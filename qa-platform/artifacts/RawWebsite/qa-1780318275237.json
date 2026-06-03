@@ -1,0 +1,14 @@
+{
+  "id": "f2738c5f-3df8-484b-a16f-818e4333cbf2",
+  "taskId": "2d6c79ba-9f68-4fa7-9d4f-c119c93ec576",
+  "timestamp": "2026-06-01T12:51:15.237Z",
+  "project": "E:\\Project\\Master\\RawSushi\\RawWebsite",
+  "engine": "qa-platform",
+  "tests": [
+    {
+      "type": "structure",
+      "exitCode": 0,
+      "output": "No executable test runner detected. Structural QA completed."
+    }
+  ]
+}

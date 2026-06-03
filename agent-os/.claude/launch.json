@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "agent-os",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["E:/Project/Master/agent-os/agent-control/node_modules/.bin/ts-node", "--transpile-only", "src/server.ts"],
+      "port": 3700,
+      "cwd": "E:/Project/Master/agent-os/agent-control"
+    }
+  ]
+}

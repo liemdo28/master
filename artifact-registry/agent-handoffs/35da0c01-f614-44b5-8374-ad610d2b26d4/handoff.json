@@ -1,0 +1,15 @@
+{
+  "taskId": "35da0c01-f614-44b5-8374-ad610d2b26d4",
+  "adapter": "cline",
+  "status": "ready_for_cline_extension",
+  "nativeInjection": false,
+  "reason": "Cline VS Code extension does not expose a stable local task injection API to this worker.",
+  "project": "Bakudan/dashboard.bakudanramen.com",
+  "projectPath": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+  "prompt": "Fix requested issue in dashboard.bakudanramen.com at Bakudan/dashboard.bakudanramen.com.\nReproduce the issue from source evidence first.\nPatch the smallest safe scope.\nRun targeted validation and return residual risk.",
+  "commanderIntent": "fix",
+  "executionStrategy": "cline",
+  "taskSize": "medium",
+  "qaRequired": true,
+  "createdAt": "2026-06-01T23:57:45.609Z"
+}

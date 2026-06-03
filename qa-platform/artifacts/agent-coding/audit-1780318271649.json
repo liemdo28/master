@@ -1,0 +1,48 @@
+{
+  "id": "c6594f34-9171-4597-80fd-968774f88fe9",
+  "project": "E:\\Project\\Master\\Agent\\agent-coding",
+  "timestamp": "2026-06-01T12:51:11.547Z",
+  "stats": {
+    "totalFiles": 1652,
+    "sourceFiles": 586,
+    "styleFiles": 7,
+    "configFiles": 44,
+    "docFiles": 180
+  },
+  "files": {},
+  "languages": [
+    "JavaScript/TypeScript"
+  ],
+  "frameworks": [
+    "express"
+  ],
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "chalk": "^5.3.0",
+    "chokidar": "^3.6.0",
+    "commander": "^12.0.0",
+    "cors": "^2.8.6",
+    "diff": "^5.2.0",
+    "express": "^4.22.2",
+    "fast-glob": "^3.3.2",
+    "ignore": "^5.3.1",
+    "ora": "^8.0.1",
+    "bullmq": "^5.0.0",
+    "dotenv": "^16.4.0",
+    "fastify": "^4.26.0",
+    "ioredis": "^5.3.0",
+    "nanoid": "^5.0.0",
+    "pg": "^8.11.0",
+    "pino": "^8.19.0",
+    "socket.io": "^4.7.0",
+    "zod": "^3.22.0",
+    "@qdrant/js-client-rest": "^1.8.0",
+    "openai": "^4.28.0",
+    "telegraf": "^4.16.0",
+    "eventemitter3": "^5.0.0"
+  },
+  "security": {
+    "deprecatedPackages": [],
+    "sensitiveFilesFound": []
+  }
+}

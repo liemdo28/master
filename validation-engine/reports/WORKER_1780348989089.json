@@ -1,0 +1,10 @@
+{
+  "taskId": "WORKER_1780348989089",
+  "validator": "worker",
+  "status": "UNKNOWN",
+  "exitCode": -1,
+  "artifacts": [],
+  "startedAt": "2026-06-01T21:23:09.089Z",
+  "endedAt": "2026-06-01T21:23:09.090Z",
+  "details": {}
+}

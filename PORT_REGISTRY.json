@@ -1,0 +1,108 @@
+{
+  "agent-os-ceo-chat": {
+    "port": 3000,
+    "owner": "Agent OS CEO Chat",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\ceo-chat",
+    "description": "Reserved CEO chat UI port. Current Agent OS control plane still runs on 3700."
+  },
+  "agent-coding-api-keys": {
+    "port": 3456,
+    "owner": "Antigravity Universal AI Gateway",
+    "status": "active",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding-api-keys",
+    "entryPoint": "dist\\server.js",
+    "startupScript": "start-proxy-background.ps1",
+    "pidFile": "E:\\Project\\Master\\artifact-registry\\executions\\api-proxy.pid",
+    "logFile": "E:\\Project\\Master\\artifact-registry\\logs\\api-proxy.log",
+    "health": "http://127.0.0.1:3456/health",
+    "description": "Protocol-compatible AI gateway for Antigravity/Cline/API-key workflows."
+  },
+  "validation-engine": {
+    "port": 3460,
+    "owner": "Agent OS Validation",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\validation-engine",
+    "description": "Reserved for validation HTTP runner. Current validation runner is CLI-only."
+  },
+  "agent-control": {
+    "port": 3700,
+    "owner": "Agent OS Control Plane",
+    "status": "active",
+    "path": "E:\\Project\\Master\\agent-os\\agent-control",
+    "entryPoint": "dist\\server.js",
+    "health": "http://127.0.0.1:3700/api/workers",
+    "description": "Current Agent OS control-plane API and browser UI."
+  },
+  "agent-worker": {
+    "port": null,
+    "owner": "Agent OS Worker",
+    "status": "active",
+    "path": "E:\\Project\\Master\\agent-os\\agent-worker",
+    "entryPoint": "dist\\worker.js",
+    "description": "Worker process. No listening HTTP port; connects to control plane."
+  },
+  "agent-coding-local-agent-ui": {
+    "port": 4001,
+    "owner": "Agent Coding Local Agent UI",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\local-agent\\ui",
+    "description": "Local Agent UI backend/frontend dev proxy."
+  },
+  "agent-coding-accounting-engine": {
+    "port": 8844,
+    "owner": "Agent Coding Accounting Engine",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\accounting-engine",
+    "description": "Loopback accounting REST API."
+  },
+  "agency-api": {
+    "port": 8000,
+    "owner": "Agent Coding Agency API",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\apps\\agency",
+    "description": "Agency API from .env/.env.example."
+  },
+  "agency-unified-api": {
+    "port": 8001,
+    "owner": "Agent Coding Agency Unified API",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\apps\\agency",
+    "description": "Agency unified project API."
+  },
+  "agency-control-api": {
+    "port": 8002,
+    "owner": "Agent Coding Agency Control Plane API",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\apps\\agency",
+    "description": "Agency control plane API referenced by Vite proxy."
+  },
+  "agency-dashboard": {
+    "port": 8080,
+    "owner": "Agent Coding Agency Dashboard",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\agent-coding\\apps\\agency",
+    "description": "Agency dashboard local UI."
+  },
+  "ai-search-tool": {
+    "port": 8788,
+    "owner": "AI Search Tool",
+    "status": "reserved",
+    "path": "E:\\Project\\Master\\Agent\\ai-search-tool",
+    "description": "AI search local web tool."
+  },
+  "ollama-local": {
+    "port": 11434,
+    "owner": "Ollama Local",
+    "status": "external",
+    "path": null,
+    "description": "External local model server dependency; not owned by Master projects."
+  },
+  "rules": [
+    "No project may choose a random port.",
+    "Every project must read its port from .env or PORT_REGISTRY.json.",
+    "If a port is occupied by another owner, the app must fail cleanly and must not spawn another process.",
+    "Raw startup scripts must log to artifact-registry and must not depend on visible console windows.",
+    "Do not kill a process unless owner is identified."
+  ]
+}

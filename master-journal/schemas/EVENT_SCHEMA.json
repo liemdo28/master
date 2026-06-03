@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Master Journal Event",
+  "description": "Schema for all events recorded in the Master Journal",
+  "type": "object",
+  "required": ["id", "type", "timestamp", "project"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^evt_[a-z0-9]{12}$",
+      "description": "Unique event identifier"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "task.created", "task.completed", "task.failed",
+        "build.started", "build.completed", "build.failed",
+        "deploy.started", "deploy.completed", "deploy.rollback",
+        "git.push", "git.merge",
+        "qa.started", "qa.completed",
+        "project.created", "project.updated",
+        "snapshot.created", "artifact.created"
+      ],
+      "description": "Event type classification"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp with timezone"
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["agent", "human", "system"] }
+      },
+      "required": ["id", "name"]
+    },
+    "project": {
+      "type": "string",
+      "description": "Project name this event belongs to"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific data",
+      "properties": {
+        "task_id": { "type": "string" },
+        "task_type": { "type": "string" },
+        "duration_ms": { "type": "integer" },
+        "outcome": { "type": "string", "enum": ["success", "failure", "partial"] },
+        "version": { "type": "string" },
+        "environment": { "type": "string" },
+        "artifacts": { "type": "array", "items": { "type": "string" } },
+        "related_events": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string", "default": "1.0" },
+        "correlation_id": { "type": "string" },
+        "parent_event_id": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

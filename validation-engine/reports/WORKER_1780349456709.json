@@ -1,0 +1,29 @@
+{
+  "taskId": "WORKER_1780349456709",
+  "validator": "worker",
+  "status": "FAIL",
+  "exitCode": 1,
+  "artifacts": [
+    "process:node.exe:detected",
+    "logs:E:\\Project\\Master\\validation-engine\\reports\\logs\\worker-validation.log"
+  ],
+  "startedAt": "2026-06-01T21:30:56.709Z",
+  "endedAt": "2026-06-01T21:30:56.951Z",
+  "details": {
+    "process": {
+      "detected": true,
+      "details": "node.exe                     13116 Console                    1     46,980 K\r\nnode.exe                     15836 Console                    1     67,464 K\r\nnode.exe                     11316 Console                    1     44,228 K\r\nnode.exe                     10048 Console                    1     44,736 K\r\nnode.exe                     15868 Console                    1     62,288 K\r\nnode.exe                     16012 Console                    1     83,760 K\r\nnode.exe                      2756 Console                    1     61,808 K\r\nnode.exe                     31108 Console                    1     93,992 K\r\nnode.exe                     27836 Console                    1     58,340 K\r\nnode.exe                      8120 Console                    1     55,724 K"
+    },
+    "port": {
+      "detected": false,
+      "details": "",
+      "port": 3002
+    },
+    "health": {
+      "reachable": false,
+      "error": "",
+      "url": "http://localhost:3002/health"
+    },
+    "logs": ""
+  }
+}

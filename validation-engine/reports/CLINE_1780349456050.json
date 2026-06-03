@@ -1,0 +1,23 @@
+{
+  "taskId": "CLINE_1780349456050",
+  "validator": "cline",
+  "status": "PASS",
+  "exitCode": 0,
+  "artifacts": [
+    "process:code:detected",
+    "logs:E:\\Project\\Master\\validation-engine\\reports\\logs\\cline-validation.log"
+  ],
+  "startedAt": "2026-06-01T21:30:56.050Z",
+  "endedAt": "2026-06-01T21:30:56.654Z",
+  "details": {
+    "process": {
+      "detected": true,
+      "details": "Codex.exe                    10088 Console                    1    175,276 K\r\nCodex.exe                    11148 Console                    1     10,532 K\r\nCodex.exe                    19364 Console                    1      8,560 K\r\nCodex.exe                    12100 Console                    1     54,604 K\r\nCodex.exe                    10972 Console                    1     38,612 K\r\nCodex.exe                     6512 Console                    1     19,644 K\r\ncodex.exe                    13836 Console                    1     59,884 K\r\nCodex.exe                    11524 Console                    1    194,480 K\r\nCodex.exe                     3444 Console                    1     27,732 K\r\ncodex.exe                    11996 Console                    1     32,420 K\r\ncodex.exe                    23528 Console                    1     31,600 K\r\ncodex.exe                    24188 Console                    1     35,160 K"
+    },
+    "extension": {
+      "installed": false,
+      "details": "afractal.node-essentials\nanthropic.claude-code\nbe5invis.vscode-icontheme-nomo-dark\nbhshawon.node-json-autocomplete\ncameron.vscode-pytest\ncharliermarsh.ruff\nchristian-kohler.npm-intellisense\nchristian-kohler.path-intellisense\ndatoux.vscode-pytest-intellisence\neamodio.gitlens\nesbenp.prettier-vscode\ngithub.codespaces\ngithub.vscode-github-actions\ngithub.vscode-pull-request-github\ninferrinizzard.prettier-sql-vscode\njasonnutter.search-node-modules\nlfurzewaddock.vscode-wsl-workspacefolder\nmatangover.mypy\nmechatroner.rainbow-csv\nms-azure-load-testing.microsoft-testing\nms-azuretools.azure-dev\nms-azuretools.vscode-azure-github-copilot\nms-azuretools.vscode-azure-mcp-server\nms-azuretools.vscode-azureappservice\nms-azuretools.vscode-azurecontainerapps\nms-azuretools.vscode-azurefunctions\nms-azuretools.vscode-azureresourcegroups\nms-azuretools.vscode-azurestaticwebapps\nms-azuretools.vscode-azurestorage\nms-azuretools.vscode-azurevirtualmachines\nms-azuretools.vscode-containers\nms-azuretools.vscode-cosmosdb\nms-azuretools.vscode-docker\nms-kubernetes-tools.vscode-kubernetes-tools\nms-python.debugpy\nms-python.mypy-type-checker\nms-python.python\nms-python.vscode-pylance\nms-python.vscode-python-envs\nms-vscode-remote.remote-containers\nms-vscode-remote.remote-ssh\nms-vscode-remote.remote-ssh-edit\nms-vscode-remote.remote-wsl\nms-vscode-remote.vscode-remote-extensionpack\nms-vscode.powershell\nms-vscode.remote-explorer\nms-vscode.remote-server\nms-vscode.vscode-chat-customizations-evaluations\nms-vscode.vscode-node-azure-pack\nnickmillerdev.pytest-fixtures\nnothlng.vscode-open-wsl\nnumso.prettier-standard-vscode\noneofone.save-runner\nopenai.chatgpt\npamaron.pytest-runner\npflannery.vscode-versionlens\nredhat.fabric8-analytics\nredhat.vscode-yaml\nrobclouth.wsl-path-tools\nrsoubrane.vs-code-import-organizer\nsaoudrizwan.claude-dev\nswellaby.node-pack\nteamsdevapp.vscode-ai-foundry\nwallabyjs.quokka-vscode\nwix.vscode-import-cost"
+    },
+    "logs": ""
+  }
+}

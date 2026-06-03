@@ -1,0 +1,33 @@
+{
+  "id": "c81d0888-aefd-493b-96c3-48190ad5c0cd",
+  "project": "E:\\Project\\Master\\Bakudan\\bakudanramen.com-current",
+  "timestamp": "2026-06-01T12:48:09.807Z",
+  "stats": {
+    "totalFiles": 1233,
+    "sourceFiles": 20,
+    "styleFiles": 2,
+    "configFiles": 2,
+    "docFiles": 2
+  },
+  "files": {},
+  "languages": [
+    "JavaScript/TypeScript"
+  ],
+  "frameworks": [
+    "express"
+  ],
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3"
+  },
+  "security": {
+    "deprecatedPackages": [],
+    "sensitiveFilesFound": [
+      ".env"
+    ]
+  }
+}

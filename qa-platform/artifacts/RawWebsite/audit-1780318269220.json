@@ -1,0 +1,24 @@
+{
+  "id": "35f1c44f-7713-4835-979e-6c292ed543a5",
+  "project": "E:\\Project\\Master\\RawSushi\\RawWebsite",
+  "timestamp": "2026-06-01T12:51:09.210Z",
+  "stats": {
+    "totalFiles": 144,
+    "sourceFiles": 10,
+    "styleFiles": 4,
+    "configFiles": 7,
+    "docFiles": 14
+  },
+  "files": {},
+  "languages": [
+    "JavaScript/TypeScript"
+  ],
+  "frameworks": [],
+  "dependencies": {
+    "astro": "^6.1.5"
+  },
+  "security": {
+    "deprecatedPackages": [],
+    "sensitiveFilesFound": []
+  }
+}

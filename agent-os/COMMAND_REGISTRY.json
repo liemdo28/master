@@ -1,0 +1,146 @@
+{
+  "version": "2026-06-01",
+  "default_unknown_behavior": "unsupported_no_task",
+  "commands": [
+    {
+      "intent": "audit_master",
+      "display_name": "Audit Master",
+      "task_type": "audit",
+      "executor": "audit_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "aliases": ["audit master", "scan master", "check master", "review master"]
+    },
+    {
+      "intent": "git_status_all",
+      "display_name": "Git Status",
+      "task_type": "git_sync",
+      "executor": "git_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "payload": { "operations": ["status"], "scope": "all_repositories" },
+      "aliases": ["git status", "git status all", "status git", "check git"]
+    },
+    {
+      "intent": "run_qa",
+      "display_name": "Run QA",
+      "task_type": "qa",
+      "executor": "qa_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "aliases": ["run qa", "run tests", "test master", "qa master"]
+    },
+    {
+      "intent": "build_dashboard",
+      "display_name": "Build Dashboard",
+      "task_type": "build",
+      "executor": "build_executor",
+      "project": "Bakudan/dashboard.bakudanramen.com",
+      "risk_level": "safe",
+      "approval_required": false,
+      "aliases": ["build dashboard", "compile dashboard"]
+    },
+    {
+      "intent": "build_payroll",
+      "display_name": "Build Payroll",
+      "task_type": "build",
+      "executor": "build_executor",
+      "project": "apps/payroll",
+      "risk_level": "safe",
+      "approval_required": false,
+      "aliases": ["build payroll", "compile payroll"]
+    },
+    {
+      "intent": "open_antigravity",
+      "display_name": "Open Antigravity",
+      "task_type": "launch",
+      "executor": "app_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "payload": { "app": "antigravity", "action": "open_app" },
+      "aliases": ["open antigravity", "launch antigravity", "start antigravity"]
+    },
+    {
+      "intent": "start_api_proxy",
+      "display_name": "Start API Proxy",
+      "task_type": "script",
+      "executor": "script_executor",
+      "project": "Agent/agent-coding-api-keys",
+      "risk_level": "safe",
+      "approval_required": false,
+      "payload": {
+        "scriptPath": "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\start-proxy-background.ps1"
+      },
+      "aliases": ["start api proxy", "run api proxy", "start proxy"]
+    },
+    {
+      "intent": "deploy_staging",
+      "display_name": "Deploy Staging",
+      "task_type": "deploy",
+      "executor": "deploy_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "elevated",
+      "approval_required": true,
+      "aliases": ["deploy staging", "release staging"]
+    },
+    {
+      "intent": "create_master_snapshot",
+      "display_name": "Create Master Snapshot",
+      "task_type": "audit",
+      "executor": "snapshot_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "payload": { "action": "create_snapshot" },
+      "aliases": ["create master snapshot", "snapshot master", "create snapshot"]
+    },
+    {
+      "intent": "search_master",
+      "display_name": "Search Master",
+      "task_type": "query",
+      "executor": "query_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "aliases": ["search master", "find in master"]
+    },
+    {
+      "intent": "export_master_audit_package",
+      "display_name": "Export Master Audit Package",
+      "task_type": "export",
+      "executor": "export_executor",
+      "project": "E:\\Project\\Master",
+      "risk_level": "safe",
+      "approval_required": false,
+      "payload": {
+        "scriptPath": "E:\\Project\\Master\\master-exporter\\export-master-audit-package.js",
+        "args": ["--reason", "manual-ceo-request"]
+      },
+      "aliases": [
+        "export master audit package",
+        "export master package",
+        "export audit package",
+        "export package",
+        "create audit package",
+        "generate audit package"
+      ]
+    }
+  ],
+  "unsupported_suggestions": [
+    "Audit Master",
+    "Git Status",
+    "Run QA",
+    "Open Antigravity",
+    "Start API Proxy"
+  ],
+  "raw_shell": {
+    "enabled_from_chat": false,
+    "approved_script_paths": [
+      "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\start-proxy-background.ps1"
+    ]
+  }
+}

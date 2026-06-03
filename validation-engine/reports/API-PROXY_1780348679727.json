@@ -1,0 +1,40 @@
+{
+  "taskId": "API-PROXY_1780348679727",
+  "validator": "api-proxy",
+  "status": "FAIL",
+  "exitCode": 1,
+  "artifacts": [
+    "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\start-proxy-win.bat",
+    "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\proxy.js",
+    "E:\\Project\\Master\\artifact-registry\\api-proxy\\api-proxy-log-API-1780347024117.txt",
+    "E:\\Project\\Master\\artifact-registry\\api-proxy\\API_PROXY_START_TEST.md"
+  ],
+  "startedAt": "2026-06-01T21:17:59.727Z",
+  "endedAt": "2026-06-01T21:18:00.044Z",
+  "details": {
+    "script": {
+      "exists": true,
+      "path": "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\start-proxy-win.bat",
+      "size": 103
+    },
+    "main": {
+      "exists": true,
+      "path": "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\proxy.js",
+      "size": 827
+    },
+    "process": {
+      "detected": true,
+      "details": "node.exe                     13116 Console                    1     47,612 K\r\nnode.exe                     15836 Console                    1     67,892 K\r\nnode.exe                     11316 Console                    1     50,992 K\r\nnode.exe                     10048 Console                    1     55,276 K\r\nnode.exe                     15868 Console                    1     68,128 K\r\nnode.exe                     16012 Console                    1     77,436 K\r\nnode.exe                     30572 Console                    1     61,836 K\r\nnode.exe                     22660 Console                    1     84,468 K\r\nnode.exe                     26316 Console                    1     58,460 K\r\nnode.exe                     29608 Console                    1     58,216 K"
+    },
+    "port": {
+      "detected": false,
+      "details": ""
+    },
+    "health": {
+      "reachable": false,
+      "error": "Port not active",
+      "status": "FAIL"
+    },
+    "logs": "E:\\Project\\Master\\artifact-registry\\api-proxy\\api-proxy-log-API-1780347024117.txt"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "9f4ee3d0-93b2-4ca0-a4d6-d38d3d9767e8",
+  "project": "E:\\Project\\Master\\qa-platform",
+  "timestamp": "2026-06-01T12:28:47.004Z",
+  "stats": {
+    "totalFiles": 1,
+    "sourceFiles": 0,
+    "styleFiles": 0,
+    "configFiles": 0,
+    "docFiles": 1
+  },
+  "files": {},
+  "languages": [],
+  "frameworks": [],
+  "dependencies": {},
+  "security": {
+    "sensitiveFilesFound": []
+  }
+}

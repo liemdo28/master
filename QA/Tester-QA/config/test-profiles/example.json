@@ -1,0 +1,22 @@
+{
+    "project": "agent-coding",
+    "base_url": "http://localhost:3000",
+    "login_required": true,
+    "auth_profile": "agent-coding-admin",
+    "stress_level": "high",
+    "browser_count": 25,
+    "websocket_test": true,
+    "timeout_seconds": 30,
+    "retry_count": 3,
+    "test_suites": [
+        "browser",
+        "stress",
+        "security",
+        "chaos"
+    ],
+    "ignore_paths": [
+        "/health",
+        "/metrics"
+    ],
+    "environment": "development"
+}

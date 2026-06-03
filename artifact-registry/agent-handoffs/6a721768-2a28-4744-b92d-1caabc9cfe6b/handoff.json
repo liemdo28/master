@@ -1,0 +1,15 @@
+{
+  "taskId": "6a721768-2a28-4744-b92d-1caabc9cfe6b",
+  "adapter": "antigravity",
+  "status": "opened_antigravity_ready_for_manual_injection",
+  "nativeInjection": false,
+  "reason": "Antigravity native Agent Manager injection API is not exposed to this worker yet.",
+  "project": "Bakudan/dashboard.bakudanramen.com",
+  "projectPath": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+  "prompt": "Fix requested issue in dashboard.bakudanramen.com at Bakudan/dashboard.bakudanramen.com.\nReproduce the issue from source evidence first.\nPatch the smallest safe scope.\nRun targeted validation and return residual risk.",
+  "commanderIntent": "fix",
+  "executionStrategy": "antigravity",
+  "taskSize": "large",
+  "qaRequired": true,
+  "createdAt": "2026-06-02T00:02:04.295Z"
+}

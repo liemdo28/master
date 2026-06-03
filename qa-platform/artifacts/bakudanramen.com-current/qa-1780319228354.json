@@ -1,0 +1,14 @@
+{
+  "id": "6947d0c8-9fab-404f-bd32-df452fced351",
+  "taskId": "84a69836-dfc2-4794-b3e9-aaee65030634",
+  "timestamp": "2026-06-01T13:07:06.641Z",
+  "project": "E:\\Project\\Master\\Bakudan\\bakudanramen.com-current",
+  "engine": "qa-platform",
+  "tests": [
+    {
+      "type": "unit",
+      "exitCode": 0,
+      "output": "\n> bakudan-website@1.0.0 test\n> node server/test.js\n\n\nBKDN API Smoke Test → http://localhost:3000\n\n  ✓ GET /api/config returns version\n  ✓ POST /api/auth/login with valid creds\n  ✓ POST /api/auth/login with bad creds → 401\n  ✓ GET /api/auth/me returns user\n  ✓ GET /api/links/pages returns pages\n  ✓ GET /api/links/pages/1/buttons returns buttons\n  ✓ GET /api/links/dashboard returns KPIs\n  ✓ GET /api/links/settings returns settings\n  ✓ GET /api/public/links/bakudan returns public buttons\n  ✓ GET /api/public/blog returns posts array\n  ✓ GET /api/blog/posts returns posts\n  ✓ POST /api/blog/posts creates draft\n  ✓ GET /links returns HTML (public links page)\n  ✓ GET /links-admin returns HTML (admin SPA)\n  ✓ GET /blog-cms returns HTML\n  ✓ Unauthenticated /api/links/pages → 401\n\n  Results: 16 passed, 0 failed\n\n"
+    }
+  ]
+}

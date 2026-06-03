@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenClaw Personal</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="orb orb-left" aria-hidden="true"></div>
+    <div class="orb orb-right" aria-hidden="true"></div>
+
+    <main class="shell">
+      <section class="hero panel">
+        <div>
+          <p class="eyebrow">OPENCLAW SOLO</p>
+          <h1>Your private AI cockpit for daily work, notes, and focused chats.</h1>
+          <p class="hero-copy">
+            Built for personal use. Keep your prompts, notes, model setup, and conversation flow in one
+            place without standing up a backend.
+          </p>
+        </div>
+        <div class="hero-metrics">
+          <article>
+            <span>Storage</span>
+            <strong>Local only</strong>
+          </article>
+          <article>
+            <span>API mode</span>
+            <strong>Bring your own key</strong>
+          </article>
+          <article>
+            <span>Use case</span>
+            <strong>Personal workflow</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="stack">
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Identity</p>
+                <h2>Personal profile</h2>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label class="field">
+                <span>Display name</span>
+                <input id="profile-name" type="text" placeholder="Liem" />
+              </label>
+
+              <label class="field">
+                <span>Main role</span>
+                <input id="profile-role" type="text" placeholder="Builder, operator, freelancer..." />
+              </label>
+
+              <label class="field field-wide">
+                <span>Current focus</span>
+                <textarea
+                  id="profile-focus"
+                  rows="3"
+                  placeholder="What are you optimizing for this week?"
+                ></textarea>
+              </label>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Connection</p>
+                <h2>Model setup</h2>
+              </div>
+              <p class="section-copy">Works best with endpoints compatible with chat completions.</p>
+            </div>
+
+            <div class="form-grid">
+              <label class="field field-wide">
+                <span>API endpoint</span>
+                <input id="api-endpoint" type="text" placeholder="https://api.openai.com/v1/chat/completions" />
+              </label>
+
+              <label class="field">
+                <span>Model</span>
+                <input id="model-name" type="text" placeholder="gpt-4.1-mini" />
+              </label>
+
+              <label class="field">
+                <span>Temperature</span>
+                <input id="temperature" type="number" min="0" max="2" step="0.1" placeholder="0.7" />
+              </label>
+
+              <label class="field">
+                <span>Response mode</span>
+                <label class="toggle-line">
+                  <input id="stream-response" type="checkbox" checked />
+                  Stream response
+                </label>
+              </label>
+
+              <label class="field field-wide">
+                <span>API key</span>
+                <input id="api-key" type="password" placeholder="Paste your personal API key" />
+                <small>Saved in this browser only. Use this build for personal workflows, not public deploys.</small>
+              </label>
+
+              <label class="field field-wide">
+                <span>System prompt</span>
+                <textarea
+                  id="system-prompt"
+                  rows="5"
+                  placeholder="You are my calm, sharp personal copilot..."
+                ></textarea>
+              </label>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Workspace</p>
+                <h2>Prompt presets</h2>
+              </div>
+              <button id="add-preset-btn" class="ghost-button" type="button">Add preset</button>
+            </div>
+
+            <div id="preset-list" class="preset-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Memory</p>
+                <h2>Scratchpad notes</h2>
+              </div>
+            </div>
+
+            <textarea
+              id="workspace-notes"
+              class="notes-area"
+              rows="10"
+              placeholder="Drop ideas, links, rough outlines, and reminders here."
+            ></textarea>
+
+            <div class="action-row">
+              <button id="export-btn" type="button">Export workspace</button>
+              <button id="import-btn" type="button" class="ghost-button">Import workspace</button>
+              <button id="reset-btn" type="button" class="ghost-button danger">Reset all</button>
+              <input id="import-file" type="file" accept="application/json" hidden />
+            </div>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section class="panel panel-chat">
+            <div class="section-head">
+              <div>
+                <p class="section-kicker">Live</p>
+                <h2>OpenClaw chat</h2>
+              </div>
+              <div class="chat-actions">
+                <button id="clear-chat-btn" type="button" class="ghost-button">Clear chat</button>
+              </div>
+            </div>
+
+            <div id="chat-feed" class="chat-feed" aria-live="polite"></div>
+
+            <form id="chat-form" class="chat-form">
+              <label class="field field-wide">
+                <span>Message</span>
+                <textarea
+                  id="chat-input"
+                  rows="5"
+                  placeholder="Ask for strategy, drafting, planning, critique, or reflection."
+                ></textarea>
+              </label>
+
+              <div class="composer-bar">
+                <p id="status" class="status">Ready.</p>
+                <button id="send-btn" type="submit">Send</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <template id="preset-template">
+      <article class="preset-card">
+        <div class="preset-card-top">
+          <div>
+            <p class="preset-label"></p>
+            <h3 class="preset-title"></h3>
+          </div>
+          <button class="ghost-button preset-delete" type="button">Remove</button>
+        </div>
+        <textarea class="preset-body" rows="4" placeholder="Preset instruction"></textarea>
+        <div class="preset-actions">
+          <button class="preset-use" type="button">Use in chat</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="message-template">
+      <article class="message">
+        <div class="message-meta">
+          <span class="message-role"></span>
+          <time class="message-time"></time>
+        </div>
+        <div class="message-body"></div>
+      </article>
+    </template>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

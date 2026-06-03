@@ -1,0 +1,14 @@
+{
+  "id": "dee3dd68-892d-41cc-8e20-c1b6e62332a4",
+  "taskId": "a1aab96d-b18e-4a73-824c-6414e9d2f0f5",
+  "timestamp": "2026-06-01T12:50:54.165Z",
+  "project": "E:\\Project\\Master\\Bakudan\\review-automation-system",
+  "engine": "qa-platform",
+  "tests": [
+    {
+      "type": "structure",
+      "exitCode": 0,
+      "output": "No executable test runner detected. Structural QA completed."
+    }
+  ]
+}

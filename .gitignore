@@ -1,0 +1,47 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android / SDK
+*.keystore
+adbkey*
+sdk*
+.gradle/
+build/
+
+# Logs
+*.log
+
+# Embedded git repos (tracked separately)
+Agent/agent-coding/
+Agent/ai-search-tool/
+Agent/shared-workspace/
+Bakudan/bakudanramen.com-current/
+Bakudan/dashboard.bakudanramen.com/
+Bakudan/growth-dashboard/
+Bakudan/integration-system/
+Bakudan/mobile_taskflow/
+Bakudan/packing-list/
+Bakudan/review-automation-system/
+Other/It-Takes-Two-Inspired-Game/
+Other/LinkTreeHL/
+Other/Tuya/
+
+# Long path folder
+Other/VC/
+
+# Archive folder (contains many embedded git repos)
+_archive/
+
+# Large files
+*.zip

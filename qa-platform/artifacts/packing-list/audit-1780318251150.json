@@ -1,0 +1,22 @@
+{
+  "id": "e9dc52a1-fde5-496d-abbe-29f49140bab7",
+  "project": "E:\\Project\\Master\\Bakudan\\packing-list",
+  "timestamp": "2026-06-01T12:50:49.527Z",
+  "stats": {
+    "totalFiles": 20223,
+    "sourceFiles": 720,
+    "styleFiles": 50,
+    "configFiles": 400,
+    "docFiles": 953
+  },
+  "files": {},
+  "languages": [
+    "JavaScript/TypeScript"
+  ],
+  "frameworks": [],
+  "dependencies": {},
+  "security": {
+    "deprecatedPackages": [],
+    "sensitiveFilesFound": []
+  }
+}

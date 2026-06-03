@@ -1,0 +1,19 @@
+{
+  "id": "ca0e7eca-5e18-4aff-9bf7-1291d96e366c",
+  "project": "E:\\Project\\Master\\agent-coding",
+  "timestamp": "2026-06-01T13:25:31.831Z",
+  "stats": {
+    "totalFiles": 0,
+    "sourceFiles": 0,
+    "styleFiles": 0,
+    "configFiles": 0,
+    "docFiles": 0
+  },
+  "files": {},
+  "languages": [],
+  "frameworks": [],
+  "dependencies": {},
+  "security": {
+    "sensitiveFilesFound": []
+  }
+}

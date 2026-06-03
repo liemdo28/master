@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bakudan-dashboard",
+      "runtimeExecutable": "C:/xampp/php/php.exe",
+      "runtimeArgs": ["-S", "localhost:5003", "-t", "E:/Project/Master/dashboard.bakudanramen.com", "E:/Project/Master/dashboard.bakudanramen.com/router.php"],
+      "port": 5003
+    },
+    {
+      "name": "bakudan-dashboard-qa",
+      "runtimeExecutable": "C:/xampp/php/php.exe",
+      "runtimeArgs": ["-S", "localhost:5180", "-t", "E:/Project/Master/dashboard.bakudanramen.com", "E:/Project/Master/dashboard.bakudanramen.com/router.php"],
+      "port": 5180
+    },
+    {
+      "name": "agent-os",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/ts-node/dist/bin.js", "--transpile-only", "src/server.ts"],
+      "port": 3700,
+      "autoPort": false,
+      "cwd": "E:/Project/Master/agent-os/agent-control"
+    }
+  ]
+}

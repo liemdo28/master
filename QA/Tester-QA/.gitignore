@@ -1,0 +1,5 @@
+
+# Tester-QA auth state — never commit
+.auth/*.enc
+.auth/*.json
+.auth/

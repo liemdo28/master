@@ -1,0 +1,982 @@
+{
+  "generated_at": "2026-06-01T13:56:15.817Z",
+  "total_projects": 30,
+  "nodes": [
+    {
+      "id": "agent-agent-coding",
+      "display_name": "Agent / Agent / Coding",
+      "path": "E:\\Project\\Master\\Agent\\agent-coding",
+      "language": "JavaScript",
+      "framework": "Express",
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 5209,
+      "total_lines": 201062,
+      "prod_dep_count": 23,
+      "dev_dep_count": 144,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "better-sqlite3",
+          "version": "^12.10.0"
+        },
+        {
+          "name": "chalk",
+          "version": "^5.3.0"
+        },
+        {
+          "name": "chokidar",
+          "version": "^3.6.0"
+        },
+        {
+          "name": "commander",
+          "version": "^12.0.0"
+        },
+        {
+          "name": "cors",
+          "version": "^2.8.6"
+        },
+        {
+          "name": "diff",
+          "version": "^5.2.0"
+        },
+        {
+          "name": "express",
+          "version": "^4.22.2"
+        },
+        {
+          "name": "fast-glob",
+          "version": "^3.3.2"
+        },
+        {
+          "name": "ignore",
+          "version": "^5.3.1"
+        },
+        {
+          "name": "ora",
+          "version": "^8.0.1"
+        },
+        {
+          "name": "bullmq",
+          "version": "^5.0.0"
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.0"
+        },
+        {
+          "name": "fastify",
+          "version": "^4.26.0"
+        },
+        {
+          "name": "ioredis",
+          "version": "^5.3.0"
+        },
+        {
+          "name": "nanoid",
+          "version": "^5.0.0"
+        },
+        {
+          "name": "pg",
+          "version": "^8.11.0"
+        },
+        {
+          "name": "pino",
+          "version": "^8.19.0"
+        },
+        {
+          "name": "socket.io",
+          "version": "^4.7.0"
+        },
+        {
+          "name": "zod",
+          "version": "^3.22.0"
+        },
+        {
+          "name": "@qdrant/js-client-rest",
+          "version": "^1.8.0"
+        },
+        {
+          "name": "openai",
+          "version": "^4.28.0"
+        },
+        {
+          "name": "telegraf",
+          "version": "^4.16.0"
+        },
+        {
+          "name": "eventemitter3",
+          "version": "^5.0.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-agent-coding-api-keys",
+      "display_name": "Agent / Agent / Coding / Api / Keys",
+      "path": "E:\\Project\\Master\\Agent\\agent-coding-api-keys",
+      "language": "TypeScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 217,
+      "total_lines": 15878,
+      "prod_dep_count": 1,
+      "dev_dep_count": 32,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "dotenv",
+          "version": "^16.4.7"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-ai-search-tool",
+      "display_name": "Agent / Ai / Search / Tool",
+      "path": "E:\\Project\\Master\\Agent\\ai-search-tool",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 76,
+      "total_lines": 21901,
+      "prod_dep_count": 0,
+      "dev_dep_count": 89,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-os-agent-control",
+      "display_name": "Agent / Os / Agent / Control",
+      "path": "E:\\Project\\Master\\agent-os\\agent-control",
+      "language": "TypeScript",
+      "framework": "Express",
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 27,
+      "total_lines": 2759,
+      "prod_dep_count": 5,
+      "dev_dep_count": 135,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "better-sqlite3",
+          "version": "^12.10.0"
+        },
+        {
+          "name": "cors",
+          "version": "2.8.5"
+        },
+        {
+          "name": "express",
+          "version": "4.19.2"
+        },
+        {
+          "name": "uuid",
+          "version": "9.0.1"
+        },
+        {
+          "name": "ws",
+          "version": "8.17.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-os-agent-worker",
+      "display_name": "Agent / Os / Agent / Worker",
+      "path": "E:\\Project\\Master\\agent-os\\agent-worker",
+      "language": "TypeScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 9,
+      "total_lines": 1176,
+      "prod_dep_count": 5,
+      "dev_dep_count": 44,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "axios",
+          "version": "1.6.8"
+        },
+        {
+          "name": "dotenv",
+          "version": "16.4.5"
+        },
+        {
+          "name": "systeminformation",
+          "version": "5.22.0"
+        },
+        {
+          "name": "uuid",
+          "version": "9.0.1"
+        },
+        {
+          "name": "ws",
+          "version": "8.17.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-os-shared",
+      "display_name": "Agent / Os / Shared",
+      "path": "E:\\Project\\Master\\agent-os\\shared",
+      "language": "TypeScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 10,
+      "total_lines": 440,
+      "prod_dep_count": 0,
+      "dev_dep_count": 1,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "agent-shared-workspace",
+      "display_name": "Agent / Shared / Workspace",
+      "path": "E:\\Project\\Master\\Agent\\shared-workspace",
+      "language": "Unknown",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 22,
+      "total_lines": 347,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-bakudanramen-com-current",
+      "display_name": "Bakudan / Bakudanramen.com / Current",
+      "path": "E:\\Project\\Master\\Bakudan\\bakudanramen.com-current",
+      "language": "JavaScript",
+      "framework": "Express",
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 1244,
+      "total_lines": 5281,
+      "prod_dep_count": 8,
+      "dev_dep_count": 93,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "bcryptjs",
+          "version": "^2.4.3"
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5"
+        },
+        {
+          "name": "express",
+          "version": "^4.18.2"
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.2"
+        },
+        {
+          "name": "multer",
+          "version": "^1.4.5-lts.1"
+        },
+        {
+          "name": "node-cron",
+          "version": "^3.0.3"
+        },
+        {
+          "name": "ms",
+          "version": "2.1.3"
+        },
+        {
+          "name": "safe-buffer",
+          "version": "5.1.2"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-dashboard-bakudanramen-com",
+      "display_name": "Bakudan / Dashboard.bakudanramen.com",
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 1118,
+      "total_lines": 39313,
+      "prod_dep_count": 0,
+      "dev_dep_count": 4,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-growth-dashboard",
+      "display_name": "Bakudan / Growth / Dashboard",
+      "path": "E:\\Project\\Master\\Bakudan\\growth-dashboard",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 36,
+      "total_lines": 5309,
+      "prod_dep_count": 0,
+      "dev_dep_count": 89,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-integration-system",
+      "display_name": "Bakudan / Integration / System",
+      "path": "E:\\Project\\Master\\Bakudan\\integration-system",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 352,
+      "total_lines": 33686,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-mobile_taskflow",
+      "display_name": "Bakudan / Mobile / Taskflow",
+      "path": "E:\\Project\\Master\\Bakudan\\mobile_taskflow",
+      "language": "Java",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 152,
+      "total_lines": 361,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-packing-list",
+      "display_name": "Bakudan / Packing / List",
+      "path": "E:\\Project\\Master\\Bakudan\\packing-list",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 20295,
+      "total_lines": 144961,
+      "prod_dep_count": 8,
+      "dev_dep_count": 344,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "picomatch",
+          "version": "2.3.2"
+        },
+        {
+          "name": "emoji-regex",
+          "version": "8.0.0"
+        },
+        {
+          "name": "string-width",
+          "version": "4.2.3"
+        },
+        {
+          "name": "strip-ansi",
+          "version": "6.0.1"
+        },
+        {
+          "name": "wrap-ansi",
+          "version": "7.0.0"
+        },
+        {
+          "name": "signal-exit",
+          "version": "3.0.7"
+        },
+        {
+          "name": "semver",
+          "version": "7.7.4"
+        },
+        {
+          "name": "supports-color",
+          "version": "8.1.1"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "bakudan-review-automation-system",
+      "display_name": "Bakudan / Review / Automation / System",
+      "path": "E:\\Project\\Master\\Bakudan\\review-automation-system",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 163,
+      "total_lines": 16678,
+      "prod_dep_count": 1,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "fastapi",
+          "version": "*"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "master-indexer",
+      "display_name": "Master / Indexer",
+      "path": "E:\\Project\\Master\\master-indexer",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 19,
+      "total_lines": 6867,
+      "prod_dep_count": 1,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "sql.js",
+          "version": "^1.10.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-dau-tu",
+      "display_name": "Other / Dau / Tu",
+      "path": "E:\\Project\\Master\\Other\\dau-tu",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 167,
+      "total_lines": 33663,
+      "prod_dep_count": 0,
+      "dev_dep_count": 89,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-it-takes-two-inspired-game",
+      "display_name": "Other / It / Takes / Two / Inspired / Game",
+      "path": "E:\\Project\\Master\\Other\\It-Takes-Two-Inspired-Game",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 310,
+      "total_lines": 3773,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-linktreehl",
+      "display_name": "Other / LinkTreeHL",
+      "path": "E:\\Project\\Master\\Other\\LinkTreeHL",
+      "language": "TypeScript",
+      "framework": "React/Next.js",
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 665,
+      "total_lines": 38281,
+      "prod_dep_count": 33,
+      "dev_dep_count": 466,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "@dnd-kit/core",
+          "version": "^6.3.1"
+        },
+        {
+          "name": "@dnd-kit/sortable",
+          "version": "^10.0.0"
+        },
+        {
+          "name": "@dnd-kit/utilities",
+          "version": "^3.2.2"
+        },
+        {
+          "name": "@heroicons/react",
+          "version": "^2.2.0"
+        },
+        {
+          "name": "@prisma/client",
+          "version": "^5.22.0"
+        },
+        {
+          "name": "bcryptjs",
+          "version": "^3.0.3"
+        },
+        {
+          "name": "clsx",
+          "version": "^2.1.1"
+        },
+        {
+          "name": "date-fns",
+          "version": "^4.1.0"
+        },
+        {
+          "name": "dotenv",
+          "version": "^17.4.2"
+        },
+        {
+          "name": "next",
+          "version": "14.2.35"
+        },
+        {
+          "name": "next-auth",
+          "version": "^4.24.14"
+        },
+        {
+          "name": "prisma",
+          "version": "^5.22.0"
+        },
+        {
+          "name": "qrcode",
+          "version": "^1.5.4"
+        },
+        {
+          "name": "react",
+          "version": "^18"
+        },
+        {
+          "name": "react-dom",
+          "version": "^18"
+        },
+        {
+          "name": "recharts",
+          "version": "^3.8.1"
+        },
+        {
+          "name": "sharp",
+          "version": "^0.34.5"
+        },
+        {
+          "name": "@jridgewell/trace-mapping",
+          "version": "0.3.9"
+        },
+        {
+          "name": "ansi-regex",
+          "version": "6.2.2"
+        },
+        {
+          "name": "strip-ansi",
+          "version": "7.2.0"
+        },
+        {
+          "name": "immer",
+          "version": "11.1.4"
+        },
+        {
+          "name": "ignore",
+          "version": "7.0.5"
+        },
+        {
+          "name": "balanced-match",
+          "version": "4.0.4"
+        },
+        {
+          "name": "brace-expansion",
+          "version": "5.0.5"
+        },
+        {
+          "name": "minimatch",
+          "version": "10.2.5"
+        },
+        {
+          "name": "eslint-visitor-keys",
+          "version": "5.0.1"
+        },
+        {
+          "name": "glob-parent",
+          "version": "5.1.2"
+        },
+        {
+          "name": "emoji-regex",
+          "version": "8.0.0"
+        },
+        {
+          "name": "string-width",
+          "version": "4.2.3"
+        },
+        {
+          "name": "wrap-ansi",
+          "version": "6.2.0"
+        },
+        {
+          "name": "semver",
+          "version": "6.3.1"
+        },
+        {
+          "name": "resolve",
+          "version": "1.22.12"
+        },
+        {
+          "name": "fdir",
+          "version": "6.5.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-openclaw",
+      "display_name": "Other / Openclaw",
+      "path": "E:\\Project\\Master\\Other\\openclaw",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 6,
+      "total_lines": 628,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-phuyen-2026",
+      "display_name": "Other / Phuyen / 2026",
+      "path": "E:\\Project\\Master\\Other\\phuyen-2026",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 1162,
+      "total_lines": 82998,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-tu-vi",
+      "display_name": "Other / Tu / Vi",
+      "path": "E:\\Project\\Master\\Other\\tu-vi",
+      "language": "JavaScript",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 17,
+      "total_lines": 2574,
+      "prod_dep_count": 0,
+      "dev_dep_count": 89,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-tuya",
+      "display_name": "Other / Tuya",
+      "path": "E:\\Project\\Master\\Other\\Tuya",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 1442,
+      "total_lines": 7700,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-vc-format-cv---ns-south--web--cv-format-web",
+      "display_name": "Other / VC / Format CV  /  NS South (web) / Cv / Format / Web",
+      "path": "E:\\Project\\Master\\Other\\VC\\Format CV - NS South (web)\\cv-format-web",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 108,
+      "total_lines": 20042,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-vc-format-cv---ns-south--web--cv-format-web-mar27",
+      "display_name": "Other / VC / Format CV  /  NS South (web) / Cv / Format / Web / Mar27",
+      "path": "E:\\Project\\Master\\Other\\VC\\Format CV - NS South (web)\\cv-format-web-mar27",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 45,
+      "total_lines": 9022,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "other-vc-format-cv---ns-south--web--inform-resume",
+      "display_name": "Other / VC / Format CV  /  NS South (web) / Inform / Resume",
+      "path": "E:\\Project\\Master\\Other\\VC\\Format CV - NS South (web)\\inform-resume",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 11,
+      "total_lines": 1967,
+      "prod_dep_count": 4,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "python-docx",
+          "version": "1.0.0"
+        },
+        {
+          "name": "PyMuPDF",
+          "version": "1.24.0"
+        },
+        {
+          "name": "docx2pdf",
+          "version": "0.1.8"
+        },
+        {
+          "name": "anthropic",
+          "version": "0.20.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "qa-pc-qa-stability-certification",
+      "display_name": "QA / PC / QA / Stability / Certification",
+      "path": "E:\\Project\\Master\\QA\\PC-QA-Stability-Certification",
+      "language": "PowerShell",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 1453,
+      "total_lines": 1646970,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "qa-qa-system",
+      "display_name": "QA / Qa / System",
+      "path": "E:\\Project\\Master\\QA\\qa-system",
+      "language": "TypeScript",
+      "framework": "Express",
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 361,
+      "total_lines": 16714,
+      "prod_dep_count": 17,
+      "dev_dep_count": 150,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "axios",
+          "version": "^1.15.2"
+        },
+        {
+          "name": "chalk",
+          "version": "^4.1.2"
+        },
+        {
+          "name": "concurrently",
+          "version": "^9.2.1"
+        },
+        {
+          "name": "cors",
+          "version": "^2.8.6"
+        },
+        {
+          "name": "dotenv",
+          "version": "^17.4.2"
+        },
+        {
+          "name": "express",
+          "version": "^5.2.1"
+        },
+        {
+          "name": "fast-glob",
+          "version": "^3.3.3"
+        },
+        {
+          "name": "fs-extra",
+          "version": "^11.3.4"
+        },
+        {
+          "name": "playwright",
+          "version": "^1.59.1"
+        },
+        {
+          "name": "simple-git",
+          "version": "^3.36.0"
+        },
+        {
+          "name": "ts-node",
+          "version": "^10.9.2"
+        },
+        {
+          "name": "typescript",
+          "version": "^6.0.3"
+        },
+        {
+          "name": "uuid",
+          "version": "^14.0.0"
+        },
+        {
+          "name": "ws",
+          "version": "^8.20.0"
+        },
+        {
+          "name": "supports-color",
+          "version": "8.1.1"
+        },
+        {
+          "name": "mime-db",
+          "version": "1.52.0"
+        },
+        {
+          "name": "mime-types",
+          "version": "2.1.35"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "qa-qa_runner",
+      "display_name": "QA / Qa / Runner",
+      "path": "E:\\Project\\Master\\QA\\qa_runner",
+      "language": "Unknown",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 4,
+      "total_lines": 24,
+      "prod_dep_count": 1,
+      "dev_dep_count": 2,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "playwright",
+          "version": "^1.59.1"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "qa-tester-qa",
+      "display_name": "QA / Tester / QA",
+      "path": "E:\\Project\\Master\\QA\\Tester-QA",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 411,
+      "total_lines": 62970,
+      "prod_dep_count": 0,
+      "dev_dep_count": 0,
+      "internal_deps": [],
+      "external_deps": [],
+      "impact_score": 0,
+      "dependents_count": 0
+    },
+    {
+      "id": "rawsushi-rawwebsite",
+      "display_name": "RawSushi / RawWebsite",
+      "path": "E:\\Project\\Master\\RawSushi\\RawWebsite",
+      "language": "Python",
+      "framework": null,
+      "criticality": "P2",
+      "status": "active",
+      "total_files": 119,
+      "total_lines": 2434,
+      "prod_dep_count": 4,
+      "dev_dep_count": 317,
+      "internal_deps": [],
+      "external_deps": [
+        {
+          "name": "astro",
+          "version": "^6.1.5"
+        },
+        {
+          "name": "picomatch",
+          "version": "2.3.2"
+        },
+        {
+          "name": "mdn-data",
+          "version": "2.0.28"
+        },
+        {
+          "name": "entities",
+          "version": "4.5.0"
+        }
+      ],
+      "impact_score": 0,
+      "dependents_count": 0
+    }
+  ],
+  "edges": [],
+  "stats": {
+    "total_internal_deps": 0,
+    "total_external_deps": 111,
+    "max_internal_deps": 0,
+    "max_external_deps": 33,
+    "most_depended_on": "rawsushi-rawwebsite (0 dependents)",
+    "most_dependencies": "other-linktreehl (33 deps)"
+  }
+}

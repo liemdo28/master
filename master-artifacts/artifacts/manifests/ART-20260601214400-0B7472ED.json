@@ -1,0 +1,10 @@
+{
+  "artifactId": "ART-20260601214400-0B7472ED",
+  "taskId": "TASK-20260601214400-A8D4",
+  "type": "log",
+  "path": "E:\\Project\\Master\\master-artifacts\\artifacts\\logs\\ART-20260601214400-0B7472ED.log",
+  "checksum": "571b959c991065a5893663f0b5c5534e14925322893e5851bde6213cacf13538",
+  "createdAt": "2026-06-01T21:44:00.769Z",
+  "source": "test-evidence-chain",
+  "exists": true
+}

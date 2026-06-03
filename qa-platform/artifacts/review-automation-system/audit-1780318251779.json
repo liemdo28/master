@@ -1,0 +1,21 @@
+{
+  "id": "6fc0290e-b027-4ef9-8255-c610d95e6512",
+  "project": "E:\\Project\\Master\\Bakudan\\review-automation-system",
+  "timestamp": "2026-06-01T12:50:51.586Z",
+  "stats": {
+    "totalFiles": 260,
+    "sourceFiles": 1,
+    "styleFiles": 1,
+    "configFiles": 4,
+    "docFiles": 20
+  },
+  "files": {},
+  "languages": [],
+  "frameworks": [],
+  "dependencies": {},
+  "security": {
+    "sensitiveFilesFound": [
+      ".env"
+    ]
+  }
+}

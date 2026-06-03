@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Command Center</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .health-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .health-badge.healthy {
+      background: rgba(0, 255, 136, 0.2);
+      color: #00ff88;
+    }
+    
+    .health-badge.warning {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+    }
+    
+    .health-badge.critical {
+      background: rgba(255, 87, 87, 0.2);
+      color: #ff5757;
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 20px;
+    }
+    
+    .panel {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .panel-title {
+      font-size: 1.1rem;
+      color: #888;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Chat Section */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .message {
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      max-width: 90%;
+    }
+    
+    .message.user {
+      background: rgba(0, 217, 255, 0.2);
+      margin-left: auto;
+    }
+    
+    .message.bot {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .message-time {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 16px 20px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    
+    .chat-input:focus {
+      border-color: #00d9ff;
+    }
+    
+    .send-btn {
+      padding: 16px 28px;
+      border-radius: 50px;
+      border: none;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      color: #1a1a2e;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .send-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Quick Commands */
+    .quick-commands {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .quick-cmd {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .quick-cmd:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #00d9ff;
+    }
+    
+    /* Stats Panel */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: rgba(0,0,0,0.2);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #00d9ff;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 4px;
+    }
+    
+    /* Project Status */
+    .project-list {
+      list-style: none;
+    }
+    
+    .project-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .project-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    
+    .status-dot.pass { background: #00ff88; }
+    .status-dot.warning { background: #ffc107; }
+    .status-dot.critical { background: #ff5757; }
+    
+    .project-health {
+      font-weight: bold;
+    }
+    
+    /* Activity Feed */
+    .activity-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+    
+    .activity-time {
+      color: #666;
+      font-size: 0.75rem;
+    }
+    
+    /* Alerts */
+    .alerts-section {
+      margin-top: 20px;
+    }
+    
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .alert.warning {
+      background: rgba(255, 193, 7, 0.15);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+    
+    .alert.critical {
+      background: rgba(255, 87, 87, 0.15);
+      border: 1px solid rgba(255, 87, 87, 0.3);
+    }
+    
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>CEO Command Center</h1>
+      <div class="health-badge healthy" id="healthBadge">
+        <span class="health-icon">🟢</span>
+        <span id="healthScore">88%</span>
+      </div>
+    </header>
+    
+    <div class="main-grid">
+      <!-- Chat Panel -->
+      <div class="panel">
+        <div class="panel-title">Ask anything about your company</div>
+        
+        <div class="quick-commands">
+          <button class="quick-cmd" onclick="ask('Tổng quan công ty')">📊 Tổng quan công ty</button>
+          <button class="quick-cmd" onclick="ask('Project nào nguy hiểm nhất?')">⚠️ Project nguy hiểm</button>
+          <button class="quick-cmd" onclick="ask('Có bug critical nào không?')">🐛 Bug critical</button>
+          <button class="quick-cmd" onclick="ask('Workers đang online không?')">💻 Workers status</button>
+          <button class="quick-cmd" onclick="ask('QA coverage hiện tại?')">✅ QA coverage</button>
+        </div>
+        
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+              <div>👋 Xin chào! Tôi là trợ lý CEO. Tôi có thể giúp bạn trả lời các câu hỏi về công ty.</div>
+              <div class="message-time">Vừa xong</div>
+            </div>
+          </div>
+          
+          <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a command or question..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Panel -->
+      <div>
+        <div class="panel">
+          <div class="panel-title">Company Overview</div>
+          
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="totalProjects">47</div>
+              <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="activeWorkers">3/3</div>
+              <div class="stat-label">Workers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="openBugs">7</div>
+              <div class="stat-label">Open Risks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="qaCoverage">85%</div>
+              <div class="stat-label">QA Coverage</div>
+            </div>
+          </div>
+          
+          <div class="panel-title">Project Status</div>
+          <ul class="project-list">
+            <li class="project-item">
+              <div class="project-status">
+                <span class="status-dot pass"></span>
+                Dashboard
+              </div>
+              <span class="project-health">🟢 91%</span>
+            </li>
+            <li class="project-item">
+              <div class="project-status">
+                <span class="status-dot warning"></span>
+                Payroll
+              </div>
+              <span class="project-health">🟡 72%</span>
+            </li>
+            <li class="project-item">
+              <div class="project-status">
+                <span class="status-dot pass"></span>
+                Review Auto
+              </div>
+              <span class="project-health">🟢 95%</span>
+            </li>
+            <li class="project-item">
+              <div class="project-status">
+                <span class="status-dot pass"></span>
+                Agent OS
+              </div>
+              <span class="project-health">🟢 98%</span>
+            </li>
+            <li class="project-item">
+              <div class="project-status">
+                <span class="status-dot pass"></span>
+                Bakudan
+              </div>
+              <span class="project-health">🟢 89%</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="panel alerts-section">
+          <div class="panel-title">Recent Activity</div>
+          <div class="activity-item">
+            <div>✅ Agent Core health checked</div>
+            <div class="activity-time">5:30 PM</div>
+          </div>
+          <div class="activity-item">
+            <div>⚠️ Payroll audit completed</div>
+            <div class="activity-time">5:15 PM</div>
+          </div>
+          <div class="activity-item">
+            <div>🚫 Release blocked (security)</div>
+            <div class="activity-time">5:00 PM</div>
+          </div>
+          <div class="activity-item">
+            <div>🔄 Dashboard QA started</div>
+            <div class="activity-time">4:45 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function ask(question) {
+      document.getElementById('chatInput').value = question;
+      sendMessage();
+    }
+    
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+    
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      addMessage(message, 'user');
+      input.value = '';
+      
+      // Simulate response
+      setTimeout(() => {
+        const response = getResponse(message);
+        addMessage(response, 'bot');
+      }, 500);
+    }
+    
+    function addMessage(text, type) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${type}`;
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div class="message-time">Vừa xong</div>
+      `;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+    
+    function getResponse(question) {
+      const q = question.toLowerCase();
+      
+      if (q.includes('tổng quan') || q.includes('overview')) {
+        return `🟢 COMPANY HEALTH: 88%
+        
+Projects: 47 total
+├── Healthy: 32 (68%)
+├── Warning: 12 (26%)
+└── Critical: 3 (6%)
+
+Workers: 3/3 online
+
+Open Risks: 7
+Blocked Releases: 1
+Critical Bugs: 0`;
+      }
+      
+      if (q.includes('nguy hiểm') || q.includes('rủi ro')) {
+        return `⚠️ MOST AT RISK: Payroll
+
+Impact: Finance department affected
+Health: 72% (Critical)
+Status: Active
+
+Known Issues:
+• 1 open bug (P0 - Timezone)
+• QA coverage: 71%
+
+Recommendation:
+Fix timezone bug before next release`;
+      }
+      
+      if (q.includes('bug') || q.includes('lỗi')) {
+        return `🐛 CRITICAL BUGS: 0
+
+All critical bugs have been resolved or are being actively worked on.
+
+Open bugs by severity:
+• P0: 0 (Critical)
+• P1: 3 (High)
+• P2: 7 (Medium)
+• P3: 12 (Low)`;
+      }
+      
+      if (q.includes('worker') || q.includes('online')) {
+        return `💻 WORKERS STATUS: 3/3 Online
+
+• PC-Worker-1  🟢 Online (CPU: 45%, RAM: 8GB)
+• PC-Worker-2  🟢 Online (CPU: 32%, RAM: 6GB)
+• Laptop-Worker 🟢 Online (CPU: 28%, RAM: 4GB)
+
+All workers healthy and processing tasks.`;
+      }
+      
+      if (q.includes('qa') || q.includes('coverage')) {
+        return `✅ COMPANY QA COVERAGE: 85%
+
+By Project:
+• Agent OS: 92%
+• Dashboard: 87%
+• Payroll: 71% ⚠️
+• Review Auto: 95%
+• Bakudan: 88%
+
+Recommendation:
+Increase Payroll coverage to 80% minimum.`;
+      }
+      
+      return `Tôi hiểu câu hỏi của bạn về "${question}". 
+
+Để có câu trả lời chính xác, hãy thử:
+• "Tổng quan công ty"
+• "Project nào nguy hiểm nhất?"
+• "Có bug critical nào không?"
+• "Workers đang online không?"
+• "QA coverage hiện tại?"`;
+    }
+    
+    // Load initial data
+    async function loadData() {
+      // In production, this would fetch from the API
+      // For demo, using static data
+    }
+    
+    loadData();
+  </script>
+</body>
+</html>

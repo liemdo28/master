@@ -1,0 +1,28 @@
+{
+  "name": "master-indexer",
+  "version": "1.0.0",
+  "description": "Master Source Indexer - Scans E:\\Project\\Master and builds structured metadata",
+  "main": "indexer.js",
+  "scripts": {
+    "start": "node indexer.js --full",
+    "index": "node indexer.js --full",
+    "update": "node indexer.js --incremental",
+    "health": "node indexer.js --health",
+    "export": "node indexer.js --export json"
+  },
+  "keywords": [
+    "master",
+    "indexer",
+    "code-index",
+    "metadata",
+    "projects"
+  ],
+  "author": "Agent OS",
+  "license": "MIT",
+  "dependencies": {
+    "sql.js": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
