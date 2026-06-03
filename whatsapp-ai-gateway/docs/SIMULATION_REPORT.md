@@ -1,13 +1,13 @@
 # PHASE 2.5 SIMULATION REPORT
 
-**Generated:** 2026-06-03T05:26:09.846Z
+**Generated:** 2026-06-03T05:34:12.301Z
 **Status:** ✅ ALL PASSED — PILOT READY
 **Messages simulated:** 69
 
 ## Stats
-- Messages today: 314
-- Incoming: 233
-- Last from: Off Hours
+- Messages today: 210
+- Incoming: 167
+- Last from: During Hours
 
 ## Message Matrix Results
 
