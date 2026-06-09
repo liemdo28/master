@@ -1084,8 +1084,18 @@ function renderSystemUpdates() {
             + rows + '</tbody></table></details>';
         } catch(_) {}
       }
-      loadUpdateStatus();
-      loadUpdateLog();
+      // Auto-check on page load (silent — no spinner shown)
+      (async function() {
+        try { await fetch('/api/updates/check', { method: 'POST' }); } catch(_) {}
+        await loadUpdateStatus();
+        await loadUpdateLog();
+      })();
+
+      // Re-check every 4 hours while dashboard is open
+      setInterval(async function() {
+        try { await fetch('/api/updates/check', { method: 'POST' }); } catch(_) {}
+        await loadUpdateStatus();
+      }, 4 * 60 * 60 * 1000);
     })();
   </script>
 </section>`;
