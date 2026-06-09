@@ -33,15 +33,26 @@ Bakudan/integration-system/
 Bakudan/mobile_taskflow/
 Bakudan/packing-list/
 Bakudan/review-automation-system/
+Other/dau-tu/
 Other/It-Takes-Two-Inspired-Game/
 Other/LinkTreeHL/
+Other/phuyen-2026/
+Other/tu-vi/
 Other/Tuya/
+RawSushi/RawWebsite/
+_platform/QA/PC-QA-Stability-Certification/
+_platform/QA/qa-system/
 
 # Long path folder
 Other/VC/
 
 # Archive folder (contains many embedded git repos)
 _archive/
+
+# Agent/runtime generated workspace data
+.local-agent/
+**/.local-agent/
+Agent/agent-coding/apps/agency/data/post_exports/
 
 # Large files
 *.zip
