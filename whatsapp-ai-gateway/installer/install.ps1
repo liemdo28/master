@@ -233,15 +233,50 @@ LOG_DIR=$LogsDir
     try {
       $nodeExe   = Join-Path $AppDir 'runtime\node\node.exe'
       $chromeExe = Join-Path $AppDir 'runtime\chrome-win64\chrome.exe'
-      $psCmd = "Set-Location '$AppDir'; `$env:PUPPETEER_EXECUTABLE_PATH='$chromeExe'; `$env:CHROME_PATH='$chromeExe'; & '$nodeExe' 'src/index.js'"
-      $action   = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command `"$psCmd`""
-      $trigger  = New-ScheduledTaskTrigger -AtLogOn
-      $trigger.Delay = 'PT30S'
-      $settings = New-ScheduledTaskSettingsSet -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
-      Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
-      Write-Ok "Auto-start task '$TaskName' registered"
+      $watchdog  = Join-Path $AppDir 'scripts\watchdog.ps1'
+
+      # Use watchdog script if available, otherwise run node directly
+      if (Test-Path $watchdog) {
+        $exe = 'powershell.exe'
+        $arg = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$watchdog`""
+      } else {
+        $psCmd = "Set-Location '$AppDir'; `$env:PUPPETEER_EXECUTABLE_PATH='$chromeExe'; `$env:CHROME_PATH='$chromeExe'; & '$nodeExe' 'src/index.js'"
+        $exe = 'powershell.exe'
+        $arg = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command `"$psCmd`""
+      }
+
+      $action = New-ScheduledTaskAction -Execute $exe -Argument $arg -WorkingDirectory $AppDir
+
+      # AtStartup (boot) + AtLogon — fires whichever comes first
+      $triggerBoot  = New-ScheduledTaskTrigger -AtStartup
+      $triggerBoot.Delay = 'PT45S'   # wait 45s for network/services
+      $triggerLogon = New-ScheduledTaskTrigger -AtLogOn
+      $triggerLogon.Delay = 'PT10S'
+
+      # RunLevel Highest = runs with full admin rights, no UAC popup
+      $principal = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -LogonType ServiceAccount -RunLevel Highest
+
+      $settings = New-ScheduledTaskSettingsSet `
+        -RestartCount 99 `
+        -RestartInterval (New-TimeSpan -Minutes 2) `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -ExecutionTimeLimit (New-TimeSpan -Hours 0) `
+        -MultipleInstances IgnoreNew `
+        -StartWhenAvailable
+
+      Register-ScheduledTask `
+        -TaskName $TaskName `
+        -Action $action `
+        -Trigger @($triggerBoot, $triggerLogon) `
+        -Principal $principal `
+        -Settings $settings `
+        -Force | Out-Null
+
+      Write-Ok "Auto-start task '$TaskName' registered (boot + logon, SYSTEM, RestartCount=99)"
     } catch {
       Write-Warn "Auto-start task failed: $($_.Exception.Message)"
+      Write-Warn "App will still start manually via shortcut."
     }
   }
 
