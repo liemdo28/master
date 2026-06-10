@@ -6,11 +6,20 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
+    "bigdata:down": "cd ../infra/bigdata && docker-compose down",
+    "bigdata:health": "node ../scripts/bigdata-health-check.js",
+    "bigdata:sample": "node ../scripts/bigdata-ingest-sample.js",
+    "bigdata:quality": "node ../scripts/bigdata-run-quality-checks.js",
+    "bigdata:search": "node ../scripts/bigdata-search.js",
+    "bigdata:export": "node ../scripts/bigdata-export-report.js",
+    "bigdata:test": "tsx src/bigdata/bigdata.test.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
     "@googleapis/gmail": "^17.0.0",
+    "@qdrant/js-client-rest": "^1.18.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.10.0",
     "chokidar": "^5.0.0",
@@ -25,7 +34,10 @@
     "node-fetch": "^3.3.2",
     "uuid": "^11.1.1",
     "ws": "^8.18.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@aws-sdk/client-s3": "^3.600.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -33,6 +45,8 @@
     "@types/node": "^20.14.0",
     "@types/uuid": "^10.0.0",
     "@types/ws": "^8.5.10",
+    "@types/multer": "^1.4.12",
+    "@types/pg": "^8.11.6",
     "tsx": "^4.15.7",
     "typescript": "^5.4.5"
   }

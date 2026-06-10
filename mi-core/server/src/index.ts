@@ -23,7 +23,10 @@ import { projectsRouter } from './routes/projects';
 import { remoteRouter } from './routes/remote';
 import { dataAnalystRouter } from './routes/data-analyst';
 import { whatsappRouter } from './routes/whatsapp';
+import { skillRouter } from './routes/skill-router';
+import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
+import { bigdataRouter, initBigData } from './routes/bigdata';
 import { reminderEvents } from './reminders/reminder-store';
 import { gateEvents } from './approval/gate';
 import { rateLimiter } from './middleware/rate-limit';
@@ -101,7 +104,10 @@ app.use('/api/integration-agent', integrationAgentReleasesRouter);
 app.use('/api/projects',    projectsRouter);
 app.use('/api/data-analyst',    dataAnalystRouter);
 app.use('/api/whatsapp',        whatsappRouter);
+app.use('/api/skills',          skillRouter);
+app.use('/api/browser',         browserAgentRouter);
 app.use('/api/doordash-agent',  doordashAgentRouter);
+app.use('/api/bigdata',         bigdataRouter);
 
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);
@@ -169,5 +175,9 @@ server.listen(PORT, HOST, () => {
 
     startScheduler();
     console.log('[Mi] ✓ Scheduler started');
+
+    initBigData().then(() => {
+      console.log('[Mi] ✓ Big Data Foundation initialized');
+    }).catch(e => console.warn('[Mi] Big Data init (non-critical):', e.message));
   });
 });

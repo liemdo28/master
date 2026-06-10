@@ -1,0 +1,7 @@
+{
+  "note": "Manual upload connector accepts files via POST /api/bigdata/ingest/file",
+  "accepted_types": ["text/csv", "application/pdf", "image/png", "image/jpeg", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+  "example_csv_columns": ["Date", "Time", "Order ID", "Item Name", "Category", "Quantity", "Gross Sales", "Discount", "Tax", "Tips", "Payment Type"],
+  "max_file_size_mb": 50,
+  "source_name": "manual-upload"
+}

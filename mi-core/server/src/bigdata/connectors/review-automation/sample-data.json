@@ -1,0 +1,14 @@
+{
+  "store": "bakudan",
+  "platform": "google",
+  "review_id": "rv-g-001",
+  "rating": 2,
+  "author": "Jane Smith",
+  "text": "Waited 40 minutes for ramen. Staff was not apologetic. Will not return.",
+  "published_at": "2026-06-09T20:00:00Z",
+  "reply_status": "pending",
+  "reply_text": null,
+  "escalated": false,
+  "sentiment": "negative",
+  "tags": ["wait_time", "service"]
+}
