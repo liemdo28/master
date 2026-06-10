@@ -1,0 +1,10 @@
+[
+  { "id": "SF-01", "error": "CREDENTIALS_MISSING", "expected": "QUEUED", "description": "Missing credentials queues write" },
+  { "id": "SF-02", "error": "SHEET_UNREACHABLE", "expected": "QUEUED", "description": "Sheet unreachable queues write" },
+  { "id": "SF-03", "error": "PERMISSION_DENIED", "expected": "QUEUED", "description": "Permission denied queues write" },
+  { "id": "SF-04", "error": "QUOTA_EXCEEDED", "expected": "QUEUED", "description": "Quota exceeded queues write" },
+  { "id": "SF-05", "error": "NETWORK_FAILURE", "expected": "QUEUED", "description": "Network failure queues write" },
+  { "id": "SF-06", "error": "TAB_MISSING", "expected": "QUEUED", "description": "Tab missing queues write" },
+  { "id": "SF-07", "error": "TEMPLATE_TAB_MISSING", "expected": "QUEUED", "description": "Template tab missing queues write" },
+  { "id": "SF-08", "error": "TEST_TAB_MISSING", "expected": "QUEUED", "description": "Test tab missing queues write" }
+]

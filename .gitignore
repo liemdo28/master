@@ -53,6 +53,7 @@ _archive/
 .local-agent/
 **/.local-agent/
 Agent/agent-coding/apps/agency/data/post_exports/
+agent-os/local-agent/data/
 
 # Large files
 *.zip

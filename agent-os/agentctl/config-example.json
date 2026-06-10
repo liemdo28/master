@@ -1,5 +1,0 @@
-{
-  "control_plane": "http://100.118.102.113:3700",
-  "default_worker": "pc-master",
-  "token": "optional-auth-token"
-}

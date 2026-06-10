@@ -44,7 +44,8 @@ async function* parseSSE(body: ReadableStream<Uint8Array>): AsyncGenerator<SSEEv
   let event = '';
   const data: string[] = [];
 
-  for await (const line of sseLines(body)) {
+  for await (const rawLine of sseLines(body)) {
+    const line = rawLine.endsWith('\r') ? rawLine.slice(0, -1) : rawLine;
     if (line === '') {
       if (data.length > 0) {
         yield { event, data: data.join('\n') };
@@ -160,6 +161,18 @@ export async function peekAnthropicStreamStart(
   try { parsed = JSON.parse(dataStr) as Record<string, unknown>; } catch { /* ignore */ }
 
   const resolvedType = eventType || String(parsed['type'] ?? '');
+
+  if (!resolvedType) {
+    const sample = text.trim().slice(0, 160);
+    reader.releaseLock();
+    return {
+      ok: false,
+      errorType: 'stream_protocol_error',
+      errorMessage: sample
+        ? `Invalid Anthropic SSE start: ${sample}`
+        : 'Invalid Anthropic SSE start: no event data received',
+    };
+  }
 
   if (resolvedType === 'error') {
     const err = (parsed['error'] ?? parsed) as Record<string, unknown>;

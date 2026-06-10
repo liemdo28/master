@@ -24,13 +24,50 @@ const keyRotation = await import('../dist/runtime/api-key-rotation-service.js');
 
 {
   const resolved = modelMap.resolveRuntimeModelDetailed('opusmax', 'claude-opus-4-7');
-  assert(resolved.resolvedModel === 'gpt-5.4', 'Opus 4.7 request resolves to OpusMax STANDARD runtime alias', JSON.stringify(resolved));
-  assert(resolved.reason === 'opusmax_standard_alias', 'STANDARD alias reason is visible in diagnostics', JSON.stringify(resolved));
+  assert(resolved.resolvedModel === 'claude-opus-4-7', 'Opus 4.7 request resolves to OpusMax raw runtime alias', JSON.stringify(resolved));
+  assert(resolved.reason === 'opusmax_raw_alias', 'Raw alias reason is visible in diagnostics', JSON.stringify(resolved));
 }
 
 {
   const resolved = modelMap.resolveRuntimeModelDetailed('opusmax', 'claude-opus-4-8');
-  assert(resolved.resolvedModel === 'gpt-5.4', 'Opus 4.8 request resolves to OpusMax STANDARD runtime alias', JSON.stringify(resolved));
+  assert(resolved.resolvedModel === 'claude-opus-4-8', 'Opus 4.8 request resolves to OpusMax raw runtime alias', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('opusmax', 'claude-opus-4-6');
+  assert(resolved.resolvedModel === 'claude-opus-4-6', 'Opus 4.6 request resolves to OpusMax raw runtime alias', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('opusmax', 'claude-opus-4-6', { thinking: true });
+  assert(resolved.resolvedModel === 'claude-opus-4-6-thinking', 'OpusMax thinking request resolves to -thinking model', JSON.stringify(resolved));
+  assert(resolved.reason === 'opusmax_thinking_alias', 'Thinking alias reason is visible in diagnostics', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('opusmax', 'claude-opus-4.8-thinking');
+  assert(resolved.resolvedModel === 'claude-opus-4-8-thinking', 'OpusMax accepts explicit 4.8 thinking model alias', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('antigravity', 'claude-opus-4.8-thinking');
+  assert(resolved.resolvedModel === 'claude-opus-4-7', 'NKQ strips unsupported thinking suffix and falls back to Opus 4.7', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('openrouter', 'claude-opus-4-6');
+  assert(resolved.resolvedModel === 'anthropic/claude-opus-4.1', 'OpenRouter reserve fallback maps Opus request to provider default model', JSON.stringify(resolved));
+  assert(resolved.reason === 'provider_default_model_fallback', 'Reserve fallback exposes provider default reason', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('openai', 'claude-opus-4-6');
+  assert(resolved.resolvedModel === 'gpt-4.1', 'OpenAI reserve fallback maps Opus request to GPT coding model', JSON.stringify(resolved));
+}
+
+{
+  const resolved = modelMap.resolveRuntimeModelDetailed('deepseek', 'claude-opus-4-6');
+  assert(resolved.resolvedModel === 'deepseek-chat', 'DeepSeek reserve fallback maps Opus request to DeepSeek chat model', JSON.stringify(resolved));
 }
 
 {
@@ -49,7 +86,23 @@ const keyRotation = await import('../dist/runtime/api-key-rotation-service.js');
 {
   const err = classifier.classifyUpstreamError(402, '{"error":"quota exceeded"}');
   assert(err.type === 'quota_exceeded', 'quota exhausted is classified exactly', JSON.stringify(err));
-  assert(classifier.shouldDisableKeyForError(err.type) === true, 'quota exhausted disables/cools down key');
+  assert(classifier.shouldDisableKeyForError(err.type) === false, 'quota exhausted is handled at source scope, not whole key scope');
+}
+
+{
+  const err = classifier.classifyUpstreamError(418, '{"error":{"message":"provider: r, http code: 400, message: InvokeModelWithResponseStream permission denied"}}');
+  assert(err.type === 'provider_down', 'OpusMax backend 418 provider failures are classified as provider_down', JSON.stringify(err));
+}
+
+{
+  const err = classifier.classifyUpstreamError(429, '{"error":{"message":"All available accounts exhausted","type":"server_error"}}');
+  assert(err.type === 'provider_down', 'OpusMax account pool 429 is provider_down, not key rate_limited', JSON.stringify(err));
+  assert(classifier.shouldDisableKeyForError(err.type) === false, 'OpusMax account pool 429 does not cool down the key');
+}
+
+{
+  const err = classifier.classifyThrownError(new Error('fetch failed'));
+  assert(err.type === 'provider_down', 'fetch failed is classified as provider_down', JSON.stringify(err));
 }
 
 {

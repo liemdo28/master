@@ -1,0 +1,172 @@
+[
+  {
+    "name": "accounting-engine",
+    "path": "E:\\Project\\Master\\accounting-engine",
+    "type": "node",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\accounting-engine\\reports\\accounting-qa-report.md"
+    ],
+    "has_qa": true,
+    "last_modified": "2026-06-09T09:05:55.155Z"
+  },
+  {
+    "name": "Agent",
+    "path": "E:\\Project\\Master\\Agent",
+    "type": "project",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\.local-agent\\project-summary.md",
+      "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\API_GATEWAY_JSON_FIX_REPORT.md",
+      "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\API_GATEWAY_PROVIDER_FAIL_FIX_REPORT.md",
+      "E:\\Project\\Master\\Agent\\agent-coding-api-keys\\CEO_DIRECTIVE_FULL_LOCAL_GATEWAY_AUDIT.md",
+      "E:\\Project\\Master\\Agent\\ai-search-tool\\cv-format-web\\QA_CHANGELOG_CHECKLIST.md",
+      "E:\\Project\\Master\\Agent\\ai-search-tool\\cv-format-web\\QA_CHECKLIST.md",
+      "E:\\Project\\Master\\Agent\\shared-workspace\\.local-agent\\project-summary.md",
+      "E:\\Project\\Master\\Agent\\shared-workspace\\infrastructure\\._FINAL-IMPLEMENTATION-REPORT.md",
+      "E:\\Project\\Master\\Agent\\shared-workspace\\infrastructure\\FINAL-IMPLEMENTATION-REPORT.md"
+    ],
+    "has_qa": true,
+    "last_modified": "2026-06-09T05:23:06.623Z"
+  },
+  {
+    "name": "agent-coding-api-keys",
+    "path": "E:\\Project\\Master\\agent-coding-api-keys",
+    "type": "project",
+    "issues": [],
+    "reports": [],
+    "has_qa": false,
+    "last_modified": "2026-06-09T09:49:04.257Z"
+  },
+  {
+    "name": "Bakudan",
+    "path": "E:\\Project\\Master\\Bakudan",
+    "type": "project",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_ORG_PHASE1.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_ORG_PHASE2.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_ORG_PHASE3.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE4.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE5_UI.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE6_BACKEND.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE6_BACKEND_STRESS.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE6_FINAL_INTEGRATION.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE6_UI.md",
+      "E:\\Project\\Master\\Bakudan\\Agent-Coding\\ENGINEERING_REPORT_CLOSED_LOOP_PHASE7_BACKEND.md"
+    ],
+    "has_qa": false,
+    "last_modified": "2026-06-09T09:38:47.545Z"
+  },
+  {
+    "name": "bakudan-releases",
+    "path": "E:\\Project\\Master\\bakudan-releases",
+    "type": "project",
+    "git_branch": "main",
+    "git_dirty": false,
+    "last_commit": "",
+    "issues": [],
+    "reports": [],
+    "has_qa": false,
+    "last_modified": "2026-06-09T13:58:13.782Z"
+  },
+  {
+    "name": "food-safety-gateway",
+    "path": "E:\\Project\\Master\\food-safety-gateway",
+    "type": "project",
+    "issues": [],
+    "reports": [],
+    "has_qa": false,
+    "last_modified": "2026-06-09T09:05:43.264Z"
+  },
+  {
+    "name": "mi-core",
+    "path": "E:\\Project\\Master\\mi-core",
+    "type": "node",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\mi-core\\ACTION_APPROVAL_VALIDATION.md",
+      "E:\\Project\\Master\\mi-core\\ASANA_DASHBOARD_ACTION_REPORT.md",
+      "E:\\Project\\Master\\mi-core\\CALENDAR_ACTION_WORKFLOW_REPORT.md",
+      "E:\\Project\\Master\\mi-core\\COLUMN_MAPPING_VALIDATION.md",
+      "E:\\Project\\Master\\mi-core\\CONTACT_RESOLUTION_VALIDATION.md",
+      "E:\\Project\\Master\\mi-core\\DAILY_ACTION_LAYER_REPORT.md",
+      "E:\\Project\\Master\\mi-core\\DAILY_SNAPSHOT_VALIDATION.md",
+      "E:\\Project\\Master\\mi-core\\DATA_ANALYST_BROWSER_VALIDATION.md",
+      "E:\\Project\\Master\\mi-core\\DATA_ANALYST_LAYER_REPORT.md",
+      "E:\\Project\\Master\\mi-core\\DATA_INGESTION_REPORT.md"
+    ],
+    "has_qa": false,
+    "last_modified": "2026-06-09T15:58:38.224Z"
+  },
+  {
+    "name": "Other",
+    "path": "E:\\Project\\Master\\Other",
+    "type": "project",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\Other\\It-Takes-Two-Inspired-Game\\qa\\QA_ENTRY_GATE_CHECKLIST.md",
+      "E:\\Project\\Master\\Other\\It-Takes-Two-Inspired-Game\\qa\\QA_PLAYTEST_PLAN_1000_GAMERS.md",
+      "E:\\Project\\Master\\Other\\It-Takes-Two-Inspired-Game\\roadmap\\KPI_AND_QA_STRATEGY.md",
+      "E:\\Project\\Master\\Other\\LinkTreeHL\\.local-agent\\project-summary.md",
+      "E:\\Project\\Master\\Other\\phuyen-2026\\.local-agent\\project-summary.md",
+      "E:\\Project\\Master\\Other\\phuyen-2026\\docs\\AUDIT.md",
+      "E:\\Project\\Master\\Other\\phuyen-2026\\qa\\final-deployment-consistency-audit.md",
+      "E:\\Project\\Master\\Other\\phuyen-2026\\qa\\personality-audit-report.md",
+      "E:\\Project\\Master\\Other\\Tuya\\tuya-smart-home\\PROJECT_SUMMARY.md"
+    ],
+    "has_qa": true,
+    "last_modified": "2026-06-01T08:33:20.242Z"
+  },
+  {
+    "name": "qb-ops-agent",
+    "path": "E:\\Project\\Master\\qb-ops-agent",
+    "type": "node",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\qb-ops-agent\\reports\\QA_REPORT.md"
+    ],
+    "has_qa": true,
+    "last_modified": "2026-06-09T09:29:16.894Z"
+  },
+  {
+    "name": "RawSushi",
+    "path": "E:\\Project\\Master\\RawSushi",
+    "type": "project",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\.local-agent\\project-summary.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\CLOUDFLARE_PREVIEW_E2E_VALIDATION.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\DISASTER_RECOVERY_REPORT.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\DUPLICATE_FILES_BACKUP_REPORT.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\GA_PRODUCTION_VALIDATION.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\LIVE_ENVIRONMENT_VALIDATION.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\PERMISSION_MATRIX_REPORT.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\PHASE2_CMS_IMPLEMENTATION_REPORT.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\PRODUCTION_HARDENING_FINAL_REPORT.md",
+      "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\PRODUCTION_HARDENING_REPORT.md"
+    ],
+    "has_qa": false,
+    "last_modified": "2026-06-08T08:51:50.627Z"
+  },
+  {
+    "name": "whatsapp-ai-gateway",
+    "path": "E:\\Project\\Master\\whatsapp-ai-gateway",
+    "type": "node",
+    "issues": [],
+    "reports": [
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\ADMIN_CONTROL_CENTER_UI_AUDIT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\AUDIT_TRAIL_AUDIT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\CEO_GOOGLE_SHEET_DAILY_LOG_REPORT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\CEO_QA_GATE_REPORT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\CLEAN_LAPTOP_INSTALL_VALIDATION.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\COMMAND_ROUTER_PRIORITY_REPORT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\DAILY_ENTRY_AUDIT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\DEV1_RUNTIME_VALIDATION_REPORT.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\DEV2_COVERAGE_SUMMARY.md",
+      "E:\\Project\\Master\\whatsapp-ai-gateway\\docs\\DEV3_CEO_AUDIT_PACKAGE.md"
+    ],
+    "has_qa": true,
+    "last_modified": "2026-06-09T13:55:15.078Z"
+  }
+]

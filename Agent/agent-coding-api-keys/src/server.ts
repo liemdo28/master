@@ -74,19 +74,61 @@ import { quotaOrchestrator } from './runtime/quota-orchestrator.js';
 import { providerControl } from './runtime/provider-control.js';
 import { providerRotationService } from './runtime/provider-rotation-service.js';
 import { apiKeyRotationService } from './runtime/api-key-rotation-service.js';
+import { modelQuotaService } from './runtime/model-quota-service.js';
 import { keyDb } from './db/key-database.js';
 import { providerKeyService } from './services/provider-key-service.js';
+import { keysManager } from './keys/keys-manager.js';
 import { memoryGuard } from './runtime/memory-guard.js';
 import { sessionRuntime } from './runtime/session-runtime.js';
 import { executionGraph } from './runtime/execution-graph.js';
 import { timeline } from './runtime/timeline.js';
 import { supervisor } from './runtime/supervisor.js';
 import { getAllowedModels, resolveRuntimeModelDetailed } from './runtime/provider-model-map.js';
+import { classifyUpstreamError } from './runtime/upstream-error-classifier.js';
 
 const config = loadGatewayConfig();
 const providers = config.providers.map(createProvider);
 const health = new HealthManager(providers, config.healthIntervalMs);
 const router = new ProviderRouter(config, providers, health);
+
+function getSourceWindowSnapshot(requestedModel = 'claude-opus-4-6') {
+  const providerEntries = config.providers
+    .filter((p) => p.enabled && (p.id === 'antigravity' || p.id === 'opusmax'))
+    .map((p) => {
+      const resolution = resolveRuntimeModelDetailed(p.id, requestedModel);
+      const dbKeys = providerKeyService.getKeys(p.id, p.keys);
+      return { providerId: p.id, keys: dbKeys, requestedModel, defaultResolvedModel: resolution.resolvedModel };
+    });
+  const supplySources = modelQuotaService.getSupplySources(providerEntries);
+  const sourceCandidates = providerEntries.flatMap((entry) =>
+    modelQuotaService.getSourceCandidates(entry.providerId, entry.keys, entry.requestedModel, entry.defaultResolvedModel)
+      .map((candidate) => ({
+        providerId: candidate.providerId,
+        keyId: candidate.key.id,
+        model: candidate.model,
+        sourceId: candidate.sourceId,
+        sourceLabel: candidate.sourceLabel,
+        keyUsable: apiKeyRotationService.isKeyUsable(candidate.providerId, candidate.key),
+        quotaUsable: modelQuotaService.canUse(candidate.providerId, candidate.key, candidate.model),
+        sourceUsable: modelQuotaService.canUseSource(candidate),
+        quota: modelQuotaService.getKeyModelSnapshot(candidate.providerId, candidate.key, candidate.model),
+      })),
+  );
+
+  return {
+    requestedModel,
+    sourceWindow: modelQuotaService.getCurrentSourceWindow(sourceCandidates.map((candidate) => candidate.sourceId)),
+    supplySources,
+    sources: sourceCandidates.map((candidate) => ({
+      ...candidate,
+      usable: candidate.keyUsable && candidate.quotaUsable && candidate.sourceUsable,
+    })),
+  };
+}
+
+function classifyStreamPeekFailure(errorType: string, errorMessage: string) {
+  return classifyUpstreamError(503, `${errorType}: ${errorMessage}`);
+}
 
 // ── Boot runtime subsystems ────────────────────────────────────────────────
 health.start();
@@ -156,6 +198,7 @@ const server = http.createServer(async (req, res) => {
         mode: config.mode,
         providers: config.providers.map(publicProvider),
         health: health.list(),
+        sourceRotation: getSourceWindowSnapshot('claude-opus-4-6'),
         stats: getLogStats(),
       });
       return;
@@ -186,6 +229,7 @@ const server = http.createServer(async (req, res) => {
             breakers: circuitBreakers.getStats(),
             control: providerControl.getStatus(),
             window: providerRotationService.getCurrentWindow(),
+            sourceRotation: getSourceWindowSnapshot('claude-opus-4-6'),
             allProviders: config.providers
               .filter((p) => p.enabled)
               .map((p) => ({ id: p.id, label: p.label, kind: p.kind, enabled: p.enabled })),
@@ -284,6 +328,41 @@ const server = http.createServer(async (req, res) => {
         ok: true,
         message: `Provider '${providerId}' quota and state reset.`,
         provider: quotaOrchestrator.getProviderState(providerId),
+      });
+      return;
+    }
+
+    // ── Runtime quota reset (per key+model, no restart needed) ───────────
+    // POST /api/runtime/quota/reset/:providerId/:keyId/:model
+    const quotaEntryResetMatch = path.match(/^\/api\/runtime\/quota\/reset\/([^/]+)\/([^/]+)\/([^/]+)$/);
+    if (req.method === 'POST' && quotaEntryResetMatch) {
+      const providerId = quotaEntryResetMatch[1]!;
+      const keyId = quotaEntryResetMatch[2]!;
+      const model = quotaEntryResetMatch[3]!;
+      const ok = modelQuotaService.resetModelQuotaEntry(providerId, keyId, model);
+      if (!ok) {
+        jsonError(res, 404, `Quota entry '${providerId}:${keyId}:${model}' not found.`, 'not_found');
+        return;
+      }
+      sendJson(res, 200, {
+        ok: true,
+        message: `Quota entry '${providerId}:${keyId}:${model}' reset to 0 — no restart needed.`,
+        entry: `${providerId}:${keyId}:${model}`,
+      });
+      return;
+    }
+
+    // ── Runtime quota reset (all entries for a provider) ──────────────────
+    // POST /api/runtime/quota/reset/:providerId  (body: {} or omit)
+    const quotaProviderResetMatch = path.match(/^\/api\/runtime\/quota\/reset\/([^/]+)$/);
+    if (req.method === 'POST' && quotaProviderResetMatch) {
+      const providerId = quotaProviderResetMatch[1]!;
+      const count = modelQuotaService.resetAllModelQuotaForProvider(providerId);
+      sendJson(res, 200, {
+        ok: true,
+        message: `Reset ${count} quota entries for provider '${providerId}' — no restart needed.`,
+        provider: providerId,
+        count,
       });
       return;
     }
@@ -397,17 +476,57 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 200, {
         ts: Date.now(),
         window: providerRotationService.getCurrentWindow(),
-        providers: enabledProviders.map((p) => ({
-          id: p.id,
-          label: p.label,
-          enabled: p.enabled,
-          keys: apiKeyRotationService.getProviderKeyHealth(p.id, p.keys).map((h) => ({
-            ...h,
-            masked: p.keys.find((k) => k.id === h.keyId)
-              ? `${(p.keys.find((k) => k.id === h.keyId)!.value).slice(0, 6)}...`
-              : h.keyId,
-          })),
-        })),
+        providers: enabledProviders.map((p) => {
+          const runtimeKeys = providerKeyService.getKeys(p.id, p.keys);
+          return {
+            id: p.id,
+            label: p.label,
+            enabled: p.enabled,
+            keys: apiKeyRotationService.getProviderKeyHealth(p.id, runtimeKeys).map((h) => {
+              const runtimeKey = runtimeKeys.find((k) => k.id === h.keyId);
+              const raw = runtimeKey?.value ?? h.keyId;
+              return {
+                ...h,
+                masked: raw.length > 8 ? `${raw.slice(0, 6)}...${raw.slice(-4)}` : h.keyId,
+                modelQuotas: runtimeKey ? [
+                  modelQuotaService.getKeyModelSnapshot(p.id, runtimeKey, 'claude-opus-4-6'),
+                  modelQuotaService.getKeyModelSnapshot(p.id, runtimeKey, 'claude-opus-4-7'),
+                ].filter(Boolean) : [],
+              };
+            }),
+          };
+        }),
+        sourceRotation: getSourceWindowSnapshot('claude-opus-4-6'),
+      });
+      return;
+    }
+    if (req.method === 'GET' && path === '/api/runtime/model-quotas') {
+      const providerId = url.searchParams.get('provider') ?? undefined;
+      sendJson(res, 200, {
+        ts: Date.now(),
+        quotas: modelQuotaService.getSnapshot(providerId),
+      });
+      return;
+    }
+    if (req.method === 'GET' && path === '/api/runtime/source-window') {
+      const requestedModel = url.searchParams.get('model') ?? 'claude-opus-4-7';
+      sendJson(res, 200, {
+        ts: Date.now(),
+        ...getSourceWindowSnapshot(requestedModel),
+      });
+      return;
+    }
+    const sourceActionMatch = path.match(/^\/api\/runtime\/sources\/([^/]+)\/(enable|disable|reset)$/);
+    if (req.method === 'POST' && sourceActionMatch) {
+      const [, sourceId, action] = sourceActionMatch as [string, string, string];
+      if (action === 'enable') modelQuotaService.setSourceEnabled(sourceId, true);
+      if (action === 'disable') modelQuotaService.setSourceEnabled(sourceId, false);
+      if (action === 'reset') modelQuotaService.resetSource(sourceId);
+      sendJson(res, 200, {
+        ok: true,
+        sourceId,
+        action,
+        sourceRotation: getSourceWindowSnapshot('claude-opus-4-6'),
       });
       return;
     }
@@ -422,8 +541,8 @@ const server = http.createServer(async (req, res) => {
           .map((p) => {
             const quota = quotaOrchestrator.getProviderState(p.id);
             const resolution = resolveRuntimeModelDetailed(p.id, requestedModel);
-            const keyHealth = apiKeyRotationService.getProviderKeyHealth(p.id, p.keys);
             const dbKeys = providerKeyService.getKeys(p.id, p.keys);
+            const keyHealth = apiKeyRotationService.getProviderKeyHealth(p.id, dbKeys);
             const keys = (keyHealth.length > 0 ? keyHealth : dbKeys.map((k) => ({
               keyId: k.id,
               providerId: p.id,
@@ -447,6 +566,9 @@ const server = http.createServer(async (req, res) => {
                 lastErrorReason: h.lastErrorType,
                 lastErrorMessage: h.lastErrorMessage,
                 nextRetryTime: h.cooldownUntil ? new Date(h.cooldownUntil).toISOString() : null,
+                modelQuota: runtimeKey
+                  ? modelQuotaService.getKeyModelSnapshot(p.id, runtimeKey, resolution.resolvedModel)
+                  : null,
               };
             });
 
@@ -485,6 +607,100 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && path === '/api/providers/logs') {
       const limit = parseInt(url.searchParams.get('limit') ?? '50', 10);
       sendJson(res, 200, { logs: router.requestLogs().slice(0, limit) });
+      return;
+    }
+
+    // ── Keys.json UI management endpoints ──────────────────────────────────
+    if (req.method === 'GET' && path === '/api/keys/providers') {
+      try {
+        const providers = keysManager.getAllProviders();
+        sendJson(res, 200, { providers });
+      } catch (error) {
+        jsonError(res, 500, String(error), 'read_error');
+      }
+      return;
+    }
+
+    if (req.method === 'GET' && path.startsWith('/api/keys/providers/')) {
+      const providerId = path.slice('/api/keys/providers/'.length);
+      if (!providerId) {
+        jsonError(res, 400, 'Provider ID required', 'missing_provider');
+        return;
+      }
+      try {
+        const keys = keysManager.getProviderKeys(providerId);
+        sendJson(res, 200, {
+          providerId,
+          keys: keys.map((k) => ({
+            id: k.id || `key-${keys.indexOf(k)}`,
+            active: k.active,
+            label: k.label || 'Unnamed',
+            masked: k.value.slice(0, 6) + '...' + k.value.slice(-4),
+            createdAt: k.createdAt,
+          })),
+        });
+      } catch (error) {
+        jsonError(res, 500, String(error), 'read_error');
+      }
+      return;
+    }
+
+    const addKeyMatch = path.match(/^\/api\/keys\/providers\/([^/]+)\/add$/);
+    if (req.method === 'POST' && addKeyMatch) {
+      const providerId = addKeyMatch[1]!;
+      try {
+        const body = await readJsonBody<{ key: string; label?: string }>(req);
+        if (!body.key || !body.key.trim()) {
+          jsonError(res, 400, 'Key value is required', 'missing_key');
+          return;
+        }
+        const label = body.label && body.label.trim() ? body.label.trim() : undefined;
+        const entry = keysManager.addKey(providerId, body.key.trim(), label);
+        sendJson(res, 201, {
+          ok: true,
+          key: {
+            id: entry.id,
+            active: entry.active,
+            label: entry.label,
+            masked: entry.value.slice(0, 6) + '...' + entry.value.slice(-4),
+          },
+        });
+      } catch (error) {
+        jsonError(res, 500, String(error), 'add_key_error');
+      }
+      return;
+    }
+
+    const toggleKeyMatch = path.match(/^\/api\/keys\/providers\/([^/]+)\/keys\/([^/]+)\/toggle$/);
+    if (req.method === 'POST' && toggleKeyMatch) {
+      const [, providerId, keyId] = toggleKeyMatch as [string, string, string];
+      try {
+        const body = await readJsonBody<{ active: boolean }>(req);
+        const updated = keysManager.toggleKey(providerId, keyId, body.active);
+        if (!updated) {
+          jsonError(res, 404, 'Key not found', 'not_found');
+          return;
+        }
+        sendJson(res, 200, { ok: true, active: updated.active });
+      } catch (error) {
+        jsonError(res, 500, String(error), 'toggle_error');
+      }
+      return;
+    }
+
+    const deleteKeyMatch = path.match(/^\/api\/keys\/providers\/([^/]+)\/keys\/([^/]+)$/);
+    if (req.method === 'DELETE' && deleteKeyMatch) {
+      const [, providerId, keyId] = deleteKeyMatch as [string, string, string];
+      try {
+        const ok = keysManager.deleteKey(providerId, keyId);
+        if (!ok) {
+          jsonError(res, 404, 'Key not found', 'not_found');
+          return;
+        }
+        sendJson(res, 200, { ok: true });
+      } catch (error) {
+        jsonError(res, 500, String(error), 'delete_error');
+      }
       return;
     }
 
@@ -768,15 +984,32 @@ const server = http.createServer(async (req, res) => {
               `  — retry ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
             );
             if (peekRetries >= MAX_STREAM_PEEK_RETRIES) {
+              const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
               // Only quarantine the provider after the stream start failed for
-              // the whole retry budget. Transient first-event failures can
-              // recover on retry and should not poison the circuit breaker.
-              circuitBreakers.recordFailure(streamResult.provider.id);
+              // a real provider outage. Quota/rate/client errors should be
+              // visible in logs without poisoning provider health.
+              if (classified.type === 'provider_down') {
+                circuitBreakers.recordFailure(streamResult.provider.id);
+              }
+              finalizeLog(requestId, t0, {
+                endpoint: 'openai', model: request.model, streaming: true,
+                toolCount: request.tools?.length ?? 0, inputMessages: request.messages.length,
+              }, {
+                status: 'error',
+                provider: streamResult.provider.id,
+                providerKind: streamResult.provider.kind,
+                resolvedModel: streamResult.model,
+                attempts: streamResult.attempts.length,
+                fallbacks: streamResult.attempts.filter((a) => !a.ok).length,
+                error: `${classified.type}: ${peek.errorMessage}`,
+              });
+              metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: streamResult.provider.id, streaming: true, streamCompleted: false, fallback: streamResult.attempts.length > 1, inputTokens: 0, outputTokens: 0 });
               sendJson(res, 503, {
-                error: { type: peek.errorType, message: peek.errorMessage },
+                error: { type: classified.type, upstreamType: peek.errorType, message: peek.errorMessage },
                 gateway: { retries: peekRetries },
               });
               metrics.requestEnd();
+              finalizeCorrelation(correlation.requestId);
               return;
             }
             // Backoff then re-route (circuit breaker now steers away from failed provider)
@@ -899,15 +1132,32 @@ const server = http.createServer(async (req, res) => {
               `  — retry ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
             );
             if (peekRetries >= MAX_STREAM_PEEK_RETRIES) {
+              const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
               // Only quarantine the provider after the stream start failed for
-              // the whole retry budget. Transient first-event failures can
-              // recover on retry and should not poison the circuit breaker.
-              circuitBreakers.recordFailure(streamResult.provider.id);
+              // a real provider outage. Quota/rate/client errors should be
+              // visible in logs without poisoning provider health.
+              if (classified.type === 'provider_down') {
+                circuitBreakers.recordFailure(streamResult.provider.id);
+              }
+              finalizeLog(requestId, t0, {
+                endpoint: 'anthropic', model: request.model, streaming: true,
+                toolCount: request.tools?.length ?? 0, inputMessages: request.messages.length,
+              }, {
+                status: 'error',
+                provider: streamResult.provider.id,
+                providerKind: streamResult.provider.kind,
+                resolvedModel: streamResult.model,
+                attempts: streamResult.attempts.length,
+                fallbacks: streamResult.attempts.filter((a) => !a.ok).length,
+                error: `${classified.type}: ${peek.errorMessage}`,
+              });
+              metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: streamResult.provider.id, streaming: true, streamCompleted: false, fallback: streamResult.attempts.length > 1, inputTokens: 0, outputTokens: 0 });
               sendJson(res, 503, {
-                error: { type: peek.errorType, message: peek.errorMessage },
+                error: { type: classified.type, upstreamType: peek.errorType, message: peek.errorMessage },
                 gateway: { retries: peekRetries },
               });
               metrics.requestEnd();
+              finalizeCorrelation(correlation.requestId);
               return;
             }
             await new Promise((r) => setTimeout(r, PEEK_BACKOFF_MS[peekRetries - 1] ?? 600));
@@ -1118,7 +1368,7 @@ const server = http.createServer(async (req, res) => {
       '  GET  /api/runtime/quotas/live   Live quota state snapshot',
       '  GET  /api/runtime/providers/live Live provider + breaker state',
       '  GET  /api/runtime/rotation/live Live rotation state',
-      '  GET  /api/runtime/window        Current 15-min rotation window',
+      '  GET  /api/runtime/window        Current 5-min rotation window',
       '  GET  /api/providers/status      Provider + key health (all providers)',
       '  GET  /api/providers/diagnostics Provider model/quota/key diagnostics',
       '  GET  /api/providers/rotation    Rotation state + feature flags',
@@ -1138,6 +1388,8 @@ const server = http.createServer(async (req, res) => {
       '  GET  /api/admin/audit           Admin: Audit log',
       '  POST /api/runtime/reset        Reset ALL quota + circuit breakers (operator)',
       '  POST /api/runtime/reset/:id    Reset single provider quota (operator)',
+      '  POST /api/runtime/quota/reset/:provider/:keyId/:model  Reset single key+model quota entry (no restart)',
+      '  POST /api/runtime/quota/reset/:provider              Reset all quota entries for provider (no restart)',
       '  GET  /api/runtime/provider/active  Active provider + translation info',
       '  POST /api/runtime/provider/switch  Hot-swap active provider { provider: id }',
       '  POST /api/runtime/provider/mode   Set control mode { mode: manual|assisted-auto }',
@@ -1152,6 +1404,25 @@ const server = http.createServer(async (req, res) => {
     const code = (error as { code?: string }).code;
     if (code === 'BODY_TOO_LARGE') {
       try { if (!res.headersSent) jsonError(res, 413, message, 'body_too_large'); } catch { res.end(); }
+      return;
+    }
+    if (code === 'ALL_PROVIDERS_FAILED') {
+      const attemptedSources = (error as { attempted_sources?: unknown }).attempted_sources;
+      try {
+        if (!res.headersSent) {
+          sendJson(res, 503, {
+            error: {
+              type: 'NO_AVAILABLE_QUOTA_SOURCE',
+              message,
+            },
+            gateway: {
+              attempted_sources: attemptedSources,
+            },
+          });
+        } else {
+          res.end();
+        }
+      } catch { res.end(); }
       return;
     }
     console.error(`[gateway] error:`, message);
@@ -1201,10 +1472,30 @@ process.on('uncaughtException', (err: NodeJS.ErrnoException) => {
     console.error('[gateway] Stop the existing owner only after confirming it is not the active gateway.');
     process.exit(1);
   }
-  console.error('[gateway] uncaughtException:', err);
+  // AbortError and timeout errors are request-level issues — log and continue, don't shut down.
+  if (err.name === 'AbortError' || (err as Error).message?.includes('aborted') || (err as Error).message?.includes('timeout')) {
+    console.warn('[gateway] uncaughtException (non-fatal, continuing):', err.message);
+    return;
+  }
+  // ECONNRESET / EPIPE happen when clients disconnect mid-stream — not fatal.
+  if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.code === 'ENOTFOUND') {
+    console.warn(`[gateway] network error (non-fatal): ${err.code} ${err.message}`);
+    return;
+  }
+  console.error('[gateway] uncaughtException (fatal):', err);
   gracefulShutdown('uncaughtException');
 });
 process.on('unhandledRejection', (reason) => {
+  const err = reason instanceof Error ? reason : new Error(String(reason));
+  // Same non-fatal list as uncaughtException
+  if (err.name === 'AbortError' || err.message?.includes('aborted') || err.message?.includes('timeout')) {
+    console.warn('[gateway] unhandledRejection (non-fatal):', err.message);
+    return;
+  }
+  if ((err as NodeJS.ErrnoException).code === 'ECONNRESET' || (err as NodeJS.ErrnoException).code === 'EPIPE') {
+    console.warn(`[gateway] unhandledRejection network (non-fatal): ${err.message}`);
+    return;
+  }
   console.error('[gateway] unhandledRejection:', reason);
 });
 
@@ -1217,6 +1508,10 @@ server.on('error', (err: NodeJS.ErrnoException) => {
   }
   throw err;
 });
+
+// Always boot with antigravity (NKQ) as the active provider.
+// setDefault() is a no-op if the operator has already switched via API.
+providerControl.setDefault('antigravity');
 
 server.listen(config.port, config.host, () => {
   const active = config.providers.filter((p) => p.enabled).map((p) => p.label).join(' → ') || 'none';

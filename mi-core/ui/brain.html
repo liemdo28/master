@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi — Core Brain Status</title>
+  <style>
+    :root { --bg:#0d0d0d;--surface:#161616;--surface2:#1f1f1f;--border:#2a2a2a;--accent:#4f8ef7;--text:#e8e8e8;--text-dim:#888;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    header{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+    a.back{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;font-size:13px;text-decoration:none}
+    h1{font-size:16px;font-weight:600}
+    .badge{padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
+    .badge.ready{background:#1a3a1a;color:var(--success)}
+    .badge.partial{background:#3a2a00;color:var(--warning)}
+    .badge.offline{background:#3a0000;color:var(--danger)}
+    .refresh-btn{margin-left:auto;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;font-size:12px}
+    .container{max-width:1000px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:700px){.container{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+    .card.full{grid-column:1/-1}
+    .card-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+    .stat-row:last-child{border-bottom:none}
+    .stat-label{color:var(--text-dim)}
+    .stat-value{font-weight:500}
+    .chip{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);margin:2px}
+    .chip.ok{border-color:#2a5a2a;color:var(--success);background:#1a3a1a}
+    .chip.fail{border-color:#5a0000;color:var(--danger);background:#3a0000}
+    .action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#3a7de0}
+    .btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--text-dim)}
+    .btn-secondary:hover{color:var(--text)}
+    .log-box{background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:var(--text-dim);max-height:200px;overflow-y:auto;margin-top:10px;white-space:pre-wrap;word-break:break-all}
+    .connector-grid{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+    .connector-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--surface2);border-radius:8px;font-size:12px}
+    .c-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .c-dot.ok{background:var(--success)}
+    .c-dot.nc{background:var(--text-dim)}
+    .c-dot.err{background:var(--danger)}
+    .c-name{flex:1;font-weight:500}
+    .c-status{color:var(--text-dim);font-size:11px}
+    .c-hint{font-size:10px;color:var(--warning);margin-left:auto;max-width:200px;text-align:right}
+    .kb-cats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  </style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← Mi Chat</a>
+  <h1>🧠 Core Brain Status</h1>
+  <span id="verdict-badge" class="badge partial">Loading...</span>
+  <button class="refresh-btn" onclick="load()">↻ Refresh</button>
+</header>
+
+<div class="container">
+  <!-- Visibility -->
+  <div class="card">
+    <div class="card-title">👁 Universal Visibility <span id="v-badge" class="badge partial">—</span></div>
+    <div id="visibility-content">Loading...</div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="syncAll()">↻ Sync All</button>
+      <button class="btn btn-secondary" onclick="syncProjects()">Sync Projects</button>
+    </div>
+    <div id="sync-log" class="log-box" style="display:none"></div>
+  </div>
+
+  <!-- Knowledge DB -->
+  <div class="card">
+    <div class="card-title">📚 Knowledge DB <span id="kb-badge" class="badge partial">—</span></div>
+    <div id="kb-content">Loading...</div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="ingestKB()">↻ Ingest</button>
+      <button class="btn btn-secondary" onclick="rebuildKB()">Rebuild</button>
+    </div>
+    <div id="kb-search-row" style="display:flex;gap:6px;margin-top:10px">
+      <input id="kb-q" placeholder="Search Knowledge DB..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;font-size:12px;outline:none"/>
+      <button class="btn btn-secondary" onclick="searchKB()">Search</button>
+    </div>
+    <div id="kb-results"></div>
+    <div id="kb-log" class="log-box" style="display:none"></div>
+  </div>
+
+  <!-- Memory -->
+  <div class="card">
+    <div class="card-title">🧠 Executive Memory <span id="mem-badge" class="badge partial">—</span></div>
+    <div id="mem-content">Loading...</div>
+  </div>
+
+  <!-- AI Models -->
+  <div class="card">
+    <div class="card-title">🤖 AI / Ollama <span id="ai-badge" class="badge partial">—</span></div>
+    <div id="ai-content">Loading...</div>
+  </div>
+
+  <!-- Connectors -->
+  <div class="card full">
+    <div class="card-title">🔗 Platform Connectors</div>
+    <div id="connectors-content">Loading...</div>
+    <div id="google-auth-section" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Google OAuth</div>
+      <div id="google-status" style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Checking...</div>
+      <div class="action-row">
+        <a id="google-auth-btn" href="/api/auth/google/start" class="btn btn-primary" style="text-decoration:none;display:none">Connect Google →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Knowledge Packs -->
+  <div class="card full">
+    <div class="card-title">📦 Knowledge Reference Packs</div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Domain knowledge packs — ingested into Knowledge DB</div>
+    <div class="action-row" style="margin-bottom:12px">
+      <button class="btn btn-primary" onclick="installAllPacks()">⬇ Install All Packs</button>
+    </div>
+    <div id="packs-content">Loading...</div>
+    <div id="packs-log" class="log-box" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:4001/api';
+
+async function load() {
+  try {
+    const [brain, connectors] = await Promise.all([
+      fetch(`${API}/brain/status`).then(r => r.json()),
+      fetch(`${API}/visibility/connectors`).then(r => r.json()),
+    ]);
+    renderBrain(brain);
+    renderConnectors(connectors);
+  } catch { document.querySelector('.container').innerHTML = '<div style="padding:40px;color:#888;text-align:center">Mi server offline — run start.bat</div>'; }
+}
+
+function statusBadge(s) {
+  const map = { READY:'ready', PARTIAL:'partial', OFFLINE:'offline', EMPTY:'partial' };
+  return `<span class="badge ${map[s]||'partial'}">${s}</span>`;
+}
+
+function renderBrain(b) {
+  const l = b.layers;
+  document.getElementById('verdict-badge').className = 'badge ready';
+  document.getElementById('verdict-badge').textContent = b.verdict;
+
+  // Visibility
+  const v = l.universal_visibility;
+  document.getElementById('v-badge').outerHTML = `<span id="v-badge" class="badge ${v.status==='READY'?'ready':'partial'}">${v.status}</span>`;
+  document.getElementById('visibility-content').innerHTML = `
+    <div class="stat-row"><span class="stat-label">Connected</span><span class="stat-value">${v.connected_platforms} / ${v.total_platforms}</span></div>
+    <div class="stat-row"><span class="stat-label">Not Configured</span><span class="stat-value">${v.not_configured}</span></div>
+  `;
+
+  // KB
+  const kb = l.knowledge_db;
+  document.getElementById('kb-badge').outerHTML = `<span id="kb-badge" class="badge ${kb.status==='READY'?'ready':'partial'}">${kb.status}</span>`;
+  const cats = (kb.categories||[]).map(c => `<span class="chip ok">${c.category} (${c.c})</span>`).join('');
+  document.getElementById('kb-content').innerHTML = `
+    <div class="stat-row"><span class="stat-label">Total Docs</span><span class="stat-value">${kb.total_docs.toLocaleString()}</span></div>
+    <div class="kb-cats">${cats || '<span style="color:#888;font-size:12px">No docs yet — click Ingest</span>'}</div>
+  `;
+
+  // Memory
+  const mem = l.executive_memory;
+  document.getElementById('mem-badge').outerHTML = `<span id="mem-badge" class="badge ${mem.status==='READY'?'ready':'partial'}">${mem.status}</span>`;
+  document.getElementById('mem-content').innerHTML = `
+    <div class="stat-row"><span class="stat-label">Owner Profile</span><span class="stat-value">${mem.has_profile?'✓':'—'}</span></div>
+    <div class="stat-row"><span class="stat-label">Preferences</span><span class="stat-value">${mem.has_preferences?'✓':'—'}</span></div>
+    <div class="stat-row"><span class="stat-label">Business Memory</span><span class="stat-value">${mem.has_business?'✓':'—'}</span></div>
+  `;
+
+  // AI
+  const ai = l.ai_layer;
+  document.getElementById('ai-badge').outerHTML = `<span id="ai-badge" class="badge ${ai.status==='READY'?'ready':'offline'}">${ai.status}</span>`;
+  document.getElementById('ai-content').innerHTML = `
+    <div class="stat-row"><span class="stat-label">Fast Model</span><span class="stat-value">${ai.fast_model||'not found'}</span></div>
+    <div class="stat-row"><span class="stat-label">Deep Model</span><span class="stat-value">${ai.deep_model||'not found'}</span></div>
+    <div class="stat-row"><span class="stat-label">Offline Ready</span><span class="stat-value">${ai.offline_ready?'✓ Yes':'✗ No'}</span></div>
+  `;
+}
+
+function renderConnectors(data) {
+  const rows = (data.connectors||[]).map(c => `
+    <div class="connector-row">
+      <div class="c-dot ${c.auth==='connected'?'ok':c.auth==='error'?'err':'nc'}"></div>
+      <div class="c-name">${c.name}</div>
+      <div class="c-status">${c.auth} · ${c.last_sync ? new Date(c.last_sync).toLocaleTimeString('vi-VN') : 'never synced'}</div>
+      ${c.setup_hint ? `<div class="c-hint">${c.setup_hint.slice(0,60)}...</div>` : ''}
+    </div>
+  `).join('');
+  document.getElementById('connectors-content').innerHTML = `<div class="connector-grid">${rows}</div>`;
+}
+
+async function syncAll() {
+  const log = document.getElementById('sync-log');
+  log.style.display = 'block'; log.textContent = 'Syncing...';
+  const r = await fetch(`${API}/visibility/sync`, { method:'POST' });
+  const d = await r.json();
+  log.textContent = JSON.stringify(d, null, 2);
+  load();
+}
+
+async function syncProjects() {
+  const log = document.getElementById('sync-log');
+  log.style.display = 'block'; log.textContent = 'Syncing projects...';
+  const r = await fetch(`${API}/visibility/projects`);
+  const d = await r.json();
+  log.textContent = `Projects synced: ${d.count}\n${d.projects.map(p=>`${p.name} (${p.type})`).join('\n')}`;
+  load();
+}
+
+async function ingestKB() {
+  const log = document.getElementById('kb-log');
+  log.style.display = 'block'; log.textContent = 'Ingesting...';
+  const r = await fetch(`${API}/knowledge/ingest`, { method:'POST' });
+  const d = await r.json();
+  log.textContent = `Ingested: ${d.ingested} | Skipped: ${d.skipped}`;
+  load();
+}
+
+async function rebuildKB() {
+  if (!confirm('Rebuild sẽ xóa toàn bộ KB cũ. Tiếp tục?')) return;
+  const log = document.getElementById('kb-log');
+  log.style.display = 'block'; log.textContent = 'Rebuilding...';
+  const r = await fetch(`${API}/knowledge/rebuild`, { method:'POST' });
+  const d = await r.json();
+  log.textContent = `Rebuilt: ${d.ingested} docs`;
+  load();
+}
+
+async function searchKB() {
+  const q = document.getElementById('kb-q').value.trim();
+  if (!q) return;
+  const r = await fetch(`${API}/knowledge/search?q=${encodeURIComponent(q)}&limit=5`);
+  const results = await r.json();
+  const el = document.getElementById('kb-results');
+  if (!results.length) { el.innerHTML = '<div style="font-size:12px;color:#888;margin-top:8px">No results found</div>'; return; }
+  el.innerHTML = `<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${results.map(r=>`
+    <div style="background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:8px 10px">
+      <div style="font-size:12px;font-weight:600">${r.title}</div>
+      <div style="font-size:10px;color:#888;margin-bottom:4px">${r.source} · ${r.category}</div>
+      <div style="font-size:11px;color:#ccc">${r.snippet}</div>
+    </div>`).join('')}</div>`;
+}
+
+document.getElementById('kb-q')?.addEventListener('keydown', e => { if(e.key==='Enter') searchKB(); });
+
+async function checkGoogleAuth() {
+  try {
+    const r = await fetch(`${API}/auth/google/status`);
+    const d = await r.json();
+    const el = document.getElementById('google-status');
+    const btn = document.getElementById('google-auth-btn');
+    if (d.has_tokens) {
+      el.innerHTML = '✅ Google connected — Gmail, Calendar, Drive active';
+      el.style.color = 'var(--success)';
+      btn.style.display = 'none';
+    } else if (d.configured) {
+      el.innerHTML = '⚠️ OAuth configured but not authorized yet';
+      el.style.color = 'var(--warning)';
+      btn.style.display = 'inline-flex';
+    } else {
+      el.innerHTML = 'Not configured — add GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET to .env';
+      el.style.color = 'var(--text-dim)';
+      btn.style.display = 'none';
+    }
+  } catch { /* server offline */ }
+}
+
+async function loadPacks() {
+  try {
+    const r = await fetch(`${API}/knowledge/packs`);
+    const packs = await r.json();
+    const el = document.getElementById('packs-content');
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
+      ${packs.map(p => `
+        <div style="background:var(--surface2);border:1px solid ${p.installed?'var(--success)':'var(--border)'};border-radius:8px;padding:10px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:3px">${p.installed?'✓ ':''} ${p.name}</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px">${p.description.slice(0,60)}...</div>
+          ${!p.installed ? `<button class="btn btn-secondary" style="font-size:11px;padding:4px 8px" onclick="installPack('${p.pack_id}')">Install</button>` : `<span style="font-size:10px;color:var(--success)">Installed</span>`}
+        </div>`).join('')}
+    </div>`;
+  } catch { /* offline */ }
+}
+
+async function installPack(id) {
+  const log = document.getElementById('packs-log');
+  log.style.display = 'block'; log.textContent = `Installing ${id}...`;
+  const r = await fetch(`${API}/knowledge/packs/${id}/install`, { method:'POST' });
+  const d = await r.json();
+  log.textContent = d.message;
+  loadPacks(); load();
+}
+
+async function installAllPacks() {
+  const log = document.getElementById('packs-log');
+  log.style.display = 'block'; log.textContent = 'Installing all packs...';
+  const r = await fetch(`${API}/knowledge/packs/install-all`, { method:'POST' });
+  const d = await r.json();
+  log.textContent = `Total docs added: ${d.total_installed}\n${JSON.stringify(d.results, null, 2)}`;
+  loadPacks(); load();
+}
+
+load();
+checkGoogleAuth();
+loadPacks();
+setInterval(load, 30000);
+setInterval(checkGoogleAuth, 60000);
+</script>
+</body>
+</html>

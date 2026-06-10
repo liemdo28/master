@@ -1,0 +1,42 @@
+{
+  "synced_at": "2026-06-09T14:50:21.938Z",
+  "status": "ok",
+  "root": "E:/Project/Master/RawSushi/RawWebsite",
+  "framework": "astro",
+  "git_remote": "",
+  "git_branch": "",
+  "git_dirty": false,
+  "last_commit": "",
+  "pages": [
+    {
+      "slug": "content/posts/memorable-date-night-sushi-stockton.md",
+      "title": "memorable-date-night-sushi-stockton",
+      "draft": false,
+      "path": "E:/Project/Master/RawSushi/RawWebsite/content/posts/memorable-date-night-sushi-stockton.md"
+    },
+    {
+      "slug": "content/posts/README.md",
+      "title": "README",
+      "draft": false,
+      "path": "E:/Project/Master/RawSushi/RawWebsite/content/posts/README.md"
+    },
+    {
+      "slug": "content/posts/what-to-order-sushi-stockton-tonight.md",
+      "title": "What to Order When You're Looking for Sushi in Stockton Tonight",
+      "draft": false,
+      "path": "E:/Project/Master/RawSushi/RawWebsite/content/posts/what-to-order-sushi-stockton-tonight.md"
+    }
+  ],
+  "content_dirs": [
+    "src/content",
+    "content",
+    "src/pages"
+  ],
+  "total_pages": 3,
+  "seo_issues": [
+    "3 pages missing description"
+  ],
+  "has_env": false,
+  "build_ready": true,
+  "summary_text": "🍣 Raw Sushi Website (no git)\n  Framework: Astro | Pages: 3\n  Git: ✓ clean — \n  SEO issues: 3 pages missing description"
+}

@@ -1,20 +1,20 @@
 /**
  * Antigravity Gateway — Provider Rotation Service
  *
- * Time-based 15-minute window rotation.
+ * Time-based 5-minute window rotation.
  *
  * Rotation logic:
- *   windowIndex = floor(currentMinute / 15) % providerCount
+ *   windowIndex = floor(currentMinute / 5) % providerCount
  *
  * Example (2 providers: antigravity, opusmax):
- *   00:00 – 00:14  →  primary: antigravity,  fallback: opusmax
- *   00:15 – 00:29  →  primary: opusmax,       fallback: antigravity
- *   00:30 – 00:44  →  primary: antigravity,  fallback: opusmax
- *   00:45 – 00:59  →  primary: opusmax,       fallback: antigravity
+ *   00:00 – 00:04  →  primary: antigravity,  fallback: opusmax
+ *   00:05 – 00:09  →  primary: opusmax,       fallback: antigravity
+ *   00:10 – 00:14  →  primary: antigravity,  fallback: opusmax
+ *   00:15 – 00:19  →  primary: opusmax,       fallback: antigravity
  *   (loops forever)
  *
  * Configuration is driven by the providers array injected at construction.
- * Supports N providers — each gets its own 15-minute slot in sequence.
+ * Supports N providers — each gets its own 5-minute slot in sequence.
  *
  * This service is read-only (pure function of the clock).
  * It does NOT consume quota, does NOT persist state, and does NOT rotate
@@ -25,9 +25,9 @@
 // ── Types ────────────────────────────────────────────────────────────────────
 
 export interface RotationWindow {
-  /** Index 0-3 within the current hour. */
+  /** Index 0-11 within the current hour. */
   windowId: number;
-  /** Human-readable label e.g. "10:15 - 10:29". */
+  /** Human-readable label e.g. "10:15 - 10:19". */
   windowLabel: string;
   /** Provider ID that should receive requests in this window. */
   primaryProvider: string;
@@ -45,23 +45,25 @@ export interface RotationWindow {
 
 export class ProviderRotationService {
   private readonly providers: string[];
+  private readonly windowMinutes: number;
 
   /**
    * @param providers Ordered list of provider IDs. The first provider gets
    *   the first slot (window 0), second gets window 1, etc., cycling forever.
    *   Defaults to ['antigravity', 'opusmax'].
    */
-  constructor(providers: string[] = ['antigravity', 'opusmax']) {
+  constructor(providers: string[] = ['antigravity', 'opusmax'], windowMinutes = 5) {
     if (providers.length === 0) throw new Error('ProviderRotationService: providers list cannot be empty');
     this.providers = providers;
+    this.windowMinutes = windowMinutes;
   }
 
-  /** Provider ID that should serve as primary for the current 15-min window. */
+  /** Provider ID that should serve as primary for the current time window. */
   getPrimaryProvider(): string {
     return this.getCurrentWindow().primaryProvider;
   }
 
-  /** Provider ID that should serve as fallback for the current 15-min window. */
+  /** Provider ID that should serve as fallback for the current time window. */
   getFallbackProvider(): string {
     return this.getCurrentWindow().fallbackProvider;
   }
@@ -72,14 +74,14 @@ export class ProviderRotationService {
     const d = new Date(now);
 
     const minute = d.getMinutes();
-    const windowId = Math.floor(minute / 15);
-    const windowStartMinute = windowId * 15;
+    const windowId = Math.floor(minute / this.windowMinutes);
+    const windowStartMinute = windowId * this.windowMinutes;
 
     const windowStartMs = new Date(
       d.getFullYear(), d.getMonth(), d.getDate(),
       d.getHours(), windowStartMinute, 0, 0,
     ).getTime();
-    const windowEndMs = windowStartMs + 15 * 60 * 1_000;
+    const windowEndMs = windowStartMs + this.windowMinutes * 60 * 1_000;
     const remainingMs = Math.max(0, windowEndMs - now);
 
     const primaryIdx = windowId % this.providers.length;
@@ -91,7 +93,7 @@ export class ProviderRotationService {
       const t = new Date(ms);
       return `${pad(t.getHours())}:${pad(t.getMinutes())}`;
     };
-    // End label shows xx:14 / xx:29 / xx:44 / xx:59 (last minute of the window)
+    // End label shows the last minute of the window.
     const endLabelMs = windowEndMs - 60_000;
 
     return {
@@ -125,4 +127,9 @@ const configuredProviders = process.env['ROTATION_PROVIDERS']
   ? process.env['ROTATION_PROVIDERS'].split(',').map((s) => s.trim()).filter(Boolean)
   : ['antigravity', 'opusmax'];
 
-export const providerRotationService = new ProviderRotationService(configuredProviders);
+const configuredWindowMinutes = Number.parseInt(process.env['ROTATION_WINDOW_MINUTES'] || '5', 10);
+
+export const providerRotationService = new ProviderRotationService(
+  configuredProviders,
+  Number.isFinite(configuredWindowMinutes) && configuredWindowMinutes > 0 ? configuredWindowMinutes : 5,
+);

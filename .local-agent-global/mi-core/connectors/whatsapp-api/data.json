@@ -1,0 +1,8 @@
+{
+  "synced_at": "2026-06-09T14:50:21.924Z",
+  "status": "not_configured",
+  "agent_id": "whatsapp-api",
+  "name": "whatsapp-api",
+  "host": "",
+  "summary_text": "🔗 whatsapp-api: Remote agent NOT configured\n  To connect: set WHATSAPP_API_HOST=<ip> in mi-core/.env\n  Then deploy mi-remote-agent on the remote machine\n  Install: copy mi-core/mi-remote-agent/ to remote, run: node index.mjs"
+}

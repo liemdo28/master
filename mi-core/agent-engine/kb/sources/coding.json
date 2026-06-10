@@ -1,0 +1,85 @@
+{
+  "domain": "coding",
+  "domainName": "Software Development",
+  "sources": [
+    {
+      "name": "MDN Web Docs",
+      "url": "https://github.com/mdn/content",
+      "license": "CC BY-SA 2.5",
+      "attribution": "MDN contributors (Mozilla Developer Network)",
+      "robotsOk": false,
+      "ingestMethod": "github-dump",
+      "recommend": "include",
+      "notes": "Use mdn/content GitHub repo, NOT direct web scraping"
+    },
+    {
+      "name": "Node.js Documentation",
+      "url": "https://github.com/nodejs/node/tree/main/doc",
+      "license": "MIT",
+      "attribution": "Node.js contributors",
+      "robotsOk": true,
+      "ingestMethod": "github-dump",
+      "recommend": "include",
+      "notes": "MIT licensed; generated from source"
+    },
+    {
+      "name": "Python Documentation",
+      "url": "https://docs.python.org",
+      "license": "PSF License",
+      "attribution": "Python Software Foundation",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include",
+      "notes": "PSF License allows redistribution with attribution"
+    },
+    {
+      "name": "web.dev",
+      "url": "https://web.dev",
+      "license": "CC BY 4.0",
+      "attribution": "Google LLC and contributors",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include",
+      "notes": "Performance, accessibility, modern web patterns"
+    },
+    {
+      "name": "Wikipedia — Programming",
+      "url": "https://en.wikipedia.org",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Wikipedia contributors",
+      "robotsOk": false,
+      "ingestMethod": "dump-api",
+      "recommend": "include",
+      "notes": "Use dumps.wikimedia.org, NOT direct scraping"
+    }
+  ],
+  "seedDocuments": [
+    {
+      "topicSlug": "javascript",
+      "topicName": "JavaScript",
+      "slug": "async-await",
+      "title": "Asynchronous JavaScript — Promises, async/await, and the Event Loop",
+      "file": "seed/coding/javascript-async.md",
+      "license": "CC BY-SA 2.5",
+      "attribution": "MDN contributors; Node.js contributors"
+    },
+    {
+      "topicSlug": "nodejs",
+      "topicName": "Node.js",
+      "slug": "module-systems",
+      "title": "Node.js Module Systems — CommonJS and ES Modules",
+      "file": "seed/coding/nodejs-modules.md",
+      "license": "MIT",
+      "attribution": "Node.js contributors; MDN contributors"
+    },
+    {
+      "topicSlug": "databases",
+      "topicName": "Databases",
+      "slug": "sqlite-nodejs",
+      "title": "SQLite in Node.js — better-sqlite3 and WAL Mode",
+      "file": "seed/coding/sqlite-nodejs.md",
+      "license": "MIT",
+      "attribution": "better-sqlite3 authors; SQLite authors (public domain)"
+    }
+  ]
+}

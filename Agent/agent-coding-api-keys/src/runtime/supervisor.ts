@@ -73,7 +73,7 @@ export interface SupervisorAction {
 }
 
 const DEFAULT_CONFIG: SupervisorConfig = {
-    checkIntervalMs: 30_000,
+    checkIntervalMs: 5 * 60_000, // 5 minutes — reduce log noise
     stuckSessionThresholdMs: 5 * 60_000,
     stuckNodeThresholdMs: 3 * 60_000,
     maxActiveStreams: 20,

@@ -12,7 +12,7 @@
  *   - At window expiry, quota and batch counters reset fully.
  *
  * Provider quota ledger:
- *   Antigravity NKQ  250 req / 5 h
+ *   Antigravity NKQ  1050 req / 5 h (legacy key + 4.6/4.7 model quotas)
  *   OpusMax          800 req / 5 h
  *
  * Edge cases handled:
@@ -54,7 +54,7 @@ const WINDOW_5H = 5 * 60 * 60 * 1_000;
  * Keys must match provider IDs registered in keys.json / config.
  */
 export const ROTATION_CONFIG: Record<string, ProviderRotationConfig> = {
-    antigravity: { batchSize: 20, totalQuota: 250, windowMs: WINDOW_5H },
+    antigravity: { batchSize: 20, totalQuota: 1050, windowMs: WINDOW_5H },
     opusmax: { batchSize: 60, totalQuota: 800, windowMs: WINDOW_5H },
 };
 

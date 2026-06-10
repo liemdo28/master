@@ -1,0 +1,163 @@
+# SECURITY PIPELINE
+# 
+# Policy:
+#   Critical:  block build
+#   High:      require approval (report, non-blocking)
+#   Medium:    report
+#   Low:       track
+#
+# Tools:
+#   1. npm audit     — npm native audit
+#   2. osv-scan      — OSV-Scanner (open source vulnerabilities)
+#   3. cyclonedx     — SBOM generation
+
+name: Security Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'server/package.json'
+      - 'server/package-lock.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'server/package.json'
+      - 'server/package-lock.json'
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday 6 AM
+  workflow_dispatch:
+
+jobs:
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - name: Run npm audit
+        id: audit
+        run: |
+          npm audit --audit-level=critical 2>&1 || true
+          npm audit --json 2>npm-audit-report.json || true
+        continue-on-error: true
+      - name: Process audit results
+        run: |
+          node -e "
+            const fs = require('fs');
+            let report;
+            try {
+              report = JSON.parse(fs.readFileSync('npm-audit-report.json','utf8'));
+            } catch(e) {
+              console.log('No audit report generated');
+              process.exit(0);
+            }
+            const vulns = report.vulnerabilities || {};
+            let issues = { critical: 0, high: 0, medium: 0, low: 0 };
+            for (const [pkg, info] of Object.entries(vulns)) {
+              const sev = info.severity || 'unknown';
+              issues[sev] = (issues[sev]||0) + 1;
+              console.log(\`  [\${sev.toUpperCase()}] \${pkg}@\${info.range}\`);
+            }
+            console.log(\`\nSummary: \${issues.critical} critical, \${issues.high} high, \${issues.medium} medium, \${issues.low} low\`);
+            if (issues.critical > 0) {
+              console.log('❌ CRITICAL vulnerabilities found — blocking build');
+              process.exit(1);
+            }
+            if (issues.high > 0) {
+              console.log('⚠️  HIGH vulnerabilities found — requires manual approval');
+            }
+          "
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: server/npm-audit-report.json
+        if: always()
+
+  osv-scanner:
+    name: OSV Scanner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run OSV-Scanner
+        uses: google/osv-scanner-action@v2
+        with:
+          scan-args: |-
+            --recursive
+            --format=json
+            --output=osv-report.json
+            ./
+      - name: Upload OSV report
+        uses: actions/upload-artifact@v4
+        with:
+          name: osv-report
+          path: osv-report.json
+        if: always()
+
+  sbom:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - name: Generate CycloneDX SBOM
+        run: |
+          npx @cyclonedx/cyclonedx-npm@latest --output-format JSON --output-file ../security/sbom/cyclonedx-sbom.json
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: cyclonedx-sbom
+          path: security/sbom/cyclonedx-sbom.json
+        if: always()
+
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - name: Check dependency freshness
+        run: |
+          echo "=== OUTDATED PACKAGES ==="
+          npm outdated 2>&1 || true
+      - name: License check
+        run: |
+          echo "=== DEPENDENCY CHECK SUMMARY ==="
+          echo "Total packages: $(npm ls --depth=0 2>/dev/null | wc -l)"
+          echo "Including transitive: $(npm ls --all 2>/dev/null | wc -l)"
+
+  notify:
+    name: Security Notification
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [npm-audit, osv-scanner]
+    steps:
+      - name: Log failure
+        run: |
+          echo "⚠️ Security pipeline failed — review audit logs for details."
+          echo "Check artifacts: npm-audit-report, osv-report"

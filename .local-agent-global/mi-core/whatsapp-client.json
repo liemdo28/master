@@ -1,0 +1,13 @@
+{
+  "client_id": "mi-core",
+  "whatsapp_api_base_url": "",
+  "api_key_hash": "",
+  "status": "active",
+  "allowed_routes": ["/api/whatsapp/mi"],
+  "created_at": "",
+  "last_used_at": "",
+  "rate_limit": {
+    "per_minute": 60,
+    "per_hour": 1000
+  }
+}

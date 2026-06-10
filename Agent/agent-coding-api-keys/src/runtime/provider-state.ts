@@ -143,43 +143,37 @@ export function detectOrchestrationAnomalies(): OrchestrationAnomaly[] {
     const anomalies: OrchestrationAnomaly[] = [];
     const now = Date.now();
 
-    // ── NKQ completely inactive while OpusMax has all the traffic ─────
     const nkq = state.providers.nkq;
     const opus = state.providers.opus;
 
+    // ── NKQ quota drift: opusmax consumed quota while NKQ window is running ──
+    // Only fire when BOTH windows are active and the drift is large.
+    // (Avoids false positives when one window hasn't started yet.)
     if (
-        nkq.totalRequests === 0 &&
-        opus.totalRequests > 10
+        nkq.firstRequestAt !== null &&
+        opus.firstRequestAt !== null &&
+        opus.usedQuota > 20 &&
+        nkq.usedQuota === 0
     ) {
         anomalies.push({
             severity: 'warning',
-            code: 'NKQ_INACTIVITY',
-            message: `NKQ has received 0 requests while OpusMax has handled ${opus.totalRequests}. Check rotation state.`,
+            code: 'NKQ_QUOTA_DRIFT',
+            message: `Quota drift: NKQ is STANDBY with 0 used quota while OpusMax has ${opus.usedQuota} used. NKQ should have been consumed first.`,
             providerId: 'antigravity',
         });
     }
 
-    // ── Significant quota imbalance (one provider far exceeds expected ratio) ─
-    const totalRequests = nkq.totalRequests + opus.totalRequests;
-    if (totalRequests > 30) {
-        // Expected: NKQ handles ~25% (20/80), OpusMax ~75% (60/80) of requests
-        const nkqFraction = nkq.totalRequests / totalRequests;
-        if (nkqFraction > 0.60) {
-            anomalies.push({
-                severity: 'warning',
-                code: 'ROTATION_IMBALANCE_NKQ_HIGH',
-                message: `NKQ serving ${Math.round(nkqFraction * 100)}% of requests (expected ~25%). Rotation may be stuck.`,
-                providerId: 'antigravity',
-            });
-        }
-        if (nkqFraction < 0.10) {
-            anomalies.push({
-                severity: 'warning',
-                code: 'ROTATION_IMBALANCE_OPUS_HIGH',
-                message: `OpusMax serving ${Math.round((1 - nkqFraction) * 100)}% of requests (expected ~75%). NKQ may be blocked.`,
-                providerId: 'opusmax',
-            });
-        }
+    // ── NKQ completely blocked — no requests at all while still having quota ──
+    if (
+        nkq.status === 'DEGRADED' &&
+        nkq.remainingQuota > 100
+    ) {
+        anomalies.push({
+            severity: 'warning',
+            code: 'NKQ_DEGRADED_WITH_QUOTA',
+            message: `NKQ is DEGRADED but has ${nkq.remainingQuota} quota remaining. Consecutive failures: ${nkq.consecutiveFailures}.`,
+            providerId: 'antigravity',
+        });
     }
 
     // ── Both providers exhausted ───────────────────────────────────────

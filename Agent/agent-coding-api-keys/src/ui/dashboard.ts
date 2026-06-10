@@ -92,6 +92,9 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     .tag{font-size:10px;padding:2px 5px;border-radius:3px;border:1px solid;display:inline-block;margin:1px}
     .tag-tool{color:var(--amber);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.07)}
     .tag-stream{color:var(--blue);border-color:rgba(96,165,250,.35);background:rgba(96,165,250,.07)}
+    .src-healthy{color:var(--green)}
+    .src-cooldown{color:var(--amber)}
+    .src-exhausted,.src-disabled{color:var(--pink)}
 
     /* aliases */
     .aliases{display:flex;flex-wrap:wrap;gap:8px}
@@ -100,6 +103,27 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
 
     @media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}}
     @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+    /* Key management */
+    .key-mgmt{display:grid;gap:12px}
+    .key-mgmt-section{border:1px solid var(--line);background:rgba(10,18,35,.4);border-radius:10px;padding:12px;margin-bottom:10px}
+    .key-mgmt-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+    .key-mgmt-head select,.key-mgmt-head input{flex:1;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:rgba(2,6,23,.7);color:var(--text);font-size:12px}
+    .key-list{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;background:rgba(2,6,23,.3)}
+    .key-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line);gap:8px}
+    .key-item:last-child{border-bottom:none}
+    .key-info{flex:1;min-width:0}
+    .key-label{font-size:12px;font-weight:500;color:var(--cyan);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .key-masked{font-size:11px;color:var(--muted);font-family:ui-monospace,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .key-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .btn-sm{padding:4px 8px;font-size:10px;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;transition:all .15s}
+    .btn-sm:hover{background:rgba(34,211,238,.15);border-color:rgba(34,211,238,.3);color:var(--cyan)}
+    .btn-sm.danger{color:var(--pink);border-color:rgba(251,113,133,.3)}
+    .btn-sm.danger:hover{background:rgba(251,113,133,.1);border-color:rgba(251,113,133,.4)}
+    .btn-sm.toggle-off{color:var(--muted)}
+    .badge-small{font-size:9px;padding:2px 4px;border-radius:3px;border:1px solid;display:inline-block}
+    .badge-small.active{border-color:rgba(52,211,153,.3);color:var(--green);background:rgba(52,211,153,.05)}
+    .badge-small.inactive{border-color:rgba(107,114,128,.3);color:var(--muted);background:transparent}
   </style>
 </head>
 <body>
@@ -142,6 +166,14 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     </div>
   </section>
 
+  <section class="card">
+    <div class="card-title">Supply Sources <span>source · key · model · cooldown</span></div>
+    <table>
+      <thead><tr><th>Source</th><th>Provider</th><th>Model</th><th>Key</th><th>Status</th><th>Cooldown</th><th>Last Error</th><th>Attempts</th><th>Action</th></tr></thead>
+      <tbody id="sources"></tbody>
+    </table>
+  </section>
+
   <!-- Request Logs -->
   <section class="card">
     <div class="card-title">Request Logs <button onclick="refresh()" style="background:rgba(34,211,238,.15);color:var(--cyan);padding:4px 10px;font-size:11px">Refresh</button></div>
@@ -155,6 +187,26 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
   <section class="card">
     <div class="card-title">Model Alias Registry</div>
     <div class="aliases" id="aliases"></div>
+  </section>
+
+  <!-- Key Management -->
+  <section class="card">
+    <div class="card-title">API Key Management <span>add · toggle · delete</span></div>
+    <div class="key-mgmt">
+      <div class="key-mgmt-section">
+        <div class="key-mgmt-head">
+          <select id="keyProviderSelect" style="max-width:200px">
+            <option value="">Select Provider...</option>
+          </select>
+          <input type="text" id="newKeyInput" placeholder="Paste API key here" style="flex:1"/>
+          <input type="text" id="newKeyLabel" placeholder="Label (optional)" style="max-width:150px"/>
+          <button onclick="addNewKey()" class="btn-sm" style="background:rgba(52,211,153,.15);color:var(--green);border-color:rgba(52,211,153,.3)">+ Add Key</button>
+        </div>
+        <div id="keyList" class="key-list">
+          <div style="padding:20px;text-align:center;color:var(--muted);font-size:11px">Select a provider to view keys</div>
+        </div>
+      </div>
+    </div>
   </section>
 </main>
 <script>
@@ -215,10 +267,33 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
       const flags=[l.streaming?'<span class="tag tag-stream">stream</span>':'',l.tools?'<span class="tag tag-tool">tools</span>':''].filter(Boolean).join('');
       const attemptsStr=l.attempts.map(a=>{
         const label=a.ok?'ok':((a.error||'fail').split(':')[0]||'fail');
-        return '<span style="color:'+(a.ok?'var(--green)':'var(--pink)')+'">'+a.providerId+':'+label+'</span>';
+        return '<span style="color:'+(a.ok?'var(--green)':'var(--pink)')+'">'+(a.sourceId||a.providerId)+':'+label+'</span>';
       }).join(' → ');
       return '<tr><td class="mono">'+t+'</td><td class="mono">'+l.requestModel+'</td><td>'+l.intent+'</td><td>'+flags+'</td><td>'+(l.provider||'<span style="color:var(--pink)">failed</span>')+'</td><td class="mono">'+attemptsStr+'</td><td class="mono">'+(l.durationMs??'-')+'</td></tr>';
     }).join('');
+  }
+
+  function renderSources(src){
+    const rows=((src&&src.supplySources)||[]).map(s=>{
+      const cd=s.cooldownRemainingMs?Math.ceil(s.cooldownRemainingMs/1000)+'s':'—';
+      const err=s.lastErrorType||s.lastError||'—';
+      const action=s.status==='disabled'
+        ? '<button onclick="sourceAction(\\''+s.id+'\\',\\'enable\\')" style="padding:4px 8px">Enable</button>'
+        : '<button onclick="sourceAction(\\''+s.id+'\\',\\'disable\\')" style="padding:4px 8px">Disable</button> '+
+          '<button onclick="sourceAction(\\''+s.id+'\\',\\'reset\\')" style="padding:4px 8px">Reset</button>';
+      return '<tr>'+
+        '<td class="mono">'+s.id+'</td>'+
+        '<td>'+s.provider+'</td>'+
+        '<td class="mono">'+s.model+'</td>'+
+        '<td class="mono">'+(s.keyLabel||s.keyId)+' / '+(s.maskedKey||'')+'</td>'+
+        '<td class="src-'+s.status+'">'+s.status+'</td>'+
+        '<td class="mono">'+cd+'</td>'+
+        '<td class="mono">'+String(err).slice(0,80)+'</td>'+
+        '<td class="mono">'+(s.attempts||0)+' / '+(s.failures||0)+'</td>'+
+        '<td>'+action+'</td>'+
+      '</tr>';
+    });
+    document.getElementById('sources').innerHTML=rows.length?rows.join(''):'<tr><td colspan="9" style="color:var(--muted)">No supply sources</td></tr>';
   }
 
   function renderAliases(){
@@ -231,7 +306,8 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     try{
       const [status,logs]=await Promise.all([fetch('/api/status').then(r=>r.json()),fetch('/api/logs').then(r=>r.json())]);
       S.providers=status.providers;S.health=status.health;
-      renderProviders();renderLogs(logs.logs||[]);
+      S.sourceRotation=status.sourceRotation;
+      renderProviders();renderSources(S.sourceRotation);renderLogs(logs.logs||[]);
     }catch(e){console.warn('refresh failed',e)}
   }
 
@@ -259,7 +335,102 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     refresh();
   }
 
-  renderProviders();renderAliases();refresh();setInterval(refresh,4000);
+  async function sourceAction(id,action){
+    await fetch('/api/runtime/sources/'+id+'/'+action,{method:'POST'});
+    refresh();
+  }
+
+  renderProviders();renderSources(S.sourceRotation);renderAliases();refresh();setInterval(refresh,4000);
+
+  // ── Key Management ──
+  let currentProvider=null;
+  let keyCache={};
+
+  async function loadKeyProviders(){
+    try{
+      const r=await fetch('/api/keys/providers');
+      const data=await r.json();
+      const select=document.getElementById('keyProviderSelect');
+      select.innerHTML='<option value="">Select Provider...</option>'+
+        Object.keys(data.providers).map(id=>'<option value="'+id+'">'+id+' ('+data.providers[id].keys.length+' keys)</option>').join('');
+      select.onchange=()=>loadProviderKeys(select.value);
+    }catch(e){console.error('Failed to load providers:',e)}
+  }
+
+  async function loadProviderKeys(providerId){
+    if(!providerId){
+      document.getElementById('keyList').innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);font-size:11px">Select a provider to view keys</div>';
+      currentProvider=null;
+      return;
+    }
+    currentProvider=providerId;
+    try{
+      const r=await fetch('/api/keys/providers/'+providerId);
+      const data=await r.json();
+      keyCache[providerId]=data.keys;
+      renderKeyList(data.keys,providerId);
+    }catch(e){console.error('Failed to load keys:',e)}
+  }
+
+  function renderKeyList(keys,providerId){
+    const html=keys.length?keys.map((k,i)=>'<div class="key-item">'+
+      '<div class="key-info">'+
+        '<div class="key-label">'+(k.label||'Unnamed')+'</div>'+
+        '<div class="key-masked">'+k.masked+'</div>'+
+      '</div>'+
+      '<div class="key-actions">'+
+        '<span class="badge-small '+(k.active?'active':'inactive')+'">'+(k.active?'Active':'Inactive')+'</span>'+
+        '<button class="btn-sm" onclick="toggleKey(\\''+providerId+'\\',\\''+k.id+'\\')">'+(k.active?'Disable':'Enable')+'</button>'+
+        '<button class="btn-sm danger" onclick="deleteKey(\\''+providerId+'\\',\\''+k.id+'\\')">Delete</button>'+
+      '</div>'+
+    '</div>').join(''):
+    '<div style="padding:20px;text-align:center;color:var(--muted);font-size:11px">No keys for this provider</div>';
+    document.getElementById('keyList').innerHTML=html;
+  }
+
+  async function addNewKey(){
+    if(!currentProvider){alert('Select a provider first');return}
+    const keyVal=document.getElementById('newKeyInput').value.trim();
+    const label=document.getElementById('newKeyLabel').value.trim();
+    if(!keyVal){alert('Enter an API key');return}
+    try{
+      const r=await fetch('/api/keys/providers/'+currentProvider+'/add',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({key:keyVal,label:label||undefined})
+      });
+      if(!r.ok) throw new Error('Failed to add key');
+      document.getElementById('newKeyInput').value='';
+      document.getElementById('newKeyLabel').value='';
+      await loadProviderKeys(currentProvider);
+    }catch(e){alert('Error: '+e.message)}
+  }
+
+  async function toggleKey(providerId,keyId){
+    const keys=keyCache[providerId]||[];
+    const key=keys.find(k=>k.id===keyId);
+    if(!key) return;
+    try{
+      const r=await fetch('/api/keys/providers/'+providerId+'/keys/'+keyId+'/toggle',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({active:!key.active})
+      });
+      if(!r.ok) throw new Error('Failed to toggle key');
+      await loadProviderKeys(providerId);
+    }catch(e){alert('Error: '+e.message)}
+  }
+
+  async function deleteKey(providerId,keyId){
+    if(!confirm('Delete this key?')) return;
+    try{
+      const r=await fetch('/api/keys/providers/'+providerId+'/keys/'+keyId,{method:'DELETE'});
+      if(!r.ok) throw new Error('Failed to delete key');
+      await loadProviderKeys(providerId);
+    }catch(e){alert('Error: '+e.message)}
+  }
+
+  loadKeyProviders();
 </script>
 </body>
 </html>`;

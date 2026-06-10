@@ -24,18 +24,28 @@ try {
     exit 1
 }
 
-# Check port 3210
+# Check and clear port 3210
 $portInUse = Get-NetTCPConnection -LocalPort 3210 -ErrorAction SilentlyContinue
 if ($portInUse) {
     Write-Host ""
-    Write-Host "[ERROR] Port 3210 is already in use. Close old gateway window first." -ForegroundColor Red -BackgroundColor Yellow
+    Write-Host "[WARN] Port 3210 is already in use. Stopping old gateway instance..." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Process using port 3210:" -ForegroundColor Yellow
-    Get-NetTCPConnection -LocalPort 3210 | ForEach-Object {
-        $proc = Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue
-        Write-Host "  PID $($_.OwningProcess): $($proc.ProcessName)" -ForegroundColor White
+    $pids = Get-NetTCPConnection -LocalPort 3210 -ErrorAction SilentlyContinue |
+        Where-Object { $_.OwningProcess -and $_.OwningProcess -ne 0 } |
+        Select-Object -ExpandProperty OwningProcess -Unique
+    foreach ($pid in $pids) {
+        $proc = Get-Process -Id $pid -ErrorAction SilentlyContinue
+        Write-Host "  Killing PID ${pid}: $($proc.ProcessName)" -ForegroundColor Yellow
+        Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
     }
+    Start-Sleep -Seconds 2
+}
+
+$portStillInUse = Get-NetTCPConnection -LocalPort 3210 -ErrorAction SilentlyContinue
+if ($portStillInUse) {
     Write-Host ""
+    Write-Host "[ERROR] Port 3210 is still in use. Start aborted." -ForegroundColor Red
+    netstat -ano | findstr :3210
     Read-Host "Press Enter to exit"
     exit 1
 }

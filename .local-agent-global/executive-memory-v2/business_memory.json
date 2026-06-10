@@ -1,0 +1,90 @@
+{
+  "businesses": {
+    "raw_sushi": {
+      "id": "raw-sushi",
+      "name": "Raw Sushi Bar",
+      "type": "restaurant",
+      "cuisine": "Japanese / Sushi",
+      "location": {
+        "city": "Stockton",
+        "state": "CA",
+        "market": "Central Valley, California"
+      },
+      "website": "rawsushi.com",
+      "website_tech": "Astro (static site)",
+      "git_repo": "liemdo28/rawwebsite",
+      "target_customers": "young professionals, foodies, families in Stockton area",
+      "price_range": "$$",
+      "peak_seasons": ["summer", "Valentine's Day", "Mother's Day", "Father's Day", "New Year's Eve"],
+      "marketing": {
+        "channels": ["website/SEO", "social media", "Google Business"],
+        "content_types": ["food photography", "seasonal specials", "sushi rolls", "combo deals"],
+        "post_schedule": "3x per week recommended",
+        "best_post_time": "Friday 10AM or Sunday 11AM PT",
+        "tone": "fresh, clean, upscale casual",
+        "hashtags": ["#RawSushi", "#StocktonFood", "#SushiLovers", "#CentralValleyEats"]
+      },
+      "seo": {
+        "target_keywords": ["sushi stockton", "best sushi stockton ca", "sushi bar stockton", "japanese restaurant stockton"],
+        "top_pages": ["menu", "specials", "about", "contact"],
+        "local_seo_priority": true
+      },
+      "operations": {
+        "managed_via": "Dashboard (dashboard.bakudanramen.com)",
+        "staff_manager": "Maria",
+        "ordering_system": "TBD",
+        "pos_system": "TBD"
+      }
+    },
+    "bakudan": {
+      "id": "bakudan",
+      "name": "Bakudan Ramen",
+      "type": "restaurant",
+      "cuisine": "Japanese Ramen / Izakaya",
+      "location": {
+        "city": "Stockton",
+        "state": "CA",
+        "market": "Central Valley, California"
+      },
+      "website": "bakudanramen.com",
+      "website_tech": "Node.js/Express",
+      "target_customers": "ramen lovers, students, families, late-night diners",
+      "price_range": "$$",
+      "peak_seasons": ["fall/winter", "rainy season", "college semester starts", "holidays"],
+      "marketing": {
+        "channels": ["website", "social media", "Google Business", "WhatsApp"],
+        "content_types": ["ramen bowls", "seasonal limited items", "group deals", "catering packages"],
+        "post_schedule": "2-3x per week",
+        "best_post_time": "Thursday 11AM or Saturday 10AM PT",
+        "tone": "bold, fun, energetic",
+        "hashtags": ["#BakudanRamen", "#StocktonRamen", "#RamenLovers", "#StocktonFoodies"]
+      },
+      "seo": {
+        "target_keywords": ["ramen stockton", "best ramen stockton ca", "bakudan ramen", "japanese ramen stockton"],
+        "top_pages": ["menu", "catering", "about", "order"],
+        "local_seo_priority": true
+      },
+      "operations": {
+        "managed_via": "Dashboard (dashboard.bakudanramen.com)",
+        "staff_manager": "Maria",
+        "catering_available": true
+      }
+    }
+  },
+  "market_context": {
+    "city": "Stockton",
+    "state": "California",
+    "region": "Central Valley",
+    "county": "San Joaquin County",
+    "demographics": "diverse, working-class to middle-class, large Hispanic and Asian communities",
+    "restaurant_competition": "moderate — growing food scene",
+    "key_events_calendar": [
+      "Stockton Restaurant Week (annual)",
+      "San Joaquin County Fair (June)",
+      "Stockton Ports baseball season (Apr-Sep)",
+      "Asparagus Festival",
+      "Holiday shopping season (Nov-Dec)"
+    ],
+    "local_notes": "Stockton follows Pacific Time (PT). Hot summers, mild winters. Strong community loyalty to local restaurants."
+  }
+}

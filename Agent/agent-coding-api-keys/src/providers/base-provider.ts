@@ -69,8 +69,14 @@ export abstract class BaseProvider {
   }
 
   protected streamTimeoutSignal(): AbortSignal {
-    // Streaming can legitimately run much longer
-    return AbortSignal.timeout(Math.max(this.config.timeoutMs * 4, 300_000));
+    const providerSpecific = Number.parseInt(process.env[`${this.id.toUpperCase()}_STREAM_TIMEOUT_MS`] ?? '', 10);
+    const globalTimeout = Number.parseInt(process.env['STREAM_UPSTREAM_TIMEOUT_MS'] ?? '', 10);
+    const configured = Number.isFinite(providerSpecific)
+      ? providerSpecific
+      : Number.isFinite(globalTimeout)
+        ? globalTimeout
+        : Math.min(this.config.timeoutMs, 60_000);
+    return AbortSignal.timeout(Math.max(configured, 5_000));
   }
 
   protected endpoint(path: string): string {

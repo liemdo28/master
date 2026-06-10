@@ -1,0 +1,11 @@
+{
+  "domain": "business-analyst",
+  "domainName": "Business Analysis",
+  "sources": [
+    { "name": "OpenStax Introduction to Business", "url": "https://openstax.org/details/books/introduction-business", "license": "CC BY 4.0", "attribution": "OpenStax, Rice University", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Wikipedia — Business Analysis", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" },
+    { "name": "BABOK v3 (IIBA)", "url": "https://www.iiba.org/babok", "license": "© IIBA", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "Purchase required; no redistribution" },
+    { "name": "PMI PMBOK", "url": "https://www.pmi.org", "license": "© PMI", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "Purchase required; summaries via Wikipedia only" }
+  ],
+  "seedDocuments": []
+}

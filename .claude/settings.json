@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(E:/Project/Master/Agent/agent-coding-api-keys/keys.json)",
+      "Edit(E:/Project/Master/Agent/agent-coding-api-keys/src/**)",
+      "Edit(E:/Project/Master/Agent/agent-coding-api-keys/data/**)",
+      "Edit(E:/Project/Master/Agent/agent-coding-api-keys/.env*)",
+      "Write(E:/Project/Master/Agent/agent-coding-api-keys/keys.json)",
+      "Write(E:/Project/Master/Agent/agent-coding-api-keys/data/**)",
+      "Bash(* agent-coding-api-keys * restart*)",
+      "Bash(* agent-coding-api-keys * kill*)"
+    ]
+  }
+}

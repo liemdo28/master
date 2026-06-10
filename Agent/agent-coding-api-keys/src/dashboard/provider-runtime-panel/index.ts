@@ -226,7 +226,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .ats{color:var(--text-dim);font-size:8px;white-space:nowrap}
 .nodata{color:var(--text-dim);font-size:10px;padding:8px 0;letter-spacing:1px}
 
-/* ── 15-min Rotation Clock Widget ─────────────────────────────────────────── */
+/* ── 5-min Rotation Clock Widget ──────────────────────────────────────────── */
 .rw-wrap{display:flex;flex-direction:column;gap:14px}
 .rw-clock{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border-hi);border-radius:6px;background:var(--surface-2)}
 .rw-dial{position:relative;width:56px;height:56px;flex-shrink:0}
@@ -244,6 +244,27 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .rw-slot-active{background:rgba(0,240,144,.14);border:1px solid rgba(0,240,144,.4);color:var(--green)}
 .rw-slot-next{background:rgba(0,184,255,.06);border:1px solid var(--border);color:var(--text-dim)}
 .rw-arr{color:var(--text-dim);font-size:11px}
+
+/* ── Quota Source Rotation ────────────────────────────────────────────────── */
+.src-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.src-card{border:1px solid var(--border);border-radius:6px;background:var(--surface-2);padding:11px;display:flex;flex-direction:column;gap:8px;min-height:132px}
+.src-card.active{border-color:rgba(0,240,144,.48);box-shadow:0 0 12px rgba(0,240,144,.12)}
+.src-card.off{opacity:.72}
+.src-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.src-name{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-bright);line-height:1.3}
+.src-pill{font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border);color:var(--text-dim);white-space:nowrap}
+.src-pill.active{border-color:rgba(0,240,144,.38);color:var(--green);background:rgba(0,240,144,.08)}
+.src-pill.blocked{border-color:rgba(255,56,96,.38);color:var(--red);background:rgba(255,56,96,.08)}
+.src-meta{font-size:9px;color:var(--text-dim);letter-spacing:.5px;line-height:1.45}
+.src-count{font-size:20px;color:var(--accent);letter-spacing:2px;font-variant-numeric:tabular-nums}
+.src-card.active .src-count{color:var(--green)}
+.src-q{font-size:10px;color:var(--text);font-variant-numeric:tabular-nums}
+.src-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden;border:1px solid var(--border)}
+.src-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--accent));transition:width .8s ease}
+.src-fill.bad{background:linear-gradient(90deg,var(--red),var(--orange))}
+.src-note{font-size:9px;color:var(--text-dim);line-height:1.35}
+@media (max-width:1100px){.src-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.src-grid{grid-template-columns:1fr}}
 
 /* ── Operator controls ─────────────────────────────────────────────────────── */
 .ops-group{display:flex;align-items:center;gap:8px}
@@ -411,13 +432,22 @@ const BODY = `
     </div>
   </div>
 
-  <!-- 15-min Rotation Window Clock -->
+  <!-- 5-min Rotation Window Clock -->
   <div class="pnl">
     <div class="ph">
-      <span class="pt">15-Min Rotation Window</span>
+      <span class="pt">5-Min Rotation Window</span>
       <span class="pb" id="rw-remaining-hdr">—</span>
     </div>
     <div class="pbody"><div id="rw-body" class="nodata">Connecting…</div></div>
+  </div>
+
+  <!-- Quota source rotation -->
+  <div class="pnl full">
+    <div class="ph">
+      <span class="pt">Quota Source Rotation</span>
+      <span class="pb" id="src-remaining-hdr">—</span>
+    </div>
+    <div class="pbody"><div id="src-body" class="nodata">Connecting…</div></div>
   </div>
 
   <!-- Active Rotation -->
@@ -515,7 +545,8 @@ const BODY = `
 const JS = `
 // ── state ──────────────────────────────────────────────────────────────────
 var resetTimes = {};   // { providerId: resetAt (ms) | null }
-var rwWindowEndMs = null;  // 15-min window end timestamp (ms)
+var rwWindowEndMs = null;  // 5-min window end timestamp (ms)
+var srcRotationData = null; // latest source-level quota rotation snapshot
 var keyStatusData = null;  // latest /api/providers/status response
 var alerts = [];
 var alertId = 0;
@@ -724,7 +755,7 @@ function fetchKeyStatus() {
     .catch(function() {});
 }
 
-// ── render: 15-min Rotation Window ───────────────────────────────────────
+// ── render: 5-min Rotation Window ────────────────────────────────────────
 function renderRotationWindow(win) {
   if (!win) return;
 
@@ -732,7 +763,7 @@ function renderRotationWindow(win) {
   rwWindowEndMs = win.windowEndMs || null;
 
   var remaining = Math.max(0, (win.windowEndMs || 0) - Date.now());
-  var total = 15 * 60 * 1000;
+  var total = 5 * 60 * 1000;
   var pct = total > 0 ? Math.max(0, Math.min(100, Math.round(remaining / total * 100))) : 0;
   var remSecs = Math.floor(remaining / 1000);
   var remMin = Math.floor(remSecs / 60);
@@ -747,13 +778,13 @@ function renderRotationWindow(win) {
 
   setText('rw-remaining-hdr', 'remaining ' + remStr);
 
-  // Build rotation sequence pills (4 windows: 0,1,2,3 → show all 4)
+  // Build rotation sequence pills (12 windows per hour at 5 minutes each).
   var providers = win.primaryProvider && win.fallbackProvider
     ? [win.primaryProvider, win.fallbackProvider]
     : [];
-  var slots = [0, 1, 2, 3].map(function(wid) {
+  var slots = Array.from({ length: 12 }, function(_, wid) {
     var pid = providers[wid % providers.length] || '?';
-    var mins = pad(wid * 15) + ':00 - ' + pad(wid * 15 + 14) + ':59';
+    var mins = pad(wid * 5) + ':00 - ' + pad(wid * 5 + 4) + ':59';
     var isCur = wid === (win.windowId != null ? win.windowId : -1);
     return (wid > 0 ? '<span class="rw-arr">→</span>' : '') +
       '<span class="rw-slot ' + (isCur ? 'rw-slot-active' : 'rw-slot-next') + '" title="' + mins + '">' +
@@ -781,6 +812,62 @@ function renderRotationWindow(win) {
       '<div class="rw-flow">' + slots + '</div>' +
     '</div>'
   );
+}
+
+// ── render: source-level quota rotation ───────────────────────────────────
+function renderSourceRotation(data) {
+  if (!data || !data.sourceWindow) return;
+  srcRotationData = data;
+  var win = data.sourceWindow;
+  var sources = data.sources || [];
+  var order = win.sourceOrder || sources.map(function(s) { return s.sourceId; });
+  var byId = {};
+  sources.forEach(function(s) { byId[s.sourceId] = s; });
+  var cards = order.map(function(sourceId, idx) {
+    var s = byId[sourceId] || { sourceId: sourceId, sourceLabel: sourceId, usable: false };
+    var isActive = sourceId === win.activeSource;
+    var q = s.quota || null;
+    var used = q && q.limit != null ? q.used : null;
+    var limit = q && q.limit != null ? q.limit : null;
+    var remaining = q && q.remaining != null ? q.remaining : null;
+    var qpct = limit ? Math.max(0, Math.min(100, Math.round((used || 0) / limit * 100))) : 0;
+    var status = isActive ? 'ACTIVE' : (s.usable ? 'NEXT +' + idx : 'BLOCKED');
+    var pillCls = isActive ? 'active' : (!s.usable ? 'blocked' : '');
+    var qText = limit ? ((used || 0) + '/' + limit + ' · còn ' + remaining) : 'daily / external';
+    var countText = sourceCountdownText(idx, win);
+    var resetText = q && q.resetAt ? ('reset ' + countdown(q.resetAt)) : 'window chưa bắt đầu';
+    var keyText = (s.keyId || '?') + ' · ' + (s.model || '?');
+    return '<div class="src-card ' + (isActive ? 'active ' : '') + (!s.usable ? 'off' : '') + '">' +
+      '<div class="src-top"><div class="src-name">' + escapeHtml(s.sourceLabel || sourceId) + '</div>' +
+        '<span class="src-pill ' + pillCls + '">' + status + '</span></div>' +
+      '<div class="src-count" id="src_cd_' + safeId(sourceId) + '">' + countText + '</div>' +
+      '<div class="src-meta">' + escapeHtml(keyText) + '</div>' +
+      '<div class="src-q">' + escapeHtml(qText) + '</div>' +
+      '<div class="src-bar"><div class="src-fill ' + (!s.usable ? 'bad' : '') + '" style="width:' + qpct + '%"></div></div>' +
+      '<div class="src-note">' + escapeHtml(resetText || '') + (s.usable ? '' : ' · unavailable') + '</div>' +
+    '</div>';
+  }).join('');
+
+  setText('src-remaining-hdr', 'active ' + (win.activeSource || '—') + ' · ' + sourceCountdownText(0, win));
+  setHtml('src-body', '<div class="src-grid">' + cards + '</div>');
+}
+
+function sourceCountdownText(index, win) {
+  if (!win || !win.windowEndMs) return '—';
+  var slotMs = Math.max(1, (win.windowEndMs || 0) - (win.windowStartMs || 0));
+  var ms = Math.max(0, (win.windowEndMs - Date.now()) + index * slotMs);
+  var totalSec = Math.floor(ms / 1000);
+  var m = Math.floor(totalSec / 60), s = totalSec % 60;
+  return pad(m) + ':' + pad(s);
+}
+
+function safeId(v) { return String(v || '').replace(/[^a-zA-Z0-9_-]/g, '_'); }
+function escapeHtml(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 // ── render: Active Rotation ────────────────────────────────────────────────
@@ -1069,7 +1156,7 @@ function tickCountdowns() {
     });
   }
 
-  // 15-min rotation window countdown
+  // 5-min rotation window countdown
   if (rwWindowEndMs) {
     var rem = Math.max(0, rwWindowEndMs - Date.now());
     var remMin = Math.floor(rem / 60000);
@@ -1079,8 +1166,18 @@ function tickCountdowns() {
     var cdEl = get('rw-countdown');
     if (cdEl) { cdEl.className = 'rw-remaining ' + cls2; cdEl.textContent = str + ' remaining'; }
     var pctEl = get('rw-dial-pct');
-    if (pctEl) { pctEl.textContent = Math.round(rem / (15 * 60 * 1000) * 100) + '%'; }
+    if (pctEl) { pctEl.textContent = Math.round(rem / (5 * 60 * 1000) * 100) + '%'; }
     setText('rw-remaining-hdr', 'remaining ' + str);
+  }
+
+  if (srcRotationData && srcRotationData.sourceWindow) {
+    var sw = srcRotationData.sourceWindow;
+    var order = sw.sourceOrder || [];
+    order.forEach(function(sourceId, idx) {
+      var el = get('src_cd_' + safeId(sourceId));
+      if (el) el.textContent = sourceCountdownText(idx, sw);
+    });
+    setText('src-remaining-hdr', 'active ' + (sw.activeSource || '—') + ' · ' + sourceCountdownText(0, sw));
   }
 }
 setInterval(tickCountdowns, 1000);
@@ -1113,6 +1210,7 @@ function connect() {
       checkAlerts(d);
       renderControlCenter(d.control, d.allProviders, d.orchestration, d.breakers);
       renderRotationWindow(d.window);
+      renderSourceRotation(d.sourceRotation);
       if (d.keyStatus) { keyStatusData = d.keyStatus; renderKeyTable(d.keyStatus.providers); }
       renderRotation(d.orchestration);
       renderQuotaTable(d.orchestration && d.orchestration.providers);

@@ -1,0 +1,62 @@
+{
+  "base": "http://localhost:3210",
+  "captured_at": "2026-06-04T07:29:07.502Z",
+  "health": {
+    "ok": true,
+    "name": "whatsapp-ai-gateway",
+    "build": "Admin Control Center v1",
+    "version": "v1.0.0",
+    "commit": "e06e26c",
+    "started_at": "2026-06-04T06:42:45.166Z",
+    "uptime_seconds": 2779,
+    "dashboard_ready": true,
+    "admin_control_ready": true,
+    "template_cache_ready": true,
+    "template_item_count": 5,
+    "whatsapp_ready": true,
+    "whatsapp_status": "ready",
+    "google_sheets_ready": true,
+    "ocr_ready": true,
+    "ocr_missing": [],
+    "yolink_ready": false,
+    "yolink_configured": false,
+    "business_hours_open": true,
+    "ai_paused": false,
+    "time": "2026-06-04T07:29:04.715Z"
+  },
+  "cache_control": "no-store",
+  "buttons_verified_present": [
+    "Admin Control Center",
+    "Open Daily Entry Template",
+    "Open Daily Log",
+    "Force Sync Template",
+    "Test Sheet Write",
+    "Refresh WhatsApp Groups",
+    "Map Group to Store",
+    "Save Manager Alert Group",
+    "Test Alert",
+    "Setup Checklist",
+    "Build: Admin Control Center v1"
+  ],
+  "screenshots": [
+    "screenshots/admin-control-center.png",
+    "screenshots/google-sheets-panel.png",
+    "screenshots/whatsapp-groups-panel.png",
+    "screenshots/store-mapping-panel.png",
+    "screenshots/setup-checklist.png"
+  ],
+  "extra_sections_found": [
+    "Admin Control Center",
+    "Store Mapping",
+    "Manager Alerts",
+    "Daily Entry Template",
+    "OCR Runtime",
+    "Food Safety",
+    "Agent Sessions",
+    "Pilot Metrics",
+    "Incidents",
+    "Compliance",
+    "Conversations"
+  ],
+  "store_mapping_section_present": true
+}

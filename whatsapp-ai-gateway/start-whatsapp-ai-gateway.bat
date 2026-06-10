@@ -24,6 +24,23 @@ echo [OK] Node.js found:
 node -v
 echo.
 
+:: Clear old process on dashboard port
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3210') do (
+    if not "%%a"=="0" (
+        echo [WARN] Stopping old gateway PID %%a on port 3210...
+        taskkill /PID %%a /F >nul 2>&1
+    )
+)
+timeout /t 2 /nobreak >nul
+netstat -ano | findstr :3210 >nul 2>&1
+if %errorlevel% equ 0 (
+    echo [ERROR] Port 3210 is still in use. Start aborted.
+    netstat -ano | findstr :3210
+    echo.
+    pause
+    exit /b 1
+)
+
 :: Check if node_modules exists
 if not exist "node_modules" (
     echo [INFO] node_modules not found. Running npm install...

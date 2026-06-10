@@ -1,0 +1,12 @@
+[
+  { "id": "GS-01", "input": "hello", "expected": "SILENT", "description": "Group normal chatter" },
+  { "id": "GS-02", "input": "/ldagent", "expected": "SESSION_STARTED", "description": "/ldagent starts session" },
+  { "id": "GS-03", "input": "35", "nonOwner": true, "expected": "MINIMAL_WARNING", "description": "Non-owner sends number" },
+  { "id": "GS-04", "input": "/ldagent", "expected": "SEPARATE_SESSIONS", "description": "Same employee in two groups" },
+  { "id": "GS-05", "input": "/ldagent", "expected": "NO_CONFLICT", "description": "Two groups active" },
+  { "id": "GS-06", "input": "timeout", "expected": "LOCK_RELEASED", "description": "Owner timeout releases lock" },
+  { "id": "GS-07", "input": "END", "expected": "SESSION_CLOSED", "description": "END closes session" },
+  { "id": "GS-08", "input": "/ldagent", "groupName": "Stone Oak LD Agent", "expected": "CORRECT_STORE", "description": "Mapped group correct store" },
+  { "id": "GS-09", "input": "/ldagent Bandera", "groupName": "Stone Oak LD Agent", "expected": "STORE_LOCKED", "description": "Store mapping locked" },
+  { "id": "GS-10", "input": "/ldagent", "groupName": "Random Group", "expected": "UNMAPPED_BLOCKED", "description": "Unmapped group blocked" }
+]

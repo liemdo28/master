@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Live Board — Central Command</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --card: #12121a; --border: #1e1e2e; --accent: #7c3aed;
+    --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+    --text: #e2e8f0; --muted: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 18px; font-weight: 700; }
+  header .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .header-actions { margin-left: auto; display: flex; gap: 8px; }
+  .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-size: 13px; transition: all .2s; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
+  .btn-primary:hover { background: #6d28d9; }
+
+  .main { padding: 20px 24px; max-width: 1600px; margin: 0 auto; }
+
+  /* Summary bar */
+  .summary-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Section */
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+
+  /* Project grid */
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: border-color .2s; }
+  .project-card:hover { border-color: var(--accent); }
+  .project-card.status-ok    { border-left: 3px solid var(--green); }
+  .project-card.status-warn  { border-left: 3px solid var(--yellow); }
+  .project-card.status-error { border-left: 3px solid var(--red); }
+  .project-card.status-remote { border-left: 3px solid var(--blue); }
+  .project-card.status-unknown { border-left: 3px solid var(--muted); }
+
+  .pc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .pc-name { font-weight: 600; font-size: 14px; }
+  .pc-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  .badge-local  { background: #10b98120; color: var(--green); }
+  .badge-remote { background: #3b82f620; color: var(--blue); }
+  .badge-warn   { background: #f59e0b20; color: var(--yellow); }
+
+  .pc-meta { font-size: 12px; color: var(--muted); }
+  .pc-meta > div { margin-bottom: 3px; display: flex; gap: 6px; align-items: center; }
+  .pc-meta .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--red); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-blue { background: var(--blue); }
+  .dot-grey { background: var(--muted); }
+
+  .pc-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .pc-btn { font-size: 11px; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
+  .pc-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Connector health */
+  .connector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .conn-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .conn-name { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+  .conn-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .conn-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .conn-dot.live    { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .conn-dot.offline { background: var(--red); }
+  .conn-dot.unknown { background: var(--muted); }
+  .conn-dot.partial { background: var(--yellow); }
+  .conn-host { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Approvals */
+  .approval-list { display: flex; flex-direction: column; gap: 8px; }
+  .approval-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .approval-level { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .level-1 { background: #10b98120; color: var(--green); }
+  .level-2 { background: #f59e0b20; color: var(--yellow); }
+  .level-3 { background: #ef444420; color: var(--red); }
+  .approval-desc { flex: 1; font-size: 13px; }
+  .approval-target { font-size: 11px; color: var(--muted); }
+  .approval-actions { display: flex; gap: 6px; }
+
+  /* Chat panel */
+  .chat-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+  .chat-header { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+  .chat-messages { height: 200px; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .chat-msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; max-width: 90%; }
+  .chat-msg.user { background: #7c3aed30; align-self: flex-end; }
+  .chat-msg.mi { background: var(--border); align-self: flex-start; white-space: pre-wrap; }
+  .chat-input { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .chat-input input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; }
+  .chat-input input:focus { outline: none; border-color: var(--accent); }
+
+  /* Loading */
+  .loading { text-align: center; padding: 40px; color: var(--muted); }
+  .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* QA score */
+  .qa-bar { height: 4px; border-radius: 2px; background: var(--border); margin-top: 6px; overflow: hidden; }
+  .qa-fill { height: 100%; border-radius: 2px; transition: width .5s; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  .empty { font-size: 13px; color: var(--muted); padding: 12px; text-align: center; }
+
+  /* QR Panel */
+  .qr-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
+  .qr-box { width: 100px; height: 100px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+  .qr-info { flex: 1; }
+  .qr-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  .qr-url { font-size: 12px; color: var(--accent); margin-bottom: 4px; font-family: monospace; word-break: break-all; }
+  .qr-note { font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="status-dot" id="wsStatus"></div>
+  <h1>⚡ Mi Live Board — Central Command</h1>
+  <div class="header-actions">
+    <button class="btn" onclick="scanAll()">🔍 Scan All</button>
+    <button class="btn" onclick="syncAll()">🔄 Sync All</button>
+    <button class="btn btn-primary" onclick="window.location='/'">💬 Chat</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- QR Code Panel -->
+  <div class="qr-panel" id="qrPanel">
+    <div class="qr-box"><canvas id="qrCanvas" width="96" height="96"></canvas></div>
+    <div class="qr-info">
+      <div class="qr-title">📱 Open Mi on iPhone / MacBook</div>
+      <div class="qr-url" id="qrUrl">Loading...</div>
+      <div class="qr-note" id="qrNote">Scan QR hoặc mở URL trên iPhone / MacBook</div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <a id="qrLanLink" href="#" style="font-size:11px;color:var(--muted)">LAN →</a>
+        <a id="qrTsLink"  href="#" style="font-size:11px;color:var(--accent)">Tailscale →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="summary-bar" id="summaryBar">
+    <div class="stat-card"><div class="label">Projects</div><div class="value" id="statProjects">—</div><div class="sub">in Master</div></div>
+    <div class="stat-card"><div class="label">Connected</div><div class="value" id="statConnected">—</div><div class="sub">connectors live</div></div>
+    <div class="stat-card"><div class="label">Remote</div><div class="value" id="statRemote">—</div><div class="sub">agents</div></div>
+    <div class="stat-card"><div class="label">Pending</div><div class="value" id="statApprovals">—</div><div class="sub">approvals</div></div>
+    <div class="stat-card"><div class="label">Dirty Repos</div><div class="value" id="statDirty">—</div><div class="sub">uncommitted</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <!-- Connector Health -->
+      <div class="section">
+        <div class="section-title">🔌 Connector Health</div>
+        <div class="connector-grid" id="connectorGrid"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      </div>
+
+      <!-- Pending Approvals -->
+      <div class="section">
+        <div class="section-title">🔒 Pending Approvals</div>
+        <div class="approval-list" id="approvalList"><div class="empty">No pending approvals</div></div>
+      </div>
+    </div>
+
+    <!-- Quick Chat -->
+    <div class="section">
+      <div class="section-title">💬 Quick Commands</div>
+      <div class="chat-panel">
+        <div class="chat-header">CEO → Mi</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Scan all projects / Check Dashboard / Run QA Raw..." onkeydown="if(event.key==='Enter') sendChat()">
+          <button class="btn btn-primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;">
+        <button class="pc-btn" onclick="quickCmd('Scan all Master projects')">Scan Projects</button>
+        <button class="pc-btn" onclick="quickCmd('Show all projects')">Show Projects</button>
+        <button class="pc-btn" onclick="quickCmd('Check Raw website')">Check Raw</button>
+        <button class="pc-btn" onclick="quickCmd('Check Bakudan website')">Check Bakudan</button>
+        <button class="pc-btn" onclick="quickCmd('Check Dashboard')">Check Dashboard</button>
+        <button class="pc-btn" onclick="quickCmd('Check integration-system')">Check Integration</button>
+        <button class="pc-btn" onclick="quickCmd('Check WhatsApp API')">Check WhatsApp</button>
+        <button class="pc-btn" onclick="quickCmd('Show connector health')">Connector Health</button>
+        <button class="pc-btn" onclick="quickCmd('Run QA Dashboard')">QA Dashboard</button>
+        <button class="pc-btn" onclick="quickCmd('Run QA Raw website')">QA Raw</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section">
+    <div class="section-title" style="display:flex;align-items:center;gap:8px;">
+      📦 All Projects
+      <span id="projectCount" style="font-size:11px;color:var(--muted);font-weight:400;"></span>
+    </div>
+    <div class="project-grid" id="projectGrid"><div class="loading"><div class="spinner"></div>Scanning projects...</div></div>
+  </div>
+
+</div>
+
+<script>
+const API = '';
+let ws;
+
+// ── WebSocket ──────────────────────────────────────────────────────────────
+function connectWS() {
+  ws = new WebSocket(`ws://${location.host}/ws`);
+  ws.onopen = () => { document.getElementById('wsStatus').style.background = '#10b981'; };
+  ws.onclose = () => { document.getElementById('wsStatus').style.background = '#ef4444'; setTimeout(connectWS, 3000); };
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'approval_new') loadApprovals();
+    if (msg.type === 'approval_resolved') loadApprovals();
+  };
+}
+
+// ── Load everything ────────────────────────────────────────────────────────
+async function load() {
+  await Promise.all([loadProjects(), loadConnectors(), loadApprovals()]);
+}
+
+async function loadProjects() {
+  try {
+    const res = await fetch(`${API}/api/projects`);
+    const data = await res.json();
+    renderProjects(data.projects || []);
+    document.getElementById('statProjects').textContent = data.total || 0;
+    const dirty = (data.projects || []).filter(p => p.git_dirty).length;
+    document.getElementById('statDirty').textContent = dirty;
+  } catch { document.getElementById('projectGrid').innerHTML = '<div class="empty">Failed to load projects</div>'; }
+}
+
+async function loadConnectors() {
+  try {
+    const res = await fetch(`${API}/api/projects/health`);
+    const data = await res.json();
+    renderConnectors(data.remotes || []);
+    const live = (data.remotes || []).filter(r => r.reachable).length;
+    document.getElementById('statConnected').textContent = live + ' / ' + (data.remotes || []).length;
+    document.getElementById('statRemote').textContent = (data.remotes || []).length;
+  } catch { document.getElementById('connectorGrid').innerHTML = '<div class="empty">Failed to load connectors</div>'; }
+}
+
+async function loadApprovals() {
+  try {
+    const res = await fetch(`${API}/api/approval`);
+    const data = await res.json();
+    const pending = (data.actions || []).filter(a => a.status === 'pending');
+    document.getElementById('statApprovals').textContent = pending.length;
+    renderApprovals(pending);
+  } catch {}
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function renderProjects(projects) {
+  document.getElementById('projectCount').textContent = `(${projects.length})`;
+  if (!projects.length) { document.getElementById('projectGrid').innerHTML = '<div class="empty">No projects found — click Scan All</div>'; return; }
+
+  document.getElementById('projectGrid').innerHTML = projects.map(p => {
+    const status = p.git_dirty ? 'warn' : p.location === 'remote' ? 'remote' : 'ok';
+    const badgeClass = p.location === 'remote' ? 'badge-remote' : 'badge-local';
+    const badgeLabel = p.location === 'remote' ? '☁ Remote' : '💻 Local';
+    return `<div class="project-card status-${status}" onclick="checkProject('${p.project_id}')">
+      <div class="pc-header">
+        <div class="pc-name">${p.name}</div>
+        <span class="pc-badge ${badgeClass}">${badgeLabel}</span>
+      </div>
+      <div class="pc-meta">
+        <div><span class="dot ${p.git_branch ? 'dot-green' : 'dot-grey'}"></span>${p.framework || 'unknown'} · ${p.type}</div>
+        <div><span class="dot ${p.git_dirty ? 'dot-yellow' : 'dot-green'}"></span>Git: ${p.git_branch || 'no branch'} ${p.git_dirty ? '⚠ dirty' : ''}</div>
+        ${p.ports?.length ? `<div><span class="dot dot-blue"></span>Ports: ${p.ports.join(', ')}</div>` : ''}
+        <div style="color:var(--muted);font-size:11px;">${p.relative_path}</div>
+      </div>
+      <div class="pc-actions">
+        <button class="pc-btn" onclick="event.stopPropagation();pullProject('${p.project_id}')">Pull</button>
+        <button class="pc-btn" onclick="event.stopPropagation();qaProject('${p.project_id}')">QA</button>
+        <button class="pc-btn" onclick="event.stopPropagation();syncProject('${p.project_id}')">Sync</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderConnectors(remotes) {
+  // Add local connectors
+  const localConns = [
+    { name: 'Raw Website', id: 'raw-website', type: 'local' },
+    { name: 'Bakudan Website', id: 'bakudan-website', type: 'local' },
+    { name: 'Dashboard', id: 'dashboard', type: 'local' },
+    { name: 'Accounting Engine', id: 'accounting', type: 'local' },
+    { name: 'Food Safety', id: 'food-safety', type: 'local' },
+  ];
+
+  const allConns = [
+    ...localConns.map(c => ({ ...c, reachable: true, status: 'local', host: 'localhost' })),
+    ...remotes.map(r => ({ name: r.name, id: r.agent_id, type: 'remote', reachable: r.reachable, status: r.status, host: r.host || r.error || 'not configured' })),
+  ];
+
+  document.getElementById('connectorGrid').innerHTML = allConns.map(c => {
+    const dotClass = c.type === 'local' ? 'partial' : (c.reachable ? 'live' : 'offline');
+    const statusLabel = c.type === 'local' ? '✓ Local' : (c.reachable ? '✓ Online' : '✗ Offline');
+    return `<div class="conn-card">
+      <div class="conn-name">${c.name}</div>
+      <div class="conn-status"><div class="conn-dot ${dotClass}"></div><span>${statusLabel}</span></div>
+      <div class="conn-host">${c.host || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderApprovals(pending) {
+  if (!pending.length) { document.getElementById('approvalList').innerHTML = '<div class="empty">No pending approvals ✓</div>'; return; }
+  document.getElementById('approvalList').innerHTML = pending.map(a => `
+    <div class="approval-item">
+      <div class="approval-level level-${a.risk_level}">L${a.risk_level}</div>
+      <div style="flex:1">
+        <div class="approval-desc">${a.description}</div>
+        <div class="approval-target">${a.target || ''} · ${new Date(a.created_at).toLocaleTimeString()}</div>
+      </div>
+      <div class="approval-actions">
+        <button class="pc-btn" style="color:var(--green);border-color:var(--green)" onclick="approveAction('${a.id}')">✓ Approve</button>
+        <button class="pc-btn" style="color:var(--red);border-color:var(--red)" onclick="rejectAction('${a.id}')">✗ Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+async function scanAll() {
+  addChat('mi', 'Scanning all Master projects...');
+  const res = await fetch(`${API}/api/projects/scan`);
+  const data = await res.json();
+  addChat('mi', `Scanned ${data.total} projects:\n${data.summary}`);
+  renderProjects(data.projects || []);
+  document.getElementById('statProjects').textContent = data.total || 0;
+}
+
+async function syncAll() {
+  addChat('mi', 'Syncing all connectors...');
+  const res = await fetch(`${API}/api/projects/sync-all`, { method: 'POST' });
+  const data = await res.json();
+  addChat('mi', 'Sync complete:\n' + Object.entries(data.results).map(([k,v]) => `  ${k}: ${v}`).join('\n'));
+  loadConnectors();
+}
+
+async function checkProject(id) {
+  quickCmd(`Check ${id}`);
+}
+
+async function pullProject(id) {
+  quickCmd(`Pull data from ${id}`);
+}
+
+async function qaProject(id) {
+  const res = await fetch(`${API}/api/projects/${id}/qa`, { method: 'POST' });
+  const data = await res.json();
+  addChat('mi', `QA ${id}:\n${JSON.stringify(data.qa, null, 2)}`);
+}
+
+async function syncProject(id) {
+  const res = await fetch(`${API}/api/projects/${id}/sync`, { method: 'POST' });
+  const data = await res.json();
+  addChat('mi', `Synced ${id}: ${data.synced ? '✓' : '✗'}`);
+}
+
+async function approveAction(id) {
+  await fetch(`${API}/api/approval/${id}/approve`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ approver: 'CEO' }) });
+  loadApprovals();
+}
+
+async function rejectAction(id) {
+  await fetch(`${API}/api/approval/${id}/reject`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ approver: 'CEO' }) });
+  loadApprovals();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addChat('user', msg);
+  try {
+    const res = await fetch(`${API}/api/chat`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: msg, mode: 'ceo' }) });
+    const data = await res.json();
+    addChat('mi', data.reply || JSON.stringify(data));
+    if (data.requires_approval) loadApprovals();
+  } catch(e) { addChat('mi', 'Error: ' + e.message); }
+}
+
+function quickCmd(cmd) {
+  document.getElementById('chatInput').value = cmd;
+  sendChat();
+}
+
+function addChat(role, text) {
+  const el = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  div.textContent = text;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+connectWS();
+load();
+setInterval(loadApprovals, 30000);
+setInterval(loadConnectors, 60000);
+
+// ── QR Code (pure canvas, no library needed) ────────────────────────────────
+async function loadQR() {
+  try {
+    const res = await fetch(`${API}/api/remote/qr-data`);
+    const data = await res.json();
+    const url = data.url + '/mobile.html';
+    document.getElementById('qrUrl').textContent = url;
+    document.getElementById('qrNote').textContent = data.note || '';
+    if (data.lan_url) { const a=document.getElementById('qrLanLink'); a.href=data.lan_url+'/mobile.html'; a.textContent='LAN: '+data.lan_url; }
+    if (data.tailscale_url) { const a=document.getElementById('qrTsLink'); a.href=data.tailscale_url+'/mobile.html'; a.textContent='Tailscale: '+data.tailscale_url; }
+    // Use QR API (Google Charts — only if online, fallback to URL display)
+    const canvas = document.getElementById('qrCanvas');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { const ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,96,96); };
+    img.onerror = () => {
+      // Fallback: draw URL text
+      const ctx=canvas.getContext('2d');
+      ctx.fillStyle='white'; ctx.fillRect(0,0,96,96);
+      ctx.fillStyle='#333'; ctx.font='7px monospace'; ctx.fillText('Open URL →',4,50);
+    };
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=96x96&data=${encodeURIComponent(url)}`;
+  } catch {}
+}
+loadQR();
+</script>
+</body>
+</html>

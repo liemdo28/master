@@ -1,0 +1,34 @@
+[
+  {
+    "ts": "2026-06-09T11:04:55.577Z",
+    "device_id": "dev_00c087283efe2f1c",
+    "ip": "127.0.0.1",
+    "action": "login_ok",
+    "result": "ok",
+    "detail": "Unknown Device"
+  },
+  {
+    "ts": "2026-06-09T11:05:00.942Z",
+    "device_id": "unknown",
+    "ip": "127.0.0.1",
+    "action": "login_failed",
+    "result": "denied",
+    "detail": "attempt 1"
+  },
+  {
+    "ts": "2026-06-09T11:23:45.216Z",
+    "device_id": "dev_3d37a40b46bb4379",
+    "ip": "100.123.168.74",
+    "action": "login_ok",
+    "result": "ok",
+    "detail": "iPhone"
+  },
+  {
+    "ts": "2026-06-09T12:39:15.670Z",
+    "device_id": "dev_3d37a40b46bb4379",
+    "ip": "100.123.168.74",
+    "action": "login_ok",
+    "result": "ok",
+    "detail": "iPhone"
+  }
+]

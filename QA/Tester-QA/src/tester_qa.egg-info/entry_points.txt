@@ -1,2 +1,0 @@
-[console_scripts]
-tester-qa = tester_qa.cli:main

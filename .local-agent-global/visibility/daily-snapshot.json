@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-06-09T11:26:22.423Z",
+  "date": "Thứ Ba, 9 tháng 6, 2026",
+  "platforms": {
+    "connected": [
+      "Master Workspace"
+    ],
+    "not_configured": [
+      "Gmail",
+      "Google Calendar",
+      "Google Drive",
+      "Asana",
+      "Huawei Health",
+      "Accounting Engine"
+    ]
+  },
+  "projects": {
+    "total": 10,
+    "with_issues": 0,
+    "top_issues": [],
+    "recent": [
+      "accounting-engine",
+      "Agent",
+      "agent-coding-api-keys",
+      "Bakudan",
+      "food-safety-gateway"
+    ]
+  },
+  "dashboard": {
+    "status": "not_synced"
+  },
+  "tasks": {
+    "asana_status": "not configured — set ASANA_TOKEN",
+    "dashboard_status": "no_tasks_module"
+  },
+  "emails": {
+    "status": "not configured"
+  },
+  "calendar": {
+    "status": "not configured"
+  },
+  "health": {
+    "status": "no_export"
+  },
+  "accounting": {
+    "status": "not_synced"
+  },
+  "food_safety": {
+    "status": "no_data",
+    "total_records": 0,
+    "pending_sync": 0
+  },
+  "action_items": []
+}

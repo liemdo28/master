@@ -1,8 +1,8 @@
 /**
  * Antigravity Gateway — Provider Router  (v2 — 2-Level Routing)
  *
- * Level 1 — Provider Rotation (15-min window):
- *   ProviderRotationService selects primary provider every 15 minutes.
+ * Level 1 — Provider Rotation (5-min window):
+ *   ProviderRotationService selects primary provider every 5 minutes.
  *   Fallback is the other provider in the same window.
  *
  * Level 2 — API Key Rotation (round-robin within provider):
@@ -44,6 +44,8 @@ import { timeline } from '../runtime/timeline.js';
 import { providerControl } from '../runtime/provider-control.js';
 import { providerRotationService } from '../runtime/provider-rotation-service.js';
 import { resolveRuntimeModel, resolveRuntimeModelDetailed } from '../runtime/provider-model-map.js';
+import { modelQuotaService } from '../runtime/model-quota-service.js';
+import type { SourceCandidate } from '../runtime/model-quota-service.js';
 import { classifyUpstreamError, classifyThrownError, shouldDisableKeyForError, shouldTripProviderForError } from '../runtime/upstream-error-classifier.js';
 import type { UpstreamErrorType } from '../runtime/upstream-error-classifier.js';
 import { truncateContext, estimateRequestTokens } from '../runtime/context-truncator.js';
@@ -52,6 +54,21 @@ import { truncateContext, estimateRequestTokens } from '../runtime/context-trunc
 
 const PROVIDER_ROTATION_ENABLED = process.env['PROVIDER_ROTATION_ENABLED'] !== 'false';
 const KEY_ROTATION_ENABLED      = process.env['KEY_ROTATION_ENABLED'] !== 'false';
+const RESERVE_FALLBACK_ON_OPUS_EXHAUSTION = process.env['RESERVE_FALLBACK_ON_OPUS_EXHAUSTION'] !== 'false';
+const PRIMARY_PROVIDER_IDS = ['antigravity', 'opusmax'] as const;
+const OPUS_QUOTA_REQUESTS = new Set([
+  'claude-opus-4',
+  'claude-opus-4-6',
+  'claude-opus-4.6',
+  'claude-opus-4-7',
+  'claude-opus-4.7',
+  'claude-opus-4-8',
+  'claude-opus-4.8',
+]);
+
+function isModelScopedLimitError(type: UpstreamErrorType): boolean {
+  return type === 'quota_exceeded' || type === 'rate_limited';
+}
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -82,6 +99,9 @@ export type RequestLog = {
     finalProvider: string | undefined;
     finalKeyId: string | undefined;
     failedKeys: Array<{ providerId: string; keyId: string; errorType: string }>;
+    attemptedSources?: Array<{ sourceId: string; providerId: string; keyId: string; model: string; ok: boolean; error?: string | undefined }> | undefined;
+    finalSourceId?: string | undefined;
+    fallbackCount?: number | undefined;
   } | undefined;
 };
 
@@ -90,6 +110,8 @@ interface ProviderAttemptResult {
   ok: boolean;
   providerId: string;
   keyId?: string;
+  sourceId?: string;
+  sourceLabel?: string;
   response?: import('../types.js').UniversalChatResponse;
   upstream?: Response;
   providerKind?: import('../types.js').ProviderKind;
@@ -124,16 +146,17 @@ export class ProviderRouter {
     const start = Date.now();
     const reqId = this.nextReqId();
     const rotWin = providerRotationService.getCurrentWindow();
-    const [primaryId, ...fallbackIds] = this.resolveProviderOrder();
+    const [primaryId, ...fallbackIds] = this.resolveProviderOrder(request);
     const allAttempts: RouteAttempt[] = [];
     const allFailedKeys: Array<{ providerId: string; keyId: string; errorType: UpstreamErrorType; error: string }> = [];
+    const attemptedSourceIds = new Set<string>();
 
     console.log(`[router] ▶  ${reqId}  stream=false  window="${rotWin.windowLabel}"  primary=${primaryId}  fallbacks=[${fallbackIds.join(',')}]`);
 
     const providerOrder = [primaryId!, ...fallbackIds].filter(Boolean) as string[];
 
     for (const providerId of providerOrder) {
-      const result = await this.tryProviderWithKeys(providerId, request, false);
+      const result = await this.tryProviderWithKeys(providerId, request, false, attemptedSourceIds);
       allAttempts.push(...result.attempts);
       allFailedKeys.push(...result.failedKeys);
 
@@ -145,13 +168,16 @@ export class ProviderRouter {
           primaryProvider: rotWin.primaryProvider, fallbackProvider: rotWin.fallbackProvider,
           selectedProvider: primaryId!, finalProvider: providerId,
           finalKeyId: result.keyId, failedKeys: allFailedKeys,
+          attemptedSources: this.sourceChain(allAttempts),
+          finalSourceId: result.sourceId,
+          fallbackCount: allAttempts.filter((a) => !a.ok).length,
         };
 
         providerControl.recordRouted(providerId, latency);
         circuitBreakers.recordSuccess(providerId);
         quotaOrchestrator.consume(providerId);
 
-        console.log(`[router] ✓  ${reqId}  ${providerId}  key=${result.keyId}  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
+        console.log(`[router] ✓  ${reqId}  ${providerId}  source=${result.sourceId}  key=${result.keyId}  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
 
         this.log(request, result.response.model, allAttempts, providerId, result.keyId, latency, undefined, undefined, usedFallback, rotInfo, result.contextTruncated, result.originalTokens, result.truncatedTokens);
         return { response: result.response, attempts: allAttempts };
@@ -177,18 +203,25 @@ export class ProviderRouter {
 
     // All providers exhausted
     const latency = Date.now() - start;
-    const model = resolveRuntimeModel(primaryId!, request.model);
+    const model = resolveRuntimeModel(primaryId!, request.model, { thinking: Boolean(request.thinking) });
     const finalErrorType = allFailedKeys[0]?.errorType ?? 'unknown';
     this.log(request, model, allAttempts, undefined, undefined, latency, 'ALL_PROVIDERS_FAILED', finalErrorType, false, {
       windowId: rotWin.windowId, windowLabel: rotWin.windowLabel,
       primaryProvider: rotWin.primaryProvider, fallbackProvider: rotWin.fallbackProvider,
       selectedProvider: primaryId!, finalProvider: undefined, finalKeyId: undefined,
       failedKeys: allFailedKeys,
+      attemptedSources: this.sourceChain(allAttempts),
+      fallbackCount: allAttempts.filter((a) => !a.ok).length,
     });
 
     throw Object.assign(
-      new Error(`ALL_PROVIDERS_FAILED: tried [${providerOrder.join(', ')}]`),
-      { code: 'ALL_PROVIDERS_FAILED', providers_attempted: providerOrder },
+      new Error(`NO_AVAILABLE_QUOTA_SOURCE: tried [${this.sourceChain(allAttempts).map((a) => a.sourceId).join(', ')}]`),
+      {
+        code: 'ALL_PROVIDERS_FAILED',
+        type: 'NO_AVAILABLE_QUOTA_SOURCE',
+        providers_attempted: providerOrder,
+        attempted_sources: this.sourceChain(allAttempts),
+      },
     );
   }
 
@@ -197,16 +230,17 @@ export class ProviderRouter {
     const start = Date.now();
     const reqId = this.nextReqId();
     const rotWin = providerRotationService.getCurrentWindow();
-    const [primaryId, ...fallbackIds] = this.resolveProviderOrder();
+    const [primaryId, ...fallbackIds] = this.resolveProviderOrder(request);
     const allAttempts: RouteAttempt[] = [];
     const allFailedKeys: Array<{ providerId: string; keyId: string; errorType: UpstreamErrorType; error: string }> = [];
+    const attemptedSourceIds = new Set<string>();
 
     console.log(`[router] ▶  ${reqId}  stream=true  window="${rotWin.windowLabel}"  primary=${primaryId}  fallbacks=[${fallbackIds.join(',')}]`);
 
     const providerOrder = [primaryId!, ...fallbackIds].filter(Boolean) as string[];
 
     for (const providerId of providerOrder) {
-      const result = await this.tryProviderWithKeys(providerId, request, true);
+      const result = await this.tryProviderWithKeys(providerId, request, true, attemptedSourceIds);
       allAttempts.push(...result.attempts);
       allFailedKeys.push(...result.failedKeys);
 
@@ -218,13 +252,16 @@ export class ProviderRouter {
           primaryProvider: rotWin.primaryProvider, fallbackProvider: rotWin.fallbackProvider,
           selectedProvider: primaryId!, finalProvider: providerId,
           finalKeyId: result.keyId, failedKeys: allFailedKeys,
+          attemptedSources: this.sourceChain(allAttempts),
+          finalSourceId: result.sourceId,
+          fallbackCount: allAttempts.filter((a) => !a.ok).length,
         };
 
         providerControl.recordRouted(providerId, latency);
         circuitBreakers.recordSuccess(providerId);
         quotaOrchestrator.consume(providerId);
 
-        console.log(`[router] ✓  ${reqId}  ${providerId}  key=${result.keyId}  stream OK  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
+        console.log(`[router] ✓  ${reqId}  ${providerId}  source=${result.sourceId}  key=${result.keyId}  stream OK  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
 
         this.log(request, result.model, allAttempts, providerId, result.keyId, latency, undefined, undefined, usedFallback, rotInfo, result.contextTruncated, result.originalTokens, result.truncatedTokens);
         return {
@@ -247,18 +284,25 @@ export class ProviderRouter {
     }
 
     const latency = Date.now() - start;
-    const model = resolveRuntimeModel(primaryId!, request.model);
+    const model = resolveRuntimeModel(primaryId!, request.model, { thinking: Boolean(request.thinking) });
     const finalErrorType = allFailedKeys[0]?.errorType ?? 'unknown';
     this.log(request, model, allAttempts, undefined, undefined, latency, 'ALL_PROVIDERS_FAILED', finalErrorType, false, {
       windowId: rotWin.windowId, windowLabel: rotWin.windowLabel,
       primaryProvider: rotWin.primaryProvider, fallbackProvider: rotWin.fallbackProvider,
       selectedProvider: primaryId!, finalProvider: undefined, finalKeyId: undefined,
       failedKeys: allFailedKeys,
+      attemptedSources: this.sourceChain(allAttempts),
+      fallbackCount: allAttempts.filter((a) => !a.ok).length,
     });
 
     throw Object.assign(
-      new Error(`ALL_PROVIDERS_FAILED: tried [${providerOrder.join(', ')}]`),
-      { code: 'ALL_PROVIDERS_FAILED', providers_attempted: providerOrder },
+      new Error(`NO_AVAILABLE_QUOTA_SOURCE: tried [${this.sourceChain(allAttempts).map((a) => a.sourceId).join(', ')}]`),
+      {
+        code: 'ALL_PROVIDERS_FAILED',
+        type: 'NO_AVAILABLE_QUOTA_SOURCE',
+        providers_attempted: providerOrder,
+        attempted_sources: this.sourceChain(allAttempts),
+      },
     );
   }
 
@@ -272,19 +316,64 @@ export class ProviderRouter {
     providerId: string,
     request: UniversalChatRequest,
     streaming: boolean,
+    attemptedSourceIds: Set<string>,
   ): Promise<ProviderAttemptResult> {
     const provider = this.getEnabledProvider(providerId);
     if (!provider) {
       return { ok: false, providerId, attempts: [], failedKeys: [], shouldTripProvider: false };
     }
+    if (!circuitBreakers.canExecute(providerId)) {
+      console.warn(`[router] ${providerId}: circuit breaker open, skipping provider`);
+      return {
+        ok: false,
+        providerId,
+        attempts: [],
+        failedKeys: [{ providerId, keyId: 'all', errorType: 'provider_down', error: 'circuit breaker open' }],
+        shouldTripProvider: false,
+      };
+    }
 
-    const resolution = resolveRuntimeModelDetailed(providerId, request.model);
-    const model = resolution.resolvedModel;
-    const keys = this.resolveKeys(providerId, provider.config.keys) as RuntimeKey[];
+    const resolution = resolveRuntimeModelDetailed(providerId, request.model, { thinking: Boolean(request.thinking) });
+    const orderedKeys = this.resolveKeys(providerId, provider.config.keys) as RuntimeKey[];
+    const rawCandidates = modelQuotaService
+      .getSourceCandidates(providerId, orderedKeys, request.model, resolution.resolvedModel);
+    const candidates = rawCandidates
+      .filter((candidate) => !attemptedSourceIds.has(candidate.sourceId))
+      .filter((candidate) => modelQuotaService.canUseSource(candidate));
 
-    if (keys.length === 0) {
+    if (orderedKeys.length === 0) {
       console.warn(`[router] ${providerId}: no healthy keys available`);
-      return { ok: false, providerId, attempts: [], failedKeys: [], shouldTripProvider: false };
+      return {
+        ok: false,
+        providerId,
+        attempts: [],
+        failedKeys: [{ providerId, keyId: 'all', errorType: 'provider_down', error: 'no healthy keys available' }],
+        shouldTripProvider: false,
+      };
+    }
+
+    if (candidates.length === 0) {
+      console.warn(`[router] ${providerId}: all healthy key/model sources exhausted for requested model ${request.model}`);
+      const skippedAttempts = rawCandidates
+        .filter((candidate) => !attemptedSourceIds.has(candidate.sourceId))
+        .map((candidate) => ({
+          providerId,
+          model: candidate.model,
+          latencyMs: 0,
+          ok: false,
+          keyId: candidate.key.id,
+          sourceId: candidate.sourceId,
+          sourceLabel: candidate.sourceLabel,
+          error: 'source_unavailable',
+        }));
+      return {
+        ok: false,
+        providerId,
+        attempts: skippedAttempts,
+        failedKeys: [{ providerId, keyId: 'all', errorType: 'quota_exceeded', error: `no key/model source quota available for ${request.model}` }],
+        shouldTripProvider: false,
+        terminalErrorType: 'quota_exceeded',
+      };
     }
 
     // ── Context truncation (pre-flight) ─────────────────────────────────────
@@ -311,9 +400,11 @@ export class ProviderRouter {
     const attempts: RouteAttempt[] = [];
     let shouldTripProvider = false;
 
-    for (const key of keys) {
+    for (const candidate of candidates) {
+      const { key, model, sourceId, sourceLabel } = candidate;
+      attemptedSourceIds.add(sourceId);
       const keyStart = Date.now();
-      console.log(`[router]   → ${providerId}  key=${key.id}  requested=${request.model}  resolved=${model}  reason=${resolution.reason}  stream=${streaming}`);
+      console.log(`[router]   → ${providerId}  source=${sourceId} (${sourceLabel})  key=${key.id}  requested=${request.model}  resolved=${model}  reason=${resolution.reason}  stream=${streaming}`);
 
       try {
         if (streaming) {
@@ -325,13 +416,18 @@ export class ProviderRouter {
             const latency = Date.now() - keyStart;
 
             console.error(`[router]   ✗ ${providerId}  key=${key.id}  HTTP ${upstream.status}  [${classified.type}] ${providerId}:${classified.type} -> requested:${request.model} resolved:${model}  body=${rawBody.slice(0, 300)}`);
-            if (shouldDisableKeyForError(classified.type)) {
+            const isModelScopedQuota = isModelScopedLimitError(classified.type) && modelQuotaService.hasTrackedLimit(providerId, key, model);
+            if (isModelScopedQuota) {
+              modelQuotaService.markExhausted(providerId, key, model, rawBody);
+            }
+            modelQuotaService.markSourceFailure(candidate, classified.type, rawBody);
+            if (shouldDisableKeyForError(classified.type) && !isModelScopedQuota) {
               apiKeyRotationService.markFailure(providerId, key.id, classified.type, rawBody.slice(0, 200));
               providerKeyService.recordFailure(key as RuntimeKey, classified.type, rawBody.slice(0, 200));
             }
             providerControl.recordError(providerId, classified.type, classified.label);
-            shouldTripProvider = shouldTripProvider || shouldTripProviderForError(classified.type);
-            attempts.push({ providerId, model, latencyMs: latency, ok: false, keyId: key.id, error: `${classified.type}: HTTP ${upstream.status}` });
+            shouldTripProvider = shouldTripProvider || (!isModelScopedQuota && this.shouldTripProviderForSource(candidate, classified.type));
+            attempts.push({ providerId, model, latencyMs: latency, ok: false, keyId: key.id, sourceId, sourceLabel, error: `${classified.type}: HTTP ${upstream.status}` });
             failedKeys.push({ providerId, keyId: key.id, errorType: classified.type, error: rawBody.slice(0, 120) });
 
             if (classified.type === 'prompt_too_large') {
@@ -347,9 +443,10 @@ export class ProviderRouter {
           const latency = Date.now() - keyStart;
           apiKeyRotationService.markSuccess(providerId, key.id);
           providerKeyService.recordSuccess(key as RuntimeKey);
-          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id });
+          modelQuotaService.recordSuccess(providerId, key, model);
+          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel });
           return {
-            ok: true, providerId, keyId: key.id,
+            ok: true, providerId, keyId: key.id, sourceId, sourceLabel,
             upstream, providerKind: provider.config.kind, model,
             attempts, failedKeys, shouldTripProvider: false,
             ...truncMeta,
@@ -361,8 +458,9 @@ export class ProviderRouter {
 
           apiKeyRotationService.markSuccess(providerId, key.id);
           providerKeyService.recordSuccess(key as RuntimeKey);
-          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id });
-          return { ok: true, providerId, keyId: key.id, response, attempts, failedKeys, shouldTripProvider: false, ...truncMeta };
+          modelQuotaService.recordSuccess(providerId, key, model);
+          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel });
+          return { ok: true, providerId, keyId: key.id, sourceId, sourceLabel, response, attempts, failedKeys, shouldTripProvider: false, ...truncMeta };
         }
 
       } catch (error) {
@@ -371,13 +469,18 @@ export class ProviderRouter {
         const latency = Date.now() - keyStart;
 
         console.error(`[router]   ✗ ${providerId}  key=${key.id}  [${classified.type}]: ${errMsg.slice(0, 150)} requested:${request.model} resolved:${model}`);
-        if (shouldDisableKeyForError(classified.type)) {
+        const isModelScopedQuota = isModelScopedLimitError(classified.type) && modelQuotaService.hasTrackedLimit(providerId, key, model);
+        if (isModelScopedQuota) {
+          modelQuotaService.markExhausted(providerId, key, model, errMsg);
+        }
+        modelQuotaService.markSourceFailure(candidate, classified.type, errMsg);
+        if (shouldDisableKeyForError(classified.type) && !isModelScopedQuota) {
           apiKeyRotationService.markFailure(providerId, key.id, classified.type, errMsg);
           providerKeyService.recordFailure(key as RuntimeKey, classified.type, errMsg);
         }
         providerControl.recordError(providerId, classified.type, classified.label);
-        shouldTripProvider = shouldTripProvider || shouldTripProviderForError(classified.type);
-        attempts.push({ providerId, model, latencyMs: latency, ok: false, keyId: key.id, error: `${classified.type}: ${errMsg.slice(0, 100)}` });
+        shouldTripProvider = shouldTripProvider || (!isModelScopedQuota && this.shouldTripProviderForSource(candidate, classified.type));
+        attempts.push({ providerId, model, latencyMs: latency, ok: false, keyId: key.id, sourceId, sourceLabel, error: `${classified.type}: ${errMsg.slice(0, 100)}` });
         failedKeys.push({ providerId, keyId: key.id, errorType: classified.type, error: errMsg.slice(0, 120) });
 
         if (classified.type === 'prompt_too_large') {
@@ -404,36 +507,91 @@ export class ProviderRouter {
    *
    * Fallbacks: remaining enabled providers, rotation window fallback first.
    */
-  private resolveProviderOrder(): string[] {
+  private resolveProviderOrder(request?: UniversalChatRequest): string[] {
     const enabled = this.providers.filter((p) => p.config.enabled).map((p) => p.id);
     if (enabled.length === 0) throw new Error('No enabled providers configured.');
+    const primaryEnabled = PRIMARY_PROVIDER_IDS.filter((id) => enabled.includes(id));
+    const isOpusQuotaRequest = request ? OPUS_QUOTA_REQUESTS.has(request.model) : false;
+    const reserveEnabled = (!isOpusQuotaRequest || RESERVE_FALLBACK_ON_OPUS_EXHAUSTION)
+      ? enabled.filter((id) => !PRIMARY_PROVIDER_IDS.includes(id as (typeof PRIMARY_PROVIDER_IDS)[number]))
+      : [];
+
+    if (request && providerControl.mode !== 'manual' && PROVIDER_ROTATION_ENABLED) {
+      const providerSources: Array<{ providerId: string; candidates: SourceCandidate[] }> = [];
+      for (const providerId of primaryEnabled) {
+          const provider = this.getEnabledProvider(providerId);
+          if (!provider) continue;
+          const resolution = resolveRuntimeModelDetailed(providerId, request.model, { thinking: Boolean(request.thinking) });
+          const keys = this.resolveKeys(providerId, provider.config.keys) as RuntimeKey[];
+          const candidates = modelQuotaService
+            .getSourceCandidates(providerId, keys, request.model, resolution.resolvedModel)
+            .filter((candidate) => modelQuotaService.canUseSource(candidate));
+          providerSources.push({ providerId, candidates });
+      }
+
+      const sourceWindow = modelQuotaService.getCurrentSourceWindow(
+        providerSources.flatMap((entry) => entry.candidates.map((candidate) => candidate.sourceId)),
+      );
+      const sourceOrderedProviders = providerSources
+        .filter((entry) => entry.candidates.length > 0)
+        .sort((a, b) => {
+          const aSource = a.candidates[0]?.sourceId ?? a.providerId;
+          const bSource = b.candidates[0]?.sourceId ?? b.providerId;
+          return sourceWindow.sourceOrder.indexOf(aSource) - sourceWindow.sourceOrder.indexOf(bSource);
+        })
+        .map((entry) => entry.providerId);
+
+      const missingPrimary = primaryEnabled.filter((id) => !sourceOrderedProviders.includes(id));
+      if (sourceOrderedProviders.length > 0) {
+        return [...sourceOrderedProviders, ...missingPrimary, ...reserveEnabled];
+      }
+    }
+
+    const primaryFirst = (preferred?: string): string[] => {
+      const orderedPrimary = preferred && primaryEnabled.includes(preferred as (typeof PRIMARY_PROVIDER_IDS)[number])
+        ? [preferred, ...primaryEnabled.filter((id) => id !== preferred)]
+        : primaryEnabled;
+      return [...orderedPrimary, ...reserveEnabled];
+    };
 
     // Manual operator override
     if (providerControl.mode === 'manual' && providerControl.activeProvider) {
       const manualId = providerControl.activeProvider;
       if (enabled.includes(manualId)) {
-        const rest = enabled.filter((id) => id !== manualId);
-        return [manualId, ...rest];
+        if (primaryEnabled.includes(manualId as (typeof PRIMARY_PROVIDER_IDS)[number])) {
+          return primaryFirst(manualId);
+        }
+        // Reserve providers are only used after Antigravity NKQ and OpusMax.
+        return [
+          ...primaryEnabled,
+          manualId,
+          ...reserveEnabled.filter((id) => id !== manualId),
+        ];
       }
     }
 
     if (!PROVIDER_ROTATION_ENABLED) {
-      return enabled;
+      return primaryFirst();
     }
 
     // Time-based rotation window
     const rotWin = providerRotationService.getCurrentWindow();
-    const primaryId = enabled.includes(rotWin.primaryProvider) ? rotWin.primaryProvider : enabled[0]!;
+    const rotationPrimary = PRIMARY_PROVIDER_IDS.includes(rotWin.primaryProvider as (typeof PRIMARY_PROVIDER_IDS)[number])
+      ? rotWin.primaryProvider
+      : undefined;
+    const primaryId = rotationPrimary && primaryEnabled.includes(rotationPrimary as (typeof PRIMARY_PROVIDER_IDS)[number])
+      ? rotationPrimary
+      : primaryEnabled[0] ?? reserveEnabled[0]!;
     const fallbackId = rotWin.fallbackProvider;
 
-    const rest = enabled.filter((id) => id !== primaryId);
-    // Prefer rotation fallback first, then others
-    const ordered = [
-      ...(rest.includes(fallbackId) ? [fallbackId] : []),
-      ...rest.filter((id) => id !== fallbackId),
+    const primaryRest = primaryEnabled.filter((id) => id !== primaryId);
+    // Prefer rotation fallback within the main tier first, then reserve providers.
+    const orderedPrimary = [
+      ...(primaryRest.includes(fallbackId as (typeof PRIMARY_PROVIDER_IDS)[number]) ? [fallbackId] : []),
+      ...primaryRest.filter((id) => id !== fallbackId),
     ];
 
-    return [primaryId, ...ordered];
+    return [primaryId, ...orderedPrimary, ...reserveEnabled];
   }
 
   /** Get an enabled provider by ID. Returns null if not found. */
@@ -470,6 +628,24 @@ export class ProviderRouter {
 
   private nextReqId(): string {
     return `req_${(++this.reqCounter).toString(36).padStart(6, '0')}`;
+  }
+
+  private sourceChain(attempts: RouteAttempt[]): Array<{ sourceId: string; providerId: string; keyId: string; model: string; ok: boolean; error?: string | undefined }> {
+    return attempts.map((attempt) => ({
+      sourceId: attempt.sourceId ?? `${attempt.providerId}:${attempt.keyId ?? 'unknown'}:${attempt.model}`,
+      providerId: attempt.providerId,
+      keyId: attempt.keyId ?? 'unknown',
+      model: attempt.model,
+      ok: attempt.ok,
+      error: attempt.error,
+    }));
+  }
+
+  private shouldTripProviderForSource(candidate: SourceCandidate, errorType: UpstreamErrorType): boolean {
+    if (candidate.providerId === 'opusmax' && (errorType === 'provider_down' || errorType === 'timeout' || errorType === 'rate_limited')) {
+      return false;
+    }
+    return shouldTripProviderForError(errorType);
   }
 
   private log(

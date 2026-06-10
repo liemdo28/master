@@ -56,7 +56,7 @@ export function isModelCompatibilityError(type: UpstreamErrorType): boolean {
 }
 
 export function shouldDisableKeyForError(type: UpstreamErrorType): boolean {
-  return type === 'auth_failed' || type === 'quota_exceeded' || type === 'rate_limited' || type === 'provider_down' || type === 'timeout';
+  return type === 'auth_failed';
 }
 
 export function shouldTripProviderForError(type: UpstreamErrorType): boolean {
@@ -142,12 +142,27 @@ export function classifyUpstreamError(status: number, body: string): ClassifiedE
     lower.includes('quota exceeded') ||
     lower.includes('daily limit') ||
     lower.includes('monthly limit') ||
+    lower.includes('weekly limit') ||
+    lower.includes('week limit') ||
     lower.includes('usage limit') ||
+    lower.includes('giới hạn tuần') ||
+    lower.includes('gioi han tuan') ||
+    lower.includes('đạt giới hạn tuần') ||
+    lower.includes('dat gioi han tuan') ||
     lower.includes('credit') ||
     lower.includes('out of tokens') ||
     (status === 402)
   ) {
     return { type: 'quota_exceeded', raw: body, status, retryable: false, label: 'Quota Exceeded' };
+  }
+
+  // OpusMax sometimes returns this as HTTP 429, but the account pool failure is
+  // provider-side/transient. Do not cool down the user's API key for it.
+  if (
+    lower.includes('all available accounts exhausted') ||
+    lower.includes('no available accounts')
+  ) {
+    return { type: 'provider_down', raw: body, status, retryable: true, label: 'Provider Down' };
   }
 
   // ── Rate limiting (429) ────────────────────────────────────────────────
@@ -178,6 +193,12 @@ export function classifyUpstreamError(status: number, body: string): ClassifiedE
 
   // ── Provider down / temporarily unavailable ───────────────────────────
   if (
+    (status === 418 && (
+      lower.includes('provider:') ||
+      lower.includes('invokemodel') ||
+      lower.includes('permission_denied') ||
+      lower.includes('permission denied')
+    )) ||
     status >= 500 ||
     lower.includes('temporarily unavailable') ||
     lower.includes('service unavailable') ||
@@ -202,6 +223,16 @@ export function classifyThrownError(error: unknown): ClassifiedError {
 
   if (lower.includes('timeout') || lower.includes('abort') || lower.includes('timed out')) {
     return { type: 'timeout', raw: msg, retryable: true, label: 'Timeout' };
+  }
+
+  if (
+    lower.includes('fetch failed') ||
+    lower.includes('econnreset') ||
+    lower.includes('enotfound') ||
+    lower.includes('econnrefused') ||
+    lower.includes('und_err')
+  ) {
+    return { type: 'provider_down', raw: msg, retryable: true, label: 'Provider Down' };
   }
 
   // Try to extract status from message like "antigravity 503: ..."

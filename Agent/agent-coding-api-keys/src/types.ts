@@ -54,6 +54,7 @@ export interface ChatCompletionRequest {
   stream?: boolean | undefined;
   tools?: unknown[] | undefined;
   tool_choice?: unknown | undefined;
+  thinking?: { type: 'enabled'; budget_tokens: number } | undefined;
   response_format?: unknown | undefined;
   metadata?: Record<string, unknown> | undefined;
 }
@@ -167,6 +168,8 @@ export interface RouteAttempt {
   ok: boolean;
   error?: string | undefined;
   keyId?: string | undefined;
+  sourceId?: string | undefined;
+  sourceLabel?: string | undefined;
 }
 
 export interface RouteResult {

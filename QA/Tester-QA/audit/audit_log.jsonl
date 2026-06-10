@@ -1,2 +1,0 @@
-{"action_id": "ACT-3e5e4c2f653c", "timestamp": "2026-05-21T13:36:55.080290+00:00", "operator": "SafeShell", "target": "/Users/liemdo/Projects/Tester-QA", "action": "rm -rf /tmp/tester-qa-danger", "mode": "dry_run", "result": "failed", "evidence": []}
-{"action_id": "ACT-a4c7f5530c23", "timestamp": "2026-05-21T13:37:24.150808+00:00", "operator": "BrowserInspector", "target": "http://127.0.0.1:8765", "action": "browser-inspect", "mode": "read_only", "result": "success", "evidence": ["/Users/liemdo/Projects/Tester-QA/reports/browser-inspection-20260521-2037.md"]}

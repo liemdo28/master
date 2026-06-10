@@ -10,11 +10,16 @@
 
 require('dotenv').config();
 
+const path = require('path');
+if (!process.env.GATEWAY_DB_PATH) {
+  process.env.GATEWAY_DB_PATH = path.resolve(`data/gateway-live-validator-${process.pid}.db`);
+}
+
 const simulator  = require('../../src/simulation/message-simulator');
 const rateLimiter = require('../../src/safety/rate-limiter');
 const businessHours = require('../../src/safety/business-hours');
 const aiControl  = require('../../src/safety/ai-control');
-const { getDb }  = require('../../src/storage/sqlite');
+const sqlite = require('../../src/storage/sqlite');
 const { getTodayStats, getRecentConversations } = require('../../src/storage/conversations');
 
 const NO_TELEGRAM = process.argv.includes('--no-telegram');
@@ -57,7 +62,7 @@ async function main() {
   console.log(`  Time: ${new Date().toLocaleString()}\n`);
 
   // Init DB
-  getDb();
+  sqlite.getDb();
   await delay(500);
   await aiControl.init();
 
@@ -253,11 +258,13 @@ async function main() {
     console.log('\n  🎉  Phase 2.5 Live Validator: ALL PASSED');
     console.log('  ✅  System is PILOT READY\n');
     await writeReport(true, allResults, stats);
+    await sqlite.close();
     process.exit(0);
   } else {
     console.log('\n  ⚠️   Phase 2.5 Live Validator: SOME FAILURES');
     console.log('  ❌  Resolve failures before pilot\n');
     await writeReport(false, allResults, stats);
+    await sqlite.close();
     process.exit(1);
   }
 }
@@ -296,5 +303,5 @@ ${lines.join('\n')}
 
 main().catch(err => {
   console.error('\nFatal validator error:', err.message);
-  process.exit(1);
+  sqlite.close().finally(() => process.exit(1));
 });

@@ -17,6 +17,10 @@ export function openAIToUniversal(body: ChatCompletionRequest): UniversalChatReq
       : undefined,
     toolChoice: openAIToolChoiceToAnthropic(body.tool_choice),
     metadata: body.metadata,
+    thinking:
+      typeof body.thinking === 'object' && body.thinking
+        ? body.thinking
+        : undefined,
   };
 }
 

@@ -1,0 +1,35 @@
+{
+  "preferred_name": "anh",
+  "full_role": "CEO & Founder",
+  "timezone": "America/Los_Angeles",
+  "city": "Stockton",
+  "state": "California",
+  "country": "USA",
+  "language_primary": "vi",
+  "language_secondary": "en",
+  "works_from": ["phone", "MacBook", "occasionally Windows PC"],
+  "communication_style": "direct, action-oriented, short summaries preferred",
+  "decision_style": "fast — give options with a recommendation",
+  "peak_hours": "morning 8-11AM PT, late night 9-11PM PT",
+  "tools_used": ["Asana", "Gmail", "Google Calendar", "WhatsApp", "Dashboard", "Mi"],
+  "prefers_automation": true,
+  "delegation_style": "one sentence to Mi — Mi handles the rest, asks for approval only",
+  "businesses": ["Raw Sushi Bar", "Bakudan Ramen"],
+  "primary_market": "Stockton, CA",
+  "key_staff": [
+    { "name": "Maria", "role": "Manager / Dashboard admin" },
+    { "name": "Hoang", "role": "Operations" },
+    { "name": "Nguyen", "role": "Staff" }
+  ],
+  "goals_2025": [
+    "Automate operations via Dashboard + Mi",
+    "Grow Raw Sushi online presence (SEO + social)",
+    "Expand Bakudan catering revenue",
+    "Reduce manual tasks by 80%"
+  ],
+  "pain_points": [
+    "Manual tasks consuming too much time",
+    "Lack of real-time visibility across both restaurants",
+    "Marketing content creation is slow"
+  ]
+}

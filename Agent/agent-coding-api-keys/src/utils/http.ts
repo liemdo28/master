@@ -45,8 +45,7 @@ export function setCors(res: http.ServerResponse): void {
 export function sendHtml(res: http.ServerResponse, html: string): void {
   res.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
+    ...SECURITY_HEADERS,
   });
   res.end(html);
 }

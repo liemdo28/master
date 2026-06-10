@@ -1,0 +1,28 @@
+{
+  "store": "Bandera Road",
+  "date": "2026-06-03",
+  "time": "AM",
+  "readings": [
+    { "item": "Walk-in Cooler", "value": 38, "unit": "F", "confidence": 0.95 },
+    { "item": "Walk-in Freezer", "value": -5, "unit": "F", "confidence": 0.92 },
+    { "item": "Prep Area Cooler", "value": 39, "unit": "F", "confidence": 0.88 },
+    { "item": "Ramen Refrigeration Top", "value": 37, "unit": "F", "confidence": 0.91 },
+    { "item": "Ramen Refrigeration Below", "value": 36, "unit": "F", "confidence": 0.90 },
+    { "item": "Line Freezer", "value": -2, "unit": "F", "confidence": 0.89 },
+    { "item": "Tapas Refrigeration Top", "value": 38, "unit": "F", "confidence": 0.87 },
+    { "item": "Tapas Refrigeration Below", "value": 39, "unit": "F", "confidence": 0.86 },
+    { "item": "Bowl Warmers", "value": 140, "unit": "F", "confidence": 0.93 },
+    { "item": "Pork Chashu", "value": 155, "unit": "F", "confidence": 0.94 },
+    { "item": "Chicken Chashu", "value": 35, "unit": "F", "confidence": 0.91 },
+    { "item": "Seasoned Eggs", "value": 145, "unit": "F", "confidence": 0.88 },
+    { "item": "Fryer 1", "value": 353, "unit": "F", "confidence": 0.90 },
+    { "item": "Fryer 2", "value": 348, "unit": "F", "confidence": 0.89 },
+    { "item": "Pasta Boiler 1", "value": 212, "unit": "F", "confidence": 0.92 },
+    { "item": "Pasta Boiler 2", "value": 208, "unit": "F", "confidence": 0.91 },
+    { "item": "Pork Broth", "value": 205, "unit": "F", "confidence": 0.94 },
+    { "item": "Chicken Broth", "value": 210, "unit": "F", "confidence": 0.93 },
+    { "item": "Veggie Broth", "value": 202, "unit": "F", "confidence": 0.88 }
+  ],
+  "unclear_fields": [],
+  "needs_review": []
+}

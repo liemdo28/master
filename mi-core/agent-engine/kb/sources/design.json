@@ -1,0 +1,10 @@
+{
+  "domain": "design",
+  "domainName": "UI/UX Design",
+  "sources": [
+    { "name": "Material Design M3", "url": "https://m3.material.io", "license": "CC BY 4.0", "attribution": "Google LLC", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Apple Human Interface Guidelines", "url": "https://developer.apple.com/design/human-interface-guidelines", "license": "© Apple Inc", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "No redistribution; manual reference only" },
+    { "name": "Wikipedia — Design", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" }
+  ],
+  "seedDocuments": []
+}

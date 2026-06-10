@@ -1,0 +1,17 @@
+{
+  "name": "mi-agent-engine",
+  "version": "1.0.0",
+  "description": "Autonomous coding and patch engine bridge for Mi Ultimate",
+  "type": "module",
+  "main": "bridge.mjs",
+  "scripts": {
+    "start": "node bridge.mjs",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

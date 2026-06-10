@@ -1,0 +1,117 @@
+{
+  "synced_at": "2026-06-09T14:49:35.312Z",
+  "status": "ok",
+  "root": "E:/Project/Master/Bakudan/dashboard.bakudanramen.com",
+  "php_files": 0,
+  "modules": [
+    {
+      "name": "ActionCenterController",
+      "file": "controllers/ActionCenterController.php",
+      "has_api": false
+    },
+    {
+      "name": "ActivityFeedController",
+      "file": "controllers/ActivityFeedController.php",
+      "has_api": true
+    },
+    {
+      "name": "AdminDeadlineExtensionController",
+      "file": "controllers/AdminDeadlineExtensionController.php",
+      "has_api": true
+    },
+    {
+      "name": "AdminTaskAuditController",
+      "file": "controllers/AdminTaskAuditController.php",
+      "has_api": false
+    },
+    {
+      "name": "AdoptionMetricsController",
+      "file": "controllers/AdoptionMetricsController.php",
+      "has_api": true
+    },
+    {
+      "name": "AiTaskController",
+      "file": "controllers/AiTaskController.php",
+      "has_api": false
+    },
+    {
+      "name": "ApprovalNoteController",
+      "file": "controllers/ApprovalNoteController.php",
+      "has_api": false
+    },
+    {
+      "name": "AsanaController",
+      "file": "controllers/AsanaController.php",
+      "has_api": false
+    },
+    {
+      "name": "AuthController",
+      "file": "controllers/AuthController.php",
+      "has_api": true
+    },
+    {
+      "name": "BillController",
+      "file": "controllers/BillController.php",
+      "has_api": false
+    },
+    {
+      "name": "CommandCenterController",
+      "file": "controllers/CommandCenterController.php",
+      "has_api": false
+    },
+    {
+      "name": "CommentController",
+      "file": "controllers/CommentController.php",
+      "has_api": true
+    },
+    {
+      "name": "CompanyCalendarController",
+      "file": "controllers/CompanyCalendarController.php",
+      "has_api": false
+    },
+    {
+      "name": "ControlTowerController",
+      "file": "controllers/ControlTowerController.php",
+      "has_api": false
+    },
+    {
+      "name": "CredentialController",
+      "file": "controllers/CredentialController.php",
+      "has_api": false
+    },
+    {
+      "name": "DashboardController",
+      "file": "controllers/DashboardController.php",
+      "has_api": false
+    },
+    {
+      "name": "DashboardCustomizationController",
+      "file": "controllers/DashboardCustomizationController.php",
+      "has_api": true
+    },
+    {
+      "name": "DeadlineExtensionController",
+      "file": "controllers/DeadlineExtensionController.php",
+      "has_api": false
+    },
+    {
+      "name": "FavoritesController",
+      "file": "controllers/FavoritesController.php",
+      "has_api": true
+    },
+    {
+      "name": "FranchiseController",
+      "file": "controllers/FranchiseController.php",
+      "has_api": false
+    }
+  ],
+  "tasks_cached": [],
+  "users_cached": [],
+  "git_branch": "",
+  "git_dirty": false,
+  "last_commit": "",
+  "api_live": true,
+  "api_url": "http://dashboard.bakudanramen.com",
+  "reports_count": 50,
+  "summary_text": "📊 Dashboard (no git)\n  PHP files: 0 | Modules: 50 | Reports: 50\n  API (http://dashboard.bakudanramen.com): ✓ live\n  Git: ✓ clean — \n  No cached task data"
+}

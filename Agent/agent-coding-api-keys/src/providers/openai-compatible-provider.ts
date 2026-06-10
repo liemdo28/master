@@ -58,12 +58,27 @@ export class OpenAICompatibleProvider extends BaseProvider {
     const key = this.requireKey(keyOverride);
     const payload = this.buildPayload(request, true);
 
-    return fetch(this.endpoint('/chat/completions'), {
-      method: 'POST',
-      headers: this.buildHeaders(key.value),
-      body: JSON.stringify(payload),
-      signal: this.streamTimeoutSignal(),
-    });
+    try {
+      const response = await fetch(this.endpoint('/chat/completions'), {
+        method: 'POST',
+        headers: this.buildHeaders(key.value),
+        body: JSON.stringify(payload),
+        signal: this.streamTimeoutSignal(),
+      });
+
+      if (this.shouldFallbackStreamToNonStream(response.status)) {
+        const fallback = await this.fetchNonStreamAsSSE(request, key);
+        if (fallback) return fallback;
+      }
+
+      return response;
+    } catch (error) {
+      if (this.id === 'opusmax') {
+        const fallback = await this.fetchNonStreamAsSSE(request, key);
+        if (fallback) return fallback;
+      }
+      throw error;
+    }
   }
 
   override async listModels(): Promise<ProviderModel[]> {
@@ -114,6 +129,88 @@ export class OpenAICompatibleProvider extends BaseProvider {
       Authorization: `Bearer ${apiKey}`,
       ...this.config.headers,
     };
+  }
+
+  private shouldFallbackStreamToNonStream(status: number): boolean {
+    return this.id === 'opusmax' && [429, 502, 503, 504].includes(status);
+  }
+
+  private async fetchNonStreamAsSSE(request: UniversalChatRequest, key: import('../types.js').ProviderKey): Promise<Response | null> {
+    const payload = this.buildPayload(request, false);
+    try {
+      const response = await fetch(this.endpoint('/chat/completions'), {
+        method: 'POST',
+        headers: this.buildHeaders(key.value),
+        body: JSON.stringify(payload),
+        signal: this.timeoutSignal(),
+      });
+      if (!response.ok) return null;
+      const data = await response.json() as OpenAIResponse;
+      return new Response(this.openAIResponseToSSE(data, request.model), {
+        status: 200,
+        headers: { 'Content-Type': 'text/event-stream' },
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  private openAIResponseToSSE(data: OpenAIResponse, requestedModel: string): ReadableStream<Uint8Array> {
+    const encoder = new TextEncoder();
+    const id = data.id ?? `${this.id}-${Date.now()}`;
+    const model = data.model ?? requestedModel;
+    const created = Math.floor(Date.now() / 1000);
+    const choice = data.choices?.[0];
+    const chunks: string[] = [];
+    const emit = (chunk: unknown) => chunks.push(`data: ${JSON.stringify(chunk)}\n\n`);
+
+    emit({
+      id,
+      object: 'chat.completion.chunk',
+      created,
+      model,
+      choices: [{ index: 0, delta: { role: 'assistant' }, finish_reason: null }],
+    });
+
+    if (choice?.message?.content) {
+      emit({
+        id,
+        object: 'chat.completion.chunk',
+        created,
+        model,
+        choices: [{ index: 0, delta: { content: choice.message.content }, finish_reason: null }],
+      });
+    }
+
+    if (choice?.message?.tool_calls?.length) {
+      emit({
+        id,
+        object: 'chat.completion.chunk',
+        created,
+        model,
+        choices: [{
+          index: 0,
+          delta: { tool_calls: choice.message.tool_calls },
+          finish_reason: null,
+        }],
+      });
+    }
+
+    emit({
+      id,
+      object: 'chat.completion.chunk',
+      created,
+      model,
+      choices: [{ index: 0, delta: {}, finish_reason: choice?.finish_reason ?? 'stop' }],
+    });
+    chunks.push('data: [DONE]\n\n');
+
+    return new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(encoder.encode(chunks.join('')));
+        controller.close();
+      },
+    });
   }
 
   private parseResponse(data: OpenAIResponse, requestedModel: string): UniversalChatResponse {

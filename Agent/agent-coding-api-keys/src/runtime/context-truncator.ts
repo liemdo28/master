@@ -27,7 +27,7 @@ import type { UniversalChatRequest, UniversalMessage, ToolUseBlock, ToolResultBl
 const PROVIDER_TOKEN_LIMITS: Record<string, number> = {
   antigravity: 180_000,   // Anthropic Claude via NKQ proxy  (200k window)
   anthropic:   180_000,   // Anthropic direct                (200k window)
-  opusmax:     900_000,   // OpusMax gpt-5.4                 (1,050,000 window — use 900k, matches auto-compact)
+  opusmax:     900_000,   // OpusMax Claude standard aliases (1,050,000 window — use 900k, matches auto-compact)
   openrouter:  115_000,   // OpenRouter (varies; 128k safe)
   openai:      115_000,   // OpenAI                          (128k window)
   gemini:      900_000,   // Gemini 2.0 Flash                (1M window)
@@ -111,6 +111,46 @@ function isOrphanToolResult(msg: UniversalMessage, precedingMessages: UniversalM
     if (!available.has(id)) return true; // at least one ID has no matching tool_call
   }
   return false;
+}
+
+function toolResultSatisfies(toolUseMsg: UniversalMessage, maybeResultMsg: UniversalMessage | undefined): boolean {
+  if (!maybeResultMsg || maybeResultMsg.role !== 'user' || !hasToolResult(maybeResultMsg)) {
+    return false;
+  }
+
+  const needed = toolUseIds(toolUseMsg);
+  const provided = toolResultIds(maybeResultMsg);
+
+  if (needed.size === 0) return false;
+  for (const id of needed) {
+    if (!provided.has(id)) return false;
+  }
+  return true;
+}
+
+function removeInvalidToolPairs(messages: UniversalMessage[]): UniversalMessage[] {
+  const sanitized: UniversalMessage[] = [];
+
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i]!;
+
+    if (hasToolUse(msg)) {
+      const next = messages[i + 1];
+      if (toolResultSatisfies(msg, next)) {
+        sanitized.push(msg, next!);
+        i++;
+      }
+      continue;
+    }
+
+    if (hasToolResult(msg) && isOrphanToolResult(msg, sanitized)) {
+      continue;
+    }
+
+    sanitized.push(msg);
+  }
+
+  return sanitized;
 }
 
 export interface TruncationResult {
@@ -229,23 +269,27 @@ export function truncateContext(
     keptMiddle.shift();
   }
 
-  const droppedCount = middle.length - keptMiddle.length;
+  const initialDroppedCount = middle.length - keptMiddle.length;
 
   // ── Inject elision marker if anything was dropped ────────────────────────
   const elisionMarker: UniversalMessage | null =
-    droppedCount > 0
+    initialDroppedCount > 0
       ? {
           role: 'user',
-          content: `[${droppedCount} earlier messages were omitted by the gateway to fit within the context window. The conversation continues below.]`,
+          content: `[${initialDroppedCount} earlier messages were omitted by the gateway to fit within the context window. The conversation continues below.]`,
         }
       : null;
 
-  const newMessages: UniversalMessage[] = [
+  const candidateMessages: UniversalMessage[] = [
     ...head,
     ...(elisionMarker ? [elisionMarker] : []),
     ...keptMiddle,
     ...tail,
   ];
+
+  const newMessages = removeInvalidToolPairs(candidateMessages);
+  const syntheticMessages = elisionMarker && newMessages.includes(elisionMarker) ? 1 : 0;
+  const droppedCount = msgs.length - (newMessages.length - syntheticMessages);
 
   const truncatedTokens =
     systemTokens + newMessages.reduce((s, m) => s + messageCost(m), 0);

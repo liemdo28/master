@@ -21,5 +21,13 @@
       "autoPort": false,
       "cwd": "E:/Project/Master/agent-os/agent-control"
     }
+    {
+      "name": "mi-ui",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "--no-clipboard"],
+      "port": 4010,
+      "autoPort": true,
+      "cwd": "E:/Project/Master/mi-core/ui"
+    }
   ]
 }

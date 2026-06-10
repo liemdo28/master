@@ -1,0 +1,6 @@
+{
+  "name": "mi-core",
+  "private": true,
+  "workspaces": ["server"],
+  "description": "Mi Ultimate — Executive OS monorepo workspace root"
+}
