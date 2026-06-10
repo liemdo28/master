@@ -19,7 +19,7 @@ async function openDashboard() {
   let page;
   try {
     page = await newPage(url);
-    await page.waitForTimeout(2000);
+    await new Promise(r => setTimeout(r, 2000));
     const title   = await page.title().catch(() => '');
     const content = await page.evaluate(() => document.body.innerText.slice(0, 500)).catch(() => '');
     const screenshot = await captureScreenshot('dashboard', page);
@@ -37,7 +37,7 @@ async function verifyDashboardSubmission(submissionId) {
   let page;
   try {
     page = await newPage(getDashboardUrl());
-    await page.waitForTimeout(2000);
+    await new Promise(r => setTimeout(r, 2000));
 
     const found = await page.evaluate((sid) => {
       return document.body.innerText.includes(sid);

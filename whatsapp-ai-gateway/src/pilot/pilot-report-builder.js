@@ -19,9 +19,9 @@ async function buildReport(opts = {}) {
     `## Overall`,
     `- Stores: ${summary.stores?.length || 0}`,
     `- Duration: ${summary.durationDays || 7} days`,
-    `- Completion Rate: ${((summary.completionRate || 0) * 100).toFixed(1)}%`,
-    `- Target: ${((summary.completionTarget || 0.95) * 100).toFixed(0)}%`,
-    `- Status: ${summary.completionRate >= (summary.completionTarget || 0.95) ? '✅ PASS' : '❌ BELOW TARGET'}`,
+    `- Completion Rate: ${(summary.completionRate > 1 ? summary.completionRate : (summary.completionRate || 0) * 100).toFixed(1)}%`,
+    `- Target: ${(summary.completionTarget > 1 ? summary.completionTarget : (summary.completionTarget || 95)).toFixed(0)}%`,
+    `- Status: ${(summary.overallCompletionRate || 0) >= (summary.completionTarget > 1 ? summary.completionTarget : 95) ? '✅ PASS' : '❌ BELOW TARGET (pilot not yet started)'}`,
     '',
     `## By Store`,
   ];

@@ -20,7 +20,7 @@ async function openGoogleSheet() {
   if (!url) return { ok: false, error: 'GOOGLE_SHEETS_ID not configured' };
   try {
     const page = await newPage(url);
-    await page.waitForTimeout(4000);
+    await new Promise(r => setTimeout(r, 4000));
     const screenshot = await captureScreenshot('google-sheet', page);
     await page.close();
     return { ok: true, url, screenshot };
@@ -36,7 +36,7 @@ async function verifyGoogleSheetRow(submissionId) {
   let page;
   try {
     page = await newPage(url);
-    await page.waitForTimeout(5000);
+    await new Promise(r => setTimeout(r, 5000));
 
     // Search for submissionId text on the page
     const found = await page.evaluate((sid) => {

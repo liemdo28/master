@@ -22,7 +22,7 @@ async function handle(query, context = {}) {
 
     const [missingResult, failRows] = await Promise.all([
       detectMissing(date),
-      db ? db.all(`SELECT store_id, employee, shift FROM food_safety_submissions WHERE date(submitted_at) = date(?) AND status IN ('FAIL','UNSAFE') ORDER BY submitted_at DESC LIMIT 10`, [date]).catch(() => []) : [],
+      db ? db.all(`SELECT store_id, sender_name, shift FROM food_safety_submissions WHERE date(created_at) = date(?) AND status IN ('FAIL','UNSAFE') ORDER BY created_at DESC LIMIT 10`, [date]).catch(() => []) : [],
     ]);
 
     const lines = [];
@@ -32,7 +32,7 @@ async function handle(query, context = {}) {
     }
     if (failRows.length) {
       lines.push('*Failed Checks:*');
-      failRows.forEach(r => lines.push(`• ${r.store_id} — ${r.employee || 'Unknown'} (${r.shift || ''})`));
+      failRows.forEach(r => lines.push(`• ${r.store_id} — ${r.sender_name || 'Unknown'} (${r.shift || ''})`));
     }
 
     if (lines.length === 0) return { ok: true, reply: `No action items for ${date}. All clear!` };

@@ -29,9 +29,12 @@ function getScreenshotDir() {
 
 async function getBrowser() {
   if (!puppeteer) throw new Error('Puppeteer not installed. Run: npm install puppeteer');
-  if (_browser && _browser.isConnected()) return _browser;
+  // isConnected() was removed in newer Puppeteer — check with try/catch
+  if (_browser) {
+    try { const pages = await _browser.pages(); if (pages !== null) return _browser; } catch (_) { _browser = null; }
+  }
   _browser = await puppeteer.launch({
-    headless: 'new',
+    headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
   });
   return _browser;

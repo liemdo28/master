@@ -7,7 +7,7 @@
 const { makeLogger } = require('../../logger');
 const log = makeLogger('mi');
 
-const TRIGGERS = [/summary/i, /report/i, /today.?food/i, /food.?today/i, /daily.?check/i];
+const TRIGGERS = [/summar/i, /report/i, /today.?food/i, /food.?today/i, /daily.?check/i];
 
 function matches(text) {
   return TRIGGERS.some(t => t.test(text)) && /food|safety|line.?check/i.test(text);
@@ -26,7 +26,7 @@ async function handle(query, context = {}) {
               SUM(CASE WHEN status IN ('FAIL','UNSAFE','fail') THEN 1 ELSE 0 END) as fail,
               COUNT(*) as total
        FROM food_safety_submissions
-       WHERE date(submitted_at) = date(?)
+       WHERE date(created_at) = date(?)
        GROUP BY store_id`,
       [date]
     );

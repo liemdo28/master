@@ -30,7 +30,7 @@ async function checkWhatsAppSession() {
     page = result.page;
 
     // Wait up to 10s for either QR code or chat list
-    await page.waitForTimeout(5000);
+    await new Promise(r => setTimeout(r, 5000));
     const html = await page.content();
 
     const hasQr        = html.includes('data-ref') || html.includes('qr-code') || html.includes('QR');

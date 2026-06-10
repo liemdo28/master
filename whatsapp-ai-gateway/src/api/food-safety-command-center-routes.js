@@ -34,11 +34,11 @@ router.get('/submissions', async (req, res) => {
     const params = [];
     if (store)     { conditions.push('store_id = ?');            params.push(store); }
     if (status)    { conditions.push('status = ?');              params.push(status); }
-    if (date_from) { conditions.push('submitted_at >= ?');       params.push(date_from); }
-    if (date_to)   { conditions.push('submitted_at <= ?');       params.push(date_to); }
+    if (date_from) { conditions.push('created_at >= ?');         params.push(date_from); }
+    if (date_to)   { conditions.push('created_at <= ?');         params.push(date_to); }
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
     const rows = await db.all(
-      `SELECT * FROM food_safety_submissions ${where} ORDER BY submitted_at DESC LIMIT ?`,
+      `SELECT * FROM food_safety_submissions ${where} ORDER BY created_at DESC LIMIT ?`,
       [...params, Math.min(parseInt(limit, 10) || 100, 1000)]
     );
     res.json({ ok: true, count: rows.length, submissions: rows });
@@ -60,7 +60,7 @@ router.get('/summary', async (req, res) => {
               SUM(CASE WHEN status IN ('FAIL','UNSAFE') THEN 1 ELSE 0 END) as fail_count,
               COUNT(*) as total
        FROM food_safety_submissions
-       WHERE date(submitted_at) = date(?)
+       WHERE date(created_at) = date(?)
        GROUP BY store_id`,
       [date]
     );

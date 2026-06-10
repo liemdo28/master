@@ -31,7 +31,7 @@ async function getSubmissionsForDate(date) {
   try {
     return await db.all(
       `SELECT store_id, shift FROM food_safety_submissions
-       WHERE date(submitted_at) = date(?) AND status != 'rejected'`,
+       WHERE date(created_at) = date(?) AND status != 'rejected'`,
       [date]
     );
   } catch (_) { return []; }

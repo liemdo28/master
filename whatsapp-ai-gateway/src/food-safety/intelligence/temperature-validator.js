@@ -13,9 +13,8 @@ function isImpossible(value) {
 
 function isCelsius(value, label = '') {
   const lbl = label.toLowerCase();
-  if (lbl.includes('celsius') || lbl.includes('°c')) return true;
-  // Heuristic: a fridge temperature of 2–8°C looks like a cooler in Celsius
-  return value > 0 && value < 50 && !lbl.includes('°f') && !lbl.includes('fahrenheit');
+  // Only flag Celsius when explicitly indicated — value range alone is not enough
+  return lbl.includes('celsius') || lbl.includes('°c') || lbl.includes(' c)') || lbl.endsWith(' c');
 }
 
 function celsiusToFahrenheit(c) {

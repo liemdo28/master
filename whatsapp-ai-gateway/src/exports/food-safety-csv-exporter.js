@@ -2,12 +2,16 @@
 /**
  * food-safety-csv-exporter.js
  * Exports food safety submissions as CSV.
+ * Uses actual food_safety_submissions schema columns.
  */
 
 const { makeLogger } = require('../logger');
 const log = makeLogger('exports');
 
-const CSV_HEADERS = ['id', 'store_id', 'employee', 'shift', 'submitted_at', 'status', 'field_id', 'item_name', 'value', 'notes'];
+const CSV_HEADERS = [
+  'id', 'submission_id', 'store_id', 'store', 'sender_name', 'shift',
+  'form_date', 'status', 'ocr_confidence', 'created_at', 'confirmed_at', 'sync_error',
+];
 
 function escapeCsvField(val) {
   const s = String(val ?? '');
@@ -21,11 +25,14 @@ async function exportCsv({ dateFrom, dateTo, store } = {}) {
 
   const conditions = [];
   const params = [];
-  if (store)    { conditions.push('store_id = ?');       params.push(store); }
-  if (dateFrom) { conditions.push('submitted_at >= ?');  params.push(dateFrom); }
-  if (dateTo)   { conditions.push('submitted_at <= ?');  params.push(dateTo); }
+  if (store)    { conditions.push('store_id = ?');         params.push(store); }
+  if (dateFrom) { conditions.push('created_at >= ?');      params.push(dateFrom); }
+  if (dateTo)   { conditions.push('created_at <= ?');      params.push(dateTo); }
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-  const rows = await db.all(`SELECT * FROM food_safety_submissions ${where} ORDER BY submitted_at DESC LIMIT 10000`, params);
+  const rows = await db.all(
+    `SELECT ${CSV_HEADERS.join(', ')} FROM food_safety_submissions ${where} ORDER BY created_at DESC LIMIT 10000`,
+    params
+  );
 
   const lines = [CSV_HEADERS.join(',')];
   for (const row of rows) {

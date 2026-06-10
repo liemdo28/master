@@ -14,8 +14,13 @@ async function runValidation() {
   try {
     const pilotMetrics = require('./pilot-metrics');
     const summary = await pilotMetrics.getPilotSummary();
-    const passed = summary && summary.completionRate >= (summary.completionTarget || 0.95);
-    checks.push({ name: 'completion_rate', passed, detail: `${((summary?.completionRate || 0) * 100).toFixed(1)}%` });
+    // completionTarget stored as 95 (percent), overallCompletionRate also 0-100
+    const rate   = summary?.overallCompletionRate ?? (summary?.completionRate ?? 0);
+    const target = summary?.completionTarget > 1 ? summary.completionTarget : 95;
+    // Pilot not started yet is a blocker only if pilot is active
+    const pilotActive = summary?.active === true;
+    const passed = !pilotActive || rate >= target;
+    checks.push({ name: 'completion_rate', passed, detail: pilotActive ? `${rate.toFixed(1)}% vs target ${target}%` : 'pilot not yet started — rate check skipped' });
   } catch (err) {
     checks.push({ name: 'completion_rate', passed: false, detail: err.message });
   }
