@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const http = require('http');
+const https = require('https');
 const whatsappSession = require('../whatsapp/session-manager');
 const { getStatus } = whatsappSession;
 const { isEnabled: tgEnabled } = require('../telegram/telegram-forwarder');
@@ -19,6 +21,8 @@ const auditTrail = (() => { try { return require('../workflows/audit-trail'); } 
 const sheetQueueSvc = (() => { try { return require('../workflows/sheet-write-queue'); } catch (_) { return null; } })();
 const dailyHealthReport = (() => { try { return require('../reports/daily-health-report'); } catch (_) { return null; } })();
 const runtimeControl = (() => { try { return require('../runtime/windows-runtime-control'); } catch (_) { return null; } })();
+const commandCenter = (() => { try { return require('../dashboard/food-safety-command-center'); } catch (_) { return null; } })();
+const pilotValidation = (() => { try { return require('../pilot/food-safety-pilot-validation'); } catch (_) { return null; } })();
 
 // Food safety storage — gracefully skip if not enabled
 let fsStorage = null;
@@ -32,6 +36,11 @@ const templateOcrDeps = (() => { try { return require('../template-ocr/dependenc
 const templateOcrGenerator = (() => { try { return require('../template-ocr/template-generator'); } catch (_) { return null; } })();
 const dailyEntryTestForm = (() => { try { return require('../forms/daily-entry-test-form-generator'); } catch (_) { return null; } })();
 const guideGenerator = (() => { try { return require('../forms/guide-generator'); } catch (_) { return null; } })();
+const projectClientRegistry = (() => { try { return require('../security/project-client-registry'); } catch (_) { return null; } })();
+const apiKeyAuditLog = (() => { try { return require('../security/api-key-audit-log'); } catch (_) { return null; } })();
+const agentMiRouter = (() => { try { return require('../commands/agent-mi-router'); } catch (_) { return null; } })();
+const agentMiForwarder = (() => { try { return require('../forwarding/agent-mi-forwarder'); } catch (_) { return null; } })();
+const sqlite = (() => { try { return require('../storage/sqlite'); } catch (_) { return null; } })();
 const buildInfo = getBuildInfo();
 const startedAt = buildInfo.startedAt;
 
@@ -42,11 +51,98 @@ function extractSpreadsheetId(url) {
   const m = String(url).match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
   return m ? m[1] : null;
 }
+
+function keyStatus(name) {
+  const value = process.env[name] || '';
+  return {
+    configured: !!value,
+    prefix: value ? value.slice(0, 8) + '...' : '',
+    length: value.length,
+  };
+}
+
+function envUrlStatus(name) {
+  const value = process.env[name] || '';
+  return {
+    configured: !!value,
+    value: value ? value.replace(/\/+$/, '') : '',
+  };
+}
+
+function httpGet(targetUrl, timeoutMs = 2500) {
+  return new Promise((resolve) => {
+    const parsed = new URL(targetUrl);
+    const transport = parsed.protocol === 'https:' ? https : http;
+    const req = transport.request({
+      method: 'GET',
+      hostname: parsed.hostname,
+      port: parsed.port || (parsed.protocol === 'https:' ? 443 : 80),
+      path: parsed.pathname + parsed.search,
+      timeout: timeoutMs,
+    }, (response) => {
+      let body = '';
+      response.on('data', chunk => { body += chunk; });
+      response.on('end', () => resolve({
+        ok: response.statusCode >= 200 && response.statusCode < 500,
+        status: response.statusCode,
+        body: body.slice(0, 500),
+      }));
+    });
+    req.on('error', err => resolve({ ok: false, error: err.message }));
+    req.on('timeout', () => {
+      req.destroy();
+      resolve({ ok: false, error: 'timeout' });
+    });
+    req.end();
+  });
+}
+
+async function checkServiceHealth(baseUrl) {
+  if (!baseUrl) return { configured: false, reachable: false, error: 'not_configured' };
+  const base = baseUrl.replace(/\/+$/, '');
+  const paths = ['/api/health', '/health', '/'];
+  const attempts = [];
+  for (const suffix of paths) {
+    const result = await httpGet(base + suffix);
+    attempts.push({ url: base + suffix, ...result });
+    if (result.ok) return { configured: true, reachable: true, matched_url: base + suffix, status: result.status };
+  }
+  return { configured: true, reachable: false, attempts };
+}
 const app = express();
 app.use(express.json());
 
 // Mount Backup / Restore API (added by Dev #2 Phase 2)
 try { require('./backup-api')(app); } catch (e) { console.warn('backup-api mount failed:', e.message); }
+
+// Mount Food Safety Command Center routes
+try { app.use('/api/food-safety', require('./food-safety-command-center-routes')); } catch (e) { console.warn('food-safety-command-center-routes mount failed:', e.message); }
+
+// Agent-OS browser status endpoint
+app.get('/api/agent-tools/browser/status', async (_req, res) => {
+  try {
+    const browserTool = (() => { try { return require('../agent-tools/browser/browser-tool'); } catch (_) { return null; } })();
+    res.json({ ok: true, puppeteerAvailable: browserTool ? browserTool.isAvailable() : false });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+// Mi food-safety skill status
+app.get('/api/mi/food-safety/status', async (_req, res) => {
+  try {
+    const { getMemoryStatus } = require('../agent-tools/memory/food-safety-memory-indexer');
+    const mem = await getMemoryStatus();
+    res.json({ ok: true, memory: mem });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+// Pilot metrics endpoint
+app.get('/api/food-safety/pilot-metrics', async (_req, res) => {
+  try {
+    const pilotMetrics = require('../pilot/pilot-metrics');
+    const summary = await pilotMetrics.getPilotSummary();
+    res.json({ ok: true, ...summary });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
 
 // ── Health ────────────────────────────────────────────────────────────────────
 function safeBool(fn, fallback = false) {
@@ -181,10 +277,40 @@ app.get('/api/whatsapp/status', (req, res) => {
   res.json(whatsappSession.getStatus());
 });
 
+app.post('/api/whatsapp/connect', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const status = await whatsappSession.connect();
+    res.json({ ok: true, status });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
+  }
+});
+
 app.post('/api/whatsapp/restart', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   try {
     const status = await whatsappSession.restart();
+    res.json({ ok: true, status });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
+  }
+});
+
+app.post('/api/whatsapp/reconnect', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const status = await whatsappSession.reconnect();
+    res.json({ ok: true, status });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
+  }
+});
+
+app.post('/api/whatsapp/disconnect', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const status = await whatsappSession.disconnect();
     res.json({ ok: true, status });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
@@ -198,6 +324,240 @@ app.post('/api/whatsapp/reset-session', async (req, res) => {
     res.json({ ok: true, status });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
+  }
+});
+
+app.post('/api/whatsapp/clear-session', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  try {
+    const status = await whatsappSession.clearSession();
+    res.json({ ok: true, status });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, status: whatsappSession.getStatus() });
+  }
+});
+
+app.get('/api/router/status', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const agentEnv = envUrlStatus('AGENT_CODING_URL');
+  const miEnv = envUrlStatus('MI_CORE_URL');
+  const status = {
+    ok: true,
+    router_enabled: !!agentMiRouter && !!agentMiForwarder,
+    agent_handler_loaded: !!agentMiRouter?.isAgentCommand,
+    mi_handler_loaded: !!agentMiRouter?.isMiCommand,
+    forwarder_loaded: !!agentMiForwarder?.forward,
+    message_listener_loaded: true,
+    commands: {
+      agent: '/agent',
+      mi: '/mi',
+    },
+    env: {
+      agent_coding_url: agentEnv,
+      mi_core_url: miEnv,
+      agent_coding_api_key: keyStatus('AGENT_CODING_API_KEY'),
+      mi_core_api_key: keyStatus('MI_CORE_API_KEY'),
+    },
+    endpoints: {
+      agent_coding: await checkServiceHealth(agentEnv.value),
+      mi_core: await checkServiceHealth(miEnv.value),
+    },
+    time: new Date().toISOString(),
+  };
+  res.json(status);
+});
+
+app.get('/api/clients', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!projectClientRegistry) return res.status(503).json({ ok: false, error: 'Project client registry not available' });
+  try {
+    const clients = await projectClientRegistry.listClients();
+    const byId = Object.fromEntries((clients || []).map(client => [client.client_id, client]));
+    res.json({
+      ok: true,
+      clients,
+      required: {
+        'agent-coding': {
+          exists: !!byId['agent-coding'],
+          status: byId['agent-coding']?.status || 'missing',
+          key_prefix: byId['agent-coding']?.key_prefix || '',
+          env_key_configured: !!process.env.AGENT_CODING_API_KEY,
+          last_used_at: byId['agent-coding']?.last_used_at || null,
+        },
+        'mi-core': {
+          exists: !!byId['mi-core'],
+          status: byId['mi-core']?.status || 'missing',
+          key_prefix: byId['mi-core']?.key_prefix || '',
+          env_key_configured: !!process.env.MI_CORE_API_KEY,
+          last_used_at: byId['mi-core']?.last_used_at || null,
+        },
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/clients', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!projectClientRegistry) return res.status(503).json({ ok: false, error: 'Project client registry not available' });
+  try {
+    const clientId = String(req.body?.client_id || req.body?.clientId || '').trim();
+    if (!clientId) return res.status(400).json({ ok: false, error: 'client_id is required' });
+    const existing = await projectClientRegistry.getClient(clientId);
+    if (existing) return res.status(409).json({ ok: false, error: 'client already exists', client: existing });
+    const result = await projectClientRegistry.createClient({
+      clientId,
+      allowedCommands: req.body?.allowed_commands || req.body?.allowedCommands || '/agent,/mi',
+      callbackUrl: req.body?.callback_url || req.body?.callbackUrl || '',
+      rateLimit: parseInt(req.body?.rate_limit || req.body?.rateLimit || '60', 10),
+      permissions: req.body?.permissions || 'read',
+      description: req.body?.description || '',
+    });
+    res.status(201).json({
+      ok: true,
+      client: result.client,
+      raw_key_once: result.rawKey,
+      key_prefix: result.keyPrefix,
+      warning: 'Store raw_key_once securely. It cannot be recovered later.',
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/api/clients/:clientId/health', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!projectClientRegistry) return res.status(503).json({ ok: false, error: 'Project client registry not available' });
+  try {
+    const clientId = req.params.clientId;
+    const client = await projectClientRegistry.getClient(clientId);
+    if (!client) return res.status(404).json({ ok: false, error: 'client not found' });
+    const envName = clientId === 'agent-coding' ? 'AGENT_CODING_URL' : (clientId === 'mi-core' ? 'MI_CORE_URL' : '');
+    const keyName = clientId === 'agent-coding' ? 'AGENT_CODING_API_KEY' : (clientId === 'mi-core' ? 'MI_CORE_API_KEY' : '');
+    const env = envName ? envUrlStatus(envName) : { configured: false, value: client.callback_url || '' };
+    res.json({
+      ok: true,
+      client,
+      key: keyName ? keyStatus(keyName) : { configured: false, prefix: '', length: 0 },
+      endpoint: await checkServiceHealth(env.value || client.callback_url || ''),
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/clients/:clientId/rotate', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!projectClientRegistry) return res.status(503).json({ ok: false, error: 'Project client registry not available' });
+  try {
+    const result = await projectClientRegistry.rotateClientKey(req.params.clientId);
+    res.json({
+      ok: true,
+      client_id: req.params.clientId,
+      raw_key_once: result.rawKey,
+      key_prefix: result.keyPrefix,
+      warning: 'Store raw_key_once securely and update the matching service/env. It cannot be recovered later.',
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/clients/:clientId/revoke', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!projectClientRegistry) return res.status(503).json({ ok: false, error: 'Project client registry not available' });
+  try {
+    await projectClientRegistry.revokeClient(req.params.clientId);
+    res.json({ ok: true, client_id: req.params.clientId, status: 'revoked' });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/api/audit/api-keys', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!apiKeyAuditLog) return res.status(503).json({ ok: false, error: 'API key audit log not available' });
+  try {
+    const limit = Math.min(parseInt(req.query.limit || '50', 10) || 50, 200);
+    const clientId = req.query.client_id || req.query.clientId || undefined;
+    res.json({ ok: true, logs: await apiKeyAuditLog.getLogs({ clientId, limit }) });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/api/audit/messages', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const limit = Math.min(parseInt(req.query.limit || '25', 10) || 25, 100);
+  try {
+    const routed = sqlite
+      ? await sqlite.all(
+          `SELECT id, source_chat, command_prefix, target_project, response_body, action_taken, approval_status, timestamp, client_id, duration_ms, success
+           FROM routed_messages ORDER BY id DESC LIMIT ?`,
+          [limit]
+        ).catch(err => ({ error: err.message }))
+      : [];
+    const apiKeyAudit = apiKeyAuditLog
+      ? await apiKeyAuditLog.getLogs({ limit }).catch(err => ({ error: err.message }))
+      : [];
+    res.json({ ok: true, routed_messages: routed, api_key_audit: apiKeyAudit });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/router/test', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!agentMiRouter || !agentMiForwarder) return res.status(503).json({ ok: false, error: 'Agent/MI router not available' });
+  const command = String(req.body?.command || req.body?.text || '').trim();
+  const timestamp = new Date().toISOString();
+  try {
+    let route = null;
+    let parsed = null;
+    let forwarded = null;
+    if (agentMiRouter.isAgentCommand(command)) {
+      parsed = await agentMiRouter.handleAgentMessage({
+        chatId: 'diagnostic@localhost',
+        groupId: '',
+        sender: 'diagnostic',
+        senderName: 'Diagnostic',
+        text: command,
+        timestamp,
+      });
+      route = {
+        command_prefix: '/agent',
+        target_project: 'agent-coding',
+        target_url: await agentMiForwarder.getTargetUrl('agent-coding'),
+      };
+      if (parsed.payload) forwarded = await agentMiForwarder.forwardToAgent(parsed.payload);
+    } else if (agentMiRouter.isMiCommand(command)) {
+      parsed = await agentMiRouter.handleMiMessage({
+        chatId: 'diagnostic@localhost',
+        groupId: '',
+        sender: 'diagnostic',
+        senderName: 'Diagnostic',
+        text: command,
+        timestamp,
+      });
+      route = {
+        command_prefix: '/mi',
+        target_project: 'mi-core',
+        target_url: await agentMiForwarder.getTargetUrl('mi-core'),
+      };
+      if (parsed.payload) forwarded = await agentMiForwarder.forwardToMi(parsed.payload);
+    } else {
+      return res.status(400).json({ ok: false, error: 'Use /mi <message> or /agent <message>' });
+    }
+    res.json({
+      ok: !!forwarded?.ok,
+      incoming_message: command,
+      router_decision: route,
+      payload: parsed?.payload ? { ...parsed.payload, api_key: '***REDACTED***' } : null,
+      result: forwarded || { ok: true, reply: parsed?.reply || '' },
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
@@ -352,7 +712,12 @@ app.get('/', async (req, res) => {
     // Pilot data
     let pilotData = null;
     if (pilotMetrics) {
-      try { pilotData = await pilotMetrics.getPilotSummary(); } catch (_) {}
+      try {
+        pilotData = await pilotMetrics.getPilotSummary();
+        if (pilotValidation) {
+          pilotData.validation = await pilotValidation.getProductionReadiness().catch(() => null);
+        }
+      } catch (_) {}
     }
     const unknownData = fallbackAudit ? {
       path: fallbackAudit.AUDIT_PATH,
@@ -445,7 +810,8 @@ app.get('/', async (req, res) => {
       const formPhotoStorage = require('../workflows/form-photo-storage');
       const stats = await formPhotoStorage.getSubmissionStats().catch(() => null);
       const submissions = await formPhotoStorage.getRecentSubmissions(30).catch(() => []);
-      formPhotoData = { stats, submissions };
+      const commandCenterData = commandCenter ? await commandCenter.getCommandCenterData().catch(() => null) : null;
+      formPhotoData = { stats, submissions, commandCenter: commandCenterData };
     } catch (_) {}
 
     const html = await renderDashboard({ waStatus: status, waDiagnostics, telegramEnabled: tgEnabled(), stats, recent, qrData, safetyState, fsData, templateData, templateOcrData, agentData, storeGroupData, managerAlertData, incidentData, complianceData, pilotData, adminSetupData, yolinkData, parallelData, unknownData, runtimeData, formPhotoData, buildInfo });

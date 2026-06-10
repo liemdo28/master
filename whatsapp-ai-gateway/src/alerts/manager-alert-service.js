@@ -259,6 +259,36 @@ async function getStats() {
   };
 }
 
+async function sendMissingSubmissionAlerts(date = null) {
+  const { detectMissing } = require('../food-safety/alerts/missing-submission-detector');
+  const { missingSubmissionAlert } = require('../food-safety/alerts/alert-template-builder');
+
+  const enabled = await isEnabledAsync();
+  if (!enabled) return { skipped: true, reason: 'alerts_disabled' };
+
+  const { missing } = await detectMissing(date);
+  if (!missing.length) return { sent: 0, missing: [] };
+
+  const managerChatId = await getManagerChatIdAsync();
+  if (!managerChatId) return { sent: 0, missing, error: 'no_manager_chat_id' };
+
+  let client = null;
+  try { client = require('../whatsapp/client-manager').getClient(); } catch (_) {}
+
+  let sent = 0;
+  for (const m of missing) {
+    const text = missingSubmissionAlert(m);
+    const key = `missing:${m.store_id}:${m.shift}:${m.date}`;
+    const existing = await get(`SELECT id FROM manager_alerts WHERE dedupe_key = ? AND date(created_at) = date('now') LIMIT 1`, [key]);
+    if (existing) continue;
+    let status = 'PENDING_CLIENT';
+    if (client) status = await replyService.send(client, managerChatId, text) ? 'SENT' : 'FAILED';
+    await saveAlert({ session: {}, store: { store_id: m.store_id, store_name: m.store_name }, managerChatId, issues: [], sheetWriteStatus: 'n/a', status, dedupeKey: key });
+    if (status === 'SENT') sent++;
+  }
+  return { sent, missing };
+}
+
 module.exports = {
   ensureTables,
   isEnabled,
@@ -267,6 +297,7 @@ module.exports = {
   storeWarningMessage,
   managerAlertMessage,
   handleConfirmedDailyEntry,
+  sendMissingSubmissionAlerts,
   getRecentAlerts,
   getStats,
 };
