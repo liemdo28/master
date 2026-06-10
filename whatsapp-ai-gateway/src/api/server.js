@@ -118,6 +118,12 @@ try { require('./backup-api')(app); } catch (e) { console.warn('backup-api mount
 // Mount Food Safety Command Center routes
 try { app.use('/api/food-safety', require('./food-safety-command-center-routes')); } catch (e) { console.warn('food-safety-command-center-routes mount failed:', e.message); }
 
+// Mount Stone Oak Pilot API
+try { app.use('/api/pilot/stone-oak', require('../pilot/stone-oak-pilot-api')); } catch (e) { console.warn('stone-oak-pilot-api mount failed:', e.message); }
+
+// Start pilot tracker background polling
+try { require('../pilot/stone-oak-pilot-tracker').start(); } catch (e) { console.warn('pilot-tracker start failed:', e.message); }
+
 // Agent-OS browser status endpoint
 app.get('/api/agent-tools/browser/status', async (_req, res) => {
   try {

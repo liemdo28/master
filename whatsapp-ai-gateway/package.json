@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js",
+    "test": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
     "test:legacy": "node tests/legacy/broth-command-legacy-tests.js"
   },
   "dependencies": {
