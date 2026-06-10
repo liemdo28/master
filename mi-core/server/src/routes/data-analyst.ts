@@ -1,80 +1,99 @@
 /**
  * Data Analyst API Routes
- * POST /api/data-analyst/analyze — analyze a local file
- * POST /api/data-analyst/question — ask a question about loaded data
+ * GET  /api/data-analyst/health   — health check
  * GET  /api/data-analyst/datasets — list all datasets
- * GET  /api/data-analyst/last — get last analysis
+ * GET  /api/data-analyst/last     — get last analysis for a dataset
+ * POST /api/data-analyst/upload   — upload and ingest a file (multipart)
+ * POST /api/data-analyst/analyze  — analyze a local file path
+ * POST /api/data-analyst/question — ask a question about a file
+ * POST /api/data-analyst/report   — generate full report for a file
+ * POST /api/data-analyst/quick    — quick analyze + opportunities
  */
 
 import { Router, Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { pathToFileURL } from 'url';
-
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const CATALOG_FILE = path.join(GLOBAL_DIR, 'data-analyst', 'dataset_catalog.json');
-const LAST_ANALYSIS_FILE = path.join(GLOBAL_DIR, 'data-analyst', 'last_analysis.json');
+import multer from 'multer';
+import { DataAnalystEngine } from '../data-analyst/data-analyst-engine';
+import { listDatasets } from '../data-analyst/dataset-catalog';
 
 export const dataAnalystRouter = Router();
 
-// Load JS engine lazily
-let engine: Record<string, unknown> | null = null;
+const engine = new DataAnalystEngine();
 
-async function getEngine() {
-  if (!engine) {
-    const enginePath = path.resolve('E:/Project/Master/mi-core/local-agent/data-analyst/DataAnalystEngine.mjs');
-    engine = await import(pathToFileURL(enginePath).href) as Record<string, unknown>;
-  }
-  return engine;
-}
+const UPLOAD_DIR = path.join(process.cwd(), '.local-agent-global', 'data-analyst', 'uploads');
+const upload = multer({
+  dest: UPLOAD_DIR,
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = ['.csv', '.xlsx', '.xls', '.json', '.pdf', '.docx', '.doc'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, allowed.includes(ext));
+  },
+});
+
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+// GET /api/data-analyst/health
+dataAnalystRouter.get('/health', (_req: Request, res: Response) => {
+  res.json({
+    status: 'ok',
+    module: 'data-analyst',
+    engine: 'DataAnalystEngine (TypeScript native)',
+    supported_formats: ['csv', 'xlsx', 'xls', 'json', 'pdf', 'docx'],
+    endpoints: [
+      'GET  /health',
+      'GET  /datasets',
+      'GET  /last?dataset_id=',
+      'POST /upload  (multipart file)',
+      'POST /analyze { file_path, analysis_type }',
+      'POST /question { file_path, question }',
+      'POST /report   { file_path, format }',
+      'POST /quick    { file_path }',
+    ],
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // GET /api/data-analyst/datasets
 dataAnalystRouter.get('/datasets', (_req: Request, res: Response) => {
-  try {
-    const catalog = JSON.parse(fs.readFileSync(CATALOG_FILE, 'utf-8'));
-    res.json(catalog);
-  } catch {
-    res.json({ datasets: [], message: 'No datasets yet' });
-  }
+  res.json(listDatasets());
 });
 
-// GET /api/data-analyst/last
-dataAnalystRouter.get('/last', (_req: Request, res: Response) => {
-  try {
-    const last = JSON.parse(fs.readFileSync(LAST_ANALYSIS_FILE, 'utf-8'));
-    res.json(last);
-  } catch {
-    res.json({ error: 'No analysis yet', hint: 'POST /api/data-analyst/analyze with { file_path }' });
-  }
+// GET /api/data-analyst/last?dataset_id=ds_xxx
+dataAnalystRouter.get('/last', (req: Request, res: Response) => {
+  const { dataset_id } = req.query as { dataset_id?: string };
+  if (!dataset_id) return res.status(400).json({ error: 'dataset_id query param required' });
+  const result = engine.getLastAnalysis(dataset_id);
+  if (!result) return res.json({ error: 'No analysis found for this dataset' });
+  res.json(result);
+});
+
+// POST /api/data-analyst/upload
+dataAnalystRouter.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded. Use multipart/form-data with field "file"' });
+
+  const ext = path.extname(req.file.originalname).toLowerCase();
+  const destPath = req.file.path + ext;
+  fs.renameSync(req.file.path, destPath);
+
+  const result = await engine.ingest(destPath);
+  if (!result.success) return res.status(400).json(result);
+  res.json({ ...result, upload_path: destPath });
 });
 
 // POST /api/data-analyst/analyze
 dataAnalystRouter.post('/analyze', async (req: Request, res: Response) => {
-  const { file_path, store, period } = req.body as { file_path?: string; store?: string; period?: string };
+  const { file_path, dataset_id, analysis_type = 'full_report' } = req.body as {
+    file_path?: string; dataset_id?: string; analysis_type?: string;
+  };
 
-  if (!file_path) {
-    return res.status(400).json({ error: 'file_path required' });
-  }
+  if (!file_path && !dataset_id) return res.status(400).json({ error: 'file_path or dataset_id required' });
+  if (file_path && !fs.existsSync(file_path)) return res.status(404).json({ error: `File not found: ${file_path}` });
 
-  if (!fs.existsSync(file_path)) {
-    return res.status(404).json({ error: `File not found: ${file_path}` });
-  }
-
-  try {
-    const mod = await getEngine();
-    const DataAnalystEngine = mod['DataAnalystEngine'] as new () => { analyze: (f: string, opts: object) => Promise<Record<string, unknown>>; report: () => string };
-    const eng = new DataAnalystEngine();
-    const result = await eng.analyze(file_path, { store, period });
-
-    if (!result['success']) {
-      return res.status(400).json(result);
-    }
-
-    const report = eng.report();
-    res.json({ ...result, report_text: report });
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
-  }
+  const result = await engine.analyze({ file_path, dataset_id, analysis_type: analysis_type as never });
+  if (!result.success) return res.status(400).json(result);
+  res.json(result);
 });
 
 // POST /api/data-analyst/question
@@ -82,60 +101,33 @@ dataAnalystRouter.post('/question', async (req: Request, res: Response) => {
   const { file_path, question } = req.body as { file_path?: string; question: string };
 
   if (!question) return res.status(400).json({ error: 'question required' });
+  if (!file_path) return res.status(400).json({ error: 'file_path required' });
+  if (!fs.existsSync(file_path)) return res.status(404).json({ error: `File not found: ${file_path}` });
 
-  try {
-    const mod = await getEngine();
-    const quickAnalyze = mod['quickAnalyze'] as (f: string, q: string) => Promise<Record<string, unknown>>;
-
-    if (file_path) {
-      const result = await quickAnalyze(file_path, question);
-      return res.json(result);
-    }
-
-    // Use last analysis if no file provided
-    if (!fs.existsSync(LAST_ANALYSIS_FILE)) {
-      return res.json({
-        answer: 'Chưa có dữ liệu. Upload file trước: POST /api/data-analyst/analyze',
-      });
-    }
-
-    // For saved datasets, we'd need to reload — for now return hint
-    res.json({
-      note: 'Provide file_path to analyze, or use chat interface for AI-powered questions.',
-      question,
-      hint: 'POST /api/data-analyst/analyze first, then POST /api/data-analyst/question with file_path',
-    });
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
-  }
+  const result = await engine.answerQuestion(file_path, question);
+  res.json(result);
 });
 
 // POST /api/data-analyst/report
 dataAnalystRouter.post('/report', async (req: Request, res: Response) => {
   const { file_path, format = 'markdown' } = req.body as { file_path?: string; format?: string };
-
   if (!file_path) return res.status(400).json({ error: 'file_path required' });
+  if (!fs.existsSync(file_path)) return res.status(404).json({ error: `File not found: ${file_path}` });
 
-  try {
-    const mod = await getEngine();
-    const DataAnalystEngine = mod['DataAnalystEngine'] as new () => { analyze: (f: string, opts: object) => Promise<Record<string, unknown>>; report: () => string };
-    const eng = new DataAnalystEngine();
-    const result = await eng.analyze(file_path, {});
-    if (!result['success']) return res.status(400).json(result);
+  const result = await engine.analyze({ file_path, analysis_type: 'full_report' });
+  if (!result.success) return res.status(400).json(result);
 
-    const report = eng.report();
+  if (format === 'json') return res.json(result);
+  const report = (result.result as { report_text?: string })?.report_text || '';
+  res.json({ format: 'markdown', report, file: file_path, generated_at: new Date().toISOString() });
+});
 
-    if (format === 'json') {
-      return res.json({ report: result['analytics'], generated_at: new Date().toISOString() });
-    }
+// POST /api/data-analyst/quick
+dataAnalystRouter.post('/quick', async (req: Request, res: Response) => {
+  const { file_path } = req.body as { file_path?: string };
+  if (!file_path) return res.status(400).json({ error: 'file_path required' });
+  if (!fs.existsSync(file_path)) return res.status(404).json({ error: `File not found: ${file_path}` });
 
-    res.json({
-      format: 'markdown',
-      report,
-      file: file_path,
-      generated_at: new Date().toISOString(),
-    });
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
-  }
+  const result = await engine.quickAnalyze(file_path);
+  res.json(result);
 });

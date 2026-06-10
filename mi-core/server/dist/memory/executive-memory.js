@@ -12,7 +12,8 @@ exports.executiveMemory = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const crypto_1 = __importDefault(require("crypto"));
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = path_1.default.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path_1.default.join(MI_CORE_ROOT, '.local-agent-global');
 const MEM_DIR = path_1.default.join(GLOBAL_DIR, 'executive-memory-v2');
 const FILES = {
     owner_profile: path_1.default.join(MEM_DIR, 'owner_profile.json'),

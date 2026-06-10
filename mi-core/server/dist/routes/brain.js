@@ -4,17 +4,14 @@
  * Returns health of all 5 layers: Visibility, Knowledge Federation,
  * Project Connectors, Remote Control, Executive Memory.
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.brainRouter = void 0;
 const express_1 = require("express");
-const fs_1 = __importDefault(require("fs"));
 const connector_registry_1 = require("../visibility/connector-registry");
 const knowledge_db_1 = require("../knowledge/knowledge-db");
 const executive_memory_1 = require("../memory/executive-memory");
 const ollama_router_1 = require("../model-router/ollama-router");
+const reference_brain_path_1 = require("../knowledge/reference-brain-path");
 exports.brainRouter = (0, express_1.Router)();
 exports.brainRouter.get('/status', async (_req, res) => {
     const [modelStatus] = await Promise.allSettled([(0, ollama_router_1.getModelStatus)()]);
@@ -22,8 +19,7 @@ exports.brainRouter.get('/status', async (_req, res) => {
     const registry = connector_registry_1.connectorRegistry.getSummary();
     const kb = (0, knowledge_db_1.getStats)();
     const memProfile = executive_memory_1.executiveMemory.getOwnerProfile();
-    const usCompliancePath = 'E:/Project/Master/.local-agent-global/reference-brain/us-business-compliance';
-    const usComplianceReady = fs_1.default.existsSync(usCompliancePath);
+    const complianceStatus = (0, reference_brain_path_1.getComplianceDBStatus)();
     res.json({
         timestamp: new Date().toISOString(),
         verdict: 'MI_FEDERATED_OS',
@@ -37,7 +33,18 @@ exports.brainRouter.get('/status', async (_req, res) => {
             knowledge_federation: {
                 status: kb.total_docs > 0 ? 'READY' : 'EMPTY',
                 total_docs: kb.total_docs,
-                us_compliance_db: usComplianceReady ? 'READY' : 'NOT_FOUND',
+                us_compliance_db: {
+                    status: complianceStatus.status,
+                    exists: complianceStatus.exists,
+                    resolved_path: complianceStatus.resolved_path,
+                    searchable: complianceStatus.searchable,
+                    document_count: complianceStatus.document_count,
+                    chunk_count: complianceStatus.chunk_count,
+                    source_count: complianceStatus.source_count,
+                    jurisdictions: complianceStatus.jurisdictions,
+                    domains: complianceStatus.domains,
+                    raw_size_mb: complianceStatus.raw_size_mb,
+                },
                 categories: kb.by_category,
                 db_path: kb.db_path || '',
             },
@@ -73,20 +80,19 @@ exports.brainRouter.get('/federated-status', async (_req, res) => {
     const registry = connector_registry_1.connectorRegistry.getSummary();
     const kb = (0, knowledge_db_1.getStats)();
     const memProfile = executive_memory_1.executiveMemory.getOwnerProfile();
-    const usCompliancePath = 'E:/Project/Master/.local-agent-global/reference-brain/us-business-compliance';
-    const usComplianceReady = fs_1.default.existsSync(usCompliancePath);
+    const complianceStatus = (0, reference_brain_path_1.getComplianceDBStatus)();
     res.json({
         timestamp: new Date().toISOString(),
         verdict: 'MI_FEDERATED_OS',
         phases: {
             universal_visibility: { verdict: 'READY', modules: ['ConnectorRegistry', 'VisibilityCache', 'DailySnapshotBuilder', 'PlatformHealthChecker'] },
-            knowledge_federation: { verdict: usComplianceReady ? 'READY' : 'PARTIAL', modules: ['FederationSearch', 'ComplianceSearch'] },
+            knowledge_federation: { verdict: complianceStatus.exists ? 'READY' : 'PARTIAL', modules: ['FederationSearch', 'ComplianceSearch'] },
             project_connector_layer: { verdict: 'READY', modules: ['ProjectConnector'] },
             remote_control: { verdict: 'READY', modules: ['RemoteAccessManager'] },
         },
         layers: {
             universal_visibility: { status: registry.connected > 0 ? 'READY' : 'PARTIAL' },
-            knowledge_federation: { status: kb.total_docs > 0 ? 'READY' : 'EMPTY', us_compliance_db: usComplianceReady ? 'READY' : 'NOT_FOUND' },
+            knowledge_federation: { status: kb.total_docs > 0 ? 'READY' : 'EMPTY', us_compliance_db: complianceStatus.exists ? 'READY' : 'NOT_FOUND' },
             project_connector_layer: { status: 'READY' },
             remote_control: { status: 'READY' },
             executive_memory: { status: Object.keys(memProfile).length > 0 ? 'READY' : 'EMPTY' },

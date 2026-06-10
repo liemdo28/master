@@ -30,7 +30,8 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const holiday_engine_1 = require("./holiday-engine");
 const timezone_1 = require("../utils/timezone");
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = path_1.default.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path_1.default.join(MI_CORE_ROOT, '.local-agent-global');
 const MEM_DIR = path_1.default.join(GLOBAL_DIR, 'executive-memory-v2');
 function readMem(file) {
     try {

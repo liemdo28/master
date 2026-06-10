@@ -26,8 +26,10 @@ exports.getFederatedContext = getFederatedContext;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const knowledge_db_1 = require("../knowledge/knowledge-db");
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const reference_brain_path_1 = require("../knowledge/reference-brain-path");
+const MI_CORE_ROOT = path_1.default.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path_1.default.join(MI_CORE_ROOT, '.local-agent-global');
+const MASTER_ROOT = process.env.MASTER_ROOT || path_1.default.resolve(MI_CORE_ROOT, '..');
 // ── Score a text match ────────────────────────────────────────────────────
 function scoreMatch(text, query) {
     const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
@@ -217,6 +219,50 @@ function searchWorkflows(query) {
         return [];
     }
 }
+// ── Source 7: US Compliance DB ────────────────────────────────────────────
+function searchUSComplianceDB(query, jurisdiction) {
+    const complianceRoot = (0, reference_brain_path_1.getUSComplianceDBPath)();
+    if (!complianceRoot)
+        return [];
+    const results = [];
+    const categories = jurisdiction
+        ? [jurisdiction.toLowerCase()]
+        : ['federal', 'california', 'texas', 'stockton', 'san-antonio', 'labor-law', 'payroll', 'tax', 'food-safety', 'permits', 'accounting'];
+    for (const cat of categories) {
+        const catDir = path_1.default.join(complianceRoot, cat);
+        if (!fs_1.default.existsSync(catDir))
+            continue;
+        try {
+            const files = fs_1.default.readdirSync(catDir).filter(f => f.endsWith('.md') || f.endsWith('.txt'));
+            for (const file of files.slice(0, 10)) {
+                try {
+                    const filePath = path_1.default.join(catDir, file);
+                    const content = fs_1.default.readFileSync(filePath, 'utf-8');
+                    const score = scoreMatch(content, query);
+                    if (score > 0.25) {
+                        const idx = content.toLowerCase().indexOf(query.toLowerCase().split(' ')[0]);
+                        const start = Math.max(0, idx - 100);
+                        const snippet = (start > 0 ? '...' : '') + content.slice(start, start + 300) + '...';
+                        results.push({
+                            source: `us-compliance/${cat}`,
+                            domain: 'compliance',
+                            title: file.replace(/\.(md|txt)$/, '').replace(/[-_]/g, ' '),
+                            snippet,
+                            confidence: score * 0.9,
+                            timestamp: fs_1.default.statSync(filePath).mtime.toISOString(),
+                            file_path: filePath,
+                            requires_disclaimer: 'Verify with CPA/legal professional before filing or taking action',
+                            metadata: { jurisdiction: cat },
+                        });
+                    }
+                }
+                catch { /* skip */ }
+            }
+        }
+        catch { /* skip */ }
+    }
+    return results.slice(0, 8);
+}
 // ── Main federation functions ─────────────────────────────────────────────
 function searchAll(query, opts = {}) {
     const { limit = 10, domains, min_confidence = 0.15, project } = opts;
@@ -224,6 +270,8 @@ function searchAll(query, opts = {}) {
     const shouldSearch = (d) => !domains?.length || domains.includes(d);
     if (shouldSearch('knowledge-db'))
         allResults.push(...searchKnowledgeDB(query, 5));
+    if (shouldSearch('compliance'))
+        allResults.push(...searchUSComplianceDB(query, opts.jurisdiction));
     if (shouldSearch('executive-memory'))
         allResults.push(...searchExecutiveMemory(query));
     if (shouldSearch('project-registry'))

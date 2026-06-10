@@ -4,6 +4,7 @@ exports.knowledgeRouter = void 0;
 const express_1 = require("express");
 const knowledge_db_1 = require("../knowledge/knowledge-db");
 const pack_manager_1 = require("../knowledge/pack-manager");
+const reference_brain_path_1 = require("../knowledge/reference-brain-path");
 exports.knowledgeRouter = (0, express_1.Router)();
 exports.knowledgeRouter.get('/search', (req, res) => {
     const { q, category, limit } = req.query;
@@ -46,4 +47,12 @@ exports.knowledgeRouter.post('/packs/:packId/install', (req, res) => {
 });
 exports.knowledgeRouter.delete('/packs/:packId', (req, res) => {
     res.json((0, pack_manager_1.uninstallPack)(req.params.packId));
+});
+// US Compliance DB status (legacy shape: includes status field)
+exports.knowledgeRouter.get('/us-compliance/status', (_req, res) => {
+    res.json((0, reference_brain_path_1.getComplianceDBStatus)());
+});
+// US Compliance DB health (canonical shape per CEO directive)
+exports.knowledgeRouter.get('/us-compliance/health', (_req, res) => {
+    res.json((0, reference_brain_path_1.checkUSComplianceDBHealth)());
 });

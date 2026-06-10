@@ -60,6 +60,11 @@ const integrationAgentReleases_1 = require("./routes/integrationAgentReleases");
 const projects_1 = require("./routes/projects");
 const remote_1 = require("./routes/remote");
 const data_analyst_1 = require("./routes/data-analyst");
+const whatsapp_1 = require("./routes/whatsapp");
+const skill_router_1 = require("./routes/skill-router");
+const browser_agent_1 = require("./routes/browser-agent");
+const doordash_agent_1 = require("./routes/doordash-agent");
+const bigdata_1 = require("./routes/bigdata");
 const reminder_store_1 = require("./reminders/reminder-store");
 const gate_1 = require("./approval/gate");
 const rate_limit_1 = require("./middleware/rate-limit");
@@ -128,6 +133,11 @@ app.use('/api/qb-agent', qb_agent_1.qbAgentRouter);
 app.use('/api/integration-agent', integrationAgentReleases_1.integrationAgentReleasesRouter);
 app.use('/api/projects', projects_1.projectsRouter);
 app.use('/api/data-analyst', data_analyst_1.dataAnalystRouter);
+app.use('/api/whatsapp', whatsapp_1.whatsappRouter);
+app.use('/api/skills', skill_router_1.skillRouter);
+app.use('/api/browser', browser_agent_1.browserAgentRouter);
+app.use('/api/doordash-agent', doordash_agent_1.doordashAgentRouter);
+app.use('/api/bigdata', bigdata_1.bigdataRouter);
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = (0, http_1.createServer)(app);
 const wss = new ws_1.WebSocketServer({ server, path: '/ws' });
@@ -195,5 +205,8 @@ server.listen(PORT, HOST, () => {
         }
         (0, sync_scheduler_1.startScheduler)();
         console.log('[Mi] ✓ Scheduler started');
+        (0, bigdata_1.initBigData)().then(() => {
+            console.log('[Mi] ✓ Big Data Foundation initialized');
+        }).catch(e => console.warn('[Mi] Big Data init (non-critical):', e.message));
     });
 });

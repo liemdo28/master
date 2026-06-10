@@ -24,6 +24,9 @@ const task_manager_1 = require("../projects/task-manager");
 const content_scheduler_1 = require("../projects/content-scheduler");
 const ai_client_1 = require("../services/ai-client");
 const gate_1 = require("../approval/gate");
+const intent_classifier_1 = require("../brain/intent-classifier");
+const brain_router_1 = require("../brain/brain-router");
+const compliance_retrieval_1 = require("../knowledge/compliance-retrieval");
 const daily_work_actions_1 = require("../actions/daily-work-actions");
 const store_context_1 = require("../memory2/store-context");
 const file_search_1 = require("../actions/file-search");
@@ -34,6 +37,10 @@ async function runPipeline(input) {
     const liveDataParts = []; // live data fetched this request
     let kbHits = 0;
     let extraContext = '';
+    // ── 0. Brain Router — classify intent, select optimal brain ─────────────
+    const classifiedIntent = (0, intent_classifier_1.classifyIntent)(message);
+    const brainConfig = (0, brain_router_1.selectBrainConfig)(classifiedIntent);
+    console.log(`[Mi Brain] domain=${classifiedIntent.domain} brain=${brainConfig.brain} model=${brainConfig.model} confidence=${classifiedIntent.confidence.toFixed(2)}`);
     // ── 0a. Data Analyst — intercept before AI ────────────────────────────────
     if ((0, data_analyst_handler_1.isDataAnalystMessage)(message)) {
         const directAnswer = (0, data_analyst_handler_1.handleDataAnalystMessage)(message);
@@ -78,7 +85,24 @@ async function runPipeline(input) {
         sources.push('knowledge-db');
         kbHits = kbResults.length;
     }
-    // (Compliance DB search handled by knowledge-federation/index.ts searchAll)
+    // ── 3b. US Compliance DB — WS4 ───────────────────────────────────────────
+    if (classifiedIntent.requires_compliance_db && (0, compliance_retrieval_1.isComplianceDBAvailable)()) {
+        try {
+            const compResults = (0, compliance_retrieval_1.searchCompliance)(message, {
+                limit: 3,
+                jurisdiction: classifiedIntent.jurisdiction,
+                min_score: 0.04,
+            });
+            if (compResults.length > 0) {
+                liveDataParts.push((0, compliance_retrieval_1.formatComplianceContext)(compResults, message));
+                sources.push('us-compliance-db');
+                console.log(`[Mi Compliance] ${compResults.length} docs found for: "${message.slice(0, 60)}"`);
+            }
+        }
+        catch (e) {
+            console.warn('[Mi] Compliance DB search error:', e);
+        }
+    }
     // ── 4. Executive Reasoning Chain ──
     if (reasoningTypes.some(t => ['holiday_business_impact', 'marketing_action', 'content_reference', 'scheduling'].includes(t))) {
         const actionPlan = (0, executive_context_1.buildActionPlan)(message, reasoningTypes);
@@ -274,7 +298,7 @@ async function runPipeline(input) {
     for (const h of history.slice(-8))
         messages.push({ role: h.role, content: h.content });
     messages.push({ role: 'user', content: message });
-    // ── 18. AI call ──
-    const aiRes = await (0, ai_client_1.askAi)(messages);
-    return { reply: aiRes.text, model: aiRes.model, sources, memory_context: memContext, kb_hits: kbHits };
+    // ── 18. AI call — use brain-router-selected model ──
+    const aiRes = await (0, ai_client_1.askAiWithBrain)(messages, brainConfig);
+    return { reply: aiRes.text, model: `${brainConfig.brain}/${aiRes.model}`, sources, memory_context: memContext, kb_hits: kbHits };
 }

@@ -19,8 +19,10 @@ exports.buildCatalog = buildCatalog;
 const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+// Path resolution: prefer mi-core root, then workspace root
+const MI_CORE_ROOT = path_1.default.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path_1.default.join(MI_CORE_ROOT, '.local-agent-global');
+const MASTER_ROOT = process.env.MASTER_ROOT || path_1.default.resolve(MI_CORE_ROOT, '..');
 const DB_PATH = path_1.default.join(GLOBAL_DIR, 'knowledge-db', 'knowledge.db');
 const STATS_PATH = path_1.default.join(GLOBAL_DIR, 'knowledge-db', 'stats.json');
 const LOG_PATH = path_1.default.join(GLOBAL_DIR, 'knowledge-db', 'ingestion_log.json');
