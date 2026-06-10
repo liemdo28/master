@@ -79,7 +79,7 @@ export function redactObject(obj: unknown, path = ''): { clean: unknown; secrets
       for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
         // Block known secret key names entirely
         const kl = k.toLowerCase();
-        if (/password|secret|private_key|access_token|refresh_token|api_key|client_secret/.test(kl)) {
+        if (/password|secret|private_key|access_token|refresh_token|api_key|client_secret|\btoken\b/.test(kl)) {
           result[k] = '[REDACTED:key_name]';
           secrets.push(`${p}.${k}:blocked_key_name`);
         } else {

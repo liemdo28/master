@@ -55,7 +55,11 @@ bigdataRouter.get('/sources', async (_req: Request, res: Response) => {
     const sources = await listSources();
     res.json({ sources, count: sources.length });
   } catch (e) {
-    res.status(500).json({ error: String(e) });
+    const msg = String(e);
+    if (msg.includes('AggregateError') || msg.includes('ECONNREFUSED') || msg.includes('connect')) {
+      return res.json({ sources: [], count: 0, warning: 'PostgreSQL unavailable' });
+    }
+    res.status(500).json({ error: msg });
   }
 });
 
@@ -140,7 +144,11 @@ bigdataRouter.get('/events', async (req: Request, res: Response) => {
     const events = await listEvents({ store_id, event_type, source, date_from, date_to, limit: parseInt(limit || '50') });
     res.json({ events, count: events.length });
   } catch (e) {
-    res.status(500).json({ error: String(e) });
+    const msg = String(e);
+    if (msg.includes('AggregateError') || msg.includes('ECONNREFUSED') || msg.includes('connect')) {
+      return res.json({ events: [], count: 0, warning: 'PostgreSQL unavailable' });
+    }
+    res.status(500).json({ error: msg });
   }
 });
 
