@@ -21,6 +21,7 @@ interface TestResult { name: string; status: 'PASS' | 'FAIL' | 'SKIP'; detail: s
 
 const results: TestResult[] = [];
 let testSourceId = 0;
+const RUN_ID = Date.now();
 
 function pass(name: string, detail = '') { results.push({ name, status: 'PASS', detail }); console.log(`  ✅ PASS: ${name}${detail ? ' — ' + detail : ''}`); }
 function fail(name: string, detail: string) { results.push({ name, status: 'FAIL', detail }); console.error(`  ❌ FAIL: ${name} — ${detail}`); }
@@ -66,7 +67,7 @@ async function t3_jsonIngest(pgOk: boolean, minioOk: boolean) {
   const result = await ingestJson({
     source_name: 'test-bigdata-source',
     payload: { store: 'bakudan', tasks: [{ id: 'test-t1', title: 'Test task', status: 'pending', assignee: 'Maria', updated_at: new Date().toISOString() }] },
-    filename: 'test_ingest.json',
+    filename: `test_ingest_${RUN_ID}.json`,
     index_memory: false,
   });
 
@@ -84,7 +85,7 @@ async function t4_fileIngest(pgOk: boolean, minioOk: boolean) {
   const csvContent = 'Date,Item,Amount\n2026-06-10,Ramen,14.00\n2026-06-10,Sushi,18.00\n';
   const result = await ingestFile({
     source_name: 'test-bigdata-source',
-    filename: 'test_sales.csv',
+    filename: `test_sales_${RUN_ID}.csv`,
     buffer: Buffer.from(csvContent),
     content_type: 'text/csv',
     index_memory: false,
@@ -101,8 +102,8 @@ async function t5_duplicateChecksum(pgOk: boolean, minioOk: boolean) {
   if (!pgOk || !minioOk) { skip('T5', 'PG or MinIO unavailable'); return; }
 
   const content = `dup-test-content-${Date.now()}`;
-  const r1 = await ingestFile({ source_name: 'test-bigdata-source', filename: 'dup1.txt', buffer: Buffer.from(content), content_type: 'text/plain', index_memory: false });
-  const r2 = await ingestFile({ source_name: 'test-bigdata-source', filename: 'dup2.txt', buffer: Buffer.from(content), content_type: 'text/plain', index_memory: false });
+  const r1 = await ingestFile({ source_name: 'test-bigdata-source', filename: `dup1_${RUN_ID}.txt`, buffer: Buffer.from(content), content_type: 'text/plain', index_memory: false });
+  const r2 = await ingestFile({ source_name: 'test-bigdata-source', filename: `dup2_${RUN_ID}.txt`, buffer: Buffer.from(content), content_type: 'text/plain', index_memory: false });
 
   if (r1.raw_object_id === r2.raw_object_id) {
     pass('T5: Duplicate checksum — returns same raw_object_id');
@@ -212,7 +213,7 @@ async function t11_connectorSample(pgOk: boolean, minioOk: boolean) {
     reply_status: 'pending',
   };
 
-  const result = await ingestJson({ source_name: 'review-automation', payload: sampleReview, filename: 'test_review.json', index_memory: false });
+  const result = await ingestJson({ source_name: 'review-automation', payload: sampleReview, filename: `test_review_${RUN_ID}.json`, index_memory: false });
   if (result.raw_object_id) pass('T11: Review connector sample ingest', `object_id=${result.raw_object_id}`);
   else fail('T11: Review connector sample ingest', 'No raw_object_id');
 }

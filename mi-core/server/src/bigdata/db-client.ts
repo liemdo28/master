@@ -4,11 +4,14 @@
  */
 
 import { Pool, PoolClient } from 'pg';
+import { loadBigDataEnv } from './env';
+
+loadBigDataEnv();
 
 const pool = new Pool({
   host:     process.env.POSTGRES_HOST     || 'localhost',
   port:     parseInt(process.env.POSTGRES_PORT || '5432'),
-  database: process.env.POSTGRES_DB       || 'mi_bigdata',
+  database: process.env.POSTGRES_DATABASE || process.env.POSTGRES_DB || 'mi_bigdata',
   user:     process.env.POSTGRES_USER     || 'mi_user',
   password: process.env.POSTGRES_PASSWORD || '',
   max:      10,

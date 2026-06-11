@@ -6,13 +6,16 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, HeadBucketCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import crypto from 'crypto';
+import { loadBigDataEnv } from './env';
+
+loadBigDataEnv();
 
 const ENDPOINT  = process.env.MINIO_ENDPOINT    || 'http://localhost:9000';
 const USER      = process.env.MINIO_ROOT_USER   || 'mi_minio';
 const PASSWORD  = process.env.MINIO_ROOT_PASSWORD || '';
 
 export const BUCKETS = {
-  RAW:      process.env.MINIO_BUCKET_RAW      || 'mi-raw',
+  RAW:      process.env.MINIO_BUCKET_RAW      || process.env.MINIO_BUCKET || 'mi-raw',
   REPORTS:  process.env.MINIO_BUCKET_REPORTS  || 'mi-reports',
   EVIDENCE: process.env.MINIO_BUCKET_EVIDENCE || 'mi-evidence',
 };

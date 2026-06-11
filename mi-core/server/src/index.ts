@@ -27,6 +27,8 @@ import { skillRouter } from './routes/skill-router';
 import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
 import { bigdataRouter, initBigData } from './routes/bigdata';
+import { enterpriseRouter } from './routes/enterprise';
+import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
 import { gateEvents } from './approval/gate';
 import { rateLimiter } from './middleware/rate-limit';
@@ -108,6 +110,37 @@ app.use('/api/skills',          skillRouter);
 app.use('/api/browser',         browserAgentRouter);
 app.use('/api/doordash-agent',  doordashAgentRouter);
 app.use('/api/bigdata',         bigdataRouter);
+app.use('/api/enterprise',      enterpriseRouter);
+app.get('/api/tools', (_req, res) => {
+  res.json({
+    tools: [
+      { id: 'provider-router', status: 'available', endpoint: '/api/enterprise/providers' },
+      { id: 'memory-router', status: 'available', endpoint: '/api/enterprise/memory/search' },
+      { id: 'browser-router', status: 'available', endpoint: '/api/browser/health' },
+      { id: 'queue', status: 'available', endpoint: '/api/jobs' },
+      { id: 'bigdata', status: 'available', endpoint: '/api/bigdata/health' },
+    ],
+  });
+});
+app.get('/api/jobs', async (req, res) => {
+  try {
+    const jobs = await listQueueJobs(parseInt(String(req.query.limit || '50'), 10));
+    const stats = await queueStats();
+    res.json({ jobs, count: jobs.length, stats });
+  } catch (e) {
+    const error = e instanceof AggregateError
+      ? (e.errors?.map((err: unknown) => err instanceof Error ? err.message : String(err)).filter(Boolean).join('; ') || 'PostgreSQL unavailable')
+      : String(e);
+    res.json({
+      jobs: [],
+      count: 0,
+      stats: [],
+      status: 'degraded',
+      warning: 'PostgreSQL unavailable; queue jobs cannot be listed.',
+      error,
+    });
+  }
+});
 
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);

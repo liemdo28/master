@@ -26,6 +26,7 @@ import { ingestJson, ingestFile, listJobs } from '../bigdata/ingestion-service';
 import { hybridSearch, listEvents } from '../bigdata/search-service';
 import { runAllChecks } from '../bigdata/data-quality';
 import { answerOperationalQuestion } from '../bigdata/ceo-query-service';
+import { enqueueJob } from '../queue/job-queue';
 
 export const bigdataRouter = Router();
 const upload = multer({ limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB limit
@@ -89,6 +90,22 @@ bigdataRouter.post('/ingest/json', async (req: Request, res: Response) => {
   }
 });
 
+bigdataRouter.post('/ingest/json/queue', async (req: Request, res: Response) => {
+  const { source_name, payload } = req.body as { source_name: string; payload: Record<string, unknown> };
+  if (!source_name || !payload) return res.status(400).json({ error: 'source_name and payload required' });
+  try {
+    const job = await enqueueJob({
+      queue_name: 'ingestion',
+      job_type: 'ingest_json',
+      payload_json: req.body,
+      created_by: 'api',
+    });
+    res.status(202).json({ ok: true, queued: true, job });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
 // ── Ingest File ─────────────────────────────────────────────────────────────
 bigdataRouter.post('/ingest/file', upload.single('file'), async (req: Request, res: Response) => {
   const file = (req as Request & { file?: Express.Multer.File }).file;
@@ -120,6 +137,22 @@ bigdataRouter.post('/index-memory', async (req: Request, res: Response) => {
   try {
     const result = await indexTextChunks({ text, title, source_id, raw_object_id, chunk_type, store_id, tags, actor: 'api' });
     res.json({ ok: true, ...result });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+bigdataRouter.post('/index-memory/queue', async (req: Request, res: Response) => {
+  const { text, title, source_id } = req.body as { text: string; title: string; source_id: number };
+  if (!text || !title || !source_id) return res.status(400).json({ error: 'text, title, source_id required' });
+  try {
+    const job = await enqueueJob({
+      queue_name: 'memory',
+      job_type: 'index_memory',
+      payload_json: req.body,
+      created_by: 'api',
+    });
+    res.status(202).json({ ok: true, queued: true, job });
   } catch (e) {
     res.status(500).json({ error: String(e) });
   }

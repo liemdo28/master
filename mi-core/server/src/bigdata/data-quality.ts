@@ -128,7 +128,11 @@ async function checkQBDailyLogs(): Promise<QualityCheckResult> {
      GROUP BY DATE(event_time)
      ORDER BY event_day`
   );
-  const presentDays = new Set(rows.map(r => r.event_day));
+  const presentDays = new Set(rows.map(r => {
+    const value = r.event_day as unknown;
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    return String(value).slice(0, 10);
+  }));
   const missing: string[] = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();

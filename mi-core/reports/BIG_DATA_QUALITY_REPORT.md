@@ -1,76 +1,106 @@
 # Mi Big Data Quality Report
-**Generated:** 2026-06-10T16:44:24.940Z
+**Generated:** 2026-06-11T00:49:17.329Z
 
 ## Summary
 | Status | Count |
 |---|---|
-| ✅ Pass   | 0 |
-| ⚠️ Warn   | 0 |
+| ✅ Pass   | 5 |
+| ⚠️ Warn   | 3 |
 | ❌ Fail   | 0 |
-| 💥 Error  | 8 |
+| 💥 Error  | 0 |
 
 ## Results
 
-### 💥 checkDuplicateChecksums (critical)
-**Status:** error
+### ✅ duplicate_checksum (warn)
+**Status:** pass
 ```json
 {
-  "error": "AggregateError"
+  "duplicate_count": 0,
+  "checksums": []
 }
 ```
 
-### 💥 checkMissingStoreId (critical)
-**Status:** error
+### ✅ missing_store_id (warn)
+**Status:** pass
 ```json
 {
-  "error": "AggregateError"
+  "events_missing_store_id": 0
 }
 ```
 
-### 💥 checkInvalidEventTime (critical)
-**Status:** error
+### ✅ invalid_event_time (warn)
+**Status:** pass
 ```json
 {
-  "error": "AggregateError"
+  "invalid_time_count": 0
 }
 ```
 
-### 💥 checkStaleSources (critical)
-**Status:** error
+### ⚠️ stale_source (warn)
+**Status:** warn
 ```json
 {
-  "error": "AggregateError"
+  "stale_sources": [
+    {
+      "name": "asana",
+      "last_job": "never"
+    },
+    {
+      "name": "doordash",
+      "last_job": "never"
+    },
+    {
+      "name": "gmail",
+      "last_job": "never"
+    },
+    {
+      "name": "google-drive",
+      "last_job": "never"
+    },
+    {
+      "name": "manual-upload",
+      "last_job": "never"
+    },
+    {
+      "name": "quickbooks-raw",
+      "last_job": "never"
+    }
+  ]
 }
 ```
 
-### 💥 checkFailedIngestions (critical)
-**Status:** error
+### ⚠️ failed_ingestion_24h (warn)
+**Status:** warn
 ```json
 {
-  "error": "AggregateError"
+  "failed_jobs_24h": 5
 }
 ```
 
-### 💥 checkEmptyObjects (critical)
-**Status:** error
+### ✅ empty_file (warn)
+**Status:** pass
 ```json
 {
-  "error": "AggregateError"
+  "empty_object_count": 0
 }
 ```
 
-### 💥 checkSuspiciousAmounts (critical)
-**Status:** error
+### ✅ suspicious_amount (warn)
+**Status:** pass
 ```json
 {
-  "error": "AggregateError"
+  "suspicious_transactions": 0,
+  "examples": []
 }
 ```
 
-### 💥 checkQBDailyLogs (critical)
-**Status:** error
+### ⚠️ missing_qb_daily_log (warn)
+**Status:** warn
 ```json
 {
-  "error": "AggregateError"
+  "missing_days": [
+    "2026-06-11"
+  ],
+  "present_days": 7
 }
 ```

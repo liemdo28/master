@@ -5,11 +5,13 @@
 import { pgQuery } from './db-client';
 import { auditLog } from './audit-service';
 import { redactSecrets } from './secret-redactor';
+import { providerRouter } from '../providers/provider-router';
+import { loadBigDataEnv } from './env';
+
+loadBigDataEnv();
 
 const QDRANT_URL    = process.env.QDRANT_URL    || 'http://localhost:6333';
-const EMBED_MODEL   = process.env.OLLAMA_EMBED_MODEL || 'nomic-embed-text';
-const OLLAMA_BASE   = process.env.OLLAMA_BASE_URL    || 'http://localhost:11434';
-const COLLECTION    = 'mi_bigdata';
+const COLLECTION    = process.env.QDRANT_COLLECTION || 'mi_bigdata';
 const CHUNK_SIZE    = 800;
 const CHUNK_OVERLAP = 100;
 
@@ -36,14 +38,8 @@ function chunkText(text: string): string[] {
 }
 
 async function generateEmbedding(text: string): Promise<number[]> {
-  const res = await fetch(`${OLLAMA_BASE}/api/embeddings`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: EMBED_MODEL, prompt: text }),
-  });
-  if (!res.ok) throw new Error(`Embedding failed: ${res.status}`);
-  const data = await res.json() as { embedding: number[] };
-  return data.embedding;
+  const result = await providerRouter.generateEmbedding(text);
+  return result.embedding;
 }
 
 async function ensureQdrantCollection(): Promise<void> {

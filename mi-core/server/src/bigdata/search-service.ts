@@ -3,11 +3,13 @@
  */
 
 import { pgQuery } from './db-client';
+import { providerRouter } from '../providers/provider-router';
+import { loadBigDataEnv } from './env';
+
+loadBigDataEnv();
 
 const QDRANT_URL  = process.env.QDRANT_URL       || 'http://localhost:6333';
-const EMBED_MODEL = process.env.OLLAMA_EMBED_MODEL || 'nomic-embed-text';
-const OLLAMA_BASE = process.env.OLLAMA_BASE_URL    || 'http://localhost:11434';
-const COLLECTION  = 'mi_bigdata';
+const COLLECTION  = process.env.QDRANT_COLLECTION || 'mi_bigdata';
 
 export interface SearchResult {
   id: string | number;
@@ -65,14 +67,7 @@ async function keywordSearch(query: string, filters: Record<string, string>, lim
 
 async function semanticSearch(query: string, limit: number): Promise<SearchResult[]> {
   try {
-    const embedRes = await fetch(`${OLLAMA_BASE}/api/embeddings`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: EMBED_MODEL, prompt: query }),
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!embedRes.ok) return [];
-    const { embedding } = await embedRes.json() as { embedding: number[] };
+    const { embedding } = await providerRouter.generateEmbedding(query, { timeoutMs: 5000 });
 
     const searchRes = await fetch(`${QDRANT_URL}/collections/${COLLECTION}/points/search`, {
       method: 'POST',

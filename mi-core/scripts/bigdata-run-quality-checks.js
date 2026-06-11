@@ -51,6 +51,9 @@ async function main() {
   fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   fs.writeFileSync(OUTPUT, lines.join('\n'), 'utf-8');
   console.log(`\nReport saved: ${OUTPUT}`);
+  if ((summary.fail || 0) > 0 || (summary.error || 0) > 0) {
+    process.exitCode = 1;
+  }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch(e => { console.error(e); process.exitCode = 1; });

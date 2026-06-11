@@ -1,10 +1,8 @@
 /**
- * Calls Python AI service (FastAPI) which wraps Ollama.
- * Falls back to direct Ollama if Python service is down.
+ * AI Client — compatibility wrapper around the provider router.
  */
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:4002';
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+import { providerRouter } from '../providers/provider-router';
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -14,39 +12,37 @@ export interface ChatMessage {
 export interface AiResponse {
   text: string;
   model: string;
-  source: 'python-service' | 'ollama-direct';
+  source: string;
 }
 
-async function callPythonService(messages: ChatMessage[], stream = false): Promise<AiResponse> {
-  const res = await fetch(`${AI_SERVICE_URL}/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, stream }),
-    signal: AbortSignal.timeout(30000),
-  });
-  if (!res.ok) throw new Error(`AI service error: ${res.status}`);
-  const data = await res.json() as { text: string; model: string };
-  return { text: data.text, model: data.model, source: 'python-service' };
-}
-
-async function callOllamaDirect(messages: ChatMessage[]): Promise<AiResponse> {
-  const model = process.env.OLLAMA_FAST_MODEL || 'qwen3:8b';
-  const res = await fetch(`${OLLAMA_URL}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, stream: false }),
-    signal: AbortSignal.timeout(60000),
-  });
-  if (!res.ok) throw new Error(`Ollama error: ${res.status}`);
-  const data = await res.json() as { message: { content: string } };
-  return { text: data.message.content, model, source: 'ollama-direct' };
-}
-
+// ── Standard call (existing behavior) ─────────────────────────────────────
 export async function askAi(messages: ChatMessage[]): Promise<AiResponse> {
-  try {
-    return await callPythonService(messages);
-  } catch {
-    console.warn('[Mi] Python AI service unavailable, falling back to Ollama direct');
-    return await callOllamaDirect(messages);
+  const result = await providerRouter.generateText(messages);
+  return { text: result.text, model: result.model, source: result.provider };
+}
+
+// ── Brain-router-driven call (WS1) ─────────────────────────────────────────
+export interface BrainCallConfig {
+  brain: string;
+  model: string;
+  timeout_ms: number;
+  system_suffix?: string;
+}
+
+export async function askAiWithBrain(messages: ChatMessage[], config: BrainCallConfig): Promise<AiResponse> {
+  // Apply system suffix if provided
+  let msgs = messages;
+  if (config.system_suffix) {
+    msgs = messages.map(m =>
+      m.role === 'system' ? { ...m, content: m.content + config.system_suffix } : m
+    );
   }
+
+  const providers = config.brain === 'claude-api' ? ['anthropic', 'ollama'] as const : undefined;
+  const result = await providerRouter.generateText(msgs, {
+    providers: providers ? [...providers] : undefined,
+    model: config.model,
+    timeoutMs: config.timeout_ms,
+  });
+  return { text: result.text, model: result.model, source: result.provider };
 }
