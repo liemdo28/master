@@ -22,11 +22,16 @@ async function renderDashboard({
   runtimeData = null,
   formPhotoData = null,
   buildInfo = {},
+  transportPanels = '',
 }) {
   let qrImg = '';
   if (qrData) {
     try { qrImg = `data:image/png;base64,${await qrToBase64(qrData)}`; } catch (_) { qrImg = ''; }
   }
+  const waConnectionStatus = waDiagnostics?.connection_status || (waStatus === 'ready' ? 'CONNECTED' : 'DISCONNECTED');
+  const waMeta = waConnectionStatus === 'CONNECTED'
+    ? esc(waDiagnostics?.account_name || waDiagnostics?.phone_number || 'Session connected')
+    : '<button class="primary" onclick="whatsappAction(\'connect\')">Open WhatsApp Web</button>';
   const threads = groupThreads(recent);
   const buildName = buildInfo.name || 'Admin Control Center v1';
   const buildCommit = buildInfo.commit || 'unknown';
@@ -73,7 +78,7 @@ async function renderDashboard({
   </header>
   <main>
     <div class="grid">
-      ${statCard('WhatsApp', statusBadge(waStatus === 'ready' ? 'READY' : waStatus || 'UNKNOWN', waStatus === 'ready' ? 'ok' : 'warn'), qrImg ? '<div class="qr"><img src="' + qrImg + '" alt="QR"><span class="dim">Scan to connect</span></div>' : '')}
+      ${statCard('WhatsApp', statusBadge(waConnectionStatus, waConnectionStatus === 'CONNECTED' ? 'ok' : waConnectionStatus === 'AUTH_REQUIRED' ? 'warn' : 'off'), waMeta)}
       ${statCard('Telegram', statusBadge(telegramEnabled ? 'ENABLED' : 'OFF', telegramEnabled ? 'ok' : 'off'))}
       ${statCard('AI Engine', statusBadge(safetyState.aiPaused ? 'PAUSED' : 'ACTIVE', safetyState.aiPaused ? 'warn' : 'ok'))}
       ${statCard('Business Hours', statusBadge(safetyState.businessHoursOpen ? 'OPEN' : 'CLOSED', safetyState.businessHoursOpen ? 'ok' : 'warn'), esc(safetyState.todaySchedule || ''))}
@@ -81,6 +86,7 @@ async function renderDashboard({
       ${statCard('Last Message', stats.lastMessage ? esc(stats.lastMessage.name || stats.lastMessage.phone || '') : '-', stats.lastMessage ? esc((stats.lastMessage.message || '').slice(0, 90)) : '')}
     </div>
 
+    ${transportPanels}
     ${renderAdminSetup(adminSetupData)}
     ${renderWhatsAppDiagnostics(waDiagnostics)}
     ${renderRuntimeControl(runtimeData)}
@@ -89,6 +95,7 @@ async function renderDashboard({
     ${renderTemplate(templateData)}
     ${renderTemplateOcr(templateOcrData)}
     ${renderFoodSafety(fsData)}
+    ${renderFoodSafetyCommandCenter(formPhotoData?.commandCenter)}
     ${renderFormPhoto(formPhotoData)}
     ${renderAgent(agentData)}
     ${renderYoLink(yolinkData)}
@@ -324,7 +331,7 @@ function saveSheetLinks() {
         alert('Request failed: ' + e.message);
         return;
       }
-      if (r.status === 'WA_NOT_READY') { alert('WhatsApp not connected. Scan QR first.'); return; }
+      if (r.status === 'WA_NOT_READY') { alert('WhatsApp not connected. Click Open WhatsApp Web first.'); return; }
       if (!r.groups || !r.groups.length) { alert('No groups found.'); return; }
       let msg = 'WhatsApp Groups:\\n';
       r.groups.forEach(g => {
@@ -436,27 +443,32 @@ function renderAdminSetup(data) {
 
 function renderWhatsAppDiagnostics(data) {
   const state = data?.state || String(data?.status || 'UNKNOWN').toUpperCase();
+  const connection = data?.connection_status || (state === 'READY' ? 'CONNECTED' : 'DISCONNECTED');
   const ready = state === 'READY';
   const lastError = data?.last_error || '';
+  const age = data?.session_age_seconds == null ? '-' : formatDuration(data.session_age_seconds);
   return `<section class="section">
     <div class="section-head">
-      <h2>WhatsApp Diagnostics</h2>
-      ${statusBadge(ready ? 'CONNECTED / READY' : state, ready ? 'ok' : state === 'AUTH_FAILURE' ? 'bad' : 'warn')}
+      <h2>WhatsApp Session</h2>
+      ${statusBadge(connection, connection === 'CONNECTED' ? 'ok' : connection === 'AUTH_REQUIRED' ? 'warn' : connection === 'RECONNECTING' ? 'warn' : 'off')}
     </div>
     <div class="grid">
-      ${statCard('Current State', statusBadge(state, ready ? 'ok' : state === 'AUTH_FAILURE' ? 'bad' : 'warn'), 'Client ID: bakudan-food-safety')}
-      ${statCard('Last QR', esc(data?.last_qr_at || '-'), data?.qrData ? 'QR available on dashboard header' : '')}
-      ${statCard('Authenticated', esc(data?.last_authenticated_at || '-'), '')}
-      ${statCard('Ready', esc(data?.last_ready_at || '-'), '')}
-      ${statCard('Restart Count', esc(data?.restart_count ?? 0), '')}
+      ${statCard('Connection Status', statusBadge(connection, connection === 'CONNECTED' ? 'ok' : connection === 'AUTH_REQUIRED' ? 'warn' : 'off'), `Client ID: ${esc(data?.client_id || 'bakudan-food-safety')}`)}
+      ${statCard('Account Name', esc(data?.account_name || '-'), esc(data?.phone_number || ''))}
+      ${statCard('Last Connected', esc(data?.last_connected_at || data?.last_ready_at || '-'), '')}
+      ${statCard('Session Age', esc(age), data?.has_stored_session ? 'Stored session found' : 'No stored session')}
+      ${statCard('Reconnect Count', esc(data?.restart_count ?? 0), '')}
       ${statCard('Last Error', lastError ? esc(lastError) : '-', '')}
     </div>
     <div class="row" style="margin:8px 0 12px">
+      <button class="primary" onclick="whatsappAction('connect')">Open WhatsApp Web</button>
+      <button onclick="whatsappAction('reconnect')">Reconnect WhatsApp</button>
+      <button class="danger" onclick="whatsappAction('disconnect')">Disconnect WhatsApp</button>
       <button onclick="whatsappAction('status')">Refresh Diagnostics</button>
-      <button class="primary" onclick="whatsappAction('restart')">Restart WhatsApp</button>
-      <button onclick="whatsappAction('restart')">Generate New QR / Re-Pair</button>
-      <button class="danger" onclick="if(confirm('Reset WhatsApp session and require a new QR scan?')) whatsappAction('reset-session')">Reset WhatsApp Session</button>
+      <button onclick="whatsappAction('restart')">Restart Session Manager</button>
+      <button class="danger" onclick="if(confirm('Clear stored WhatsApp session and require login again?')) whatsappAction('clear-session')">Clear Session</button>
     </div>
+    ${data?.qrData ? `<details style="margin:10px 0"><summary class="dim" style="cursor:pointer">Emergency QR fallback</summary><div class="qr"><img src="/qr" alt="Emergency QR"><span class="dim">Use only if WhatsApp Web browser login is unavailable.</span></div></details>` : ''}
     <pre id="whatsapp-diagnostics-output" class="dim" style="white-space:pre-wrap;background:#0f172a;border:1px solid #243044;border-radius:6px;padding:10px;margin:0">${esc(JSON.stringify(data || {}, null, 2))}</pre>
   </section>`;
 }
@@ -690,6 +702,63 @@ function renderFormPhoto(data) {
   </section>`;
 }
 
+function renderFoodSafetyCommandCenter(data) {
+  if (!data) return '';
+  const storeRows = (data.storeStatusToday || []).map(s => `<tr>
+    <td>${esc(s.store)}</td>
+    <td>${esc(s.expected)}</td>
+    <td>${esc(s.received)}</td>
+    <td>${statusBadge(s.missing ? 'MISSING' : 'OK', s.missing ? 'bad' : 'ok')}</td>
+    <td>${esc(s.unsafe)}</td>
+    <td>${esc(s.warnings)}</td>
+    <td>${esc(s.managerReviews)}</td>
+    <td>${statusBadge(s.syncFailures ? 'FAILED' : 'OK', s.syncFailures ? 'bad' : 'ok')}</td>
+  </tr>`).join('');
+  const recentRows = (data.recentSubmissions || []).map(s => {
+    const imageLink = s.imagePath
+      ? `<a href="/api/form-photo/image?path=${encodeURIComponent(s.imagePath)}" target="_blank" class="small">View</a>`
+      : '—';
+    const safetyCls = s.safetyStatus === 'UNSAFE' ? 'bad' : s.safetyStatus === 'WARNING' || s.safetyStatus === 'NEEDS_REVIEW' ? 'warn' : 'ok';
+    const syncCls = s.sheetSyncStatus === 'FAILED' ? 'bad' : s.sheetSyncStatus === 'SYNCED' ? 'ok' : 'warn';
+    return `<tr>
+      <td class="dim">${esc(s.createdAt || '')}</td>
+      <td>${esc(s.store || '—')}</td>
+      <td>${esc(s.employee || '—')}</td>
+      <td>${statusBadge(s.safetyStatus || 'SAFE', safetyCls)}</td>
+      <td>${Math.round(Number(s.ocrConfidence || 0) * 100)}%</td>
+      <td>${statusBadge(s.sheetSyncStatus || 'PENDING', syncCls)}</td>
+      <td>${imageLink}</td>
+      <td class="dim">${esc(s.submissionId || '')}</td>
+    </tr>`;
+  }).join('');
+  const trend = (data.weeklyTrend || []).map(d => `${esc(d.date)}: ${esc(d.received)} received, ${esc(d.unsafe)} unsafe, ${esc(d.syncFailures)} sync fail`).join('<br>');
+  return `<section class="section">
+    <div class="section-head"><h2>Food Safety Command Center</h2>${statusBadge(data.complianceScore >= 95 ? 'PASS' : data.complianceScore >= 80 ? 'WATCH' : 'ACTION', data.complianceScore >= 95 ? 'ok' : data.complianceScore >= 80 ? 'warn' : 'bad')}</div>
+    <div class="grid">
+      ${statCard('Store Status Today', `${esc(data.receivedSubmissions)}/${esc(data.expectedSubmissions)}`, `${esc(data.missingSubmissions)} missing`)}
+      ${statCard('Unsafe Temperatures', esc(data.unsafeTemperatures || 0))}
+      ${statCard('Warnings', esc(data.warningTemperatures || 0))}
+      ${statCard('Manager Reviews', esc(data.managerReviews || 0))}
+      ${statCard('Evidence Photos', esc(data.evidencePhotos || 0))}
+      ${statCard('OCR Accuracy', Math.round(Number(data.ocrAccuracy || 0) * 100) + '%')}
+      ${statCard('Google Sheet Sync', statusBadge(data.googleSheetSyncStatus || 'NO_DATA', data.googleSheetSyncStatus === 'FAILED' ? 'bad' : data.googleSheetSyncStatus === 'SYNCED' ? 'ok' : 'warn'))}
+      ${statCard('Compliance Score', esc(data.complianceScore || 0) + '%')}
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      ${(data.filters || []).map(f => `<span class="badge off">${esc(f)}</span>`).join('')}
+    </div>
+    <table><thead><tr><th>Store</th><th>Expected</th><th>Received</th><th>Missing</th><th>Unsafe</th><th>Warnings</th><th>Reviews</th><th>Sheet</th></tr></thead>
+    <tbody>${storeRows || emptyRow(8, 'No store status available')}</tbody></table>
+    <h3 style="margin-top:16px;margin-bottom:6px">Recent Submissions</h3>
+    <table><thead><tr><th>Submitted</th><th>Store</th><th>Employee</th><th>Safety</th><th>OCR</th><th>Sheet</th><th>Photo</th><th>ID</th></tr></thead>
+    <tbody>${recentRows || emptyRow(8, 'No submissions today')}</tbody></table>
+    <div class="row" style="margin-top:12px">
+      ${(data.actions || []).map(a => `<button class="small">${esc(a)}</button>`).join('')}
+    </div>
+    <div class="dim small" style="margin-top:10px">${trend || 'No weekly trend data yet'}</div>
+  </section>`;
+}
+
 function renderFoodSafety(data) {
   if (!data) return '';
   return `<section class="section">
@@ -717,6 +786,7 @@ function renderPilot(data) {
   const checks = data.checks || [];
   const allPass = checks.every(c => c.status === 'PASS' || c.status === 'READY' || c.status === 'DISABLED');
   const ready = allPass && checks.length >= 10;
+  const validation = data.validation || null;
 
   const checkRows = checks.map(c => {
     const cls = badgeClass(c.status);
@@ -724,11 +794,22 @@ function renderPilot(data) {
       '<td>' + statusBadge(c.status || 'UNKNOWN', cls) + '</td>' +
       '<td class="dim">' + esc(c.note || '') + '</td></tr>';
   }).join('');
+  const gateRows = validation?.gates?.map(g => '<tr><td>' + esc(g.label) + '</td>' +
+    '<td>' + statusBadge(g.pass ? 'PASS' : 'FAIL', g.pass ? 'ok' : 'bad') + '</td>' +
+    '<td class="dim">' + esc(g.id) + '</td></tr>').join('') || '';
+  const metrics = validation?.metrics || {};
 
   return '<section class="section">' +
     '<div class="section-head"><h2>Pilot Launch Status</h2>' +
-    statusBadge(ready ? 'READY' : 'NEEDS ACTION', ready ? 'ok' : 'warn') +
+    statusBadge(validation ? validation.verdict : (ready ? 'READY' : 'NEEDS ACTION'), validation?.verdict === 'PASS' || (!validation && ready) ? 'ok' : 'warn') +
     '</div>' +
+    (validation ? '<div class="grid">' +
+      statCard('Forms Tested', esc(metrics.total_forms_tested || 0) + '/30') +
+      statCard('Field Accuracy', Math.round(Number(metrics.field_accuracy_rate || 0) * 100) + '%') +
+      statCard('Capture Rate', Math.round(Number(metrics.field_capture_rate || 0) * 100) + '%') +
+      statCard('Sync Success', Math.round(Number(metrics.sync_success_rate || 0) * 100) + '%') +
+    '</div>' : '') +
+    (gateRows ? '<h3 style="margin-bottom:6px">CEO Approval Gates</h3><table><thead><tr><th>Gate</th><th>Status</th><th>ID</th></tr></thead><tbody>' + gateRows + '</tbody></table><h3 style="margin-top:16px;margin-bottom:6px">Launch Checks</h3>' : '') +
     '<table><thead><tr><th>Check</th><th>Status</th><th>Note</th></tr></thead>' +
     '<tbody>' + (checkRows || emptyRow(3, 'No checks available')) + '</tbody></table>' +
     '<div style="margin-top:12px">' +
@@ -867,6 +948,16 @@ function formatThreshold(t) {
   if (t.min != null) return `\u2265 ${t.min}`;
   if (t.max != null) return `\u2264 ${t.max}`;
   return '';
+}
+
+function formatDuration(seconds) {
+  const s = Math.max(0, Number(seconds) || 0);
+  const days = Math.floor(s / 86400);
+  const hours = Math.floor((s % 86400) / 3600);
+  const minutes = Math.floor((s % 3600) / 60);
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
 }
 
 

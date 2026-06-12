@@ -295,6 +295,13 @@ app.get('/api/whatsapp/status', (req, res) => {
   res.json(whatsappSession.getStatus());
 });
 
+// Canonical session endpoint — returns extended status including heartbeat + backoff state
+app.get('/api/whatsapp/session', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  const fn = whatsappSession.getDetailedStatus || whatsappSession.getStatus;
+  res.json({ ok: true, session: fn.call(whatsappSession) });
+});
+
 app.post('/api/whatsapp/connect', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   try {
@@ -579,6 +586,57 @@ app.post('/api/router/test', async (req, res) => {
   }
 });
 
+// Routing isolation validation — verifies /agent, /mi, food-safety do NOT cross-route
+app.get('/api/router/validate', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!agentMiRouter) return res.status(503).json({ ok: false, error: 'Router not loaded' });
+
+  const checks = [];
+  function check(name, pass, detail) { checks.push({ name, pass, detail }); }
+
+  // 1. /agent routes to agent-coding only
+  check('isAgentCommand("/agent hello")', agentMiRouter.isAgentCommand('/agent hello'), '/agent prefix detected correctly');
+  check('isMiCommand("/agent hello") is false', !agentMiRouter.isMiCommand('/agent hello'), '/agent not mis-routed to mi-core');
+
+  // 2. /mi routes to mi-core only
+  check('isMiCommand("/mi status")', agentMiRouter.isMiCommand('/mi status'), '/mi prefix detected correctly');
+  check('isAgentCommand("/mi status") is false', !agentMiRouter.isAgentCommand('/mi status'), '/mi not mis-routed to agent-coding');
+
+  // 3. neither command routes food-safety
+  check('Food safety photo (no prefix) not agent', !agentMiRouter.isAgentCommand('photo message no prefix'), 'Unprefix message stays in food-safety pipeline');
+  check('Food safety photo not mi', !agentMiRouter.isMiCommand('photo message no prefix'), 'Unprefix message stays in food-safety pipeline');
+
+  // 4. Target URL isolation
+  let agentUrl = '', miUrl = '';
+  try {
+    if (agentMiForwarder) {
+      agentUrl = await agentMiForwarder.getTargetUrl('agent-coding');
+      miUrl    = await agentMiForwarder.getTargetUrl('mi-core');
+    }
+  } catch (_) {}
+  check('agent-coding URL configured', !!agentUrl, agentUrl || '(not set)');
+  check('mi-core URL configured', !!miUrl, miUrl || '(not set)');
+  check('agent-coding and mi-core URLs are distinct', agentUrl !== miUrl, `${agentUrl} vs ${miUrl}`);
+
+  // 5. Client registry isolation
+  let agentClient = null, miClient = null;
+  try {
+    if (projectClientRegistry) {
+      agentClient = await projectClientRegistry.getClient('agent-coding');
+      miClient    = await projectClientRegistry.getClient('mi-core');
+    }
+  } catch (_) {}
+  check('agent-coding client exists in registry', !!agentClient, agentClient?.status || 'missing');
+  check('mi-core client exists in registry', !!miClient, miClient?.status || 'missing');
+  check('agent-coding allowed_commands is /agent', agentClient?.allowed_commands?.includes('/agent'), agentClient?.allowed_commands || 'n/a');
+  check('mi-core allowed_commands is /mi', miClient?.allowed_commands?.includes('/mi'), miClient?.allowed_commands || 'n/a');
+  check('mi-core is NOT allowed /agent', !miClient?.allowed_commands?.includes('/agent') || miClient?.allowed_commands === '/mi', 'No cross-permission');
+
+  const pass = checks.filter(c => c.pass).length;
+  const fail = checks.filter(c => !c.pass).length;
+  res.json({ ok: fail === 0, summary: { pass, fail, total: checks.length }, checks });
+});
+
 app.get('/api/runtime-truth', async (req, res) => {
   res.set('Cache-Control', 'no-store');
   const health = getRuntimeHealth();
@@ -832,7 +890,51 @@ app.get('/', async (req, res) => {
       formPhotoData = { stats, submissions, commandCenter: commandCenterData };
     } catch (_) {}
 
-    const html = await renderDashboard({ waStatus: status, waDiagnostics, telegramEnabled: tgEnabled(), stats, recent, qrData, safetyState, fsData, templateData, templateOcrData, agentData, storeGroupData, managerAlertData, incidentData, complianceData, pilotData, adminSetupData, yolinkData, parallelData, unknownData, runtimeData, formPhotoData, buildInfo });
+    // Build transport panels (session hardening, clients, routing, traffic, audit)
+    let transportPanels = '';
+    try {
+      const { renderTransportPanels } = require('../dashboard/transport-panels');
+      const [sessionData, clientsData, routerData, validationData, messagesData] = await Promise.all([
+        whatsappSession.getDetailedStatus ? Promise.resolve(whatsappSession.getDetailedStatus()) : Promise.resolve(whatsappSession.getStatus()),
+        projectClientRegistry ? projectClientRegistry.listClients().then(clients => {
+          const byId = Object.fromEntries((clients||[]).map(c => [c.client_id, c]));
+          return { clients, required: {
+            'agent-coding': { exists: !!byId['agent-coding'], env_key_configured: !!process.env.AGENT_CODING_API_KEY },
+            'mi-core': { exists: !!byId['mi-core'], env_key_configured: !!process.env.MI_CORE_API_KEY },
+          }};
+        }).catch(() => null) : Promise.resolve(null),
+        agentMiForwarder ? agentMiForwarder.getTargetUrl('agent-coding').then(agentUrl =>
+          agentMiForwarder.getTargetUrl('mi-core').then(miUrl => ({
+            env: {
+              agent_coding_url: { value: agentUrl, configured: !!process.env.AGENT_CODING_URL },
+              mi_core_url: { value: miUrl, configured: !!process.env.MI_CORE_URL },
+              agent_coding_api_key: { configured: !!process.env.AGENT_CODING_API_KEY },
+              mi_core_api_key: { configured: !!process.env.MI_CORE_API_KEY },
+            },
+            endpoints: { agent_coding: {}, mi_core: {} },
+          }))
+        ).catch(() => null) : Promise.resolve(null),
+        sqlite ? sqlite.all(
+          `SELECT ok, summary, checks FROM (SELECT 1) -- placeholder; validation runs on-demand`,
+          []
+        ).then(() => null).catch(() => null) : Promise.resolve(null),
+        sqlite ? sqlite.all(
+          `SELECT id, source_chat, command_prefix, target_project, action_taken, approval_status, timestamp, client_id, duration_ms, success FROM routed_messages ORDER BY id DESC LIMIT 20`,
+          []
+        ).then(routed => ({ routed_messages: routed })).catch(() => ({ routed_messages: [] })) : Promise.resolve({ routed_messages: [] }),
+      ]);
+      // Merge api_key_audit into messagesData
+      let fullMessages = messagesData || { routed_messages: [] };
+      if (apiKeyAuditLog) {
+        const audit = await apiKeyAuditLog.getLogs({ limit: 20 }).catch(() => []);
+        fullMessages = { ...fullMessages, api_key_audit: audit };
+      }
+      transportPanels = await renderTransportPanels({ session: sessionData, clients: clientsData, router: routerData, validation: null, messages: fullMessages });
+    } catch (tpErr) {
+      log.warn('Transport panels build failed', { error: tpErr.message });
+    }
+
+    const html = await renderDashboard({ waStatus: status, waDiagnostics, telegramEnabled: tgEnabled(), stats, recent, qrData, safetyState, fsData, templateData, templateOcrData, agentData, storeGroupData, managerAlertData, incidentData, complianceData, pilotData, adminSetupData, yolinkData, parallelData, unknownData, runtimeData, formPhotoData, buildInfo, transportPanels });
     res.send(html);
   } catch (err) {
     log.error('Dashboard render error', { error: err.message });
