@@ -121,6 +121,18 @@ try { app.use('/api/food-safety', require('./food-safety-command-center-routes')
 // Mount Stone Oak Pilot API
 try { app.use('/api/pilot/stone-oak', require('../pilot/stone-oak-pilot-api')); } catch (e) { console.warn('stone-oak-pilot-api mount failed:', e.message); }
 
+// Mount Production Metrics Dashboard (Phase 2)
+try { app.use('/api/metrics', require('./production-metrics-routes')); } catch (e) { console.warn('production-metrics-routes mount failed:', e.message); }
+
+// Mount Production Hardening Audit endpoint
+app.get('/api/hardening/audit', async (_req, res) => {
+  try {
+    const { runAudit } = require('../hardening/production-hardening-audit');
+    const report = await runAudit();
+    res.json(report);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
 // Start pilot tracker background polling
 try { require('../pilot/stone-oak-pilot-tracker').start(); } catch (e) { console.warn('pilot-tracker start failed:', e.message); }
 
