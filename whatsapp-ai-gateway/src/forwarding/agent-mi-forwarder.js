@@ -49,7 +49,7 @@ async function getTargetUrl(clientId) {
     return base.replace(/\/+$/, '') + '/api/whatsapp/agent';
   }
   if (clientId === 'mi-core') {
-    const base = process.env.MI_CORE_URL || 'http://localhost:3200';
+    const base = process.env.MI_CORE_URL || 'http://localhost:4001';
     return base.replace(/\/+$/, '') + '/api/whatsapp/mi';
   }
   throw new Error('Unknown client_id: ' + clientId);
@@ -157,8 +157,16 @@ async function recordRoutedMessage({ sourceChat, commandPrefix, targetProject, r
  * Build a safe error reply.
  */
 function safeErrorReply(clientId) {
-  const name = clientId === 'agent-coding' ? 'Agent-Coding' : 'Mi-Core';
-  return '⚠️ ' + name + ' is temporarily unavailable. Please try again later.';
+  if (clientId === 'agent-coding') {
+    return 'Em chưa kết nối được Agent-Coding lúc này. Anh thử lại sau nhé.';
+  }
+  // Mi-Core — executive-style graceful degradation
+  const replies = [
+    'Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang hoạt động.',
+    'Em chưa truy cập được Knowledge Universe lúc này. Anh thử lại giúp em trong ít phút nhé — các tính năng khác vẫn hoạt động bình thường.',
+    'Em đang gặp lỗi khi truy cập dữ liệu. Em vẫn đang hoạt động nhưng chưa lấy được thông tin mới nhất. Anh thử lại nhé.',
+  ];
+  return replies[Math.floor(Date.now() / 10000) % replies.length];
 }
 
 /**
@@ -178,6 +186,8 @@ async function forward(payload, clientId, commandPrefix) {
 
   let lastError = null;
   let response = null;
+  let lastResponseBody = null;
+  let lastStatusCode = null;
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     if (attempt > 0) {
@@ -195,6 +205,8 @@ async function forward(payload, clientId, commandPrefix) {
       });
 
       response = await httpPost(targetUrl, enrichedPayload, TIMEOUT_MS);
+      lastStatusCode = response.statusCode;
+      lastResponseBody = response.body;
 
       if (!response.ok) {
         lastError = 'HTTP ' + response.statusCode;
@@ -204,7 +216,7 @@ async function forward(payload, clientId, commandPrefix) {
 
       const validation = validateResponse(response.body);
       if (!validation.valid) {
-        lastError = validation.reason;
+        lastError = validation.detail ? validation.reason + ': ' + validation.detail : validation.reason;
         log.warn('Forward response validation failed', { clientId, reason: validation.reason });
         continue;
       }
@@ -257,7 +269,7 @@ async function forward(payload, clientId, commandPrefix) {
     commandPrefix,
     targetProject: clientId,
     requestBody: sanitizeForLog(enrichedPayload),
-    responseBody: null,
+    responseBody: lastResponseBody || { error: lastError },
     actionTaken: '',
     approvalStatus: 'none',
     clientId,
@@ -276,6 +288,8 @@ async function forward(payload, clientId, commandPrefix) {
     ok: false,
     reply: safeErrorReply(clientId),
     error: lastError,
+    statusCode: lastStatusCode,
+    response_body: lastResponseBody,
   };
 }
 

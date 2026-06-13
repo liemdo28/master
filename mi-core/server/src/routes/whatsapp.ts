@@ -43,6 +43,10 @@ import {
 import { runPipeline } from '../pipeline/response-pipeline';
 import { approve, reject, getPending, getById } from '../approval/gate';
 import { setupApiKey, rotateApiKey, revokeApiKey } from '../services/whatsapp-key-manager';
+import { routeCeoCommand } from '../whatsapp/ceo-command-router';
+import { handleMiHumanAssistant } from '../communication/mi-human-assistant';
+import { findSkill } from '../skills/skill-registry';
+import { appendGroupMessage, upsertParticipant as upsertContextParticipant } from '../intelligence/context-memory';
 
 // ── Sensitive action categories requiring double approval ────────────────────
 const DOUBLE_APPROVAL_KEYWORDS = [
@@ -95,6 +99,9 @@ function normalizeMessage(text: string): { normalized: string; isMiCommand: bool
 
   // Not a /mi command — check if it still looks like one
   if (/^mi[,\s]/i.test(trimmed) && !trimmed.toLowerCase().startsWith('michael') && !trimmed.toLowerCase().startsWith('microsoft')) {
+    if (/^mi\s*(ơi|oi|o'i|ui)[\s!.?]*$/i.test(trimmed)) {
+      return { normalized: 'Mi ơi', isMiCommand: true };
+    }
     const rest = trimmed.replace(/^mi[,\s]+/i, '').trim();
     return { normalized: rest, isMiCommand: true };
   }
@@ -117,6 +124,33 @@ function requiresDoubleApproval(message: string): boolean {
   return DOUBLE_APPROVAL_KEYWORDS.some(kw => new RegExp(kw, 'i').test(lower));
 }
 
+function normalizeWhatsAppIdentity(value: string): string {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return '';
+  if (raw.endsWith('@lid')) return raw;
+  return raw
+    .replace(/@(c\.us|s\.whatsapp\.net)$/i, '')
+    .replace(/[\s\-().+]/g, '');
+}
+
+function getAllowedCeoIdentities(): string[] {
+  return [
+    process.env.CEO_WHATSAPP_NUMBER || '',
+    process.env.CEO_WHATSAPP_ALLOWED_NUMBERS || '',
+    process.env.MI_CEO_WHATSAPP_IDS || '',
+  ]
+    .join(',')
+    .split(',')
+    .map(normalizeWhatsAppIdentity)
+    .filter(Boolean);
+}
+
+function isAllowedCeoSender(sender: string): boolean {
+  const allowed = getAllowedCeoIdentities();
+  if (allowed.length === 0) return true;
+  return allowed.includes(normalizeWhatsAppIdentity(sender));
+}
+
 // ── POST /api/whatsapp/mi — main message handler ────────────────────────────
 whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   const {
@@ -125,11 +159,13 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     message_id,
     chat_id,
     group_id = '',
+    is_group = false,
     sender,
     sender_name = '',
     text,
     timestamp,
     attachments = [],
+    quoted_message,
     api_key: _apiKey, // extracted via middleware, not used here
   } = req.body as {
     source?: string;
@@ -137,11 +173,13 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     message_id?: string;
     chat_id?: string;
     group_id?: string;
+    is_group?: boolean;
     sender?: string;
     sender_name?: string;
     text?: string;
     timestamp?: string;
     attachments?: Array<{ type: string; url: string; name?: string }>;
+    quoted_message?: { sender?: string; sender_name?: string; text?: string };
     api_key?: string;
   };
 
@@ -164,6 +202,19 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
 
   if (!text?.trim()) {
     return res.status(400).json({ ok: false, error: 'MISSING_TEXT' });
+  }
+
+  // ── Group mode gate — in group chats Mi only responds when /mi prefix used ──
+  const { isMiCommand: textIsMiCommand } = normalizeMessage(text);
+  if (is_group && !textIsMiCommand) {
+    return res.json({ ok: true, reply: '', actions: [], approval_required: false, approval_id: null,
+      metadata: { intent: 'group_silent', source: 'mi-core', confidence: 1, requires_followup: false } });
+  }
+
+  // ── CEO-only gate (private chat) — non-CEO senders get silent reply ────────
+  if (!is_group && !isAllowedCeoSender(sender)) {
+    return res.json({ ok: true, reply: '', actions: [], approval_required: false, approval_id: null,
+      metadata: { intent: 'ignored_non_ceo', source: 'mi-core', confidence: 1, requires_followup: false } });
   }
 
   // ── Rate limit check ─────────────────────────────────────────────────────
@@ -197,9 +248,17 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   }
 
   // ── Normalize message ─────────────────────────────────────────────────────
-  const { normalized, isMiCommand } = normalizeMessage(text);
+  // This is a dedicated Mi endpoint — gateway already filtered non-/mi traffic.
+  // Always treat incoming text as a Mi command; just strip /mi prefix if present.
+  const { normalized } = normalizeMessage(text);
+  const isMiCommand = true;
 
-  // If not a /mi command, ignore silently (whatsapp-api routes only /mi)
+  // ── Build quoted message context if present ───────────────────────────────
+  const quotedContext = quoted_message?.text
+    ? `[Quoted from ${quoted_message.sender_name || quoted_message.sender || 'unknown'}]: "${quoted_message.text.slice(0, 300)}"`
+    : undefined;
+
+  // Dead code kept for safety — should never trigger on this endpoint
   if (!isMiCommand) {
     return res.json({
       ok: true,
@@ -219,6 +278,19 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     last_seen: timestamp || new Date().toISOString(),
     message_count: 0,
   });
+
+  // ── Context memory tracking ───────────────────────────────────────────────
+  upsertContextParticipant(sender || 'unknown', sender_name || sender || 'unknown', chat_id || 'unknown');
+  if (is_group) {
+    appendGroupMessage({
+      message_id: message_id || '',
+      chat_id: chat_id || '',
+      sender: sender || '',
+      sender_name: sender_name || sender || '',
+      text: text || '',
+      timestamp: timestamp || new Date().toISOString(),
+    });
+  }
 
   // ── Initial message record ───────────────────────────────────────────────
   saveMessage({
@@ -255,23 +327,212 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   // /mi approve APP-xxx  or  /mi reject APP-xxx
   const approveMatch = normalized.match(/^approve\s+(.+)/i);
   const rejectMatch = normalized.match(/^reject\s+(.+)/i);
+  // "cancel <id>" or bare "cancel" — alias for rejection
+  const cancelMatch = normalized.match(/^cancel\s+(.+)/i);
+  const bareCancelMatch = /^cancel$/i.test(normalized.trim());
 
-  if (approveMatch) {
+  if (approveMatch && !/^approve\s+review\s+\d+$/i.test(normalized)) {
     const approvalId = approveMatch[1].trim();
     const result = handleApprovalCommand(approvalId, 'approved', sender, sender_name, message_id, chat_id);
     return res.json(result);
   }
 
-  if (rejectMatch) {
+  if (rejectMatch && !/^reject\s+review\s+\d+$/i.test(normalized)) {
     const approvalId = rejectMatch[1].trim();
     const result = handleApprovalCommand(approvalId, 'rejected', sender, sender_name, message_id, chat_id);
     return res.json(result);
   }
 
+  if (cancelMatch) {
+    const approvalId = cancelMatch[1].trim();
+    const result = handleApprovalCommand(approvalId, 'rejected', sender, sender_name, message_id, chat_id);
+    return res.json(result);
+  }
+
+  if (bareCancelMatch) {
+    // Cancel most recent pending approval for this sender
+    const pending = getPending();
+    if (!pending.length) return res.json({ reply: 'Không có approval nào đang chờ.', intent: 'no_pending' });
+    const approvalId = pending[0].id;
+    const result = handleApprovalCommand(approvalId, 'rejected', sender, sender_name, message_id, chat_id);
+    return res.json(result);
+  }
+
+  // ── Jarvis Evolution Phase 21-30 — first-class CEO OS answers ───────────
+  try {
+    const { processJarvisQuery } = await import('../jarvis/phase30-jarvis/jarvis-core');
+    const jarvisResult = await processJarvisQuery({
+      sender: sender || 'whatsapp',
+      raw_text: normalized,
+      normalized,
+      timestamp: timestamp || new Date().toISOString(),
+      session_id: chat_id || undefined,
+    });
+    if (jarvisResult?.handled && jarvisResult.reply) {
+      updateMessageStatus(message_id, 'replied', jarvisResult.reply);
+      return res.json({
+        ok: true,
+        reply: jarvisResult.reply,
+        actions: [],
+        approval_required: false,
+        approval_id: null,
+        metadata: {
+          intent: `jarvis_phase_${jarvisResult.phase || 30}`,
+          source: 'jarvis-evolution',
+          confidence: 1,
+          requires_followup: false,
+        },
+      });
+    }
+  } catch (e) {
+    console.warn('[WhatsApp] Jarvis evolution early route skipped:', e instanceof Error ? e.message : String(e));
+  }
+
+  // ── Human assistant layer: natural conversation engine (runs BEFORE skill check) ──
+  // processNaturalConversation handles: pronoun resolution, natural intents, dangerous-action approval gates, skill fallback
+  const humanResultEarly = await handleMiHumanAssistant(normalized, sender || undefined);
+  if (humanResultEarly?.handled) {
+    try { updateMessageStatus(message_id, humanResultEarly.approval_required ? 'processed' : 'replied', humanResultEarly.reply, humanResultEarly.approval_id); } catch { /* non-critical */ }
+    return res.json({
+      ok: true,
+      reply: humanResultEarly.reply,
+      actions: [],
+      approval_required: humanResultEarly.approval_required,
+      approval_id: humanResultEarly.approval_id,
+      metadata: {
+        intent: humanResultEarly.intent,
+        action_mode: humanResultEarly.action_mode,
+        source: 'mi-human-assistant',
+        confidence: 1,
+        requires_followup: humanResultEarly.approval_required || humanResultEarly.action_mode === 'unknown_clarify',
+      },
+    });
+  }
+
+  // ── Skill routing — fallback for unhandled messages ──────────────────────
+  const skill = findSkill(normalized);
+  if (skill) {
+    const skillResult = await skill.handler({ message: normalized, context: quotedContext, language: 'vi' });
+
+    if (skillResult.requires_approval) {
+      const { enqueue } = await import('../approval/gate');
+      const action = enqueue({
+        risk_level: 2,
+        category: 'whatsapp_skill',
+        description: `[Skill:${skill.name}] ${sender_name || sender}: ${normalized.slice(0, 150)}`,
+        target: 'whatsapp-skill-execution',
+        after_state: JSON.stringify({ skill: skill.name, sender, chat_id, message_id }),
+      });
+      saveApproval({
+        approval_id: action.id,
+        message_id: message_id || '',
+        chat_id: chat_id || '',
+        sender: sender || '',
+        action_description: `Skill: ${skill.name} — ${normalized.slice(0, 150)}`,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      });
+      updateMessageStatus(message_id, 'processed', skillResult.output, action.id);
+      return res.json({
+        ok: true,
+        reply: `${skillResult.output}\n\nID: *${action.id}*\nAnh reply *approve ${action.id}* để xác nhận, hoặc *cancel* để bỏ.`,
+        actions: [],
+        approval_required: true,
+        approval_id: action.id,
+        metadata: { intent: `skill_${skill.name}`, source: 'mi-skill', confidence: skillResult.confidence, requires_followup: true },
+      });
+    }
+
+    updateMessageStatus(message_id, 'replied', skillResult.output);
+    return res.json({
+      ok: true,
+      reply: skillResult.output,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: { intent: `skill_${skill.name}`, source: 'mi-skill', confidence: skillResult.confidence, requires_followup: false },
+    });
+  }
+
+  // ── Human assistant layer fallback (for unhandled messages from skill registry) ──
+  const humanResult = await handleMiHumanAssistant(normalized, sender || undefined);
+  if (humanResult?.handled) {
+    updateMessageStatus(message_id, humanResult.approval_required ? 'processed' : 'replied', humanResult.reply, humanResult.approval_id);
+    return res.json({
+      ok: true,
+      reply: humanResult.reply,
+      actions: [],
+      approval_required: humanResult.approval_required,
+      approval_id: humanResult.approval_id,
+      metadata: {
+        intent: humanResult.intent,
+        action_mode: humanResult.action_mode,
+        source: 'mi-human-assistant',
+        confidence: 1,
+        requires_followup: humanResult.approval_required || humanResult.action_mode === 'unknown_clarify',
+      },
+    });
+  }
+
+  // ── Deterministic CEO OS commands ────────────────────────────────────────
+  const commandResult = await routeCeoCommand(normalized, {
+    sender,
+    senderName: sender_name,
+    chatId: chat_id,
+  });
+
+  if (commandResult) {
+    updateMessageStatus(message_id, 'replied', commandResult.reply);
+    return res.json({
+      ok: true,
+      reply: commandResult.reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: commandResult.intent,
+        source: 'mi-core',
+        confidence: commandResult.confidence,
+        requires_followup: commandResult.requires_followup,
+      },
+    });
+  }
+
+  // ── Jarvis Evolution Phase 21-30 — unified CEO OS layer ─────────────────
+  try {
+    const { processJarvisQuery } = await import('../jarvis/phase30-jarvis/jarvis-core');
+    const jarvisResult = await processJarvisQuery({
+      sender: sender || 'whatsapp',
+      raw_text: normalized,
+      normalized,
+      timestamp: timestamp || new Date().toISOString(),
+      session_id: chat_id || undefined,
+    });
+    if (jarvisResult?.handled && jarvisResult.reply) {
+      updateMessageStatus(message_id, 'replied', jarvisResult.reply);
+      return res.json({
+        ok: true,
+        reply: jarvisResult.reply,
+        actions: [],
+        approval_required: false,
+        approval_id: null,
+        metadata: {
+          intent: `jarvis_phase_${jarvisResult.phase || 30}`,
+          source: 'jarvis-evolution',
+          confidence: 1,
+          requires_followup: false,
+        },
+      });
+    }
+  } catch (e) {
+    console.warn('[WhatsApp] Jarvis evolution fallback skipped:', e instanceof Error ? e.message : String(e));
+  }
+
   // ── Route to Mi Executive Pipeline ───────────────────────────────────────
   try {
+    const pipelineMessage = quotedContext ? `${quotedContext}\n\n${normalized}` : normalized;
     const pipelineOut = await runPipeline({
-      message: normalized,
+      message: pipelineMessage,
       mode: 'ceo',
       history: [],
       intent: 'chat',
@@ -311,7 +572,7 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
 
       return res.json({
         ok: true,
-        reply: `⚡ Em đã chuẩn bị action. Tuy nhiên action này cần **double approval** vì thuộc danh mục nhạy cảm.\n\nApproval ID: **${action.id}**\n\nAnh reply:\n/mi approve ${action.id}\nhoặc\n/mi reject ${action.id}`,
+        reply: `⚡ Em đã chuẩn bị action này nhưng cần anh xác nhận vì thuộc danh mục nhạy cảm.\n\nID: **${action.id}**\n\nAnh reply *approve ${action.id}* để tiếp tục, hoặc *cancel* để bỏ.`,
         actions: [],
         approval_required: true,
         approval_id: approvalId,
@@ -351,7 +612,7 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
 
       return res.json({
         ok: true,
-        reply: `Em đã chuẩn bị action:\n\n${pipelineOut.reply}\n\nApproval ID: **${action.id}**\nAnh reply:\n/mi approve ${action.id}\nhoặc\n/mi reject ${action.id}`,
+        reply: `Em đã chuẩn bị:\n\n${pipelineOut.reply}\n\nID: **${action.id}**\nAnh reply *approve ${action.id}* để xác nhận, hoặc *cancel* để bỏ.`,
         actions: [],
         approval_required: true,
         approval_id: approvalId,
@@ -389,10 +650,30 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
       detail: e.message,
     });
     updateMessageStatus(message_id, 'failed', undefined, null);
-    return res.status(500).json({
-      ok: false,
-      error: 'PIPELINE_ERROR',
-      detail: 'Mi encountered an error processing your message.',
+
+    // Classify the error and return a graceful Vietnamese reply.
+    // Never expose raw infrastructure errors to the CEO.
+    const msg = e.message || '';
+    let gracefulReply: string;
+    if (/timeout|aborted|timed out|ETIMEDOUT/i.test(msg)) {
+      gracefulReply = 'Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang hoạt động.';
+    } else if (/generateText|providers|LLM|ollama|anthropic/i.test(msg)) {
+      gracefulReply = 'Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em câu khác nhé.';
+    } else if (/knowledge|qdrant|vector|embed/i.test(msg)) {
+      gracefulReply = 'Em chưa truy cập được Knowledge Universe lúc này. Anh thử lại giúp em trong ít phút nhé — các tính năng khác vẫn hoạt động bình thường.';
+    } else if (/UNKNOWN|open.*\.json|whatsapp-client/i.test(msg)) {
+      gracefulReply = 'Em đang gặp lỗi nhỏ khi đọc cấu hình. Em vẫn đang hoạt động — anh thử lại nhé.';
+    } else {
+      gracefulReply = 'Em đang gặp lỗi khi xử lý tin nhắn này. Em vẫn đang hoạt động nhưng chưa lấy được thông tin mới nhất. Anh thử lại sau nhé.';
+    }
+
+    return res.json({
+      ok: true,
+      reply: gracefulReply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: { intent: 'graceful_error', source: 'mi-core', confidence: 0.5, requires_followup: false },
     });
   }
 });
@@ -540,6 +821,21 @@ whatsappRouter.get('/mi/health', (_req: Request, res: Response) => {
   });
 });
 
+// GET /api/whatsapp/health — compatibility alias required by Laptop1 validation
+whatsappRouter.get('/health', (_req: Request, res: Response) => {
+  const keyCfg = getKeyStatus();
+  const summary = getSummary();
+  res.json({
+    endpoint: 'online',
+    route: '/api/whatsapp/mi',
+    api_key_configured: keyCfg.configured,
+    api_key_status: keyCfg.status,
+    last_message_time: summary.last_message_at || null,
+    total_messages: summary.total_messages,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // GET /api/whatsapp/mi/status — full status
 whatsappRouter.get('/mi/status', (_req: Request, res: Response) => {
   const keyCfg = getKeyStatus();
@@ -645,8 +941,13 @@ whatsappRouter.post('/mi/rotate', async (req: Request, res: Response) => {
   res.json({ ok: true, message: 'WhatsApp API key rotated successfully.' });
 });
 
-// POST /api/whatsapp/mi/revoke — revoke API key
-whatsappRouter.post('/mi/revoke', async (req: Request, res: Response) => {
+// POST /api/whatsapp/mi/revoke — revoke API key (localhost only — blocks remote callers)
+whatsappRouter.post('/mi/revoke', (req: Request, res: Response) => {
+  const remoteIp = req.socket.remoteAddress || '';
+  const isLocal = remoteIp === '127.0.0.1' || remoteIp === '::1' || remoteIp === '::ffff:127.0.0.1';
+  if (!isLocal) {
+    return res.status(403).json({ ok: false, error: 'REVOKE_FORBIDDEN', detail: 'Revoke only allowed from localhost' });
+  }
   revokeApiKey();
   res.json({ ok: true, message: 'WhatsApp API key revoked locally.' });
 });
@@ -659,4 +960,38 @@ whatsappRouter.get('/mi/check', (_req: Request, res: Response) => {
     configured,
     status: configured ? 'valid' : 'not_configured',
   });
+});
+
+// ── Phase 1: Communication Layer additions ───────────────────────────────────
+
+// POST /api/whatsapp/webhook — generic webhook alias (same as /mi but path-flexible)
+whatsappRouter.post('/webhook', waAuth, async (req: Request, res: Response) => {
+  // Forward to /mi handler logic via internal fetch
+  // Forward to /mi by delegating to the POST /mi handler directly
+  req.url = '/mi';
+  (whatsappRouter as unknown as { handle: (req: unknown, res: unknown, next: () => void) => void }).handle(req, res, () => res.status(404).json({ error: 'Not found' }));
+});
+
+// GET /api/whatsapp/conversations — audit trail of routed messages
+whatsappRouter.get('/conversations', (req: Request, res: Response) => {
+  const { getRecentConversations, getConversationStats } = require('../communication/conversation-audit');
+  const limit = parseInt(String(req.query.limit)) || 50;
+  const conversations = getRecentConversations(limit);
+  const stats = getConversationStats();
+  res.json({ stats, conversations });
+});
+
+// POST /api/whatsapp/send-test — inject a test message through the pipeline
+whatsappRouter.post('/send-test', async (req: Request, res: Response) => {
+  const { message = '/mi status', sender = 'test-ceo', chat_id = 'test-room' } = req.body || {};
+  const message_id = 'test-' + Date.now();
+  try {
+    const pipeline = require('../pipeline/response-pipeline');
+    const result = await pipeline.runPipeline({
+      message, mode: 'mi', history: [], intent: '',
+    });
+    res.json({ ok: true, message_id, reply: result.reply, intent: result.intent });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: String(err) });
+  }
 });
