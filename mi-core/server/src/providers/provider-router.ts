@@ -1,5 +1,6 @@
 import { pgQuery } from '../bigdata/db-client';
 import { ensureEnterpriseSchema } from '../queue/job-queue';
+import { chatMetrics } from '../chat/chat-metrics';
 
 export type ProviderName = 'openai' | 'anthropic' | 'gemini' | 'deepseek' | 'ollama' | 'minimax' | 'openai-compatible';
 export type ProviderOperation = 'generateText' | 'generateEmbedding' | 'vision' | 'transcribe' | 'rank';
@@ -22,6 +23,33 @@ export interface ProviderEmbeddingResult {
 }
 
 const OLLAMA_URL = process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+
+// ── Ollama Circuit Breaker ────────────────────────────────────────────────────
+// Opens after CB_FAILURE_THRESHOLD consecutive failures; resets after CB_RESET_MS.
+const CB_FAILURE_THRESHOLD = 3;
+const CB_RESET_MS = 30_000;
+
+let cbFailures = 0;
+let cbOpenUntil = 0;
+
+function isCbOpen(): boolean {
+  if (cbOpenUntil && Date.now() < cbOpenUntil) return true;
+  if (cbOpenUntil && Date.now() >= cbOpenUntil) {
+    cbFailures = 0; cbOpenUntil = 0; chatMetrics.circuitClose();
+  }
+  return false;
+}
+
+function recordCbSuccess() { cbFailures = 0; }
+
+function recordCbFailure() {
+  cbFailures++;
+  if (cbFailures >= CB_FAILURE_THRESHOLD) {
+    cbOpenUntil = Date.now() + CB_RESET_MS;
+    chatMetrics.circuitOpen();
+    console.warn(`[CB] Ollama circuit OPEN — pausing for ${CB_RESET_MS / 1000}s after ${cbFailures} failures`);
+  }
+}
 
 const DEFAULTS: Record<ProviderOperation, ProviderName[]> = {
   generateText: ['openai-compatible', 'anthropic', 'openai', 'gemini', 'deepseek', 'minimax', 'ollama'],
@@ -84,15 +112,25 @@ async function auditProviderCall(params: {
 }
 
 async function callOllamaText(messages: ChatMessage[], model: string, timeoutMs: number): Promise<ProviderTextResult> {
-  const res = await fetch(`${OLLAMA_URL}/api/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, stream: false }),
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (!res.ok) throw new Error(`Ollama text error: ${res.status}`);
-  const data = await res.json() as { message?: { content?: string } };
-  return { text: data.message?.content || '', provider: 'ollama', model };
+  if (isCbOpen()) throw new Error('Ollama circuit breaker OPEN — skipping to fallback');
+  chatMetrics.ollamaCall();
+  try {
+    const res = await fetch(`${OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, stream: false }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!res.ok) { recordCbFailure(); throw new Error(`Ollama text error: ${res.status}`); }
+    const data = await res.json() as { message?: { content?: string } };
+    recordCbSuccess();
+    return { text: data.message?.content || '', provider: 'ollama', model };
+  } catch (e) {
+    const isTimeout = e instanceof Error && (e.name === 'TimeoutError' || e.name === 'AbortError');
+    if (isTimeout) { chatMetrics.ollamaTimeout(); recordCbFailure(); }
+    else if (!(e instanceof Error && e.message.startsWith('Ollama circuit'))) recordCbFailure();
+    throw e;
+  }
 }
 
 async function callAnthropicText(messages: ChatMessage[], model: string, timeoutMs: number): Promise<ProviderTextResult> {

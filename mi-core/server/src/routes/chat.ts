@@ -11,6 +11,8 @@ import { parseReminderCommand } from '../reminders/reminder-parser';
 import { createOnce, createInterval, createDaily } from '../reminders/reminder-store';
 import { executiveMemory } from '../memory/executive-memory';
 import { runPipeline } from '../pipeline/response-pipeline';
+import { enqueueChat, ChatQueueFullError, ChatTimeoutError } from '../chat/chat-queue';
+import { chatMetrics } from '../chat/chat-metrics';
 
 export const chatRouter = Router();
 
@@ -26,10 +28,22 @@ chatRouter.post('/', async (req: Request, res: Response) => {
   const { message, session_id = 'default' } = req.body as { message: string; session_id?: string };
   if (!message?.trim()) return res.status(400).json({ error: 'message required' });
 
+  chatMetrics.reqStart();
+  const t0 = Date.now();
   try {
-    const result = await processMessage(message, session_id);
+    const result = await enqueueChat(() => processMessage(message, session_id));
+    chatMetrics.reqEnd(Date.now() - t0, true);
     res.json(result);
   } catch (e) {
+    if (e instanceof ChatQueueFullError) {
+      chatMetrics.reqEnd(Date.now() - t0, false);
+      return res.status(503).json({ error: 'Em đang bận quá — anh thử lại sau vài giây nhé.', code: 'QUEUE_FULL' });
+    }
+    if (e instanceof ChatTimeoutError) {
+      chatMetrics.reqTimeout();
+      return res.status(503).json({ error: 'Câu hỏi mất quá lâu — anh thử lại nhé.', code: 'TIMEOUT' });
+    }
+    chatMetrics.reqEnd(Date.now() - t0, false);
     console.error('[Mi Chat]', e);
     res.status(500).json({ error: 'Mi gặp lỗi, anh thử lại nhé.' });
   }
@@ -46,11 +60,20 @@ export async function handleWsChat(ws: WebSocket, msg: { message: string; sessio
     ws.send(JSON.stringify({ type: 'error', message: 'message required' }));
     return;
   }
+  chatMetrics.reqStart();
+  const t0 = Date.now();
   try {
-    const result = await processMessage(message, session_id);
+    const result = await enqueueChat(() => processMessage(message, session_id));
+    chatMetrics.reqEnd(Date.now() - t0, true);
     ws.send(JSON.stringify({ type: 'response', ...result }));
   } catch (e) {
-    ws.send(JSON.stringify({ type: 'error', message: 'Mi gặp lỗi, anh thử lại nhé.' }));
+    if (e instanceof ChatQueueFullError || e instanceof ChatTimeoutError) {
+      chatMetrics.reqEnd(Date.now() - t0, false);
+      ws.send(JSON.stringify({ type: 'error', message: 'Em đang bận — anh thử lại nhé.', code: (e as { code: string }).code }));
+    } else {
+      chatMetrics.reqEnd(Date.now() - t0, false);
+      ws.send(JSON.stringify({ type: 'error', message: 'Mi gặp lỗi, anh thử lại nhé.' }));
+    }
   }
 }
 

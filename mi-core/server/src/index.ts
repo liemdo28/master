@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import dotenv from 'dotenv';
@@ -28,6 +29,31 @@ import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
 import { bigdataRouter, initBigData } from './routes/bigdata';
 import { enterpriseRouter } from './routes/enterprise';
+import { voiceRouter } from './routes/voice';
+import { actionsRouter } from './routes/actions';
+import { jarvisRouter } from './routes/jarvis';
+import { gstackRouter } from './routes/gstack';
+import { nodesRouter } from './routes/nodes';
+import { modelsRegistryRouter } from './routes/models-registry';
+import { miReviewApprovalsRouter } from './routes/mi-review-approvals';
+import { operationalKnowledgeRouter } from './routes/operational-knowledge';
+import { graphRouter } from './graph/graph-router';
+import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
+import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-router';
+import { briefingRouter } from './executive-briefing/briefing-router';
+import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
+import { autonomousRouter } from './autonomous/autonomous-router';
+import { councilRouter } from './council/council-router';
+import { selfImprovementRouter } from './self-improvement/self-improvement-router';
+import { healthIntelligenceRouter } from './health-intelligence/health-router';
+import { digitalTwinRouter } from './digital-twin/digital-twin-router';
+import { agenviewRouter } from './agenview/agenview-router';
+import { cooV4Router } from './routes/coo-v4-router';
+import { chatMetrics } from './chat/chat-metrics';
+import { queueState } from './chat/chat-queue';
+import { claimLeadershipOnBoot, startLeaderHeartbeat } from './nodes/leader-lock-persistent';
+import { startProactiveMonitor, onAlert } from './jarvis/proactive-monitor';
+import { startDailyBriefingScheduler } from './jarvis/daily-briefing-scheduler';
 import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
 import { gateEvents } from './approval/gate';
@@ -39,13 +65,29 @@ import { executiveMemory } from './memory/executive-memory';
 import { fullIngest } from './knowledge/knowledge-db';
 import { installAllPacks } from './knowledge/pack-manager';
 import { startScheduler } from './cron/sync-scheduler';
+import { getKeyStatus } from './services/whatsapp-key-manager';
 
 dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env'), override: false });
 
 const app = express();
 const PORT   = parseInt(process.env.MI_PORT   || '4001');
 // Bind to 0.0.0.0 when MOBILE_ACCESS=1 or HOST env set; default localhost for safety
 const HOST   = process.env.HOST || (process.env.MOBILE_ACCESS === '1' ? '0.0.0.0' : '127.0.0.1');
+
+function validateReviewApprovalStartup() {
+  const allowedNumbers = (process.env.CEO_WHATSAPP_ALLOWED_NUMBERS || '').split(',').map(v => v.trim()).filter(Boolean);
+  const keyStatus = getKeyStatus();
+  if (!allowedNumbers.length) {
+    console.warn('[Mi] Review approval WhatsApp channel disabled: CEO_WHATSAPP_ALLOWED_NUMBERS is not configured.');
+  }
+  if (!keyStatus.configured || keyStatus.status !== 'active') {
+    console.warn('[Mi] Review approval WhatsApp channel disabled: WhatsApp API key is not configured or active.');
+  }
+  if (!process.env.REVIEW_SYSTEM_INTERNAL_TOKEN) {
+    console.warn('[Mi] Review approval callbacks are running without REVIEW_SYSTEM_INTERNAL_TOKEN.');
+  }
+}
 
 // ── Security headers ────────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -82,9 +124,11 @@ app.use((req, res, next) => {
 });
 
 // ── Static UI ───────────────────────────────────────────────────────────────
-app.use(express.static('../ui'));
+app.use(express.static(path.resolve(__dirname, '../../ui')));
 app.get('/liveboard', (_req, res) => res.redirect('/liveboard.html'));
 app.get('/mobile',    (_req, res) => res.redirect('/mobile.html'));
+app.get('/voice',     (_req, res) => res.redirect('/voice.html'));
+app.get('/agenview',  (_req, res) => res.redirect('/agenview.html'));
 
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/remote',      remoteRouter);       // Remote access (login/health/devices)
@@ -103,6 +147,7 @@ app.use('/api/brain',       brainRouter);
 app.use('/api/agent-engine',agentEngineRouter);
 app.use('/api/qb-agent',    qbAgentRouter);
 app.use('/api/integration-agent', integrationAgentReleasesRouter);
+app.use('/api',             operationalKnowledgeRouter);
 app.use('/api/projects',    projectsRouter);
 app.use('/api/data-analyst',    dataAnalystRouter);
 app.use('/api/whatsapp',        whatsappRouter);
@@ -111,6 +156,25 @@ app.use('/api/browser',         browserAgentRouter);
 app.use('/api/doordash-agent',  doordashAgentRouter);
 app.use('/api/bigdata',         bigdataRouter);
 app.use('/api/enterprise',      enterpriseRouter);
+app.use('/api/voice',           voiceRouter);
+app.use('/api/actions',         actionsRouter);
+app.use('/api/jarvis',          jarvisRouter);
+app.use('/api/gstack',          gstackRouter);
+app.use('/api/nodes',           nodesRouter);
+app.use('/api/models',          modelsRegistryRouter);
+app.use('/api/mi',              miReviewApprovalsRouter);
+app.use('/api/graph',           graphRouter);         // Phase 14: Ownership + Dependency Graph
+app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
+app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
+app.use('/api/briefing',        briefingRouter);           // Phase 17: Executive Daily Briefing
+app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
+app.use('/api/agenview',        agenviewRouter);           // Phase 19: AgenView Dashboard
+app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
+app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution
+app.use('/api/council',         councilRouter);            // Phase 21: Multi-Agent Council
+app.use('/api/improvement',     selfImprovementRouter);    // Phase 22: Self-Improvement
+app.use('/api/health-intel',    healthIntelligenceRouter); // Phase 23: Health Intelligence
+app.use('/api/digital-twin',    digitalTwinRouter);        // Phase 24: Digital Twin
 app.get('/api/tools', (_req, res) => {
   res.json({
     tools: [
@@ -142,9 +206,17 @@ app.get('/api/jobs', async (req, res) => {
   }
 });
 
+// ── Chat runtime metrics ─────────────────────────────────────────────────────
+app.get('/api/metrics/chat', (_req, res) => {
+  res.json({ ...chatMetrics.snapshot(), queue: queueState() });
+});
+
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);
 const wss = new WebSocketServer({ server, path: '/ws' });
+server.on('error', (err) => {
+  console.error('[Mi] HTTP server listen error:', err);
+});
 
 function broadcast(data: object) {
   const payload = JSON.stringify(data);
@@ -185,32 +257,94 @@ server.listen(PORT, HOST, () => {
   console.log(`[Mi] Local:      http://127.0.0.1:${PORT}`);
   if (net.lan_url)       console.log(`[Mi] LAN:        ${net.lan_url}`);
   if (net.tailscale_url) console.log(`[Mi] Tailscale:  ${net.tailscale_url}  ← use on iPhone/Mac`);
+  console.log(`[Mi] AgenView:   http://127.0.0.1:${PORT}/agenview`);
   console.log(`[Mi] LiveBoard:  http://127.0.0.1:${PORT}/liveboard.html`);
   console.log(`[Mi] Mobile:     http://127.0.0.1:${PORT}/mobile.html`);
   console.log(`[Mi] WebSocket:  ws://127.0.0.1:${PORT}/ws`);
   console.log(`[Mi] ════════════════════════════════════════\n`);
+  validateReviewApprovalStartup();
 
   connectorRegistry.init();
+  // Auto-mark connectors as connected when credentials are available in env
+  if (process.env.ASANA_TOKEN) {
+    connectorRegistry.update('asana', { auth_status: 'connected', status: 'active', health_status: 'unknown' });
+  }
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    const googleTokenPath = require('path').join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'visibility', 'google-tokens.json');
+    if (require('fs').existsSync(googleTokenPath)) {
+      for (const id of ['gmail', 'google-calendar', 'google-drive', 'google-contacts']) {
+        connectorRegistry.update(id, { auth_status: 'connected', status: 'active' });
+      }
+    }
+  }
   executiveMemory.init();
   console.log('[Mi] ✓ Connector Registry initialized');
   console.log('[Mi] ✓ Executive Memory initialized');
 
-  setImmediate(() => {
-    try {
-      const result = fullIngest();
-      console.log(`[Mi] ✓ Knowledge DB: ${result.ingested} docs ingested`);
-    } catch (e) { console.warn('[Mi] Knowledge DB ingest error:', e); }
+  setTimeout(() => {
+    if (process.env.MI_BOOT_KNOWLEDGE_INGEST === '1') {
+      try {
+        const result = fullIngest();
+        console.log(`[Mi] ✓ Knowledge DB: ${result.ingested} docs ingested`);
+      } catch (e) { console.warn('[Mi] Knowledge DB ingest error:', e); }
 
-    try {
-      const packs = installAllPacks();
-      console.log(`[Mi] ✓ Knowledge Packs: ${packs.total_installed} docs from all packs`);
-    } catch (e) { console.warn('[Mi] Pack install error:', e); }
+      try {
+        const packs = installAllPacks();
+        console.log(`[Mi] ✓ Knowledge Packs: ${packs.total_installed} docs from all packs`);
+      } catch (e) { console.warn('[Mi] Pack install error:', e); }
+    } else {
+      console.log('[Mi] Knowledge DB boot ingest skipped (set MI_BOOT_KNOWLEDGE_INGEST=1 to enable)');
+    }
 
     startScheduler();
     console.log('[Mi] ✓ Scheduler started');
 
+    const timeoutMinutes = parseInt(process.env.REVIEW_APPROVAL_TIMEOUT_MINUTES || '1440', 10);
+    setInterval(() => {
+      fetch(`http://127.0.0.1:${PORT}/api/mi/review-approvals/sweep-timeouts`, { method: 'POST' }).catch(() => undefined);
+    }, Math.max(1, Math.min(timeoutMinutes, 60)) * 60_000);
+    console.log(`[Mi] ✓ Review approval timeout monitor started (${timeoutMinutes}m)`);
+
     initBigData().then(() => {
       console.log('[Mi] ✓ Big Data Foundation initialized');
     }).catch(e => console.warn('[Mi] Big Data init (non-critical):', e.message));
+
+    // Jarvis proactive monitor — broadcast alerts via WebSocket
+    onAlert((alert) => broadcast({ type: 'jarvis_alert', alert }));
+    const MONITOR_INTERVAL = parseInt(process.env.JARVIS_MONITOR_INTERVAL_MIN || '15');
+    startProactiveMonitor(MONITOR_INTERVAL);
+    console.log(`[Mi] ✓ Jarvis Proactive Monitor started (interval: ${MONITOR_INTERVAL}m)`);
+
+    // Phase 7: Leader Lock — claim leadership on boot, start heartbeat
+    claimLeadershipOnBoot();
+    startLeaderHeartbeat(30_000);
+    console.log('[Mi] ✓ Leader Lock initialized (Phase 7 — multi-node coordination)');
+
+    startDailyBriefingScheduler();
+    console.log('[Mi] ✓ Daily Briefing Scheduler started (07:00 VN time)');
+
+    // Jarvis Evolution Phase 30 — boot all 10 phases
+    import('./jarvis/phase30-jarvis/jarvis-core').then(({ bootJarvis }) => {
+      bootJarvis().catch(() => {});
+      console.log('[Mi] ✓ Jarvis Evolution Phase 30 booted (knowledge, memory, graph, health, workflows, twin)');
+    }).catch(() => {});
   });
 });
+
+// ── Graceful shutdown — prevents EADDRINUSE on PM2 restart ───────────────────
+function gracefulShutdown(signal: string) {
+  console.log(`[Mi] ${signal} received — shutting down gracefully`);
+  server.closeAllConnections?.();
+  server.close(() => {
+    console.log('[Mi] HTTP server closed');
+    process.exit(0);
+  });
+  // Force exit after 5s — port already released by closeAllConnections
+  setTimeout(() => {
+    console.warn('[Mi] Forced shutdown after timeout');
+    process.exit(0);
+  }, 5000).unref();
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
