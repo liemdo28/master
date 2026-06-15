@@ -17,6 +17,12 @@ const { detectWithConfidence } = require('../i18n/detector');
 const fallbackAudit = require('../audit/fallback-audit');
 const { getBuildInfo } = require('../runtime/build-info');
 const nlpResolver = require('../nlp/command-resolver');
+const miAccess = require('../security/mi-access-control');
+
+// CEO Operating Model Router (new routing priority)
+const operatingModelRouter = (() => {
+  try { return require('../workflows/operating-model-router'); } catch (_) { return null; }
+})();
 
 // Food Safety module
 const foodSafetyPipeline = (() => {
@@ -42,6 +48,27 @@ const log = makeLogger('whatsapp');
 
 let messageCount = 0;
 
+function isSelfChatAllowed(client, msg) {
+  if (process.env.MI_ALLOW_SELF_CHAT !== 'true') return false;
+  if (!msg?.fromMe) return false;
+  if (String(msg.from || '').includes('@g.us')) return false;
+  if ((process.env.MI_ALLOW_FROM_ME_DIRECT || 'false') === 'true') return true;
+  const ownId = client?.info?.wid?._serialized || client?.info?.me?._serialized || client?.info?.wid?.user || '';
+  if (!ownId) return false;
+  return miAccess.normalizeWaId(msg.from) === miAccess.normalizeWaId(ownId);
+}
+
+function getOwnWaId(client) {
+  return client?.info?.wid?._serialized || client?.info?.me?._serialized || client?.info?.wid?.user || '';
+}
+
+function configuredSelfChatNames() {
+  return String(process.env.MI_SELF_CHAT_NAMES || '')
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(Boolean);
+}
+
 async function getLanguageQuestionReply(phone, name, text) {
   const lang = langMem.detectLanguageQuestion(text);
   if (!lang) return null;
@@ -49,6 +76,57 @@ async function getLanguageQuestionReply(phone, name, text) {
   if (!reply) return null;
   await langMem.rememberFromMessage(phone, name, text).catch(() => {});
   return reply;
+}
+
+async function handleAgentMiCommand({ client, msg, chatId, isGroup, phone, name, text, trimmedText, timestamp, runtimeTraceBase }) {
+  const agentMiRouter = require('../commands/agent-mi-router');
+  const agentMiForwarder = require('../forwarding/agent-mi-forwarder');
+
+  const isAgent = agentMiRouter.isAgentCommand(trimmedText);
+  const isMi = agentMiRouter.isMiCommand(trimmedText);
+  if (!isAgent && !isMi) return false;
+  if (isMi && !miAccess.isCeoSender(phone)) {
+    log.info('[MESSAGE_FLOW] mi_blocked_non_ceo', { ...runtimeTraceBase, route: 'mi_blocked_non_ceo', phone });
+    return false;
+  }
+
+  const chat = await msg.getChat().catch(() => null);
+  const groupName = chat?.name || '';
+  const handler = isAgent ? agentMiRouter.handleAgentMessage : agentMiRouter.handleMiMessage;
+  const forwarder = isAgent ? agentMiForwarder.forwardToAgent : agentMiForwarder.forwardToMi;
+  const intent = isAgent ? 'agent_command' : 'mi_command';
+  const route = isAgent ? 'agent_forward' : 'mi_forward';
+  const result = await handler({
+    chatId,
+    groupId: isGroup ? chatId : '',
+    sender: phone,
+    senderName: name,
+    messageId: msg.id?._serialized || '',
+    text: trimmedText,
+    timestamp,
+    attachments: [],
+    client,
+  });
+
+  if (!result.handled) return false;
+
+  const conversationPhone = isGroup ? chatId : phone;
+  const conversationName = isGroup ? (groupName || chatId) : name;
+  await saveMessage({ phone: conversationPhone, name: conversationName, direction: 'in', message: text, intent, aiReplied: false });
+
+  if (result.payload) {
+    const forwardResult = await forwarder(result.payload);
+    if (forwardResult.reply) {
+      log.info('[MESSAGE_FLOW] ' + route + '_reply', { ...runtimeTraceBase, route, ok: !!forwardResult.ok, error: forwardResult.error || '' });
+      await replyService.send(client, chatId, forwardResult.reply);
+      await saveMessage({ phone: conversationPhone, name: conversationName, direction: 'out', message: forwardResult.reply, intent, aiReplied: true });
+    }
+  } else if (result.reply) {
+    await replyService.send(client, chatId, result.reply);
+    await saveMessage({ phone: conversationPhone, name: conversationName, direction: 'out', message: result.reply, intent, aiReplied: true });
+  }
+
+  return true;
 }
 
 function attach(client) {
@@ -67,6 +145,14 @@ function attach(client) {
       await handleTextMessage(client, msg);
     } catch (err) {
       log.error('Message handler error', { error: err.message, stack: err.stack });
+    }
+  });
+  client.on('message_create', async (msg) => {
+    if (!isSelfChatAllowed(client, msg)) return;
+    try {
+      await handleTextMessage(client, msg);
+    } catch (err) {
+      log.error('Self-chat message handler error', { error: err.message, stack: err.stack });
     }
   });
   log.info('Message listener attached (with food-safety image support)');
@@ -111,7 +197,7 @@ async function handleImageMessage(client, msg) {
     media = await msg.downloadMedia();
   } catch (err) {
     log.error('Failed to download media', { error: err.message });
-    await replyService.send(client, chatId, '⚠️ Failed to download the image. Please try again.');
+    await replyService.send(client, chatId, '⚠️ Tải ảnh thất bại. Anh thử gửi lại nhé.');
     return;
   }
 
@@ -131,7 +217,7 @@ async function handleImageMessage(client, msg) {
         ? formPhotoImageStorage.saveFormPhotoImage(media, metadata)
         : null;
       if (!imagePath) {
-        await replyService.send(client, chatId, '⚠️ Image save failed. Please try again.');
+        await replyService.send(client, chatId, '⚠️ Lưu ảnh thất bại. Anh thử gửi lại nhé.');
         return;
       }
       // Route to form photo workflow
@@ -144,7 +230,7 @@ async function handleImageMessage(client, msg) {
       return;
     } catch (err) {
       log.error('Form photo workflow error', { error: err.message, stack: err.stack });
-      await replyService.send(client, chatId, '⚠️ Form processing error. Please try again or notify manager.');
+      await replyService.send(client, chatId, '⚠️ Lỗi xử lý form. Anh thử lại hoặc báo manager nhé.');
       return;
     }
   }
@@ -168,7 +254,7 @@ async function handleImageMessage(client, msg) {
       }
     } catch (err) {
       log.error('Template OCR pipeline error', { error: err.message, stack: err.stack });
-      await replyService.send(client, chatId, 'Template OCR failed due to an internal error. Please retake the photo or notify manager.');
+      await replyService.send(client, chatId, '⚠️ OCR thất bại. Anh chụp lại ảnh rõ hơn hoặc báo manager nhé.');
       return;
     }
   }
@@ -183,7 +269,7 @@ async function handleImageMessage(client, msg) {
     }
   } catch (err) {
     log.error('Food safety pipeline error', { error: err.message });
-    await replyService.send(client, chatId, '⚠️ Food safety check failed due to an internal error. Please try again.');
+    await replyService.send(client, chatId, '⚠️ Kiểm tra food safety thất bại. Anh thử lại nhé.');
     return;
   }
 
@@ -202,13 +288,29 @@ async function handleImageMessage(client, msg) {
 
 async function handleTextMessage(client, msg) {
   if (msg.from === 'status@broadcast') return;
-  if (msg.fromMe) return;
+  const selfChatAllowed = isSelfChatAllowed(client, msg);
+  if (msg.fromMe) {
+    if (!selfChatAllowed) return;
+    if (replyService.isGatewaySentMessage?.(msg)) return;
+  }
 
   const isGroup = msg.from.includes('@g.us');
   const chatId = msg.from;
-  const phone = isGroup ? (msg.author || msg.from).replace('@c.us', '').replace('@g.us', '') : msg.from.replace('@c.us', '');
-  const contact = await msg.getContact().catch(() => null);
-  const name = contact?.pushname || contact?.name || phone;
+  const selfSender = msg.fromMe && selfChatAllowed && !isGroup;
+  const selfChat = selfSender ? await msg.getChat().catch(() => null) : null;
+  const allowedSelfChatNames = configuredSelfChatNames();
+  if (selfSender && allowedSelfChatNames.length) {
+    const chatName = String(selfChat?.name || '').trim().toLowerCase();
+    if (!allowedSelfChatNames.includes(chatName)) {
+      log.info('[MESSAGE_FLOW] self_chat_not_allowed_name', { chatId, chatName });
+      return;
+    }
+  }
+  const phone = selfSender
+    ? miAccess.normalizeWaId(getOwnWaId(client))
+    : (isGroup ? (msg.author || msg.from).replace('@c.us', '').replace('@g.us', '') : msg.from.replace('@c.us', ''));
+  const contact = selfSender ? null : await msg.getContact().catch(() => null);
+  const name = selfSender ? (client?.info?.pushname || client?.info?.wid?.user || phone) : (contact?.pushname || contact?.name || phone);
   const text = msg.body || '';
   const timestamp = msg.timestamp ? new Date(msg.timestamp * 1000).toISOString() : new Date().toISOString();
   const trimmedText = text.trim();
@@ -261,6 +363,11 @@ async function handleTextMessage(client, msg) {
     return;
   }
 
+  // Agent/MI commands must route before group quiet mode and legacy command routing.
+  // Otherwise unknown slash commands in groups are silently dropped.
+  if (await handleAgentMiCommand({ client, msg, chatId, isGroup, phone, name, text, trimmedText, timestamp, runtimeTraceBase })) {
+    return;
+  }
 
   // ── Group quiet mode ──────────────────────────────────────────────────────────
   const groupQuietMode  = process.env.GROUP_QUIET_MODE !== 'false'; // default: true
@@ -337,7 +444,8 @@ async function handleTextMessage(client, msg) {
   }
 
   // ── Direct chat: language question short-circuit ──────────────────────────────
-  if (!brothCommandMod.hasActiveSession(chatId, phone)) {
+  // CEO messages must never be intercepted here — they route to mi-core via isNoPrefix below.
+  if (!brothCommandMod.hasActiveSession(chatId, phone) && !miAccess.isCeoSender(phone)) {
     const languageReply = await getLanguageQuestionReply(phone, name, trimmedText);
     if (languageReply) {
       log.info('[MESSAGE_FLOW] language_question_reply', { ...runtimeTraceBase, route: 'direct_language_question' });
@@ -404,6 +512,9 @@ async function handleTextMessage(client, msg) {
   }
 
   if (agentMiRouter.isMiCommand(trimmedText)) {
+    if (!miAccess.isCeoSender(phone)) {
+      log.info('[MESSAGE_FLOW] mi_blocked_non_ceo', { ...runtimeTraceBase, route: 'mi_blocked_non_ceo', phone });
+    } else {
     const chat = await msg.getChat().catch(() => null);
     const groupName = chat?.name || '';
     const result = await agentMiRouter.handleMiMessage({
@@ -426,11 +537,41 @@ async function handleTextMessage(client, msg) {
       await saveMessage({ phone, name, direction: 'in', message: text, intent: 'mi_command', aiReplied: false });
       return;
     }
+    }
   }
 
-  // No-prefix guidance
+  // No-prefix direct admin chat routes to Mi-Core. Non-admin no-prefix remains quiet
+  // here so the gateway does not answer CEO-style messages with command training text.
   if (agentMiRouter.isNoPrefix(trimmedText)) {
-    // Do NOT route no-prefix messages — silently ignore
+    const groupWorkflowConfig = require('../workflows/group-workflow-config');
+    const isAdmin = miAccess.isCeoSender(phone) || (!isGroup && await groupWorkflowConfig.isMiAdminPrivateChat(chatId, phone) && miAccess.isCeoSender(phone));
+    if (!isAdmin) {
+      log.info('[MESSAGE_FLOW] no_prefix_not_mi_non_ceo', { ...runtimeTraceBase, route: 'chatbot_fallback', phone });
+    } else {
+      const result = await agentMiRouter.handleMiMessage({
+        chatId,
+        groupId: '',
+        sender: phone,
+        senderName: name,
+        text: '/mi ' + trimmedText,
+        timestamp,
+        attachments: [],
+        client,
+      });
+      await saveMessage({ phone, name, direction: 'in', message: text, intent: 'no_prefix', aiReplied: false });
+      if (result.payload) {
+        const forwardResult = await agentMiForwarder.forwardToMi(result.payload);
+        if (forwardResult.reply) {
+          log.info('[MESSAGE_FLOW] no_prefix_mi_forward_reply', { ...runtimeTraceBase, route: 'no_prefix_mi_forward', ok: !!forwardResult.ok });
+          await replyService.send(client, chatId, forwardResult.reply);
+          await saveMessage({ phone, name, direction: 'out', message: forwardResult.reply, intent: 'mi_no_prefix', aiReplied: true });
+        }
+      } else if (result.reply) {
+        await replyService.send(client, chatId, result.reply);
+        await saveMessage({ phone, name, direction: 'out', message: result.reply, intent: 'mi_no_prefix', aiReplied: true });
+      }
+      return;
+    }
   }
 
 

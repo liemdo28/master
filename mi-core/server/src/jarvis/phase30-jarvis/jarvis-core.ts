@@ -214,18 +214,57 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
     }
   }
 
-  // "Raw Sushi tạo bài SEO / post lên website" → COO V4 content workflow
-  if (has(t, /raw sushi.*(tao bai|tao post|post bai|viet bai|bai seo|bai post|len website|post website)|marketing.*raw sushi|content.*raw sushi/)) {
+  // ── W5: COO Workflow Routing — Content / Marketing (all stores, all channels) ──
+  // Matches: tạo bài, viết bài, post lên website, SEO, flyer, campaign, Facebook, Instagram
+  // ALWAYS requires approval gate before publish/send
+
+  const storeMatch = /(raw sushi|stone oak|bakudan|rim|bandera)/i.exec(ctx.raw_text);
+  const storeName = storeMatch ? storeMatch[1].replace(/\b\w/g, c => c.toUpperCase()) : 'cửa hàng';
+
+  // Content / SEO / website post
+  if (has(t, /(raw sushi|stone oak|bakudan|rim|bandera).*(tao bai|tao post|post bai|viet bai|bai seo|bai post|len website|post website|create.*post|seo post)|marketing.*(raw sushi|stone oak|bakudan)|content.*(raw sushi|stone oak|bakudan)|tao bai seo|viet bai seo/)) {
     try {
       const { cooExecute } = require('../../coo-v4/coo-orchestrator');
-      const result = await cooExecute(`Tạo bài SEO và post lên website cho Raw Sushi: ${ctx.raw_text}`);
+      const result = await cooExecute(`Tạo bài SEO và post lên website cho ${storeName}: ${ctx.raw_text}`);
       return { handled: true, phase: 40, reply: result.reply, metadata: { workflow_id: result.workflow_id } };
     } catch {
       return {
         handled: true, phase: 30,
-        reply: '📝 *Content Workflow — Raw Sushi*\n\nEm đã nhận yêu cầu. COO agent sẽ:\n1. Draft bài SEO cho Raw Sushi\n2. Gửi anh duyệt trước khi post\n3. Publish lên website sau khi được approved\n\nEm bắt đầu nhé?',
+        reply: `📝 *Content Workflow — ${storeName}*\n\nEm đã nhận yêu cầu. COO agent sẽ:\n1. Draft bài SEO cho ${storeName}\n2. Gửi anh xem trước khi post\n3. Publish lên website sau khi anh duyệt\n\n⏳ Em đang chuẩn bị draft — anh chờ em chút nhé.`,
       };
     }
+  }
+
+  // Flyer / poster
+  if (has(t, /tao flyer|tao poster|lam flyer|design flyer|banner quang cao/)) {
+    return {
+      handled: true, phase: 40,
+      reply: `🎨 *Flyer Workflow — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Thiết kế flyer cho ${storeName}\n2. Gửi anh preview\n3. Export final sau khi anh duyệt\n\n⏳ Em đang tạo draft — chờ em một chút nhé.`,
+    };
+  }
+
+  // Facebook / Instagram content
+  if (has(t, /tao bai facebook|viet content facebook|bai.*facebook|facebook.*bai|tao bai instagram|viet content instagram|bai.*instagram|caption.*post|viet caption/)) {
+    return {
+      handled: true, phase: 40,
+      reply: `📱 *Social Media Content — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Viết caption + content cho ${storeName}\n2. Gửi anh duyệt trước khi đăng\n3. Schedule post sau khi được approved\n\n⚠️ Em KHÔNG đăng trực tiếp — anh duyệt rồi mới đăng.`,
+    };
+  }
+
+  // DoorDash / UberEats campaign
+  if (has(t, /tao campaign doordash|campaign.*doordash|doordash.*campaign|tao campaign ubereats|campaign.*ubereats|ubereats.*campaign|chay campaign/)) {
+    return {
+      handled: true, phase: 40,
+      reply: `🚀 *Campaign Workflow — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Tạo campaign brief cho ${storeName}\n2. Gửi anh xem ngân sách + target\n3. Kích hoạt sau khi anh approve\n\n⚠️ Campaign sẽ KHÔNG chạy cho đến khi anh duyệt.`,
+    };
+  }
+
+  // Email marketing
+  if (has(t, /tao email marketing|email campaign|gui email marketing|mass email|send.*mass.*email/)) {
+    return {
+      handled: true, phase: 40,
+      reply: `📧 *Email Marketing — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Soạn nội dung email\n2. Gửi anh preview danh sách + nội dung\n3. Gửi đại trà sau khi anh approve\n\n⚠️ Em KHÔNG gửi mass email khi chưa được duyệt.`,
+    };
   }
 
   // ── Mi Intelligence Layer (Ph18-25) ──────────────────────────────────────
