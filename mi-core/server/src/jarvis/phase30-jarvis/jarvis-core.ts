@@ -117,10 +117,26 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
     return { handled: true, phase: 21, reply: `Payroll / finance checklist documents in Knowledge Universe:\n${files || '• california_payroll_checklist.md in finance category'}` };
   }
 
+  // ── W3: Greeting catch-all for messages jarvis-core should own ──────────────
+  // Prevents "mi co do khong" etc. from returning handled:false
+  if (has(t, /^(mi co do khong|mi co o do|em co o day|em co do khong|mi dang hoat dong|em dang chay|mi oi anh can|mi oi em oi|mi dau|em dau)\??$|^(mi oi|em oi)\s+anh\s+/)) {
+    return { handled: true, phase: 30, reply: 'Dạ em đây anh. Em đang hoạt động bình thường. Anh cần gì không?' };
+  }
+
+  // ── W3: Bakudan operational status — prevent graph dump ──────────────────
+  // "Bakudan hôm nay sao?" must NOT trigger Knowledge Graph
+  if (has(t, /^bakudan.*(hom nay|sao|co gi|tinh hinh|status)$|bakudan.*(hom nay|sao roi|the nao)\??$/)) {
+    return {
+      handled: true, phase: 30,
+      reply: '🏪 *Bakudan Ramen — Tổng quan*\n\nAnh dùng "Dashboard hôm nay có gì?" để xem task, overdue và tình hình vận hành hôm nay từ Dashboard em nhé.',
+    };
+  }
+
   // ── W3: Dashboard live queries (hit /api/mi/snapshot directly) ───────────
 
-  // "Dashboard hôm nay có gì?" / "kiem tra dashboard" / "tổng quan dashboard"
-  if (has(t, /dashboard.*(hom nay|co gi|task|tong quan|overview|status|tinh hinh|bao cao)|kiem tra.*dashboard|tong quan.*dashboard/)) {
+  // "Dashboard hôm nay có gì?" / "kiem tra dashboard" / "tổng quan dashboard" / "xem dashboard"
+  // Also catches "hôm nay anh có gì?" — general CEO executive question
+  if (has(t, /dashboard.*(hom nay|co gi|task|tong quan|overview|status|tinh hinh|bao cao)|kiem tra.*dashboard|tong quan.*dashboard|xem.*dashboard|^hom nay anh co gi|^co gi hom nay anh/)) {
     try {
       const DASH_URL = (process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com') + '/api/mi/snapshot';
       const MI_TOKEN = process.env.MI_SNAPSHOT_SECRET || '';
@@ -153,11 +169,16 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
         }
         return { handled: true, phase: 30, reply: lines.join('\n') };
       }
-    } catch { /* fall through to LLM */ }
+      // API responded but not OK (e.g. 403, 500) — return graceful fallback
+      return { handled: true, phase: 30, reply: 'Em chưa lấy được data từ Dashboard lúc này — server trả về lỗi. Anh thử lại sau ít phút nhé.' };
+    } catch {
+      // Network/timeout error — return graceful fallback instead of falling through to graph dump
+      return { handled: true, phase: 30, reply: 'Em chưa kết nối được với Dashboard lúc này — có thể mạng đang gián đoạn. Anh thử lại sau vài giây nhé.' };
+    }
   }
 
-  // "hôm nay anh có task gì" / "task hôm nay" — pull from dashboard snapshot
-  if (has(t, /hom nay.*anh.*task|anh.*task.*hom nay|hom nay.*co.*task|task.*cua anh|task.*hom nay|co.*task.*gi/)) {
+  // "hôm nay anh có task gì" / "task hôm nay" / "task hnay" — pull from dashboard snapshot
+  if (has(t, /hom nay.*anh.*task|anh.*task.*hom nay|hom nay.*co.*task|task.*cua anh|task.*hom nay|co.*task.*gi|task hnay|hnay.*task/)) {
     try {
       const DASH_URL = (process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com') + '/api/mi/snapshot';
       const MI_TOKEN = process.env.MI_SNAPSHOT_SECRET || '';
@@ -186,7 +207,10 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
         }
         return { handled: true, phase: 30, reply: lines.join('\n') };
       }
-    } catch { /* fall through */ }
+      return { handled: true, phase: 30, reply: 'Em chưa lấy được danh sách task từ Dashboard lúc này. Anh thử lại sau nhé.' };
+    } catch {
+      return { handled: true, phase: 30, reply: 'Em chưa kết nối được với Dashboard để lấy task — anh thử lại sau vài giây nhé.' };
+    }
   }
 
   // "Raw Sushi tạo bài SEO / post lên website" → COO V4 content workflow
@@ -719,11 +743,10 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
   }
 
   // ── Phase 25: Knowledge graph ──
-  if (has(t, /graph|quan he|entity|^tim .{2,30} trong graph/)) {
-    const match = ctx.normalized.match(/(?:graph|quan he|entity)\s+(.+)/i);
-    if (match) {
-      return { handled: true, phase: 25, reply: exploreRelationships(match[1].trim()) };
-    }
+  if (has(t, /graph|quan he|entity|^tim .{2,30} trong graph|connected to|phu thuoc gi/)) {
+    const match = (ctx.normalized || ctx.raw_text).match(/(?:graph|quan he|entity|connected to|phu thuoc gi)\s*(.{0,50})/i);
+    const entity = match?.[1]?.trim() || ctx.raw_text;
+    return { handled: true, phase: 25, reply: exploreRelationships(entity) };
   }
 
   // ── Bakudan Ramen store list ──

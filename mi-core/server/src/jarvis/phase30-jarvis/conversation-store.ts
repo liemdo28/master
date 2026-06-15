@@ -47,9 +47,11 @@ export function updateSession(
 // ── Follow-up detection ────────────────────────────────────────────────────
 
 const FOLLOWUP_PATTERNS = [
-  /^(la sao|rồi sao|roi sao|then what|ke them|ke tiep|nhu the nao|the nao|con gi nua|co gi nua|anh muon biet gi them)\??$/i,
-  /^(sao|hả|ha|hả anh|sao anh|y nghia gi|nghia la gi|tai sao)\??$/i,
+  /^(la sao|roi sao|then what|nhu the nao|the nao|con gi nua|co gi nua|anh muon biet gi them)\??$/i,
+  /^(sao|ha|sao anh|y nghia gi|nghia la gi|tai sao)\??$/i,
   /^(va|va roi|va sao)\??$/i,
+  /^ke (them|tiep|nua)(\s+(di|nhe|anh))?\??$/i,   // "kể thêm đi", "kể tiếp nhé"
+  /^co gi (nua|them|tiep)(\s+(khong|ko|anh))?\??$/i, // "có gì nữa không?"
 ];
 
 export function isFollowUp(normalized: string): boolean {
