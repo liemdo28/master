@@ -15,17 +15,16 @@ exports.getOverdueTasks = getOverdueTasks;
 exports.isAsanaConfigured = isAsanaConfigured;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const ASANA_TOKEN = process.env.ASANA_TOKEN;
 const BASE_URL = 'https://app.asana.com/api/1.0';
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
 const CACHE_DIR = path_1.default.join(GLOBAL_DIR, 'visibility', 'asana');
-function isConfigured() { return !!ASANA_TOKEN; }
+function isConfigured() { return !!process.env.ASANA_TOKEN; }
 async function asanaFetch(endpoint) {
     if (!isConfigured())
         throw new Error('ASANA_TOKEN not set in .env');
     const res = await fetch(`${BASE_URL}${endpoint}`, {
         headers: {
-            Authorization: `Bearer ${ASANA_TOKEN}`,
+            Authorization: `Bearer ${process.env.ASANA_TOKEN}`,
             Accept: 'application/json',
         },
         signal: AbortSignal.timeout(15000),

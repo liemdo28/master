@@ -62,9 +62,9 @@ assert(dateInfo.today !== undefined, 'getOwnerDateInfo returns today');
 assert(dateInfo.tomorrow !== undefined, 'getOwnerDateInfo returns tomorrow');
 assert(['morning', 'afternoon', 'evening', 'night'].includes(dateInfo.timeOfDay), 'getOwnerDateInfo returns valid timeOfDay');
 // ── TEST CASE: Chat "today" behavior ──────────────────────────────────────
-// When CEO says "today" at Vietnam 19:00 ICT → today = 2026-06-09
-// "today" in Vietnam = 2026-06-09 — use as primary (NOT Chicago or LA)
-assert(dateInfo.today === '2026-06-09', `Vietnam "today" = 2026-06-09 (got: ${dateInfo.today})`);
+// "today" in Vietnam uses the owner's current date — use as primary (NOT Chicago or LA).
+const expectedOwnerToday = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+assert(dateInfo.today === expectedOwnerToday, `Vietnam "today" = ${expectedOwnerToday} (got: ${dateInfo.today})`);
 // ── TEST CASE: AI context injection has timezone rule ────────────────────
 const timeContext = (0, timezone_1.getTimeContextForAI)();
 const tzKeywords = ['today', 'tomorrow', 'this week', 'morning', 'afternoon', 'evening', 'schedule', 'reminder'];

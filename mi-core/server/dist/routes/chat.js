@@ -46,6 +46,9 @@ const reminder_parser_1 = require("../reminders/reminder-parser");
 const reminder_store_1 = require("../reminders/reminder-store");
 const executive_memory_1 = require("../memory/executive-memory");
 const response_pipeline_1 = require("../pipeline/response-pipeline");
+const chat_queue_1 = require("../chat/chat-queue");
+const chat_metrics_1 = require("../chat/chat-metrics");
+const executive_snapshot_1 = require("../executive/executive-snapshot");
 exports.chatRouter = (0, express_1.Router)();
 // In-memory session history (per conversation session)
 const sessions = new Map();
@@ -54,15 +57,33 @@ function getHistory(sessionId) {
         sessions.set(sessionId, []);
     return sessions.get(sessionId);
 }
+function isExecutiveStatusQuestion(message) {
+    const label = (0, executive_snapshot_1.classifyExecutiveIntent)(message);
+    if (label === 'graph_lookup' || label === 'action_request')
+        return false;
+    return /dashboard|hôm nay|hom nay|task|work order|việc|viec|duyệt|duyet|approve|email|gmail|calendar|lịch|lich|drive|qb|quickbooks|sync|raw sushi|rawsushibar|connector|kết nối|ket noi|đáng lo|dang lo|blocker/i.test(message);
+}
 exports.chatRouter.post('/', async (req, res) => {
     const { message, session_id = 'default' } = req.body;
     if (!message?.trim())
         return res.status(400).json({ error: 'message required' });
+    chat_metrics_1.chatMetrics.reqStart();
+    const t0 = Date.now();
     try {
-        const result = await processMessage(message, session_id);
+        const result = await (0, chat_queue_1.enqueueChat)(() => processMessage(message, session_id));
+        chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, true);
         res.json(result);
     }
     catch (e) {
+        if (e instanceof chat_queue_1.ChatQueueFullError) {
+            chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, false);
+            return res.status(503).json({ error: 'Em đang bận quá — anh thử lại sau vài giây nhé.', code: 'QUEUE_FULL' });
+        }
+        if (e instanceof chat_queue_1.ChatTimeoutError) {
+            chat_metrics_1.chatMetrics.reqTimeout();
+            return res.status(503).json({ error: 'Câu hỏi mất quá lâu — anh thử lại nhé.', code: 'TIMEOUT' });
+        }
+        chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, false);
         console.error('[Mi Chat]', e);
         res.status(500).json({ error: 'Mi gặp lỗi, anh thử lại nhé.' });
     }
@@ -77,12 +98,22 @@ async function handleWsChat(ws, msg) {
         ws.send(JSON.stringify({ type: 'error', message: 'message required' }));
         return;
     }
+    chat_metrics_1.chatMetrics.reqStart();
+    const t0 = Date.now();
     try {
-        const result = await processMessage(message, session_id);
+        const result = await (0, chat_queue_1.enqueueChat)(() => processMessage(message, session_id));
+        chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, true);
         ws.send(JSON.stringify({ type: 'response', ...result }));
     }
     catch (e) {
-        ws.send(JSON.stringify({ type: 'error', message: 'Mi gặp lỗi, anh thử lại nhé.' }));
+        if (e instanceof chat_queue_1.ChatQueueFullError || e instanceof chat_queue_1.ChatTimeoutError) {
+            chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, false);
+            ws.send(JSON.stringify({ type: 'error', message: 'Em đang bận — anh thử lại nhé.', code: e.code }));
+        }
+        else {
+            chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, false);
+            ws.send(JSON.stringify({ type: 'error', message: 'Mi gặp lỗi, anh thử lại nhé.' }));
+        }
     }
 }
 async function processMessage(message, sessionId) {
@@ -100,6 +131,21 @@ async function processMessage(message, sessionId) {
         return { reply: pipelineOut.reply, intent: 'action', mode: 'ceo', model: pipelineOut.model, sources: pipelineOut.sources };
     }
     const intent = (0, mi_brain_1.parseIntent)(message);
+    if (isExecutiveStatusQuestion(message) || [
+        'visibility_daily',
+        'visibility_email',
+        'visibility_calendar',
+        'visibility_dashboard',
+        'visibility_connector_status',
+        'pending_approvals',
+    ].includes(intent.type)) {
+        const answer = await (0, executive_snapshot_1.formatExecutiveSnapshotAnswer)(message);
+        history.push({ role: 'user', content: message });
+        history.push({ role: 'assistant', content: answer.reply });
+        if (history.length > 40)
+            history.splice(0, 2);
+        return { reply: answer.reply, intent: answer.intent, mode: intent.mode, model: 'executive-snapshot', sources: answer.sources };
+    }
     // Reminder
     if (intent.type === 'reminder') {
         const parsed = (0, reminder_parser_1.parseReminderCommand)(message);

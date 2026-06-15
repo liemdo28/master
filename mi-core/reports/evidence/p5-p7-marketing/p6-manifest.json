@@ -1,0 +1,19 @@
+{
+  "phase": "P6",
+  "target": "WEBSITE_AGENT_CERTIFIED",
+  "drafts": {
+    "blog_post": {
+      "title": "Bakudan Ramen Summer Guide 2026",
+      "status": "DRAFT",
+      "url": "pending-wp-creds"
+    },
+    "about_page": {
+      "title": "About Bakudan Ramen",
+      "status": "DRAFT"
+    },
+    "seo_score": 75
+  },
+  "passed": 3,
+  "failed": 0,
+  "generated_at": "2026-06-14T14:13:07.994Z"
+}

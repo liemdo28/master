@@ -52,7 +52,7 @@ exports.remoteRouter.post('/login', (req, res) => {
         ok: true,
         token: result.token,
         device_id: result.device_id,
-        message: 'Đăng nhập thành công — chào mừng CEO 👋',
+        message: 'Đăng nhập thành công — chào anh 👋',
     });
 });
 // ── POST /api/remote/logout ───────────────────────────────────────────────────

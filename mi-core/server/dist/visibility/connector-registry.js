@@ -38,7 +38,7 @@ const DEFAULT_CONNECTORS = [
         approval_required: true,
         cache_path: 'dashboard/',
         health_status: 'unknown',
-        config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'E:/Project/Master/dashboard.bakudanramen.com' },
+        config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com' },
     },
     {
         connector_id: 'asana',
@@ -95,6 +95,20 @@ const DEFAULT_CONNECTORS = [
         cache_path: 'google-drive/',
         health_status: 'unknown',
         setup_hint: 'Same OAuth as Gmail — add Drive scope: https://www.googleapis.com/auth/drive.readonly',
+    },
+    {
+        connector_id: 'google-sheets',
+        name: 'Google Sheets',
+        type: 'api',
+        status: 'pending',
+        auth_status: 'not_configured',
+        last_sync: null,
+        read_capability: ['spreadsheets', 'ranges', 'values'],
+        write_capability: ['values'],
+        approval_required: true,
+        cache_path: 'google-sheets/',
+        health_status: 'unknown',
+        setup_hint: 'Same OAuth as Gmail — requires scope: https://www.googleapis.com/auth/spreadsheets',
     },
     {
         connector_id: 'health-export',
@@ -154,6 +168,24 @@ const DEFAULT_CONNECTORS = [
         config: { api_url: 'http://127.0.0.1:8844', db_path: 'E:/Project/Master/accounting-engine/ledgers/accounting.db' },
     },
     {
+        connector_id: 'quickbooks-runtime',
+        name: 'QuickBooks Runtime',
+        type: 'local',
+        status: 'active',
+        auth_status: 'connected',
+        last_sync: null,
+        read_capability: ['company-state', 'activity-log', 'sync-status', 'duplicate-checks', 'transactions'],
+        write_capability: [],
+        approval_required: false,
+        cache_path: 'quickbooks/',
+        health_status: 'unknown',
+        setup_hint: 'QuickBooks runtime lives on laptop1 with Dev1. Dev1 must open QuickBooks Desktop/company file on laptop1, keep QB Web Connector running, then trigger force sync.',
+        config: {
+            checksum_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
+            agent_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
+        },
+    },
+    {
         connector_id: 'food-safety',
         name: 'Food Safety Gateway',
         type: 'local',
@@ -174,7 +206,18 @@ function ensureDir(p) {
 }
 function loadRegistry() {
     try {
-        return JSON.parse(fs_1.default.readFileSync(REGISTRY_PATH, 'utf-8'));
+        const existing = JSON.parse(fs_1.default.readFileSync(REGISTRY_PATH, 'utf-8'));
+        const merged = [...existing];
+        let changed = false;
+        for (const connector of DEFAULT_CONNECTORS) {
+            if (!merged.some(c => c.connector_id === connector.connector_id)) {
+                merged.push(connector);
+                changed = true;
+            }
+        }
+        if (changed)
+            saveRegistry(merged);
+        return merged;
     }
     catch {
         return DEFAULT_CONNECTORS;
@@ -183,6 +226,26 @@ function loadRegistry() {
 function saveRegistry(connectors) {
     ensureDir(path_1.default.dirname(REGISTRY_PATH));
     fs_1.default.writeFileSync(REGISTRY_PATH, JSON.stringify(connectors, null, 2));
+}
+function effectiveHealth(connector) {
+    if (connector.health_status !== 'unknown')
+        return connector.health_status;
+    if (connector.auth_status !== 'connected')
+        return 'offline';
+    const cacheDir = path_1.default.join(GLOBAL_DIR, 'visibility', connector.cache_path || '');
+    const dataPath = path_1.default.join(cacheDir, 'data.json');
+    const summaryPath = path_1.default.join(cacheDir, 'summary.json');
+    const errorsPath = path_1.default.join(cacheDir, 'errors.json');
+    if (fs_1.default.existsSync(dataPath) || fs_1.default.existsSync(summaryPath)) {
+        try {
+            const errors = fs_1.default.existsSync(errorsPath) ? JSON.parse(fs_1.default.readFileSync(errorsPath, 'utf-8')) : [];
+            return Array.isArray(errors) && errors.length > 0 ? 'degraded' : 'healthy';
+        }
+        catch {
+            return 'degraded';
+        }
+    }
+    return connector.last_sync ? 'healthy' : 'offline';
 }
 exports.connectorRegistry = {
     getAll() {
@@ -212,15 +275,18 @@ exports.connectorRegistry = {
             total: all.length,
             connected: all.filter(c => c.auth_status === 'connected').length,
             not_configured: all.filter(c => c.auth_status === 'not_configured').length,
-            healthy: all.filter(c => c.health_status === 'healthy').length,
-            connectors: all.map(c => ({
-                id: c.connector_id,
-                name: c.name,
-                auth: c.auth_status,
-                health: c.health_status,
-                last_sync: c.last_sync,
-                setup_hint: c.auth_status !== 'connected' ? c.setup_hint : undefined,
-            })),
+            healthy: all.filter(c => effectiveHealth(c) === 'healthy').length,
+            connectors: all.map(c => {
+                const health = effectiveHealth(c);
+                return {
+                    id: c.connector_id,
+                    name: c.name,
+                    auth: c.auth_status,
+                    health,
+                    last_sync: c.last_sync,
+                    setup_hint: c.auth_status !== 'connected' || health !== 'healthy' ? c.setup_hint : undefined,
+                };
+            }),
         };
     },
     init() {

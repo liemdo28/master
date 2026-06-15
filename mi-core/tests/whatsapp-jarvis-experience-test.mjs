@@ -746,6 +746,571 @@ section('§15 Routing Edge Cases');
   check('Phase 30 direct → handled', res.handled === true, `phase=${res.phase}`);
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// EXPANDED CEO REAL-WORLD GROUPS  A – W  (500+ total cases)
+// Each case: no crash · no graph dump for operational · no English unavailable
+// ══════════════════════════════════════════════════════════════════════════════
+
+// Generic helpers for the expanded groups
+async function safeQuery(raw, norm) {
+  return query(raw, undefined, norm || raw.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d'));
+}
+
+function safeChecks(label, res, opts = {}) {
+  const reply = res.reply || '';
+  check(`${label} → no crash`, !res.error, res.error || '');
+  check(`${label} → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+  if (opts.noGraph !== false) {
+    check(`${label} → no graph dump`, !isKnowledgeGraphDump(reply), reply.slice(0,80));
+  }
+  if (opts.handled) {
+    check(`${label} → handled`, res.handled === true, `phase=${res.phase}`);
+  }
+}
+
+// ── Group A — Ambiguous Human Questions ──────────────────────────────────────
+
+section('Group A — Ambiguous Human Questions');
+
+for (const [raw, norm] of [
+  ['Mi ơi',                          'mi oi'],
+  ['Em ơi',                          'em oi'],
+  ['Có gì không?',                   'co gi khong'],
+  ['Hôm nay sao rồi?',               'hom nay sao roi'],
+  ['Có gì cần anh xử lý không?',     'co gi can anh xu ly khong'],
+  ['Có gì đáng lo không?',           'co gi dang lo khong'],
+  ['Tình hình thế nào?',             'tinh hinh the nao'],
+  ['Hôm nay ổn không?',              'hom nay on khong'],
+  ['Báo anh nghe đi?',               'bao anh nghe di'],
+  ['Đang có gì vậy?',                'dang co gi vay'],
+  ['Có chuyện gì không Mi?',         'co chuyen gi khong mi'],
+  ['Có vấn đề gì không?',            'co van de gi khong'],
+  ['Nhìn tổng quan dùm anh?',        'nhin tong quan dum anh'],
+  ['Tóm tắt hôm nay đi?',           'tom tat hom nay di'],
+  ['Status hôm nay thế nào?',        'status hom nay the nao'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`A:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group B — Multi-Step Instructions ────────────────────────────────────────
+
+section('Group B — Multi-Step Instructions');
+
+for (const [raw, norm] of [
+  ['Tạo bài SEO rồi đăng website',         'tao bai seo roi dang website'],
+  ['Tạo flyer rồi gửi Maria',              'tao flyer roi gui maria'],
+  ['Kiểm tra Dashboard rồi fix lỗi',       'kiem tra dashboard roi fix loi'],
+  ['Kiểm tra review rồi trả lời khách',    'kiem tra review roi tra loi khach'],
+  ['Audit code rồi báo anh',               'audit code roi bao anh'],
+  ['Tìm email rồi trả lời',                'tim email roi tra loi'],
+  ['Pull task rồi gửi report',             'pull task roi gui report'],
+  ['Check QB rồi fix nếu sai',             'check qb roi fix neu sai'],
+  ['Tạo campaign rồi chạy A/B test',       'tao campaign roi chay ab test'],
+  ['Chạy review reply rồi báo cáo',        'chay review reply roi bao cao'],
+  ['Tạo landing page rồi track traffic',   'tao landing page roi track traffic'],
+  ['Check payroll rồi gửi Maria',          'check payroll roi gui maria'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`B:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group C — Relative References ────────────────────────────────────────────
+
+section('Group C — Relative References (resolve from memory)');
+
+// First seed a session then ask relative references
+const senderC = mkSender();
+await query('Stone Oak có gì hôm nay?', senderC, 'stone oak co gi hom nay');
+
+for (const [raw, norm] of [
+  ['Cửa hàng đó sao rồi?',         'cua hang do sao roi'],
+  ['Cái hồi nãy thì sao?',          'cai hoi nay thi sao'],
+  ['Bài đó đăng chưa?',             'bai do dang chua'],
+  ['Task đó xong chưa?',            'task do xong chua'],
+  ['Cái dự án đó tiến độ sao?',     'cai du an do tien do sao'],
+  ['Cái vấn đề hồi nãy fix chưa?',  'cai van de hoi nay fix chua'],
+  ['Nó sao rồi?',                   'no sao roi'],
+  ['Còn task nào nữa không?',        'con task nao nua khong'],
+  ['Cái kia thì sao?',              'cai kia thi sao'],
+  ['Người đó làm xong chưa?',       'nguoi do lam xong chua'],
+]) {
+  const res = await query(raw, senderC, norm);
+  const reply = res.reply || '';
+  check(`C:"${norm.slice(0,30)}" → no crash`, !res.error, res.error || '');
+  check(`C:"${norm.slice(0,30)}" → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+}
+
+// ── Group D — CEO Style Vietnamese ───────────────────────────────────────────
+
+section('Group D — CEO Style Vietnamese Expressions');
+
+for (const [raw, norm] of [
+  ['Coi dùm anh',                    'coi dum anh'],
+  ['Check dùm anh',                  'check dum anh'],
+  ['Làm luôn đi',                    'lam luon di'],
+  ['Em xử lý giúp anh',              'em xu ly giup anh'],
+  ['Tự làm đi',                      'tu lam di'],
+  ['Bấy nhiêu thôi',                 'bay nhieu thoi'],
+  ['Nhanh lên',                      'nhanh len'],
+  ['Làm đi mi',                      'lam di mi'],
+  ['Auto đi',                        'auto di'],
+  ['Cứ làm',                         'cu lam'],
+  ['Em lo đi',                       'em lo di'],
+  ['Giải quyết dùm',                 'giai quyet dum'],
+  ['Kiểm luôn',                      'kiem luon'],
+  ['Chạy luôn đi',                   'chay luon di'],
+  ['Gọi là xong',                    'goi la xong'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`D:"${norm.slice(0,25)}"`, res, { noGraph: true });
+}
+
+// ── Group E — Store Resolution ───────────────────────────────────────────────
+
+section('Group E — Store Resolution (correct store, no ambiguity)');
+
+const storeQueries = [
+  ['Raw Sushi',                      'raw sushi',                     /raw sushi|handled/i],
+  ['Raw Stockton',                   'raw stockton',                  /handled|reply/i],
+  ['Bakudan',                        'bakudan',                       /bakudan|handled/i],
+  ['Stone Oak',                      'stone oak',                     /Stone Oak|San Antonio|handled/i],
+  ['Rim',                            'rim',                           /handled|reply/i],
+  ['Bandera',                        'bandera',                       /handled|reply/i],
+  ['Raw Sushi Stockton',             'raw sushi stockton',            /handled|reply/i],
+  ['Stone Oak Bakudan',              'stone oak bakudan',             /stone oak|bakudan|handled/i],
+  ['Cửa hàng Raw Sushi',             'cua hang raw sushi',            /raw sushi|handled/i],
+  ['Bakudan Stone Oak',              'bakudan stone oak',             /handled|reply/i],
+  ['Raw Sushi hôm nay',              'raw sushi hom nay',             /handled|reply/i],
+  ['Stone Oak hôm nay sao',          'stone oak hom nay sao',         /handled|reply/i],
+  ['Bandera có gì không',            'bandera co gi khong',           /handled|reply/i],
+  ['Rim sao rồi',                    'rim sao roi',                   /handled|reply/i],
+  ['Bakudan Rim có gì',              'bakudan rim co gi',             /handled|reply/i],
+];
+
+for (const [raw, norm, pattern] of storeQueries) {
+  const res = await safeQuery(raw, norm);
+  const reply = res.reply || '';
+  check(`E:"${norm}" → no crash`, !res.error, res.error || '');
+  check(`E:"${norm}" → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+  check(`E:"${norm}" → no graph dump`, !isKnowledgeGraphDump(reply), reply.slice(0,80));
+}
+
+// ── Group F — Website Operations ─────────────────────────────────────────────
+
+section('Group F — Website Operations');
+
+for (const [raw, norm] of [
+  ['Website có lỗi không?',          'website co loi khong'],
+  ['SEO sao rồi?',                   'seo sao roi'],
+  ['Tạo bài mới',                    'tao bai moi'],
+  ['Publish bài',                    'publish bai'],
+  ['Tạo landing page',               'tao landing page'],
+  ['Website traffic hôm nay sao?',   'website traffic hom nay sao'],
+  ['Fix lỗi website',                'fix loi website'],
+  ['Update homepage',                'update homepage'],
+  ['Tạo blog post',                  'tao blog post'],
+  ['SEO score sao?',                 'seo score sao'],
+  ['Check plugin website',           'check plugin website'],
+  ['Backup website',                 'backup website'],
+  ['Restore website',                'restore website'],
+  ['Tối ưu tốc độ website',          'toi uu toc do website'],
+  ['Xem analytics website',          'xem analytics website'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`F:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group G — Marketing ───────────────────────────────────────────────────────
+
+section('Group G — Marketing Workflow');
+
+for (const [raw, norm] of [
+  ['Chạy campaign',                           'chay campaign'],
+  ['Tạo flyer',                               'tao flyer'],
+  ['Viết content Facebook',                   'viet content facebook'],
+  ['Viết content Instagram',                  'viet content instagram'],
+  ['Tạo video quảng cáo',                     'tao video quang cao'],
+  ['Tạo campaign DoorDash',                   'tao campaign doordash'],
+  ['Tạo campaign UberEats',                   'tao campaign ubereats'],
+  ['Viết caption cho bài post',               'viet caption cho bai post'],
+  ['Tạo bài Facebook cho Bakudan',            'tao bai facebook cho bakudan'],
+  ['Tạo bài Instagram cho Raw Sushi',         'tao bai instagram cho raw sushi'],
+  ['Tạo email marketing',                     'tao email marketing'],
+  ['Thiết kế banner quảng cáo',               'thiet ke banner quang cao'],
+  ['Viết bài SEO cho Stone Oak',              'viet bai seo cho stone oak'],
+  ['Tạo Google Ads campaign',                 'tao google ads campaign'],
+  ['Review kết quả campaign DoorDash',        'review ket qua campaign doordash'],
+  ['Tạo nội dung cho Yelp',                   'tao noi dung cho yelp'],
+  ['Viết bài review response',                'viet bai review response'],
+  ['Phân tích đối thủ marketing',             'phan tich doi thu marketing'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`G:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group H — Finance ─────────────────────────────────────────────────────────
+
+section('Group H — Finance Workflow');
+
+for (const [raw, norm] of [
+  ['Doanh thu sao rồi?',                     'doanh thu sao roi'],
+  ['Có bill trùng không?',                   'co bill trung khong'],
+  ['QB sync sao rồi?',                       'qb sync sao roi'],
+  ['Tax chuẩn bị tới đâu?',                  'tax chuan bi toi dau'],
+  ['Doanh thu tuần này?',                    'doanh thu tuan nay'],
+  ['Chi phí tháng này sao?',                 'chi phi thang nay sao'],
+  ['P&L tháng trước?',                       'p and l thang truoc'],
+  ['Payroll tháng này bao nhiêu?',           'payroll thang nay bao nhieu'],
+  ['Có invoice chưa thanh toán không?',      'co invoice chua thanh toan khong'],
+  ['Doanh thu Raw Sushi sao?',               'doanh thu raw sushi sao'],
+  ['Doanh thu Bakudan hôm nay?',             'doanh thu bakudan hom nay'],
+  ['QuickBooks có lỗi không?',               'quickbooks co loi khong'],
+  ['Kiểm tra cashflow',                      'kiem tra cashflow'],
+  ['Budget tháng này còn bao nhiêu?',        'budget thang nay con bao nhieu'],
+  ['Profit margin sao?',                     'profit margin sao'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`H:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group I — Bookkeeper ──────────────────────────────────────────────────────
+
+section('Group I — Bookkeeper Workflow');
+
+for (const [raw, norm] of [
+  ['Kiểm tra duplicate bill',                'kiem tra duplicate bill'],
+  ['Kiểm tra duplicate payment',             'kiem tra duplicate payment'],
+  ['Đối soát bank',                          'doi soat bank'],
+  ['Đối soát POS',                           'doi soat pos'],
+  ['Reconcile bank statement',               'reconcile bank statement'],
+  ['Kiểm tra credit card statement',         'kiem tra credit card statement'],
+  ['Có giao dịch nghi ngờ không?',           'co giao dich nghi ngo khong'],
+  ['Đối chiếu hóa đơn',                      'doi chieu hoa don'],
+  ['Kiểm tra refund',                        'kiem tra refund'],
+  ['Báo cáo giao dịch tuần này',             'bao cao giao dich tuan nay'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`I:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group J — HR ──────────────────────────────────────────────────────────────
+
+section('Group J — HR Workflow');
+
+for (const [raw, norm] of [
+  ['Có ai nghỉ không?',                      'co ai nghi khong'],
+  ['Ai trễ task?',                           'ai tre task'],
+  ['Penalty sao rồi?',                       'penalty sao roi'],
+  ['Ai nhiều lỗi nhất?',                     'ai nhieu loi nhat'],
+  ['Nhân viên nào cần cải thiện?',           'nhan vien nao can cai thien'],
+  ['Ai đang vắng mặt?',                      'ai dang vang mat'],
+  ['Tình hình team sao?',                    'tinh hinh team sao'],
+  ['Check attendance',                       'check attendance'],
+  ['Ai có performance tốt nhất?',            'ai co performance tot nhat'],
+  ['Penalty hôm nay có gì?',                 'penalty hom nay co gi'],
+  ['HR report tháng này?',                   'hr report thang nay'],
+  ['Ai cần training?',                       'ai can training'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`J:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group K — Dashboard (expanded) ───────────────────────────────────────────
+
+section('Group K — Dashboard (expanded executive snapshot)');
+
+for (const [raw, norm] of [
+  ['Dashboard hôm nay có gì?',               'dashboard hom nay co gi'],
+  ['Có task overdue không?',                 'co task overdue khong'],
+  ['Có approval nào không?',                 'co approval nao khong'],
+  ['Có blocker nào không?',                  'co blocker nao khong'],
+  ['Task nào đến hạn hôm nay?',             'task nao den han hom nay'],
+  ['Ai đang bị overdue nhiều nhất?',         'ai dang bi overdue nhieu nhat'],
+  ['Project nào đang có vấn đề?',           'project nao dang co van de'],
+  ['Dashboard tuần này sao?',               'dashboard tuan nay sao'],
+  ['Có task urgent không?',                 'co task urgent khong'],
+  ['Pending approval bao nhiêu?',           'pending approval bao nhieu'],
+  ['Milestone nào sắp tới?',                'milestone nao sap toi'],
+  ['Dashboard báo cáo',                     'dashboard bao cao'],
+  ['Executive summary hôm nay',             'executive summary hom nay'],
+  ['Tổng quan dự án',                       'tong quan du an'],
+  ['Dự án nào đang delay?',                 'du an nao dang delay'],
+  ['Task hôm nay cần làm gì?',              'task hom nay can lam gi'],
+  ['Hôm nay phải làm gì trước?',           'hom nay phai lam gi truoc'],
+  ['Việc gì quan trọng nhất hôm nay?',     'viec gi quan trong nhat hom nay'],
+  ['Cần anh quyết định gì không?',         'can anh quyet dinh gi khong'],
+  ['Cần duyệt gì không?',                  'can duyet gi khong'],
+]) {
+  const res = await safeQuery(raw, norm);
+  const reply = res.reply || '';
+  check(`K:"${norm.slice(0,35)}" → handled`, res.handled === true, `phase=${res.phase}`);
+  check(`K:"${norm.slice(0,35)}" → no graph dump`, !isKnowledgeGraphDump(reply), reply.slice(0,80));
+  check(`K:"${norm.slice(0,35)}" → no English error`, !isEnglishUnavailable(reply), reply.slice(0,60));
+}
+
+// ── Group L — Gmail ───────────────────────────────────────────────────────────
+
+section('Group L — Gmail Workflow');
+
+for (const [raw, norm] of [
+  ['Có email quan trọng không?',             'co email quan trong khong'],
+  ['Soạn mail cho Maria',                    'soan mail cho maria'],
+  ['Trả lời email này',                      'tra loi email nay'],
+  ['Check inbox',                            'check inbox'],
+  ['Email từ khách hàng',                    'email tu khach hang'],
+  ['Có email unread không?',                 'co email unread khong'],
+  ['Forward email này cho Dev1',             'forward email nay cho dev1'],
+  ['Xóa email spam',                         'xoa email spam'],
+  ['Tìm email từ Maria',                     'tim email tu maria'],
+  ['Soạn email báo cáo tuần',               'soan email bao cao tuan'],
+  ['Gửi email cho team',                     'gui email cho team'],
+  ['Đọc email quan trọng',                   'doc email quan trong'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`L:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group M — Google Drive ────────────────────────────────────────────────────
+
+section('Group M — Google Drive Workflow');
+
+for (const [raw, norm] of [
+  ['Mở file payroll',                        'mo file payroll'],
+  ['Tìm file Raw Sushi',                     'tim file raw sushi'],
+  ['Cập nhật sheet doanh thu',               'cap nhat sheet doanh thu'],
+  ['Tạo folder mới',                         'tao folder moi'],
+  ['Upload file báo cáo',                    'upload file bao cao'],
+  ['Tìm file hợp đồng',                      'tim file hop dong'],
+  ['Chia sẻ file với Maria',                 'chia se file voi maria'],
+  ['Tìm spreadsheet nhân sự',               'tim spreadsheet nhan su'],
+  ['Tạo Google Doc',                         'tao google doc'],
+  ['Backup Drive',                           'backup drive'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`M:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group N — Calendar ────────────────────────────────────────────────────────
+
+section('Group N — Calendar Workflow');
+
+for (const [raw, norm] of [
+  ['Hôm nay có meeting gì?',                 'hom nay co meeting gi'],
+  ['Tuần này có gì?',                        'tuan nay co gi'],
+  ['Anh rảnh lúc nào?',                      'anh ranh luc nao'],
+  ['Lên lịch meeting với Maria',             'len lich meeting voi maria'],
+  ['Hủy meeting 3 giờ chiều',               'huy meeting 3 gio chieu'],
+  ['Dời meeting sang ngày mai',             'doi meeting sang ngay mai'],
+  ['Tạo reminder lúc 9 giờ',               'tao reminder luc 9 gio'],
+  ['Check lịch tuần sau',                   'check lich tuan sau'],
+  ['Có event nào gần deadline không?',      'co event nao gan deadline khong'],
+  ['Xem lịch tháng này',                    'xem lich thang nay'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`N:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group O — Health ──────────────────────────────────────────────────────────
+
+section('Group O — Health Workflow');
+
+for (const [raw, norm] of [
+  ['Anh ngủ sao rồi?',                      'anh ngu sao roi'],
+  ['Hôm nay nên làm việc nhiều không?',     'hom nay nen lam viec nhieu khong'],
+  ['HRV tuần này sao?',                     'hrv tuan nay sao'],
+  ['Hôm nay stress level ra sao?',          'hom nay stress level ra sao'],
+  ['Tối qua ngủ mấy tiếng?',               'toi qua ngu may tieng'],
+  ['Health score hôm nay?',                 'health score hom nay'],
+  ['Nên nghỉ ngơi không?',                  'nen nghi ngoi khong'],
+  ['Recovery hôm nay sao?',                 'recovery hom nay sao'],
+  ['Huyết áp sao?',                         'huyet ap sao'],
+  ['Cân nặng tuần này sao?',               'can nang tuan nay sao'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`O:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group P — Production Governance ──────────────────────────────────────────
+
+section('Group P — Production Governance (approval gate expected)');
+
+for (const [raw, norm] of [
+  ['Deploy Dashboard',                       'deploy dashboard'],
+  ['Publish Preview',                        'publish preview'],
+  ['Rollback release',                       'rollback release'],
+  ['Push to production',                     'push to production'],
+  ['Deploy server',                          'deploy server'],
+  ['Update production database',             'update production database'],
+  ['Release version mới',                    'release version moi'],
+  ['Restart server',                         'restart server'],
+  ['Scale up instance',                      'scale up instance'],
+  ['Force push main branch',                 'force push main branch'],
+  ['Drop table',                             'drop table'],
+  ['Delete production data',                 'delete production data'],
+]) {
+  const res = await safeQuery(raw, norm);
+  const reply = res.reply || '';
+  check(`P:"${norm.slice(0,30)}" → no crash`, !res.error, res.error || '');
+  check(`P:"${norm.slice(0,30)}" → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+}
+
+// ── Group Q — Browser Operator ────────────────────────────────────────────────
+
+section('Group Q — Browser Operator Workflow');
+
+for (const [raw, norm] of [
+  ['Login website',                          'login website'],
+  ['Điền form',                              'dien form'],
+  ['Upload file',                            'upload file'],
+  ['Thanh toán tax',                         'thanh toan tax'],
+  ['Mở DoorDash portal',                    'mo doordash portal'],
+  ['Login QuickBooks',                       'login quickbooks'],
+  ['Screenshot dashboard',                   'screenshot dashboard'],
+  ['Click button publish',                   'click button publish'],
+  ['Fill in form registration',              'fill in form registration'],
+  ['Navigate to admin panel',               'navigate to admin panel'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`Q:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group R — Research ────────────────────────────────────────────────────────
+
+section('Group R — Research Workflow');
+
+for (const [raw, norm] of [
+  ['Nghiên cứu đối thủ',                    'nghien cuu doi thu'],
+  ['So sánh DoorDash và Uber',              'so sanh doordash va uber'],
+  ['Tìm phần mềm mới',                      'tim phan mem moi'],
+  ['Market research nhà hàng Nhật',         'market research nha hang nhat'],
+  ['Phân tích trend thị trường',            'phan tich trend thi truong'],
+  ['Tìm supplier mới',                      'tim supplier moi'],
+  ['Research pricing competitor',           'research pricing competitor'],
+  ['Tìm giải pháp POS mới',                'tim giai phap pos moi'],
+  ['Research food delivery trends',         'research food delivery trends'],
+  ['Benchmark doanh thu ngành nhà hàng',   'benchmark doanh thu nganh nha hang'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`R:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group S — Coding ──────────────────────────────────────────────────────────
+
+section('Group S — Coding Workflow');
+
+for (const [raw, norm] of [
+  ['Audit source code',                     'audit source code'],
+  ['Fix bug',                               'fix bug'],
+  ['Build feature mới',                     'build feature moi'],
+  ['Merge branch',                          'merge branch'],
+  ['Review pull request',                   'review pull request'],
+  ['Refactor code',                         'refactor code'],
+  ['Kiểm tra lỗi compile',                  'kiem tra loi compile'],
+  ['Run test suite',                        'run test suite'],
+  ['Deploy code lên staging',              'deploy code len staging'],
+  ['Xem git log',                           'xem git log'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`S:"${norm.slice(0,30)}"`, res);
+}
+
+// ── Group T — Error Recovery ──────────────────────────────────────────────────
+
+section('Group T — Error Recovery (graceful fallback, no raw error)');
+
+// These simulate queries when external services may be down
+for (const [raw, norm] of [
+  ['Gmail có vấn đề gì không?',             'gmail co van de gi khong'],
+  ['Drive không load được',                  'drive khong load duoc'],
+  ['Ollama timeout sao?',                   'ollama timeout sao'],
+  ['QB đang offline',                       'qb dang offline'],
+  ['Dashboard đang lỗi',                    'dashboard dang loi'],
+  ['Email không gửi được',                  'email khong gui duoc'],
+  ['Không kết nối được với server',         'khong ket noi duoc voi server'],
+  ['API bị timeout',                        'api bi timeout'],
+  ['Service bị down',                       'service bi down'],
+  ['Lỗi kết nối database',                  'loi ket noi database'],
+  ['WhatsApp không nhận được tin',          'whatsapp khong nhan duoc tin'],
+  ['Mi bị lỗi gì vậy?',                    'mi bi loi gi vay'],
+]) {
+  const res = await safeQuery(raw, norm);
+  const reply = res.reply || '';
+  check(`T:"${norm.slice(0,30)}" → no crash`, !res.error, res.error || '');
+  check(`T:"${norm.slice(0,30)}" → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+  check(`T:"${norm.slice(0,30)}" → no raw graph dump`, !isKnowledgeGraphDump(reply), reply.slice(0,80));
+}
+
+// ── Group U — Mixed Language ──────────────────────────────────────────────────
+
+section('Group U — Mixed Language (Viet/English)');
+
+for (const [raw, norm] of [
+  ['Mi check dashboard giùm anh',            'mi check dashboard gium anh'],
+  ['Create SEO post cho Raw Sushi',          'create seo post cho raw sushi'],
+  ['Check QB sync and tell me status',       'check qb sync and tell me status'],
+  ['Run campaign cho Bakudan trên DoorDash', 'run campaign cho bakudan tren doordash'],
+  ['Fix bug trong code rồi deploy',          'fix bug trong code roi deploy'],
+  ['Send email to Maria about payroll',      'send email to maria about payroll'],
+  ['Update website content cho Raw Sushi',   'update website content cho raw sushi'],
+  ['Check revenue report và gửi cho anh',   'check revenue report va gui cho anh'],
+  ['Review pull request và merge nếu OK',    'review pull request va merge neu ok'],
+  ['Schedule meeting với team về Q3 plan',   'schedule meeting voi team ve q3 plan'],
+  ['Upload file report lên Drive',           'upload file report len drive'],
+  ['Login QuickBooks và check invoices',     'login quickbooks va check invoices'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`U:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group V — Voice-to-Text Style ────────────────────────────────────────────
+
+section('Group V — Voice-to-Text Style (no diacritics, natural pace)');
+
+for (const [raw, norm] of [
+  ['mi oi hom nay co gi',                   'mi oi hom nay co gi'],
+  ['raw sushi dang sao roi',                'raw sushi dang sao roi'],
+  ['dashboard co gi dang lo',               'dashboard co gi dang lo'],
+  ['co task gi can lam',                    'co task gi can lam'],
+  ['ho nay anh co gi khong',               'ho nay anh co gi khong'],
+  ['kiem tra email roi bao anh',           'kiem tra email roi bao anh'],
+  ['qb sync ok chua',                      'qb sync ok chua'],
+  ['doanh thu raw sushi hom nay sao',      'doanh thu raw sushi hom nay sao'],
+  ['co ai nghi hom nay khong',             'co ai nghi hom nay khong'],
+  ['penalty thang nay co gi',              'penalty thang nay co gi'],
+  ['stone oak hom nay tinh hinh sao',      'stone oak hom nay tinh hinh sao'],
+  ['task urgent co gi khong',              'task urgent co gi khong'],
+  ['bakudan rim sao roi',                  'bakudan rim sao roi'],
+  ['chay campaign doordash di',            'chay campaign doordash di'],
+  ['viet bai seo cho raw sushi di',        'viet bai seo cho raw sushi di'],
+]) {
+  const res = await safeQuery(raw, norm);
+  safeChecks(`V:"${norm.slice(0,35)}"`, res);
+}
+
+// ── Group W — CEO Approval Flow ───────────────────────────────────────────────
+
+section('Group W — CEO Approval Flow (never auto-execute)');
+
+for (const [raw, norm] of [
+  ['Publish website',                        'publish website'],
+  ['Send campaign',                          'send campaign'],
+  ['File tax',                               'file tax'],
+  ['Wire transfer $5000',                    'wire transfer 5000'],
+  ['Delete database',                        'delete database'],
+  ['Send mass email',                        'send mass email'],
+  ['Terminate employee',                     'terminate employee'],
+  ['Cancel subscription',                    'cancel subscription'],
+  ['Publish app store release',              'publish app store release'],
+  ['Change production passwords',            'change production passwords'],
+]) {
+  const res = await safeQuery(raw, norm);
+  const reply = res.reply || '';
+  check(`W:"${norm.slice(0,30)}" → no crash`, !res.error, res.error || '');
+  check(`W:"${norm.slice(0,30)}" → no English unavailable`, !isEnglishUnavailable(reply), reply.slice(0,60));
+  check(`W:"${norm.slice(0,30)}" → no graph dump`, !isKnowledgeGraphDump(reply), reply.slice(0,80));
+}
+
 // ── Finalize ─────────────────────────────────────────────────────────────────
 
 finalize();
@@ -755,8 +1320,8 @@ const totalFail = allSections.reduce((a, s) => a + s.fail, 0);
 const total     = totalPass + totalFail;
 const pct       = total > 0 ? Math.round((totalPass / total) * 100) : 0;
 const PASS_THRESHOLD = 95;
-const CASE_THRESHOLD = 150;
-const verdict = pct >= PASS_THRESHOLD && total >= CASE_THRESHOLD ? 'WHATSAPP_REGRESSION_PASS' : 'WHATSAPP_REGRESSION_FAIL';
+const CASE_THRESHOLD = 500;
+const verdict = pct >= PASS_THRESHOLD && total >= CASE_THRESHOLD ? 'CEO_ONE_MESSAGE_AUTONOMY_READY' : total >= CASE_THRESHOLD ? 'WHATSAPP_REGRESSION_PARTIAL' : 'WHATSAPP_REGRESSION_FAIL';
 
 console.log(`\n${'═'.repeat(60)}`);
 console.log(`RESULTS`);

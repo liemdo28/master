@@ -11,7 +11,13 @@ exports.syncDashboard = syncDashboard;
 exports.getCachedDashboard = getCachedDashboard;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const DASHBOARD_PATH = process.env.DASHBOARD_PATH || 'E:/Project/Master/dashboard.bakudanramen.com';
+const DASHBOARD_PATH_CANDIDATES = [
+    process.env.DASHBOARD_PATH,
+    process.env.DASHBOARD_ROOT,
+    'E:/Project/Master/Bakudan/dashboard.bakudanramen.com',
+    'E:/Project/Master/dashboard.bakudanramen.com',
+].filter(Boolean);
+const DASHBOARD_PATH = DASHBOARD_PATH_CANDIDATES.find(p => fs_1.default.existsSync(p)) || DASHBOARD_PATH_CANDIDATES[0];
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
 const CACHE_DIR = path_1.default.join(GLOBAL_DIR, 'visibility', 'dashboard');
 function scanModules(root) {
@@ -56,7 +62,7 @@ function findReports(root) {
                 if (e.name === 'node_modules')
                     continue;
                 if (e.isFile() && /report|audit|summary/i.test(e.name))
-                    results.push(path_1.default.join(dir, e.name).replace(DASHBOARD_PATH, ''));
+                    results.push(path_1.default.join(dir, e.name).replace(root, ''));
                 if (e.isDirectory())
                     walk(path_1.default.join(dir, e.name), depth + 1);
             }
@@ -68,7 +74,7 @@ function findReports(root) {
 }
 async function syncDashboard() {
     if (!fs_1.default.existsSync(DASHBOARD_PATH)) {
-        const err = { error: 'Dashboard path not found', path: DASHBOARD_PATH, checked_at: new Date().toISOString() };
+        const err = { error: 'Dashboard path not found', path: DASHBOARD_PATH, candidates: DASHBOARD_PATH_CANDIDATES, checked_at: new Date().toISOString() };
         fs_1.default.mkdirSync(CACHE_DIR, { recursive: true });
         fs_1.default.writeFileSync(path_1.default.join(CACHE_DIR, 'errors.json'), JSON.stringify([err], null, 2));
         return null;

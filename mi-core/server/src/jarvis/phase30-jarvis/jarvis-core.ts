@@ -125,7 +125,7 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
 
   // ── W3: Bakudan operational status — prevent graph dump ──────────────────
   // "Bakudan hôm nay sao?" must NOT trigger Knowledge Graph
-  if (has(t, /^bakudan.*(hom nay|sao|co gi|tinh hinh|status)$|bakudan.*(hom nay|sao roi|the nao)\??$/)) {
+  if (has(t, /^bakudan$|^bakudan\s*[?!.]*$|^bakudan.*(hom nay|sao|co gi|tinh hinh|status|hien|dang|nay)$|bakudan.*(hom nay|sao roi|the nao)\??$/)) {
     return {
       handled: true, phase: 30,
       reply: '🏪 *Bakudan Ramen — Tổng quan*\n\nAnh dùng "Dashboard hôm nay có gì?" để xem task, overdue và tình hình vận hành hôm nay từ Dashboard em nhé.',
@@ -134,9 +134,10 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
 
   // ── W3: Dashboard live queries (hit /api/mi/snapshot directly) ───────────
 
-  // "Dashboard hôm nay có gì?" / "kiem tra dashboard" / "tổng quan dashboard" / "xem dashboard"
-  // Also catches "hôm nay anh có gì?" — general CEO executive question
-  if (has(t, /dashboard.*(hom nay|co gi|task|tong quan|overview|status|tinh hinh|bao cao)|kiem tra.*dashboard|tong quan.*dashboard|xem.*dashboard|^hom nay anh co gi|^co gi hom nay anh/)) {
+  // Catches: dashboard + any suffix, screenshot/check/error + dashboard,
+  // approval/overdue/blocker/milestone/delay executive questions,
+  // "hôm nay anh có gì?" — general CEO executive daily overview
+  if (has(t, /dashboard|^hom nay anh co gi|^co gi hom nay anh|co.*overdue|overdue.*co|\boverdue\b|co.*approval|approval.*pending|pending.*approval|co.*blocker|milestone.*sap|executive.*summary|summary.*executive|tong quan.*du an|du an.*delay|delay.*du an|hom nay.*phai lam|phai lam.*truoc|can anh.*quyet dinh|quyet dinh.*gi|can.*duyet|co.*task.*urgent|urgent.*task|screenshot.*dashboard|^task hom nay|kiem tra dashboard|tong quan dashboard|xem dashboard/)) {
     try {
       const DASH_URL = (process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com') + '/api/mi/snapshot';
       const MI_TOKEN = process.env.MI_SNAPSHOT_SECRET || '';
