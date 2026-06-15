@@ -41,6 +41,7 @@ import {
   updateApproval as updateStoreApproval,
 } from '../services/whatsapp-store';
 import { runPipeline } from '../pipeline/response-pipeline';
+import { enqueueChat, ChatQueueFullError, ChatTimeoutError } from '../chat/chat-queue';
 import { approve, reject, getPending, getById } from '../approval/gate';
 import { setupApiKey, rotateApiKey, revokeApiKey } from '../services/whatsapp-key-manager';
 import { routeCeoCommand } from '../whatsapp/ceo-command-router';
@@ -239,7 +240,7 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     const existing = await import('../services/whatsapp-store').then(m => m.getMessageById(message_id));
     return res.json({
       ok: true,
-      reply: existing?.response || '',
+      reply: existing?.response || 'Em đang xử lý yêu cầu của anh — anh thử lại sau vài giây nhé.',
       actions: [],
       approval_required: false,
       approval_id: null,
@@ -531,12 +532,12 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   // ── Route to Mi Executive Pipeline ───────────────────────────────────────
   try {
     const pipelineMessage = quotedContext ? `${quotedContext}\n\n${normalized}` : normalized;
-    const pipelineOut = await runPipeline({
+    const pipelineOut = await enqueueChat(() => runPipeline({
       message: pipelineMessage,
       mode: 'ceo',
       history: [],
       intent: 'chat',
-    });
+    }));
 
     // ── Detect if approval needed ──────────────────────────────────────────
     const needsApproval = requiresApproval(normalized);
@@ -655,7 +656,11 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     // Never expose raw infrastructure errors to the CEO.
     const msg = e.message || '';
     let gracefulReply: string;
-    if (/timeout|aborted|timed out|ETIMEDOUT/i.test(msg)) {
+    if (e instanceof ChatQueueFullError) {
+      gracefulReply = 'Em đang bận xử lý nhiều việc cùng lúc — anh thử lại sau vài giây nhé.';
+    } else if (e instanceof ChatTimeoutError) {
+      gracefulReply = 'Em đang bị chậm lúc này — AI engine mất quá lâu. Anh thử lại nhé, em vẫn đang hoạt động.';
+    } else if (/timeout|aborted|timed out|ETIMEDOUT/i.test(msg)) {
       gracefulReply = 'Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang hoạt động.';
     } else if (/generateText|providers|LLM|ollama|anthropic/i.test(msg)) {
       gracefulReply = 'Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em câu khác nhé.';
