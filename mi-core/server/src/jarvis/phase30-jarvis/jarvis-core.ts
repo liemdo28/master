@@ -4,6 +4,7 @@
  * Every WhatsApp message → Jarvis → right module → right answer.
  */
 
+import { getSession, updateSession, isFollowUp, extractEntity, extractTopic } from './conversation-store';
 import { indexKnowledge, searchKnowledge, getKnowledgeStats } from '../phase21-knowledge/knowledge-indexer';
 import { recallMemory, storeMemory, getMemoryStats } from '../phase22-memory/memory-registry';
 import { getAllTools, getDangerousTools } from '../phase23-tools/tool-registry';
@@ -56,7 +57,7 @@ function has(text: string, pattern: RegExp): boolean {
   return pattern.test(text);
 }
 
-export async function processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> {
+async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> {
   const t = norm(ctx.normalized || ctx.raw_text);
 
   // ── Phase 30 direct acceptance/status queries before personality routing ──
@@ -762,6 +763,44 @@ export async function processJarvisQuery(ctx: JarvisContext): Promise<JarvisResp
   }
 
   return { handled: false };
+}
+
+// ── Session-aware public wrapper ─────────────────────────────────────────────
+
+export async function processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> {
+  const session = getSession(ctx.sender);
+
+  // Resolve follow-up messages against the last conversation turn
+  let resolvedCtx = ctx;
+  if (session && isFollowUp(norm(ctx.normalized || ctx.raw_text))) {
+    const contextNote = [
+      session.last_entity ? `[Chủ đề trước: ${session.last_entity}]` : '',
+      session.last_topic ? `[Topic: ${session.last_topic}]` : '',
+      session.last_reply ? `[Em vừa trả lời: ${session.last_reply.slice(0, 150)}]` : '',
+    ].filter(Boolean).join(' ');
+
+    resolvedCtx = {
+      ...ctx,
+      raw_text: `${ctx.raw_text} ${contextNote}`.trim(),
+      normalized: `${ctx.normalized || ctx.raw_text} ${contextNote}`.trim(),
+    };
+  }
+
+  const result = await _processJarvisQuery(resolvedCtx);
+
+  // Persist session after a successful handled response
+  if (result.handled && result.reply) {
+    const intentStr = (result.metadata?.intent as string) || `phase_${result.phase}` || '';
+    updateSession(ctx.sender, {
+      last_message: ctx.raw_text,
+      last_reply: result.reply.slice(0, 300),
+      last_entity: extractEntity(ctx.raw_text) || session?.last_entity || '',
+      last_topic: extractTopic(result.phase, intentStr) || session?.last_topic || '',
+      last_intent: intentStr || session?.last_intent || '',
+    });
+  }
+
+  return result;
 }
 
 async function getJarvisStatusReport(): Promise<string> {
