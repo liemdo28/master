@@ -172,9 +172,13 @@ async function handleStatusCheck(text: string, sender: string): Promise<string |
         return reply.trim();
       }
 
-      // Generic entity status
-      const graph = exploreRelationships(entity);
-      const reply = `Em vừa kiểm tra ${entity}.\n\n${graph}`;
+      // Generic entity status — clean executive style, no raw graph dump
+      const rec = getRecommendation(entity.toLowerCase()) || '';
+      const reply = formatExecutiveResponse([
+        `Em đang theo dõi ${entity}.`,
+        `Hiện tại em chưa có dữ liệu live. Anh hỏi cụ thể hơn nhé — ví dụ: "${entity} doanh thu sao?" hoặc "${entity} có vấn đề gì không?".`,
+        rec,
+      ]);
       addMiTurn(sender, reply);
       return reply;
     }
@@ -407,6 +411,28 @@ function handleProjectQuery(text: string, sender: string): string | null {
   return reply;
 }
 
+// ── GStack Operating Backend — fires before personality for complex requests ──
+
+let _gstackModule: { shouldUseGStack: (t: string) => boolean; processGStackRequest: (r: unknown) => Promise<{ ceo_message: string; confidence_score: number }> } | null = null;
+function getGStack() {
+  if (!_gstackModule) _gstackModule = require('../../gstack/gstack-orchestrator');
+  return _gstackModule!;
+}
+
+async function tryGStack(text: string, sender: string): Promise<PersonalityResult | null> {
+  try {
+    const { shouldUseGStack, processGStackRequest } = getGStack();
+    if (!shouldUseGStack(text)) return null;
+
+    const result = await processGStackRequest({
+      raw_request: text,
+      requested_by: sender,
+      source: 'whatsapp',
+    });
+    return { handled: true, reply: result.ceo_message, intent: 'gstack_pipeline', confidence: result.confidence_score };
+  } catch { return null; }
+}
+
 // ── Main entry point ──────────────────────────────────────────────────────────
 
 export async function processExecutiveQuery(
@@ -415,6 +441,13 @@ export async function processExecutiveQuery(
 ): Promise<PersonalityResult> {
   const text = rawText.trim();
   addCEOTurn(sender, text);
+
+  // 0. GStack Operating Backend — intercepts complex CEO requests
+  const gstack = await tryGStack(text, sender);
+  if (gstack) {
+    if (gstack.reply) addMiTurn(sender, gstack.reply);
+    return gstack;
+  }
 
   // 1. Greeting
   const greeting = handleGreeting(text);
@@ -463,15 +496,14 @@ export async function processExecutiveQuery(
   const proactive = handleProactiveRequest(text, sender);
   if (proactive) return { handled: true, reply: proactive, intent: 'proactive_suggestion', confidence: 85 };
 
-  // 8. Entity-aware fallback — if text mentions a known entity, give a generic status
+  // 8. Entity-aware fallback — clean executive style, no raw graph dump
   const knownEntity = detectEntity(text);
   if (knownEntity) {
     addCEOTurn(sender, text, knownEntity, knownEntity);
-    const graph = exploreRelationships(knownEntity);
+    const rec = getRecommendation(knownEntity.toLowerCase()) || '';
     const reply = formatExecutiveResponse([
       `Em đang theo dõi ${knownEntity}.`,
-      graph ? `\n${graph}` : '',
-      getRecommendation(knownEntity.toLowerCase()) || '',
+      rec || `Anh hỏi cụ thể hơn nhé — ví dụ doanh thu, task, hay tình trạng vận hành?`,
     ]);
     addMiTurn(sender, reply);
     return { handled: true, reply, intent: 'entity_awareness', confidence: 70 };

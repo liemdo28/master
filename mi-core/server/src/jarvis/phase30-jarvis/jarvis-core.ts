@@ -706,7 +706,7 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
   if (has(t, /simulate|kich ban|scenario/)) {
     const scenarios = getAllScenarios();
     const lines = scenarios.map((s, i) => `${i + 1}. *${s.name}* (${s.impact}): ${s.description.slice(0, 60)}`);
-    return { handled: true, phase: 29, reply: `📊 *Simulation Scenarios*\n\n${lines.join('\n\n')}\n\nGõ "simulate [tên]" để chạy mô phỏng.` };
+    return { handled: true, phase: 29, reply: `📊 *Simulation Scenarios*\n\n${lines.join('\n\n')}\n\nAnh muốn chạy kịch bản nào, em sẽ phân tích ngay.` };
   }
 
   // ── Phase 26: Health & Incidents ──
