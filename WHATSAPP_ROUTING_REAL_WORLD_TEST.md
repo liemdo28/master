@@ -1,88 +1,130 @@
-# WHATSAPP ROUTING REAL WORLD TEST
-> Phase 21.6 CEO Directive P0 | Generated: 2026-06-22
+# WhatsApp Routing Real World Test
 
-## Certification Rule
-Do NOT certify based on: curl | localhost | unit tests | mock messages
-Certification requires: Real WhatsApp | Real group | Real CEO messages | Real routing logs | No duplicate replies
+## Test Environment
+CEO WhatsApp chat — the exact affected WhatsApp number.
 
----
-
-## Test 1: CEO says "Mi ơi"
-
-**Command:** CEO sends "Mi ơi" to Mi-Core
-**Expected:**
-- Owner = mi_core
-- 1 response max
-- Response: mi-core executive reply
-**Validation:** Check routing-trace.jsonl for message_id with owner=mi_core, response_sent=true
+## Test Procedure
+Each test: send message → observe responses → log result.
 
 ---
 
-## Test 2: CEO says "nay anh có task gì"
+## Test A: "mi oi"
 
-**Command:** CEO sends "nay anh có task gì" (no prefix)
-**Expected:**
-- Owner = mi_core (CEO sender in MI_CEO_WHATSAPP_IDS)
-- 1 response max
-- NO marketing preview
-- NO food safety rejection
-**Evidence:** routing-trace.jsonl — owner must be mi_core, response_sent=true
-**Anti-evidence:** Any entry with owner=food_safety or marketing_preview for this message_id
+**Send**: `mi oi`
 
----
+**Expected**:
+- owner = mi_core
+- response_count = 1
+- no food safety reply
+- no marketing preview
+- route log: `no_prefix_mi_forward` or `mi_forward`
 
-## Test 3: Food Safety image upload
-
-**Command:** Team member uploads food safety form image to Food Safety group
-**Expected:**
-- Owner = food_safety
-- 1 response max
-- Response: OCR confirmation or warning
-**Validation:** routing-trace.jsonl — owner=food_safety, response_sent=true, intent=food_safety_submission
+**PASS/FAIL**: _______
 
 ---
 
-## Test 4: Repeat same message (DEDUP TEST)
+## Test B: "nay anh có task gì"
 
-**Command:** Send exact same text twice
-**Expected:**
-- First message: 1 response (owner determined)
-- Second message: 0 responses (duplicate blocked)
-**Validation:** routing-trace.jsonl — message_id appears once with response_sent=true, never again
+**Send**: `nay anh có task gì`
 
----
+**Expected**:
+- owner = mi_core OR unknown_no_reply
+- response_count <= 1
+- no food safety reply
+- no marketing preview
+- route log: `no_prefix_mi_forward` or `mi_forward`
 
-## Test 5: Marketing approval command
-
-**Command:** Send "duyệt bản nháp" or "approve draft"
-**Expected:**
-- Owner = marketing_preview
-- 1 response max
-**Validation:** routing-trace.jsonl — owner=marketing_preview
+**PASS/FAIL**: _______
 
 ---
 
-## Test 6: Unknown message (no reply)
+## Test C: "anh hỏi anh có task gì mà"
 
-**Command:** Random person sends "hello" to a group
-**Expected:**
-- Owner = unknown_no_reply
-- 0 responses
-**Validation:** routing-trace.jsonl — owner=unknown_no_reply, response_sent=false
+**Send**: `anh hỏi anh có task gì mà`
+
+**Expected**:
+- owner = mi_core OR continuation_of_mi_core_session
+- response_count = 1
+- no food safety reply
+- no marketing preview
+
+**PASS/FAIL**: _______
 
 ---
 
-## Test 7: Concurrent messages (race condition)
+## Test D: Food Safety Form Image
 
-**Command:** Send 3 different messages within 1 second
-**Expected:**
-- Each message gets exactly 1 response
-- No message is assigned to 2 owners
-**Validation:** routing-trace.jsonl — 3 entries, each response_sent=true, distinct message_ids
+**Send**: Take photo of a food safety form/checklist and send it.
 
-## Test 8: Food Safety group text (no image)
+**Expected**:
+- owner = food_safety
+- response_count = 1
+- no mi-core reply
+- no marketing preview
 
-**Command:** Staff sends "check" in Food Safety group
-**Expected:** 0 responses (text-only in food safety group needs active session)
-**Validation:** routing-trace.jsonl — owner=food_safety, response_sent=false, intent=silent_drop
+**PASS/FAIL**: _______
 
+---
+
+## Test E: Marketing Approval (only with active draft)
+
+**Prerequisite**: Active marketing draft session must exist.
+**Send**: `approve review 42` (or the appropriate approval command)
+
+**Expected**:
+- owner = marketing_preview
+- response_count = 1
+
+**PASS/FAIL**: _______
+
+---
+
+## Test F: Duplicate Message (Dedup)
+
+**Send**: Repeat Test A message within 10 seconds.
+
+**Expected**:
+- dedup = true
+- response_count = 0
+- route log: `dedup_blocked_incoming`
+
+**PASS/FAIL**: _______
+
+---
+
+## Test Log Template
+
+```
+=== TEST RUN: YYYY-MM-DD HH:MM ===
+CEO: [CEO phone]
+Gateway PID: 8388
+Gateway Uptime: [uptime]
+
+Test A "mi oi":
+  Response count: ___
+  Owner: ___
+  Route: ___
+  PASS: Y/N
+
+Test B "nay anh có task gì":
+  Response count: ___
+  Owner: ___
+  Route: ___
+  PASS: Y/N
+
+Test C "anh hỏi anh có task gì mà":
+  Response count: ___
+  Owner: ___
+  Route: ___
+  PASS: Y/N
+
+Test D Food Safety image:
+  Response count: ___
+  Owner: ___
+  PASS: Y/N
+
+Test F Duplicate:
+  Dedup blocked: Y/N
+  Response count: ___
+  PASS: Y/N
+```
