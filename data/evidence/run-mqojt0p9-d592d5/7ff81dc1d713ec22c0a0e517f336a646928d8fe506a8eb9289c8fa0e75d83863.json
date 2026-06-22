@@ -1,0 +1,19 @@
+{
+  "primary_intent": {
+    "intent": "compliance_concern",
+    "label_vi": "Tuân thủ pháp luật",
+    "confidence": 0.8,
+    "evidence_keywords": [
+      "audit"
+    ],
+    "suggested_investigation": [
+      "Check license expiry dates",
+      "Review compliance status",
+      "Verify insurance coverage",
+      "Check regulatory updates"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}
