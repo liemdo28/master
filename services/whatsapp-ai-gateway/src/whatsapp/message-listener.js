@@ -835,7 +835,8 @@ async function handleTextMessage(client, msg) {
     const groupWorkflowConfig = require('../workflows/group-workflow-config');
     const isAdmin = miAccess.isCeoSender(phone) || (!isGroup && await groupWorkflowConfig.isMiAdminPrivateChat(chatId, phone) && miAccess.isCeoSender(phone));
     if (!isAdmin) {
-      log.info('[MESSAGE_FLOW] no_prefix_not_mi_non_ceo', { ...runtimeTraceBase, route: 'chatbot_fallback', phone });
+      log.info('[MESSAGE_FLOW] no_prefix_non_ceo_silent_drop', { ...runtimeTraceBase, route: 'no_prefix_silent_drop', phone });
+      return; // P0 FIX: non-CEO no-prefix must NOT fall through to GREETING block
     } else {
       const result = await agentMiRouter.handleMiMessage({
         chatId,
@@ -862,8 +863,12 @@ async function handleTextMessage(client, msg) {
           phone,
           name,
         });
-        if (!sent && !forwardResult.ok) {
-          log.warn('[MESSAGE_FLOW] no_prefix_mi_forward_failed_no_user_fallback', { ...runtimeTraceBase, route: 'no_prefix_mi_forward', error: forwardResult.error || '' });
+        if (forwardResult.ok && forwardResult.reply && !sent) {
+          // Forward succeeded but sendMiForwardResult suppressed (dedup/stale guard)
+          log.info('[MESSAGE_FLOW] no_prefix_mi_forward_suppressed', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_suppressed' });
+        } else if (!forwardResult.ok) {
+          // Mi-core unreachable — silent drop, mi-core handles retry
+          log.warn('[MESSAGE_FLOW] no_prefix_mi_forward_failed_silent_drop', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_failed', error: forwardResult.error || '' });
         }
       } else if (result.reply) {
         await replyService.send(client, chatId, result.reply);
@@ -873,6 +878,13 @@ async function handleTextMessage(client, msg) {
     }
   }
 
+
+  // P0 FIX: CEO senders must NEVER receive generic greeting or generic AI reply
+  // Only Mi-Core may respond to CEO. This prevents collision when mi-core is slow.
+  if (miAccess.isCeoSender(phone)) {
+    log.info('[MESSAGE_FLOW] ceo_sender_blocked_from_generic_ai', { ...runtimeTraceBase, route: 'ceo_generic_ai_blocked' });
+    return; // CEO always routes to Mi. Never use generic AI or greeting.
+  }
 
   if (nlp.autoHandle && nlp.intent === 'GREETING') {
     await langMem.setUserLanguage(phone, nlp.language, { displayName: name, confidence: nlp.confidence, source: 'nlp_greeting' }).catch(() => {});

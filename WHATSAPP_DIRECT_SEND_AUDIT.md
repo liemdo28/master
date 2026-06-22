@@ -1,67 +1,58 @@
-# WHATSAPP_DIRECT_SEND_AUDIT
+# WhatsApp Direct Send Audit
 
-**Status:** AUDITED
-**Date:** 2026-06-22
-**Scope:** All code under `services/whatsapp-ai-gateway/src/`
+## Ownership Response Contract
 
-## Direct Send Locations Found
+All handlers MUST return a routing result. Only the central router (`message-listener.js`) sends WhatsApp messages.
 
-### ✅ ALLOWED — reply-service.js (THE ONLY SEND POINT)
-
-| Location | Function | Status |
-|----------|----------|--------|
-| reply-service.js:35 | `client.sendMessage(to, text)` | ✅ ALLOWED — authorized send |
-| reply-service.js:67 | `client.sendMessage(to, media, caption)` | ✅ ALLOWED — authorized media send |
-
-**reply-service.js is the ONLY authorized send point.** All handlers must use `replyService.send()`.
-
-### ✅ GUARDED — Outbound Send Guards
-
-| File | Guard | Status |
-|------|-------|--------|
-| message-listener.js:351 | `installOutboundSendGuard(client)` | ✅ Blocks banned text from raw client.sendMessage |
-| session-manager.js:83 | `installOutboundSendGuard(targetClient)` | ✅ Same guard at session level |
-
-Both guards intercept `client.sendMessage()` and block messages matching `BLOCKED_USER_FACING_PATTERNS`:
-- `/mi-core is temporarily unavailable/i`
-- `/temporarily unavailable\.?\s*please try again later/i`
-
-### ✅ ALLOWED — Non-WhatsApp Sends
-
-| File | Purpose | Status |
-|------|---------|--------|
-| telegram-forwarder.js:46 | `bot.sendMessage(chatId, text)` | ✅ Telegram only — not WhatsApp |
-| telegram-forwarder.js:56 | `bot.sendMessage(chatId, text)` | ✅ Telegram only — not WhatsApp |
-
-### ✅ TEST ONLY
-
-| File | Purpose | Status |
-|------|---------|--------|
-| tests/*.js | Mock `client.sendMessage` | ✅ Test mocks — not production |
-
-## Handler Audit — All Handlers Return Proposed Response
-
-Under the new routing architecture (`message-router-owner.js`), ALL handlers must return:
-
-```javascript
+```ts
 {
-  owner: string,        // handler identifier
-  confidence: number,   // 0-1
-  response: string,     // proposed response text (null = no reply)
-  evidence: string,     // reasoning
-  shouldSend: boolean   // router decides
+  owner: 'mi_core' | 'food_safety' | 'marketing_preview' | 'team_support' | 'unknown',
+  confidence: number,
+  shouldSend: boolean,
+  responseType: 'text' | 'image' | 'none',
+  text?: string,
+  imagePath?: string,
+  reason: string
 }
 ```
 
-**No handler may call `replyService.send()` directly.** The router (`sendOnce()`) is the sole sender.
+## Direct Send Paths Audit
 
-## Remaining Risk
+| Send Path | File | Lines | Still Allowed | Notes |
+|---|---|---|---|---|
+| `replyService.send()` | `message-listener.js` | 732, 750, 758, 781, 787, 820, 841, 869, 938, 951, 976 | YES | Central router only |
+| `sendMediaFile()` | `message-listener.js` | 191 (inside sendMiForwardResult) | YES | Central router only |
+| Food Safety pipeline | `message-listener.js` | 516-533 | YES | Image workflow owner |
+| Template OCR | `message-listener.js` | 498-509 | YES | Active session owner |
+| Form Photo Workflow | `message-listener.js` | 474-485 | YES | Active session owner |
 
-| Risk | Mitigation | Status |
-|------|-----------|--------|
-| Legacy handler sends directly | All legacy paths still exist but are gated by router ownership check | MITIGATED |
-| New handler bypasses router | Code review required for any new handler additions | PROCESS |
+## Fixed Collision Points
 
-## Final Status
+### Collision 1: isNoPrefix → non-CEO → fallthrough → GREETING
+**Status**: FIXED ✅
+**File**: `message-listener.js` line ~838
+**Before**: `if (!isAdmin) { log.info(...); }` (no return → falls through to GREETING)
+**After**: `if (!isAdmin) { log.info(...); return; }` (explicit silent drop)
 
-**WHATSAPP_DIRECT_SEND_AUDIT_PASSED** — all WhatsApp sends go through reply-service.js, which is the sole authorized send point.
+### Collision 2: isNoPrefix → CEO → forwardToMi fails → error reply sent as fallback
+**Status**: FIXED ✅
+**File**: `message-listener.js` line ~865
+**Before**: `if (!sent && !forwardResult.ok) { log.warn(...); }` (error reply used as fallback)
+**After**: `if (forwardResult.ok && forwardResult.reply && !sent) { log.info(...); } else if (!forwardResult.ok) { log.warn(...); }` (no fallback sent)
+
+### Collision 3: CEO → NLP GREETING → generic greeting for CEO
+**Status**: FIXED ✅
+**File**: `message-listener.js` line ~877
+**Added**: CEO sender guard before GREETING block:
+```js
+if (miAccess.isCeoSender(phone)) {
+  log.info('[MESSAGE_FLOW] ceo_sender_blocked_from_generic_ai', { ...runtimeTraceBase, route: 'ceo_generic_ai_blocked' });
+  return; // CEO always routes to Mi. Never use generic AI or greeting.
+}
+```
+
+## Verified: No Direct Handler Replies
+- Food Safety pipeline: Returns `{ handled, reply }` to central router, router sends
+- Template OCR: Returns `{ handled, reply }` to central router, router sends  
+- Form Photo: Returns `{ handled, reply }` to central router, router sends
+- mi-ceo-observer: Read-only, NEVER sends

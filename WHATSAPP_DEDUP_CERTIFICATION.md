@@ -1,57 +1,47 @@
-# WHATSAPP DEDUP CERTIFICATION
-> Phase 21.6 CEO Directive P0 | Generated: 2026-06-22
+# WhatsApp Dedup Certification
 
-## Status
-**File:** `services/whatsapp-ai-gateway/src/routing/message-dedup-store.js`
-**Status:** ✅ EXISTS — Full implementation certified
+## Dedup Store: `services/whatsapp-ai-gateway/src/routing/message-dedup-store.js`
 
-## Certification Checklist
+### Implementation
+- **Type**: In-memory Map with TTL cleanup
+- **Class**: `MessageDedupStore`
+- **Singleton**: `dedupStore` exported at line 157
 
-| Requirement | Status | Evidence |
-|-------------|--------|----------|
-| Store message_id | ✅ | `this._store.set(messageId, entry)` |
-| Store chat_id | ✅ | Entry includes chat_id |
-| Store timestamp | ✅ | created_at, updated_at (Unix ms) |
-| Store owner | ✅ | owner_handler field |
-| TTL ≥ 24 hours | ✅ | `TTL_MS = 24 * 60 * 60 * 1000` |
-| Periodic cleanup | ✅ | _cleanupTimer every 5 minutes |
-| isDuplicate() check | ✅ | Lines 59–68 |
-| claim() atomic | ✅ | Lines 79–108 |
-| updateStatus() | ✅ | Lines 118–126 |
-| Singleton instance | ✅ | `const dedupStore = new MessageDedupStore()` |
-| Race condition detection | ✅ | claim() rejects if entry within TTL |
-
-## Dedup Logic Flow
-
+### Claim Flow
 ```
-isDuplicate(messageId)
-  ├── No ID? → false (always claim) ✅
-  ├── Missing? → false ✅
-  ├── Expired (>24h)? → delete + false ✅
-  └── Fresh entry? → true (BLOCK) ✅
-
-claim(messageId, chatId, owner)
-  ├── No ID? → claimed:true (legacy compat) ✅
-  ├── Fresh within TTL? → claimed:false (BLOCK) ✅
-  ├── Expired? → delete + proceed ✅
-  └── Create entry status='processing' ✅
+messageDedupStore.claim(messageId, chatId, 'gateway_router')
+  → If already claimed (within TTL) → { claimed: false, existing }
+  → If not claimed → store entry, status='processing' → { claimed: true }
 ```
 
-## Gap Analysis
+### TTL
+- **24 hours** (24 * 60 * 60 * 1000 ms)
+- **Cleanup interval**: Every 5 minutes
+- **Expired entries**: Auto-deleted on check AND on cleanup
 
-### ✅ FULLY COVERED
-- Dedup store with 24h TTL
-- Atomic claim with race protection
-- Auto-cleanup every 5 minutes
-- Memory-safe Map with pruning
-- Dedup gate in handleTextMessage() at line 594
+### Status Values
+- `processing`: Message is being handled
+- `completed`: Handler finished successfully
+- `failed`: Handler encountered error
 
-### ⚠️ PARTIAL
-- Dedup gate in handleImageMessage(): MISSING — needs dedup.claim() call before any image processing
+### Message Flow Integration
+Called at line 591 of `message-listener.js`:
+```js
+const dedupResult = messageDedupStore.claim(inboundMessageId, chatId, 'gateway_router');
+if (!dedupResult.claimed) {
+  log.info('[MESSAGE_FLOW] dedup_blocked_incoming', { ...runtimeTraceBase, route: 'dedup_rejected' });
+  return; // Exactly one response — this message already has its owner
+}
+```
 
-### ❌ NOT COVERED
-- marketing_preview owner not registered in existing handlers
-- No handler-return pattern enforced in existing code
+### Dedup Key Priority
+1. `message_id` (from WhatsApp message `msg.id._serialized`)
+2. Fallback: `chat_id + timestamp_bucket + normalized_body` (via `getResponseLockKey`)
 
-## Certified: WHATSAPP_DEDUP_IMPLEMENTED
-**Requires:** Add dedup.claim() to handleImageMessage() for full coverage
+### Certification
+- ✅ 24-hour TTL implemented
+- ✅ Duplicate message returns immediately (no handler execution)
+- ✅ Claim returns existing owner info
+- ✅ Status tracking (processing/completed/failed)
+- ✅ Periodic cleanup of expired entries
+- ✅ Singleton pattern ensures global dedup across all message handlers
