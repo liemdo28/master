@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi — Approval Gate</title>
+  <style>
+    :root {
+      --bg: #0d0d0d; --surface: #161616; --surface2: #1f1f1f;
+      --border: #2a2a2a; --accent: #4f8ef7; --text: #e8e8e8;
+      --text-dim: #888; --success: #22c55e; --warning: #f59e0b;
+      --danger: #ef4444; --info: #3b82f6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .back-btn {
+      padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface2); color: var(--text-dim); cursor: pointer;
+      font-size: 13px; text-decoration: none;
+    }
+    .back-btn:hover { color: var(--text); }
+    h1 { font-size: 16px; font-weight: 600; }
+    .badge { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: var(--danger); color: #fff; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 5px 12px; border-radius: 20px; font-size: 12px;
+      border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .action-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; margin-bottom: 12px;
+      transition: border-color 0.15s;
+    }
+    .action-card:hover { border-color: var(--border); }
+    .action-card.pending { border-left: 3px solid var(--warning); }
+    .action-card.approved { border-left: 3px solid var(--success); }
+    .action-card.rejected { border-left: 3px solid var(--danger); opacity: 0.7; }
+    .action-card.executed { border-left: 3px solid var(--info); }
+
+    .card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .risk-badge {
+      padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .risk-1 { background: #1a3a1a; color: var(--success); border: 1px solid #2a5a2a; }
+    .risk-2 { background: #3a2a00; color: var(--warning); border: 1px solid #5a4400; }
+    .risk-3 { background: #3a0000; color: var(--danger); border: 1px solid #5a0000; }
+
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .card-target { font-size: 12px; color: var(--text-dim); font-family: monospace; }
+
+    .card-meta { display: flex; gap: 12px; font-size: 11px; color: var(--text-dim); margin-bottom: 12px; flex-wrap: wrap; }
+
+    .card-detail { background: var(--surface2); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 12px; }
+    .detail-row { display: flex; gap: 8px; margin-bottom: 6px; }
+    .detail-row:last-child { margin-bottom: 0; }
+    .detail-label { color: var(--text-dim); min-width: 80px; flex-shrink: 0; }
+    .detail-value { color: var(--text); font-family: monospace; word-break: break-all; }
+
+    .card-actions { display: flex; gap: 8px; }
+    .btn {
+      padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: none; transition: all 0.15s;
+    }
+    .btn-approve { background: var(--success); color: #fff; }
+    .btn-approve:hover { background: #16a34a; }
+    .btn-reject { background: var(--surface2); color: var(--danger); border: 1px solid var(--danger); }
+    .btn-reject:hover { background: #3a0000; }
+    .btn-disabled { background: var(--surface2); color: var(--text-dim); cursor: not-allowed; }
+
+    .status-chip {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    }
+    .status-pending { background: #3a2a00; color: var(--warning); }
+    .status-approved { background: #1a3a1a; color: var(--success); }
+    .status-rejected { background: #3a0000; color: var(--danger); }
+    .status-executed { background: #0a1a3a; color: var(--info); }
+
+    .empty { text-align: center; padding: 60px 20px; color: var(--text-dim); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+    .refresh-btn {
+      margin-left: auto; padding: 6px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface2);
+      color: var(--text-dim); cursor: pointer; font-size: 12px;
+    }
+    .refresh-btn:hover { color: var(--text); }
+
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .confirm-overlay.visible { display: flex; }
+    .confirm-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px; max-width: 420px; width: 90%;
+    }
+    .confirm-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .confirm-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-btn">← Mi Chat</a>
+  <h1>Approval Gate</h1>
+  <span class="badge" id="pending-count">0</span>
+  <button class="refresh-btn" onclick="load()">↻ Refresh</button>
+</header>
+
+<div class="container">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="pending" onclick="setFilter('pending', this)">⏳ Pending</button>
+    <button class="filter-btn" data-filter="all" onclick="setFilter('all', this)">Tất cả</button>
+    <button class="filter-btn" data-filter="approved" onclick="setFilter('approved', this)">✓ Approved</button>
+    <button class="filter-btn" data-filter="rejected" onclick="setFilter('rejected', this)">✗ Rejected</button>
+    <button class="filter-btn" data-filter="executed" onclick="setFilter('executed', this)">⚡ Executed</button>
+  </div>
+
+  <div id="actions-list"></div>
+</div>
+
+<!-- Double-confirm overlay for Level 3 -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title">⚠️ Xác nhận lần 2 — Level 3 Action</div>
+    <div class="confirm-desc" id="confirm-desc"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-reject" onclick="closeConfirm()">Hủy</button>
+      <button class="btn btn-approve" id="confirm-ok-btn">Xác nhận Approve</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:4001/api/approval';
+  let currentFilter = 'pending';
+  let allActions = [];
+  let pendingConfirmId = null;
+
+  const RISK_LABELS = { 1: 'L1 Safe', 2: 'L2 Action', 3: 'L3 Critical' };
+  const CATEGORY_ICONS = {
+    create_file: '📄', edit_file: '✏️', delete_file: '🗑️',
+    deploy: '🚀', git_push: '⬆️', database: '🗄️',
+    install_package: '📦', update_website: '🌐', financial: '💰',
+  };
+
+  function setFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(API);
+      allActions = await res.json();
+      const pending = allActions.filter(a => a.status === 'pending').length;
+      document.getElementById('pending-count').textContent = pending;
+      render();
+    } catch {
+      document.getElementById('actions-list').innerHTML =
+        '<div class="empty"><div class="empty-icon">⚠️</div>Không kết nối được Mi Server</div>';
+    }
+  }
+
+  function render() {
+    const filtered = currentFilter === 'all'
+      ? allActions
+      : allActions.filter(a => a.status === currentFilter);
+
+    if (!filtered.length) {
+      document.getElementById('actions-list').innerHTML =
+        `<div class="empty"><div class="empty-icon">${currentFilter === 'pending' ? '✓' : '📋'}</div>
+        ${currentFilter === 'pending' ? 'Không có action nào cần approve' : 'Không có dữ liệu'}</div>`;
+      return;
+    }
+
+    document.getElementById('actions-list').innerHTML = filtered.map(a => `
+      <div class="action-card ${a.status}" id="card-${a.id}">
+        <div class="card-header">
+          <div class="risk-badge risk-${a.risk_level}">${RISK_LABELS[a.risk_level] || 'L' + a.risk_level}</div>
+          <div style="flex:1">
+            <div class="card-title">${CATEGORY_ICONS[a.category] || '⚙️'} ${a.description}</div>
+            <div class="card-target">${a.target}</div>
+          </div>
+          <span class="status-chip status-${a.status}">${statusLabel(a.status)}</span>
+        </div>
+
+        <div class="card-meta">
+          <span>📂 ${a.category}</span>
+          <span>🕐 ${new Date(a.created_at).toLocaleString('vi-VN')}</span>
+          ${a.risk_level === 3 ? `<span>🔒 Cần ${2 - a.confirmations} confirm nữa</span>` : ''}
+          ${a.resolved_at ? `<span>✓ ${new Date(a.resolved_at).toLocaleString('vi-VN')}</span>` : ''}
+        </div>
+
+        ${(a.before_state || a.after_state || a.rollback_plan) ? `
+        <div class="card-detail">
+          ${a.before_state ? `<div class="detail-row"><span class="detail-label">Trước:</span><span class="detail-value">${a.before_state}</span></div>` : ''}
+          ${a.after_state ? `<div class="detail-row"><span class="detail-label">Sau:</span><span class="detail-value">${a.after_state}</span></div>` : ''}
+          ${a.rollback_plan ? `<div class="detail-row"><span class="detail-label">Rollback:</span><span class="detail-value">${a.rollback_plan}</span></div>` : ''}
+          ${a.result ? `<div class="detail-row"><span class="detail-label">Kết quả:</span><span class="detail-value">${a.result}</span></div>` : ''}
+        </div>` : ''}
+
+        ${a.status === 'pending' ? `
+        <div class="card-actions">
+          <button class="btn btn-approve" onclick="doApprove('${a.id}', ${a.risk_level}, '${escHtml(a.description)}')">
+            ${a.risk_level === 3 ? '🔒 Approve (cần 2x)' : '✓ Approve'}
+          </button>
+          <button class="btn btn-reject" onclick="doReject('${a.id}')">✗ Reject</button>
+        </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function statusLabel(s) {
+    return { pending: '⏳ Chờ duyệt', approved: '✓ Approved', rejected: '✗ Rejected', executed: '⚡ Executed' }[s] || s;
+  }
+
+  function escHtml(s) { return s.replace(/'/g, "\\'"); }
+
+  async function doApprove(id, level, description) {
+    if (level === 3) {
+      pendingConfirmId = id;
+      document.getElementById('confirm-desc').textContent =
+        `Đây là Level 3 Critical action. Anh có chắc muốn approve không?\n\n"${description}"`;
+      document.getElementById('confirm-overlay').classList.add('visible');
+      document.getElementById('confirm-ok-btn').onclick = () => confirmApprove();
+      return;
+    }
+    await sendApprove(id);
+  }
+
+  async function confirmApprove() {
+    closeConfirm();
+    if (pendingConfirmId) await sendApprove(pendingConfirmId);
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('visible');
+    pendingConfirmId = null;
+  }
+
+  async function sendApprove(id) {
+    await fetch(`${API}/${id}/approve`, { method: 'POST' });
+    load();
+  }
+
+  async function doReject(id) {
+    await fetch(`${API}/${id}/reject`, { method: 'POST' });
+    load();
+  }
+
+  load();
+  setInterval(load, 15000); // auto-refresh every 15s
+</script>
+</body>
+</html>

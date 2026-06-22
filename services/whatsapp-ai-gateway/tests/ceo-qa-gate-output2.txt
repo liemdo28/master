@@ -1,0 +1,16 @@
+=== CEO QA Gate Verification ===
+
+[Gate 1] No template_ocr session during form-photo workflow
+ OK  form-photo-workflow uses own in-memory session Map
+ OK  form-photo-ocr does NOT call template-ocr-workflow
+ OK  No agent-session-manager.createSession in form-photo path
+
+[Gate 2] No duplicate submission row on confirm
+[2026-06-09 13:27:54] [32MINFO[39M: SQLite schema ready {"path":"e:\\Project\\Master\\whatsapp-ai-gateway\\:memory:"}
+[2026-06-09 13:27:54] [32MINFO[39M: Form photo storage tables ready
+ OK  confirmSubmission checks existingSubmissionId before INSERT
+ OK  confirmSubmission does UPDATE if existingSubmissionId provided
+ OK  confirmSubmission does INSERT only if no existingSubmissionId
+
+[Gate 3] Dashboard shows confirmed submission
+  ... calling getSubmissionStats() ...

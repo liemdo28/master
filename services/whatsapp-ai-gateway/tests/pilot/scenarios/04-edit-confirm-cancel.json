@@ -1,0 +1,15 @@
+[
+  { "id": "EC-01", "input": "EDIT 1 40", "expected": "EDIT_APPLIED", "description": "Edit by index" },
+  { "id": "EC-02", "input": "EDIT 1 44", "expected": "RANGE_CONFIRM", "description": "Edit out-of-range triggers confirm" },
+  { "id": "EC-03", "input": "EDIT Walk-in Cooler 40", "expected": "EDIT_APPLIED", "description": "Edit by name" },
+  { "id": "EC-04", "input": "EDIT Walk-in Cooler 44", "expected": "RANGE_CONFIRM", "description": "Edit by name out-of-range" },
+  { "id": "EC-05", "input": "EDIT current 40", "expected": "EDIT_APPLIED", "description": "Edit current" },
+  { "id": "EC-06", "input": "CANCEL", "expected": "DISCARDED", "description": "CANCEL before confirm" },
+  { "id": "EC-07", "input": "CONFIRM", "expected": "CONFIRMED", "description": "CONFIRM after edit" },
+  { "id": "EC-08", "input": "STATUS", "expected": "STATUS_REPLY", "description": "STATUS before confirm" },
+  { "id": "EC-09", "input": "END", "expected": "CLOSED", "description": "END during workflow" },
+  { "id": "EC-10", "input": "MENU", "expected": "MENU_REPLY", "description": "MENU after completion" },
+  { "id": "EC-11", "input": "YES", "expected": "CONTINUE", "description": "YES to continue" },
+  { "id": "EC-12", "input": "NO", "expected": "CLOSED", "description": "NO to close" },
+  { "id": "EC-13", "input": "EDIT 99 40", "expected": "ITEM_NOT_FOUND", "description": "EDIT bad index" }
+]

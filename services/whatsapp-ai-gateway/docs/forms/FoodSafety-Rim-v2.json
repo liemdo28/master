@@ -1,0 +1,538 @@
+{
+  "template_id": "FoodSafety-Rim-v2",
+  "store_id": "rim",
+  "store_name": "Rim",
+  "version": "2.0",
+  "form_filename": "FoodSafety-Rim-LineCheck-v2.pdf",
+  "confirmed": false,
+  "field_map": {
+    "RIM-01": {
+      "item": "Walk-In Cooler",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-02": {
+      "item": "Walk-In Freezer",
+      "required_range": "0F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 0
+    },
+    "RIM-03": {
+      "item": "Prep Area Refrig",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-04": {
+      "item": "Ramen Refrig Below",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-05": {
+      "item": "Ramen Refrig Top",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-06": {
+      "item": "Freezer Line",
+      "required_range": "0F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 0
+    },
+    "RIM-07": {
+      "item": "Tapas Refrig Below",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-08": {
+      "item": "Tapas Refrig Top",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-09": {
+      "item": "Pork Chashu Top",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-10": {
+      "item": "Chicken Chashu Top",
+      "required_range": "40F_or_below",
+      "unit": "F",
+      "min": null,
+      "max": 40
+    },
+    "RIM-11": {
+      "item": "Fryer 1",
+      "required_range": "325F_minimum",
+      "unit": "F",
+      "min": 325,
+      "max": null
+    },
+    "RIM-12": {
+      "item": "Fryer 2",
+      "required_range": "325F_minimum",
+      "unit": "F",
+      "min": 325,
+      "max": null
+    },
+    "RIM-13": {
+      "item": "Pasta Boiler 1",
+      "required_range": "200F_minimum",
+      "unit": "F",
+      "min": 200,
+      "max": null
+    },
+    "RIM-14": {
+      "item": "Pasta Boiler 2",
+      "required_range": "200F_minimum",
+      "unit": "F",
+      "min": 200,
+      "max": null
+    },
+    "RIM-15": {
+      "item": "Seasoned Eggs Warm",
+      "required_range": "100F_minimum",
+      "unit": "F",
+      "min": 100,
+      "max": null
+    },
+    "RIM-16": {
+      "item": "Pork Broth",
+      "required_range": "200F_minimum",
+      "unit": "F",
+      "min": 200,
+      "max": null
+    },
+    "RIM-17": {
+      "item": "Chicken Broth",
+      "required_range": "200F_minimum",
+      "unit": "F",
+      "min": 200,
+      "max": null
+    },
+    "RIM-18": {
+      "item": "Veggie Broth",
+      "required_range": "200F_minimum",
+      "unit": "F",
+      "min": 200,
+      "max": null
+    }
+  },
+  "ocr_zones": [
+    {
+      "zone_id": "header_date",
+      "label": "Date",
+      "row": "header",
+      "col": "date",
+      "x_pct": 0.06,
+      "y_pct": 0.08,
+      "w_pct": 0.2,
+      "h_pct": 0.04
+    },
+    {
+      "zone_id": "header_shift",
+      "label": "Shift",
+      "row": "header",
+      "col": "shift",
+      "x_pct": 0.27,
+      "y_pct": 0.08,
+      "w_pct": 0.16,
+      "h_pct": 0.04
+    },
+    {
+      "zone_id": "header_employee",
+      "label": "Employee Name",
+      "row": "header",
+      "col": "employee",
+      "x_pct": 0.44,
+      "y_pct": 0.08,
+      "w_pct": 0.5,
+      "h_pct": 0.04
+    },
+    {
+      "zone_id": "RIM-01_am",
+      "field_id": "RIM-01",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.185,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-01_pm",
+      "field_id": "RIM-01",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.185,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-02_am",
+      "field_id": "RIM-02",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.221,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-02_pm",
+      "field_id": "RIM-02",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.221,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-03_am",
+      "field_id": "RIM-03",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.257,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-03_pm",
+      "field_id": "RIM-03",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.257,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-04_am",
+      "field_id": "RIM-04",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.293,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-04_pm",
+      "field_id": "RIM-04",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.293,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-05_am",
+      "field_id": "RIM-05",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.329,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-05_pm",
+      "field_id": "RIM-05",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.329,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-06_am",
+      "field_id": "RIM-06",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.365,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-06_pm",
+      "field_id": "RIM-06",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.365,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-07_am",
+      "field_id": "RIM-07",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.401,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-07_pm",
+      "field_id": "RIM-07",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.401,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-08_am",
+      "field_id": "RIM-08",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.437,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-08_pm",
+      "field_id": "RIM-08",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.437,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-09_am",
+      "field_id": "RIM-09",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.473,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-09_pm",
+      "field_id": "RIM-09",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.473,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-10_am",
+      "field_id": "RIM-10",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.509,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-10_pm",
+      "field_id": "RIM-10",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.509,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-11_am",
+      "field_id": "RIM-11",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.545,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-11_pm",
+      "field_id": "RIM-11",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.545,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-12_am",
+      "field_id": "RIM-12",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.581,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-12_pm",
+      "field_id": "RIM-12",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.581,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-13_am",
+      "field_id": "RIM-13",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.617,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-13_pm",
+      "field_id": "RIM-13",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.617,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-14_am",
+      "field_id": "RIM-14",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.653,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-14_pm",
+      "field_id": "RIM-14",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.653,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-15_am",
+      "field_id": "RIM-15",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.689,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-15_pm",
+      "field_id": "RIM-15",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.689,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-16_am",
+      "field_id": "RIM-16",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.725,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-16_pm",
+      "field_id": "RIM-16",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.725,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-17_am",
+      "field_id": "RIM-17",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.761,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-17_pm",
+      "field_id": "RIM-17",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.761,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-18_am",
+      "field_id": "RIM-18",
+      "col": "11am",
+      "x_pct": 0.605,
+      "y_pct": 0.797,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    },
+    {
+      "zone_id": "RIM-18_pm",
+      "field_id": "RIM-18",
+      "col": "4pm",
+      "x_pct": 0.72,
+      "y_pct": 0.797,
+      "w_pct": 0.112,
+      "h_pct": 0.036
+    }
+  ],
+  "required_fields": [
+    "header_date",
+    "header_shift",
+    "header_employee"
+  ],
+  "temperature_fields": [
+    "RIM-01",
+    "RIM-02",
+    "RIM-03",
+    "RIM-04",
+    "RIM-05",
+    "RIM-06",
+    "RIM-07",
+    "RIM-08",
+    "RIM-09",
+    "RIM-10",
+    "RIM-11",
+    "RIM-12",
+    "RIM-13",
+    "RIM-14",
+    "RIM-15",
+    "RIM-16",
+    "RIM-17",
+    "RIM-18"
+  ],
+  "sheet_column_mapping": {
+    "submission_time": "A",
+    "store": "B",
+    "date": "C",
+    "shift": "D",
+    "employee": "E",
+    "field_id": "F",
+    "item_name": "G",
+    "required_range": "H",
+    "value_11am": "I",
+    "value_4pm": "J",
+    "ocr_confidence": "K",
+    "status": "L",
+    "corrective_action": "M",
+    "form_image_url": "N"
+  },
+  "confidence_thresholds": {
+    "pass": 0.8,
+    "warn": 0.5,
+    "review": 0.3
+  }
+}

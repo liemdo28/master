@@ -1,0 +1,1 @@
+{"version":3,"file":"cc-expense-check.d.ts","sourceRoot":"","sources":["../../src/workflows/cc-expense-check.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,qBAAqB,CAAC;AACxD,OAAO,EAAE,cAAc,EAAE,MAAM,yBAAyB,CAAC;AAEzD,wBAAsB,iBAAiB,CAAC,WAAW,EAAE,iBAAiB,GAAG,OAAO,CAAC,cAAc,CAAC,CAc/F"}

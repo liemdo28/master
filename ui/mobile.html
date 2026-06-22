@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0f">
+<title>Mi — CEO Command</title>
+<style>
+:root {
+  --bg: #0a0a0f; --card: #12121a; --border: #1e1e2e;
+  --accent: #7c3aed; --accent2: #6d28d9;
+  --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+  --text: #e2e8f0; --muted: #64748b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body, #app { width: 100%; min-height: 100%; overflow-x: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+  font-family: -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif; }
+.pin-screen, .mobile-shell, .pin-keypad, .pin-button { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+
+/* Login */
+#loginScreen { display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:100%; gap:20px; padding:40px 24px; }
+.login-logo { font-size:52px; }
+.login-title { font-size:26px; font-weight:700; }
+.login-sub { font-size:14px; color:var(--muted); }
+.pin-display { display:flex; gap:14px; margin:4px 0; }
+.pin-dot { width:16px; height:16px; border-radius:50%; border:2px solid var(--muted); transition:all .15s; }
+.pin-dot.filled { background:var(--accent); border-color:var(--accent); }
+.pin-keypad { display:grid; grid-template-columns:repeat(3, 80px); gap:12px; }
+.pin-key { height:80px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+  color:var(--text); font-size:24px; font-weight:500; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:background .1s;
+  -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+.pin-key:active { background:var(--accent); }
+.login-err { color:var(--red); font-size:13px; min-height:18px; text-align:center; }
+
+/* App */
+#app { display:none; flex-direction:column; height:100%; }
+#app.on { display:flex; }
+
+/* Topbar */
+.topbar { background:var(--card); border-bottom:1px solid var(--border);
+  padding:12px 16px; padding-top:calc(12px + env(safe-area-inset-top, 0px));
+  display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.topbar-title { font-weight:700; font-size:16px; flex:1; }
+.sdot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.topbtn { padding:6px 12px; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--muted); font-size:12px; cursor:pointer; }
+
+/* Pages */
+.page { display:none; flex:1; overflow-y:auto; padding:14px 14px;
+  flex-direction:column; gap:10px; }
+.page.active { display:flex; }
+
+/* Bottom nav */
+.bottomnav { background:var(--card); border-top:1px solid var(--border); display:flex;
+  padding-bottom:env(safe-area-inset-bottom, 0px); flex-shrink:0; }
+.navbtn { flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 4px;
+  gap:2px; color:var(--muted); font-size:10px; font-weight:600; cursor:pointer;
+  border:none; background:transparent; transition:color .15s; -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+.navbtn .ni { font-size:20px; }
+.navbtn.active { color:var(--accent); }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+.clabel { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; font-weight:600; }
+.cval { font-size:26px; font-weight:700; }
+.csub { font-size:12px; color:var(--muted); margin-top:2px; }
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* Quick grid */
+.qgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.qbtn { background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:12px 10px; text-align:left; cursor:pointer; color:var(--text);
+  font-size:13px; line-height:1.3; -webkit-user-select:none; transition:border-color .15s; }
+.qbtn:active { border-color:var(--accent); background:#7c3aed18; }
+.qbtn .qi { font-size:18px; display:block; margin-bottom:4px; }
+
+/* Chat */
+#chatMsgs { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
+  padding:12px 14px; }
+.cmsg { font-size:14px; padding:10px 13px; border-radius:16px; max-width:88%; line-height:1.45; }
+.cmsg.user { background:var(--accent); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
+.cmsg.mi { background:var(--card); border:1px solid var(--border); align-self:flex-start;
+  border-bottom-left-radius:4px; white-space:pre-wrap; }
+.typing { padding:0 14px 4px; display:none; align-items:center; gap:4px; }
+.typing.on { display:flex; }
+.tdot { width:6px; height:6px; border-radius:50%; background:var(--muted); animation:blink 1.2s infinite; }
+.tdot:nth-child(2){animation-delay:.2s} .tdot:nth-child(3){animation-delay:.4s}
+@keyframes blink { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+.cinput-row { display:flex; gap:8px; padding:8px 14px;
+  padding-bottom:calc(8px + env(safe-area-inset-bottom,0px)); flex-shrink:0; }
+.cinput-row input { flex:1; background:var(--card); border:1px solid var(--border);
+  border-radius:22px; padding:10px 16px; color:var(--text); font-size:16px; outline:none; }
+.cinput-row input:focus { border-color:var(--accent); }
+.sendbtn { width:44px; height:44px; border-radius:50%; background:var(--accent);
+  border:none; cursor:pointer; font-size:20px; color:white;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+/* Approvals */
+.acard { background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:14px; display:flex; flex-direction:column; gap:10px; }
+.alevel { display:inline-flex; align-items:center; gap:5px; font-size:12px;
+  padding:3px 10px; border-radius:20px; font-weight:700; }
+.l2 { background:#f59e0b20; color:var(--yellow); }
+.l3 { background:#ef444420; color:var(--red); }
+.adesc { font-size:14px; line-height:1.4; }
+.ameta { font-size:12px; color:var(--muted); }
+.abtns { display:flex; gap:8px; }
+.apbtn { flex:1; padding:11px; border-radius:10px; border:none;
+  background:var(--green); color:white; font-size:14px; font-weight:700; cursor:pointer; }
+.rjbtn { flex:1; padding:11px; border-radius:10px; border:1px solid var(--red);
+  background:transparent; color:var(--red); font-size:14px; font-weight:700; cursor:pointer; }
+.empty { text-align:center; color:var(--muted); padding:40px 0; font-size:14px; }
+
+/* Projects */
+.pitem { background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px; display:flex; align-items:center; gap:12px; }
+.pdot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.pname { font-size:14px; font-weight:600; }
+.pmeta { font-size:12px; color:var(--muted); margin-top:2px; }
+.pbadge { font-size:11px; padding:2px 8px; border-radius:20px; }
+.bloc { background:#10b98118; color:var(--green); }
+.brem { background:#3b82f618; color:var(--blue); }
+
+/* Settings */
+.srow { display:flex; align-items:center; padding:14px 16px;
+  background:var(--card); border:1px solid var(--border); border-radius:10px;
+  gap:12px; cursor:pointer; }
+.slabel { flex:1; font-size:14px; }
+.sval { font-size:12px; color:var(--muted); max-width:160px; text-align:right; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-logo">⚡</div>
+  <div class="login-title">Mi Command</div>
+  <div class="login-sub">Enter CEO PIN to access</div>
+  <div class="pin-display">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+  <div class="login-err" id="lerr"></div>
+  <div class="pin-keypad">
+    <button type="button" class="pin-key" onclick="pk('1')">1</button>
+    <button type="button" class="pin-key" onclick="pk('2')">2</button>
+    <button type="button" class="pin-key" onclick="pk('3')">3</button>
+    <button type="button" class="pin-key" onclick="pk('4')">4</button>
+    <button type="button" class="pin-key" onclick="pk('5')">5</button>
+    <button type="button" class="pin-key" onclick="pk('6')">6</button>
+    <button type="button" class="pin-key" onclick="pk('7')">7</button>
+    <button type="button" class="pin-key" onclick="pk('8')">8</button>
+    <button type="button" class="pin-key" onclick="pk('9')">9</button>
+    <button type="button" class="pin-key" onclick="pk('0')">0</button>
+    <button type="button" class="pin-key" onclick="pdel()">⌫</button>
+    <button type="button" class="pin-key" style="opacity:0" disabled></button>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <div class="topbar">
+    <div class="sdot" id="wsDot"></div>
+    <div class="topbar-title">⚡ Mi</div>
+    <button class="topbtn" onclick="showPage('approvals')" id="abadge">🔒</button>
+    <button class="topbtn" onclick="logout()">Exit</button>
+  </div>
+
+  <!-- Home page -->
+  <div class="page active" id="page-home">
+    <div class="stats-grid">
+      <div class="card"><div class="clabel">Projects</div><div class="cval" id="sProj">—</div><div class="csub">in Master</div></div>
+      <div class="card"><div class="clabel">Pending</div><div class="cval" id="sApprv" style="color:var(--yellow)">—</div><div class="csub">approvals</div></div>
+      <div class="card"><div class="clabel">Network</div><div class="cval" style="font-size:14px;padding-top:6px" id="sNet">—</div><div class="csub">connection</div></div>
+      <div class="card"><div class="clabel">Status</div><div class="cval" style="color:var(--green);font-size:16px;padding-top:6px">ONLINE</div><div class="csub" id="sUp">—</div></div>
+    </div>
+    <div class="clabel" style="padding:0 2px">Quick Commands</div>
+    <div class="qgrid">
+      <button class="qbtn" onclick="cmd('Hôm nay anh nên làm gì?')"><span class="qi">📋</span>Today's Plan</button>
+      <button class="qbtn" onclick="cmd('Show all projects')"><span class="qi">📦</span>All Projects</button>
+      <button class="qbtn" onclick="cmd('Check Dashboard')"><span class="qi">🏪</span>Dashboard</button>
+      <button class="qbtn" onclick="cmd('Check Raw website')"><span class="qi">🍣</span>Raw Website</button>
+      <button class="qbtn" onclick="cmd('Check Bakudan website')"><span class="qi">🍜</span>Bakudan Web</button>
+      <button class="qbtn" onclick="cmd('Check WhatsApp API')"><span class="qi">💬</span>WhatsApp</button>
+      <button class="qbtn" onclick="cmd('Show pending approvals')"><span class="qi">🔒</span>Approvals</button>
+      <button class="qbtn" onclick="cmd('Generate executive summary')"><span class="qi">📊</span>Exec Summary</button>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="page" id="page-chat" style="padding:0;flex-direction:column;">
+    <div id="chatMsgs"></div>
+    <div class="typing" id="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>
+    <div class="cinput-row">
+      <input type="text" id="cin" placeholder="Chat với Mi..." onkeydown="if(event.key==='Enter')send()">
+      <button class="sendbtn" onclick="send()">↑</button>
+    </div>
+  </div>
+
+  <!-- Approvals -->
+  <div class="page" id="page-approvals">
+    <div id="aList"><div class="empty">Đang tải...</div></div>
+  </div>
+
+  <!-- Projects -->
+  <div class="page" id="page-projects">
+    <div id="pList"><div class="empty">Đang tải...</div></div>
+  </div>
+
+  <!-- Settings -->
+  <div class="page" id="page-settings">
+    <div class="clabel">Server</div>
+    <div class="srow"><div class="slabel">Local URL</div><div class="sval">localhost:4001</div></div>
+    <div class="srow"><div class="slabel">LAN URL</div><div class="sval" id="cfgLan">—</div></div>
+    <div class="srow"><div class="slabel">Tailscale URL</div><div class="sval" id="cfgTs">—</div></div>
+    <div class="clabel" style="margin-top:10px">Actions</div>
+    <div class="srow" onclick="logout()"><div class="slabel">Logout</div><div class="sval">→</div></div>
+    <div class="clabel" style="margin-top:10px">More Commands</div>
+    <div class="qgrid">
+      <button class="qbtn" onclick="cmd('Run QA Raw website')"><span class="qi">🧪</span>QA Raw</button>
+      <button class="qbtn" onclick="cmd('Run QA Dashboard')"><span class="qi">🧪</span>QA Dashboard</button>
+      <button class="qbtn" onclick="cmd('Check integration-system')"><span class="qi">🔗</span>Integration</button>
+      <button class="qbtn" onclick="cmd('Show connector health')"><span class="qi">🔌</span>Connectors</button>
+    </div>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="navbtn active" id="n-home"     onclick="showPage('home')"><span class="ni">🏠</span>Home</button>
+    <button class="navbtn"        id="n-chat"     onclick="showPage('chat')"><span class="ni">💬</span>Chat</button>
+    <button class="navbtn"        id="n-approvals" onclick="showPage('approvals')"><span class="ni">🔒</span>Approve</button>
+    <button class="navbtn"        id="n-projects" onclick="showPage('projects')"><span class="ni">📦</span>Projects</button>
+    <button class="navbtn"        id="n-settings" onclick="showPage('settings')"><span class="ni">⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<script>
+let TOKEN = localStorage.getItem('mi_t') || '';
+let pin = '';
+let ws;
+
+// ── PIN ──────────────────────────────────────────────────────────────────────
+function pk(d) {
+  if (pin.length >= 4) return;
+  pin += d; updateDots();
+  if (pin.length === 4) setTimeout(doLogin, 120);
+}
+function pdel() { pin = pin.slice(0,-1); updateDots(); }
+function updateDots() {
+  for (let i=0; i<4; i++) document.getElementById('d'+i).classList.toggle('filled', i < pin.length);
+}
+async function doLogin() {
+  document.getElementById('lerr').textContent = '';
+  try {
+    const r = await fetch('/api/remote/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({pin})
+    });
+    const d = await r.json();
+    if (d.ok) { TOKEN = d.token; localStorage.setItem('mi_t', TOKEN); showApp(); }
+    else { document.getElementById('lerr').textContent = d.error || 'PIN không đúng'; shake(); pin=''; updateDots(); }
+  } catch { document.getElementById('lerr').textContent = 'Không kết nối được server'; pin=''; updateDots(); }
+}
+function shake() {
+  const kp = document.querySelector('.pin-display');
+  kp.style.transform='translateX(-8px)';
+  setTimeout(()=>kp.style.transform='translateX(8px)', 80);
+  setTimeout(()=>kp.style.transform='', 160);
+}
+function logout() {
+  if (!confirm('Đăng xuất?')) return;
+  fetch('/api/remote/logout', {method:'POST', headers:ah()});
+  TOKEN = ''; localStorage.removeItem('mi_t');
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('loginScreen').style.display = 'flex';
+  pin=''; updateDots();
+}
+
+// ── Auto-login ────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const h = await fetch('/api/remote/health').then(r=>r.json());
+    if (!h.auth_enabled) { showApp(); return; }
+    if (TOKEN) {
+      const s = await fetch('/api/remote/sessions', {headers:ah()});
+      if (s.ok) { showApp(); return; }
+    }
+    TOKEN=''; localStorage.removeItem('mi_t');
+  } catch {}
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').classList.add('on');
+  connectWS(); loadAll(); loadSettings();
+}
+function ah() {
+  return TOKEN ? {'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}
+               : {'Content-Type':'application/json'};
+}
+
+// ── WebSocket ────────────────────────────────────────────────────────────────
+function connectWS() {
+  const proto = location.protocol==='https:'?'wss:':'ws:';
+  ws = new WebSocket(`${proto}//${location.host}/ws`);
+  ws.onopen  = ()=>document.getElementById('wsDot').style.background='#10b981';
+  ws.onclose = ()=>{ document.getElementById('wsDot').style.background='#ef4444'; setTimeout(connectWS,3000); };
+  ws.onmessage = (e)=>{
+    const m = JSON.parse(e.data);
+    if (m.type==='approval_new'||m.type==='approval_resolved') loadApprovals();
+    if (m.type==='reminder') addMsg('mi','🔔 '+m.reminder?.message);
+  };
+}
+
+// ── Pages ─────────────────────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.navbtn').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name)?.classList.add('active');
+  document.getElementById('n-'+name)?.classList.add('active');
+  if (name==='approvals') loadApprovals();
+  if (name==='projects')  loadProjects();
+}
+
+// ── Load all ─────────────────────────────────────────────────────────────────
+function loadAll() { loadDashboard(); loadApprovals(); loadProjects(); }
+
+async function loadDashboard() {
+  try {
+    const [h, a, p] = await Promise.all([
+      fetch('/api/remote/health').then(r=>r.json()),
+      fetch('/api/approval',{headers:ah()}).then(r=>r.json()),
+      fetch('/api/projects',{headers:ah()}).then(r=>r.json()),
+    ]);
+    document.getElementById('sUp').textContent = `Up ${Math.floor(h.uptime_sec/60)}m`;
+    document.getElementById('sNet').textContent = h.tailscale_ip ? 'Tailscale ✓' : (h.lan_ip ? 'LAN ✓' : 'Local');
+    const pend = (a.actions||[]).filter(x=>x.status==='pending');
+    document.getElementById('sApprv').textContent = pend.length;
+    document.getElementById('abadge').textContent = pend.length>0 ? `🔒 ${pend.length}` : '✓';
+    document.getElementById('sProj').textContent = p.total||0;
+  } catch {}
+}
+
+// ── Chat ─────────────────────────────────────────────────────────────────────
+async function send() {
+  const el = document.getElementById('cin');
+  const msg = el.value.trim(); if (!msg) return;
+  el.value=''; addMsg('user',msg); showPage('chat');
+  document.getElementById('typing').classList.add('on');
+  try {
+    const r = await fetch('/api/chat',{method:'POST',headers:ah(),body:JSON.stringify({message:msg,mode:'ceo'})});
+    const d = await r.json();
+    document.getElementById('typing').classList.remove('on');
+    addMsg('mi', d.reply||JSON.stringify(d));
+    if (d.requires_approval) loadApprovals();
+  } catch(e) {
+    document.getElementById('typing').classList.remove('on');
+    addMsg('mi','Lỗi: '+e.message);
+  }
+}
+function cmd(c) { document.getElementById('cin').value=c; send(); }
+function addMsg(role,text) {
+  const el=document.getElementById('chatMsgs');
+  const d=document.createElement('div'); d.className='cmsg '+role; d.textContent=text;
+  el.appendChild(d); el.scrollTop=el.scrollHeight;
+}
+
+// ── Approvals ─────────────────────────────────────────────────────────────────
+async function loadApprovals() {
+  try {
+    const d = await fetch('/api/approval',{headers:ah()}).then(r=>r.json());
+    const pend = (d.actions||[]).filter(a=>a.status==='pending');
+    document.getElementById('sApprv').textContent = pend.length;
+    const el = document.getElementById('aList');
+    if (!pend.length) { el.innerHTML='<div class="empty">✓ Không có approval nào đang chờ</div>'; return; }
+    el.innerHTML = pend.map(a=>`
+      <div class="acard">
+        <div><span class="alevel ${a.risk_level>=3?'l3':'l2'}">Level ${a.risk_level}${a.risk_level>=3?' 🚨':''}</span></div>
+        <div class="adesc">${a.description}</div>
+        <div class="ameta">${a.target||''} · ${new Date(a.created_at).toLocaleTimeString('vi-VN')}</div>
+        ${a.risk_level>=3?'<div style="color:var(--red);font-size:12px">⚠ Hành động nguy hiểm</div>':''}
+        <div class="abtns">
+          <button class="apbtn" onclick="approve('${a.id}')">✓ Approve</button>
+          <button class="rjbtn" onclick="reject('${a.id}')">✗ Reject</button>
+        </div>
+      </div>`).join('');
+  } catch {}
+}
+async function approve(id) {
+  if (!confirm('Approve action này?')) return;
+  await fetch(`/api/approval/${id}/approve`,{method:'POST',headers:ah(),body:JSON.stringify({approver:'CEO-iPhone'})});
+  loadApprovals();
+}
+async function reject(id) {
+  await fetch(`/api/approval/${id}/reject`,{method:'POST',headers:ah(),body:JSON.stringify({approver:'CEO-iPhone'})});
+  loadApprovals();
+}
+
+// ── Projects ──────────────────────────────────────────────────────────────────
+async function loadProjects() {
+  try {
+    const d = await fetch('/api/projects',{headers:ah()}).then(r=>r.json());
+    const el = document.getElementById('pList');
+    if (!d.projects?.length) { el.innerHTML='<div class="empty">Chưa có — chat "Scan all projects"</div>'; return; }
+    el.innerHTML = d.projects.map(p=>`
+      <div class="pitem">
+        <div class="pdot" style="background:${p.git_dirty?'var(--yellow)':p.location==='remote'?'var(--blue)':'var(--green)'}"></div>
+        <div style="flex:1"><div class="pname">${p.name}</div><div class="pmeta">${p.framework} · ${p.git_branch||'no git'}${p.git_dirty?' ⚠':''}</div></div>
+        <span class="pbadge ${p.location==='remote'?'brem':'bloc'}">${p.location==='remote'?'☁':'💻'}</span>
+      </div>`).join('');
+  } catch {}
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+async function loadSettings() {
+  try {
+    const h = await fetch('/api/remote/health').then(r=>r.json());
+    document.getElementById('cfgLan').textContent = h.lan_url || 'N/A';
+    document.getElementById('cfgTs').textContent  = h.tailscale_url || 'N/A';
+  } catch {}
+}
+
+// ── QR Code for Remote Access ────────────────────────────────────────────────
+function showQR() {
+  const h = document.getElementById('qrModal');
+  if (h) { h.style.display='flex'; return; }
+  fetch('/api/remote/health').then(r=>r.json()).then(info=>{
+    const urls = [info.lan_url, info.tailscale_url].filter(Boolean);
+    const body = document.getElementById('app');
+    const modal = document.createElement('div');
+    modal.id='qrModal';
+    modal.style='position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;padding:20px';
+    modal.innerHTML=`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:340px;width:100%;text-align:center">
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px">📱 QR — Open Mi on Phone</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Scan to open Mi on iPhone/MacBook</div>
+        ${urls.map(u=>`<div style="margin-bottom:16px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${u.includes('100.')?'Tailscale':'LAN'}</div>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(u)}&format=png" style="border-radius:8px;border:1px solid var(--border)" alt="QR">
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;word-break:break-all">${u}</div>
+        </div>`).join('')}
+        <button onclick="hideQR()" style="margin-top:16px;padding:10px 24px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;cursor:pointer">Close</button>
+      </div>`;
+    body.appendChild(modal);
+  }).catch(()=>{
+    const body = document.getElementById('app');
+    const m = document.createElement('div');
+    m.id='qrModal';
+    m.style='position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999';
+    m.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center"><div style="font-size:16px;margin-bottom:8px">Mi Remote</div><div style="font-size:13px;color:var(--muted)">Enable MOBILE_ACCESS=1 in .env then restart server to access remotely.</div><button onclick="hideQR()" style="margin-top:16px;padding:8px 20px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:13px;cursor:pointer">Close</button></div>';
+    body.appendChild(m);
+  });
+}
+function hideQR() { const m=document.getElementById('qrModal'); if(m) m.style.display='none'; }
+
+// ── Double-tap & gesture zoom prevention ─────────────────────────────────────
+(function() {
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) e.preventDefault();
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+  document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+  document.addEventListener('gestureend', function(e) { e.preventDefault(); });
+})();
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+init();
+setInterval(loadApprovals, 30000);
+setInterval(loadDashboard, 60000);
+</script>
+</body>
+</html>

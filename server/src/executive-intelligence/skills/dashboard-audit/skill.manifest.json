@@ -1,0 +1,14 @@
+{
+  "name": "dashboard-audit",
+  "version": "1.0.0",
+  "entry": "skills/dashboard-audit/SKILL.md",
+  "approved": true,
+  "approvedBy": "cto",
+  "scope": ["dashboard", "engineering", "reporting"],
+  "sha256": "REPLACE_ME",
+  "policy": {
+    "mode": "read-only",
+    "allowedConnectors": ["mi-core", "dashboard"],
+    "approvalRequiredForWrite": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "domain": "website",
+  "domainName": "Web Development & Design",
+  "sources": [
+    { "name": "MDN Web Docs (HTML/CSS/JS)", "url": "https://github.com/mdn/content", "license": "CC BY-SA 2.5", "attribution": "MDN contributors", "robotsOk": false, "ingestMethod": "github-dump", "recommend": "include" },
+    { "name": "web.dev", "url": "https://web.dev", "license": "CC BY 4.0", "attribution": "Google LLC", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "W3C WCAG 2.1", "url": "https://www.w3.org/TR/WCAG21/", "license": "W3C Document License", "attribution": "W3C", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include", "notes": "Permits redistribution with attribution" }
+  ],
+  "seedDocuments": []
+}

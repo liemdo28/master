@@ -1,0 +1,94 @@
+{
+  "domain": "accounting",
+  "domainName": "Accounting & Finance",
+  "sources": [
+    {
+      "name": "IRS Publications",
+      "url": "https://www.irs.gov/publications",
+      "license": "Public Domain",
+      "attribution": "Internal Revenue Service (US Government)",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include",
+      "notes": "US federal publications are public domain — free redistribution"
+    },
+    {
+      "name": "OpenStax Financial Accounting",
+      "url": "https://openstax.org/details/books/financial-accounting",
+      "license": "CC BY 4.0",
+      "attribution": "OpenStax, Rice University",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include",
+      "notes": "Peer-reviewed textbook, CC BY 4.0"
+    },
+    {
+      "name": "OpenStax Principles of Accounting Vol 1",
+      "url": "https://openstax.org/details/books/principles-financial-accounting",
+      "license": "CC BY 4.0",
+      "attribution": "OpenStax, Rice University",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include"
+    },
+    {
+      "name": "SEC EDGAR Guides",
+      "url": "https://www.sec.gov/education.shtml",
+      "license": "Public Domain",
+      "attribution": "U.S. Securities and Exchange Commission",
+      "robotsOk": true,
+      "ingestMethod": "fetch",
+      "recommend": "include",
+      "notes": "GAAP/IFRS explanatory guides only, not FASB standards"
+    },
+    {
+      "name": "Wikipedia — Accounting",
+      "url": "https://en.wikipedia.org",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Wikipedia contributors",
+      "robotsOk": false,
+      "ingestMethod": "dump-api",
+      "recommend": "include",
+      "notes": "Use dumps.wikimedia.org"
+    },
+    {
+      "name": "Investopedia",
+      "url": "https://www.investopedia.com",
+      "license": "© All rights reserved",
+      "attribution": null,
+      "robotsOk": false,
+      "ingestMethod": "none",
+      "recommend": "reference",
+      "notes": "ToS prohibits scraping; use as manual reference only"
+    }
+  ],
+  "seedDocuments": [
+    {
+      "topicSlug": "fundamentals",
+      "topicName": "Accounting Fundamentals",
+      "slug": "double-entry",
+      "title": "Double-Entry Bookkeeping — Principles and Practice",
+      "file": "seed/accounting/double-entry.md",
+      "license": "CC BY 4.0",
+      "attribution": "OpenStax Financial Accounting; IRS Publication 583"
+    },
+    {
+      "topicSlug": "fundamentals",
+      "topicName": "Accounting Fundamentals",
+      "slug": "cash-vs-accrual",
+      "title": "Cash vs Accrual Accounting — Choosing a Method and Tax Implications",
+      "file": "seed/accounting/cash-vs-accrual.md",
+      "license": "CC BY 4.0",
+      "attribution": "IRS Publication 538; OpenStax Financial Accounting"
+    },
+    {
+      "topicSlug": "assets",
+      "topicName": "Assets & Depreciation",
+      "slug": "depreciation",
+      "title": "Depreciation — Methods, Calculations, and Tax Treatment",
+      "file": "seed/accounting/depreciation.md",
+      "license": "CC BY 4.0",
+      "attribution": "IRS Publication 946; OpenStax Financial Accounting"
+    }
+  ]
+}

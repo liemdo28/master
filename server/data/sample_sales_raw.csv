@@ -1,0 +1,72 @@
+Date,Time,Order ID,Item Name,Category,Quantity,Gross Sales,Discount,Tax,Tips,Payment Type
+2026-06-02,11:30,1001,Salmon Roll,Sushi,2,28.00,0,2.52,5.00,Credit Card
+2026-06-02,12:15,1002,Tuna Sashimi,Sashimi,1,18.00,0,1.62,3.00,Credit Card
+2026-06-02,12:45,1003,Spicy Tuna Roll,Sushi,3,36.00,2.00,3.06,6.00,Cash
+2026-06-02,13:20,1004,Rainbow Roll,Sushi,2,32.00,0,2.88,4.00,Credit Card
+2026-06-02,17:45,1005,Edamame,Appetizer,4,12.00,0,1.08,2.00,Cash
+2026-06-02,18:00,1006,Miso Soup,Soup,2,8.00,0,0.72,1.50,Credit Card
+2026-06-02,18:30,1007,Dragon Roll,Sushi,1,22.00,0,1.98,4.00,Credit Card
+2026-06-02,19:00,1008,California Roll,Sushi,3,27.00,0,2.43,4.00,Cash
+2026-06-02,19:30,1009,Salmon Nigiri,Nigiri,4,24.00,0,2.16,3.00,Credit Card
+2026-06-02,20:00,1010,Tempura Udon,Udon,1,16.00,0,1.44,2.50,Credit Card
+2026-06-03,11:15,1011,Spicy Tuna Roll,Sushi,2,24.00,0,2.16,4.00,Credit Card
+2026-06-03,11:45,1012,Salmon Roll,Sushi,3,42.00,0,3.78,6.00,Cash
+2026-06-03,12:00,1013,Dragon Roll,Sushi,2,44.00,0,3.96,7.00,Credit Card
+2026-06-03,12:30,1014,Edamame,Appetizer,3,9.00,0,0.81,1.50,Cash
+2026-06-03,13:00,1015,Miso Soup,Soup,4,16.00,0,1.44,2.00,Credit Card
+2026-06-03,17:30,1016,Tuna Sashimi,Sashimi,2,36.00,3.00,2.97,5.00,Credit Card
+2026-06-03,18:00,1017,Rainbow Roll,Sushi,3,48.00,0,4.32,8.00,Cash
+2026-06-03,18:45,1018,California Roll,Sushi,2,18.00,0,1.62,3.00,Credit Card
+2026-06-03,19:15,1019,Salmon Nigiri,Nigiri,5,30.00,0,2.70,4.00,Credit Card
+2026-06-03,20:00,1020,Tempura Udon,Udon,2,32.00,0,2.88,5.00,Cash
+2026-06-04,11:00,1021,Salmon Roll,Sushi,1,14.00,0,1.26,2.00,Credit Card
+2026-06-04,11:30,1022,Edamame,Appetizer,2,6.00,0,0.54,1.00,Cash
+2026-06-04,12:00,1023,Spicy Tuna Roll,Sushi,4,48.00,0,4.32,7.00,Credit Card
+2026-06-04,13:00,1024,Dragon Roll,Sushi,1,22.00,0,1.98,3.50,Credit Card
+2026-06-04,17:00,1025,Tuna Sashimi,Sashimi,3,54.00,5.00,4.41,8.00,Credit Card
+2026-06-04,17:45,1026,Rainbow Roll,Sushi,2,32.00,0,2.88,5.00,Cash
+2026-06-04,18:30,1027,Miso Soup,Soup,3,12.00,0,1.08,2.00,Credit Card
+2026-06-04,19:00,1028,California Roll,Sushi,2,18.00,0,1.62,3.00,Credit Card
+2026-06-04,20:00,1029,Salmon Nigiri,Nigiri,2,12.00,0,1.08,2.00,Cash
+2026-06-05,11:00,1030,Dragon Roll,Sushi,2,44.00,0,3.96,7.00,Credit Card
+2026-06-05,11:30,1031,Spicy Tuna Roll,Sushi,3,36.00,0,3.24,5.00,Credit Card
+2026-06-05,12:00,1032,Salmon Roll,Sushi,4,56.00,0,5.04,8.00,Cash
+2026-06-05,12:30,1033,Edamame,Appetizer,5,15.00,0,1.35,2.50,Credit Card
+2026-06-05,13:00,1034,Tuna Sashimi,Sashimi,1,18.00,0,1.62,3.00,Credit Card
+2026-06-05,17:30,1035,Rainbow Roll,Sushi,3,48.00,0,4.32,8.00,Credit Card
+2026-06-05,18:00,1036,Miso Soup,Soup,2,8.00,0,0.72,1.50,Cash
+2026-06-05,18:30,1037,California Roll,Sushi,4,36.00,2.00,3.06,6.00,Credit Card
+2026-06-05,19:00,1038,Salmon Nigiri,Nigiri,3,18.00,0,1.62,3.00,Credit Card
+2026-06-05,19:30,1039,Tempura Udon,Udon,2,32.00,0,2.88,4.00,Credit Card
+2026-06-05,20:00,1040,Dragon Roll,Sushi,1,22.00,0,1.98,3.00,Cash
+2026-06-06,11:30,1041,Salmon Roll,Sushi,5,70.00,0,6.30,10.00,Credit Card
+2026-06-06,12:00,1042,Dragon Roll,Sushi,4,88.00,5.00,7.47,12.00,Credit Card
+2026-06-06,12:30,1043,Tuna Sashimi,Sashimi,3,54.00,0,4.86,8.00,Cash
+2026-06-06,13:00,1044,Spicy Tuna Roll,Sushi,4,48.00,0,4.32,7.00,Credit Card
+2026-06-06,13:30,1045,Rainbow Roll,Sushi,3,48.00,0,4.32,7.00,Credit Card
+2026-06-06,17:00,1046,Edamame,Appetizer,6,18.00,0,1.62,3.00,Credit Card
+2026-06-06,17:30,1047,Miso Soup,Soup,4,16.00,0,1.44,2.50,Cash
+2026-06-06,18:00,1048,California Roll,Sushi,5,45.00,0,4.05,7.00,Credit Card
+2026-06-06,18:30,1049,Salmon Nigiri,Nigiri,6,36.00,0,3.24,6.00,Credit Card
+2026-06-06,19:00,1050,Tempura Udon,Udon,3,48.00,0,4.32,7.00,Credit Card
+2026-06-06,19:30,1051,Dragon Roll,Sushi,2,44.00,0,3.96,6.00,Cash
+2026-06-06,20:00,1052,Salmon Roll,Sushi,3,42.00,0,3.78,6.00,Credit Card
+2026-06-07,11:00,1053,Spicy Tuna Roll,Sushi,2,24.00,0,2.16,4.00,Credit Card
+2026-06-07,11:30,1054,Edamame,Appetizer,3,9.00,0,0.81,1.50,Cash
+2026-06-07,12:00,1055,Salmon Roll,Sushi,4,56.00,0,5.04,8.00,Credit Card
+2026-06-07,13:00,1056,Dragon Roll,Sushi,2,44.00,0,3.96,7.00,Credit Card
+2026-06-07,17:30,1057,Tuna Sashimi,Sashimi,2,36.00,0,3.24,5.00,Credit Card
+2026-06-07,18:00,1058,Rainbow Roll,Sushi,3,48.00,0,4.32,7.00,Cash
+2026-06-07,18:30,1059,California Roll,Sushi,2,18.00,0,1.62,3.00,Credit Card
+2026-06-07,19:00,1060,Salmon Nigiri,Nigiri,4,24.00,0,2.16,4.00,Credit Card
+2026-06-07,19:30,1061,Miso Soup,Soup,2,8.00,0,0.72,1.50,Cash
+2026-06-08,11:00,1062,Salmon Roll,Sushi,3,42.00,0,3.78,6.00,Credit Card
+2026-06-08,11:30,1063,Dragon Roll,Sushi,3,66.00,0,5.94,9.00,Credit Card
+2026-06-08,12:00,1064,Spicy Tuna Roll,Sushi,5,60.00,0,5.40,8.00,Cash
+2026-06-08,12:30,1065,Tuna Sashimi,Sashimi,2,36.00,0,3.24,5.00,Credit Card
+2026-06-08,13:00,1066,Edamame,Appetizer,4,12.00,0,1.08,2.00,Credit Card
+2026-06-08,17:30,1067,Rainbow Roll,Sushi,4,64.00,0,5.76,9.00,Credit Card
+2026-06-08,18:00,1068,Miso Soup,Soup,3,12.00,0,1.08,2.00,Cash
+2026-06-08,18:30,1069,California Roll,Sushi,3,27.00,0,2.43,4.00,Credit Card
+2026-06-08,19:00,1070,Salmon Nigiri,Nigiri,5,30.00,0,2.70,5.00,Credit Card
+2026-06-08,20:00,1071,Tempura Udon,Udon,2,32.00,0,2.88,5.00,Cash

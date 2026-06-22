@@ -1,0 +1,19 @@
+{
+  "audit_id": "AUDIT_P4_1781446380547",
+  "workflow_id": "wf_1781446380451_8qx3sx",
+  "target": "dashboard.bakudanramen.com (agenview)",
+  "audited_at": "2026-06-14T14:13:00.547Z",
+  "files_scanned": 4,
+  "findings": {
+    "total": 0,
+    "critical": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "gate": "FLAGGED",
+  "tests": "PASS",
+  "qa_score": 85,
+  "verdict": "AUTONOMOUS_AUDIT_PASSED",
+  "council": "PROCEED",
+  "duration_ms": 101
+}

@@ -1,0 +1,62 @@
+.mi-harness/
+
+# Local secrets and OAuth/token material
+.env
+.env.*
+!.env.example
+client_secret_*.json
+*credentials*.json
+*credential*.json
+*token*.json
+*tokens*.json
+*.pem
+*.key
+
+# Generated build/runtime output
+server/dist/
+node_modules/
+*/dist/
+*/node_modules/
+
+# Logs and temp data
+logs/
+.shadow-logs/
+*.log
+tmp/
+
+# Screenshots / evidence (large binary files)
+DEV4_SCREENSHOT_EVIDENCE/
+
+# Local agent runtime data (regenerated on startup)
+.local-agent-global/
+
+# WhatsApp / session data (large, lock files, runtime)
+services/whatsapp-ai-gateway/data/backup/
+services/whatsapp-ai-gateway/data/session-*/
+services/*/data/*/auth/
+services/*/data/ceo-session/
+*.sqldb
+*.sqldb-shm
+*.sqldb-wal
+*.ldb
+*.ldbtmp
+
+# Chrome/puppeteer runtime (installer, session browsers)
+services/whatsapp-ai-gateway/installer/runtime/
+services/*/data/*/Default/
+services/*/data/*/*/Default/
+services/whatsapp-ai-gateway/data/session-audit-smoke/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets folders
+services/whatsapp-ai-gateway/secrets/
+
+# Accidentally created files
+null
+relative
+{console.error(e)
+datetime('now'

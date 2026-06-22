@@ -1,0 +1,5836 @@
+{
+  "agents": {
+    "seo-local-maps-agent": {
+      "agentId": "seo-local-maps-agent",
+      "version": "1.0.0",
+      "port": 4011,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:33.416Z",
+      "registered_at": "2026-06-19T11:02:40.343Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0
+    },
+    "seo-schema-agent": {
+      "agentId": "seo-schema-agent",
+      "version": "1.0.0",
+      "port": 4014,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78264,
+      "last_sync_at": "2026-06-20T08:48:33.659Z",
+      "registered_at": "2026-06-19T11:04:10.370Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0,
+      "last_report": {
+        "agent": "seo-schema-agent",
+        "ts": "2026-06-20T08:00:02.854Z",
+        "type": "audit",
+        "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+        "payload": {
+          "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+          "schema_items_count": 12,
+          "validation_overview": [
+            {
+              "location_id": "bandera",
+              "valid": true,
+              "issues": []
+            },
+            {
+              "location_id": "stone-oak",
+              "valid": true,
+              "issues": []
+            },
+            {
+              "location_id": "the-rim",
+              "valid": true,
+              "issues": []
+            }
+          ]
+        }
+      }
+    },
+    "seo-analytics-agent": {
+      "agentId": "seo-analytics-agent",
+      "version": "1.0.0",
+      "port": 4017,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:32.973Z",
+      "registered_at": "2026-06-19T11:04:10.391Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0
+    },
+    "seo-content-agent": {
+      "agentId": "seo-content-agent",
+      "version": "1.0.0",
+      "port": 4015,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:33.238Z",
+      "registered_at": "2026-06-19T11:04:10.392Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0
+    },
+    "seo-technical-agent": {
+      "agentId": "seo-technical-agent",
+      "version": "1.0.0",
+      "port": 4013,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:33.082Z",
+      "registered_at": "2026-06-19T11:04:10.394Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0
+    },
+    "seo-website-agent": {
+      "agentId": "seo-website-agent",
+      "version": "1.0.0",
+      "port": 4012,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:33.414Z",
+      "registered_at": "2026-06-19T11:04:10.395Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0,
+      "last_report": {
+        "agent": "seo-website-agent",
+        "ts": "2026-06-20T08:00:03.073Z",
+        "type": "audit",
+        "summary": "Audited 13 pages, mapped 9 keywords",
+        "payload": {
+          "summary": "Audited 13 pages, mapped 9 keywords",
+          "pages": [
+            {
+              "id": "home",
+              "url": "https://bakudanramen.com/",
+              "type": "homepage",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/",
+              "h1": "[TODO] H1 for https://bakudanramen.com/",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "menu",
+              "url": "https://bakudanramen.com/menu",
+              "type": "menu",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/menu",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/menu",
+              "h1": "[TODO] H1 for https://bakudanramen.com/menu",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-bandera",
+              "url": "https://bakudanramen.com/locations/bandera",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/bandera",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/bandera",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/bandera",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-stone-oak",
+              "url": "https://bakudanramen.com/locations/stone-oak",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/stone-oak",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/stone-oak",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/stone-oak",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-the-rim",
+              "url": "https://bakudanramen.com/locations/the-rim",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/the-rim",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/the-rim",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/the-rim",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-best-ramen",
+              "url": "https://bakudanramen.com/best-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/best-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/best-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/best-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Best Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-tonkotsu",
+              "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Tonkotsu Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-japanese-food",
+              "url": "https://bakudanramen.com/japanese-food-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/japanese-food-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/japanese-food-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/japanese-food-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Japanese Food in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-utsa",
+              "url": "https://bakudanramen.com/ramen-near-utsa",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-utsa",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-utsa",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-utsa",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen Near UTSA",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-rim-cantera",
+              "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen Near The Rim",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-stone-oak",
+              "url": "https://bakudanramen.com/ramen-stone-oak",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-stone-oak",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-stone-oak",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-stone-oak",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen in Stone Oak",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-vegetarian",
+              "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Vegetarian Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-happy-hour",
+              "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Happy Hour Ramen San Antonio",
+              "score": 0,
+              "issues": []
+            }
+          ],
+          "keyword_map": [
+            {
+              "keyword": "Best Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/best-ramen-san-antonio",
+              "priority": 1
+            },
+            {
+              "keyword": "Tonkotsu Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "priority": 2
+            },
+            {
+              "keyword": "Japanese Food in San Antonio",
+              "assigned_page": "https://bakudanramen.com/japanese-food-san-antonio",
+              "priority": 3
+            },
+            {
+              "keyword": "Ramen Near UTSA",
+              "assigned_page": "https://bakudanramen.com/ramen-near-utsa",
+              "priority": 4
+            },
+            {
+              "keyword": "Ramen Near The Rim",
+              "assigned_page": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "priority": 5
+            },
+            {
+              "keyword": "Ramen Near La Cantera",
+              "assigned_page": null,
+              "priority": 6
+            },
+            {
+              "keyword": "Ramen in Stone Oak",
+              "assigned_page": "https://bakudanramen.com/ramen-stone-oak",
+              "priority": 7
+            },
+            {
+              "keyword": "Vegetarian Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "priority": 8
+            },
+            {
+              "keyword": "Happy Hour Ramen San Antonio",
+              "assigned_page": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "priority": 9
+            }
+          ],
+          "internal_linking_plan": "pending"
+        }
+      }
+    },
+    "seo-citation-agent": {
+      "agentId": "seo-citation-agent",
+      "version": "1.0.0",
+      "port": 4016,
+      "status": "online",
+      "health": "healthy",
+      "uptime_s": 78263,
+      "last_sync_at": "2026-06-20T08:48:33.458Z",
+      "registered_at": "2026-06-19T11:04:10.459Z",
+      "error_state": null,
+      "tasks_completed": 0,
+      "tasks_pending": 0
+    }
+  },
+  "syncLogs": [
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:12:33.105Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.370Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.792Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.795Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.818Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.844Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:02.847Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:32.386Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:32.546Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:32.653Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:32.703Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:32.781Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:39.373Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:13:39.399Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.400Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.558Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.665Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.711Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.795Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:02.853Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:03.288Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.403Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.559Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.668Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.713Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.794Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:32.860Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:14:33.146Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.690Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.693Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.717Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.728Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.801Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:02.868Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:03.150Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.428Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.571Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.679Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.727Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.805Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:32.970Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:15:33.152Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:04.876Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:04.878Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:04.880Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:04.903Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:04.986Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:05.034Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:05.036Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.429Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.593Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.700Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.750Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.831Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:32.892Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:16:33.161Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:02.445Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:02.601Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:02.713Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:02.762Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:02.841Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:03.151Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:03.228Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:32.451Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:32.606Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:32.807Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:32.813Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:33.050Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:33.100Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:17:33.175Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:02.458Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.305Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.307Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.318Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.331Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.335Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:03.364Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.213Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.215Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.224Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.244Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.253Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.257Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:18:33.321Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.472Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.638Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.748Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.828Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.875Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:02.938Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:03.204Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.470Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.686Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.755Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.802Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.938Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:32.951Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:19:33.211Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.360Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.363Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.368Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.390Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.398Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.420Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:05.426Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.486Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.661Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.771Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.817Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.899Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:32.958Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:20:33.223Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.799Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.817Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.827Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.839Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.900Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:02.963Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:03.231Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.646Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.670Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.781Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.939Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.942Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:32.988Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:21:33.261Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.503Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.674Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.788Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.896Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.915Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:02.979Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:03.245Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.558Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.692Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.916Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.918Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.928Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:32.987Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:22:33.256Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.522Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.695Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.803Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.852Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.931Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:02.998Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:03.262Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:32.621Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:32.707Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:32.813Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:32.865Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:32.943Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:33.005Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:23:33.274Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:02.547Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:02.717Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:02.829Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:02.875Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:02.955Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:03.011Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:03.277Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.006Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.008Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.010Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.015Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.239Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.241Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:24:38.267Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:02.574Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:02.730Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:02.841Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:02.899Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:03.126Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:03.128Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:03.281Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.628Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.634Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.635Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.715Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.865Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.866Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:25:36.888Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:02.588Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:02.746Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:02.855Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:02.919Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:02.981Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:03.041Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:03.306Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:32.598Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:32.749Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:32.864Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:32.928Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:33.127Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:33.154Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:26:33.321Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:02.644Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:02.755Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:02.880Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:02.943Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:03.006Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:03.068Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:03.333Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:32.625Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:33.231Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:33.243Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:27:33.396Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:02.627Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.655Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.829Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.831Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.871Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.876Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:03.901Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:32.632Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:32.922Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:32.938Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:32.976Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:33.024Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:33.086Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:28:33.353Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:02.639Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:02.797Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:02.906Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:02.984Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:03.032Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:03.093Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:03.363Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:32.798Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:32.802Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:32.912Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:32.990Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:33.038Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:33.102Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:29:33.368Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:02.656Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:02.814Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:02.926Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:03.005Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:03.246Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:03.287Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:03.383Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:32.677Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:32.823Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:32.932Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:33.004Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:33.057Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:33.139Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:30:33.385Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.314Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.317Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.336Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.339Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.342Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.369Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:03.441Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:32.680Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:32.836Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:32.950Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:33.026Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:33.078Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:33.142Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:31:33.392Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:02.686Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:02.842Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:02.968Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:03.051Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:03.095Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:03.156Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:03.406Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:32.807Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:32.856Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:33.157Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:33.177Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:33.184Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:33.210Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:32:33.422Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:02.742Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:02.865Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:02.993Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:03.072Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:03.118Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:03.372Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:03.433Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:32.709Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:32.866Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:32.994Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:33.086Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:33.159Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:33:33.194Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:02.714Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:02.872Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:02.999Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:03.091Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:03.165Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:03.202Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:03.454Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.359Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.361Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.362Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.381Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.385Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.409Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:34:33.466Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:02.740Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:02.880Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:03.022Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:03.117Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:03.336Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:03.348Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:03.480Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:32.755Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:32.882Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:33.026Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:33.117Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:33.181Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:33.228Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:35:33.483Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:02.828Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:02.888Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:03.028Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:03.124Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:03.184Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:03.234Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:03.535Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:32.840Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:32.899Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:33.039Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:33.136Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:33.193Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:33.241Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:36:33.500Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:02.790Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:02.907Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:03.047Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:03.137Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:03.198Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:03.245Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:03.503Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:32.794Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:32.916Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:33.054Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:33.148Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:33.218Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:33.259Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:37:33.509Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:02.809Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:02.938Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:03.066Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:03.164Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:03.221Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:03.271Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:03.515Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:32.823Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:32.931Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:33.068Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:33.176Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:33.226Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:33.270Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:38:33.515Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:02.972Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:02.998Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:03.102Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:03.190Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:03.237Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:03.281Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:03.529Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:32.834Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:32.942Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:33.083Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:33.190Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:33.238Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:33.297Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:39:33.540Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:02.868Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:02.956Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:03.097Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:03.207Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:03.257Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:03.316Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:03.544Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:32.855Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:32.961Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:33.099Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:33.205Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:33.253Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:33.314Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:40:33.543Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:02.855Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:02.964Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:03.104Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:03.221Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:03.267Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:03.331Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:03.545Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:32.856Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:32.967Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:33.104Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:33.232Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:33.273Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:33.337Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:41:33.551Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:02.864Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:02.972Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:03.110Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:03.234Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:03.281Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:03.342Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:03.559Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:32.868Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:32.976Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:33.116Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:33.239Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:33.284Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:33.346Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:42:33.563Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:02.874Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:02.994Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:03.132Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:03.256Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:03.288Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:03.361Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:03.576Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:32.888Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.006Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.145Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.268Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.302Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.360Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:43:33.592Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:02.896Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.020Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.159Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.279Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.312Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.371Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:03.602Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:32.905Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.028Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.164Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.290Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.321Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.383Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:44:33.599Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:02.920Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.044Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.336Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.537Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.769Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.823Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:03.854Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:32.926Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.051Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.377Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.379Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.381Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.411Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:45:33.606Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:02.933Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.057Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.240Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.318Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.353Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.413Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:03.619Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:32.931Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.056Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.210Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.320Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.351Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.413Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:46:33.620Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:02.938Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.126Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.216Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.325Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.359Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.424Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:03.624Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:32.943Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.069Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.226Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.333Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.366Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.426Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:47:33.631Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:02.961Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.072Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.243Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.348Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.379Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.445Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:03.645Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:32.973Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.082Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.238Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.414Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.416Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.458Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-20T08:48:33.659Z"
+    }
+  ],
+  "tasks": [],
+  "reports": [
+    {
+      "agent": "seo-schema-agent",
+      "ts": "2026-06-20T08:00:02.249Z",
+      "type": "audit",
+      "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+      "payload": {
+        "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+        "schema_items_count": 0,
+        "validation_overview": [
+          {
+            "location_id": "bandera",
+            "valid": true,
+            "issues": []
+          },
+          {
+            "location_id": "stone-oak",
+            "valid": true,
+            "issues": []
+          },
+          {
+            "location_id": "the-rim",
+            "valid": true,
+            "issues": []
+          }
+        ]
+      }
+    },
+    {
+      "agent": "seo-schema-agent",
+      "ts": "2026-06-20T08:00:02.854Z",
+      "type": "audit",
+      "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+      "payload": {
+        "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+        "schema_items_count": 12,
+        "validation_overview": [
+          {
+            "location_id": "bandera",
+            "valid": true,
+            "issues": []
+          },
+          {
+            "location_id": "stone-oak",
+            "valid": true,
+            "issues": []
+          },
+          {
+            "location_id": "the-rim",
+            "valid": true,
+            "issues": []
+          }
+        ]
+      }
+    },
+    {
+      "agent": "seo-website-agent",
+      "ts": "2026-06-20T08:00:03.070Z",
+      "type": "audit",
+      "summary": "Audited 13 pages, mapped 9 keywords",
+      "payload": {
+        "summary": "Audited 13 pages, mapped 9 keywords",
+        "pages": [
+          {
+            "id": "home",
+            "url": "https://bakudanramen.com/",
+            "type": "homepage",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/",
+            "h1": "[TODO] H1 for https://bakudanramen.com/",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "menu",
+            "url": "https://bakudanramen.com/menu",
+            "type": "menu",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/menu",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/menu",
+            "h1": "[TODO] H1 for https://bakudanramen.com/menu",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-bandera",
+            "url": "https://bakudanramen.com/locations/bandera",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/bandera",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/bandera",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/bandera",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-stone-oak",
+            "url": "https://bakudanramen.com/locations/stone-oak",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/stone-oak",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/stone-oak",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/stone-oak",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-the-rim",
+            "url": "https://bakudanramen.com/locations/the-rim",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/the-rim",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/the-rim",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/the-rim",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-best-ramen",
+            "url": "https://bakudanramen.com/best-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/best-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/best-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/best-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Best Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-tonkotsu",
+            "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Tonkotsu Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-japanese-food",
+            "url": "https://bakudanramen.com/japanese-food-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/japanese-food-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/japanese-food-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/japanese-food-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Japanese Food in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-utsa",
+            "url": "https://bakudanramen.com/ramen-near-utsa",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-utsa",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-utsa",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-utsa",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen Near UTSA",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-rim-cantera",
+            "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen Near The Rim",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-stone-oak",
+            "url": "https://bakudanramen.com/ramen-stone-oak",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-stone-oak",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-stone-oak",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-stone-oak",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen in Stone Oak",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-vegetarian",
+            "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Vegetarian Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-happy-hour",
+            "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Happy Hour Ramen San Antonio",
+            "score": 0,
+            "issues": []
+          }
+        ],
+        "keyword_map": [
+          {
+            "keyword": "Best Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/best-ramen-san-antonio",
+            "priority": 1
+          },
+          {
+            "keyword": "Tonkotsu Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "priority": 2
+          },
+          {
+            "keyword": "Japanese Food in San Antonio",
+            "assigned_page": "https://bakudanramen.com/japanese-food-san-antonio",
+            "priority": 3
+          },
+          {
+            "keyword": "Ramen Near UTSA",
+            "assigned_page": "https://bakudanramen.com/ramen-near-utsa",
+            "priority": 4
+          },
+          {
+            "keyword": "Ramen Near The Rim",
+            "assigned_page": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "priority": 5
+          },
+          {
+            "keyword": "Ramen Near La Cantera",
+            "assigned_page": null,
+            "priority": 6
+          },
+          {
+            "keyword": "Ramen in Stone Oak",
+            "assigned_page": "https://bakudanramen.com/ramen-stone-oak",
+            "priority": 7
+          },
+          {
+            "keyword": "Vegetarian Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "priority": 8
+          },
+          {
+            "keyword": "Happy Hour Ramen San Antonio",
+            "assigned_page": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "priority": 9
+          }
+        ],
+        "internal_linking_plan": "pending"
+      }
+    },
+    {
+      "agent": "seo-website-agent",
+      "ts": "2026-06-20T08:00:03.073Z",
+      "type": "audit",
+      "summary": "Audited 13 pages, mapped 9 keywords",
+      "payload": {
+        "summary": "Audited 13 pages, mapped 9 keywords",
+        "pages": [
+          {
+            "id": "home",
+            "url": "https://bakudanramen.com/",
+            "type": "homepage",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/",
+            "h1": "[TODO] H1 for https://bakudanramen.com/",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "menu",
+            "url": "https://bakudanramen.com/menu",
+            "type": "menu",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/menu",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/menu",
+            "h1": "[TODO] H1 for https://bakudanramen.com/menu",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-bandera",
+            "url": "https://bakudanramen.com/locations/bandera",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/bandera",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/bandera",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/bandera",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-stone-oak",
+            "url": "https://bakudanramen.com/locations/stone-oak",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/stone-oak",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/stone-oak",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/stone-oak",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "loc-the-rim",
+            "url": "https://bakudanramen.com/locations/the-rim",
+            "type": "location",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/the-rim",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/the-rim",
+            "h1": "[TODO] H1 for https://bakudanramen.com/locations/the-rim",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": null,
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-best-ramen",
+            "url": "https://bakudanramen.com/best-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/best-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/best-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/best-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Best Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-tonkotsu",
+            "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Tonkotsu Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-japanese-food",
+            "url": "https://bakudanramen.com/japanese-food-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/japanese-food-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/japanese-food-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/japanese-food-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Japanese Food in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-utsa",
+            "url": "https://bakudanramen.com/ramen-near-utsa",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-utsa",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-utsa",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-utsa",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen Near UTSA",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-rim-cantera",
+            "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen Near The Rim",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-stone-oak",
+            "url": "https://bakudanramen.com/ramen-stone-oak",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-stone-oak",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-stone-oak",
+            "h1": "[TODO] H1 for https://bakudanramen.com/ramen-stone-oak",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Ramen in Stone Oak",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-vegetarian",
+            "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Vegetarian Ramen in San Antonio",
+            "score": 0,
+            "issues": []
+          },
+          {
+            "id": "lp-happy-hour",
+            "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "type": "landing",
+            "title_tag": "[TODO] Generate title for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "meta_description": "[TODO] Generate meta for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "h1": "[TODO] H1 for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "h2_structure": [],
+            "internal_links": [],
+            "target_keyword": "Happy Hour Ramen San Antonio",
+            "score": 0,
+            "issues": []
+          }
+        ],
+        "keyword_map": [
+          {
+            "keyword": "Best Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/best-ramen-san-antonio",
+            "priority": 1
+          },
+          {
+            "keyword": "Tonkotsu Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+            "priority": 2
+          },
+          {
+            "keyword": "Japanese Food in San Antonio",
+            "assigned_page": "https://bakudanramen.com/japanese-food-san-antonio",
+            "priority": 3
+          },
+          {
+            "keyword": "Ramen Near UTSA",
+            "assigned_page": "https://bakudanramen.com/ramen-near-utsa",
+            "priority": 4
+          },
+          {
+            "keyword": "Ramen Near The Rim",
+            "assigned_page": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+            "priority": 5
+          },
+          {
+            "keyword": "Ramen Near La Cantera",
+            "assigned_page": null,
+            "priority": 6
+          },
+          {
+            "keyword": "Ramen in Stone Oak",
+            "assigned_page": "https://bakudanramen.com/ramen-stone-oak",
+            "priority": 7
+          },
+          {
+            "keyword": "Vegetarian Ramen in San Antonio",
+            "assigned_page": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+            "priority": 8
+          },
+          {
+            "keyword": "Happy Hour Ramen San Antonio",
+            "assigned_page": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+            "priority": 9
+          }
+        ],
+        "internal_linking_plan": "pending"
+      }
+    }
+  ],
+  "issues": [],
+  "opportunities": [],
+  "connectorResults": {},
+  "orchestratorJobs": [
+    {
+      "id": "job_1781867164159",
+      "job_id": "daily-website-crawl",
+      "status": "completed",
+      "started_at": "2026-06-19T11:06:04.159Z",
+      "completed_at": "2026-06-19T11:06:17.609Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "crawler": {
+            "status": "success",
+            "records": 13,
+            "successful_pages": 1,
+            "failed_pages": 12,
+            "broken_links_found": 0,
+            "credentials_configured": true,
+            "raw_payload_path": "E:\\Project\\Master\\SEO\\shared\\reports\\connectors\\crawler-1781867177605.json",
+            "data": [
+              {
+                "url": "https://bakudanramen.com/",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:09.517Z",
+                "confidence": "high",
+                "status_code": 200,
+                "error": null,
+                "title": "Bakudan Ramen | Bold Flavor. Modern Japanese Soul. Texas Spirit.",
+                "meta_description": "Experience authentic Japanese ramen in San Antonio, Texas. House-simmered tonkotsu broth, fresh noodles daily, and bold flavors at three locations. Order online for pickup or delivery.",
+                "h1": "BOLD RAMEN.UNFORGETTABLE FLAVOR.",
+                "h2s": [
+                  "HAPPY HOUR EVERY DAY",
+                  "Where Tradition Meets Innovation",
+                  "OUR SIGNATURE BOWLS",
+                  "STORIES &amp; GUIDES",
+                  "READY TO EXPERIENCE THE BOLD?",
+                  "WE NOW DELIVER!"
+                ],
+                "canonical": "https://www.bakudanramen.com/",
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": true,
+                "schema_types": [
+                  "Organization"
+                ],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 9,
+                "images_missing_alt": 2,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 20969,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/menu",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:10.509Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/bandera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:11.513Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:11.930Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/the-rim",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:12.331Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/best-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:13.272Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:13.672Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/japanese-food-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:14.580Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-utsa",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:15.469Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:15.886Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:16.288Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:16.705Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:06:17.605Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              }
+            ],
+            "error": null
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "success",
+            "last_success": "2026-06-19T11:06:17.606Z",
+            "last_error": null,
+            "last_run": "2026-06-19T11:06:04.165Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781868031522",
+      "job_id": "daily-website-crawl",
+      "status": "completed",
+      "started_at": "2026-06-19T11:20:31.522Z",
+      "completed_at": "2026-06-19T11:20:48.132Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "crawler": {
+            "status": "success",
+            "records": 13,
+            "successful_pages": 1,
+            "failed_pages": 12,
+            "broken_links_found": 0,
+            "credentials_configured": true,
+            "raw_payload_path": "E:\\Project\\Master\\SEO\\shared\\reports\\connectors\\crawler-1781868048130.json",
+            "data": [
+              {
+                "url": "https://bakudanramen.com/",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:39.877Z",
+                "confidence": "high",
+                "status_code": 200,
+                "error": null,
+                "title": "Bakudan Ramen | Bold Flavor. Modern Japanese Soul. Texas Spirit.",
+                "meta_description": "Experience authentic Japanese ramen in San Antonio, Texas. House-simmered tonkotsu broth, fresh noodles daily, and bold flavors at three locations. Order online for pickup or delivery.",
+                "h1": "BOLD RAMEN.UNFORGETTABLE FLAVOR.",
+                "h2s": [
+                  "HAPPY HOUR EVERY DAY",
+                  "Where Tradition Meets Innovation",
+                  "OUR SIGNATURE BOWLS",
+                  "STORIES &amp; GUIDES",
+                  "READY TO EXPERIENCE THE BOLD?",
+                  "WE NOW DELIVER!"
+                ],
+                "canonical": "https://www.bakudanramen.com/",
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": true,
+                "schema_types": [
+                  "Organization"
+                ],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 9,
+                "images_missing_alt": 2,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 20969,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/menu",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:41.410Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/bandera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:41.805Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:42.690Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/the-rim",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:43.087Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/best-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:43.938Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:44.814Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/japanese-food-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:45.211Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-utsa",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:45.609Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:46.005Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:46.405Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:47.274Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:20:48.130Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              }
+            ],
+            "error": null
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "success",
+            "last_success": "2026-06-19T11:20:48.131Z",
+            "last_error": null,
+            "last_run": "2026-06-19T11:20:31.524Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781868070608",
+      "job_id": "daily-website-crawl",
+      "status": "completed",
+      "started_at": "2026-06-19T11:21:10.608Z",
+      "completed_at": "2026-06-19T11:21:27.928Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "crawler": {
+            "status": "success",
+            "records": 13,
+            "successful_pages": 1,
+            "failed_pages": 12,
+            "broken_links_found": 0,
+            "credentials_configured": true,
+            "raw_payload_path": "E:\\Project\\Master\\SEO\\shared\\reports\\connectors\\crawler-1781868087927.json",
+            "data": [
+              {
+                "url": "https://bakudanramen.com/",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:19.503Z",
+                "confidence": "high",
+                "status_code": 200,
+                "error": null,
+                "title": "Bakudan Ramen | Bold Flavor. Modern Japanese Soul. Texas Spirit.",
+                "meta_description": "Experience authentic Japanese ramen in San Antonio, Texas. House-simmered tonkotsu broth, fresh noodles daily, and bold flavors at three locations. Order online for pickup or delivery.",
+                "h1": "BOLD RAMEN.UNFORGETTABLE FLAVOR.",
+                "h2s": [
+                  "HAPPY HOUR EVERY DAY",
+                  "Where Tradition Meets Innovation",
+                  "OUR SIGNATURE BOWLS",
+                  "STORIES &amp; GUIDES",
+                  "READY TO EXPERIENCE THE BOLD?",
+                  "WE NOW DELIVER!"
+                ],
+                "canonical": "https://www.bakudanramen.com/",
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": true,
+                "schema_types": [
+                  "Organization"
+                ],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 9,
+                "images_missing_alt": 2,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 20969,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/menu",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:20.329Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/bandera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:21.317Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:21.730Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/the-rim",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:22.142Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/best-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:23.591Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:24.003Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/japanese-food-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:24.416Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-utsa",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:25.798Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:26.211Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:26.624Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:27.035Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-19T11:21:27.927Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              }
+            ],
+            "error": null
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "success",
+            "last_success": "2026-06-19T11:21:27.928Z",
+            "last_error": null,
+            "last_run": "2026-06-19T11:21:10.611Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942401800",
+      "job_id": "daily-gbp-sync",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:01.800Z",
+      "completed_at": "2026-06-20T08:00:01.804Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "gbp": {
+            "status": "missing_credentials",
+            "credentials_configured": false,
+            "records": 0,
+            "error": "GBP credentials not configured. Need GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN with Business Profile API enabled.",
+            "setup_steps": [
+              "1. Enable Business Profile APIs in Google Cloud Console",
+              "2. Create OAuth2 credentials with Business Profile scope",
+              "3. Set credentials in .env",
+              "4. Link GBP locations to API project"
+            ],
+            "data": [],
+            "fields_available": [
+              "profile_status",
+              "categories",
+              "hours",
+              "phone",
+              "address",
+              "website_url",
+              "order_url",
+              "menu_url",
+              "reviews",
+              "rating",
+              "photos",
+              "performance_metrics"
+            ]
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "running",
+            "last_success": "2026-06-19T11:21:27.928Z",
+            "last_error": null,
+            "last_run": "2026-06-20T08:00:01.790Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GSC credentials not configured. Missing: GOOGLE_CLIENT_ID or GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN",
+            "last_run": "2026-06-20T08:00:01.798Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GBP credentials not configured. Need GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN with Business Profile API enabled.",
+            "last_run": "2026-06-20T08:00:01.803Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GA4 not configured. Missing: GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON, GA4_PROPERTY_ID",
+            "last_run": "2026-06-20T08:00:01.799Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942401808",
+      "job_id": "daily-gsc-sync",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:01.808Z",
+      "completed_at": "2026-06-20T08:00:01.809Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "gsc": {
+            "status": "missing_credentials",
+            "credentials_configured": false,
+            "records": 0,
+            "error": "GSC credentials not configured. Missing: GOOGLE_CLIENT_ID or GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN",
+            "setup_steps": [
+              "1. Create a Google Cloud project",
+              "2. Enable Search Console API",
+              "3. Create OAuth2 credentials or Service Account",
+              "4. Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN in SEO agent .env files",
+              "5. Verify property sc-domain:bakudanramen.com in GSC"
+            ],
+            "data": []
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "running",
+            "last_success": "2026-06-19T11:21:27.928Z",
+            "last_error": null,
+            "last_run": "2026-06-20T08:00:01.790Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GSC credentials not configured. Missing: GOOGLE_CLIENT_ID or GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN",
+            "last_run": "2026-06-20T08:00:01.808Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GBP credentials not configured. Need GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN with Business Profile API enabled.",
+            "last_run": "2026-06-20T08:00:01.803Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GA4 not configured. Missing: GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON, GA4_PROPERTY_ID",
+            "last_run": "2026-06-20T08:00:01.799Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942401812",
+      "job_id": "daily-ga4-sync",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:01.812Z",
+      "completed_at": "2026-06-20T08:00:01.813Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "ga4": {
+            "status": "missing_credentials",
+            "credentials_configured": false,
+            "records": 0,
+            "error": "GA4 not configured. Missing: GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON, GA4_PROPERTY_ID",
+            "setup_steps": [
+              "1. Enable Google Analytics Data API in Cloud Console",
+              "2. Set up OAuth2 or Service Account credentials",
+              "3. Find GA4 Property ID (numeric, e.g. 123456789)",
+              "4. Set GA4_PROPERTY_ID in .env",
+              "5. Grant analytics read access to the service account or OAuth user"
+            ],
+            "data": [],
+            "fields_available": [
+              "organic_traffic",
+              "landing_pages",
+              "conversions",
+              "source_medium",
+              "utm_performance"
+            ]
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "running",
+            "last_success": "2026-06-19T11:21:27.928Z",
+            "last_error": null,
+            "last_run": "2026-06-20T08:00:01.790Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GSC credentials not configured. Missing: GOOGLE_CLIENT_ID or GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN",
+            "last_run": "2026-06-20T08:00:01.808Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GBP credentials not configured. Need GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN with Business Profile API enabled.",
+            "last_run": "2026-06-20T08:00:01.803Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GA4 not configured. Missing: GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON, GA4_PROPERTY_ID",
+            "last_run": "2026-06-20T08:00:01.812Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942402247",
+      "job_id": "daily-schema-validation",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:02.247Z",
+      "completed_at": "2026-06-20T08:00:02.852Z",
+      "result": {
+        "ok": true,
+        "result": {
+          "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+          "schema_items_count": 12,
+          "validation_overview": [
+            {
+              "location_id": "bandera",
+              "valid": true,
+              "issues": []
+            },
+            {
+              "location_id": "stone-oak",
+              "valid": true,
+              "issues": []
+            },
+            {
+              "location_id": "the-rim",
+              "valid": true,
+              "issues": []
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942402461",
+      "job_id": "daily-technical-audit",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:02.461Z",
+      "completed_at": "2026-06-20T08:00:03.063Z",
+      "result": {
+        "ok": true,
+        "result": {
+          "summary": "Audited 13 pages, mapped 9 keywords",
+          "pages": [
+            {
+              "id": "home",
+              "url": "https://bakudanramen.com/",
+              "type": "homepage",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/",
+              "h1": "[TODO] H1 for https://bakudanramen.com/",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "menu",
+              "url": "https://bakudanramen.com/menu",
+              "type": "menu",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/menu",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/menu",
+              "h1": "[TODO] H1 for https://bakudanramen.com/menu",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-bandera",
+              "url": "https://bakudanramen.com/locations/bandera",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/bandera",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/bandera",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/bandera",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-stone-oak",
+              "url": "https://bakudanramen.com/locations/stone-oak",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/stone-oak",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/stone-oak",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/stone-oak",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "loc-the-rim",
+              "url": "https://bakudanramen.com/locations/the-rim",
+              "type": "location",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/locations/the-rim",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/locations/the-rim",
+              "h1": "[TODO] H1 for https://bakudanramen.com/locations/the-rim",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": null,
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-best-ramen",
+              "url": "https://bakudanramen.com/best-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/best-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/best-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/best-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Best Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-tonkotsu",
+              "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Tonkotsu Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-japanese-food",
+              "url": "https://bakudanramen.com/japanese-food-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/japanese-food-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/japanese-food-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/japanese-food-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Japanese Food in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-utsa",
+              "url": "https://bakudanramen.com/ramen-near-utsa",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-utsa",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-utsa",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-utsa",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen Near UTSA",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-rim-cantera",
+              "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen Near The Rim",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-stone-oak",
+              "url": "https://bakudanramen.com/ramen-stone-oak",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/ramen-stone-oak",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/ramen-stone-oak",
+              "h1": "[TODO] H1 for https://bakudanramen.com/ramen-stone-oak",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Ramen in Stone Oak",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-vegetarian",
+              "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Vegetarian Ramen in San Antonio",
+              "score": 0,
+              "issues": []
+            },
+            {
+              "id": "lp-happy-hour",
+              "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "type": "landing",
+              "title_tag": "[TODO] Generate title for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "meta_description": "[TODO] Generate meta for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "h1": "[TODO] H1 for https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "h2_structure": [],
+              "internal_links": [],
+              "target_keyword": "Happy Hour Ramen San Antonio",
+              "score": 0,
+              "issues": []
+            }
+          ],
+          "keyword_map": [
+            {
+              "keyword": "Best Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/best-ramen-san-antonio",
+              "priority": 1
+            },
+            {
+              "keyword": "Tonkotsu Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+              "priority": 2
+            },
+            {
+              "keyword": "Japanese Food in San Antonio",
+              "assigned_page": "https://bakudanramen.com/japanese-food-san-antonio",
+              "priority": 3
+            },
+            {
+              "keyword": "Ramen Near UTSA",
+              "assigned_page": "https://bakudanramen.com/ramen-near-utsa",
+              "priority": 4
+            },
+            {
+              "keyword": "Ramen Near The Rim",
+              "assigned_page": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+              "priority": 5
+            },
+            {
+              "keyword": "Ramen Near La Cantera",
+              "assigned_page": null,
+              "priority": 6
+            },
+            {
+              "keyword": "Ramen in Stone Oak",
+              "assigned_page": "https://bakudanramen.com/ramen-stone-oak",
+              "priority": 7
+            },
+            {
+              "keyword": "Vegetarian Ramen in San Antonio",
+              "assigned_page": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+              "priority": 8
+            },
+            {
+              "keyword": "Happy Hour Ramen San Antonio",
+              "assigned_page": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+              "priority": 9
+            }
+          ],
+          "internal_linking_plan": "pending"
+        }
+      },
+      "error": null
+    },
+    {
+      "id": "job_1781942419041",
+      "job_id": "daily-website-crawl",
+      "status": "completed",
+      "started_at": "2026-06-20T08:00:19.041Z",
+      "completed_at": "2026-06-20T08:00:28.826Z",
+      "result": {
+        "ok": true,
+        "results": {
+          "crawler": {
+            "status": "success",
+            "records": 13,
+            "successful_pages": 1,
+            "failed_pages": 12,
+            "broken_links_found": 0,
+            "credentials_configured": true,
+            "raw_payload_path": "E:\\Project\\Master\\SEO\\shared\\reports\\connectors\\crawler-1781942428824.json",
+            "data": [
+              {
+                "url": "https://bakudanramen.com/",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:20.818Z",
+                "confidence": "high",
+                "status_code": 200,
+                "error": null,
+                "title": "Bakudan Ramen | Bold Flavor. Modern Japanese Soul. Texas Spirit.",
+                "meta_description": "Experience authentic Japanese ramen in San Antonio, Texas. House-simmered tonkotsu broth, fresh noodles daily, and bold flavors at three locations. Order online for pickup or delivery.",
+                "h1": "BOLD RAMEN.UNFORGETTABLE FLAVOR.",
+                "h2s": [
+                  "HAPPY HOUR EVERY DAY",
+                  "Where Tradition Meets Innovation",
+                  "OUR SIGNATURE BOWLS",
+                  "STORIES &amp; GUIDES",
+                  "READY TO EXPERIENCE THE BOLD?",
+                  "WE NOW DELIVER!"
+                ],
+                "canonical": "https://www.bakudanramen.com/",
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": true,
+                "schema_types": [
+                  "Organization"
+                ],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 9,
+                "images_missing_alt": 2,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 20969,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/menu",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:21.248Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/bandera",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:21.676Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:22.106Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/locations/the-rim",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:23.013Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/best-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:23.915Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:24.343Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/japanese-food-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:24.772Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-utsa",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:25.674Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:26.578Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/ramen-stone-oak",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:27.492Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:28.395Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              },
+              {
+                "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+                "source": "crawler",
+                "fetched_at": "2026-06-20T08:00:28.824Z",
+                "confidence": "low",
+                "status_code": 404,
+                "error": null,
+                "title": "404 Not Found",
+                "meta_description": null,
+                "h1": "Not Found",
+                "h2s": [],
+                "canonical": null,
+                "robots_status": {
+                  "meta_robots": "index,follow",
+                  "x_robots_tag": null,
+                  "indexable": true,
+                  "followable": true
+                },
+                "schema_present": false,
+                "schema_types": [],
+                "internal_links": [],
+                "internal_links_count": 0,
+                "images_total": 0,
+                "images_missing_alt": 0,
+                "broken_links": [],
+                "broken_links_count": 0,
+                "content_length": 315,
+                "raw_payload_path": null
+              }
+            ],
+            "error": null
+          }
+        },
+        "connector_status": [
+          {
+            "id": "crawler",
+            "name": "Website Crawler",
+            "status": "success",
+            "last_success": "2026-06-20T08:00:28.825Z",
+            "last_error": null,
+            "last_run": "2026-06-20T08:00:19.046Z",
+            "records_fetched": 13,
+            "credentials_configured": true
+          },
+          {
+            "id": "gsc",
+            "name": "Google Search Console",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GSC credentials not configured. Missing: GOOGLE_CLIENT_ID or GOOGLE_SERVICE_ACCOUNT_JSON, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN",
+            "last_run": "2026-06-20T08:00:01.808Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "gbp",
+            "name": "Google Business Profile",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GBP credentials not configured. Need GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN with Business Profile API enabled.",
+            "last_run": "2026-06-20T08:00:01.803Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "ga4",
+            "name": "Google Analytics 4",
+            "status": "missing_credentials",
+            "last_success": null,
+            "last_error": "GA4 not configured. Missing: GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON, GA4_PROPERTY_ID",
+            "last_run": "2026-06-20T08:00:01.812Z",
+            "records_fetched": 0,
+            "credentials_configured": false
+          },
+          {
+            "id": "citation_scan",
+            "name": "Citation Checker",
+            "status": "idle",
+            "last_success": null,
+            "last_error": null,
+            "last_run": null,
+            "records_fetched": 0,
+            "credentials_configured": false
+          }
+        ]
+      },
+      "error": null
+    }
+  ],
+  "orchestratorLog": [
+    {
+      "job_id": "daily-website-crawl",
+      "action": "started",
+      "ts": "2026-06-19T11:06:04.159Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "completed",
+      "ts": "2026-06-19T11:06:17.609Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "started",
+      "ts": "2026-06-19T11:20:31.522Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "completed",
+      "ts": "2026-06-19T11:20:48.132Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "started",
+      "ts": "2026-06-19T11:21:10.608Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "completed",
+      "ts": "2026-06-19T11:21:27.928Z"
+    },
+    {
+      "job_id": "daily-gbp-sync",
+      "action": "started",
+      "ts": "2026-06-20T08:00:01.800Z"
+    },
+    {
+      "job_id": "daily-gbp-sync",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:01.804Z"
+    },
+    {
+      "job_id": "daily-gsc-sync",
+      "action": "started",
+      "ts": "2026-06-20T08:00:01.808Z"
+    },
+    {
+      "job_id": "daily-gsc-sync",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:01.809Z"
+    },
+    {
+      "job_id": "daily-ga4-sync",
+      "action": "started",
+      "ts": "2026-06-20T08:00:01.812Z"
+    },
+    {
+      "job_id": "daily-ga4-sync",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:01.813Z"
+    },
+    {
+      "job_id": "daily-schema-validation",
+      "action": "started",
+      "ts": "2026-06-20T08:00:02.247Z"
+    },
+    {
+      "job_id": "daily-technical-audit",
+      "action": "started",
+      "ts": "2026-06-20T08:00:02.461Z"
+    },
+    {
+      "job_id": "daily-schema-validation",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:02.852Z"
+    },
+    {
+      "job_id": "daily-technical-audit",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:03.063Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "started",
+      "ts": "2026-06-20T08:00:19.041Z"
+    },
+    {
+      "job_id": "daily-website-crawl",
+      "action": "completed",
+      "ts": "2026-06-20T08:00:28.826Z"
+    }
+  ]
+}

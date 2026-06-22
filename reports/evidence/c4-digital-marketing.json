@@ -1,0 +1,49 @@
+{
+  "campaign": "Spicy Lemongrass Chicken Bánh Mì Launch",
+  "generated_at": "2026-06-14T13:47:48.540Z",
+  "assets": {
+    "seo_article": {
+      "created": true
+    },
+    "flyer": {
+      "created": true
+    },
+    "video": {
+      "created": true
+    },
+    "voiceover": {
+      "created": true
+    },
+    "website_draft": {
+      "created": true
+    },
+    "seo_analysis": {
+      "created": true
+    },
+    "facebook_post": {
+      "created": true
+    },
+    "instagram_post": {
+      "created": true
+    },
+    "tiktok_post": {
+      "created": true
+    },
+    "schedule": {
+      "created": true,
+      "scheduled_for": "2026-06-19T02:00:00.000Z"
+    }
+  },
+  "env_status": {
+    "comfyui": false,
+    "wan_video": false,
+    "openvoice": false,
+    "wordpress": false,
+    "facebook": false,
+    "instagram": false,
+    "tiktok": false
+  },
+  "live_integrations": 0,
+  "passed": 10,
+  "failed": 0
+}

@@ -1,0 +1,14 @@
+{
+  "name": "business-triage",
+  "version": "1.0.0",
+  "entry": "skills/business-triage/SKILL.md",
+  "approved": true,
+  "approvedBy": "cto",
+  "scope": ["finance", "connectivity", "triage"],
+  "sha256": "REPLACE_ME",
+  "policy": {
+    "mode": "read-only",
+    "allowedConnectors": ["quickbooks", "toast", "doordash", "mi-core"],
+    "approvalRequiredForWrite": true
+  }
+}

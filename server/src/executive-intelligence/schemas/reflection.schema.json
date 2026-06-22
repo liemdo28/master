@@ -1,0 +1,28 @@
+{
+  "$id": "reflection.schema.json",
+  "type": "object",
+  "required": ["confidence", "assumptions", "alternative_explanations", "missing_evidence", "contradictions"],
+  "properties": {
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What we assumed without direct evidence"
+    },
+    "alternative_explanations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Other valid ways to interpret the data"
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Data we wish we had but don't"
+    },
+    "contradictions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conflicting signals found in the data"
+    }
+  }
+}

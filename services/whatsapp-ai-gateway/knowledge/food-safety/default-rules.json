@@ -1,0 +1,24 @@
+{
+  "rules": [
+    { "category": "Walk-in Cooler", "item": "Walk-in Cooler", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Close door, re-temp in 10 min, alert MOD if still high." },
+    { "category": "Walk-in Freezer", "item": "Walk-in Freezer", "operator": "<=", "target": 0, "unit": "F", "correctiveAction": "Check door seal, re-temp in 10 min, alert MOD." },
+    { "category": "Prep Area Cooler", "item": "Prep Area Cooler", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Move product to walk-in, re-temp, alert MOD." },
+    { "category": "Ramen Refrigeration", "item": "Ramen Refrigeration Top", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Re-temp in 10 min. Alert MOD if still high." },
+    { "category": "Ramen Refrigeration", "item": "Ramen Refrigeration Below", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Re-temp in 10 min. Alert MOD if still high." },
+    { "category": "Line Freezer", "item": "Line Freezer", "operator": "<=", "target": 0, "unit": "F", "correctiveAction": "Re-temp, check freezer. Alert MOD." },
+    { "category": "Tapas Refrigeration", "item": "Tapas Refrigeration Top", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Re-temp in 10 min. Alert MOD." },
+    { "category": "Tapas Refrigeration", "item": "Tapas Refrigeration Below", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Re-temp in 10 min. Alert MOD." },
+    { "category": "Tapas Refrigeration", "item": "Tapas Side Fridge", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Alert MOD; verify side fridge and move product if above 40F." },
+    { "category": "Hot Holding", "item": "Bowl Warmers", "operator": ">=", "target": 100, "unit": "F", "correctiveAction": "Re-heat to 165F or above. Discard if below 140F for more than 2 hours." },
+    { "category": "Hot Holding", "item": "Pork Chashu", "operator": ">=", "target": 100, "unit": "F", "correctiveAction": "Re-heat to 165F immediately. Discard if below 140F for more than 2 hours." },
+    { "category": "Cold Holding", "item": "Chicken Chashu", "operator": "<=", "target": 40, "unit": "F", "correctiveAction": "Move to walk-in cooler, re-temp in 10 min, alert MOD if still high." },
+    { "category": "Hot Holding", "item": "Seasoned Eggs", "operator": ">=", "target": 100, "unit": "F", "correctiveAction": "Re-heat to 165F immediately. Discard if below 140F for more than 2 hours." },
+    { "category": "Hot Holding", "item": "Fryer 1", "operator": ">=", "target": 325, "unit": "F", "correctiveAction": "Check oil quality. Do not use until temp is 325F." },
+    { "category": "Hot Holding", "item": "Fryer 2", "operator": ">=", "target": 325, "unit": "F", "correctiveAction": "Check oil quality. Do not use until temp is 325F." },
+    { "category": "Hot Holding", "item": "Pasta Boiler 1", "operator": ">=", "target": 200, "unit": "F", "correctiveAction": "Reheat to rolling boil. Do not use until 200F." },
+    { "category": "Hot Holding", "item": "Pasta Boiler 2", "operator": ">=", "target": 200, "unit": "F", "correctiveAction": "Reheat to rolling boil. Do not use until 200F." },
+    { "category": "Hot Holding", "item": "Pork Broth", "operator": ">=", "target": 200, "unit": "F", "correctiveAction": "Reheat to 200F. Discard if below 140F for more than 2 hours." },
+    { "category": "Hot Holding", "item": "Chicken Broth", "operator": ">=", "target": 200, "unit": "F", "correctiveAction": "Reheat to 200F. Discard if below 140F for more than 2 hours." },
+    { "category": "Hot Holding", "item": "Veggie Broth", "operator": ">=", "target": 200, "unit": "F", "correctiveAction": "Reheat to 200F. Discard if below 140F for more than 2 hours." }
+  ]
+}

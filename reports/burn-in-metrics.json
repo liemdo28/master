@@ -1,0 +1,528 @@
+{
+  "start": 1781495537072,
+  "message_count": 31,
+  "success_count": 31,
+  "fallback_count": 67,
+  "timeout_count": 2,
+  "context_loss_count": 0,
+  "graph_dump_count": 0,
+  "english_error_count": 0,
+  "workflow_created_count": 10,
+  "approval_requested_count": 0,
+  "latencies": [
+    3285,
+    975,
+    958,
+    396,
+    1070,
+    982,
+    694,
+    62,
+    360,
+    335,
+    415,
+    354,
+    736,
+    289,
+    603,
+    916,
+    335,
+    909,
+    596,
+    227,
+    119,
+    1031,
+    104,
+    460,
+    271,
+    382,
+    56,
+    707,
+    317,
+    441,
+    1138,
+    757,
+    860,
+    1149,
+    1062,
+    421,
+    1585,
+    858,
+    410,
+    802,
+    706,
+    637,
+    373,
+    607,
+    491,
+    723,
+    123,
+    640,
+    874,
+    421,
+    1151,
+    1103,
+    936,
+    1115,
+    841,
+    1452,
+    1057,
+    918,
+    651,
+    449,
+    542,
+    14044,
+    364,
+    1465,
+    122,
+    706,
+    335,
+    677,
+    283,
+    1714,
+    428,
+    1089,
+    865,
+    654,
+    828,
+    116,
+    417,
+    1072,
+    1004,
+    658,
+    723,
+    583,
+    115,
+    813,
+    683,
+    463,
+    617,
+    893,
+    636,
+    758,
+    621,
+    584
+  ],
+  "failures": [
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 3285,
+      "ts": 1781495540358
+    },
+    {
+      "msg": "co gi khong",
+      "error": "HTTP 500",
+      "lat": 975,
+      "ts": 1781495541333
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 958,
+      "ts": 1781495542291
+    },
+    {
+      "msg": "Có gì cần anh xử lý không?",
+      "error": "HTTP 500",
+      "lat": 396,
+      "ts": 1781495542687
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 1070,
+      "ts": 1781495543757
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 982,
+      "ts": 1781495544739
+    },
+    {
+      "msg": "Còn gì nữa?",
+      "error": "HTTP 500",
+      "lat": 694,
+      "ts": 1781495545433
+    },
+    {
+      "msg": "Còn gì nữa?",
+      "error": "HTTP 500",
+      "lat": 335,
+      "ts": 1781495546191
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 415,
+      "ts": 1781495546606
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 354,
+      "ts": 1781495546960
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 736,
+      "ts": 1781495547696
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 289,
+      "ts": 1781495547985
+    },
+    {
+      "msg": "Có gì cần anh xử lý không?",
+      "error": "HTTP 500",
+      "lat": 603,
+      "ts": 1781495548588
+    },
+    {
+      "msg": "Có ai nghỉ không?",
+      "error": "HTTP 500",
+      "lat": 916,
+      "ts": 1781495549504
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 335,
+      "ts": 1781495549839
+    },
+    {
+      "msg": "Có ai nghỉ không?",
+      "error": "HTTP 500",
+      "lat": 909,
+      "ts": 1781495550748
+    },
+    {
+      "msg": "co gi khong",
+      "error": "HTTP 500",
+      "lat": 596,
+      "ts": 1781495551344
+    },
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 227,
+      "ts": 1781495551572
+    },
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 1031,
+      "ts": 1781495552722
+    },
+    {
+      "msg": "Có ai nghỉ không?",
+      "error": "HTTP 500",
+      "lat": 271,
+      "ts": 1781495553557
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 382,
+      "ts": 1781495553941
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 707,
+      "ts": 1781495554704
+    },
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 317,
+      "ts": 1781495555021
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 1138,
+      "ts": 1781495556601
+    },
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 860,
+      "ts": 1781495558218
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 1149,
+      "ts": 1781495559367
+    },
+    {
+      "msg": "Chuẩn bị report doanh thu",
+      "error": "HTTP 500",
+      "lat": 1062,
+      "ts": 1781495560429
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 858,
+      "ts": 1781495563293
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 706,
+      "ts": 1781495565211
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 637,
+      "ts": 1781495565848
+    },
+    {
+      "msg": "Có gì cần anh xử lý không?",
+      "error": "HTTP 500",
+      "lat": 373,
+      "ts": 1781495566221
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 607,
+      "ts": 1781495566828
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 723,
+      "ts": 1781495568042
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 640,
+      "ts": 1781495568805
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 874,
+      "ts": 1781495569679
+    },
+    {
+      "msg": "HRV tuần này sao?",
+      "error": "HTTP 500",
+      "lat": 1151,
+      "ts": 1781495571252
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 1103,
+      "ts": 1781495572355
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 936,
+      "ts": 1781495573291
+    },
+    {
+      "msg": "Chuẩn bị report doanh thu",
+      "error": "HTTP 500",
+      "lat": 841,
+      "ts": 1781495575247
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 1452,
+      "ts": 1781495576699
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 1057,
+      "ts": 1781495577756
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 918,
+      "ts": 1781495578674
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 542,
+      "ts": 1781495580316
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "type": "timeout",
+      "lat": 15009,
+      "ts": 1781495609734
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "type": "timeout",
+      "lat": 15015,
+      "ts": 1781495624749
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 1465,
+      "ts": 1781495626214
+    },
+    {
+      "msg": "Có gì cần anh xử lý không?",
+      "error": "HTTP 500",
+      "lat": 706,
+      "ts": 1781495627042
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 677,
+      "ts": 1781495628054
+    },
+    {
+      "msg": "Mi ơi",
+      "error": "HTTP 500",
+      "lat": 283,
+      "ts": 1781495628337
+    },
+    {
+      "msg": "Tạo flyer cho Bakudan",
+      "error": "HTTP 500",
+      "lat": 1714,
+      "ts": 1781495630051
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 428,
+      "ts": 1781495630479
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 1089,
+      "ts": 1781495631568
+    },
+    {
+      "msg": "Tình hình thế nào?",
+      "error": "HTTP 500",
+      "lat": 654,
+      "ts": 1781495633088
+    },
+    {
+      "msg": "Anh ngủ sao rồi?",
+      "error": "HTTP 500",
+      "lat": 417,
+      "ts": 1781495634449
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "error": "HTTP 500",
+      "lat": 1072,
+      "ts": 1781495635521
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 1004,
+      "ts": 1781495636525
+    },
+    {
+      "msg": "Có gì cần anh xử lý không?",
+      "error": "HTTP 500",
+      "lat": 658,
+      "ts": 1781495637183
+    },
+    {
+      "msg": "Tạo flyer cho Bakudan",
+      "error": "HTTP 500",
+      "lat": 583,
+      "ts": 1781495638490
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 683,
+      "ts": 1781495640101
+    },
+    {
+      "msg": "Kể thêm đi",
+      "error": "HTTP 500",
+      "lat": 617,
+      "ts": 1781495641181
+    },
+    {
+      "msg": "HRV tuần này sao?",
+      "error": "HTTP 500",
+      "lat": 636,
+      "ts": 1781495642711
+    },
+    {
+      "msg": "Doanh thu sao rồi?",
+      "error": "HTTP 500",
+      "lat": 621,
+      "ts": 1781495644090
+    },
+    {
+      "msg": "co gi khong",
+      "error": "HTTP 500",
+      "lat": 584,
+      "ts": 1781495644674
+    },
+    {
+      "msg": "Soạn email cho Maria",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 303,
+      "ts": 1781495644977
+    },
+    {
+      "msg": "Bakudan tình hình sao?",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 2,
+      "ts": 1781495644979
+    },
+    {
+      "msg": "dashboard sao roi",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 2,
+      "ts": 1781495644981
+    },
+    {
+      "msg": "dashboard sao roi",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 2,
+      "ts": 1781495644983
+    },
+    {
+      "msg": "Hôm nay anh có task gì?",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 1,
+      "ts": 1781495644984
+    },
+    {
+      "msg": "Tạo flyer cho Bakudan",
+      "type": "network_error",
+      "error": "fetch failed",
+      "lat": 1,
+      "ts": 1781495644986
+    }
+  ]
+}

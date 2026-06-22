@@ -1,0 +1,122 @@
+{
+  "projectName": "dashboard",
+  "projectPath": "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway",
+  "generatedAt": "2026-06-08T03:09:47.626Z",
+  "entryPoints": [
+    "index.js"
+  ],
+  "importantFiles": [
+    "index.js",
+    ".local-agent\\source-map\\api.md",
+    ".local-agent\\source-map\\controllers.md",
+    ".local-agent\\source-map\\database.md",
+    ".local-agent\\source-map\\models.md",
+    ".local-agent\\source-map\\routes.md",
+    "config\\stores.js",
+    "ConversationRouter.js",
+    "db\\RecordStore.js",
+    "ocr\\OcrService.js",
+    "session\\SessionStore.js"
+  ],
+  "riskyFiles": [
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\config\\stores.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ConversationRouter.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\dashboard\\Dashboard.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\db\\RecordStore.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\index.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrFieldExtractor.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrService.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\AuditTrail.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\index.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ManagerAlerts.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\OperationsDashboard.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PilotReport.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PipelineVerifier.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ReviewQueue.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\session\\SessionStore.js",
+    "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\sync\\GoogleSheetSync.js"
+  ],
+  "routes": {
+    "total": 0,
+    "routes": [],
+    "endpoints": []
+  },
+  "controllers": {
+    "total": 0,
+    "controllers": []
+  },
+  "models": {
+    "total": 0,
+    "models": []
+  },
+  "database": {
+    "type": "unknown",
+    "connection": "not detected",
+    "tables": [],
+    "migrations": [],
+    "config": []
+  },
+  "frontend": {
+    "components": [],
+    "pages": [],
+    "stores": [],
+    "frameworks": [],
+    "total": 0
+  },
+  "dependencies": {
+    "production": [],
+    "dev": [],
+    "peer": [],
+    "php": [],
+    "python": [],
+    "external": []
+  },
+  "riskMap": {
+    "riskyFiles": [
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\config\\stores.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ConversationRouter.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\dashboard\\Dashboard.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\db\\RecordStore.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\index.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrFieldExtractor.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrService.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\AuditTrail.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\index.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ManagerAlerts.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\OperationsDashboard.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PilotReport.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PipelineVerifier.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ReviewQueue.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\session\\SessionStore.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\sync\\GoogleSheetSync.js"
+    ],
+    "high": [
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\db\\RecordStore.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ManagerAlerts.js"
+    ],
+    "medium": [
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\config\\stores.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ConversationRouter.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\dashboard\\Dashboard.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\index.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrFieldExtractor.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ocr\\OcrService.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\AuditTrail.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\index.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\OperationsDashboard.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PilotReport.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\PipelineVerifier.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\ops\\ReviewQueue.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\session\\SessionStore.js",
+      "e:\\Project\\Master\\Agent\\agent-coding\\src\\food-safety-gateway\\sync\\GoogleSheetSync.js"
+    ],
+    "low": [],
+    "notes": [
+      "2 high-risk files detected — requires careful review before editing",
+      "14 medium-risk files — test thoroughly after changes"
+    ]
+  },
+  "qaCommands": {},
+  "buildCommands": {},
+  "deployNotes": []
+}

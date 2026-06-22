@@ -1,0 +1,3009 @@
+{
+  "summary": {
+    "generated_at": "2026-06-16T05:36:37.7139654+07:00",
+    "total": 100,
+    "pass": 99,
+    "fail": 1,
+    "error": 0,
+    "forbidden_text": 0,
+    "silent_drop": 0,
+    "duplicate_child_workflow": 0,
+    "approval_bypass": 0,
+    "finance_wrong_domain": 0,
+    "rate_limit_per_minute": 120
+  },
+  "rows": [
+    {
+      "case": 1,
+      "input": "Mi oi, tao bai SEO cho Raw REG2-1",
+      "pass": true,
+      "reasons": [],
+      "ms": 908,
+      "approval_id": "APPR-mqfshmd9-729",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-001.svg\n\nApproval ID: *APPR-mqfshmd9-729*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-001",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-001",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-001.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-001.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 2,
+      "input": "Mi oi, tao bai SEO cho Bakudan REG2-2",
+      "pass": true,
+      "reasons": [],
+      "ms": 793,
+      "approval_id": "APPR-mqfshmzw-713",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *SEO Content for Bakudan Ramen*\nFor: *Bakudan Ramen*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-002.svg\n\nApproval ID: *APPR-mqfshmzw-713*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-002",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-002",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-002.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-002.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 3,
+      "input": "Kiem tra Dashboard REG2-3",
+      "pass": true,
+      "reasons": [],
+      "ms": 779,
+      "approval_id": "APPR-mqfshnl9-192",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfshnl9-192*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-001",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-001",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-001.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 4,
+      "input": "QB sync sao roi REG2-4",
+      "pass": true,
+      "reasons": [],
+      "ms": 110,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (494 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (494 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 5,
+      "input": "Doanh thu Raw Sushi bao nhieu REG2-5",
+      "pass": true,
+      "reasons": [],
+      "ms": 96,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (494 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (494 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 6,
+      "input": "Chi phi thang nay bao nhieu REG2-6",
+      "pass": true,
+      "reasons": [],
+      "ms": 153,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (494 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (494 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 7,
+      "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria REG2-7",
+      "pass": true,
+      "reasons": [],
+      "ms": 3267,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-036",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-002",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-036.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-036-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-003",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-003.json",
+              ".local-agent-global/execution-queue/JOB-mqfshpv5-329.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-036-B",
+            "workflow_id": "FINANCE-REPORT-20260616-001",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-001.json",
+              ".local-agent-global/execution-queue/JOB-mqfshq0w-153.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-036-C",
+            "workflow_id": "SEO-CONTENT-20260616-003",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-003.json",
+              ".local-agent-global/execution-queue/JOB-mqfshq6g-689.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-003.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-036-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-001",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-001.json",
+              ".local-agent-global/execution-queue/JOB-mqfshqdi-259.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 8,
+      "input": "Gui email cho Maria ve bao cao Raw REG2-8",
+      "pass": true,
+      "reasons": [],
+      "ms": 842,
+      "approval_id": "APPR-mqfshr25-778",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfshr25-778*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: EMAIL-DRAFT-20260616-002",
+      "metadata": {
+        "intent": "email_comms",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "EMAIL-DRAFT-20260616-002",
+        "evidence_path": ".local-agent-global/workflows/EMAIL-DRAFT-20260616-002.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 9,
+      "input": "Tao task dashboard cho team REG2-9",
+      "pass": true,
+      "reasons": [],
+      "ms": 853,
+      "approval_id": "APPR-mqfshrpd-580",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfshrpd-580*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-004",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-004",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-004.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 10,
+      "input": "Unknown quantum sushi request REG2-10",
+      "pass": true,
+      "reasons": [],
+      "ms": 18142,
+      "approval_id": null,
+      "reply": "Em đang xử lý yêu cầu của anh — anh thử lại sau vài giây nhé.",
+      "metadata": {
+        "intent": "duplicate",
+        "source": "mi-core",
+        "confidence": 1,
+        "requires_followup": false
+      },
+      "error": ""
+    },
+    {
+      "case": 11,
+      "input": "deploy production REG2-11",
+      "pass": true,
+      "reasons": [],
+      "ms": 109,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 12,
+      "input": "delete database REG2-12",
+      "pass": true,
+      "reasons": [],
+      "ms": 119,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 13,
+      "input": "submit tax REG2-13",
+      "pass": true,
+      "reasons": [],
+      "ms": 231,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 14,
+      "input": "Tao anh preview cho bai SEO Raw REG2-14",
+      "pass": true,
+      "reasons": [],
+      "ms": 769,
+      "approval_id": "APPR-mqfsi6om-589",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-004.svg\n\nApproval ID: *APPR-mqfsi6om-589*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-004",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-004",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-004.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-004.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 15,
+      "input": "Kiem tra work orders hom nay REG2-15",
+      "pass": true,
+      "reasons": [],
+      "ms": 789,
+      "approval_id": "APPR-mqfsi79q-146",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for chung*\nFor: *chung*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsi79q-146*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: GENERAL-TASK-20260616-001",
+      "metadata": {
+        "intent": "general",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "GENERAL-TASK-20260616-001",
+        "evidence_path": ".local-agent-global/workflows/GENERAL-TASK-20260616-001.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 16,
+      "input": "Raw Sushi finance status REG2-16",
+      "pass": true,
+      "reasons": [],
+      "ms": 132,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (495 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 17,
+      "input": "Dashboard + QB REG2-17",
+      "pass": true,
+      "reasons": [],
+      "ms": 1891,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nFinal summary: Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 2.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-037",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-005",
+        "expected_children": 2,
+        "executed_children": 2,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-037.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-037-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-006",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-006.json",
+              ".local-agent-global/execution-queue/JOB-mqfsi8of-859.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-037-B",
+            "workflow_id": "FINANCE-REPORT-20260616-002",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-002.json",
+              ".local-agent-global/execution-queue/JOB-mqfsi8u0-640.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 18,
+      "input": "Dashboard + QB + SEO Raw REG2-18",
+      "pass": true,
+      "reasons": [],
+      "ms": 2505,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nFinal summary: Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 3.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-038",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-007",
+        "expected_children": 3,
+        "executed_children": 3,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-038.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-038-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-008",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-008.json",
+              ".local-agent-global/execution-queue/JOB-mqfsiafu-070.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-038-B",
+            "workflow_id": "FINANCE-REPORT-20260616-003",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-003.json",
+              ".local-agent-global/execution-queue/JOB-mqfsialc-436.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-038-C",
+            "workflow_id": "SEO-CONTENT-20260616-005",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-005.json",
+              ".local-agent-global/execution-queue/JOB-mqfsiar4-765.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-005.md"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 19,
+      "input": "Dashboard + QB + SEO Raw + Maria REG2-19",
+      "pass": true,
+      "reasons": [],
+      "ms": 3575,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-039",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-009",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-039.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-039-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-010",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-010.json",
+              ".local-agent-global/execution-queue/JOB-mqfsicrd-599.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-039-B",
+            "workflow_id": "FINANCE-REPORT-20260616-004",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-004.json",
+              ".local-agent-global/execution-queue/JOB-mqfsicx8-659.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-039-C",
+            "workflow_id": "SEO-CONTENT-20260616-006",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-006.json",
+              ".local-agent-global/execution-queue/JOB-mqfsid47-029.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-006.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-039-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-003",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-003.json",
+              ".local-agent-global/execution-queue/JOB-mqfsida5-476.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 20,
+      "input": "Kiem tra duplicate bills QB REG2-20",
+      "pass": true,
+      "reasons": [],
+      "ms": 132,
+      "approval_id": null,
+      "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 21,
+      "input": "Mi oi, tao bai SEO cho Raw REG2-21",
+      "pass": true,
+      "reasons": [],
+      "ms": 796,
+      "approval_id": "APPR-mqfsie9j-474",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-007.svg\n\nApproval ID: *APPR-mqfsie9j-474*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-007",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-007",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-007.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-007.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 22,
+      "input": "Mi oi, tao bai SEO cho Bakudan REG2-22",
+      "pass": true,
+      "reasons": [],
+      "ms": 835,
+      "approval_id": "APPR-mqfsiewp-125",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *SEO Content for Bakudan Ramen*\nFor: *Bakudan Ramen*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-008.svg\n\nApproval ID: *APPR-mqfsiewp-125*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-008",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-008",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-008.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-008.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 23,
+      "input": "Kiem tra Dashboard REG2-23",
+      "pass": true,
+      "reasons": [],
+      "ms": 878,
+      "approval_id": "APPR-mqfsifhc-584",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsifhc-584*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-011",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-011",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-011.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 24,
+      "input": "QB sync sao roi REG2-24",
+      "pass": true,
+      "reasons": [],
+      "ms": 109,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (495 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 25,
+      "input": "Doanh thu Raw Sushi bao nhieu REG2-25",
+      "pass": true,
+      "reasons": [],
+      "ms": 77,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (495 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 26,
+      "input": "Chi phi thang nay bao nhieu REG2-26",
+      "pass": true,
+      "reasons": [],
+      "ms": 98,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (495 minutes old) | Last successful QB sync is stale (1889 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1889 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 27,
+      "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria REG2-27",
+      "pass": true,
+      "reasons": [],
+      "ms": 3072,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-040",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-012",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-040.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-040-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-013",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-013.json",
+              ".local-agent-global/execution-queue/JOB-mqfsihpr-746.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-040-B",
+            "workflow_id": "FINANCE-REPORT-20260616-005",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-005.json",
+              ".local-agent-global/execution-queue/JOB-mqfsihve-727.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-040-C",
+            "workflow_id": "SEO-CONTENT-20260616-009",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-009.json",
+              ".local-agent-global/execution-queue/JOB-mqfsii0y-483.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-009.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-040-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-004",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-004.json",
+              ".local-agent-global/execution-queue/JOB-mqfsii6q-922.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 28,
+      "input": "Gui email cho Maria ve bao cao Raw REG2-28",
+      "pass": true,
+      "reasons": [],
+      "ms": 843,
+      "approval_id": "APPR-mqfsiiql-873",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsiiql-873*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: EMAIL-DRAFT-20260616-005",
+      "metadata": {
+        "intent": "email_comms",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "EMAIL-DRAFT-20260616-005",
+        "evidence_path": ".local-agent-global/workflows/EMAIL-DRAFT-20260616-005.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 29,
+      "input": "Tao task dashboard cho team REG2-29",
+      "pass": true,
+      "reasons": [],
+      "ms": 699,
+      "approval_id": "APPR-mqfsijdq-123",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsijdq-123*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-014",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-014",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-014.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 30,
+      "input": "Unknown quantum sushi request REG2-30",
+      "pass": true,
+      "reasons": [],
+      "ms": 18342,
+      "approval_id": null,
+      "reply": "- **Xác nhận yêu cầu REG2-30:**  \n  - Kiểm tra hệ thống nội bộ để xác định liệu yêu cầu này có tồn tại hay không.  \n  - Nếu không tìm thấy, yêu cầu người gửi cung cấp thêm thông tin (ví dụ: nội dung, thời gian, hoặc liên hệ người liên quan).  \n\n- **Hướng dẫn tiếp theo:**  \n  - Nếu yêu cầu liên quan đến triển khai (deploy) hoặc báo cáo thuế, hãy cung cấp chi tiết để phân loại và xử lý đúng quy trình.  \n  - Đảm bảo tuân thủ quy định của công ty (Bakudan Ramen/Raw Sushi Bar) về xử lý yêu cầu chưa rõ ràng.  \n\n👉 Vui lòng cung cấp thêm thông tin để hỗ trợ kịp thời!",
+      "metadata": {
+        "intent": "duplicate",
+        "source": "mi-core",
+        "confidence": 1,
+        "requires_followup": false
+      },
+      "error": ""
+    },
+    {
+      "case": 31,
+      "input": "deploy production REG2-31",
+      "pass": true,
+      "reasons": [],
+      "ms": 94,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 32,
+      "input": "delete database REG2-32",
+      "pass": true,
+      "reasons": [],
+      "ms": 86,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 33,
+      "input": "submit tax REG2-33",
+      "pass": true,
+      "reasons": [],
+      "ms": 84,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 34,
+      "input": "Tao anh preview cho bai SEO Raw REG2-34",
+      "pass": true,
+      "reasons": [],
+      "ms": 754,
+      "approval_id": "APPR-mqfsiybp-403",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-010.svg\n\nApproval ID: *APPR-mqfsiybp-403*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-010",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-010",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-010.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-010.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 35,
+      "input": "Kiem tra work orders hom nay REG2-35",
+      "pass": true,
+      "reasons": [],
+      "ms": 776,
+      "approval_id": "APPR-mqfsiyxc-178",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for chung*\nFor: *chung*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsiyxc-178*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: GENERAL-TASK-20260616-002",
+      "metadata": {
+        "intent": "general",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "GENERAL-TASK-20260616-002",
+        "evidence_path": ".local-agent-global/workflows/GENERAL-TASK-20260616-002.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 36,
+      "input": "Raw Sushi finance status REG2-36",
+      "pass": true,
+      "reasons": [],
+      "ms": 109,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (495 minutes old) | Last successful QB sync is stale (1890 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (495 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 37,
+      "input": "Dashboard + QB REG2-37",
+      "pass": true,
+      "reasons": [],
+      "ms": 2061,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nFinal summary: Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 2.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-041",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-015",
+        "expected_children": 2,
+        "executed_children": 2,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-041.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-041-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-016",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-016.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj0a3-070.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-041-B",
+            "workflow_id": "FINANCE-REPORT-20260616-006",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-006.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj0fy-978.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 38,
+      "input": "Dashboard + QB + SEO Raw REG2-38",
+      "pass": true,
+      "reasons": [],
+      "ms": 2468,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nFinal summary: Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 3.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-042",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-017",
+        "expected_children": 3,
+        "executed_children": 3,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-042.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-042-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-018",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-018.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj25t-488.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-042-B",
+            "workflow_id": "FINANCE-REPORT-20260616-007",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-007.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj2bm-304.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-042-C",
+            "workflow_id": "SEO-CONTENT-20260616-011",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-011.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj2hb-980.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-011.md"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 39,
+      "input": "Dashboard + QB + SEO Raw + Maria REG2-39",
+      "pass": true,
+      "reasons": [],
+      "ms": 3077,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-043",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-019",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-043.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-043-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-020",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-020.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj4e8-028.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-043-B",
+            "workflow_id": "FINANCE-REPORT-20260616-008",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-008.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj4jq-575.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-043-C",
+            "workflow_id": "SEO-CONTENT-20260616-012",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-012.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj4pg-993.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-012.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-043-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-006",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-006.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj4vj-959.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 40,
+      "input": "Kiem tra duplicate bills QB REG2-40",
+      "pass": true,
+      "reasons": [],
+      "ms": 108,
+      "approval_id": null,
+      "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 41,
+      "input": "Mi oi, tao bai SEO cho Raw REG2-41",
+      "pass": true,
+      "reasons": [],
+      "ms": 747,
+      "approval_id": "APPR-mqfsj5j8-988",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-013.svg\n\nApproval ID: *APPR-mqfsj5j8-988*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-013",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-013",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-013.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-013.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 42,
+      "input": "Mi oi, tao bai SEO cho Bakudan REG2-42",
+      "pass": true,
+      "reasons": [],
+      "ms": 779,
+      "approval_id": "APPR-mqfsj64j-023",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *SEO Content for Bakudan Ramen*\nFor: *Bakudan Ramen*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-014.svg\n\nApproval ID: *APPR-mqfsj64j-023*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-014",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-014",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-014.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-014.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 43,
+      "input": "Kiem tra Dashboard REG2-43",
+      "pass": true,
+      "reasons": [],
+      "ms": 705,
+      "approval_id": "APPR-mqfsj6ox-393",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsj6ox-393*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-021",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-021",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-021.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 44,
+      "input": "QB sync sao roi REG2-44",
+      "pass": true,
+      "reasons": [],
+      "ms": 271,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1890 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 45,
+      "input": "Doanh thu Raw Sushi bao nhieu REG2-45",
+      "pass": true,
+      "reasons": [],
+      "ms": 199,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1890 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 46,
+      "input": "Chi phi thang nay bao nhieu REG2-46",
+      "pass": true,
+      "reasons": [],
+      "ms": 88,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1890 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 47,
+      "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria REG2-47",
+      "pass": true,
+      "reasons": [],
+      "ms": 3187,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-044",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-022",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-044.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-044-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-023",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-023.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj91u-961.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-044-B",
+            "workflow_id": "FINANCE-REPORT-20260616-009",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-009.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj97x-882.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-044-C",
+            "workflow_id": "SEO-CONTENT-20260616-015",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-015.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj9do-656.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-015.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-044-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-007",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-007.json",
+              ".local-agent-global/execution-queue/JOB-mqfsj9jm-265.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 48,
+      "input": "Gui email cho Maria ve bao cao Raw REG2-48",
+      "pass": true,
+      "reasons": [],
+      "ms": 755,
+      "approval_id": "APPR-mqfsja5a-605",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsja5a-605*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: EMAIL-DRAFT-20260616-008",
+      "metadata": {
+        "intent": "email_comms",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "EMAIL-DRAFT-20260616-008",
+        "evidence_path": ".local-agent-global/workflows/EMAIL-DRAFT-20260616-008.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 49,
+      "input": "Tao task dashboard cho team REG2-49",
+      "pass": true,
+      "reasons": [],
+      "ms": 747,
+      "approval_id": "APPR-mqfsjaqc-162",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsjaqc-162*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-024",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-024",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-024.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 50,
+      "input": "Unknown quantum sushi request REG2-50",
+      "pass": true,
+      "reasons": [],
+      "ms": 18244,
+      "approval_id": null,
+      "reply": "Em đang xử lý yêu cầu của anh — anh thử lại sau vài giây nhé.",
+      "metadata": {
+        "intent": "duplicate",
+        "source": "mi-core",
+        "confidence": 1,
+        "requires_followup": false
+      },
+      "error": ""
+    },
+    {
+      "case": 51,
+      "input": "deploy production REG2-51",
+      "pass": true,
+      "reasons": [],
+      "ms": 129,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 52,
+      "input": "delete database REG2-52",
+      "pass": true,
+      "reasons": [],
+      "ms": 131,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 53,
+      "input": "submit tax REG2-53",
+      "pass": true,
+      "reasons": [],
+      "ms": 108,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 54,
+      "input": "Tao anh preview cho bai SEO Raw REG2-54",
+      "pass": true,
+      "reasons": [],
+      "ms": 1035,
+      "approval_id": "APPR-mqfsjprb-718",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-016.svg\n\nApproval ID: *APPR-mqfsjprb-718*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-016",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-016",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-016.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-016.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 55,
+      "input": "Kiem tra work orders hom nay REG2-55",
+      "pass": true,
+      "reasons": [],
+      "ms": 900,
+      "approval_id": "APPR-mqfsjqkj-910",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for chung*\nFor: *chung*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsjqkj-910*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: GENERAL-TASK-20260616-003",
+      "metadata": {
+        "intent": "general",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "GENERAL-TASK-20260616-003",
+        "evidence_path": ".local-agent-global/workflows/GENERAL-TASK-20260616-003.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 56,
+      "input": "Raw Sushi finance status REG2-56",
+      "pass": true,
+      "reasons": [],
+      "ms": 142,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1890 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1890 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 57,
+      "input": "Dashboard + QB REG2-57",
+      "pass": true,
+      "reasons": [],
+      "ms": 2632,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nFinal summary: Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 2.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-045",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-025",
+        "expected_children": 2,
+        "executed_children": 2,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-045.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-045-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-026",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-026.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjs0d-671.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-045-B",
+            "workflow_id": "FINANCE-REPORT-20260616-010",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-010.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjs6p-296.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 58,
+      "input": "Dashboard + QB + SEO Raw REG2-58",
+      "pass": true,
+      "reasons": [],
+      "ms": 3773,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nFinal summary: Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 3.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-046",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-027",
+        "expected_children": 3,
+        "executed_children": 3,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-046.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-046-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-028",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-028.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjuov-855.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-046-B",
+            "workflow_id": "FINANCE-REPORT-20260616-011",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-011.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjuun-228.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-046-C",
+            "workflow_id": "SEO-CONTENT-20260616-017",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-017.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjv0b-021.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-017.md"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 59,
+      "input": "Dashboard + QB + SEO Raw + Maria REG2-59",
+      "pass": true,
+      "reasons": [],
+      "ms": 4661,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-047",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-029",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-047.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-047-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-030",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-030.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjy09-890.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-047-B",
+            "workflow_id": "FINANCE-REPORT-20260616-012",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-012.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjy6h-697.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-047-C",
+            "workflow_id": "SEO-CONTENT-20260616-018",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-018.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjycy-471.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-018.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-047-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-009",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-009.json",
+              ".local-agent-global/execution-queue/JOB-mqfsjyj6-224.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 60,
+      "input": "Kiem tra duplicate bills QB REG2-60",
+      "pass": true,
+      "reasons": [],
+      "ms": 1121,
+      "approval_id": null,
+      "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 61,
+      "input": "Mi oi, tao bai SEO cho Raw REG2-61",
+      "pass": true,
+      "reasons": [],
+      "ms": 2063,
+      "approval_id": "APPR-mqfsk19h-379",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-019.svg\n\nApproval ID: *APPR-mqfsk19h-379*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-019",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-019",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-019.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-019.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 62,
+      "input": "Mi oi, tao bai SEO cho Bakudan REG2-62",
+      "pass": true,
+      "reasons": [],
+      "ms": 1759,
+      "approval_id": "APPR-mqfsk2a0-313",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *SEO Content for Bakudan Ramen*\nFor: *Bakudan Ramen*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-020.svg\n\nApproval ID: *APPR-mqfsk2a0-313*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-020",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-020",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-020.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-020.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 63,
+      "input": "Kiem tra Dashboard REG2-63",
+      "pass": true,
+      "reasons": [],
+      "ms": 1387,
+      "approval_id": "APPR-mqfsk3pv-628",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsk3pv-628*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-031",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-031",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-031.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 64,
+      "input": "QB sync sao roi REG2-64",
+      "pass": true,
+      "reasons": [],
+      "ms": 306,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1891 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 65,
+      "input": "Doanh thu Raw Sushi bao nhieu REG2-65",
+      "pass": true,
+      "reasons": [],
+      "ms": 448,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1891 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 66,
+      "input": "Chi phi thang nay bao nhieu REG2-66",
+      "pass": true,
+      "reasons": [],
+      "ms": 430,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (496 minutes old) | Last successful QB sync is stale (1891 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (496 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 67,
+      "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria REG2-67",
+      "pass": true,
+      "reasons": [],
+      "ms": 4188,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-048",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-032",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-048.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-048-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-033",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-033.json",
+              ".local-agent-global/execution-queue/JOB-mqfsk77o-151.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-048-B",
+            "workflow_id": "FINANCE-REPORT-20260616-013",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-013.json",
+              ".local-agent-global/execution-queue/JOB-mqfsk7ds-283.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-048-C",
+            "workflow_id": "SEO-CONTENT-20260616-021",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-021.json",
+              ".local-agent-global/execution-queue/JOB-mqfsk7j8-136.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-021.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-048-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-010",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-010.json",
+              ".local-agent-global/execution-queue/JOB-mqfsk7y7-994.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 68,
+      "input": "Gui email cho Maria ve bao cao Raw REG2-68",
+      "pass": true,
+      "reasons": [],
+      "ms": 889,
+      "approval_id": "APPR-mqfsk8ur-665",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsk8ur-665*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: EMAIL-DRAFT-20260616-011",
+      "metadata": {
+        "intent": "email_comms",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "EMAIL-DRAFT-20260616-011",
+        "evidence_path": ".local-agent-global/workflows/EMAIL-DRAFT-20260616-011.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 69,
+      "input": "Tao task dashboard cho team REG2-69",
+      "pass": true,
+      "reasons": [],
+      "ms": 1384,
+      "approval_id": "APPR-mqfsk9je-050",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsk9je-050*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-034",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-034",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-034.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 70,
+      "input": "Unknown quantum sushi request REG2-70",
+      "pass": false,
+      "reasons": [
+        "not_ok"
+      ],
+      "ms": 25904,
+      "approval_id": null,
+      "reply": "Em chưa truy cập được Knowledge Universe lúc này. Anh thử lại giúp em trong ít phút nhé — các tính năng khác vẫn hoạt động bình thường.",
+      "metadata": null,
+      "error": "Request timeout after 15000ms"
+    },
+    {
+      "case": 71,
+      "input": "deploy production REG2-71",
+      "pass": true,
+      "reasons": [],
+      "ms": 463,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 72,
+      "input": "delete database REG2-72",
+      "pass": true,
+      "reasons": [],
+      "ms": 537,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 73,
+      "input": "submit tax REG2-73",
+      "pass": true,
+      "reasons": [],
+      "ms": 479,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 74,
+      "input": "Tao anh preview cho bai SEO Raw REG2-74",
+      "pass": true,
+      "reasons": [],
+      "ms": 1334,
+      "approval_id": "APPR-mqfskvs1-640",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-022.svg\n\nApproval ID: *APPR-mqfskvs1-640*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-022",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-022",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-022.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-022.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 75,
+      "input": "Kiem tra work orders hom nay REG2-75",
+      "pass": true,
+      "reasons": [],
+      "ms": 1343,
+      "approval_id": "APPR-mqfskwtb-828",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for chung*\nFor: *chung*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfskwtb-828*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: GENERAL-TASK-20260616-004",
+      "metadata": {
+        "intent": "general",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "GENERAL-TASK-20260616-004",
+        "evidence_path": ".local-agent-global/workflows/GENERAL-TASK-20260616-004.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 76,
+      "input": "Raw Sushi finance status REG2-76",
+      "pass": true,
+      "reasons": [],
+      "ms": 230,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (497 minutes old) | Last successful QB sync is stale (1891 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (497 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 77,
+      "input": "Dashboard + QB REG2-77",
+      "pass": true,
+      "reasons": [],
+      "ms": 2326,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nFinal summary: Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 2.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-049",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-035",
+        "expected_children": 2,
+        "executed_children": 2,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-049.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-049-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-036",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-036.json",
+              ".local-agent-global/execution-queue/JOB-mqfskyow-120.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-049-B",
+            "workflow_id": "FINANCE-REPORT-20260616-014",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-014.json",
+              ".local-agent-global/execution-queue/JOB-mqfskyuq-003.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 78,
+      "input": "Dashboard + QB + SEO Raw REG2-78",
+      "pass": true,
+      "reasons": [],
+      "ms": 2925,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nFinal summary: Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 3.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-050",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-037",
+        "expected_children": 3,
+        "executed_children": 3,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-050.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-050-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-038",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-038.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl0tp-782.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-050-B",
+            "workflow_id": "FINANCE-REPORT-20260616-015",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-015.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl0ze-095.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-050-C",
+            "workflow_id": "SEO-CONTENT-20260616-023",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-023.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl14z-166.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-023.md"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 79,
+      "input": "Dashboard + QB + SEO Raw + Maria REG2-79",
+      "pass": true,
+      "reasons": [],
+      "ms": 3342,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-051",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-039",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-051.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-051-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-040",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-040.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl3cr-072.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-051-B",
+            "workflow_id": "FINANCE-REPORT-20260616-016",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-016.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl3iq-730.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-051-C",
+            "workflow_id": "SEO-CONTENT-20260616-024",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-024.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl3oc-837.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-024.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-051-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-012",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-012.json",
+              ".local-agent-global/execution-queue/JOB-mqfsl3u5-239.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 80,
+      "input": "Kiem tra duplicate bills QB REG2-80",
+      "pass": true,
+      "reasons": [],
+      "ms": 303,
+      "approval_id": null,
+      "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (497 minutes old)",
+          "Last successful QB sync is stale (1891 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 81,
+      "input": "Mi oi, tao bai SEO cho Raw REG2-81",
+      "pass": true,
+      "reasons": [],
+      "ms": 1134,
+      "approval_id": "APPR-mqfsl4vg-489",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-025.svg\n\nApproval ID: *APPR-mqfsl4vg-489*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-025",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-025",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-025.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-025.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 82,
+      "input": "Mi oi, tao bai SEO cho Bakudan REG2-82",
+      "pass": true,
+      "reasons": [],
+      "ms": 2154,
+      "approval_id": "APPR-mqfsl5s7-233",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *SEO Content for Bakudan Ramen*\nFor: *Bakudan Ramen*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-026.svg\n\nApproval ID: *APPR-mqfsl5s7-233*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-026",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-026",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-026.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-026.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 83,
+      "input": "Kiem tra Dashboard REG2-83",
+      "pass": true,
+      "reasons": [],
+      "ms": 1479,
+      "approval_id": "APPR-mqfsl7ek-477",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfsl7ek-477*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-041",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-041",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-041.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 84,
+      "input": "QB sync sao roi REG2-84",
+      "pass": true,
+      "reasons": [],
+      "ms": 583,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (497 minutes old) | Last successful QB sync is stale (1892 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (497 minutes old)",
+          "Last successful QB sync is stale (1892 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 85,
+      "input": "Doanh thu Raw Sushi bao nhieu REG2-85",
+      "pass": true,
+      "reasons": [],
+      "ms": 472,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (497 minutes old) | Last successful QB sync is stale (1892 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (497 minutes old)",
+          "Last successful QB sync is stale (1892 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 86,
+      "input": "Chi phi thang nay bao nhieu REG2-86",
+      "pass": true,
+      "reasons": [],
+      "ms": 195,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (497 minutes old) | Last successful QB sync is stale (1892 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (497 minutes old)",
+          "Last successful QB sync is stale (1892 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 87,
+      "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria REG2-87",
+      "pass": true,
+      "reasons": [],
+      "ms": 3293,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-052",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-042",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-052.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-052-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-043",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-043.json",
+              ".local-agent-global/execution-queue/JOB-mqfslaui-301.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-052-B",
+            "workflow_id": "FINANCE-REPORT-20260616-017",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-017.json",
+              ".local-agent-global/execution-queue/JOB-mqfslb02-708.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-052-C",
+            "workflow_id": "SEO-CONTENT-20260616-027",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-027.json",
+              ".local-agent-global/execution-queue/JOB-mqfslb5j-420.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-027.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-052-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-013",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-013.json",
+              ".local-agent-global/execution-queue/JOB-mqfslbbg-669.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 88,
+      "input": "Gui email cho Maria ve bao cao Raw REG2-88",
+      "pass": true,
+      "reasons": [],
+      "ms": 1064,
+      "approval_id": "APPR-mqfslc1x-226",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfslc1x-226*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: EMAIL-DRAFT-20260616-014",
+      "metadata": {
+        "intent": "email_comms",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "EMAIL-DRAFT-20260616-014",
+        "evidence_path": ".local-agent-global/workflows/EMAIL-DRAFT-20260616-014.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 89,
+      "input": "Tao task dashboard cho team REG2-89",
+      "pass": true,
+      "reasons": [],
+      "ms": 956,
+      "approval_id": "APPR-mqfslcvf-200",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Dashboard*\nFor: *Dashboard*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfslcvf-200*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: DASHBOARD-AUDIT-20260616-044",
+      "metadata": {
+        "intent": "dashboard_monitoring",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "DASHBOARD-AUDIT-20260616-044",
+        "evidence_path": ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-044.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 90,
+      "input": "Unknown quantum sushi request REG2-90",
+      "pass": true,
+      "reasons": [],
+      "ms": 18126,
+      "approval_id": null,
+      "reply": "Em đang xử lý yêu cầu của anh — anh thử lại sau vài giây nhé.",
+      "metadata": {
+        "intent": "duplicate",
+        "source": "mi-core",
+        "confidence": 1,
+        "requires_followup": false
+      },
+      "error": ""
+    },
+    {
+      "case": 91,
+      "input": "deploy production REG2-91",
+      "pass": true,
+      "reasons": [],
+      "ms": 110,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 92,
+      "input": "delete database REG2-92",
+      "pass": true,
+      "reasons": [],
+      "ms": 131,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 93,
+      "input": "submit tax REG2-93",
+      "pass": true,
+      "reasons": [],
+      "ms": 142,
+      "approval_id": null,
+      "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+      "metadata": {
+        "intent": "deployment",
+        "message_class": "dangerous_action",
+        "source": "execution-engine",
+        "confidence": 95,
+        "requires_followup": true,
+        "execution_action": "dangerous_blocked",
+        "workflow_id": null,
+        "evidence_path": null,
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 94,
+      "input": "Tao anh preview cho bai SEO Raw REG2-94",
+      "pass": true,
+      "reasons": [],
+      "ms": 923,
+      "approval_id": "APPR-mqfslrz9-152",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260616-028.svg\n\nApproval ID: *APPR-mqfslrz9-152*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260616-028",
+      "metadata": {
+        "intent": "seo_content",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "SEO-CONTENT-20260616-028",
+        "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260616-028.json",
+        "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-028.md"
+      },
+      "error": ""
+    },
+    {
+      "case": 95,
+      "input": "Kiem tra work orders hom nay REG2-95",
+      "pass": true,
+      "reasons": [],
+      "ms": 814,
+      "approval_id": "APPR-mqfslsmo-709",
+      "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for chung*\nFor: *chung*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfslsmo-709*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: GENERAL-TASK-20260616-005",
+      "metadata": {
+        "intent": "general",
+        "message_class": "action_request",
+        "source": "execution-engine",
+        "confidence": 85,
+        "requires_followup": true,
+        "execution_action": "workflow_created",
+        "workflow_id": "GENERAL-TASK-20260616-005",
+        "evidence_path": ".local-agent-global/workflows/GENERAL-TASK-20260616-005.json",
+        "draft_preview_path": null
+      },
+      "error": ""
+    },
+    {
+      "case": 96,
+      "input": "Raw Sushi finance status REG2-96",
+      "pass": true,
+      "reasons": [],
+      "ms": 174,
+      "approval_id": null,
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (498 minutes old) | Last successful QB sync is stale (1892 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (498 minutes old)",
+          "Last successful QB sync is stale (1892 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    },
+    {
+      "case": 97,
+      "input": "Dashboard + QB REG2-97",
+      "pass": true,
+      "reasons": [],
+      "ms": 1967,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nFinal summary: Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 2.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-053",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-045",
+        "expected_children": 2,
+        "executed_children": 2,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-053.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-053-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-046",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-046.json",
+              ".local-agent-global/execution-queue/JOB-mqfslu3x-204.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-053-B",
+            "workflow_id": "FINANCE-REPORT-20260616-018",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-018.json",
+              ".local-agent-global/execution-queue/JOB-mqfslu9z-290.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 98,
+      "input": "Dashboard + QB + SEO Raw REG2-98",
+      "pass": true,
+      "reasons": [],
+      "ms": 2498,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nFinal summary: Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 3.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-054",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-047",
+        "expected_children": 3,
+        "executed_children": 3,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-054.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-054-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-048",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-048.json",
+              ".local-agent-global/execution-queue/JOB-mqfslvwf-535.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-054-B",
+            "workflow_id": "FINANCE-REPORT-20260616-019",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-019.json",
+              ".local-agent-global/execution-queue/JOB-mqfslw20-953.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-054-C",
+            "workflow_id": "SEO-CONTENT-20260616-029",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-029.json",
+              ".local-agent-global/execution-queue/JOB-mqfslw7v-141.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-029.md"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 99,
+      "input": "Dashboard + QB + SEO Raw + Maria REG2-99",
+      "pass": true,
+      "reasons": [],
+      "ms": 3206,
+      "approval_id": null,
+      "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+      "metadata": {
+        "intent": "multi_intent",
+        "source": "multi-intent-executor",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "parent_tracking_id": "WF-20260615-055",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260616-049",
+        "expected_children": 4,
+        "executed_children": 4,
+        "dropped_children": 0,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-055.json",
+        "children": [
+          {
+            "tracking_id": "WF-20260615-055-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260616-050",
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260616-050.json",
+              ".local-agent-global/execution-queue/JOB-mqfsly7g-002.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-055-B",
+            "workflow_id": "FINANCE-REPORT-20260616-020",
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "status": "completed",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260616-020.json",
+              ".local-agent-global/execution-queue/JOB-mqfslycz-623.json"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-055-C",
+            "workflow_id": "SEO-CONTENT-20260616-030",
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260616-030.json",
+              ".local-agent-global/execution-queue/JOB-mqfslyir-942.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260616-030.md"
+            ],
+            "error": null
+          },
+          {
+            "tracking_id": "WF-20260615-055-D",
+            "workflow_id": "EMAIL-DRAFT-20260616-015",
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "status": "approval_pending",
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260616-015.json",
+              ".local-agent-global/execution-queue/JOB-mqfslyor-070.json"
+            ],
+            "error": null
+          }
+        ]
+      },
+      "error": ""
+    },
+    {
+      "case": 100,
+      "input": "Kiem tra duplicate bills QB REG2-100",
+      "pass": true,
+      "reasons": [],
+      "ms": 109,
+      "approval_id": null,
+      "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+      "metadata": {
+        "intent": "finance_truth",
+        "source": "quickbooks-runtime",
+        "confidence": 0.95,
+        "requires_followup": true,
+        "status": "QB_RUNTIME_NOT_CERTIFIED",
+        "gaps": [
+          "Latest QB heartbeat is stale (498 minutes old)",
+          "Last successful QB sync is stale (1892 minutes old)"
+        ],
+        "no_mock_data": true
+      },
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "faqs": [
+    {
+      "id": "allergens",
+      "question": "Do you have allergen information?",
+      "answer": "Yes! Our menu items contain common allergens including gluten, soy, eggs, and shellfish. Please inform your server of any allergies when ordering. We have a full allergen chart available in-store.",
+      "tags": ["allergy", "allergen", "gluten", "nut", "shellfish", "dietary"]
+    },
+    {
+      "id": "vegan",
+      "question": "Do you have vegan options?",
+      "answer": "Yes! We offer a Vegan Shoyu Ramen and several vegan-friendly appetizers including Edamame. Please ask your server for our full vegan-friendly list.",
+      "tags": ["vegan", "vegetarian", "plant-based", "plant based"]
+    },
+    {
+      "id": "parking",
+      "question": "Is there parking available?",
+      "answer": "All three of our locations have free parking available in the shopping center lot.",
+      "tags": ["parking", "park"]
+    },
+    {
+      "id": "catering",
+      "question": "Do you offer catering?",
+      "answer": "Yes, we offer catering for groups of 20+. Please contact us at least 3 days in advance. Email catering@bakudanramen.com for details.",
+      "tags": ["catering", "event", "group", "party", "large order"]
+    },
+    {
+      "id": "takeout",
+      "question": "Do you offer takeout or delivery?",
+      "answer": "Yes! Takeout is available at all locations. We're also on DoorDash, Uber Eats, and Grubhub for delivery.",
+      "tags": ["takeout", "delivery", "doordash", "uber eats", "grubhub", "to go", "pickup"]
+    },
+    {
+      "id": "gift_cards",
+      "question": "Do you sell gift cards?",
+      "answer": "Yes! Gift cards are available in-store in any amount. They can be used at all Bakudan Ramen locations.",
+      "tags": ["gift card", "gift", "present"]
+    },
+    {
+      "id": "wifi",
+      "question": "Do you have WiFi?",
+      "answer": "Yes, free WiFi is available at all locations. Ask your server for the password.",
+      "tags": ["wifi", "wi-fi", "internet"]
+    }
+  ]
+}

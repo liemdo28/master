@@ -1,0 +1,1 @@
+{"version":3,"file":"sales-receipt-check.d.ts","sourceRoot":"","sources":["../../src/workflows/sales-receipt-check.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,qBAAqB,CAAC;AACxD,OAAO,EAAE,cAAc,EAAE,MAAM,yBAAyB,CAAC;AAEzD,wBAAsB,oBAAoB,CAAC,WAAW,EAAE,iBAAiB,GAAG,OAAO,CAAC,cAAc,CAAC,CAclG"}

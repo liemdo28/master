@@ -1,0 +1,1 @@
+{"version":3,"file":"daily-accounting-check.d.ts","sourceRoot":"","sources":["../../src/workflows/daily-accounting-check.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,qBAAqB,CAAC;AACxD,OAAO,EAAE,cAAc,EAAE,MAAM,yBAAyB,CAAC;AAEzD,wBAAsB,uBAAuB,CAAC,WAAW,EAAE,iBAAiB,GAAG,OAAO,CAAC,cAAc,CAAC,CAcrG"}

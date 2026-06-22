@@ -1,0 +1,10 @@
+[
+  { "id": "MA-01", "value": 35, "expectedAlert": false, "description": "PASS value no alert" },
+  { "id": "MA-02", "value": 44, "expectedAlert": true, "priority": "WARNING", "description": "OUT_OF_RANGE triggers warning" },
+  { "id": "MA-03", "value": 65, "expectedAlert": true, "priority": "HIGH", "description": "CRITICAL triggers high priority alert" },
+  { "id": "MA-04", "failures": 2, "expectedAlertCount": 1, "description": "Multiple failed items one grouped alert" },
+  { "id": "MA-05", "sameIssue": true, "withinDebounce": true, "expectedAlert": false, "description": "Same issue within debounce no duplicate" },
+  { "id": "MA-06", "sameIssue": true, "withinDebounce": false, "expectedAlert": true, "description": "Same issue after debounce sends alert" },
+  { "id": "MA-07", "sheetStatus": "QUEUED", "expectedAlert": true, "description": "Sheet queued alert still sends" },
+  { "id": "MA-08", "managerConfigured": false, "expectedDashboard": "NEEDS_ACTION", "description": "Manager not configured dashboard flag" }
+]

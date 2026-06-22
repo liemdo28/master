@@ -1,0 +1,12 @@
+{
+  "domain": "machine-learning",
+  "domainName": "Machine Learning & AI",
+  "sources": [
+    { "name": "HuggingFace Docs", "url": "https://huggingface.co/docs", "license": "Apache 2.0", "attribution": "HuggingFace Inc.", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "scikit-learn User Guide", "url": "https://scikit-learn.org/stable/user_guide.html", "license": "BSD 3-Clause", "attribution": "scikit-learn developers", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "TensorFlow Tutorials", "url": "https://www.tensorflow.org/tutorials", "license": "CC BY 4.0", "attribution": "Google LLC", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "PyTorch Documentation", "url": "https://pytorch.org/docs", "license": "BSD", "attribution": "Meta AI / PyTorch contributors", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Wikipedia — Machine Learning", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" }
+  ],
+  "seedDocuments": []
+}

@@ -1,0 +1,20 @@
+{
+  "source_name": "quickbooks-bakudan",
+  "source_type": "quickbooks",
+  "version": "1.0",
+  "description": "QuickBooks activity log ingestor — sales receipts, bank feed, reconciliation",
+  "fields": {
+    "store": "string — 'bakudan' or 'raw'",
+    "date": "YYYY-MM-DD — the activity date",
+    "transactions": "array of QB transaction objects",
+    "transactions[].id": "string",
+    "transactions[].type": "sale|refund|expense|bank_feed|reconcile",
+    "transactions[].date": "ISO 8601",
+    "transactions[].amount": "number",
+    "transactions[].description": "string",
+    "transactions[].customer": "string",
+    "transactions[].status": "string",
+    "bank_feed_items": "array — raw bank transactions from linked account",
+    "reconcile_status": "object — reconciliation status for the period"
+  }
+}

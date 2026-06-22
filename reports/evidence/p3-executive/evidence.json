@@ -1,0 +1,53 @@
+{
+  "phase": "P3",
+  "answers": {
+    "Hôm nay anh có gì?": {
+      "ok": "📅 *Chủ Nhật, 14 tháng 6*\nChào anh! Đây là tóm tắt hôm nay:\n\n• 📧 Gmail: 201 email chưa đọc (10 quan trọng)\n• ⏳ 1 workflow đang chạy/chờ duyệt\n• ⚠️ QB Agent: sync lỗi từ 10/6/2026\n• 📋 1 work order đang mở\n\nTổng: 4 mục cần chú ý.",
+      "output": "📅 *Chủ Nhật, 14 tháng 6*\nChào anh! Đây là tóm tắt hôm nay:\n\n• 📧 Gmail: 201 email chưa đọc (10 quan trọng)\n• ⏳ 1 workflow đang chạy/chờ duyệt\n• ⚠️ QB Agent: sync lỗi từ 10/6/2026\n• 📋 1 work order đang mở\n\nTổng: 4 mục cần chú ý.",
+      "metadata": {
+        "gmail_unread": 201,
+        "important_emails": 10,
+        "workflows": 1,
+        "qb_status": "error"
+      },
+      "ms": 967
+    },
+    "Có gì cần duyệt?": {
+      "ok": "✅ Không có gì cần duyệt lúc này.",
+      "output": "✅ Không có gì cần duyệt lúc này.",
+      "metadata": {
+        "pending_count": 0
+      },
+      "ms": 1
+    },
+    "Có gì đáng lo?": {
+      "ok": "⚠️ *Đáng Lo (1 vấn đề — 1 nghiêm trọng)*\n\n🔴 [HIGH] QB Agent sync lỗi 3 ngày — Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc99\n\n❗ Cần xử lý ngay hôm nay.",
+      "output": "⚠️ *Đáng Lo (1 vấn đề — 1 nghiêm trọng)*\n\n🔴 [HIGH] QB Agent sync lỗi 3 ngày — Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc99\n\n❗ Cần xử lý ngay hôm nay.",
+      "metadata": {
+        "concerns": 1,
+        "high": 1
+      },
+      "ms": 3
+    },
+    "Doanh thu sao rồi?": {
+      "ok": "💰 *Doanh Thu — 14/6/2026*\n\n⚠️ QuickBooks: sync lỗi kể từ 10/6/2026\n   Lỗi: Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35\n\n📌 Cần fix QB sync trước khi lấy được doanh thu thực.\n   Gõ: \"fix quickbooks sync\" để Mi xử lý.\n\nBusinesses: Raw Sushi Bar + Bakudan Ramen",
+      "output": "💰 *Doanh Thu — 14/6/2026*\n\n⚠️ QuickBooks: sync lỗi kể từ 10/6/2026\n   Lỗi: Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35\n\n📌 Cần fix QB sync trước khi lấy được doanh thu thực.\n   Gõ: \"fix quickbooks sync\" để Mi xử lý.\n\nBusinesses: Raw Sushi Bar + Bakudan Ramen",
+      "metadata": {
+        "qb_status": "error"
+      },
+      "ms": 1
+    },
+    "Project nào rủi ro?": {
+      "ok": "🎯 *Project Rủi Ro — 14/6/2026*\n\n🟠 1. Work Orders [STALE]\n   - WO-20260613-001: Mi oi, kiem tra project Dashboard, tim loi, fix ne\n🔴 2. QB Agent [SYNC_FAILED]\n   - Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35\n\n2 project cần chú ý. Gõ \"fix <project>\" để xử lý.",
+      "output": "🎯 *Project Rủi Ro — 14/6/2026*\n\n🟠 1. Work Orders [STALE]\n   - WO-20260613-001: Mi oi, kiem tra project Dashboard, tim loi, fix ne\n🔴 2. QB Agent [SYNC_FAILED]\n   - Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35\n\n2 project cần chú ý. Gõ \"fix <project>\" để xử lý.",
+      "metadata": {
+        "risky_count": 2,
+        "total_projects": 17
+      },
+      "ms": 2
+    }
+  },
+  "passed": 10,
+  "failed": 0,
+  "generated_at": "2026-06-14T14:12:51.986Z"
+}

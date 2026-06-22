@@ -1,0 +1,849 @@
+{
+  "timestamp": "2026-06-16T03:38:06.752Z",
+  "total": 105,
+  "pass": 95,
+  "approval": 7,
+  "unavailable": 0,
+  "fail": 3,
+  "pass_rate": 97,
+  "total_ms": 1320993,
+  "results": [
+    {
+      "index": 1,
+      "text": "chào Mi",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Chào anh! Em đây.",
+      "ms": 141
+    },
+    {
+      "index": 2,
+      "text": "Mi ơi",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đây anh.",
+      "ms": 29
+    },
+    {
+      "index": 3,
+      "text": "hey Mi",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đây anh.",
+      "ms": 26
+    },
+    {
+      "index": 4,
+      "text": "good morning Mi",
+      "status": "PASS",
+      "intent": "chat",
+      "reply": "Chào buổi sáng! 🌞  \nBạn cần hỗ trợ gì trong hôm nay?  \n- Kiểm tra tiến độ Bakudan Ramen/Raw Sushi B",
+      "ms": 58417
+    },
+    {
+      "index": 5,
+      "text": "Alo Mi",
+      "status": "PASS",
+      "intent": "greeting",
+      "reply": "Em nghe anh. Nói em biết anh cần gì. Hệ thống đang yên. Em sẵn sàng check sâu nếu anh cần.",
+      "ms": 39
+    },
+    {
+      "index": 6,
+      "text": "Mi có đó không",
+      "status": "PASS",
+      "intent": "chat",
+      "reply": "Có đó. Bạn cần thêm thông tin gì ạ?",
+      "ms": 11854
+    },
+    {
+      "index": 7,
+      "text": "Mi đang làm gì vậy",
+      "status": "PASS",
+      "intent": "chat",
+      "reply": "- **Kiểm tra tiến độ dự án Bakudan Ramen**: Đang theo dõi kế hoạch mở rộng cửa hàng mới.  \n- **Cập n",
+      "ms": 16701
+    },
+    {
+      "index": 8,
+      "text": "Mi khỏe không",
+      "status": "PASS",
+      "intent": "how_are_you",
+      "reply": "Em ổn. Hệ thống đang chạy bình thường. Anh cần gì không?",
+      "ms": 32
+    },
+    {
+      "index": 9,
+      "text": "hi Mi, hôm nay thế nào",
+      "status": "PASS",
+      "intent": "greeting",
+      "reply": "Em nghe anh. Nói em biết anh cần gì. Hệ thống đang yên. Em sẵn sàng check sâu nếu anh cần.",
+      "ms": 27
+    },
+    {
+      "index": 10,
+      "text": "Mi, bạn ổn không",
+      "status": "PASS",
+      "intent": "chat",
+      "reply": "Tôi ổn! 😊 Bạn cần hỗ trợ gì không? Tôi có thể giúp bạn quản lý công ty, soạn báo cáo, hoặc giải đáp",
+      "ms": 10206
+    },
+    {
+      "index": 11,
+      "text": "kiểm tra hệ thống",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "📋 *Work Order WO-20260616-001*\n\n\n─────────────────\n\n\n*1️⃣ Anh yêu cầu gì*\n\"kiểm tra hệ thống\"\n\n*2️⃣",
+      "ms": 21786
+    },
+    {
+      "index": 12,
+      "text": "pm2 status",
+      "status": "PASS",
+      "intent": "jarvis_phase_6",
+      "reply": "🖥 *PM2 Process Status*\n\nPM2 không khả dụng hoặc chưa được cài đặt.",
+      "ms": 94
+    },
+    {
+      "index": 13,
+      "text": "dashboard đâu",
+      "status": "APPROVAL",
+      "intent": "dashboard_monitoring",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for Dashboard*",
+      "ms": 111710
+    },
+    {
+      "index": 14,
+      "text": "hệ thống ổn không",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em vừa kiểm tra. ⚠️ 2 service đang lỗi.\n🚨 2 incident đang mở.\n\nNếu anh muốn, em có thể kiểm tra mem",
+      "ms": 26
+    },
+    {
+      "index": 15,
+      "text": "check status",
+      "status": "APPROVAL",
+      "intent": "dashboard_monitoring",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for chung*\nCho",
+      "ms": 411
+    },
+    {
+      "index": 16,
+      "text": "services đang chạy không",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đã ghi nhận.",
+      "ms": 53
+    },
+    {
+      "index": 17,
+      "text": "server ổn không",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang ho",
+      "ms": 32310
+    },
+    {
+      "index": 18,
+      "text": "Mi, check pm2",
+      "status": "APPROVAL",
+      "intent": "general",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for chung*\nCho",
+      "ms": 252178
+    },
+    {
+      "index": 19,
+      "text": "mọi thứ ổn không",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang ho",
+      "ms": 49526
+    },
+    {
+      "index": 20,
+      "text": "health check",
+      "status": "APPROVAL",
+      "intent": "general",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for chung*\nCho",
+      "ms": 89946
+    },
+    {
+      "index": 21,
+      "text": "doanh thu Raw hôm nay bao nhiêu",
+      "status": "ERROR",
+      "error": "fetch failed",
+      "ms": 23173
+    },
+    {
+      "index": 22,
+      "text": "kiểm tra QB",
+      "status": "PASS",
+      "intent": "finance_truth",
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbea",
+      "ms": 858
+    },
+    {
+      "index": 23,
+      "text": "doanh thu tháng này",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em ",
+      "ms": 1063
+    },
+    {
+      "index": 24,
+      "text": "Nguyen đã reconcile B1 chưa",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em ",
+      "ms": 716
+    },
+    {
+      "index": 25,
+      "text": "số liệu QB mới nhất",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đang theo dõi QuickBooks.\nAnh hỏi cụ thể hơn nhé — ví dụ doanh thu, task, hay tình trạng vận hành",
+      "ms": 87
+    },
+    {
+      "index": 26,
+      "text": "QB sync chưa",
+      "status": "PASS",
+      "intent": "finance_truth",
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. QB chưa healthy: degraded. Latest QB heartbeat is stale (789",
+      "ms": 1015
+    },
+    {
+      "index": 27,
+      "text": "doanh thu Raw Stockton",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em ",
+      "ms": 614
+    },
+    {
+      "index": 28,
+      "text": "check accounting",
+      "status": "APPROVAL",
+      "intent": "general",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for chung*\nCho",
+      "ms": 399
+    },
+    {
+      "index": 29,
+      "text": "profit margin Raw",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em ",
+      "ms": 594
+    },
+    {
+      "index": 30,
+      "text": "kiểm tra cash flow",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang ho",
+      "ms": 33212
+    },
+    {
+      "index": 31,
+      "text": "hôm nay có việc gì",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em đang bị chậm lúc này — có thể do AI engine đang tải. Anh thử lại sau vài giây nhé. Em vẫn đang ho",
+      "ms": 164040
+    },
+    {
+      "index": 32,
+      "text": "todo list của tôi",
+      "status": "PASS",
+      "intent": "graceful_error",
+      "reply": "Em chưa kết nối được AI engine lúc này. Em vẫn nhận được tin nhắn của anh — anh thử lại hoặc hỏi em ",
+      "ms": 15736
+    },
+    {
+      "index": 33,
+      "text": "việc gì cần làm hôm nay",
+      "status": "ERROR",
+      "error": "fetch failed",
+      "ms": 112968
+    },
+    {
+      "index": 34,
+      "text": "nhắc tôi họp lúc 3 giờ",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đã ghi nhận.",
+      "ms": 268517
+    },
+    {
+      "index": 35,
+      "text": "tạo task mới: review menu",
+      "status": "APPROVAL",
+      "intent": "flyer_design",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Action for chung*\nCho",
+      "ms": 394
+    },
+    {
+      "index": 36,
+      "text": "tasks nào đang pending",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 742
+    },
+    {
+      "index": 37,
+      "text": "deadline hôm nay là gì",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 22
+    },
+    {
+      "index": 38,
+      "text": "Mi, nhắc tôi gọi nhà cung cấp",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 18
+    },
+    {
+      "index": 39,
+      "text": "có task nào overdue không",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "📊 *Dashboard — 2026-06-16*\n\n📋 Tổng tasks: *200* | 🔴 Overdue: *66* | 📅 Đến hạn hôm nay: *1*\n⏳ Cần",
+      "ms": 1137
+    },
+    {
+      "index": 40,
+      "text": "show me my tasks",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 47
+    },
+    {
+      "index": 41,
+      "text": "Mi ơi, tạo bài SEO cho Raw",
+      "status": "APPROVAL",
+      "intent": "seo_content",
+      "reply": "Em đã tạo bản nháp để anh duyệt.\n\nTrạng thái: *Bản nháp đã sẵn sàng*\nTiêu đề: *Why Fresh Sashimi Mat",
+      "ms": 366
+    },
+    {
+      "index": 42,
+      "text": "viết bài về sushi Stockton",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 237
+    },
+    {
+      "index": 43,
+      "text": "tạo content về mì ramen",
+      "status": "PASS",
+      "intent": "jarvis_phase_40",
+      "reply": "🟢 *Mi đang thực hiện:*\n\n📋 \"Tạo bakudan\"\n\n🎯 *Goal:* Write SEO article, optimize, publish to WordPr",
+      "ms": 368
+    },
+    {
+      "index": 44,
+      "text": "blog post về hải sản tươi",
+      "status": "PASS",
+      "intent": "website_marketing",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *WEBSITE-POST-20260616-002* dang cho xu ly.\nAnh muon em lam gi ",
+      "ms": 25
+    },
+    {
+      "index": 45,
+      "text": "SEO cho Bakudan",
+      "status": "PASS",
+      "intent": "seo_content",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *SEO-CONTENT-20260616-069* dang cho xu ly.\nAnh muon em lam gi t",
+      "ms": 66
+    },
+    {
+      "index": 46,
+      "text": "bài viết về Japanese food",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 26
+    },
+    {
+      "index": 47,
+      "text": "content marketing cho Raw Sushi",
+      "status": "PASS",
+      "intent": "jarvis_phase_40",
+      "reply": "🟢 *Mi đang thực hiện:*\n\n📋 \"Tạo wordpress\"\n\n🎯 *Goal:* Write SEO article, optimize, publish to Word",
+      "ms": 372
+    },
+    {
+      "index": 48,
+      "text": "tạo bài về omakase",
+      "status": "PASS",
+      "intent": "jarvis_phase_40",
+      "reply": "🟢 *Mi đang thực hiện:*\n\n📋 \"Tạo system\"\n\n🎯 *Goal:* Write SEO article, optimize, publish to WordPre",
+      "ms": 23
+    },
+    {
+      "index": 49,
+      "text": "viết về fresh fish",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 22
+    },
+    {
+      "index": 50,
+      "text": "SEO article về sashimi",
+      "status": "PASS",
+      "intent": "seo_content",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *SEO-CONTENT-20260616-070* dang cho xu ly.\nAnh muon em lam gi t",
+      "ms": 331
+    },
+    {
+      "index": 51,
+      "text": "Raw Sushi mở cửa lúc mấy giờ",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *Raw Sushi*, nhưng em không ",
+      "ms": 314
+    },
+    {
+      "index": 52,
+      "text": "địa chỉ Raw Stockton",
+      "status": "ERROR",
+      "error": "fetch failed",
+      "ms": 18987
+    },
+    {
+      "index": 53,
+      "text": "menu Raw có gì mới",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 22
+    },
+    {
+      "index": 54,
+      "text": "Bakudan có promotion không",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đang theo dõi Bakudan Ramen.\nAnh hỏi cụ thể hơn nhé — ví dụ doanh thu, task, hay tình trạng vận h",
+      "ms": 233
+    },
+    {
+      "index": 55,
+      "text": "phone number của Raw",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 330
+    },
+    {
+      "index": 56,
+      "text": "giờ mở cửa Bakudan",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đang theo dõi Bakudan Ramen.\nAnh hỏi cụ thể hơn nhé — ví dụ doanh thu, task, hay tình trạng vận h",
+      "ms": 22
+    },
+    {
+      "index": 57,
+      "text": "show me Raw Sushi info",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 20
+    },
+    {
+      "index": 58,
+      "text": "thông tin về cửa hàng",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 800
+    },
+    {
+      "index": 59,
+      "text": "website Raw Sushi",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 301
+    },
+    {
+      "index": 60,
+      "text": "contact info",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 23
+    },
+    {
+      "index": 61,
+      "text": "nhắc tôi họp team lúc 2pm",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đã ghi nhận.",
+      "ms": 19
+    },
+    {
+      "index": 62,
+      "text": "reminder: gọi Nguyen lúc 4 giờ",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 45
+    },
+    {
+      "index": 63,
+      "text": "set reminder kiểm tra inventory",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 22
+    },
+    {
+      "index": 64,
+      "text": "nhắc tôi nộp báo cáo",
+      "status": "PASS",
+      "intent": "general",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *GENERAL-TASK-20260616-016* dang cho xu ly.\nAnh muon em lam gi ",
+      "ms": 20
+    },
+    {
+      "index": 65,
+      "text": "remind me to check emails",
+      "status": "PASS",
+      "intent": "general",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *GENERAL-TASK-20260616-017* dang cho xu ly.\nAnh muon em lam gi ",
+      "ms": 25
+    },
+    {
+      "index": 66,
+      "text": "tạo reminder cho meeting",
+      "status": "PASS",
+      "intent": "jarvis_phase_40",
+      "reply": "🟢 *Mi đang thực hiện:*\n\n📋 \"Tạo system\"\n\n🎯 *Goal:* Write SEO article, optimize, publish to WordPre",
+      "ms": 321
+    },
+    {
+      "index": 67,
+      "text": "nhắc tôi lúc 5 giờ chiều",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 57
+    },
+    {
+      "index": 68,
+      "text": "morning reminder cho ngày mai",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Có anh. Link chính em hay dùng:\n📊 Dashboard: http://dashboard.bakudanramen.com\n🧭 Workspace/project",
+      "ms": 21
+    },
+    {
+      "index": 69,
+      "text": "weekly reminder kiểm tra QB",
+      "status": "PASS",
+      "intent": "finance_truth",
+      "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbea",
+      "ms": 24
+    },
+    {
+      "index": 70,
+      "text": "nhắc họp staff meeting",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đã ghi nhận.",
+      "ms": 18
+    },
+    {
+      "index": 71,
+      "text": "tìm tài liệu về payroll",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đang theo dõi Payroll.\nEm đề xuất chạy payroll checklist trước ngày 15.",
+      "ms": 21
+    },
+    {
+      "index": 72,
+      "text": "search knowledge base",
+      "status": "PASS",
+      "intent": "general",
+      "reply": "Em da nhan yeu cau nay roi. Workflow *GENERAL-TASK-20260616-018* dang cho xu ly.\nAnh muon em lam gi ",
+      "ms": 20
+    },
+    {
+      "index": 73,
+      "text": "hướng dẫn QB Web Connector",
+      "status": "PASS",
+      "intent": "jarvis_phase_30",
+      "reply": "Em đang theo dõi QuickBooks.\nAnh hỏi cụ thể hơn nhé — ví dụ doanh thu, task, hay tình trạng vận hành",
+      "ms": 27
+    },
+    {
+      "index": 74,
+      "text": "tìm SOP cho kitchen",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 19
+    },
+    {
+      "index": 75,
+      "text": "recipe tiêu chuẩn cho broth",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 19
+    },
+    {
+      "index": 76,
+      "text": "tìm email từ Nguyen",
+      "status": "PASS",
+      "intent": "context_clarify",
+      "reply": "Em chưa bắt đúng ý câu này, anh nói thêm một chút. Ngữ cảnh gần nhất là *all*, nhưng em không muốn đ",
+      "ms": 20
+    },
+    {
+      "index": 77,
+      "text": "knowledge về food safety",
+      "status": "PASS",
+      "intent": "skill:food-safety-summary",
+      "reply": "🍱 *Food Safety Summary*\n\nChưa có dữ liệu kiểm tra. Pilot Stone Oak chưa bắt đầu ghi nhận.\n\nKhi có d",
+      "ms": 20
+    },
+    {
+      "index": 78,
+      "text": "search: inventory management",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 79,
+      "text": "tìm báo cáo tháng trước",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 3
+    },
+    {
+      "index": 80,
+      "text": "procedure onboarding nhân viên",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 81,
+      "text": "dự án nào đang active",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 82,
+      "text": "tiến độ Mi-Core thế nào",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 83,
+      "text": "project Raw Website update",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 84,
+      "text": "status của Bakudan project",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 85,
+      "text": "milestone nào tiếp theo",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 9
+    },
+    {
+      "index": 86,
+      "text": "review automation project",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 87,
+      "text": "Mi-Core progress update",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 88,
+      "text": "project list",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 89,
+      "text": "any blocked projects",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 90,
+      "text": "sprint update",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 91,
+      "text": "check doanh thu và tạo bài SEO về Raw",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 92,
+      "text": "kiểm tra hệ thống và nhắc họp lúc 3h",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 93,
+      "text": "Mi ơi hôm nay có việc gì và QB sync chưa",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 94,
+      "text": "show dashboard, check QB, và tạo reminder",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 95,
+      "text": "check Raw revenue và viết content về sushi",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 96,
+      "text": "???",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 97,
+      "text": ".",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 98,
+      "text": "ok",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 99,
+      "text": "thanks",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 100,
+      "text": "cảm ơn Mi",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    },
+    {
+      "index": 101,
+      "text": "bỏ qua đi",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 22
+    },
+    {
+      "index": 102,
+      "text": "không cần nữa",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 103,
+      "text": "cancel",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 104,
+      "text": "stop",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 2
+    },
+    {
+      "index": 105,
+      "text": "test",
+      "status": "PASS",
+      "intent": "Too many requests",
+      "reply": "Too many requests",
+      "ms": 1
+    }
+  ]
+}

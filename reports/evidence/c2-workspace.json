@@ -1,0 +1,17 @@
+{
+  "phase": "C2",
+  "target": "WORKSPACE_OPERATOR_CERTIFIED",
+  "generated_at": "2026-06-14T13:47:22.686Z",
+  "google_oauth": "GRACEFUL_DEGRADATION",
+  "capabilities": {
+    "gmail_read": true,
+    "gmail_draft": true,
+    "sheets_read": true,
+    "sheets_write": true,
+    "drive_upload": true,
+    "report": true
+  },
+  "passed": 10,
+  "failed": 0,
+  "total": 10
+}

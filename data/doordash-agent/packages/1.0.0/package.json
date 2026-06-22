@@ -1,0 +1,183 @@
+{
+  "mi_version": "1.0.0",
+  "policy_version": "1.0.0",
+  "playbook_version": "1.0.0",
+  "prompt_version": "1.0.0",
+  "agent_id": "doordash-agent",
+  "published_at": "2026-06-10T00:00:00.000Z",
+  "published_by": "CEO",
+  "change_notes": "Initial MI-CORE intelligence package — extracted from DoorDash Agent hardcoded logic",
+  "checksum": "35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+  "guardrails": {
+    "max_daily_budget_per_campaign": 50,
+    "max_weekly_spend_per_store": 500,
+    "max_risk_auto_execute": 0.6,
+    "min_confidence_to_execute": 0.5,
+    "require_ceo_all_store_rollout": true,
+    "budget_tolerance_usd": 1,
+    "max_budget_increase_pct": 0.3,
+    "max_budget_decrease_pct": 0.3,
+    "test_campaign_max_budget": 15,
+    "test_campaign_duration_days": 7
+  },
+  "campaign_playbooks": {
+    "increase_budget": {
+      "name": "Increase Daily Budget",
+      "trigger_conditions": {
+        "min_roas": 3,
+        "min_orders_per_week": 20,
+        "max_impression_share": 0.6
+      },
+      "action": "INCREASE_BUDGET",
+      "max_increase_pct": 0.2,
+      "rationale_template": "Campaign '{name}' has strong ROAS of {roas} and {orders} orders/week but low impression share ({impression_share}%). Increasing daily budget by {delta_pct}% to capture untapped demand."
+    },
+    "decrease_budget": {
+      "name": "Decrease Daily Budget",
+      "trigger_conditions": {
+        "max_roas": 1.5,
+        "min_spend": 0
+      },
+      "action": "DECREASE_BUDGET",
+      "max_decrease_pct": 0.2,
+      "rationale_template": "Campaign '{name}' has underperformed with ROAS of {roas}. Reducing budget by {delta_pct}% to minimize waste while we optimize."
+    },
+    "pause_campaign": {
+      "name": "Pause Underperforming Campaign",
+      "trigger_conditions": {
+        "max_roas": 0.5,
+        "min_spend": 50
+      },
+      "action": "PAUSE",
+      "requires_ceo_override": true,
+      "rationale_template": "Campaign '{name}' has critically low ROAS of {roas} with ${spend} spent. Pausing to halt waste pending strategy review."
+    },
+    "test_campaign": {
+      "name": "New Item Test Campaign",
+      "trigger_conditions": {
+        "item_is_new": true,
+        "item_has_photo": true,
+        "item_is_promoted": false
+      },
+      "action": "TEST",
+      "default_budget_usd": 15,
+      "duration_days": 7,
+      "rationale_template": "New menu item '{item_name}' has not been tested in a campaign. Running a ${budget}/day test for {days} days to measure demand."
+    }
+  },
+  "menu_playbooks": {
+    "scoring": {
+      "high_seller_threshold_orders_per_week": 20,
+      "low_seller_threshold_orders_per_week": 5,
+      "promote_action": "PROMOTE",
+      "remove_action": "REMOVE",
+      "add_photo_action": "ADD_PHOTO_FIRST"
+    },
+    "audit_rules": [
+      {
+        "rule": "inactive_visible",
+        "severity": "high",
+        "description": "Item is hidden in store but still appearing in active campaign"
+      },
+      {
+        "rule": "price_mismatch",
+        "severity": "medium",
+        "description": "Campaign-facing price differs from current menu price"
+      },
+      {
+        "rule": "toast_photo_not_synced",
+        "severity": "low",
+        "description": "Photo was updated in Toast POS but has not synced to DoorDash"
+      }
+    ],
+    "special_rules": {
+      "pork_katsu_bun": {
+        "skip_photo_sync_check": true,
+        "reason": "Pork Katsu Bun: Toast automatic photo sync not supported for this item — manual upload required"
+      }
+    },
+    "task_assignments": {
+      "photo_upload": "Nguyen",
+      "menu_check": "Operations Staff",
+      "price_fix": "Operations Staff",
+      "modifier_check": "Nguyen",
+      "general": "Operations Staff"
+    }
+  },
+  "photo_standards": {
+    "low_quality_threshold": 0.4,
+    "promoted_item_requires_photo": true,
+    "severity": {
+      "missing_photo_promoted": "high",
+      "missing_photo_standard": "medium",
+      "low_quality_photo": "medium",
+      "photo_not_synced": "low"
+    }
+  },
+  "store_config": {
+    "stone_oak": {
+      "store_id": "store_stone_oak",
+      "display_name": "Stone Oak",
+      "pilot_week": 1,
+      "max_active_campaigns": 3,
+      "timezone": "America/Chicago",
+      "weekly_run_day": "monday",
+      "weekly_run_hour": 8
+    },
+    "rim": {
+      "store_id": "store_rim",
+      "display_name": "Rim",
+      "pilot_week": 2,
+      "max_active_campaigns": 3,
+      "timezone": "America/Chicago",
+      "weekly_run_day": "monday",
+      "weekly_run_hour": 8
+    },
+    "bandera": {
+      "store_id": "store_bandera",
+      "display_name": "Bandera",
+      "pilot_week": 3,
+      "max_active_campaigns": 3,
+      "timezone": "America/Chicago",
+      "weekly_run_day": "monday",
+      "weekly_run_hour": 8
+    }
+  },
+  "approval_policies": {
+    "require_approval_for_all_changes": true,
+    "ceo_required_for": [
+      "PAUSE",
+      "all_store_rollout",
+      "budget_over_limit",
+      "new_campaign"
+    ],
+    "auto_approve_confidence_threshold": 0.95,
+    "approval_expiry_hours": 24,
+    "max_pending_approvals_before_alert": 5,
+    "approval_aging_alert_hours": 24
+  },
+  "execution_policies": {
+    "dry_run_default": true,
+    "max_retries": 2,
+    "retry_delay_ms": 3000,
+    "screenshot_required": true,
+    "pre_execution_screenshot": true,
+    "post_execution_screenshot": true,
+    "verify_review_screen": true,
+    "budget_tolerance_usd": 1,
+    "stop_on_wrong_account": true,
+    "stop_on_wrong_store": true,
+    "stop_on_campaign_not_found": true,
+    "stop_on_budget_mismatch": true,
+    "stop_on_ui_change": true,
+    "stop_on_2fa": true,
+    "never_bypass_2fa": true,
+    "no_unapproved_submit": true
+  },
+  "prompts": {
+    "recommendation_rationale": "You are an expert restaurant marketing analyst for Bakudan, a Japanese-American restaurant. Given the following DoorDash campaign performance data, write a clear, specific 2-sentence rationale for the recommended action. Focus on business impact in dollars and customer growth. Data: {data}",
+    "weekly_summary": "Summarize the following DoorDash campaign performance for Bakudan restaurant in 3 bullet points. Focus on revenue impact, what changed, and the single most important next step. Data: {data}",
+    "risk_assessment": "Assess the risk level (low/medium/high) of the following DoorDash campaign change. Consider budget exposure, reversibility, and store impact. Return a JSON object with: risk_level, confidence, rationale. Change: {change}"
+  },
+  "learning_history": []
+}
