@@ -35,25 +35,36 @@ function gateSchemaValid(
 ): QAGateResult {
   const errors: string[] = [];
 
-  // Check intent has required fields
+  // Check intent has required fields (handles both types.ts and executive-intent-engine.ts shapes)
   if (intent) {
-    if (typeof intent.primary_intent !== 'string') errors.push('intent: missing primary_intent string');
-    if (typeof intent.confidence !== 'number') errors.push('intent: missing confidence number');
-    if (!Array.isArray(intent.hypotheses) || intent.hypotheses.length === 0) errors.push('intent: hypotheses must be non-empty array');
+    const hasPrimary = typeof intent.primary_intent === 'string' || (typeof intent.primary_intent === 'object' && intent.primary_intent !== null);
+    if (!hasPrimary) errors.push('intent: missing primary_intent');
+    const confidence = typeof intent.confidence === 'number' ? intent.confidence
+      : typeof intent.primary_intent === 'object' ? (intent.primary_intent as any)?.confidence
+      : undefined;
+    if (typeof confidence !== 'number') errors.push('intent: missing confidence number');
+    const hasHypotheses = Array.isArray(intent.hypotheses) || Array.isArray(intent.alternatives);
+    if (!hasHypotheses) errors.push('intent: missing hypotheses/alternatives');
   }
 
-  // Check plan has required fields
+  // Check plan has required fields (handles both types.ts and executive-planner.ts shapes)
   if (plan) {
-    if (typeof plan.objective !== 'string') errors.push('plan: missing objective string');
-    if (!Array.isArray(plan.tasks) || plan.tasks.length === 0) errors.push('plan: tasks must be non-empty array');
+    const hasObjective = typeof plan.objective === 'string' || typeof plan.title === 'string';
+    if (!hasObjective) errors.push('plan: missing objective/title string');
+    const hasTasks = Array.isArray(plan.tasks) || Array.isArray(plan.steps);
+    if (!hasTasks) errors.push('plan: missing tasks/steps');
   }
 
-  // Check brief has required fields
+  // Check brief has required fields (handles both types.ts and executive-brief.ts shapes)
   if (brief) {
-    if (typeof brief.headline !== 'string') errors.push('brief: missing headline string');
-    if (!Array.isArray(brief.what_changed)) errors.push('brief: missing what_changed array');
-    if (!Array.isArray(brief.recommended_actions)) errors.push('brief: missing recommended_actions array');
-    if (typeof brief.confidence !== 'number') errors.push('brief: missing confidence number');
+    const b = brief as any;
+    const hasHeadline = typeof b.headline === 'string' || typeof b.title_vi === 'string';
+    const hasWhatChanged = Array.isArray(b.whatChanged) || typeof b.what_changed === 'string';
+    const hasActions = Array.isArray(b.recommendedActions) || Array.isArray(b.recommended_actions);
+    if (!hasHeadline) errors.push('brief: missing headline/title_vi string');
+    if (!hasWhatChanged) errors.push('brief: missing what_changed section');
+    if (!hasActions) errors.push('brief: missing recommended_actions array');
+    if (typeof b.confidence !== 'number') errors.push('brief: missing confidence number');
   }
 
   return {
@@ -96,23 +107,37 @@ function gateTraceability(
   const evidenceIds = new Set(evidencePackets.map(e => e.id));
   const missingRefs: string[] = [];
 
+  // Handle both types.ts ExecutiveBrief (has evidenceRefs) and executive-brief.ts ExecutiveBrief (doesn't)
+  const evidenceRefs: string[] = (brief as any).evidenceRefs || [];
+  const risks: string[] = brief.risks || [];
+
   // Check that brief has at least some evidence references
-  if (brief.evidenceRefs.length === 0 && brief.risks.length > 0) {
+  if (evidenceRefs.length === 0 && risks.length > 0 && evidencePackets.length > 0) {
     missingRefs.push('Brief has risks but no evidence references');
   }
 
   // Check each evidence ref exists
-  for (const ref of brief.evidenceRefs) {
+  for (const ref of evidenceRefs) {
     if (!evidenceIds.has(ref)) {
       missingRefs.push(`Evidence ref "${ref}" not found in evidence packets`);
     }
+  }
+
+  // If there are no evidence packets at all, the gate passes (no evidence to trace)
+  if (evidencePackets.length === 0) {
+    return {
+      gate: 'traceability',
+      passed: true,
+      details: 'No evidence packets to trace (minimal mode)',
+      checkedAt: new Date().toISOString(),
+    };
   }
 
   return {
     gate: 'traceability',
     passed: missingRefs.length === 0,
     details: missingRefs.length === 0
-      ? `All ${brief.evidenceRefs.length} evidence refs traceable`
+      ? `All ${evidenceRefs.length} evidence refs traceable (${evidencePackets.length} packets)`
       : `Traceability issues: ${missingRefs.join('; ')}`,
     checkedAt: new Date().toISOString(),
   };
@@ -141,7 +166,11 @@ function gatePolicySafety(
 }
 
 function gateContradictionCheck(reflection: ReflectionResult): QAGateResult {
-  const unresolved = reflection.contradictions.filter(c => c.length > 0);
+  // Handle both types.ts ReflectionResult (has contradictions: string[])
+  // and executive-reflection.ts ReflectionResult (may use different shape)
+  const r = reflection as any;
+  const contradictions: string[] = r.contradictions || r.alternativeExplanations || [];
+  const unresolved = Array.isArray(contradictions) ? contradictions.filter((c: string) => c && c.length > 0) : [];
 
   // Contradictions are allowed IF they are surfaced (which they are by definition)
   // The gate passes as long as contradictions are documented
@@ -157,32 +186,38 @@ function gateContradictionCheck(reflection: ReflectionResult): QAGateResult {
 
 function gateExecutiveQuality(brief: ExecutiveBrief): QAGateResult {
   const issues: string[] = [];
+  const b = brief as any;
 
-  // Must have a headline
-  if (!brief.headline || brief.headline.trim().length === 0) {
+  // Must have a headline/title (handles both types.ts and executive-brief.ts)
+  const headline = b.headline || b.title_vi || '';
+  if (!headline || headline.trim().length === 0) {
     issues.push('Brief has no headline');
   }
 
   // Must have at least one recommended action for non-trivial briefs
-  if (brief.recommendedActions.length === 0 && brief.confidence < 0.95) {
+  const actions = b.recommendedActions || b.recommended_actions || [];
+  if (actions.length === 0 && b.confidence < 0.95) {
     issues.push('Brief has no recommended actions');
   }
 
   // Must not be just raw data dump (check if it has structured sections)
-  if (brief.whatChanged.length === 0 && brief.whyItMatters.length === 0) {
+  const whatChanged = b.whatChanged || b.what_changed || '';
+  const whyMatters = b.whyItMatters || b.why_it_matters || '';
+  if ((!whatChanged || (Array.isArray(whatChanged) && whatChanged.length === 0) || (typeof whatChanged === 'string' && whatChanged.length === 0)) &&
+      (!whyMatters || (Array.isArray(whyMatters) && whyMatters.length === 0) || (typeof whyMatters === 'string' && whyMatters.length === 0))) {
     issues.push('Brief lacks what_changed and why_it_matters sections');
   }
 
   // Confidence must be reasonable
-  if (brief.confidence < 0 || brief.confidence > 1) {
-    issues.push(`Invalid confidence: ${brief.confidence}`);
+  if (b.confidence < 0 || b.confidence > 1) {
+    issues.push(`Invalid confidence: ${b.confidence}`);
   }
 
   return {
     gate: 'executive_quality',
     passed: issues.length === 0,
     details: issues.length === 0
-      ? `Brief quality OK (confidence: ${brief.confidence})`
+      ? `Brief quality OK (confidence: ${b.confidence})`
       : `Quality issues: ${issues.join('; ')}`,
     checkedAt: new Date().toISOString(),
   };

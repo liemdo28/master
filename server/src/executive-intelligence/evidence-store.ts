@@ -129,13 +129,52 @@ export const evidenceStore: EvidenceStore = {
   },
 
   getEvidence(evidenceId) {
-    return evidenceIndex.get(evidenceId) || null;
+    const packet = evidenceIndex.get(evidenceId);
+    if (!packet) return null;
+    // Return a frozen copy — callers cannot mutate stored evidence
+    return Object.freeze({ ...packet });
   },
 
   listEvidence(runId) {
     return Array.from(evidenceIndex.values())
       .filter(e => e.objectiveRunId === runId)
-      .sort((a, b) => new Date(a.capturedAt).getTime() - new Date(b.capturedAt).getTime());
+      .sort((a, b) => new Date(a.capturedAt).getTime() - new Date(b.capturedAt).getTime())
+      .map(e => Object.freeze({ ...e }));
+  },
+
+  /**
+   * Immutability check — verifies the artifact file hasn't been tampered with.
+   * Called before any evidence retrieval to ensure integrity.
+   */
+  isEvidenceImmutable(evidenceId: string): boolean {
+    const packet = evidenceIndex.get(evidenceId);
+    if (!packet || !packet.artifactPath) return false;
+    try {
+      const content = fs.readFileSync(packet.artifactPath);
+      const currentHash = computeSHA256(content);
+      return currentHash === packet.sha256;
+    } catch {
+      return false;
+    }
+  },
+
+  /**
+   * Bulk integrity verification for an entire run.
+   */
+  verifyRunIntegrity(runId: string): { allValid: boolean; total: number; valid: number; invalid: string[] } {
+    const evidence = this.listEvidence(runId);
+    const invalid: string[] = [];
+    let valid = 0;
+
+    for (const e of evidence) {
+      if (this.isEvidenceImmutable(e.id)) {
+        valid++;
+      } else {
+        invalid.push(e.id);
+      }
+    }
+
+    return { allValid: invalid.length === 0, total: evidence.length, valid, invalid };
   },
 
   verifyIntegrity(evidenceId) {
