@@ -2,17 +2,18 @@
  * Executive Intelligence Routes — Phase 21
  *
  * Express router for the Executive Intelligence Layer.
- * All endpoints are under /api/executive/*
+ * All endpoints are under /api/executive-intelligence/*
  *
  * Routes:
- *   GET  /api/executive/health         — Health + version + model routes
- *   POST /api/executive/objective      — Process CEO objective end-to-end
- *   GET  /api/executive/objectives/:id — Get run status + evidence + QA
- *   POST /api/executive/memory/upsert  — Store a memory item
- *   POST /api/executive/memory/search  — Semantic + keyword memory search
- *   GET  /api/executive/skills         — List approved skills
- *   POST /api/executive/skills/validate — Validate a SKILL.md
- *   POST /api/executive/benchmark/run  — Run benchmark suite
+ *   GET  /api/executive-intelligence/health         — Health + version + model routes
+ *   POST /api/executive-intelligence/objective      — Process CEO objective end-to-end
+ *   GET  /api/executive-intelligence/objectives     — List all objective runs
+ *   GET  /api/executive-intelligence/objectives/:id — Get run status + evidence + QA
+ *   POST /api/executive-intelligence/memory/upsert  — Store a memory item
+ *   POST /api/executive-intelligence/memory/search  — Keyword + tag memory search
+ *   GET  /api/executive-intelligence/skills         — List approved skills
+ *   POST /api/executive-intelligence/skills/validate — Validate a SKILL.md
+ *   POST /api/executive-intelligence/benchmark/run  — Run 50-scenario benchmark suite
  */
 
 import { Router, Request, Response } from 'express';
@@ -20,6 +21,10 @@ import crypto from 'node:crypto';
 import { getModelRoutes, checkOllamaHealth } from './model-router';
 import { processCEOInput } from './executive-intelligence-orchestrator';
 import { evidenceStore } from './evidence-store';
+import { objectiveRunStore } from './db/objective-run-store';
+import { memoryStore } from './db/memory-store';
+import { skillRegistry } from './skill-registry';
+import { runBenchmark, formatBenchmarkReport } from './executive-intelligence-benchmark';
 
 export const executiveRouter = Router();
 
@@ -41,6 +46,10 @@ executiveRouter.get('/health', async (_req: Request, res: Response) => {
     evidence_store: {
       path: evidenceStore.getRootPath(),
     },
+    objective_runs: {
+      total: objectiveRunStore.listRuns(1000).length,
+      path: process.env.GLOBAL_DIR || '.local-agent-global/executive-intelligence/runs',
+    },
     uptime: Math.floor((Date.now() - new Date(startedAt).getTime()) / 1000),
     timestamp: new Date().toISOString(),
   });
@@ -59,20 +68,27 @@ executiveRouter.post('/objective', async (req: Request, res: Response) => {
   if (!objective || typeof objective !== 'string') {
     return res.status(400).json({
       error: 'Missing or invalid "objective" field',
-      usage: 'POST /api/executive/objective { "objective": "Are we okay today?" }',
+      usage: 'POST /api/executive-intelligence/objective { "objective": "Are we okay today?" }',
     });
   }
 
   try {
-    const result = await processCEOInput(objective, {
+    const result = processCEOInput(objective, {
       channel: (channel as any) || 'api',
       actor: actor || 'ceo',
       readOnlyDefault: readOnlyDefault !== false,
     });
 
     return res.json({
-      runId: crypto.randomUUID(),
-      ...result,
+      runId: result.runId,
+      ok: true,
+      mode: result.mode,
+      evidenceCount: result.evidenceCount,
+      qaResult: result.qaResult,
+      autonomyDecision: result.autonomyDecision,
+      brief: result.brief,
+      intent: result.intent.primary_intent,
+      processing_time_ms: result.processing_time_ms,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -84,16 +100,56 @@ executiveRouter.post('/objective', async (req: Request, res: Response) => {
   }
 });
 
+// ── List Objective Runs ───────────────────────────────────────────────────────
+
+executiveRouter.get('/objectives', async (req: Request, res: Response) => {
+  const limit = parseInt(String(req.query.limit || '50'), 10);
+  const status = req.query.status as string | undefined;
+
+  let runs;
+  if (status) {
+    runs = objectiveRunStore.getRunsByStatus(status as any);
+  } else {
+    runs = objectiveRunStore.listRuns(limit);
+  }
+
+  res.json({
+    ok: true,
+    count: runs.length,
+    runs,
+  });
+});
+
 // ── Get Objective Status ──────────────────────────────────────────────────────
 
 executiveRouter.get('/objectives/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  // TODO: Query from Postgres objective_runs table when DB is wired
-  // For now, return a placeholder
+  const run = objectiveRunStore.getRun(id);
+
+  if (!run) {
+    return res.status(404).json({
+      id,
+      status: 'not_found',
+      message: `Objective run "${id}" not found`,
+    });
+  }
+
+  // Get evidence for this run
+  const evidence = evidenceStore.listEvidence(id);
+
   res.json({
-    id,
-    status: 'not_found',
-    message: 'Objective run lookup requires Postgres connection (Week 2)',
+    ok: true,
+    run,
+    evidence: {
+      count: evidence.length,
+      items: evidence.map(e => ({
+        id: e.id,
+        sourceType: e.sourceType,
+        sourceRef: e.sourceRef,
+        summary: e.summary,
+        capturedAt: e.capturedAt,
+      })),
+    },
   });
 });
 
@@ -113,21 +169,8 @@ executiveRouter.post('/memory/upsert', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing required field: title' });
   }
 
-  const id = `mem-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 6)}`;
-  const item = {
-    id,
-    namespace: namespace || 'default',
-    kind: kind || 'general',
-    title,
-    body: body || '',
-    tags: tags || [],
-    sourceRefs: sourceRefs || [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  const item = memoryStore.upsert({ namespace, kind, title, body, tags, sourceRefs });
 
-  // TODO: Store in Postgres memory_items table when DB is wired
-  // For now, return the item
   res.json({ ok: true, item });
 });
 
@@ -142,23 +185,66 @@ executiveRouter.post('/memory/search', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing required field: query' });
   }
 
-  // TODO: Hybrid search (keyword + vector) when DB is wired
+  const results = memoryStore.search(query, { namespace, limit: limit || 10 });
+
   res.json({
+    ok: true,
     query,
     namespace: namespace || 'all',
-    results: [],
-    message: 'Memory search requires Postgres connection (Week 2)',
+    count: results.length,
+    results: results.map(r => ({
+      id: r.item.id,
+      namespace: r.item.namespace,
+      kind: r.item.kind,
+      title: r.item.title,
+      body: r.item.body,
+      tags: r.item.tags,
+      relevance: Math.round(r.relevance * 100) / 100,
+      createdAt: r.item.createdAt,
+    })),
   });
+});
+
+executiveRouter.get('/memory/list/:namespace', async (req: Request, res: Response) => {
+  const { namespace } = req.params;
+  const limit = parseInt(String(req.query.limit || '50'), 10);
+  const items = memoryStore.listItems(namespace, limit);
+  res.json({ ok: true, namespace, count: items.length, items });
+});
+
+executiveRouter.delete('/memory/:namespace/:id', async (req: Request, res: Response) => {
+  const { namespace, id } = req.params;
+  const deleted = memoryStore.deleteItem(id, namespace);
+  if (!deleted) {
+    return res.status(404).json({ error: `Memory item "${id}" not found in namespace "${namespace}"` });
+  }
+  res.json({ ok: true, deleted: true, id, namespace });
 });
 
 // ── Skills Endpoints ──────────────────────────────────────────────────────────
 
 executiveRouter.get('/skills', async (_req: Request, res: Response) => {
-  // TODO: Load from skill_manifests table
-  res.json({
-    skills: [],
-    message: 'Skill listing requires Postgres connection (Week 4)',
-  });
+  try {
+    const loaded = skillRegistry.loadAll();
+    const approved = skillRegistry.listApproved();
+
+    res.json({
+      ok: true,
+      total_loaded: loaded.length,
+      approved_count: approved.length,
+      skills: loaded.map(s => ({
+        name: s.manifest.name,
+        version: s.manifest.version,
+        approved: s.manifest.approved,
+        scope: s.manifest.scope,
+        policy_mode: s.manifest.policy.mode,
+        sha256: s.manifest.sha256,
+        loadedAt: s.loadedAt,
+      })),
+    });
+  } catch (e) {
+    res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
+  }
 });
 
 executiveRouter.post('/skills/validate', async (req: Request, res: Response) => {
@@ -167,20 +253,53 @@ executiveRouter.post('/skills/validate', async (req: Request, res: Response) => 
     return res.status(400).json({ error: 'Missing required field: name' });
   }
 
-  // TODO: Validate SKILL.md + policy
-  res.json({
-    name,
-    valid: false,
-    message: 'Skill validation requires SKILL.md system (Week 4)',
-  });
+  const result = skillRegistry.validateSkill(name);
+  res.json({ ok: true, ...result });
+});
+
+executiveRouter.get('/skills/prompt/:name', async (req: Request, res: Response) => {
+  const { name } = req.params;
+  const prompt = skillRegistry.getSkillPrompt(name);
+  if (!prompt) {
+    return res.status(404).json({ error: `Skill "${name}" not found or not approved` });
+  }
+  res.json({ ok: true, skill: name, prompt });
 });
 
 // ── Benchmark Endpoint ────────────────────────────────────────────────────────
 
 executiveRouter.post('/benchmark/run', async (_req: Request, res: Response) => {
-  // TODO: Load scenarios and run benchmark suite
-  res.json({
-    status: 'not_implemented',
-    message: 'Benchmark runner requires completed intelligence layer (Week 5)',
-  });
+  try {
+    console.log('[Executive] Starting benchmark run (50 scenarios)...');
+    const report = runBenchmark();
+    const formatted = formatBenchmarkReport(report);
+
+    res.json({
+      ok: true,
+      certification: report.certification,
+      overall_score: report.overall_score,
+      passed: report.passed,
+      total: report.total_scenarios,
+      by_category: report.by_category,
+      by_dimension: report.by_dimension,
+      execution_time_ms: report.execution_time_ms,
+      failing_count: report.failing_scenarios.length,
+      report: formatted,
+    });
+  } catch (e) {
+    res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
+  }
+});
+
+executiveRouter.get('/benchmark/report', async (_req: Request, res: Response) => {
+  try {
+    console.log('[Executive] Starting benchmark run (50 scenarios)...');
+    const report = runBenchmark();
+    const formatted = formatBenchmarkReport(report);
+
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    res.send(formatted);
+  } catch (e) {
+    res.status(500).json({ error: e instanceof Error ? e.message : String(e) });
+  }
 });
