@@ -1,68 +1,44 @@
-# WHATSAPP SESSION ISOLATION
-> Phase 21.6 CEO Directive P0 | Generated: 2026-06-22
+# WhatsApp Session Isolation
 
-## Session Isolation Matrix
+## Session Scope Rule
 
-| Session | Scope Key | Mi-Core | Food Safety | Marketing | Team |
-|---------|-----------|---------|------------|-----------|------|
-| templateOcrWorkflow | `chatId:sender` | ✅ | ✅ | ✅ | ✅ |
-| formPhotoWorkflow | `chatId:sender` | ✅ | ✅ | ✅ | ✅ |
-| brothCommandMod | `chatId:sender` | ✅ | ✅ | ✅ | ✅ |
-| agentMgr | `chatId` | ✅ | ✅ | ✅ | ✅ |
-| dedupStore | `messageId` | ✅ | ✅ | ✅ | ✅ |
-| **NEW: chatId+owner** | `chatId::owner` | ✅ | ✅ | ✅ | ✅ |
+ALL sessions MUST be scoped by: `chat_id + owner`
 
-## Per-Session Analysis
+Sessions are NEVER global. No shared state across different owners.
 
-### formPhotoWorkflow (food-safety)
-- Scope: `chatId:sender` ✅
-- Isolation: Employee can only interact with their own form session
-- No cross-chat leakage
-- **Risk:** If same person sends to multiple chats simultaneously → separate sessions by `chatId:sender` ✅
+## Session Types
 
-### templateOcrWorkflow (food-safety)
-- Scope: `chatId:sender` ✅
-- Isolation: Employee can only confirm/edit their own OCR submission
-- **Risk:** None identified
+### Food Safety Session
+- **Scope**: `chat_id + sender`
+- **Active if**: `formPhotoWorkflow.hasActiveSession(chatId, sender)` returns true
+- **Message**: CONFIRM / EDIT / RETAKE / MANAGER / CANCEL
+- **Isolation**: Session is tied to specific sender in specific chat. Other senders in same chat cannot access.
 
-### brothCommandMod
-- Scope: `chatId:sender` ✅
-- Isolation: Employee can only log broth for their own session
-- **Risk:** None identified
+### Template OCR Session  
+- **Scope**: `chat_id + sender`
+- **Active if**: `templateOcrWorkflow.hasActiveSession(chatId, sender)` returns true
+- **Isolation**: Tied to specific sender in specific chat.
 
-### agentMgr
-- Scope: `chatId` (owner-based)
-- Isolation: Non-owners see non-owner reply, cannot inject into agent session
-- See message-listener.js line 678: `if (!agentMgr.isOwner(chatId, phone))` ✅
-- **Risk:** Low
+### Agent Session
+- **Scope**: `chat_id`
+- **Active if**: `agentMgr.hasSession(chatId)` returns true
+- **Owner check**: `agentMgr.isOwner(chatId, phone)`
+- **Non-owner messages**: Return warning, do not route to agent
 
-### mi-core (no formal session store)
-- Scope: Per-request (each /mi message is independent)
-- Isolation: Each message is forwarded to mi-core independently
-- **Risk:** None — stateless per message
+## Dedup Store
 
-### marketing_preview
-- **FINDING:** No marketing session found in codebase
-- marketing_preview owner needs session management — not yet implemented
-- **Action required:** Register marketing_preview session handler
+- **Primary key**: `message_id` (from WhatsApp message)
+- **Fallback key**: `chat_id + timestamp_bucket + normalized_body`
+- **TTL**: 24 hours
+- **Location**: `services/whatsapp-ai-gateway/src/routing/message-dedup-store.js`
 
-## Cross-Leakage Prevention
+## Ownership Rules
 
-The NEW router session store uses `chatId::owner` composite keys:
-
-```
-// Mi-Core session for CEO chat
-ceo-chat-id::mi_core          → session data
-
-// Food Safety session (different chat)
-fs-chat-id::food_safety       → session data
-
-// These keys NEVER overlap:
-ceo-chat-id::food_safety      → undefined (no food safety session for CEO chat)
-```
-
-## Certified: WHATSAPP_SESSION_ISOLATION_PARTIAL
-- Food Safety: ✅ Isolated
-- Team Support: ✅ Isolated
-- Mi-Core: ✅ Stateless
-- Marketing Preview: ❌ NOT IMPLEMENTED — needs session handler
+| Message Pattern | Owner | Condition |
+|---|---|---|
+| `mi oi`, `mi ơi`, `@mi` | mi_core | CEO sender |
+| `/mi` prefix | mi_core | Any sender |
+| Food safety form image | food_safety | Chat has food safety enabled |
+| Active food_safety session | food_safety | Session scoped to chat_id+sender |
+| APPROVE/EDIT/CANCEL for draft | marketing_preview | Active draft session exists |
+| Unknown | unknown (no reply) | No match |

@@ -1,158 +1,90 @@
-# WHATSAPP ROUTING INVENTORY
-> Phase 21.6 — CEO DIRECTIVE P0 | Generated: 2026-06-22
+# WhatsApp Routing Inventory
 
----
+## Listeners
 
-## Architecture Summary
+### 1. `services/whatsapp-ai-gateway/src/whatsapp/message-listener.js`
+- **Owner**: whatsapp-ai-gateway (mi-whatsapp-gateway PM2 process)
+- **Type**: `client.on('message')` + `client.on('message_create')`
+- **Lines**: 384-407
+- **Can send directly**: YES — calls `replyService.send()` directly in many branches
+- **Handlers that send**: 
+  - `handleImageMessage` (food safety image pipeline)
+  - `handleTextMessage` (all text routes)
+  - `sendMiForwardResult` (dedup-locked mi-core reply)
+- **Priority order**:
+  1. Image: food safety pipeline (lines 411-537)
+  2. Dedup gate (lines 588-609)
+  3. Template OCR session (lines 611-617)
+  4. Form photo session (lines 620-626)
+  5. Voice message (lines 628-644)
+  6. `/mi` and `/agent` commands (lines 648-650 → `handleAgentMiCommand`)
+  7. Group quiet mode (lines 652-724)
+  8. Language question (lines 726-735)
+  9. Command routing (lines 737-764)
+  10. `/agent` → agent forward (lines 769-792)
+  11. `/mi` command → mi-core forward (lines 794-826) **[COLLISION ZONE]**
+  12. `isNoPrefix` → mi-core forward (lines 830-874) **[COLLISION ZONE]**
+  13. NLP GREETING (lines 877-885) **[COLLISION ZONE]**
+  14. Safety gates + generic AI reply (lines 887-980)
 
-```
-WhatsApp Web.js Client
-└── message-listener.js (entry point)
-    ├── client.on('message')      → ALL messages (images + text)
-    └── client.on('message_create')→ self-chat only
-```
+### 2. `services/mi-ceo-observer/src/ceo-session.js`
+- **Owner**: mi-ceo-observer (mi-ceo-observer PM2 process)
+- **Type**: `client.on('message')` + `client.on('message_create')`
+- **Lines**: 201-213
+- **Can send directly**: NO — read-only by design
+- **Behavior**: Observes CEO messages, forwards tasks to mi-core via HTTP
+- **Dedup**: `processedIds` Set with 5-min TTL (lines 33-57)
 
-### Handlers called within message-listener.js
+## Collision Analysis
 
-| Handler | Lines | Purpose | Owner |
-|---------|-------|---------|-------|
-| `handleImageMessage()` | 411–537 | Food safety image pipeline | food_safety |
-| `handleTextMessage()` | 539–980 | Complex routing tree | varies |
+### Root Cause: isNoPrefix → mi-core → fallback → GREETING collision
+**File**: `message-listener.js` lines 830-885
 
-### Inside handleTextMessage()
+When CEO sends "mi oi":
+1. `isMiCommand("mi oi")` → `false` (no `/mi` prefix)
+2. `isNoPrefix("mi oi")` → `true` (no recognized prefix)
+3. CEO is admin → `handleMiMessage` called → `/mi mi oi` sent to mi-core
+4. `forwardToMi` returns `{ ok: false, reply: errorText }`
+5. `sendMiForwardResult` logs warning but does NOT return
+6. `forwardResult.reply` = error text → sent via `replyService.send` → **Collision #1**
+7. mi-core eventually replies → **Collision #2**
 
-| Check | Line | Owner |
-|-------|------|-------|
-| `templateOcrWorkflow` session | 611 | food_safety |
-| `formPhotoWorkflow` session | 620 | food_safety |
-| `getLanguageQuestionReply()` group | 668 | generic |
-| `handleAgentMiCommand()` | 648 | mi_core / agent |
-| `commandRouter` group | 699 | varies |
-| `commandRouter` direct | 743 | varies |
-| `agentMiRouter.isAgentCommand()` | 769 | agent |
-| `agentMiRouter.isMiCommand()` | 794 | mi_core |
-| `agentMiRouter.isNoPrefix()` | 830 | mi_core |
-| NLP greeting | 877 | generic |
-| `generateResponse()` AI | 959 | generic |
+### Root Cause: isNoPrefix fallback reply suppresses mi-core
+**File**: `message-listener.js` lines 852-873
 
-### Other callers of replyService.send()
+After `forwardToMi` fails with `ok: false` and `reply: errorText`:
+- `forwardResult.reply` (error text) is treated as a valid reply
+- Sent via `replyService.send` as "greeting/fallback"
+- This prevents mi-core's reply from showing (stale message guard)
 
-| File | Role |
-|------|------|
-| `workflows/operating-model-router.js` | IMAGE + TEXT routing (separate parallel path) |
-| `workflows/form-photo-workflow.js` | Form photo confirmation workflow |
-| `template-ocr/template-ocr-workflow.js` | Template OCR workflow |
-| `index.js`, `api/server.js`, `alerts/*`, `incidents/*`, `reports/*` | Admin/system notifications |
+### Root Cause: isCeoSender bypass missing in isNoPrefix block
+**File**: `message-listener.js` lines 830-874
 
----
+The `isNoPrefix` block does `isCeoSender` check (line 836) but the logic is complex and may fail in edge cases. All CEO messages should be routed to mi-core regardless of admin config.
 
-## ALL `replyService.send()` Call Sites
+## Send Paths
 
-### message-listener.js (handleImageMessage)
+| Send Path | File | Lines | Can Send Directly |
+|---|---|---|---|
+| `replyService.send()` | `message-listener.js` | 732, 750, 758, 781, 787, 820, 841, 869, 881, 938, 951, 976 | YES |
+| `sendMediaFile()` | `message-listener.js` | 191 (inside sendMiForwardResult) | YES |
+| `sendMiForwardResult()` | `message-listener.js` | 188-197 | YES |
+| `food-safety-workflow` | `message-listener.js` | 516-518 | YES |
+| `template-ocr-workflow` | `message-listener.js` | 498-504 | YES |
+| `form-photo-workflow` | `message-listener.js` | 474-478 | YES |
 
-| Line | Function | Trigger | Owner | Direct Send |
-|------|----------|---------|-------|-------------|
-| 450 | `handleImageMessage()` | Media download fail | food_safety | YES |
-| 470 | `handleImageMessage()` | Form photo image save fail | food_safety | YES |
-| 478 | `handleImageMessage()` | Form photo upload reply | food_safety | YES |
-| 483 | `handleImageMessage()` | Form photo error | food_safety | YES |
-| 501 | `handleImageMessage()` | Template OCR reply | food_safety | YES |
-| 507 | `handleImageMessage()` | Template OCR fail | food_safety | YES |
-| 522 | `handleImageMessage()` | Food safety pipeline fail | food_safety | YES |
-| 529, 532 | `handleImageMessage()` | Food safety warning/pass | food_safety | YES |
+## Dedup Store
 
-### message-listener.js (handleTextMessage)
+- **Primary**: `services/whatsapp-ai-gateway/src/routing/message-dedup-store.js` (singleton)
+- **Backup**: `services/whatsapp-ai-gateway/src/routing/message-dedup-store.ts`
+- **Claim key**: `message_id`
+- **TTL**: 24 hours
+- **Status values**: `processing | completed | failed`
 
-| Line | Function | Trigger | Owner | Direct Send |
-|------|----------|---------|-------|-------------|
-| 188, 191 | `sendMiForwardResult()` | Mi-Core reply + image | mi_core | YES (router) |
-| 346, 350 | `handleAgentMiCommand()` | /mi or /agent reply | varies | YES (handler) |
-| 614, 623 | `handleTextMessage()` | Form photo reply | food_safety | YES |
-| 642 | `handleTextMessage()` | Voice message not supported | generic | YES |
-| 670, 680 | `handleTextMessage()` | Language question (group) | generic | YES |
-| 706, 714 | `handleTextMessage()` | Group command reply | varies | YES |
-| 732 | `handleTextMessage()` | Language question (direct) | generic | YES |
-| 750, 758 | `handleTextMessage()` | Direct command reply | varies | YES |
-| 781, 784, 787 | `handleTextMessage()` | /agent reply | agent | YES |
-| 820 | `handleTextMessage()` | /mi local reply | mi_core | YES |
-| 869 | `handleTextMessage()` | no-prefix local reply | mi_core | YES |
-| 881 | `handleTextMessage()` | NLP greeting | generic | YES |
-| 938 | `handleTextMessage()` | Business hours closed | generic | YES |
-| 951 | `handleTextMessage()` | Escalation holding | generic | YES |
-| 976 | `handleTextMessage()` | AI reply | generic | YES |
+## PM2 Processes
 
-### workflows/form-photo-workflow.js
-
-| Line | Function | Trigger | Owner |
-|------|----------|---------|-------|
-| 89 | `handleFormPhotoUpload()` | "Reading your form..." | food_safety |
-| 423 | `handleManagerReview()` | Manager alert | food_safety |
-
-### template-ocr/template-ocr-workflow.js
-
-| Line | Function | Trigger | Owner |
-|------|----------|---------|-------|
-| 135 | `handleReply()` | Manager review alert | food_safety |
-| 321 | `sendManagerAlert()` | OCR warning alert | food_safety |
-
-### workflows/operating-model-router.js
-
-| Line | Function | Trigger | Owner |
-|------|----------|---------|-------|
-| 68, 71, 92, 98, 101 | `routeImage()` | Food safety / form replies | food_safety |
-| 127, 138, 142 | `routeImage()` | OCR / form photo | food_safety |
-| 154, 159 | `routeImage()` | Evidence / unknown | food_safety |
-| 184, 192, 212, 218, 233, 236, 253, 256, 278 | `routeText()` | Mi / Agent / session | varies |
-
----
-
-## ALL `client.sendMessage()` Call Sites
-
-| File | Line | Purpose |
-|------|------|---------|
-| `whatsapp/message-listener.js` | 360–371 | `installOutboundSendGuard()` — monkey-patch to block banned raw sends |
-| `whatsapp/reply-service.js` | 35 | `send()` — sole outbound send function |
-| `whatsapp/reply-service.js` | 67 | `sendMediaFile()` — outbound media |
-| `whatsapp/session-manager.js` | 87–103 | `installOutboundSendGuard()` — monkey-patch on session client |
-
----
-
-## Dedup Gate Status
-
-| Component | Status | Location |
-|-----------|--------|---------|
-| `message-dedup-store.js` | ✅ EXISTS | `routing/message-dedup-store.js` |
-| `dedup.claim()` in handleTextMessage | ✅ EXISTS | `message-listener.js:594` |
-| `dedup.claim()` in handleImageMessage | ❌ MISSING | No dedup check for images |
-| `dedup.isDuplicate()` in router | ✅ In router | `message-router-owner.js:221` |
-| `dedup.updateStatus()` in router | ✅ In router | `message-router-owner.js:373` |
-
----
-
-## Session Isolation Status
-
-| Session | Scope Key | Isolated? | Issue |
-|---------|-----------|-----------|-------|
-| `templateOcrWorkflow` | `chatId:sender` | ✅ | None |
-| `formPhotoWorkflow` | `chatId:sender` | ✅ | None |
-| `brothCommandMod` | `chatId:sender` | ✅ | None |
-| `agentMgr` | `chatId` | ✅ | Owner-based access control |
-| `dedupStore` | `messageId` | ✅ | TTL-based |
-| Marketing session | `chatId:owner` | ❌ | No marketing session found in codebase |
-
----
-
-## Collision Root Cause
-
-**Observed:** CEO message "nay anh có task gì" produced TWO responses:
-1. "Mi is not available on this bot."
-2. Marketing preview image.
-
-**Root cause:** Multiple handlers processed the same message_id:
-- `handleTextMessage()` processed it → saw no active session → fell through → sent "Mi is not available..."
-- A marketing workflow also processed the same message → sent preview image.
-
-**The dedup gate at `message-listener.js:594` exists but is only in `handleTextMessage()`**.
-`handleImageMessage()` has no dedup gate at all. If the message is text but also triggers a parallel path (e.g., operating-model-router.js), both can reply.
-
-**Fix required:** Extend dedup gate to ALL message types, enforce handler-return-only pattern, route all sends through router.
+| Process | Service | Port | Script |
+|---|---|---|---|
+| mi-whatsapp-gateway | whatsapp-ai-gateway | 3211 | src/index.js |
+| mi-ceo-observer | mi-ceo-observer | 3212 | src/index.js |
+| mi-core | server | 4001 | server/dist/index.js |
