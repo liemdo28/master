@@ -1,0 +1,14 @@
+{
+  "name": "incident-review",
+  "version": "1.0.0",
+  "entry": "skills/incident-review/SKILL.md",
+  "approved": true,
+  "approvedBy": "cto",
+  "scope": ["incidents", "operations", "reporting"],
+  "sha256": "REPLACE_ME",
+  "policy": {
+    "mode": "read-only",
+    "allowedConnectors": ["mi-core", "pm2", "evidence-store"],
+    "approvalRequiredForWrite": true
+  }
+}

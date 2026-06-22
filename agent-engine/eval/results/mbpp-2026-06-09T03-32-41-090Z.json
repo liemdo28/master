@@ -1,0 +1,37 @@
+{
+  "benchmark": "mbpp",
+  "timestamp": "2026-06-09T03:32:41.090Z",
+  "stats": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "passRate": "1.0000",
+  "results": [
+    {
+      "problem": {
+        "text": "Write a function to find the minimum cost path to reach (m, n) from (0, 0) for the given cost matrix cost[][] and a position (m, n) in cost[][].",
+        "code": "R = 3\r\nC = 3\r\ndef min_cost(cost, m, n): \r\n\ttc = [[0 for x in range(C)] for x in range(R)] \r\n\ttc[0][0] = cost[0][0] \r\n\tfor i in range(1, m+1): \r\n\t\ttc[i][0] = tc[i-1][0] + cost[i][0] \r\n\tfor j in range(1, n+1): \r\n\t\ttc[0][j] = tc[0][j-1] + cost[0][j] \r\n\tfor i in range(1, m+1): \r\n\t\tfor j in range(1, n+1): \r\n\t\t\ttc[i][j] = min(tc[i-1][j-1], tc[i-1][j], tc[i][j-1]) + cost[i][j] \r\n\treturn tc[m][n]",
+        "task_id": 1,
+        "test_setup_code": "",
+        "test_list": [
+          "assert min_cost([[1, 2, 3], [4, 8, 2], [1, 5, 3]], 2, 2) == 8",
+          "assert min_cost([[2, 3, 4], [5, 9, 3], [2, 6, 4]], 2, 2) == 12",
+          "assert min_cost([[3, 4, 5], [6, 10, 4], [3, 7, 5]], 2, 2) == 16"
+        ],
+        "challenge_test_list": []
+      },
+      "code": "def min_cost_path(cost):\n    m = len(cost)\n    n = len(cost[0])\n    \n    # Create a 2D array to store the minimum cost to reach each cell\n    dp = [[float('inf')] * n for _ in range(m)]\n    \n    # Initialize the starting point\n    dp[0][0] = cost[0][0]\n    \n    # Fill the first row\n    for j in range(1, n):\n        dp[0][j] = dp[0][j-1] + cost[0][j]\n    \n    # Fill the first column\n    for i in range(1, m):\n        dp[i][0] = dp[i-1][0] + cost[i][0]\n    \n    # Fill the rest of the dp array\n    for i in range(1, m):\n        for j in range(1, n):\n            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + cost[i][j]\n    \n    # The minimum cost to reach (m-1, n-1)\n    return dp[m-1][n-1]\n\n# Example usage:\ncost = [\n    [1, 3, 1],\n    [1, 5, 1],\n    [4, 2, 1]\n]\nprint(min_cost_path(cost))  # Output: 7",
+      "execution": {
+        "stdout": "7\r\n",
+        "stderr": "",
+        "exitCode": 0
+      },
+      "passed": true,
+      "reason": "executed",
+      "stderr": ""
+    }
+  ]
+}

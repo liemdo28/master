@@ -1,0 +1,15 @@
+[
+  { "id": "MD-01", "input": "skip", "expected": "SKIPPED", "description": "skip keyword" },
+  { "id": "MD-02", "input": "SKIP", "expected": "SKIPPED", "description": "SKIP uppercase" },
+  { "id": "MD-03", "input": "n/a", "expected": "SKIPPED", "description": "n/a" },
+  { "id": "MD-04", "input": "NA", "expected": "SKIPPED", "description": "NA" },
+  { "id": "MD-05", "input": "none", "expected": "SKIPPED", "description": "none" },
+  { "id": "MD-06", "input": "no reading", "expected": "SKIPPED", "description": "no reading" },
+  { "id": "MD-07", "input": "not available", "expected": "SKIPPED", "description": "not available" },
+  { "id": "MD-08", "input": "broken", "expected": "SKIPPED", "description": "broken" },
+  { "id": "MD-09", "input": "thermometer broken", "expected": "SKIPPED", "description": "thermometer broken" },
+  { "id": "MD-10", "input": "STATUS", "expected": "STATUS_REPLY", "description": "STATUS command during workflow" },
+  { "id": "MD-11", "input": "CANCEL", "expected": "CANCELLED", "description": "CANCEL command" },
+  { "id": "MD-12", "input": "END", "expected": "CLOSED", "description": "END command" },
+  { "id": "MD-13", "input": "MENU", "expected": "MENU_REPLY", "description": "MENU command" }
+]

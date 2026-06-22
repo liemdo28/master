@@ -1,0 +1,27 @@
+{
+  "$id": "plan.schema.json",
+  "type": "object",
+  "required": ["objective", "tasks", "success_criteria", "risk_level"],
+  "properties": {
+    "objective": { "type": "string" },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "department", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "department": { "type": "string" },
+          "type": { "type": "string", "enum": ["investigate", "read", "analyze", "execute", "qa", "report"] },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "read_only": { "type": "boolean" },
+          "estimated_seconds": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "success_criteria": { "type": "array", "items": { "type": "string" } },
+    "risk_level": { "type": "string", "enum": ["low", "medium", "high"] }
+  }
+}

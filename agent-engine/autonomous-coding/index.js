@@ -1,0 +1,12 @@
+export { AutoRetryPatchLoop } from './AutoRetryPatchLoop.js';
+export { ClineControlBridge } from './ClineControlBridge.js';
+export { CodePatchPlanner } from './CodePatchPlanner.js';
+export { GitChangeTracker } from './GitChangeTracker.js';
+export { PatchApplier } from './PatchApplier.js';
+export { PatchEvidenceStore } from './PatchEvidenceStore.js';
+export { PatchStrategyEngine } from './PatchStrategyEngine.js';
+export { PatchValidator } from './PatchValidator.js';
+export { PostPatchQA } from './PostPatchQA.js';
+export { SafeFileEditor } from './SafeFileEditor.js';
+export { SourceDiffAnalyzer } from './SourceDiffAnalyzer.js';
+export * from './PatchSafetyPolicy.js';

@@ -1,0 +1,408 @@
+{
+  "generated_at": "2026-06-15T09:32:45.177Z",
+  "verdict": "NOT_CEO_READY_V4",
+  "scores": {
+    "Security": true,
+    "Auth": true,
+    "Memory": true,
+    "Approval": true,
+    "Workflow": true,
+    "Execution": true,
+    "Multi Intent": true,
+    "Finance Truth": false,
+    "Connector Truth": false,
+    "Restart Stability": false,
+    "WhatsApp Reliability": false
+  },
+  "finance": [
+    {
+      "id": 1,
+      "prompt": "Doanh thu Raw Sushi bao nhiêu?",
+      "status": 200,
+      "ms": 125,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 2,
+      "prompt": "Chi phí tháng này bao nhiêu?",
+      "status": 500,
+      "ms": 30397,
+      "timeout": false,
+      "pass": false,
+      "reply_sample": "Mi gặp lỗi, anh thử lại nhé.",
+      "error": null
+    },
+    {
+      "id": 3,
+      "prompt": "QB sync sao rồi?",
+      "status": 200,
+      "ms": 470,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 4,
+      "prompt": "Raw Sushi revenue today?",
+      "status": 200,
+      "ms": 914,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 5,
+      "prompt": "Raw Sushi sales hôm nay bao nhiêu?",
+      "status": 200,
+      "ms": 737,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 6,
+      "prompt": "Doanh thu hôm nay của Raw Sushi?",
+      "status": 200,
+      "ms": 293,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 7,
+      "prompt": "Chi phí Raw Sushi tháng này?",
+      "status": 200,
+      "ms": 130,
+      "timeout": false,
+      "pass": false,
+      "reply_sample": "Raw Sushi website: ok, source E:/Project/Master/RawSushi/RawWebsite, repo https://github.com/liemdo28/rawwebsite.git, last sync 2026-06-15T09:18:49.822Z.",
+      "error": null
+    },
+    {
+      "id": 8,
+      "prompt": "QuickBooks sync status?",
+      "status": 200,
+      "ms": 94,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 9,
+      "prompt": "QB hôm nay có số liệu chưa?",
+      "status": 200,
+      "ms": 980,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 10,
+      "prompt": "Finance Raw Sushi có stale không?",
+      "status": 200,
+      "ms": 110,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 11,
+      "prompt": "Doanh thu tháng này Raw Sushi?",
+      "status": 200,
+      "ms": 1198,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 12,
+      "prompt": "Raw Sushi có live revenue data chưa?",
+      "status": 200,
+      "ms": 111,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 13,
+      "prompt": "Chi phí tháng này trong QB?",
+      "status": 200,
+      "ms": 116,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 14,
+      "prompt": "QB connector đang ổn không?",
+      "status": 200,
+      "ms": 185,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 15,
+      "prompt": "Sales Raw Sushi bao nhiêu?",
+      "status": 200,
+      "ms": 83,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 16,
+      "prompt": "Raw Sushi finance summary?",
+      "status": 200,
+      "ms": 870,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 17,
+      "prompt": "QuickBooks có stale không?",
+      "status": 200,
+      "ms": 136,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 18,
+      "prompt": "Doanh thu Raw Sushi tháng này bao nhiêu?",
+      "status": 200,
+      "ms": 267,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.8",
+      "error": null
+    },
+    {
+      "id": 19,
+      "prompt": "Expense this month from QB?",
+      "status": 200,
+      "ms": 78,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    },
+    {
+      "id": 20,
+      "prompt": "QB sync freshness sao rồi?",
+      "status": 200,
+      "ms": 420,
+      "timeout": false,
+      "pass": true,
+      "reply_sample": "Dữ liệu đang degraded, em báo thận trọng. QB status: degraded. Company: Raw Japanese Bistro and Sushi Bar. Last sync: 2026-06-14T15:04:32.890153+00:00. Transactions today: 0. Checksum mismatch: no. Action required: On La",
+      "error": null
+    }
+  ],
+  "connectors": {
+    "registry_status": 200,
+    "executive_snapshot_status": 200,
+    "qb_status": 200,
+    "freshness_status": 200,
+    "runtime_feed_status": 200,
+    "accounting_health_status": 200,
+    "whatsapp_health_status": 200,
+    "qb_summary": {
+      "status": "degraded",
+      "certified": false,
+      "action_required": true,
+      "gaps": [
+        "Latest QB heartbeat is stale (225 minutes old)"
+      ],
+      "last_successful_sync": "2026-06-14T15:04:32.890153+00:00",
+      "last_heartbeat": "2026-06-15T05:48:29.007Z"
+    },
+    "snapshot_action_required": [
+      {
+        "section": "gmail",
+        "reason": "freshness=stale",
+        "owner": "Dev2"
+      },
+      {
+        "section": "finance_qb",
+        "reason": "On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (225 minutes old)",
+        "owner": "Dev1"
+      },
+      {
+        "section": "connectors",
+        "reason": "freshness=stale",
+        "owner": "Dev2"
+      }
+    ],
+    "stale_sources": [
+      {
+        "source": "Gmail",
+        "status": "stale",
+        "error": null
+      },
+      {
+        "source": "QuickBooks",
+        "status": "degraded",
+        "error": "Connector health is degraded"
+      }
+    ]
+  },
+  "pm2": [
+    {
+      "name": "whatsapp-ai-gateway",
+      "status": "online",
+      "restarts": 1162,
+      "pid": 32784,
+      "uptime_seconds": 0
+    },
+    {
+      "name": "mi-node-agent",
+      "status": "online",
+      "restarts": 425,
+      "pid": 28444,
+      "uptime_seconds": 18970
+    },
+    {
+      "name": "mi-ai-service",
+      "status": "online",
+      "restarts": 0,
+      "pid": 8704,
+      "uptime_seconds": 31784
+    },
+    {
+      "name": "mi-core",
+      "status": "online",
+      "restarts": 144,
+      "pid": 29736,
+      "uptime_seconds": 2751
+    },
+    {
+      "name": "accounting-engine",
+      "status": "online",
+      "restarts": 0,
+      "pid": 9356,
+      "uptime_seconds": 3747
+    }
+  ],
+  "logs": {
+    "mi_core_error_tail": "RE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:37:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:38:09: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:38:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:39:09: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:39:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:40:09: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:40:31: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:40:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:41:09: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:41:17: [Mi][Auth] WARNING: MI_CORE_API_KEY is not set — /api/gstack, /api/graph, /api/jarvis/evolution, /api/knowledge will reject all requests with 503 until key is configured in .env\n9|mi-core  | 2026-06-15 15:41:18: [Mi] Review approval WhatsApp channel disabled: CEO_WHATSAPP_ALLOWED_NUMBERS is not configured.\n9|mi-core  | 2026-06-15 15:41:18: [Mi] Review approval callbacks are running without REVIEW_SYSTEM_INTERNAL_TOKEN.\n9|mi-core  | 2026-06-15 15:41:19: [BigData] MinIO not available (start with docker-compose): \n9|mi-core  | 2026-06-15 15:41:27: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:41:34: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:41:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:42:09: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:42:39: [RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled\n9|mi-core  | 2026-06-15 15:43:09: [Mi] Review approval WhatsApp channel disabled: CEO_WHATSAPP_ALLOWED_NUMBERS is not configured.\n9|mi-core  | 2026-06-15 15:43:09: [Mi] Review approval callbacks are running without REVIEW_SYSTEM_INTERNAL_TOKEN.\n9|mi-core  | 2026-06-15 15:43:10: [BigData] MinIO not available (start with docker-compose): \n9|mi-core  | 2026-06-15 15:46:55: [Mi] Review approval WhatsApp channel disabled: CEO_WHATSAPP_ALLOWED_NUMBERS is not configured.\n9|mi-core  | 2026-06-15 15:46:55: [Mi] Review approval callbacks are running without REVIEW_SYSTEM_INTERNAL_TOKEN.\n9|mi-core  | 2026-06-15 15:46:56: [BigData] MinIO not available (start with docker-compose): \n9|mi-core  | 2026-06-15 15:57:10: [O4-LATENCY] RED ai_inference: 23834ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 15:57:10: [O4-LATENCY] RED chat_response: 24267ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 15:57:26: [O4-LATENCY] RED ai_inference: 16078ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 15:57:26: [O4-LATENCY] RED chat_response: 16429ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 15:57:41: [O4-LATENCY] RED chat_response: 14693ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 15:57:53: [O4-LATENCY] RED chat_response: 12463ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:02:00: [WhatsApp Sender] CEO_WHATSAPP_NUMBER not set — outbound disabled\n9|mi-core  | 2026-06-15 16:03:24: [O4-LATENCY] RED ai_inference: 24838ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:03:24: [O4-LATENCY] RED chat_response: 25682ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:03:34: [O4-LATENCY] RED chat_response: 10044ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:04:02: [O4-LATENCY] RED ai_inference: 27447ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:04:02: [O4-LATENCY] RED chat_response: 27930ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:04:28: [O4-LATENCY] RED ai_inference: 25508ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:04:28: [O4-LATENCY] RED chat_response: 26081ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:09:57: [O4-LATENCY] RED chat_response: 196527ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:14:39: [O4-LATENCY] RED ai_inference: 27302ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:14:39: [O4-LATENCY] RED chat_response: 27989ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:14:53: [O4-LATENCY] RED chat_response: 13636ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:15:11: [O4-LATENCY] RED ai_inference: 17078ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:15:11: [O4-LATENCY] RED chat_response: 17832ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:15:32: [O4-LATENCY] RED ai_inference: 20292ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:15:32: [O4-LATENCY] RED chat_response: 21187ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:17:16: The system cannot find the path specified.\r\n9|mi-core  | 2026-06-15 16:17:50: [O4-LATENCY] RED ai_inference: 136986ms (threshold 15000ms)\n9|mi-core  | 2026-06-15 16:17:50: [O4-LATENCY] RED chat_response: 137632ms (threshold 10000ms)\n9|mi-core  | 2026-06-15 16:32:51: [WhatsApp Sender] CEO_WHATSAPP_NUMBER not set — outbound disabled\n9|mi-core  | 2026-06-15 16:33:16: [Mi Chat] Error: generateText failed across providers: The operation was aborted due to timeout\n9|mi-core  | 2026-06-15 16:33:16:     at tryProviders (E:\\Project\\Master\\mi-core\\server\\dist\\providers\\provider-router.js:211:11)\n9|mi-core  | 2026-06-15 16:33:16:     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n9|mi-core  | 2026-06-15 16:33:16:     at async askAiWithBrain (E:\\Project\\Master\\mi-core\\server\\dist\\services\\ai-client.js:21:20)\n9|mi-core  | 2026-06-15 16:33:16:     at async runPipeline (E:\\Project\\Master\\mi-core\\server\\dist\\pipeline\\response-pipeline.js:307:19)\n9|mi-core  | 2026-06-15 16:33:16:     at async processMessage (E:\\Project\\Master\\mi-core\\server\\dist\\routes\\chat.js:452:25)\n\n",
+    "whatsapp_error_tail": "sql\":\"ALTER TABLE store_groups ADD COLUMN locked INTEGER DEFAULT 0\",\"code\":\"SQLITE_ERROR\",\"retry\":0}\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: Daily entry template sync: fetching {\"tab\":\"Daily_Entry_Template\",\"range\":\"B11:D35\",\"spreadsheetId\":\"configured\"}\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: Food safety rules synced {\"count\":19,\"lastSynced\":\"2026-06-15T09:33:20.797Z\"}\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: Food safety tables ready\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: Food safety pipeline initialized\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[33MWARN\u001b[39M: Telegram not configured — forwarding disabled\r\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: BOOT_STEP_4_WHATSAPP {\"deferredUntilServerReady\":true}\r\n0|whatsapp | 2026-06-15T16:33:20: BOOT_STEP_4_WHATSAPP\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[32MINFO\u001b[39M: BOOT_STEP_5_SERVER\r\n0|whatsapp | 2026-06-15T16:33:20: BOOT_STEP_5_SERVER\n0|whatsapp | 2026-06-15T16:33:20: [2026-06-15 16:33:20] \u001b[31MERROR\u001b[39M: Dashboard listen failed {\"error\":\"listen EADDRINUSE: address already in use 0.0.0.0:3211\",\"port\":3211,\"host\":\"0.0.0.0\"}\r\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: Stone Oak pilot tracker started\r\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: SQLite schema ready {\"path\":\"E:\\\\Project\\\\Master\\\\whatsapp-ai-gateway\\\\data\\\\gateway.db\"}\r\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: === WhatsApp AI Gateway v2.0 starting ===\r\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: BOOT_STEP_1_CONFIG {\"startupMode\":\"normal\"}\r\n0|whatsapp | 2026-06-15T16:33:21: BOOT_STEP_1_CONFIG\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: BOOT_STEP_2_DB\r\n0|whatsapp | 2026-06-15T16:33:21: BOOT_STEP_2_DB\n0|whatsapp | 2026-06-15T16:33:21: [2026-06-15 16:33:21] \u001b[32MINFO\u001b[39M: All migrations up to date\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Database ready\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: AI control loaded {\"paused\":false,\"blocked\":0}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: BOOT_STEP_3_TEMPLATE\r\n0|whatsapp | 2026-06-15T16:33:22: BOOT_STEP_3_TEMPLATE\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Template cache: no synced template_cache payload available\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Template cache ready {\"version\":null,\"syncedAt\":null,\"rowCount\":0,\"source\":\"unavailable\"}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Template sync service started {\"intervalMs\":300000}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Template OCR printable template ready\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Session timeout service started\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: YoLink poller disabled (YOLINK_ENABLED != true or credentials missing)\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: YoLink poller disabled (not configured) — human workflow remains active\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Loaded cached food safety rules {\"count\":19,\"lastSynced\":\"2026-06-15T09:33:20.797Z\"}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Fetching food safety rules from Google Sheet... {\"url\":\"https://docs.google.com/spreadsheets/d/12J9CRkTpDJ4boKClVaz0qiev9KV7dEyr-TK4KA1ugJs/edit?usp=sharing\"}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[33MWARN\u001b[39M: SQLite run error {\"sql\":\"ALTER TABLE store_groups ADD COLUMN locked INTEGER DEFAULT 0\",\"code\":\"SQLITE_ERROR\",\"retry\":0}\r\n0|whatsapp | 2026-06-15T16:33:22: [2026-06-15 16:33:22] \u001b[32MINFO\u001b[39M: Daily entry template sync: fetching {\"tab\":\"Daily_Entry_Template\",\"range\":\"B11:D35\",\"spreadsheetId\":\"configured\"}\r\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[32MINFO\u001b[39M: Food safety rules synced {\"count\":19,\"lastSynced\":\"2026-06-15T09:33:23.286Z\"}\r\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[32MINFO\u001b[39M: Food safety tables ready\r\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[32MINFO\u001b[39M: Food safety pipeline initialized\r\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[33MWARN\u001b[39M: Telegram not configured — forwarding disabled\r\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[32MINFO\u001b[39M: BOOT_STEP_4_WHATSAPP {\"deferredUntilServerReady\":true}\r\n0|whatsapp | 2026-06-15T16:33:23: BOOT_STEP_4_WHATSAPP\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[32MINFO\u001b[39M: BOOT_STEP_5_SERVER\r\n0|whatsapp | 2026-06-15T16:33:23: BOOT_STEP_5_SERVER\n0|whatsapp | 2026-06-15T16:33:23: [2026-06-15 16:33:23] \u001b[31MERROR\u001b[39M: Dashboard listen failed {\"error\":\"listen EADDRINUSE: address already in use 0.0.0.0:3211\",\"port\":3211,\"host\":\"0.0.0.0\"}\r\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: Stone Oak pilot tracker started\r\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: SQLite schema ready {\"path\":\"E:\\\\Project\\\\Master\\\\whatsapp-ai-gateway\\\\data\\\\gateway.db\"}\r\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: === WhatsApp AI Gateway v2.0 starting ===\r\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: BOOT_STEP_1_CONFIG {\"startupMode\":\"normal\"}\r\n0|whatsapp | 2026-06-15T16:33:24: BOOT_STEP_1_CONFIG\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: BOOT_STEP_2_DB\r\n0|whatsapp | 2026-06-15T16:33:24: BOOT_STEP_2_DB\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: All migrations up to date\r\n0|whatsapp | 2026-06-15T16:33:24: [2026-06-15 16:33:24] \u001b[32MINFO\u001b[39M: Database ready\r\n\n"
+  },
+  "whatsappReliability": {
+    "real_messages_requested": 50,
+    "real_messages_sent": 0,
+    "pass": false,
+    "reason": "Real 50-message run blocked: whatsapp-ai-gateway status=online, restarts=1162, uptime=0s",
+    "endpoint_health": 200,
+    "pm2": {
+      "name": "whatsapp-ai-gateway",
+      "status": "online",
+      "restarts": 1162,
+      "pid": 32784,
+      "uptime_seconds": 0
+    }
+  },
+  "scenario": {
+    "normal": {
+      "parent_tracking_id": "WF-OPS-CEO-1",
+      "parent_workflow_id": "DASHBOARD-AUDIT-20260615-2041",
+      "expected_children": 4,
+      "executed_children": 4,
+      "dropped_children": 0,
+      "children": [
+        {
+          "tracking_id": "WF-OPS-CEO-1-A",
+          "workflow_id": "DASHBOARD-AUDIT-20260615-2042",
+          "workflow_type": "DASHBOARD_AUDIT",
+          "domain": "dashboard_monitoring",
+          "status": "approval_pending",
+          "error": null
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-1-B",
+          "workflow_id": "FINANCE-REPORT-20260615-968",
+          "workflow_type": "FINANCE_REPORT",
+          "domain": "finance_qb",
+          "status": "completed",
+          "error": null
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-1-C",
+          "workflow_id": "SEO-CONTENT-20260615-991",
+          "workflow_type": "SEO_CONTENT",
+          "domain": "seo_content",
+          "status": "approval_pending",
+          "error": null
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-1-D",
+          "workflow_id": "EMAIL-DRAFT-20260615-642",
+          "workflow_type": "EMAIL_DRAFT",
+          "domain": "email_comms",
+          "status": "approval_pending",
+          "error": null
+        }
+      ],
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-OPS-CEO-1.json"
+    },
+    "qb_disabled": {
+      "parent_tracking_id": "WF-OPS-CEO-2",
+      "parent_workflow_id": "DASHBOARD-AUDIT-20260615-2043",
+      "expected_children": 4,
+      "executed_children": 4,
+      "dropped_children": 0,
+      "children": [
+        {
+          "tracking_id": "WF-OPS-CEO-2-A",
+          "workflow_id": "DASHBOARD-AUDIT-20260615-2044",
+          "workflow_type": "DASHBOARD_AUDIT",
+          "domain": "dashboard_monitoring",
+          "status": "approval_pending",
+          "error": null
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-2-B",
+          "workflow_id": "FINANCE-REPORT-20260615-969",
+          "workflow_type": "FINANCE_REPORT",
+          "domain": "finance_qb",
+          "status": "failed",
+          "error": "Forced failure for finance_qb"
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-2-C",
+          "workflow_id": "SEO-CONTENT-20260615-992",
+          "workflow_type": "SEO_CONTENT",
+          "domain": "seo_content",
+          "status": "approval_pending",
+          "error": null
+        },
+        {
+          "tracking_id": "WF-OPS-CEO-2-D",
+          "workflow_id": "EMAIL-DRAFT-20260615-643",
+          "workflow_type": "EMAIL_DRAFT",
+          "domain": "email_comms",
+          "status": "approval_pending",
+          "error": null
+        }
+      ],
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-OPS-CEO-2.json"
+    }
+  }
+}

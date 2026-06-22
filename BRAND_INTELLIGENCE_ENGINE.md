@@ -112,4 +112,3 @@ All store scores are UNKNOWN pending GBP re-authorization and review data pull.
 
 ```text
 BRAND_INTELLIGENCE_ENGINE_DESIGNED
-```

@@ -1,0 +1,64 @@
+{
+  "modules": {
+    "executive-context": {
+      "description": "Load Mi architecture, owner context boundaries, current reports, and decision constraints before work.",
+      "skills": ["mi-context-briefing"],
+      "rules": ["mi-architecture-boundaries"],
+      "commands": ["mi-brief"]
+    },
+    "safe-coding": {
+      "description": "Plan and apply code changes through Mi's patch safety model.",
+      "skills": ["mi-safe-patch-workflow", "mi-code-review"],
+      "rules": ["mi-coding-standards", "mi-approval-gate"],
+      "commands": ["mi-plan-patch", "mi-review"]
+    },
+    "qa-security": {
+      "description": "Run verification, dependency checks, and security review before declaring work done.",
+      "skills": ["mi-verification-loop", "mi-security-review"],
+      "rules": ["mi-security-baseline", "mi-test-evidence"],
+      "commands": ["mi-verify", "mi-security-check"]
+    },
+    "connector-ops": {
+      "description": "Operate visibility connectors, action layer, remote devices, and business integrations safely.",
+      "skills": ["mi-connector-ops"],
+      "rules": ["mi-connector-contracts", "mi-approval-gate"],
+      "commands": ["mi-connector-audit"]
+    },
+    "release-readiness": {
+      "description": "Produce concise release evidence and readiness summaries for owner-facing decisions.",
+      "skills": ["mi-release-readiness"],
+      "rules": ["mi-release-evidence"],
+      "commands": ["mi-release-report"]
+    },
+    "whatsapp-runtime": {
+      "description": "Operate WhatsApp API, key manager, store, gateway contracts, and approval impact safely.",
+      "skills": ["mi-whatsapp-ops"],
+      "rules": ["mi-whatsapp-contracts", "mi-approval-gate", "mi-security-baseline"],
+      "commands": ["mi-whatsapp-audit"]
+    },
+    "visibility-runtime": {
+      "description": "Operate Universal Visibility cache, connector registry, platform health, and dashboard freshness.",
+      "skills": ["mi-visibility-ops"],
+      "rules": ["mi-connector-contracts", "mi-test-evidence"],
+      "commands": ["mi-visibility-brief"]
+    },
+    "daily-work-automation": {
+      "description": "Operate daily action workflows with approval, audit trail, rollback, and owner-facing summaries.",
+      "skills": ["mi-daily-work-ops"],
+      "rules": ["mi-approval-gate", "mi-release-evidence", "mi-security-baseline"],
+      "commands": ["mi-daily-work-audit"]
+    },
+    "compliance-knowledge": {
+      "description": "Operate compliance knowledge ingestion, search quality, source boundaries, and evidence reporting.",
+      "skills": ["mi-compliance-ops"],
+      "rules": ["mi-compliance-boundaries", "mi-test-evidence"],
+      "commands": ["mi-compliance-brief"]
+    },
+    "remote-control-runtime": {
+      "description": "Operate remote access, trusted devices, command history, and remote execution safety.",
+      "skills": ["mi-remote-control-ops"],
+      "rules": ["mi-remote-control-safety", "mi-approval-gate", "mi-security-baseline"],
+      "commands": ["mi-remote-control-audit"]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+📋 *BÁO CÁO TUẦN — JARVIS V4*
+21:28:50 14/6/2026
+*✅ Hoàn thành (9):*
+• [Certification] JARVIS COO V4 — 24 domains, 162/162 acceptance tests PASS
+• [Browser] 8/8 browser operations certified (real Playwright Chromium)
+• [Workspace] Gmail 201 unread read, Drive upload confirmed (ID: 1o50OSS...)
+• [Executive] 5 CEO Vietnamese questions answered from real data
+• [Marketing] SEO article, flyer, banner, 6 social posts scheduled
+• [Finance] 6 transactions categorized, QB status surfaced
+• [Operator Harness] Bridge online port 4003, 5/5 smart brief modes verified
+• [Connector UI] Gmail last_sync fixed — no false "never synced"
+• [Production Hardening] OTel tracing, retry policies, flow gap detector, burn-in
+*🔄 Đang tiến hành:*
+• [Burn-In] Day 1/7 — 16 events tracked
+*🔴 Bị chặn (3):*
+• [Finance] QuickBooks real revenue data — blocked by SYNC_FAILED
+• [Social] Live Facebook/Instagram/TikTok publishing — blocked by missing tokens
+• [Website] Live WordPress publishing — blocked by WP_URL + WP_APP_PASSWORD not set
+*❌ Lỗi hệ thống (1):*
+• [FINANCE] QB Connector: Checksum mismatch since 2026-06-10. 15+ consecutive SYNC_FAILED.
+*💡 Khuyến nghị:*
+1. Fix QB Connector on LIEMDO-PC — open QuickBooks, restart QB Connector service, verify sync.
+2. Set FB_PAGE_TOKEN + FB_PAGE_ID to enable live social publishing.
+*📊 Hệ thống:*
+• Burn-in: Ngày 1/7  (IN_PROGRESS)
+• Tổng actions: 16
+• Thành công: 81%
+• Flow gaps: 0
+• Health: 86/100 (DEGRADED)
+JARVIS_V4_BURN_IN_READY ✅

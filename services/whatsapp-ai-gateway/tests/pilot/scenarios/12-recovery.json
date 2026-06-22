@@ -1,0 +1,12 @@
+[
+  { "id": "RC-01", "event": "PC_RESTART", "expected": "DRAFT_ABANDONED", "description": "PC restart during workflow" },
+  { "id": "RC-02", "event": "WHATSAPP_RECONNECT", "expected": "SESSION_RESUMES", "description": "WhatsApp reconnect resumes" },
+  { "id": "RC-03", "event": "NODE_CRASH", "expected": "DRAFT_ABANDONED", "description": "Node crash abandons draft" },
+  { "id": "RC-04", "event": "SHEET_DOWN_RESTART", "expected": "QUEUE_SURVIVES", "description": "Sheet down queue survives restart" },
+  { "id": "RC-05", "event": "SQLITE_LOCK", "expected": "RETRY_SUCCESS", "description": "SQLite lock retry succeeds" },
+  { "id": "RC-06", "event": "SESSION_TIMEOUT", "expected": "DRAFT_ABANDONED", "description": "Session timeout abandons draft" },
+  { "id": "RC-07", "event": "BROWSER_REFRESH", "expected": "SESSION_RESUMES", "description": "Browser refresh resumes session" },
+  { "id": "RC-08", "event": "RESUME_LATER", "expected": "DRAFT_OFFERED", "description": "Employee resumes later" },
+  { "id": "RC-09", "event": "RESTART_RETRY", "expected": "RETRY_SUCCEEDS", "description": "Restart retry succeeds" },
+  { "id": "RC-10", "event": "DUPLICATE_RESEND", "expected": "NO_DUPLICATE", "description": "Duplicate message no duplicate" }
+]

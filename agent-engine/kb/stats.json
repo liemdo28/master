@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-06-08T14:53:36.845Z",
+  "total": {
+    "documents": 32,
+    "chunks": 162,
+    "words": 64001
+  },
+  "byDomain": [
+    {
+      "domain": "accounting",
+      "domainName": "Accounting & Finance",
+      "documents": 3,
+      "chunks": 6,
+      "words": 4112,
+      "firstIngested": "2026-06-08 14:52:04",
+      "lastUpdated": "2026-06-08 14:52:58",
+      "sampleDocuments": [
+        {
+          "title": "Depreciation — Methods, Calculations, and Tax Treatment",
+          "source_url": null,
+          "license": "CC BY 4.0",
+          "word_count": 791,
+          "chunk_count": 2
+        },
+        {
+          "title": "Cash vs Accrual Accounting — Choosing a Method and Tax Implications",
+          "source_url": null,
+          "license": "CC BY 4.0",
+          "word_count": 653,
+          "chunk_count": 2
+        },
+        {
+          "title": "Double-Entry Bookkeeping — Principles and Practice",
+          "source_url": null,
+          "license": "CC BY 4.0",
+          "word_count": 612,
+          "chunk_count": 2
+        }
+      ]
+    },
+    {
+      "domain": "coding",
+      "domainName": "Software Development",
+      "documents": 29,
+      "chunks": 156,
+      "words": 552689,
+      "firstIngested": "2026-06-08 14:52:04",
+      "lastUpdated": "2026-06-08 14:52:58",
+      "sampleDocuments": [
+        {
+          "title": "JavaScript modules",
+          "source_url": null,
+          "license": "CC BY-SA 2.5",
+          "word_count": 7277,
+          "chunk_count": 20
+        },
+        {
+          "title": "Array",
+          "source_url": null,
+          "license": "CC BY-SA 2.5",
+          "word_count": 6148,
+          "chunk_count": 14
+        },
+        {
+          "title": "Intersection Observer API",
+          "source_url": null,
+          "license": "CC BY-SA 2.5",
+          "word_count": 5609,
+          "chunk_count": 14
+        },
+        {
+          "title": "Grammar and types",
+          "source_url": null,
+          "license": "CC BY-SA 2.5",
+          "word_count": 4536,
+          "chunk_count": 10
+        },
+        {
+          "title": "Promise",
+          "source_url": null,
+          "license": "CC BY-SA 2.5",
+          "word_count": 3877,
+          "chunk_count": 9
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+# INCIDENT_REGISTRY
+
+Generated: 2026-06-20T07:44:44.186Z
+Target: INCIDENT_REGISTRY_READY
+
+| Status | Type | Source | First Seen | Last Seen | Recurrence | Escalation | Summary |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| open | runtime_failure | Mi-Core | 2026-06-14T15:47:19.780Z | 2026-06-20T07:44:44.168Z | 19 | escalated | Mi-Core down |
+| open | runtime_failure | Agent Engine | 2026-06-14T15:48:58.502Z | 2026-06-20T07:44:44.169Z | 70 | watch | Agent Engine unknown |
+| open | sync_failure | Gmail | 2026-06-14T16:05:16.431Z | 2026-06-20T07:44:44.170Z | 69 | escalated | Gmail freshness stale |
+| open | runtime_failure | Visibility | 2026-06-14T17:42:06.074Z | 2026-06-20T07:44:44.169Z | 66 | watch | Visibility degraded |
+| open | runtime_failure | QB Connector | 2026-06-14T17:42:06.075Z | 2026-06-20T07:44:44.170Z | 66 | watch | QB Connector degraded |
+| open | sync_failure | QuickBooks | 2026-06-14T17:42:06.076Z | 2026-06-20T07:44:44.171Z | 65 | watch | QuickBooks freshness degraded |
+| resolved | runtime_failure | AI Service | 2026-06-18T02:25:49.698Z | 2026-06-18T15:05:17.457Z | 3 | escalated | AI Service down |
+| open | sync_failure | Work Orders | 2026-06-18T05:28:16.113Z | 2026-06-20T07:44:44.171Z | 31 | escalated | Work Orders freshness stale |
+| resolved | sync_failure | Memory | 2026-06-19T07:36:06.841Z | 2026-06-20T00:27:15.370Z | 14 | escalated | Memory freshness stale |

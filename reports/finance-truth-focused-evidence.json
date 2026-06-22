@@ -1,0 +1,40 @@
+[
+  {
+    "input": "Raw Sushi finance status REG-FOCUS1",
+    "ok": true,
+    "result_ok": true,
+    "reply": "Em chưa có đủ dữ liệu thật để kết luận. Có lỗi đồng bộ hoặc thiếu điều kiện sync: Latest QB heartbeat is stale (494 minutes old) | Last successful QB sync is stale (1888 minutes old)\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+    "approval_id": null,
+    "metadata": {
+      "intent": "finance_truth",
+      "source": "quickbooks-runtime",
+      "confidence": 0.95,
+      "requires_followup": true,
+      "status": "QB_RUNTIME_NOT_CERTIFIED",
+      "gaps": [
+        "Latest QB heartbeat is stale (494 minutes old)",
+        "Last successful QB sync is stale (1888 minutes old)"
+      ],
+      "no_mock_data": true
+    }
+  },
+  {
+    "input": "Kiem tra duplicate bills QB REG-FOCUS2",
+    "ok": true,
+    "result_ok": true,
+    "reply": "Duplicate check từ QB activity hiện có: 0 bill trùng, 0 payment trùng; dữ liệu hiện tại chưa certified vì QB company/runtime chưa healthy.\n\nStatus: QB_RUNTIME_NOT_CERTIFIED\nSource: QuickBooks Runtime + QB Agent SQLite + Enterprise Brain\nNo mock data.",
+    "approval_id": null,
+    "metadata": {
+      "intent": "finance_truth",
+      "source": "quickbooks-runtime",
+      "confidence": 0.95,
+      "requires_followup": true,
+      "status": "QB_RUNTIME_NOT_CERTIFIED",
+      "gaps": [
+        "Latest QB heartbeat is stale (494 minutes old)",
+        "Last successful QB sync is stale (1888 minutes old)"
+      ],
+      "no_mock_data": true
+    }
+  }
+]

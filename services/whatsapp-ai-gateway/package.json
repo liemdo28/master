@@ -1,0 +1,30 @@
+{
+  "name": "whatsapp-ai-gateway",
+  "version": "1.0.0",
+  "description": "WhatsApp AI Gateway - MVP Phase 1",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
+    "test:legacy": "node tests/legacy/broth-command-legacy-tests.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "puppeteer": "^25.1.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.34.5",
+    "sqlite3": "^5.1.7",
+    "whatsapp-web.js": "^1.34.7",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

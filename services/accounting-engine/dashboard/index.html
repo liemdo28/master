@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Engineering Intelligence Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body   { font-family: 'SF Mono', 'Cascadia Code', monospace; background: #0d1117; color: #c9d1d9; padding: 20px; }
+    h1     { color: #58a6ff; font-size: 18px; margin-bottom: 4px; }
+    .sub   { color: #6e7681; font-size: 11px; margin-bottom: 20px; }
+    .grid  { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .card  { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
+    .card h2 { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+    .stat  { font-size: 26px; color: #58a6ff; font-weight: 700; line-height: 1; }
+    .label { font-size: 11px; color: #6e7681; margin: 3px 0 10px; }
+    .row   { display: flex; gap: 20px; flex-wrap: wrap; }
+    .row > div { flex: 1; min-width: 80px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .g    { background: #1a3a2a; color: #3fb950; }
+    .y    { background: #3d2e00; color: #e3b341; }
+    .r    { background: #3d1a1a; color: #f85149; }
+    .b    { background: #1a2a3d; color: #58a6ff; }
+    table  { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th     { color: #8b949e; text-align: left; padding: 4px 8px; border-bottom: 1px solid #30363d; }
+    td     { padding: 4px 8px; border-bottom: 1px solid #21262d; }
+    tr:hover td { background: #1c2128; }
+    .meter { height: 4px; background: #21262d; border-radius: 2px; margin-top: 4px; }
+    .fill  { height: 100%; border-radius: 2px; transition: width .4s; }
+    .green { background: #3fb950; } .yellow { background: #e3b341; } .red { background: #f85149; }
+    button { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 5px 12px;
+             border-radius: 5px; cursor: pointer; font-size: 11px; font-family: inherit; }
+    button:hover { background: #30363d; }
+    #toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+    #status  { font-size: 11px; color: #6e7681; margin-left: auto; }
+    pre      { font-size: 10px; color: #8b949e; overflow: auto; max-height: 160px; }
+    .risk-HIGH  { color: #f85149; } .risk-MEDIUM { color: #e3b341; } .risk-LOW { color: #3fb950; }
+    section    { margin-bottom: 20px; }
+    section h3 { font-size: 13px; color: #8b949e; margin-bottom: 10px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+  </style>
+</head>
+<body>
+<h1>Engineering Intelligence System</h1>
+<p class="sub" id="subtitle">Local AI Engineering OS — offline-first · 127.0.0.1:8844</p>
+
+<div id="toolbar">
+  <button onclick="refresh()">⟳ Refresh</button>
+  <button onclick="verifyLedger()">🔒 Verify Ledger</button>
+  <button onclick="loadRisks()">⚠ Risk Report</button>
+  <button onclick="loadModels()">🤖 Models</button>
+  <span id="status">Loading…</span>
+</div>
+
+<!-- System Health -->
+<section>
+  <h3>System Health</h3>
+  <div class="grid" id="health-grid"></div>
+</section>
+
+<!-- QA Intelligence -->
+<section>
+  <h3>QA Intelligence</h3>
+  <div class="grid" id="qa-grid"></div>
+</section>
+
+<!-- Cost Analytics -->
+<section>
+  <h3>Cost Analytics</h3>
+  <div class="grid" id="cost-grid"></div>
+</section>
+
+<!-- Intelligence Panel (risks / models) -->
+<section id="intel-section" style="display:none">
+  <h3 id="intel-title">Intelligence</h3>
+  <div id="intel-body"></div>
+</section>
+
+<script>
+const BASE = 'http://127.0.0.1:8844';
+const $ = (id) => document.getElementById(id);
+
+async function get(path) {
+  const r = await fetch(BASE + path);
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  return r.json();
+}
+
+function pct(v, max = 100) {
+  const p = Math.min(100, Math.round((v / max) * 100));
+  const c = p > 70 ? 'red' : p > 40 ? 'yellow' : 'green';
+  return `<div class="meter"><div class="fill ${c}" style="width:${p}%"></div></div>`;
+}
+
+function badge(v, levels = { HIGH: 'r', MEDIUM: 'y', LOW: 'g', PASS: 'g', FAIL: 'r', VALID: 'g', INVALID: 'r' }) {
+  return `<span class="badge ${levels[v] ?? 'b'}">${v}</span>`;
+}
+
+function card(title, html) {
+  return `<div class="card"><h2>${title}</h2>${html}</div>`;
+}
+
+function stat(value, label, extra = '') {
+  return `<div><div class="stat">${value}</div><div class="label">${label}</div>${extra}</div>`;
+}
+
+async function refresh() {
+  $('status').textContent = 'Loading…';
+  try {
+    const [stats, costs] = await Promise.all([get('/stats'), get('/costs')]);
+    renderHealth(stats);
+    renderQA(stats);
+    renderCosts(stats, costs);
+    $('status').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+    $('subtitle').textContent = `Local AI Engineering OS — offline-first · ${stats.timestamp}`;
+  } catch (e) {
+    $('status').textContent = '❌ ' + e.message;
+  }
+}
+
+function renderHealth(stats) {
+  const db = stats.database ?? {};
+  const mt = stats.metrics  ?? {};
+  $('health-grid').innerHTML = [
+    card('Database', `
+      <div class="row">
+        ${stat(db.sessions?.toLocaleString()  ?? '–', 'Sessions')}
+        ${stat(db.metrics?.toLocaleString()   ?? '–', 'Metric Rows')}
+        ${stat(db.patches?.toLocaleString()   ?? '–', 'Patches')}
+        ${stat(db.auditRows?.toLocaleString() ?? '–', 'Audit Events')}
+      </div>
+      <div class="label" style="margin-top:8px">
+        ${((db.dbSizeBytes ?? 0)/1048576).toFixed(2)} MB · ${badge(db.walMode === 'wal' ? 'WAL' : 'NO-WAL', {'WAL':'g','NO-WAL':'r'})}
+      </div>`),
+
+    card('Resource Monitor', `
+      <div class="row">
+        ${stat((mt.avg_cpu_pct ?? 0).toFixed(1) + '%', 'Avg CPU',    pct(mt.avg_cpu_pct ?? 0, 100))}
+        ${stat((mt.avg_memory_mb ?? 0).toFixed(0) + ' MB', 'Avg Mem')}
+        ${stat((mt.max_cpu_pct ?? 0).toFixed(1) + '%', 'Peak CPU',   pct(mt.max_cpu_pct ?? 0, 100))}
+        ${stat(mt.total_samples?.toLocaleString() ?? '–', 'Samples')}
+      </div>
+      <div class="label" style="margin-top:8px">Last: ${mt.last_sample ?? '–'}</div>`),
+
+    card('Patch Lifecycle', (() => {
+      const p = stats.patches ?? {};
+      const total = p.total ?? 0;
+      return `
+        <div class="row">
+          ${stat(total, 'Total')}
+          ${stat(p.applied ?? 0, 'Applied')}
+          ${stat(p.rolled_back ?? 0, 'Rolled Back')}
+          ${stat(p.failed ?? 0, 'Failed')}
+        </div>
+        ${total > 0 ? pct((p.rolled_back ?? 0) + (p.failed ?? 0), total) : ''}
+        <div class="label">failure rate ${total > 0 ? Math.round(((p.rolled_back??0)+(p.failed??0))/total*100) : 0}%</div>`;
+    })()),
+  ].join('');
+}
+
+function renderQA(stats) {
+  const qa = stats.qa ?? {};
+  $('qa-grid').innerHTML = [
+    card('QA Performance', `
+      <div class="row">
+        ${stat(qa.total_runs ?? 0, 'Total Runs')}
+        ${stat((qa.avg_score ?? 0).toFixed(1), 'Avg Score', pct(qa.avg_score ?? 0))}
+        ${stat(qa.pass_count ?? 0, 'Pass', '')}
+        ${stat(qa.fail_count ?? 0, 'Fail', '')}
+      </div>
+      <div class="label" style="margin-top:8px">
+        Last run: ${qa.last_run_at ?? '–'}
+      </div>`),
+
+    card('Regression', `
+      <div class="row">
+        ${stat((qa.avg_regression_score ?? 0).toFixed(3), 'Avg Regression',
+               pct((qa.avg_regression_score ?? 0) * 100))}
+        ${stat((qa.avg_tests ?? 0).toFixed(0), 'Avg Tests')}
+        ${stat((qa.avg_failed ?? 0).toFixed(1), 'Avg Failures')}
+      </div>
+      <div class="label" style="margin-top:8px">
+        Total QA cost: $${((qa.total_cost_cents ?? 0) / 100).toFixed(2)}
+      </div>`),
+  ].join('');
+}
+
+function renderCosts(stats, costs) {
+  const s = costs.summary ?? {};
+  const q = costs.qa      ?? {};
+  const p = costs.patches ?? {};
+
+  $('cost-grid').innerHTML = [
+    card('Engineering Cost', `
+      <div class="row">
+        ${stat('$' + (s.total_cost_usd ?? '0.00'), 'Total Spend')}
+        ${stat(s.wasted_effort_pct ?? 0, 'Waste %', pct(s.wasted_effort_pct ?? 0))}
+      </div>
+      <div class="label" style="margin-top:8px">
+        Fix time: ${((q.total_fix_minutes ?? 0) / 60).toFixed(1)}h total · ${(q.avg_fix_minutes ?? 0).toFixed(1)} min/run avg
+      </div>`),
+
+    card('Patch Economics', `
+      <div class="row">
+        ${stat(p.total_patches ?? 0, 'Patches')}
+        ${stat(p.rollbacks ?? 0, 'Rollbacks')}
+        ${stat(p.failures ?? 0, 'Failures')}
+      </div>
+      <div class="label" style="margin-top:8px">
+        ${badge(s.wasted_effort_pct > 30 ? 'HIGH' : s.wasted_effort_pct > 15 ? 'MEDIUM' : 'LOW')} waste level
+      </div>`),
+  ].join('');
+}
+
+async function verifyLedger() {
+  try {
+    const result = await get('/stats/ledger');
+    $('intel-section').style.display = 'block';
+    $('intel-title').textContent = 'Ledger Verification';
+    $('intel-body').innerHTML = `
+      <div class="card">
+        <div style="margin-bottom:10px">
+          Status: ${badge(result.valid ? 'VALID' : 'INVALID', {VALID:'g',INVALID:'r'})}
+          &nbsp; Rows: <strong>${result.rowsChecked}</strong>
+          &nbsp; ${result.checkedAt}
+        </div>
+        ${result.valid
+          ? `<div style="color:#3fb950">✅ Chain intact — ${result.rowsChecked} rows verified</div>`
+          : `<div style="color:#f85149">❌ TAMPERED at sequence ${result.firstInvalid}: ${result.reason}</div>`}
+      </div>`;
+  } catch (e) { alert('Ledger verify failed: ' + e.message); }
+}
+
+async function loadRisks() {
+  try {
+    const risks = await get('/risks');
+    $('intel-section').style.display = 'block';
+    $('intel-title').textContent = `Risk Report — Score: ${risks.riskScore} ${badge(risks.riskLevel)}`;
+    const hotspots = risks.rollbackHotspots.slice(0, 5);
+    const flaky    = risks.flakyTests.slice(0, 5);
+    $('intel-body').innerHTML = `
+      <div class="grid">
+        <div class="card">
+          <h2>Rollback Hotspots</h2>
+          <table><thead><tr><th>Branch</th><th>Rollbacks</th><th>Rate</th></tr></thead><tbody>
+            ${hotspots.map((r) => `<tr><td>${r.branch_name}</td><td>${r.rollbacks}</td><td class="risk-${r.rollback_rate_pct>30?'HIGH':r.rollback_rate_pct>15?'MEDIUM':'LOW'}">${r.rollback_rate_pct}%</td></tr>`).join('') || '<tr><td colspan="3" style="color:#6e7681">None</td></tr>'}
+          </tbody></table>
+        </div>
+        <div class="card">
+          <h2>Recurring Failures</h2>
+          <table><thead><tr><th>Issue Key</th><th>Occurrences</th></tr></thead><tbody>
+            ${flaky.map((r) => `<tr><td>${r.repeated_issue_key}</td><td>${r.occurrences}</td></tr>`).join('') || '<tr><td colspan="2" style="color:#6e7681">None</td></tr>'}
+          </tbody></table>
+        </div>
+        <div class="card">
+          <h2>High-Risk Patches</h2>
+          <table><thead><tr><th>Patch</th><th>Status</th><th>Risk</th></tr></thead><tbody>
+            ${risks.highRiskPatches.slice(0,5).map((r) => `<tr><td style="font-size:10px">${r.patch_id.slice(0,20)}…</td><td>${r.status}</td><td class="risk-HIGH">HIGH</td></tr>`).join('') || '<tr><td colspan="3" style="color:#6e7681">None</td></tr>'}
+          </tbody></table>
+        </div>
+      </div>`;
+  } catch (e) { alert('Risk load failed: ' + e.message); }
+}
+
+async function loadModels() {
+  try {
+    const models     = await get('/models');
+    const leaderboard = await get('/models/leaderboard');
+    $('intel-section').style.display = 'block';
+    $('intel-title').textContent = 'Model Analytics';
+    $('intel-body').innerHTML = models.length === 0
+      ? `<div class="card" style="color:#6e7681">No model usage recorded yet. Wire model calls to POST /models to track performance.</div>`
+      : `<div class="card"><h2>Model Leaderboard</h2>
+          <table><thead><tr><th>Model</th><th>Calls</th><th>Avg Latency</th><th>Cost/Call</th><th>Success Rate</th></tr></thead><tbody>
+            ${leaderboard.map((m) => `<tr><td>${m.model_name}</td><td>${m.calls}</td><td>${m.avg_ms}ms</td><td>¢${m.cost_per_call_cents??0}</td><td class="risk-${m.success_rate_pct>90?'LOW':m.success_rate_pct>70?'MEDIUM':'HIGH'}">${m.success_rate_pct}%</td></tr>`).join('')}
+          </tbody></table></div>`;
+  } catch (e) { alert('Models load failed: ' + e.message); }
+}
+
+refresh();
+setInterval(refresh, 30000);
+</script>
+</body>
+</html>

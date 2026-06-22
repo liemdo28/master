@@ -1,0 +1,13 @@
+{
+  "store": "Stone Oak",
+  "date": "2026-06-03",
+  "time": "PM",
+  "readings": [
+    { "item": "Walk-in Cooler", "value": 44, "unit": "F", "confidence": 0.93 },
+    { "item": "Walk-in Freezer", "value": 10, "unit": "F", "confidence": 0.91 },
+    { "item": "Pork Broth", "value": 190, "unit": "F", "confidence": 0.89 },
+    { "item": "Chicken Chashu", "value": 45, "unit": "F", "confidence": 0.87 }
+  ],
+  "unclear_fields": [],
+  "needs_review": []
+}

@@ -1,0 +1,30 @@
+{
+  "source_name": "dashboard-bakudan",
+  "source_type": "dashboard",
+  "version": "1.0",
+  "description": "dashboard.bakudanramen.com — tasks, approvals, penalties, notifications",
+  "fields": {
+    "store": "string — 'bakudan' or 'raw'",
+    "tasks": "array of task objects",
+    "tasks[].id": "string",
+    "tasks[].title": "string",
+    "tasks[].assignee": "string",
+    "tasks[].status": "pending|in_progress|completed|overdue|missed",
+    "tasks[].due_date": "ISO 8601",
+    "tasks[].updated_at": "ISO 8601",
+    "approvals": "array of approval events",
+    "approvals[].id": "string",
+    "approvals[].action": "string",
+    "approvals[].actor": "string",
+    "approvals[].status": "approved|rejected|pending",
+    "approvals[].created_at": "ISO 8601",
+    "penalties": "array of penalty events",
+    "notifications": "array of system notifications"
+  },
+  "event_mappings": {
+    "tasks": "task",
+    "approvals": "approval",
+    "penalties": "penalty",
+    "notifications": "notification"
+  }
+}

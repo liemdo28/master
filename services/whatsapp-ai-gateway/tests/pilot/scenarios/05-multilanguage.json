@@ -1,0 +1,22 @@
+[
+  { "id": "ML-ES-01", "input": "ayuda", "lang": "es", "expected": "HELP_REPLY", "description": "Spanish: ayuda" },
+  { "id": "ML-ES-02", "input": "estado", "lang": "es", "expected": "STATUS_REPLY", "description": "Spanish: estado" },
+  { "id": "ML-ES-03", "input": "cancelar", "lang": "es", "expected": "CANCELLED", "description": "Spanish: cancelar" },
+  { "id": "ML-ES-04", "input": "sí", "lang": "es", "expected": "YES", "description": "Spanish: sí" },
+  { "id": "ML-ES-05", "input": "si", "lang": "es", "expected": "YES", "description": "Spanish: si (without accent)" },
+  { "id": "ML-ES-06", "input": "no", "lang": "es", "expected": "NO", "description": "Spanish: no" },
+  { "id": "ML-ES-07", "input": "confirmar", "lang": "es", "expected": "CONFIRM", "description": "Spanish: confirmar" },
+  { "id": "ML-ES-08", "input": "editar", "lang": "es", "expected": "EDIT", "description": "Spanish: editar" },
+  { "id": "ML-ES-09", "input": "volver", "lang": "es", "expected": "MENU", "description": "Spanish: volver" },
+  { "id": "ML-ES-10", "input": "35", "lang": "es", "expectedValue": 35, "description": "Spanish: numeric still parsed" },
+  { "id": "ML-ES-11", "input": "44", "lang": "es", "expected": "OUT_OF_RANGE_ES", "description": "Spanish out-of-range shows Fuera de rango" },
+  { "id": "ML-VI-01", "input": "trợ giúp", "lang": "vi", "expected": "HELP_REPLY", "description": "Vietnamese: trợ giúp" },
+  { "id": "ML-VI-02", "input": "trang thai", "lang": "vi", "expected": "STATUS_REPLY", "description": "Vietnamese: trang thai" },
+  { "id": "ML-VI-03", "input": "trạng thái", "lang": "vi", "expected": "STATUS_REPLY", "description": "Vietnamese: trạng thái (with diacritics)" },
+  { "id": "ML-VI-04", "input": "hủy", "lang": "vi", "expected": "CANCELLED", "description": "Vietnamese: hủy" },
+  { "id": "ML-VI-05", "input": "đúng", "lang": "vi", "expected": "YES", "description": "Vietnamese: đúng" },
+  { "id": "ML-VI-06", "input": "sửa", "lang": "vi", "expected": "EDIT", "description": "Vietnamese: sửa" },
+  { "id": "ML-VI-07", "input": "tiếp tục", "lang": "vi", "expected": "CONTINUE", "description": "Vietnamese: tiếp tục" },
+  { "id": "ML-VI-08", "input": "kết thúc", "lang": "vi", "expected": "END", "description": "Vietnamese: kết thúc" },
+  { "id": "ML-VI-09", "input": "38", "lang": "vi", "expectedValue": 38, "description": "Vietnamese: numeric still parsed" }
+]
