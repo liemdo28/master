@@ -21,6 +21,14 @@ const { getBuildInfo } = require('../runtime/build-info');
 const nlpResolver = require('../nlp/command-resolver');
 const miAccess = require('../security/mi-access-control');
 
+// ── WhatsApp Routing Collision Fix (P0) ───────────────────────────────────────
+const messageRouterOwner = (() => {
+  try { return require('../routing/message-router-owner'); } catch (_) { return null; }
+})();
+const messageDedupStore = (() => {
+  try { return require('../routing/message-dedup-store'); } catch (_) { return null; }
+})();
+
 // CEO Operating Model Router (new routing priority)
 const operatingModelRouter = (() => {
   try { return require('../workflows/operating-model-router'); } catch (_) { return null; }
@@ -576,6 +584,29 @@ async function handleTextMessage(client, msg) {
     inboundMessageId,
   };
   log.info('[MESSAGE_FLOW] received', runtimeTraceBase);
+
+  // ── WhatsApp Routing Collision Fix: Dedup Gate ──────────────────────────────────
+  // This is the FIRST line of defense. Any message that passes through this gate
+  // has exactly one owner and exactly one response slot. No duplicates, no races.
+  if (messageDedupStore && inboundMessageId) {
+    const chat = await msg.getChat().catch(() => null);
+    const groupName = chat?.name || '';
+    const dedupResult = messageDedupStore.claim(inboundMessageId, chatId, 'gateway_router');
+    if (!dedupResult.claimed) {
+      log.info('[MESSAGE_FLOW] dedup_blocked_incoming', {
+        ...runtimeTraceBase,
+        route: 'dedup_rejected',
+        existingOwner: dedupResult.existing?.owner_handler || 'unknown',
+        existingStatus: dedupResult.existing?.status || 'unknown',
+      });
+      return; // exactly one response — this message already has its owner
+    }
+    log.info('[MESSAGE_FLOW] dedup_claim_acquired', {
+      ...runtimeTraceBase,
+      route: 'dedup_claim',
+      inboundMessageId,
+    });
+  }
 
   if (templateOcrWorkflow && templateOcrWorkflow.hasActiveSession(chatId, phone)) {
     const routed = await templateOcrWorkflow.handleReply({ chatId, sender: phone, senderName: name, text, client });
