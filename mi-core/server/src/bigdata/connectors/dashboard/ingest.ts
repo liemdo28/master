@@ -5,26 +5,23 @@
 import { ingestJson } from '../../ingestion-service';
 import fs from 'fs';
 import path from 'path';
-import http from 'http';
 
 const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com';
-const DASHBOARD_API  = process.env.DASHBOARD_API_URL || 'http://localhost:8080';
+const DASHBOARD_API  = process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com';
+const MI_SNAPSHOT_SECRET = process.env.MI_SNAPSHOT_SECRET || '';
 const SOURCE_NAME    = 'dashboard-bakudan';
 
 async function fetchFromApi(): Promise<Record<string, unknown> | null> {
-  return new Promise(resolve => {
-    const url = new URL(`${DASHBOARD_API}/api/mi/snapshot`);
-    const req = http.get({ hostname: url.hostname, port: parseInt(url.port || '80'), path: url.pathname, timeout: 5000 }, (res) => {
-      let body = '';
-      res.on('data', d => body += d);
-      res.on('end', () => {
-        try { resolve(JSON.parse(body)); }
-        catch { resolve(null); }
-      });
-    });
-    req.on('error', () => resolve(null));
-    req.on('timeout', () => { req.destroy(); resolve(null); });
-  });
+  try {
+    const url = `${DASHBOARD_API}/api/mi/snapshot`;
+    const headers: Record<string, string> = { 'Accept': 'application/json' };
+    if (MI_SNAPSHOT_SECRET) headers['X-Mi-Token'] = MI_SNAPSHOT_SECRET;
+    const res = await fetch(url, { headers, signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return null;
+    return await res.json() as Record<string, unknown>;
+  } catch {
+    return null;
+  }
 }
 
 function readFromLocalFiles(): Record<string, unknown> {

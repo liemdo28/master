@@ -40,11 +40,11 @@ export async function syncAccounting(): Promise<AccountingSnapshot> {
   // Try live API first
   try {
     const [stats, costs] = await Promise.all([
-      fetchAccounting('/api/stats') as Promise<Record<string, unknown>>,
-      fetchAccounting('/api/costs') as Promise<Record<string, unknown>>,
+      fetchAccounting('/stats') as Promise<Record<string, unknown>>,
+      fetchAccounting('/costs') as Promise<Record<string, unknown>>,
     ]);
 
-    const ledgerRes = await fetchAccounting('/api/stats/ledger') as Record<string, unknown>;
+    const ledgerRes = await fetchAccounting('/stats/ledger') as Record<string, unknown>;
     const ledgerOk = (ledgerRes as { ok?: boolean })?.ok !== false;
 
     const snap: AccountingSnapshot = {

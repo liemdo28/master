@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx src/server.ts",
-    "test": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs",
+    "test": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs && node tests/api-key-rotation-policy.mjs && node tests/gateway-queue-policy.mjs",
     "check": "tsc --noEmit",
     "health": "curl -s http://127.0.0.1:${PORT:-3456}/health | jq",
     "test:chat": "curl -s -X POST http://127.0.0.1:${PORT:-3456}/v1/chat/completions -H 'Content-Type: application/json' -H 'Authorization: Bearer proxy' -d '{\"model\":\"claude-opus-4-7\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply exactly: OK\"}],\"max_tokens\":16}' | jq",

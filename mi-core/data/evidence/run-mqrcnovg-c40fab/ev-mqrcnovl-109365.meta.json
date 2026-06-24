@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnovl-109365",
+  "objectiveRunId": "run-mqrcnovg-c40fab",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: marketing_concern (70%), Alternatives: 1, Ambiguous: false",
+  "sha256": "5553f5927d4bfe2dea5935e9f03938330df6a052084c4e3f0d978f78802c6442",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnovg-c40fab\\5553f5927d4bfe2dea5935e9f03938330df6a052084c4e3f0d978f78802c6442.json",
+  "capturedAt": "2026-06-24T00:43:18.321Z",
+  "readOnly": true
+}

@@ -18,7 +18,7 @@ const GATEWAY = process.argv.includes('--gateway');
 
 const MI_CORE_URL  = 'http://127.0.0.1:4001';
 const GATEWAY_URL  = 'http://127.0.0.1:3211';
-const MI_CORE_KEY  = process.env.MI_CORE_API_KEY || 'mi-core-secret-2026';
+const MI_CORE_KEY  = process.env.MI_CORE_API_KEY || '';
 
 // ── Timing requirements (ms) ────────────────────────────────────────────────
 const LIMIT_PERSONALITY = 1000;   // personality-handled queries must reply under 1s

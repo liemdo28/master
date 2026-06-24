@@ -182,4 +182,11 @@ export interface StreamRouteResult {
   provider: { id: string; kind: ProviderKind };
   model: string;
   attempts: RouteAttempt[];
+  sourceId?: string;
+  /** Confirm the upstream stream produced a valid first event. Idempotent. */
+  confirmStreamStart?: () => void;
+  /** Reject an upstream stream whose first event is an error. Idempotent. */
+  rejectStreamStart?: (errorType: string, message: string) => void;
+  /** Call when the stream ends (success, error, or client disconnect) to free the concurrency slot. */
+  releaseSlot?: () => void;
 }

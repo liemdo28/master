@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "node-cron": "^4.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

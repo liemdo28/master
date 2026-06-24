@@ -1,0 +1,11 @@
+{
+  "imported_at": "2026-06-24T04:06:36.202Z",
+  "source_path": "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json",
+  "detected_files": [
+    "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json",
+    "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json"
+  ],
+  "corrupted_files": [],
+  "records_imported": 20,
+  "status": "ok"
+}

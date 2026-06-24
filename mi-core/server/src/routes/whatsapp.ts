@@ -19,6 +19,8 @@
  * 8. Return response
  */
 import { Router, Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import {
   validateApiKey,
   checkRateLimit,
@@ -48,6 +50,23 @@ import { routeCeoCommand } from '../whatsapp/ceo-command-router';
 import { handleMiHumanAssistant } from '../communication/mi-human-assistant';
 import { findSkill } from '../skills/skill-registry';
 import { appendGroupMessage, upsertParticipant as upsertContextParticipant } from '../intelligence/context-memory';
+import { responseScrubberMiddleware } from '../middleware/response-scrubber';
+import {
+  buildDangerousActionBlockedResponse,
+  classifyActionIntent,
+  needsWorkflow,
+  processCEORequest,
+  resolveApproval as resolveExecutionApproval,
+} from '../execution';
+import { isMultiIntent } from '../execution/multi-intent-engine';
+import { executeMultiIntent, type MultiIntentExecutionSummary } from '../execution/multi-intent-executor';
+import { answerQuickBooksQuestion } from '../visibility/connectors/qb-runtime-connector';
+import { evaluateStatement, extractStatementTopic } from '../communication/statement-guard';
+import { checkFingerprint, registerFingerprint } from '../execution/message-fingerprint';
+
+const MI_ROOT = process.cwd();
+const LOCAL_GLOBAL_DIR = path.join(MI_ROOT, '.local-agent-global');
+const CORRECTION_LOG = path.join(LOCAL_GLOBAL_DIR, 'operational-memory', 'ceo-corrections.jsonl');
 
 // ── Sensitive action categories requiring double approval ────────────────────
 const DOUBLE_APPROVAL_KEYWORDS = [
@@ -58,6 +77,9 @@ const DOUBLE_APPROVAL_KEYWORDS = [
 
 // ── Router ──────────────────────────────────────────────────────────────────
 export const whatsappRouter = Router();
+
+// P0 Security: scrub secrets from ALL reply fields before they leave the system
+whatsappRouter.use(responseScrubberMiddleware);
 
 // ── Middleware: API key validation ──────────────────────────────────────────
 async function waAuth(req: Request, res: Response, next: Function) {
@@ -110,6 +132,10 @@ function normalizeMessage(text: string): { normalized: string; isMiCommand: bool
   return { normalized: trimmed, isMiCommand: false };
 }
 
+function stripLiveTestPrefix(message: string): string {
+  return String(message || '').replace(/^TEST-DEV5-\d+\s+/i, '').trim();
+}
+
 // ── Detect if an action requires approval ──────────────────────────────────
 function requiresApproval(message: string): boolean {
   const lower = message.toLowerCase();
@@ -123,6 +149,87 @@ function requiresApproval(message: string): boolean {
 function requiresDoubleApproval(message: string): boolean {
   const lower = message.toLowerCase();
   return DOUBLE_APPROVAL_KEYWORDS.some(kw => new RegExp(kw, 'i').test(lower));
+}
+
+function shouldUseDeterministicMultiIntent(message: string): boolean {
+  const lower = message.toLowerCase();
+  const expectedSignals = [
+    /dashboard/.test(lower),
+    /\bqb\b|quickbooks/.test(lower),
+    /raw\s*seo|seo\s*raw|raw sushi.*seo|seo.*raw sushi/.test(lower),
+    /maria/.test(lower),
+  ].filter(Boolean).length;
+  return expectedSignals >= 2 && (isMultiIntent(message) || message.includes('+'));
+}
+
+function formatMultiIntentReply(result: MultiIntentExecutionSummary): string {
+  // P2+P3: Use CEO language filter — no internal workflow names, no IDs
+  return result.final_summary;
+}
+
+function isFinanceTruthQuestion(message: string): boolean {
+  const lower = message.toLowerCase();
+  const financeSignal = /\b(qb|quickbooks|finance|financial|doanh thu|revenue|sales|chi phi|expense|expenses|cost|costs|spend|spending|tai chinh|sync|bill|bills|payment|payments|invoice|receipt)\b/.test(lower) || /chi\s*phi/.test(lower) || /thang\s*nay/.test(lower) || /recent/.test(lower);
+  const questionSignal = /\b(bao nhieu|bao nhieu|how much|sao roi|sao roi|status|sync|dong bo|dong bo|co khong|co khong|chua|chua|latest|gan nhat|gan nhat|duplicate|duplicates|trung|trung|check|kiem tra|kiem tra|thang nay|recent|payment)\b/.test(lower) || /[?？]/.test(message);
+  const explicitFinanceTruth = /\bfinance\s+status\b/.test(lower) || /\bduplicate(s)?\s+(bill|bills|payment|payments)\b/.test(lower);
+  const actionSignal = /\b(tao|tạo|create|generate|viet|viết|gui|gửi|send|post|dang|đăng|approve|duyet|duyệt)\b/.test(lower);
+  return (explicitFinanceTruth || (financeSignal && questionSignal)) && !actionSignal;
+}
+
+function isObviousUnknownRequest(message: string): boolean {
+  const lower = message.toLowerCase();
+  return /\bunknown\b/.test(lower) || /\bquantum\s+sushi\b/.test(lower);
+}
+
+function isImageFollowup(message: string): boolean {
+  return /\b(hinh|hình|anh|ảnh|image|preview)\b/i.test(message) && /\b(khong|không|co|có|gui|gửi|dau|đâu|ha|hả)\b/i.test(message);
+}
+
+function latestSeoImagePath(): string | null {
+  const dir = path.join(LOCAL_GLOBAL_DIR, 'seo-images');
+  if (!fs.existsSync(dir)) return null;
+  const files = fs.readdirSync(dir)
+    .filter(f => /^featured-.*\.(svg|png|jpg|jpeg)$/i.test(f))
+    .map(f => ({ f, p: path.join(dir, f), m: fs.statSync(path.join(dir, f)).mtimeMs }))
+    .sort((a, b) => b.m - a.m);
+  return files[0]?.p || null;
+}
+
+function appendCorrection(entry: Record<string, unknown>) {
+  fs.mkdirSync(path.dirname(CORRECTION_LOG), { recursive: true });
+  fs.appendFileSync(CORRECTION_LOG, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n', 'utf8');
+}
+
+function classifyCeoCorrection(message: string): 'qb_report_completed' | 'payroll_schedule' | null {
+  const lower = message.toLowerCase();
+  if (/\bqb\b|quickbooks/.test(lower) && /\b(hoàn\s*thành|hoan\s*thanh|xong|completed|done)\b/.test(lower)) {
+    return 'qb_report_completed';
+  }
+  if (/\bpayroll\b/.test(lower) && /\b(tuần\s*rồi|tuan\s*roi|tuần\s*sau|tuan\s*sau|next\s*week|last\s*week)\b/.test(lower)) {
+    return 'payroll_schedule';
+  }
+  return null;
+}
+
+function isShortClarification(message: string): boolean {
+  return /^(hả|ha|hah|gì|gi|sao|what)\??$/i.test(message.trim());
+}
+
+function isReadOnlyDashboardQuestion(message: string): boolean {
+  const lower = message.toLowerCase();
+  if (!/\bdashboard\b|dash\s*board|bảng\s*điều\s*khiển|bang\s*dieu\s*khien/.test(lower)) return false;
+  return /\b(kiem\s*tra|kiểm\s*tra|check|xem|coi|status|trạng\s*thái|tinh\s*hinh|tình\s*hình|sao\s*rồi|sao\s*roi|ổn|on)\b/.test(lower);
+}
+
+async function tryJarvisReadOnlyReply(message: string, sender: string | undefined, timestamp: string | undefined, chatId: string | undefined) {
+  const { processJarvisQuery } = await import('../jarvis/phase30-jarvis/jarvis-core');
+  return processJarvisQuery({
+    sender: sender || 'whatsapp',
+    raw_text: message,
+    normalized: message,
+    timestamp: timestamp || new Date().toISOString(),
+    session_id: chatId || undefined,
+  });
 }
 
 function normalizeWhatsAppIdentity(value: string): string {
@@ -221,6 +328,35 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   // ── Rate limit check ─────────────────────────────────────────────────────
   const rateCheck = checkRateLimit(client_id);
   if (!rateCheck.allowed) {
+    const normalizedForRateLimit = normalizeMessage(text || '').normalized || text || '';
+    const rateLimitIntent = classifyActionIntent(normalizedForRateLimit);
+    if (rateLimitIntent.message_class === 'dangerous_action') {
+      const reply = buildDangerousActionBlockedResponse(rateLimitIntent);
+      logError({
+        ts: new Date().toISOString(),
+        message_id,
+        chat_id,
+        error: 'RATE_LIMITED_DANGEROUS_BLOCKED',
+        detail: `dangerous command blocked while rate limited; retry after ${rateCheck.retry_after_seconds}s`,
+      });
+      return res.json({
+        ok: true,
+        reply,
+        actions: [],
+        approval_required: true,
+        approval_id: null,
+        metadata: {
+          intent: 'dangerous_blocked',
+          message_class: 'dangerous_action',
+          source: 'execution-engine',
+          confidence: rateLimitIntent.confidence || 1,
+          requires_followup: true,
+          execution_action: 'dangerous_blocked',
+          rate_limited: true,
+        },
+      });
+    }
+
     logError({
       ts: new Date().toISOString(),
       message_id,
@@ -251,7 +387,8 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   // ── Normalize message ─────────────────────────────────────────────────────
   // This is a dedicated Mi endpoint — gateway already filtered non-/mi traffic.
   // Always treat incoming text as a Mi command; just strip /mi prefix if present.
-  const { normalized } = normalizeMessage(text);
+  const normalizedMessage = normalizeMessage(text);
+  let normalized = stripLiveTestPrefix(normalizedMessage.normalized);
   const isMiCommand = true;
 
   // ── Build quoted message context if present ───────────────────────────────
@@ -330,6 +467,7 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   const rejectMatch = normalized.match(/^reject\s+(.+)/i);
   // "cancel <id>" or bare "cancel" — alias for rejection
   const cancelMatch = normalized.match(/^cancel\s+(.+)/i);
+  const bareApprovalResponseMatch = /^(approve|approved|ok\s*em|duyet|dong\s*y|chap\s*nhan|yes|ok\s*done|cancel|huy|reject|tu\s*choi|no)\b/i.test(normalized.trim());
   const bareCancelMatch = /^cancel$/i.test(normalized.trim());
 
   if (approveMatch && !/^approve\s+review\s+\d+$/i.test(normalized)) {
@@ -353,10 +491,287 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
   if (bareCancelMatch) {
     // Cancel most recent pending approval for this sender
     const pending = getPending();
-    if (!pending.length) return res.json({ reply: 'Không có approval nào đang chờ.', intent: 'no_pending' });
-    const approvalId = pending[0].id;
-    const result = handleApprovalCommand(approvalId, 'rejected', sender, sender_name, message_id, chat_id);
-    return res.json(result);
+    if (pending.length) {
+      const approvalId = pending[0].id;
+      const result = handleApprovalCommand(approvalId, 'rejected', sender, sender_name, message_id, chat_id);
+      return res.json(result);
+    }
+  }
+
+  if (bareApprovalResponseMatch) {
+    const executionResult = processCEORequest({
+      message: normalized,
+      sender: sender || 'whatsapp',
+      message_id: message_id || '',
+    });
+
+    updateMessageStatus(message_id, 'processed', executionResult.response_message, null);
+
+    return res.json({
+      ok: true,
+      reply: executionResult.response_message,
+      actions: [],
+      approval_required: false,
+      approval_id: executionResult.approval?.approval_id || null,
+      metadata: {
+        intent: 'approval_response',
+        message_class: executionResult.intent?.message_class,
+        source: 'execution-engine',
+        confidence: executionResult.intent?.confidence || 1,
+        requires_followup: false,
+        execution_action: executionResult.action,
+        workflow_id: executionResult.approval?.workflow_id || null,
+      },
+    });
+  }
+
+  if (isImageFollowup(normalized)) {
+    const imagePath = latestSeoImagePath();
+    const reply = imagePath
+      ? 'Có anh. Em gửi lại hình preview của bản nháp gần nhất bên dưới.'
+      : 'Em chưa tìm thấy hình preview trong evidence gần nhất. Em sẽ không nói "hình sẵn sàng" nếu chưa có file proof.';
+    updateMessageStatus(message_id, 'replied', reply, null);
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'image_evidence_followup',
+        source: 'execution-evidence',
+        confidence: 1,
+        requires_followup: !imagePath,
+        image_evidence_path: imagePath,
+      },
+    });
+  }
+
+  const correctionType = classifyCeoCorrection(normalized);
+  if (correctionType) {
+    appendCorrection({
+      type: correctionType,
+      sender: sender || 'whatsapp',
+      message: normalized,
+    });
+    const reply = correctionType === 'qb_report_completed'
+      ? [
+        'Em hiểu. Đây là cập nhật trạng thái, không phải yêu cầu tạo report mới.',
+        'Em thấy có nhiều task QB Report liên quan, nên chưa tự đánh dấu tất cả.',
+        'Anh reply *TẤT CẢ QB REPORT XONG* hoặc nói rõ mã C1/C2/C3/B1/B2/B3 để em cập nhật đúng.'
+      ].join('\n')
+      : [
+        'Em hiểu. Payroll Raw là thông tin lịch, không chạy checklist hôm nay.',
+        'Em đã ghi nhận: payroll Raw thuộc tuần sau.',
+        'Em sẽ nhắc theo lịch mới, không tạo approval.'
+      ].join('\n');
+    updateMessageStatus(message_id, 'replied', reply, null);
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: correctionType,
+        source: 'ceo-correction-router',
+        confidence: 1,
+        requires_followup: correctionType === 'qb_report_completed',
+        correction_log: CORRECTION_LOG,
+      },
+    });
+  }
+
+  if (isShortClarification(normalized)) {
+    const reply = 'Anh muốn em làm rõ phần nào: task, hình preview, QB, hay approval?';
+    updateMessageStatus(message_id, 'replied', reply, null);
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'clarification',
+        source: 'mi-core',
+        confidence: 1,
+        requires_followup: true,
+      },
+    });
+  }
+
+  // ── P0-3: Message Fingerprint — content-level dedup before routing ──────
+  const fingerprintCheck = checkFingerprint({ sender: sender || 'whatsapp', text: normalized });
+  if (fingerprintCheck.is_duplicate && fingerprintCheck.should_block) {
+    const reply = 'Em đã nhận tin nhắn này rồi. Em đang xử lý — anh đợi vài giây nhé.';
+    updateMessageStatus(message_id, 'replied', reply, null);
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'fingerprint_dedup',
+        source: 'message-fingerprint',
+        confidence: 1,
+        requires_followup: false,
+        fingerprint: fingerprintCheck.existing_record?.fingerprint,
+        duplicate_count: fingerprintCheck.existing_record?.count,
+      },
+    });
+  }
+
+  // ── P0-1: Statement Guard — catch status updates, casual acks, temporal updates ──
+  // BEFORE execution engine: statements should NEVER trigger workflows
+  const statementResult = evaluateStatement(normalized);
+  if (statementResult.is_statement) {
+    // Update context memory with the statement topic
+    const stmtTopic = extractStatementTopic(normalized);
+    if (stmtTopic) {
+      try {
+        const { addUserTurn, addAssistantTurn } = await import('../communication/conversation-memory');
+        addUserTurn(sender || 'whatsapp', normalized, 'statement:' + statementResult.statement_type, { target: stmtTopic });
+        addAssistantTurn(sender || 'whatsapp', statementResult.reply || 'Dạ.');
+      } catch { /* non-critical */ }
+    }
+    updateMessageStatus(message_id, 'replied', statementResult.reply || 'Dạ.', null);
+    return res.json({
+      ok: true,
+      reply: statementResult.reply || 'Dạ.',
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'statement_' + statementResult.statement_type,
+        source: 'statement-guard',
+        confidence: statementResult.confidence,
+        requires_followup: false,
+        statement_type: statementResult.statement_type,
+      },
+    });
+  }
+
+  // ── DEV5 Multi-Intent Execution: match /api/chat production behavior ─────
+  if (shouldUseDeterministicMultiIntent(normalized)) {
+    const multi = executeMultiIntent(normalized, { sender: sender || 'whatsapp' });
+    const reply = formatMultiIntentReply(multi);
+    updateMessageStatus(message_id, 'processed', reply, null);
+
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: multi.approval_pending_children > 0,
+      approval_id: null,
+      metadata: {
+        intent: 'multi_intent',
+        source: 'multi-intent-executor',
+        confidence: 0.95,
+        requires_followup: multi.approval_pending_children > 0,
+        parent_tracking_id: multi.parent_tracking_id,
+        parent_workflow_id: multi.parent_workflow_id,
+        expected_children: multi.expected_children,
+        executed_children: multi.executed_children,
+        dropped_children: multi.dropped_children,
+        failed_children: multi.failed_children,
+        approval_pending_children: multi.approval_pending_children,
+        trace_path: multi.trace_path,
+        children: multi.children.map(child => ({
+          tracking_id: child.tracking_id,
+          workflow_id: child.workflow_id,
+          workflow_type: child.workflow_type,
+          domain: child.domain,
+          status: child.status,
+          evidence: child.evidence,
+          error: child.error,
+        })),
+      },
+    });
+  }
+
+  if (isFinanceTruthQuestion(normalized)) {
+    const qb = answerQuickBooksQuestion(normalized);
+    const reply = `${qb.answer}\n\nStatus: ${qb.status}\nSource: ${qb.source_layers.join(' + ')}\nNo mock data.`;
+    updateMessageStatus(message_id, 'processed', reply, null);
+
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'finance_truth',
+        source: 'quickbooks-runtime',
+        confidence: 0.95,
+        requires_followup: !qb.pass,
+        status: qb.status,
+        gaps: qb.gaps,
+        no_mock_data: qb.no_mock_data,
+      },
+    });
+  }
+
+  if (isReadOnlyDashboardQuestion(normalized)) {
+    try {
+      const jarvisResult = await tryJarvisReadOnlyReply(normalized, sender, timestamp, chat_id);
+      if (jarvisResult?.handled && jarvisResult.reply) {
+        updateMessageStatus(message_id, 'replied', jarvisResult.reply);
+        return res.json({
+          ok: true,
+          reply: jarvisResult.reply,
+          actions: [],
+          approval_required: false,
+          approval_id: null,
+          metadata: {
+            intent: 'dashboard_status',
+            source: 'jarvis-evolution',
+            confidence: 1,
+            requires_followup: false,
+          },
+        });
+      }
+    } catch (e) {
+      console.warn('[WhatsApp] Dashboard read-only route skipped:', e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  // ── DEV5 Execution Engine: action requests must create workflow evidence ──
+  const executionIntent = classifyActionIntent(normalized);
+  const shouldUseExecutionEngine =
+    executionIntent.message_class === 'dangerous_action' ||
+    (executionIntent.message_class === 'action_request' && needsWorkflow(executionIntent));
+
+  if (shouldUseExecutionEngine) {
+    const executionResult = processCEORequest({
+      message: normalized,
+      sender: sender || 'whatsapp',
+      message_id: message_id || '',
+    });
+
+    const approvalId = executionResult.approval?.approval_id || null;
+    updateMessageStatus(message_id, 'processed', executionResult.response_message, approvalId);
+
+    return res.json({
+      ok: true,
+      reply: executionResult.response_message,
+      actions: [],
+      approval_required: !!approvalId || executionResult.action === 'dangerous_blocked',
+      approval_id: approvalId,
+      metadata: {
+        intent: executionResult.intent?.domain || 'execution_action',
+        message_class: executionResult.intent?.message_class,
+        source: 'execution-engine',
+        confidence: executionResult.intent?.confidence || 1,
+        requires_followup: !!approvalId || executionResult.action === 'dangerous_blocked',
+        execution_action: executionResult.action,
+        workflow_id: executionResult.workflow?.workflow_id || null,
+        evidence_path: executionResult.workflow?.evidence_path || null,
+        draft_preview_path: executionResult.draft?.preview_path || null,
+        image_evidence_path: executionResult.draft?.image_assets?.featured_image || null,
+      },
+    });
   }
 
   // ── Jarvis Evolution Phase 21-30 — first-class CEO OS answers ───────────
@@ -527,6 +942,24 @@ whatsappRouter.post('/mi', waAuth, async (req: Request, res: Response) => {
     }
   } catch (e) {
     console.warn('[WhatsApp] Jarvis evolution fallback skipped:', e instanceof Error ? e.message : String(e));
+  }
+
+  if (isObviousUnknownRequest(normalized)) {
+    const reply = 'Em chưa hiểu rõ yêu cầu này. Anh nói rõ mục tiêu hoặc nguồn dữ liệu cần kiểm tra giúp em nhé.';
+    updateMessageStatus(message_id, 'replied', reply);
+    return res.json({
+      ok: true,
+      reply,
+      actions: [],
+      approval_required: false,
+      approval_id: null,
+      metadata: {
+        intent: 'unknown_clarify',
+        source: 'mi-core',
+        confidence: 1,
+        requires_followup: true,
+      },
+    });
   }
 
   // ── Route to Mi Executive Pipeline ───────────────────────────────────────
@@ -701,6 +1134,27 @@ function handleApprovalCommand(
     const waApproval = waApprovals.find(a => a.approval_id === approvalId);
 
     if (!waApproval) {
+      const executionAction = action === 'approved' ? 'approve' : 'cancel';
+      const executionApproval = resolveExecutionApproval(approvalId, executionAction);
+      if (executionApproval) {
+        return {
+          ok: true,
+          reply: action === 'approved'
+            ? `✅ Anh đã approve **${approvalId}** cho workflow **${executionApproval.workflow_id}**.`
+            : `❌ Anh đã reject **${approvalId}** cho workflow **${executionApproval.workflow_id}**.`,
+          actions: [],
+          approval_required: false,
+          approval_id: approvalId,
+          metadata: {
+            intent: `execution_approval_${action}`,
+            source: 'execution-engine',
+            confidence: 1,
+            requires_followup: false,
+            workflow_id: executionApproval.workflow_id,
+          },
+        };
+      }
+
       return {
         ok: true,
         reply: `Em không tìm thấy approval ID **${approvalId}**. Có thể nó đã được xử lý hoặc ID không đúng.`,

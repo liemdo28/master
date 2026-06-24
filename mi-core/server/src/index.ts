@@ -1,11 +1,49 @@
+// ── ENV MUST LOAD FIRST — before any module initializes ─────────────────────
+// auth.ts reads process.env.MI_PIN at module-load time to compute PIN_HASH.
+// All imports below run their top-level code when require()'d, so dotenv
+// must execute synchronously before the import block runs.
+// In CommonJS this is guaranteed by placing the require + config call here,
+// before any other require. In ESM/tsc output the compiled code preserves
+// declaration order, so dotenv calls at lines 1-2 of dist/index.js run first.
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env'), override: false });
+
+// ── Auth boot assertion — fail fast if PIN env is missing ───────────────────
+{
+  const crypto = require('crypto') as typeof import('crypto');
+  const pin = process.env.MI_PIN || '';
+  const pinHash = process.env.MI_PIN_HASH || '';
+  if (!pin && !pinHash) {
+    console.warn('[Mi][Auth] WARNING: MI_PIN and MI_PIN_HASH are both unset — auth disabled (dev mode)');
+  } else if (pin) {
+    // Self-test: verify that the hash we are about to use will accept the configured PIN
+    const salt = 'mi-salt-2024';
+    const expectedHash = crypto.createHash('sha256').update(pin + salt).digest('hex');
+    // We can't reach into auth.ts's closed-over PIN_HASH here, but we can confirm
+    // that the env value is set and non-empty before auth.ts loads it.
+    console.log('[Mi][Auth] PIN configured — auth enforcement active');
+  }
+}
+
+// ── API key boot assertion ────────────────────────────────────────────────────
+{
+  if (!process.env.MI_CORE_API_KEY) {
+    console.warn('[Mi][Auth] WARNING: MI_CORE_API_KEY is not set — /api/gstack, /api/graph, /api/jarvis/evolution, /api/knowledge will reject all requests with 503 until key is configured in .env');
+  } else {
+    console.log('[Mi][Auth] MI_CORE_API_KEY configured — API key enforcement active');
+  }
+}
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import path from 'path';
+import net from 'net';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
-import dotenv from 'dotenv';
 import { chatRouter } from './routes/chat';
+import { executiveRouter } from './routes/executive';
 import { profileRouter } from './routes/profile';
 import { healthRouter } from './routes/health';
 import { approvalRouter } from './routes/approval';
@@ -24,6 +62,7 @@ import { projectsRouter } from './routes/projects';
 import { remoteRouter } from './routes/remote';
 import { dataAnalystRouter } from './routes/data-analyst';
 import { whatsappRouter } from './routes/whatsapp';
+import { ceoObserverRouter } from './routes/ceo-observer';
 import { skillRouter } from './routes/skill-router';
 import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
@@ -32,6 +71,7 @@ import { enterpriseRouter } from './routes/enterprise';
 import { voiceRouter } from './routes/voice';
 import { actionsRouter } from './routes/actions';
 import { jarvisRouter } from './routes/jarvis';
+import { workflowMetricsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
 import { nodesRouter } from './routes/nodes';
 import { modelsRegistryRouter } from './routes/models-registry';
@@ -43,12 +83,20 @@ import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-ro
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
+import { ceoTelemetryRouter } from './telemetry/ceo-telemetry-router';
 import { councilRouter } from './council/council-router';
 import { selfImprovementRouter } from './self-improvement/self-improvement-router';
 import { healthIntelligenceRouter } from './health-intelligence/health-router';
 import { digitalTwinRouter } from './digital-twin/digital-twin-router';
 import { agenviewRouter } from './agenview/agenview-router';
+import { seoRouter } from './routes/seo';
 import { cooV4Router } from './routes/coo-v4-router';
+import companyOsRouter from './company-os/company-os-router';
+import { operationsRouter } from './routes/operations';
+import { executiveRouter as executiveIntelligenceRouter } from './executive-intelligence/executive-routes';
+import { startBurnInScheduler } from './operations/burn-in';
+import { startSelfHealingScheduler } from './operations/self-healing';
+import { startSelfHealingMonitor } from './company-os/self-healing-monitor';
 import { chatMetrics } from './chat/chat-metrics';
 import { queueState } from './chat/chat-queue';
 import { claimLeadershipOnBoot, startLeaderHeartbeat } from './nodes/leader-lock-persistent';
@@ -58,7 +106,8 @@ import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
 import { gateEvents } from './approval/gate';
 import { rateLimiter } from './middleware/rate-limit';
-import { ipGuard } from './remote/remote-auth';
+import { ipGuard, requireRemoteAuth } from './remote/remote-auth';
+import { requireAuth } from './routes/auth';
 import { getNetworkInfo } from './remote/network-info';
 import { connectorRegistry } from './visibility/connector-registry';
 import { executiveMemory } from './memory/executive-memory';
@@ -66,14 +115,14 @@ import { fullIngest } from './knowledge/knowledge-db';
 import { installAllPacks } from './knowledge/pack-manager';
 import { startScheduler } from './cron/sync-scheduler';
 import { getKeyStatus } from './services/whatsapp-key-manager';
+import { n8nRouter } from './n8n/n8n-router';
 
-dotenv.config();
-dotenv.config({ path: path.resolve(__dirname, '../.env'), override: false });
+// dotenv already loaded at top of file — do not call again here.
 
 const app = express();
 const PORT   = parseInt(process.env.MI_PORT   || '4001');
-// Bind to 0.0.0.0 when MOBILE_ACCESS=1 or HOST env set; default localhost for safety
-const HOST   = process.env.HOST || (process.env.MOBILE_ACCESS === '1' ? '0.0.0.0' : '127.0.0.1');
+// QB Laptop1 reports over Tailscale, so Mi-Core must listen beyond localhost.
+const HOST   = process.env.HOST || process.env.MI_BIND_HOST || '0.0.0.0';
 
 function validateReviewApprovalStartup() {
   const allowedNumbers = (process.env.CEO_WHATSAPP_ALLOWED_NUMBERS || '').split(',').map(v => v.trim()).filter(Boolean);
@@ -131,50 +180,70 @@ app.get('/voice',     (_req, res) => res.redirect('/voice.html'));
 app.get('/agenview',  (_req, res) => res.redirect('/agenview.html'));
 
 // ── API routes ──────────────────────────────────────────────────────────────
-app.use('/api/remote',      remoteRouter);       // Remote access (login/health/devices)
-app.use('/api/chat',        chatRouter);
-app.use('/api/profile',     profileRouter);
-app.use('/api/health',      healthRouter);
-app.use('/api/approval',    approvalRouter);
-app.use('/api/workspace',   workspaceRouter);
-app.use('/api/auth',        authRouter);
+// Auth strategy: requireAuth checks PIN-based token sessions.
+// - If MI_PIN is not configured, requireAuth is a no-op (all requests pass).
+// - If MI_PIN is configured, all P0/P1 routes require a valid Bearer token.
+// - /api/remote (has its own auth), /api/health, /api/auth, /api/nodes are public.
+
+// P0 — Write access (approve actions, send emails, modify data)
+app.use('/api/approval',    requireAuth, approvalRouter);
+app.use('/api/actions',     requireAuth, actionsRouter);
+
+// P1 — Sensitive read (executive data, memory, briefing)
+app.use('/api/executive',   requireAuth, executiveRouter);
+app.use('/api/memory',      requireAuth, memoryRouter);
+app.use('/api/briefing',    requireAuth, briefingRouter);
+app.use('/api/graph',       requireAuth, graphRouter);
+app.use('/api/brain',       requireAuth, brainRouter);
+app.use('/api/visibility',  requireAuth, visibilityRouter);
+
+// P2 — Operational (protected but less sensitive)
+app.use('/api/chat',        requireAuth, chatRouter);
+app.use('/api/jarvis',      requireAuth, jarvisRouter);
+app.use('/api/qb-agent',    requireAuth, qbAgentRouter);
+app.use('/api/projects',    requireAuth, projectsRouter);
+app.use('/api/reminders',   requireAuth, remindersRouter);
+app.use('/api/workspace',   requireAuth, workspaceRouter);
+app.use('/api/knowledge',   requireAuth, knowledgeRouter);
+app.use('/api/ceo-observer', requireAuth, ceoObserverRouter); // Session A proxy
+
+// Internal / already protected / public
+app.use('/api/remote',      remoteRouter);       // Remote access (has own auth)
+app.use('/api/auth',        authRouter);         // Auth endpoints (must be public)
+app.use('/api/health',      healthRouter);       // Health check (public)
+app.use('/api/nodes',       requireAuth, nodesRouter);        // Node registration (internal)
+app.use('/api/whatsapp',    whatsappRouter);     // Has API key auth middleware
 app.use('/api/models',      modelsRouter);
-app.use('/api/reminders',   remindersRouter);
-app.use('/api/visibility',  visibilityRouter);
-app.use('/api/knowledge',   knowledgeRouter);
-app.use('/api/memory',      memoryRouter);
-app.use('/api/brain',       brainRouter);
 app.use('/api/agent-engine',agentEngineRouter);
-app.use('/api/qb-agent',    qbAgentRouter);
 app.use('/api/integration-agent', integrationAgentReleasesRouter);
 app.use('/api',             operationalKnowledgeRouter);
-app.use('/api/projects',    projectsRouter);
 app.use('/api/data-analyst',    dataAnalystRouter);
-app.use('/api/whatsapp',        whatsappRouter);
 app.use('/api/skills',          skillRouter);
 app.use('/api/browser',         browserAgentRouter);
 app.use('/api/doordash-agent',  doordashAgentRouter);
 app.use('/api/bigdata',         bigdataRouter);
 app.use('/api/enterprise',      enterpriseRouter);
 app.use('/api/voice',           voiceRouter);
-app.use('/api/actions',         actionsRouter);
-app.use('/api/jarvis',          jarvisRouter);
 app.use('/api/gstack',          gstackRouter);
-app.use('/api/nodes',           nodesRouter);
 app.use('/api/models',          modelsRegistryRouter);
 app.use('/api/mi',              miReviewApprovalsRouter);
-app.use('/api/graph',           graphRouter);         // Phase 14: Ownership + Dependency Graph
 app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
 app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
-app.use('/api/briefing',        briefingRouter);           // Phase 17: Executive Daily Briefing
 app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
 app.use('/api/agenview',        agenviewRouter);           // Phase 19: AgenView Dashboard
+app.use('/api/seo',             seoRouter);                // SEO Phase 2: 7 SEO Agent Integration
 app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
+app.use('/api/company-os',      companyOsRouter);          // Mi Company OS: 19-dept pipeline
 app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution
 app.use('/api/council',         councilRouter);            // Phase 21: Multi-Agent Council
 app.use('/api/improvement',     selfImprovementRouter);    // Phase 22: Self-Improvement
 app.use('/api/health-intel',    healthIntelligenceRouter); // Phase 23: Health Intelligence
 app.use('/api/digital-twin',    digitalTwinRouter);        // Phase 24: Digital Twin
+app.use('/api/operations',      requireAuth, operationsRouter);  // DEV3: Operations & Reliability Layer
+app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: Workflow Execution Ledger & Metrics
+app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
+app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
+app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
 app.get('/api/tools', (_req, res) => {
   res.json({
     tools: [
@@ -214,8 +283,52 @@ app.get('/api/metrics/chat', (_req, res) => {
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);
 const wss = new WebSocketServer({ server, path: '/ws' });
-server.on('error', (err) => {
-  console.error('[Mi] HTTP server listen error:', err);
+
+// ── EADDRINUSE self-recovery ─────────────────────────────────────────────────
+// Wait before binding instead of repeatedly calling listen() on the same server.
+// Exiting here makes PM2 spawn another process and can create a restart storm.
+let _bindAttempts = 0;
+const BIND_RETRY_MS = 2500;
+
+function canBind(port: number, host: string): Promise<boolean> {
+  return new Promise(resolve => {
+    const probe = net.createServer();
+    probe.once('error', () => resolve(false));
+    probe.once('listening', () => {
+      probe.close(() => resolve(true));
+    });
+    probe.listen(port, host);
+  });
+}
+
+async function startHttpServer(): Promise<void> {
+  const MAX_BIND_ATTEMPTS = 3;
+  while (!(await canBind(PORT, HOST))) {
+    _bindAttempts++;
+    if (_bindAttempts >= MAX_BIND_ATTEMPTS) {
+      console.error(`[Mi][EADDRINUSE] Port ${PORT} still busy after ${MAX_BIND_ATTEMPTS} attempts — exiting so PM2 can restart cleanly`);
+      process.exit(1);
+    }
+    console.warn(`[Mi][EADDRINUSE] Port ${PORT} busy — waiting for release (attempt ${_bindAttempts})`);
+    await new Promise(resolve => setTimeout(resolve, BIND_RETRY_MS));
+  }
+  server.listen(PORT, HOST, onListenSuccess);
+}
+
+server.on('error', (err: NodeJS.ErrnoException) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`[Mi][EADDRINUSE] Port ${PORT} busy after bind — exiting for clean PM2 restart`);
+    process.exit(1);
+  } else {
+    console.error('[Mi] HTTP server error:', err);
+  }
+});
+// ws library re-emits server errors on wss — must handle or it becomes uncaught exception
+wss.on('error', (err: NodeJS.ErrnoException) => {
+  if (err.code !== 'EADDRINUSE') {
+    console.error('[Mi] WebSocket server error:', err);
+  }
+  // EADDRINUSE handled above by server.on('error')
 });
 
 function broadcast(data: object) {
@@ -250,7 +363,10 @@ wss.on('connection', (ws, req) => {
 });
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
-server.listen(PORT, HOST, () => {
+function onListenSuccess() {
+  _bindAttempts = 0; // reset for future restarts
+  // Tell PM2 the process is ready — stops it from spawning more instances
+  if (typeof process.send === 'function') process.send('ready');
   const net = getNetworkInfo(PORT);
   console.log(`\n[Mi] ════════════════════════════════════════`);
   console.log(`[Mi] Mi-Core Central Command — ONLINE`);
@@ -277,6 +393,10 @@ server.listen(PORT, HOST, () => {
       }
     }
   }
+  // DEV2: Live-probe HTTP connectors after init to prevent stale "healthy" in registry
+  setTimeout(() => {
+    connectorRegistry.liveProbe().catch(() => {/* probe failures are non-fatal */});
+  }, 3000);
   executiveMemory.init();
   console.log('[Mi] ✓ Connector Registry initialized');
   console.log('[Mi] ✓ Executive Memory initialized');
@@ -298,6 +418,11 @@ server.listen(PORT, HOST, () => {
 
     startScheduler();
     console.log('[Mi] ✓ Scheduler started');
+
+    startBurnInScheduler();
+    startSelfHealingScheduler(5);
+    startSelfHealingMonitor(60_000); // Phase 12: monitor 11 services every 60s
+    console.log('[Mi] ✓ Operations layer started (burn-in + self-healing + Phase12-monitor)');
 
     const timeoutMinutes = parseInt(process.env.REVIEW_APPROVAL_TIMEOUT_MINUTES || '1440', 10);
     setInterval(() => {
@@ -323,12 +448,21 @@ server.listen(PORT, HOST, () => {
     startDailyBriefingScheduler();
     console.log('[Mi] ✓ Daily Briefing Scheduler started (07:00 VN time)');
 
+    import('./jarvis/qb-online-watcher').then(({ startQbOnlineWatcher }) => {
+      startQbOnlineWatcher();
+      console.log('[Mi] ✓ QB Online Watcher started (auto-sync when Laptop1 reconnects)');
+    }).catch(() => {});
+
     // Jarvis Evolution Phase 30 — boot all 10 phases
     import('./jarvis/phase30-jarvis/jarvis-core').then(({ bootJarvis }) => {
       bootJarvis().catch(() => {});
       console.log('[Mi] ✓ Jarvis Evolution Phase 30 booted (knowledge, memory, graph, health, workflows, twin)');
     }).catch(() => {});
   });
+}
+
+startHttpServer().catch(e => {
+  console.error('[Mi] HTTP server startup failed:', e);
 });
 
 // ── Graceful shutdown — prevents EADDRINUSE on PM2 restart ───────────────────

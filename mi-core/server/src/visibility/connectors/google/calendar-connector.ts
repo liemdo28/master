@@ -38,7 +38,7 @@ export async function syncCalendar(): Promise<CalendarSnapshot> {
 
   // Get calendar list
   const calList = await cal.calendarList.list();
-  const calendars = calList.data.items?.map(c => c.summary || '') || [];
+  const calendars = calList.data.items?.map((c: { summary?: string | null }) => c.summary || '') || [];
   const calMap: Record<string, string> = {};
   for (const c of calList.data.items || []) {
     if (c.id && c.summary) calMap[c.id] = c.summary;
@@ -75,7 +75,7 @@ export async function syncCalendar(): Promise<CalendarSnapshot> {
           description: e.description?.slice(0, 300) ?? undefined,
           calendar: calMap[calItem.id!] || calItem.id!,
           is_all_day: isAllDay,
-          attendees: (e.attendees || []).map(a => a.email || a.displayName || '').filter(Boolean),
+          attendees: (e.attendees || []).map((a: { email?: string | null; displayName?: string | null }) => a.email || a.displayName || '').filter(Boolean),
           status: e.status || 'confirmed',
         });
       }

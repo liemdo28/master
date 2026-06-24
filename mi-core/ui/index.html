@@ -1,49 +1,952 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta name="theme-color" content="#0a0a0f"/>
-<title>Mi — Executive Assistant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Executive Assistant</title>
 <style>
-:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;--surface3:#22223a;--border:#1e1e2e;--accent:#7c3aed;--accent-hover:#6d28d9;--accent-glow:rgba(124,58,237,0.25);--accent2:#4f8ef7;--online:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--text:#e2e8f0;--text-dim:#64748b;--text-muted:#475569;--font:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;--font-mono:'SF Mono','Fira Code',Consolas,monospace}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body,#root{width:100%;min-height:100%;overflow-x:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5}
-.shell,.mobile-shell,.pin-screen,.pin-keypad,.pin-button{touch-action:manipulation;-webkit-user-select:none;user-select:none}
-input,textarea,select,button{font-size:16px!important;font-family:var(--font)}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.shell{display:flex;flex-direction:column;height:100dvh;width:100%}
-.main{flex:1;display:flex;overflow:hidden;position:relative}
-.chat-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.panel{display:none;width:360px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:16px}
-@media(min-width:1024px){.panel{display:block}.panel.collapsed{display:none}}@media(min-width:1440px){.panel{width:400px}}@media(min-width:1920px){.panel{width:440px}}@media(max-width:1023px){.panel.mob-open{display:block;position:fixed;inset:0;width:100%;z-index:50;border-left:none;padding:24px;background:var(--bg)}}
-.hdr{display:flex;align-items:center;gap:8px;padding:8px 16px;padding-top:calc(8px+env(safe-area-inset-top,0px));background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;min-height:52px}@media(min-width:1024px){.hdr{padding:12px 24px;min-height:60px}}
-.hav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
-.hinfo{flex:1;min-width:0}.hnm{font-size:15px;font-weight:600}.hst{font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:5px}
-.sdot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}.sdot.on{background:var(--online)}.sdot.off{background:var(--danger)}
-.hmeta{display:none;align-items:center;gap:8px;color:var(--text-dim);font-size:11px}@media(min-width:1024px){.hmeta{display:flex}}.mbadge{padding:2px 8px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);font-size:10px}.mbadge.on{border-color:var(--online);color:var(--online)}
-.hacts{display:flex;gap:4px}.ibtn{width:44px;height:44px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .15s}.ibtn:hover,.ibtn:focus-visible{background:var(--surface3);color:var(--text);border-color:var(--accent);outline:none}@media(max-width:767px){.ibtn.hm{display:none}}.ibtn.on{border-color:var(--online);color:var(--online)}
-.health{display:none;padding:4px 16px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-dim);gap:16px;flex-shrink:0;flex-wrap:wrap}.health.v{display:flex}.hitem{display:flex;gap:5px;align-items:center}.hdot{width:6px;height:6px;border-radius:50%}
-.mbar{display:flex;gap:4px;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;scrollbar-width:none}.mbar::-webkit-scrollbar{display:none}
-.mchip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-dim);white-space:nowrap;transition:all .15s;flex-shrink:0;min-height:44px;display:flex;align-items:center;gap:4px}.mchip:hover,.mchip:focus-visible{border-color:var(--accent);color:var(--text);outline:none}.mchip.a{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 12px var(--accent-glow)}@media(max-width:767px){.mchip.hm{display:none}}
-.chat{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;display:flex;flex-direction:column;gap:8px}
-.cc{width:100%;margin:0 auto;display:flex;flex-direction:column;gap:8px}@media(min-width:768px){.cc{max-width:720px}}@media(min-width:1024px){.cc{max-width:760px}}@media(min-width:1440px){.cc{max-width:800px}}@media(min-width:1920px){.cc{max-width:860px}}
-.mr{display:flex;gap:8px;width:100%}.mr.u{flex-direction:row-reverse}.mr.mi{flex-direction:row}
-.ma{width:28px;height:28px;min-width:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}.ma.m{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}.ma.u{background:var(--surface2);color:var(--text-dim)}
-.mc{min-width:0;max-width:calc(100% - 36px)}.bub{padding:10px 14px;border-radius:14px;line-height:1.55;font-size:14px;white-space:pre-wrap;word-break:break-word}.bub.mi{background:var(--surface2);border:1px solid var(--border);border-top-left-radius:4px}.bub.u{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);border-top-right-radius:4px}
-.bub code{background:#111;padding:1px 5px;border-radius:4px;font-family:var(--font-mono);font-size:12px}.bub pre{background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:10px;overflow-x:auto;font-family:var(--font-mono);font-size:12px;margin-top:6px}
-.mm{font-size:10px;color:var(--text-dim);margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.mtag{padding:1px 6px;border-radius:4px;background:var(--surface);border:1px solid var(--border);font-size:10px;color:var(--text-dim)}
-.ty{display:none;align-items:center;gap:5px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;border-top-left-radius:4px;width:fit-content}.ty.v{display:flex}.tdot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);animation:bounce 1.2s infinite}.tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-.cmp{padding:8px 12px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:calc(8px+env(safe-area-inset-bottom,0px))}@media(min-width:1024px){.cmp{padding:12px 24px}}
-.cr{display:flex;gap:8px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:8px 12px}.cr:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
-#ui{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:16px;line-height:1.5;resize:none;max-height:120px;font-family:var(--font);padding:4px 0}#ui::placeholder{color:var(--text-muted)}
-.ca{display:flex;gap:4px;align-items:flex-end;flex-shrink:0}.cbtn{width:44px;height:44px;border-radius:8px;background:transparent;border:1px solid transparent;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;flex-shrink:0}.cbtn:hover{color:var(--text);background:var(--surface3)}
-.snd{width:44px;height:44px;border-radius:10px;background:var(--accent);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0}.snd:hover{background:var(--accent-hover)}.snd:disabled{background:var(--border);cursor:not-allowed}
-.qt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.q{padding:5px 10px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;white-space:nowrap;min-height:44px}.q:hover{border-color:var(--accent);color:var(--accent)}@media(max-width:767px){.q{font-size:11px;padding:4px 8px}}
-.wt{display:none;gap:4px;padding:8px 16px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}.wt::-webkit-scrollbar{display:none}@media(min-width:768px){.wt{display:flex}}
-.wtb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;background:transparent;color:var(--text-dim);white-space:nowrap;min-height:44px}.wtb:hover,.wtb:focus-visible{border-color:var(--border);background:var(--surface2);outline:none}.wtb.a{background:var(--surface3);border-color:var(--accent);color:var(--text)}
-.mnav{display:flex;background:var(--surface);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px);flex-shrink:0}@media(min-width:768px){.mnav{display:none}}.nbtn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px;gap:2px;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;border:none;background:transparent;min-height:44px}.nbtn .ni{font-size:20px}.nbtn.a{color:var(--accent)}
-.phdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.pt{font-size:14px;font-weight:600}.pcl{width:44px;height:44px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}@media(min-width:1024px){.pcl{display:none}}
-.ps{margin-bottom:20px}.pst{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}.pc{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px}.pcr{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)}.pcr:last-child{border-bottom:none}.pcl{color:var(--text-dim);min-width:80px}.pcv{font-weight:500}.pbg{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}.pgg{background:rgba(16,185,129,0.15);color:var(--online)}.pgy{background:rgba(245,158,11,0.15);color:var(--warning)}.pgr{background:rgba(239,68,68,0.15);color:var(--danger)}
-.ac{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}.aac{display:flex;gap:8px}.abtn{flex:1;padding:11px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer}.ay{background:var(--online);color:#fff}.ay:hover{background:#059669}.an{background:transparent;border:1px solid var(--danger);color:var(--danger)}.an:hover{background:rgba(239,68,68,0.1)}
-.dbl{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center}.dbl.v{display:flex}.dbl-b{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:420px;width:90%;margin:16px}.dbl-t{font-size:16px;
+:root{
+  --bg:#09090f;--bg2:#101116;--bg3:#16181f;--bg4:#1e2028;
+  --border:#252830;--border2:#2e3240;
+  --accent:#4f8ef7;--accent2:#7c5df9;--accent3:#06b6d4;
+  --green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--orange:#f97316;
+  --text:#e8eaf0;--text2:#a0a8b8;--text3:#64748b;
+  --card-r:10px;--font:-apple-system,'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px}
+.tb-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo{font-size:17px;font-weight:700;color:var(--accent);letter-spacing:-.5px;white-space:nowrap}
+.logo span{color:var(--text);font-weight:400}
+.tb-badge{font-size:11px;padding:2px 7px;border-radius:99px;background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);white-space:nowrap}
+.tb-center{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.tb-updated{font-size:11px;color:var(--text3)}
+.tb-refresh{background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text2);padding:4px 10px;cursor:pointer;font-size:12px;transition:all .15s;display:flex;align-items:center;gap:5px}
+.tb-refresh:hover{border-color:var(--accent);color:var(--accent)}
+.spinning{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tb-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.tb-alert-chip{font-size:11px;padding:3px 9px;border-radius:99px;background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);cursor:pointer;display:flex;align-items:center;gap:5px}
+.tb-alert-chip:hover{background:rgba(239,68,68,.22)}
+#clock{font-size:12px;color:var(--text3);font-variant-numeric:tabular-nums;font-family:monospace}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+
+/* ALERT BANNER */
+.alert-banner{background:rgba(239,68,68,.07);border-bottom:1px solid rgba(239,68,68,.18);padding:7px 20px;display:none;align-items:flex-start;gap:12px}
+.alert-banner.show{display:flex}
+.alert-banner-items{flex:1;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.ap{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid;cursor:pointer;transition:opacity .15s}
+.ap:hover{opacity:.75}
+.ap.err{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.1);color:var(--red)}
+.ap.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.1);color:var(--yellow)}
+.banner-close{color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px;margin-left:4px}
+.banner-close:hover{color:var(--text)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:210px 1fr;flex:1;min-height:0}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:14px 0 20px;display:flex;flex-direction:column;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.nl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);padding:12px 16px 4px}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 16px;color:var(--text2);cursor:pointer;transition:all .12s;font-size:13px;border-left:2px solid transparent;text-decoration:none}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:rgba(79,142,247,.09);color:var(--accent);border-left-color:var(--accent)}
+.ni .ic{width:17px;text-align:center;font-size:15px;flex-shrink:0}
+.nb{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600}
+.nb.r{background:rgba(239,68,68,.18);color:var(--red)}
+.nb.y{background:rgba(245,158,11,.15);color:var(--yellow)}
+.nb.g{background:rgba(34,197,94,.15);color:var(--green)}
+.nb.b{background:rgba(79,142,247,.15);color:var(--accent)}
+
+/* MAIN */
+.main{overflow-y:auto;display:flex;flex-direction:column}
+.section{display:none;padding:20px;gap:14px;flex-direction:column}
+.section.active{display:flex}
+.sec-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(79,142,247,.1),rgba(124,93,249,.06));border:1px solid rgba(79,142,247,.18);border-radius:12px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.hero-title{font-size:20px;font-weight:700}
+.hero-sub{font-size:12.5px;color:var(--text2);margin-top:4px}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.hc{font-size:11.5px;padding:4px 11px;border-radius:99px;border:1px solid;display:flex;align-items:center;gap:5px}
+.hc.ok{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:var(--green)}
+.hc.err{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:var(--red)}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:13px 15px;cursor:pointer;transition:border-color .15s}
+.kpi:hover{border-color:var(--border2)}
+.kpi-lbl{font-size:10.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.kpi-val{font-size:24px;font-weight:700;line-height:1}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.ok{color:var(--green)}.warn{color:var(--yellow)}.err{color:var(--red)}.blue{color:var(--accent)}
+
+/* GRID */
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.g2{display:grid;grid-template-columns:2fr 1fr;gap:13px}
+.g2e{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+@media(max-width:800px){.g3,.g2,.g2e{grid-template-columns:1fr}.sidebar{display:none}}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);overflow:hidden;display:flex;flex-direction:column}
+.card-hd{padding:11px 16px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.card-title{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+.card-link{font-size:11.5px;color:var(--accent);cursor:pointer;text-decoration:none;white-space:nowrap}
+.card-link:hover{text-decoration:underline}
+.card-body{padding:12px 16px;flex:1}
+
+/* LIST */
+.li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.li:last-child{border-bottom:none}
+.li-ic{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg3)}
+.li-b{flex:1;min-width:0}
+.li-t{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-s{font-size:11.5px;color:var(--text3);margin-top:2px}
+
+/* TAGS */
+.tag{font-size:10.5px;padding:2px 7px;border-radius:99px;display:inline-flex;align-items:center;gap:3px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.tg{background:rgba(34,197,94,.12);color:var(--green)}
+.ty{background:rgba(245,158,11,.12);color:var(--yellow)}
+.tr{background:rgba(239,68,68,.12);color:var(--red)}
+.tb{background:rgba(79,142,247,.12);color:var(--accent)}
+.tp{background:rgba(124,93,249,.12);color:var(--accent2)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%}
+
+/* ALERT BOXES */
+.abox{border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;border:1px solid;margin-bottom:10px}
+.abox:last-child{margin-bottom:0}
+.abox.err{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.22)}
+.abox.warn{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.22)}
+.abox.ok{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.22)}
+.abox.info{background:rgba(79,142,247,.07);border-color:rgba(79,142,247,.22)}
+.abox-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.abox-bd{flex:1}
+.abox-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.abox-text{font-size:12px;color:var(--text2);line-height:1.6}
+.abox-link{font-size:11.5px;color:var(--accent);cursor:pointer;margin-top:6px;display:inline-block}
+.abox-link:hover{text-decoration:underline}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:9px}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:12px 14px}
+.metric-lbl{font-size:10.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:700;line-height:1}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* PROGRESS BAR */
+.hbar{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.hbar:last-child{margin-bottom:0}
+.hbar-lbl{width:90px;font-size:12px;color:var(--text2);flex-shrink:0}
+.hbar-track{flex:1;height:5px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:99px;transition:width .6s}
+.hbar-val{width:85px;font-size:11.5px;text-align:right;color:var(--text2)}
+
+/* CONNECTOR */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px}
+.cc{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:9px;transition:border-color .15s}
+.cc:hover{border-color:var(--border2)}
+.cc-ic{font-size:18px;width:30px;text-align:center;flex-shrink:0}
+.cc-name{font-size:12.5px;font-weight:500}
+.cc-sync{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 52px - 110px)}
+.chat-msgs{flex:1;overflow-y:auto;padding:4px 0 8px;display:flex;flex-direction:column;gap:13px}
+.chat-msg{display:flex;gap:10px;max-width:860px}
+.chat-msg.user{flex-direction:row-reverse;margin-left:auto}
+.chat-bub{padding:9px 13px;border-radius:11px;line-height:1.65;font-size:13.5px;max-width:600px;white-space:pre-wrap;word-break:break-word}
+.chat-msg.bot .chat-bub{background:var(--bg3);border:1px solid var(--border)}
+.chat-msg.user .chat-bub{background:var(--accent);color:#fff}
+.chat-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--bg3);border:1px solid var(--border)}
+.chat-msg.user .chat-av{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chat-src{font-size:10.5px;color:var(--text3);margin-top:4px}
+.qp-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px}
+.qp{font-size:12px;padding:5px 11px;border-radius:99px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text2);transition:all .14s;white-space:nowrap}
+.qp:hover{border-color:var(--accent);color:var(--accent)}
+.chat-input-row{border-top:1px solid var(--border);padding:11px 0 0;display:flex;gap:9px;align-items:flex-end}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:9px;color:var(--text);padding:9px 13px;font-size:13.5px;font-family:var(--font);resize:none;min-height:40px;max-height:130px;outline:none;line-height:1.5;transition:border-color .14s}
+.chat-input:focus{border-color:var(--accent)}
+.chat-send{background:var(--accent);color:#fff;border:none;border-radius:9px;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.chat-send:disabled{opacity:.35;cursor:not-allowed}
+
+/* BURN-IN */
+.bi-score{font-size:48px;font-weight:800;line-height:1}
+.bi-score.HEALTHY{color:var(--green)}.bi-score.DEGRADED{color:var(--yellow)}.bi-score.CRITICAL{color:var(--red)}
+.bi-dom{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bi-dom:last-child{border-bottom:none}
+.bi-dom-name{width:85px;font-size:12.5px;font-weight:500;text-transform:capitalize}
+.bi-dom-track{flex:1;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.bi-dom-fill{height:100%;border-radius:99px;transition:width .5s}
+.bi-dom-val{width:75px;font-size:11.5px;text-align:right;color:var(--text2)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;padding:7px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.018)}
+
+/* SKELETON */
+.sk{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.3s infinite;border-radius:5px;height:13px;margin-bottom:8px}
+.sk.w60{width:60%}.sk.w80{width:80%}.sk.h30{height:30px}.sk.h40{height:40px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* EMPTY */
+.empty{text-align:center;padding:24px 16px;color:var(--text3)}
+.empty .ei{font-size:26px;margin-bottom:6px}
+.empty .et{font-size:13px}
+
+/* EV LINK */
+.ev{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent3);text-decoration:none;opacity:.8;cursor:pointer}
+.ev:hover{opacity:1;text-decoration:underline}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="tb-left">
+    <div class="logo">Mi<span> Executive</span></div>
+    <span class="tb-badge">● WhatsApp Live</span>
+  </div>
+  <div class="tb-center">
+    <span class="tb-updated" id="last-updated">Đang tải...</span>
+    <button class="tb-refresh" id="refresh-btn" onclick="refreshAll()">
+      <span id="refresh-ico">⟳</span> Làm mới
+    </button>
+  </div>
+  <div class="tb-right">
+    <span class="tb-alert-chip" id="alert-chip" style="display:none" onclick="switchSection('alerts')">🚨 <span id="alert-count">0</span></span>
+    <span id="clock">--:--:--</span>
+    <div class="avatar">LD</div>
+  </div>
+</header>
+
+<!-- ALERT BANNER -->
+<div class="alert-banner" id="alert-banner">
+  <div style="font-size:16px;flex-shrink:0;margin-top:1px">🚨</div>
+  <div class="alert-banner-items" id="alert-pills"></div>
+  <span class="banner-close" onclick="dismissBanner()">✕</span>
+</div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="nl">Overview</div>
+  <a class="ni active" data-sec="home"><span class="ic">🏠</span>CEO Home</a>
+  <a class="ni" data-sec="ask"><span class="ic">💬</span>Ask Mi</a>
+  <a class="ni" data-sec="alerts"><span class="ic">🚨</span>Critical Alerts<span class="nb r" id="nav-alerts" style="display:none">0</span></a>
+  <div class="nl">Operations</div>
+  <a class="ni" data-sec="tasks"><span class="ic">✅</span>Tasks<span class="nb y" id="nav-overdue">67</span></a>
+  <a class="ni" data-sec="approvals"><span class="ic">🔐</span>Approvals</a>
+  <a class="ni" data-sec="workorders"><span class="ic">📋</span>Work Orders</a>
+  <div class="nl">Information</div>
+  <a class="ni" data-sec="email"><span class="ic">📧</span>Emails<span class="nb r" id="nav-emails">45</span></a>
+  <a class="ni" data-sec="calendar"><span class="ic">📅</span>Calendar<span class="nb y" id="nav-cal">3</span></a>
+  <a class="ni" data-sec="health"><span class="ic">❤️</span>Health</a>
+  <a class="ni" data-sec="finance"><span class="ic">💰</span>Finance<span class="nb r" id="nav-finance">!</span></a>
+  <div class="nl">System</div>
+  <a class="ni" data-sec="connectors"><span class="ic">🔌</span>Connectors<span class="nb y" id="nav-conn">2</span></a>
+  <a class="ni" data-sec="burnin"><span class="ic">📊</span>Burn-In</a>
+</nav>
+
+<main class="main">
+
+<!-- CEO HOME -->
+<div id="sec-home" class="section active">
+  <div class="hero">
+    <div>
+      <div class="hero-title" id="hero-title">Xin chào, anh Liem 👋</div>
+      <div class="hero-sub" id="hero-sub">Đang tải...</div>
+    </div>
+    <div class="hero-chips">
+      <span class="hc ok"><span class="dot" style="background:var(--green)"></span>AI Online</span>
+      <span class="hc ok"><span class="dot" style="background:var(--green)"></span>WhatsApp Live</span>
+      <span class="hc" id="qb-hero-chip"><span class="dot" style="background:var(--yellow)"></span>QB loading</span>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi" onclick="switchSection('email')">
+      <div class="kpi-lbl">Emails</div><div class="kpi-val warn" id="kpi-emails">–</div><div class="kpi-sub" id="kpi-emails-sub">chưa đọc</div>
+    </div>
+    <div class="kpi" onclick="switchSection('tasks')">
+      <div class="kpi-lbl">Tasks overdue</div><div class="kpi-val err" id="kpi-overdue">67</div><div class="kpi-sub">/ 855 total</div>
+    </div>
+    <div class="kpi" onclick="switchSection('calendar')">
+      <div class="kpi-lbl">Sự kiện</div><div class="kpi-val ok" id="kpi-cal">–</div><div class="kpi-sub">hôm nay</div>
+    </div>
+    <div class="kpi" onclick="switchSection('approvals')">
+      <div class="kpi-lbl">Cần duyệt</div><div class="kpi-val ok" id="kpi-approv">0</div><div class="kpi-sub">pending</div>
+    </div>
+    <div class="kpi" onclick="switchSection('health')">
+      <div class="kpi-lbl">Bước chân</div><div class="kpi-val warn" id="kpi-steps">–</div><div class="kpi-sub">/ 10,000</div>
+    </div>
+    <div class="kpi" onclick="switchSection('burnin')">
+      <div class="kpi-lbl">Burn-In</div><div class="kpi-val blue" id="kpi-burnin">–</div><div class="kpi-sub" id="kpi-burnin-sub">score</div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📅 Lịch hôm nay</div><a class="card-link" onclick="switchSection('calendar')">Tất cả →</a></div>
+      <div class="card-body" id="home-cal"><div class="sk"></div><div class="sk w80"></div><div class="sk w60"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">⚡ Cần làm ngay</div></div>
+      <div class="card-body" id="home-actions"><div class="sk"></div><div class="sk w80"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📋 Work Orders</div><a class="card-link" onclick="switchSection('workorders')">Chi tiết →</a></div>
+      <div class="card-body" id="home-workorders-body">
+        <div class="li"><div class="li-ic">⚙️</div><div class="li-b"><div class="li-t">Audit Dashboard</div><div class="li-s">ai_developer · 5ms</div></div><span class="tag tg">✅</span></div>
+        <div class="li"><div class="li-ic">💵</div><div class="li-b"><div class="li-t">Analyze Revenue</div><div class="li-s">cfo · 11ms</div></div><span class="tag tg">✅</span></div>
+        <div class="li"><div class="li-ic">✍️</div><div class="li-b"><div class="li-t">Create SEO Article</div><div class="li-s">marketing · 314ms</div></div><span class="tag tg">✅</span></div>
+        <div class="li"><div class="li-ic">📊</div><div class="li-b"><div class="li-t">Update Google Sheet</div><div class="li-s">workspace · 1.5s</div></div><span class="tag tg">✅</span></div>
+        <div class="li" style="border:0"><div class="li-ic">📑</div><div class="li-b"><div class="li-t">Generate Exec Report</div><div class="li-s">executive · 725ms</div></div><span class="tag tg">✅</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">🚨 Critical Alerts</div><a class="card-link" onclick="switchSection('alerts')">Tất cả →</a></div>
+      <div class="card-body" id="home-alerts"><div class="sk h30"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">❤️ Sức khỏe</div><a class="card-link" onclick="switchSection('health')">Chi tiết →</a></div>
+      <div class="card-body" id="home-health"><div class="sk"></div><div class="sk w80"></div><div class="sk w60"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">💰 Finance</div><a class="card-link" onclick="switchSection('finance')">Chi tiết →</a></div>
+      <div class="card-body">
+        <div id="home-finance-qb"><div class="sk h40"></div></div>
+        <div class="li" style="border:0">
+          <div class="li-ic">🏷️</div>
+          <div class="li-b"><div class="li-t">6 giao dịch đã phân loại</div><div class="li-s">Sysco, Payroll, Mailchimp, Rent...</div></div>
+          <span class="tag tg">Done</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">🔌 Connector Health</div>
+      <a class="card-link" onclick="switchSection('connectors')">Xem tất cả →</a>
+    </div>
+    <div class="card-body">
+      <div class="cg" id="home-conn"><div class="sk h40"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASK MI -->
+<div id="sec-ask" class="section">
+  <div class="sec-title">💬 Ask Mi</div>
+  <div class="qp-row">
+    <span class="qp" onclick="sendQ('Hôm nay anh có gì?')">📋 Hôm nay?</span>
+    <span class="qp" onclick="sendQ('Có gì cần duyệt không?')">🔐 Cần duyệt?</span>
+    <span class="qp" onclick="sendQ('Có gì đáng lo không?')">🚨 Đáng lo?</span>
+    <span class="qp" onclick="sendQ('Doanh thu sao rồi?')">💰 Doanh thu</span>
+    <span class="qp" onclick="sendQ('Review Automation có lỗi gì không?')">🔍 Review Auto</span>
+    <span class="qp" onclick="sendQ('Gmail có gì quan trọng không?')">📧 Gmail</span>
+    <span class="qp" onclick="sendQ('Hôm qua anh ngủ mấy tiếng?')">😴 Giấc ngủ</span>
+    <span class="qp" onclick="sendQ('Project nào rủi ro nhất?')">⚠️ Rủi ro</span>
+  </div>
+  <div class="chat-wrap">
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="chat-msg bot">
+        <div class="chat-av">🤖</div>
+        <div>
+          <div class="chat-bub">Chào anh! Em là Mi — trợ lý điều hành AI của anh.<br><br>Em có thể trả lời từ: Enterprise Brain, Asana, Gmail, Google Calendar, Apple Health, QuickBooks, Work Orders và Knowledge Base.<br><br>Anh cần hỏi gì cũng được 🙏</div>
+          <div class="chat-src">Sources: Enterprise Brain · Executive Memory · Knowledge DB</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chat-input" placeholder="Hỏi Mi..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px'"></textarea>
+      <button class="chat-send" id="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- CRITICAL ALERTS -->
+<div id="sec-alerts" class="section">
+  <div class="sec-title">🚨 Critical Alerts <span class="nb r" id="alerts-badge" style="margin-left:6px;font-size:12px"></span></div>
+  <div id="alerts-body"><div class="sk h30"></div><div class="sk h30 w80"></div></div>
+</div>
+
+<!-- TASKS -->
+<div id="sec-tasks" class="section">
+  <div class="sec-title">✅ Tasks</div>
+  <div class="metrics" style="margin-bottom:4px">
+    <div class="metric"><div class="metric-lbl">Tổng</div><div class="metric-val" id="tm-total">855</div></div>
+    <div class="metric"><div class="metric-lbl">Overdue</div><div class="metric-val err" id="tm-overdue">67</div></div>
+    <div class="metric"><div class="metric-lbl">Projects</div><div class="metric-val blue">17</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Asana — My Tasks</div><div id="tasks-meta" style="font-size:11.5px;color:var(--text3)"></div></div>
+    <div class="card-body">
+      <div class="abox warn">
+        <div class="abox-ico">📌</div>
+        <div class="abox-bd">
+          <div class="abox-title" id="tasks-alert-title">67 tasks overdue</div>
+          <div class="abox-text" id="tasks-status">Đồng bộ từ Asana</div>
+          <a class="abox-link ev" href="https://app.asana.com" target="_blank">📎 Mở Asana →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPROVALS -->
+<div id="sec-approvals" class="section">
+  <div class="sec-title">🔐 Approvals</div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Pending Approvals</div></div>
+    <div class="card-body" id="approvals-body"><div class="sk"></div></div>
+  </div>
+</div>
+
+<!-- WORK ORDERS -->
+<div id="sec-workorders" class="section">
+  <div class="sec-title">📋 Work Orders</div>
+  <div class="metrics" style="margin-bottom:4px">
+    <div class="metric"><div class="metric-lbl">Open</div><div class="metric-val warn" id="wo-open">–</div></div>
+    <div class="metric"><div class="metric-lbl">P0/P1</div><div class="metric-val err" id="wo-critical">–</div></div>
+    <div class="metric"><div class="metric-lbl">Source</div><div class="metric-val blue" id="wo-source">API</div></div>
+    <div class="metric"><div class="metric-lbl">Freshness</div><div class="metric-val" id="wo-freshness">–</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Current Work Orders</div><span class="ev" title="task-intelligence.current_work_order_store">📎 Source</span></div>
+    <div class="card-body" id="workorders-body"><div class="sk"></div></div>
+  </div>
+</div>
+
+<!-- EMAIL -->
+<div id="sec-email" class="section">
+  <div class="sec-title">📧 Important Emails</div>
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">Gmail</div>
+      <div id="email-meta" style="font-size:11.5px;color:var(--text3)"></div>
+    </div>
+    <div class="card-body" id="email-body"><div class="sk"></div><div class="sk w80"></div></div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div id="sec-calendar" class="section">
+  <div class="sec-title">📅 Calendar</div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Google Calendar — Hôm nay</div><span class="ev" title="google-calendar connector">📎 Source</span></div>
+    <div class="card-body" id="calendar-body"><div class="sk"></div><div class="sk w80"></div></div>
+  </div>
+</div>
+
+<!-- HEALTH -->
+<div id="sec-health" class="section">
+  <div class="sec-title">❤️ Health</div>
+  <div class="g2e">
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-title">Chỉ số hôm nay</div>
+        <span class="ev" title=".local-agent-global/health-export/">📎 Apple Health</span>
+      </div>
+      <div class="card-body" id="health-metrics"><div class="sk h40"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Progress</div></div>
+      <div class="card-body" id="health-bars"><div class="sk"></div><div class="sk w80"></div><div class="sk w60"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="abox info" style="margin-bottom:0">
+        <div class="abox-ico">ℹ️</div>
+        <div class="abox-bd"><div class="abox-title">Disclaimer</div><div class="abox-text">Tóm tắt dữ liệu health export — không phải tư vấn y tế. HRV và RHR từ Apple Watch.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCE -->
+<div id="sec-finance" class="section">
+  <div class="sec-title">💰 Finance</div>
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">QuickBooks Status</div>
+      <span class="ev" title="QB runtime cache">📎 Runtime source</span>
+    </div>
+    <div class="card-body" id="finance-qb-status">
+      <div class="sk h40"></div>
+    </div>
+  </div>
+  <div class="g2e">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">⏳ Chờ QB sync</div></div>
+      <div class="card-body">
+        <div class="li"><div class="li-ic">📊</div><div class="li-b"><div class="li-t">P&L Q2 2026</div><div class="li-s">Cần QB data</div></div><span class="tag ty">Pending</span></div>
+        <div class="li"><div class="li-ic">💵</div><div class="li-b"><div class="li-t">Cash Flow 3 tháng</div><div class="li-s">Cần QB data</div></div><span class="tag ty">Pending</span></div>
+        <div class="li" style="border:0"><div class="li-ic">🧾</div><div class="li-b"><div class="li-t">Duplicate bills</div><div class="li-s">Cần QB data</div></div><span class="tag ty">Pending</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">✅ Đã xong</div><span class="ev" title="reports/evidence/p8-finance/">📎 Evidence</span></div>
+      <div class="card-body">
+        <div class="li"><div class="li-ic">🏷️</div><div class="li-b"><div class="li-t">6 giao dịch phân loại</div><div class="li-s">Sysco→Food, Payroll, Mailchimp→SW, Rent, PG&E, DoorDash</div></div><span class="tag tg">Done</span></div>
+        <div class="li" style="border:0"><div class="li-ic">🔍</div><div class="li-b"><div class="li-t">Root cause xác định</div><div class="li-s">Fix plan: QB_CONNECTOR_INVESTIGATION.md</div></div><span class="tag tg">Done</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTORS -->
+<div id="sec-connectors" class="section">
+  <div class="sec-title">🔌 Connectors</div>
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">Registry</div>
+      <div id="conn-meta" style="font-size:11.5px;color:var(--text3)"></div>
+    </div>
+    <div class="card-body">
+      <div class="cg" id="conn-grid"><div class="sk h40"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BURN-IN -->
+<div id="sec-burnin" class="section">
+  <div class="sec-title">📊 7-Day Burn-In Dashboard</div>
+  <div class="g3">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Score</div><span class="ev" title=".local-agent-global/coo-v4/metrics/">📎 Metrics</span></div>
+      <div class="card-body" id="bi-score-card"><div class="sk h40"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Rates</div></div>
+      <div class="card-body" id="bi-rates"><div class="sk"></div><div class="sk w80"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Flow Health</div></div>
+      <div class="card-body" id="bi-flow"><div class="sk"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Domain Breakdown</div></div>
+    <div class="card-body" id="bi-domains"><div class="sk"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Recent Events (last 10)</div><span class="ev" title=".local-agent-global/coo-v4/burn-in.db">📎 DB</span></div>
+    <div class="card-body" id="bi-recent"><div class="sk"></div></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+// STATE
+const LD = {};   // loaded flags per section
+let _snap=null, _exec=null, _brain=null, _conn=null, _bi=null, _qb=null, _alerts=[];
+let _autoTimer=null;
+
+// CLOCK
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('vi-VN')}
+setInterval(tick,1000);tick();
+
+// GREETING
+const _h=new Date().getHours();
+document.getElementById('hero-title').textContent=(_h<12?'Chào buổi sáng':_h<18?'Chào buổi chiều':'Chào buổi tối')+', anh Liem 👋';
+document.getElementById('hero-sub').textContent=new Date().toLocaleDateString('vi-VN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+// NAV
+function switchSection(s){
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
+  const el=document.getElementById('sec-'+s);if(el)el.classList.add('active');
+  const nav=document.querySelector('[data-sec="'+s+'"]');if(nav)nav.classList.add('active');
+  lazyLoad(s);
+}
+document.querySelectorAll('.ni').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();switchSection(el.dataset.sec)}));
+function lazyLoad(s){
+  if(LD[s])return;LD[s]=true;
+  if(s==='alerts')renderAlerts();
+  if(s==='tasks')renderTasks();
+  if(s==='approvals')loadApprovals();
+  if(s==='workorders')renderWorkOrders();
+  if(s==='email')renderEmail();
+  if(s==='calendar')renderCalendar();
+  if(s==='health')renderHealth();
+  if(s==='finance')renderFinance();
+  if(s==='connectors')renderConnectors();
+  if(s==='burnin')loadBurnIn();
+}
+
+// API
+async function api(p){try{const r=await fetch(p);if(!r.ok)return null;const d=await r.json();return d?.data??d}catch{return null}}
+function ago(iso){if(!iso)return'never';const m=Math.floor((Date.now()-new Date(iso).getTime())/60000);if(m<2)return'now';if(m<60)return m+'m';const h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'d'}
+function pct(v){return(v*100).toFixed(0)+'%'}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+const ICONS={gmail:'📧','google-calendar':'📅','google-drive':'📁',whatsapp:'💬','local-projects':'💻','dashboard-bakudan':'🏮',asana:'📌','health-export':'❤️','website-raw':'🍣','website-bakudan':'🍜',accounting:'💰','food-safety':'🛡️','quickbooks-runtime':'🔧','google-sheets':'📈'};
+
+// PARSERS
+function parseSteps(s){const m=s?.match(/(\d[\d,]+)\/10[,.]?000/);return m?parseInt(m[1].replace(/,/g,'')):null}
+function parseSleep(s){const m=s?.match(/([\d.]+)h\s*\(good\)/i);return m?parseFloat(m[1]):null}
+function parseHRV(s){const m=s?.match(/HRV:\s*([\d.]+)/i);return m?parseFloat(m[1]):null}
+function parseRHR(s){const m=s?.match(/Resting HR:\s*([\d.]+)/i);return m?parseFloat(m[1]):null}
+function parseWorkouts(s){const m=s?.match(/Workouts[^:]*:\s*(\d+)/i);return m?parseInt(m[1]):null}
+function parseStress(s){const m=s?.match(/Stress[^:]*:\s*(\w+)/i);return m?m[1].toUpperCase():null}
+
+// FETCHERS (cached)
+async function getSnap(){return _snap||(_snap=await api('/api/visibility/snapshot'))}
+async function getExec(){return _exec||(_exec=await api('/api/executive/snapshot'))}
+async function getBrain(){return _brain||(_brain=await api('/api/brain/status'))}
+async function getConn(){if(_conn)return _conn;const r=await api('/api/visibility/connectors');_conn=r?.connectors?r:null;return _conn}
+async function getBi(){return _bi||(_bi=await api('/api/coo-v4/burnin'))}
+async function getQb(){return _qb||(_qb=await api('/api/visibility/quickbooks'))}
+
+// REFRESH
+async function refreshAll(){
+  const ico=document.getElementById('refresh-ico');
+  ico.classList.add('spinning');
+  Object.keys(LD).forEach(k=>delete LD[k]);
+  _snap=null;_exec=null;_brain=null;_conn=null;_bi=null;_qb=null;_alerts=[];
+  await Promise.all([getSnap(),getExec(),getBrain(),getConn(),getBi(),getQb()]);
+  await renderHome();
+  const cur=document.querySelector('.ni.active');if(cur&&cur.dataset.sec!=='home')lazyLoad(cur.dataset.sec);
+  document.getElementById('last-updated').textContent='Cập nhật: '+new Date().toLocaleTimeString('vi-VN');
+  ico.classList.remove('spinning');
+}
+function startAutoRefresh(){if(_autoTimer)clearInterval(_autoTimer);_autoTimer=setInterval(refreshAll,60000)}
+function dismissBanner(){document.getElementById('alert-banner').classList.remove('show')}
+
+// ALERTS
+function buildAlerts(snap,conn,bi,qb){
+  const a=[];
+  if(qb?.dashboard_status==='needs_dev1_action')a.push({sev:'err',key:'qb-dev1',title:'QuickBooks: NEEDS DEV1 ACTION',detail:qb.required_dev1_action||(qb.gaps||[]).join(' · '),action:'finance'});
+  else if(qb?.dashboard_status==='failed')a.push({sev:'err',key:'qb-failed',title:'QuickBooks: FAILED',detail:(qb.gaps||[]).join(' · ')||'QB runtime failed',action:'finance'});
+  else if(qb?.dashboard_status==='degraded')a.push({sev:'warn',key:'qb-degraded',title:'QuickBooks: DEGRADED',detail:(qb.gaps||[]).join(' · ')||'QB runtime degraded',action:'finance'});
+  const conns=conn?.connectors||[];
+  conns.forEach(c=>{
+    if(c.health==='degraded')a.push({sev:'warn',key:'deg-'+c.id,title:c.name+': DEGRADED',detail:'Connector has cached data but live sync needs attention',action:'connectors'});
+    else if(c.health==='offline')a.push({sev:'err',key:'off-'+c.id,title:c.name+': OFFLINE',detail:'Connector unavailable',action:'connectors'});
+    else if(c.health==='unknown')a.push({sev:'warn',key:'unk-'+c.id,title:c.name+': UNKNOWN',detail:'Status unconfirmed',action:'connectors'});
+  });
+  const ov=snap?.tasks?.asana_overdue||0;
+  if(ov>50)a.push({sev:'warn',key:'overdue',title:ov+' tasks overdue',detail:'Review in Asana',action:'tasks'});
+  if(bi?.burn_in_status==='DEGRADED')a.push({sev:'warn',key:'bi',title:'Burn-In DEGRADED ('+bi.burn_in_score+'/100)',detail:'Success rate below 95%',action:'burnin'});
+  if(bi?.burn_in_status==='CRITICAL')a.push({sev:'err',key:'bi',title:'Burn-In CRITICAL',detail:'Immediate attention needed',action:'burnin'});
+  if(bi?.orphan_workflows>0)a.push({sev:'warn',key:'orphan',title:bi.orphan_workflows+' orphan workflows',detail:'Pending > 30 min',action:'burnin'});
+  return a;
+}
+function applyAlerts(alerts){
+  _alerts=alerts;
+  const banner=document.getElementById('alert-banner');
+  const pills=document.getElementById('alert-pills');
+  const chip=document.getElementById('alert-chip');
+  const nb=document.getElementById('nav-alerts');
+  const badge=document.getElementById('alerts-badge');
+  if(!alerts.length){banner.classList.remove('show');chip.style.display='none';nb.style.display='none';return}
+  pills.innerHTML=alerts.map(a=>`<span class="ap ${a.sev}" onclick="switchSection('${a.action}')">${a.sev==='err'?'●':'⚠'} ${esc(a.title)}</span>`).join('');
+  banner.classList.add('show');
+  chip.style.display='flex';document.getElementById('alert-count').textContent=alerts.length;
+  nb.textContent=alerts.length;nb.style.display='';
+  if(badge)badge.textContent=alerts.length;
+}
+
+// HOME
+async function renderHome(){
+  const[exec,snap,brain,conn,bi,qbRaw]=await Promise.all([getExec(),getSnap(),getBrain(),getConn(),getBi(),getQb()]);
+  const qb=exec?.finance_qb?.data||qbRaw;
+  const gmail=exec?.gmail?.data;
+  const calendar=exec?.calendar?.data;
+  const tasks=exec?.tasks?.data;
+  const workOrders=exec?.work_orders?.data;
+  renderQbHero(qb);
+  if(snap){
+    document.getElementById('kpi-emails').textContent=gmail?.unread_count??snap.emails?.unread??'–';
+    document.getElementById('kpi-emails-sub').textContent=(gmail?.important_count??snap.emails?.important??0)+' quan trọng';
+    document.getElementById('kpi-cal').textContent=calendar?.today_count??snap.calendar?.today_count??'–';
+    document.getElementById('kpi-overdue').textContent=tasks?.asana?.asana_overdue??snap.tasks?.asana_overdue??'–';
+    document.getElementById('nav-overdue').textContent=tasks?.asana?.asana_overdue??snap.tasks?.asana_overdue??'–';
+    document.getElementById('nav-emails').textContent=gmail?.unread_count??snap.emails?.unread??'–';
+    document.getElementById('nav-cal').textContent=calendar?.today_count??snap.calendar?.today_count??'–';
+    const steps=parseSteps(snap.health?.summary);
+    document.getElementById('kpi-steps').textContent=steps?steps.toLocaleString():'–';
+    // Calendar
+    const calEl=document.getElementById('home-cal');
+    const evs=calendar?.events_today||snap.calendar?.events_today||[];
+    calEl.innerHTML=evs.length?evs.map(ev=>`<div class="li"><div class="li-ic">📅</div><div class="li-b"><div class="li-t">${esc(ev.title)}</div><div class="li-s">${ev.start?.includes('T')?new Date(ev.start).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}):'Cả ngày'}</div></div></div>`).join(''):'<div class="empty"><div class="ei">📅</div><div class="et">Không có sự kiện</div></div>';
+    // Actions
+    const acts=exec?.today_summary?.data?.action_items||snap.action_items||[];
+    document.getElementById('home-actions').innerHTML=acts.length?acts.map(a=>`<div class="li"><div class="li-ic">⚡</div><div class="li-b"><div class="li-t">${esc(a)}</div></div></div>`).join(''):'<div class="empty"><div class="ei">✅</div><div class="et">Không có action items</div></div>';
+    // Health mini
+    const sleep=parseSleep(snap.health?.summary);const hrv=parseHRV(snap.health?.summary);const stress=parseStress(snap.health?.summary);
+    document.getElementById('home-health').innerHTML=
+      bar('Bước chân',(steps||0)/10000,(steps||0).toLocaleString()+'/10k',(steps||0)>=8000?'var(--green)':'var(--yellow)')+
+      bar('Giấc ngủ',(sleep||0)/9,(sleep||0)+'h/9h','var(--green)')+
+      bar('HRV',(hrv||0)/80,(hrv||0)+'ms','var(--accent)')+
+      `<div style="margin-top:6px"><span class="tag ${stress==='LOW'?'tg':stress==='MEDIUM'?'ty':'tr'}">Stress: ${stress||'–'}</span></div>`;
+  }
+  renderQbMini(qb,'home-finance-qb');
+  if(bi){
+    document.getElementById('kpi-burnin').textContent=bi.burn_in_score??'–';
+    document.getElementById('kpi-burnin-sub').textContent='Day '+(bi.days_elapsed||1)+'/7 · '+(bi.burn_in_status||'');
+  }
+  // Approvals kpi
+  const appItems=exec?.approvals?.data?.items||[];
+  document.getElementById('kpi-approv').textContent=appItems.length;
+  // Alerts
+  const execConn=exec?.connectors?.data?.truth?{connectors:exec.connectors.data.truth.map(c=>({id:c.connector_id,name:c.name,health:c.action_required?'degraded':'healthy',last_sync:c.last_successful_sync}))}:conn;
+  const alerts=buildAlerts(snap,execConn,bi,qb);applyAlerts(alerts);
+  // Alerts preview
+  const hAlerts=document.getElementById('home-alerts');
+  hAlerts.innerHTML=alerts.length?alerts.slice(0,4).map(a=>`<div class="abox ${a.sev==='err'?'err':'warn'}">
+    <div class="abox-ico">${a.sev==='err'?'🔴':'⚠️'}</div>
+    <div class="abox-bd"><div class="abox-title">${esc(a.title)}</div><div class="abox-text">${esc(a.detail)}</div>
+    <span class="abox-link" onclick="switchSection('${a.action}')">→ Chi tiết</span></div></div>`).join(''):'<div class="empty"><div class="ei">✅</div><div class="et">Không có cảnh báo</div></div>';
+  // Brain / connector strip
+  if(brain?.layers){
+    const MAP={universal_visibility:['👁️','Visibility'],knowledge_federation:['📚','Knowledge'],project_connector_layer:['🔌','Connectors'],executive_memory:['🧠','Memory'],ai_layer:['🤖','AI Layer'],remote_control:['🛡️','Remote']};
+    document.getElementById('home-conn').innerHTML=Object.entries(MAP).map(([k,[ico,lbl]])=>{
+      const l=brain.layers[k]||{};const ok=l.status==='READY';
+      const sub=k==='knowledge_federation'?(l.total_docs||0).toLocaleString()+' docs':k==='universal_visibility'?(l.connected_platforms||0)+' platforms':k==='ai_layer'?l.fast_model||'–':l.status||'–';
+      return`<div class="cc"><div class="cc-ic">${ico}</div><div><div class="cc-name">${lbl}</div><div class="cc-sync"><span class="dot" style="background:${ok?'var(--green)':'var(--red)'}"></span> ${esc(sub)}</div></div></div>`;
+    }).join('');
+  }else if(execConn?.connectors){
+    connGrid(document.getElementById('home-conn'),execConn.connectors.slice(0,6));
+  }
+  renderWorkOrdersPreview(workOrders);
+  document.getElementById('last-updated').textContent='Cập nhật: '+new Date().toLocaleTimeString('vi-VN');
+}
+function renderWorkOrdersPreview(workOrders){
+  const body=document.getElementById('home-workorders-body'); if(!body)return;
+  const items=workOrders?.items||[];
+  body.innerHTML=items.length?items.slice(0,5).map(wo=>`<div class="li"><div class="li-ic">📋</div><div class="li-b"><div class="li-t">${esc(wo.title||wo.id)}</div><div class="li-s">${esc(wo.priority||'P2')} · ${esc(wo.status||'open')} · ${esc(wo.project||'no project')}</div></div><span class="tag ${wo.priority==='P0'||wo.priority==='P1'?'tr':'ty'}">${esc(wo.priority||'P2')}</span></div>`).join(''):`<div class="empty"><div class="ei">✅</div><div class="et">Không có work order mở</div></div>`;
+}
+function bar(lbl,frac,val,col){return`<div class="hbar"><div class="hbar-lbl">${lbl}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(frac*100,100).toFixed(0)}%;background:${col}"></div></div><div class="hbar-val">${val}</div></div>`}
+function fmtDate(v){try{return v?new Date(v).toLocaleString('vi-VN'):'none'}catch{return v||'none'}}
+function qbState(qb){
+  if(!qb)return {cls:'warn',label:'QB unknown',dot:'var(--yellow)',box:'warn',title:'QB status unknown',text:'Không lấy được runtime snapshot'};
+  const dash=qb.dashboard_status||qb.status;
+  if(qb.certified&&dash==='healthy')return {cls:'ok',label:'QB Healthy',dot:'var(--green)',box:'ok',title:'QB healthy',text:`Last sync: ${fmtDate(qb.last_successful_sync||qb.last_sync_timestamp)} · ${qb.activity?.today_transactions||0} transactions today`};
+  if(dash==='needs_dev1_action')return {cls:'err',label:'QB needs Dev1',dot:'var(--red)',box:'err',title:'QB needs Dev1 action',text:qb.required_dev1_action||(qb.gaps||[]).join(' · ')||'Laptop1 action required'};
+  if(dash==='failed')return {cls:'err',label:'QB failed',dot:'var(--red)',box:'err',title:'QB failed',text:(qb.gaps||[]).join(' · ')||'QB runtime failed'};
+  if(dash==='degraded')return {cls:'warn',label:'QB degraded',dot:'var(--yellow)',box:'warn',title:'QB degraded',text:(qb.gaps||[]).join(' · ')||'QB runtime degraded'};
+  return {cls:'err',label:'QB issue',dot:'var(--red)',box:'err',title:'QB needs attention',text:(qb.gaps||[]).join(' · ')||qb.status||'unknown'};
+}
+function renderQbHero(qb){
+  const chip=document.getElementById('qb-hero-chip'); if(!chip)return;
+  const s=qbState(qb);
+  chip.className='hc '+s.cls;
+  chip.innerHTML=`<span class="dot" style="background:${s.dot}"></span>${esc(s.label)}`;
+}
+function renderQbMini(qb,targetId){
+  const el=document.getElementById(targetId); if(!el)return;
+  const s=qbState(qb);
+  const dupBills=qb?.duplicates?.duplicate_bills?.length||0;
+  const dupPayments=qb?.duplicates?.duplicate_payments?.length||0;
+  const handoff=qb?.handoff_package_path?`<div class="abox-text">Dev1 package: ${esc(qb.handoff_package_path)}</div>`:'';
+  el.innerHTML=`<div class="abox ${s.box}">
+    <div class="abox-ico">${s.box==='ok'?'✅':s.box==='warn'?'⚠️':'🔴'}</div>
+    <div class="abox-bd"><div class="abox-title">${esc(s.title)}</div><div class="abox-text">${esc(s.text)}</div>
+    <div class="abox-text">Status: ${esc(qb?.dashboard_status||qb?.status||'unknown')} · Company: ${qb?.company_detected?'yes':'no'} · QB open: ${qb?.quickbooks_desktop_open?'yes':'no'}</div>
+    <div class="abox-text">Transactions today: ${qb?.activity?.today_transactions||0} · Duplicate bills: ${dupBills} · Duplicate payments: ${dupPayments}</div>
+    <div class="abox-text">Checksum expected: ${esc(qb?.checksum?.expected||'none')} · actual: ${esc(qb?.checksum?.got||'none')}</div>
+    ${handoff}
+    <span class="abox-link" onclick="switchSection('finance')">→ Finance</span></div></div>`;
+}
+
+// ALERTS SECTION
+function renderAlerts(){
+  const el=document.getElementById('alerts-body');
+  if(!_alerts.length){el.innerHTML='<div class="empty"><div class="ei">✅</div><div class="et">Không có cảnh báo nào</div></div>';return}
+  el.innerHTML=_alerts.map(a=>`<div class="abox ${a.sev==='err'?'err':'warn'}">
+    <div class="abox-ico">${a.sev==='err'?'🔴':'⚠️'}</div>
+    <div class="abox-bd"><div class="abox-title">${esc(a.title)}</div><div class="abox-text">${esc(a.detail)}</div>
+    <span class="abox-link" onclick="switchSection('${a.action}')">→ Xem ${esc(a.action)}</span></div></div>`).join('');
+}
+
+// TASKS
+async function renderTasks(){
+  const exec=await getExec();const t=exec?.tasks?.data?.asana||{};
+  document.getElementById('tm-total').textContent=t.asana_my_tasks??'–';
+  document.getElementById('tm-overdue').textContent=t.asana_overdue??'–';
+  document.getElementById('tasks-alert-title').textContent=(t.asana_overdue??'–')+' tasks overdue';
+  document.getElementById('tasks-status').textContent=(exec?.tasks?.stale?'Stale/missing · ':'')+(t.asana_status||'Đồng bộ từ executive snapshot');
+  document.getElementById('tasks-meta').textContent=`${t.asana_my_tasks??'–'} total · ${t.asana_overdue??'–'} overdue`;
+}
+
+async function renderWorkOrders(){
+  const exec=await getExec();const wo=exec?.work_orders?.data||{count:0,items:[]};const items=wo.items||[];
+  document.getElementById('wo-open').textContent=wo.count??items.length;
+  document.getElementById('wo-critical').textContent=items.filter(x=>x.priority==='P0'||x.priority==='P1').length;
+  document.getElementById('wo-source').textContent='Snapshot';
+  document.getElementById('wo-freshness').textContent=exec?.work_orders?.freshness||'missing';
+  document.getElementById('workorders-body').innerHTML=items.length
+    ?`<table><thead><tr><th>ID</th><th>Title</th><th>Project</th><th>Priority</th><th>Status</th><th>Age</th></tr></thead><tbody>${items.map(wo=>`<tr><td>${esc(wo.id)}</td><td>${esc(wo.title)}</td><td>${esc(wo.project||'')}</td><td><span class="tag ${wo.priority==='P0'||wo.priority==='P1'?'tr':'ty'}">${esc(wo.priority)}</span></td><td>${esc(wo.status)}</td><td>${esc(wo.age_hours)}h</td></tr>`).join('')}</tbody></table>`
+    :'<div class="empty"><div class="ei">✅</div><div class="et">Không có work order mở</div></div>';
+}
+
+async function renderFinance(){
+  const exec=await getExec();const qb=exec?.finance_qb?.data||await getQb();
+  renderQbMini(qb,'finance-qb-status');
+}
+
+// APPROVALS
+async function loadApprovals(){
+  const exec=await getExec();const r=exec?.approvals?.data?.items||await api('/api/approval/pending');
+  const el=document.getElementById('approvals-body');
+  const items=Array.isArray(r)?r:[];
+  document.getElementById('kpi-approv').textContent=items.length;
+  el.innerHTML=items.length
+    ?`<table><thead><tr><th>Loại</th><th>Mô tả</th><th>Người gửi</th><th>Thời gian</th></tr></thead><tbody>${items.map(a=>`<tr><td><span class="tag ty">${esc(a.type||'request')}</span></td><td>${esc(a.description||'')}</td><td>${esc(a.requester||'System')}</td><td style="color:var(--text3)">${ago(a.created_at)}</td></tr>`).join('')}</tbody></table>`
+    :'<div class="empty"><div class="ei">✅</div><div class="et">Không có gì cần duyệt lúc này</div></div>';
+}
+
+// EMAIL
+async function renderEmail(){
+  const exec=await getExec();const em=exec?.gmail?.data||{};
+  document.getElementById('email-meta').textContent=`${em.unread_count??0} chưa đọc · ${em.important_count??0} quan trọng · ${exec?.gmail?.freshness||'missing'}`;
+  document.getElementById('email-body').innerHTML=`
+    <div class="metrics" style="margin-bottom:12px">
+      <div class="metric"><div class="metric-lbl">Chưa đọc</div><div class="metric-val warn">${em.unread_count??0}</div></div>
+      <div class="metric"><div class="metric-lbl">Quan trọng</div><div class="metric-val err">${em.important_count??0}</div></div>
+    </div>
+    <div class="abox warn" style="margin-bottom:0">
+      <div class="abox-ico">📧</div>
+      <div class="abox-bd">
+        <div class="abox-title">${em.unread_count??0} emails chưa đọc</div>
+        <div class="abox-text">${esc(em.status||'missing')} · ${exec?.gmail?.stale?'Stale/missing':'Fresh'} · Executive snapshot</div>
+        <a class="abox-link ev" href="https://mail.google.com" target="_blank">📎 Mở Gmail →</a>
+      </div>
+    </div>`;
+}
+
+// CALENDAR
+async function renderCalendar(){
+  const exec=await getExec();const cal=exec?.calendar?.data||{};const evs=cal.events_today||[];
+  const colors=['var(--accent)','var(--accent2)','var(--green)','var(--yellow)'];
+  document.getElementById('calendar-body').innerHTML=evs.length
+    ?`<div style="font-size:12px;color:var(--text3);margin-bottom:10px">${cal.today_count} sự kiện hôm nay · ${exec?.calendar?.freshness||'missing'}</div>`+
+       evs.map((ev,i)=>`<div class="li"><div class="li-ic" style="background:${colors[i%4]}18;color:${colors[i%4]}">📅</div><div class="li-b"><div class="li-t">${esc(ev.title)}</div><div class="li-s">${ev.start?.includes('T')?new Date(ev.start).toLocaleString('vi-VN',{weekday:'short',hour:'2-digit',minute:'2-digit'}):'Cả ngày'}</div></div><a class="ev" href="https://calendar.google.com" target="_blank">📎</a></div>`).join('')
+    :'<div class="empty"><div class="ei">📅</div><div class="et">Không có sự kiện hôm nay</div></div>';
+}
+
+// HEALTH
+async function renderHealth(){
+  const snap=await getSnap();const sum=snap?.health?.summary||'';
+  const steps=parseSteps(sum),sleep=parseSleep(sum),hrv=parseHRV(sum),rhr=parseRHR(sum),wk=parseWorkouts(sum),stress=parseStress(sum);
+  document.getElementById('health-metrics').innerHTML=`<div class="metrics">
+    <div class="metric"><div class="metric-lbl">Bước chân</div><div class="metric-val ${(steps||0)>=8000?'ok':'warn'}">${steps?.toLocaleString()||'–'}</div><div class="metric-sub">/ 10,000</div></div>
+    <div class="metric"><div class="metric-lbl">Giấc ngủ</div><div class="metric-val ok">${sleep||'–'}h</div><div class="metric-sub">Tốt</div></div>
+    <div class="metric"><div class="metric-lbl">HRV</div><div class="metric-val ok">${hrv||'–'}ms</div></div>
+    <div class="metric"><div class="metric-lbl">Nhịp tim nghỉ</div><div class="metric-val">${rhr||'–'}</div><div class="metric-sub">bpm</div></div>
+    <div class="metric"><div class="metric-lbl">Workouts</div><div class="metric-val ok">${wk||'–'}</div><div class="metric-sub">tuần này</div></div>
+    <div class="metric"><div class="metric-lbl">Stress</div><div class="metric-val ${stress==='LOW'?'ok':stress==='MEDIUM'?'warn':'err'}">${stress||'–'}</div></div>
+  </div>`;
+  document.getElementById('health-bars').innerHTML=
+    bar('Bước chân',(steps||0)/10000,(steps||0).toLocaleString()+'/10k',(steps||0)>=8000?'var(--green)':'var(--yellow)')+
+    bar('Giấc ngủ',(sleep||0)/9,(sleep||0)+'h / 9h','var(--green)')+
+    bar('HRV',(hrv||0)/80,(hrv||0)+'ms','var(--accent)')+
+    bar('Workouts',(wk||0)/5,(wk||0)+' / 5',(wk||0)>=3?'var(--green)':'var(--yellow)');
+}
+
+// CONNECTORS
+async function renderConnectors(){
+  const exec=await getExec();const conn=await getConn();const el=document.getElementById('conn-grid');
+  const truth=exec?.connectors?.data?.truth;
+  const c=truth?truth.map(x=>({id:x.connector_id,name:x.name,health:x.action_required?'degraded':'healthy',last_sync:x.last_successful_sync,setup_hint:x.setup_hint})):conn?.connectors;
+  if(!c){el.innerHTML='<div class="empty"><div class="et">Không lấy được dữ liệu</div></div>';return}
+  document.getElementById('conn-meta').textContent=`${c.length} total · ${c.filter(x=>x.health==='healthy').length} healthy · ${exec?.connectors?.freshness||'unknown'}`;
+  const badCount=c.filter(x=>x.health!=='healthy').length;
+  document.getElementById('nav-conn').textContent=badCount;
+  document.getElementById('nav-conn').style.display=badCount?'':'none';
+  connGrid(el,c);
+}
+function connGrid(el,c){
+  el.innerHTML=c.map(x=>{
+    const ok=x.health==='healthy';const deg=x.health==='degraded';
+    const dot=ok?'var(--green)':deg?'var(--red)':'var(--yellow)';
+    return`<div class="cc"><div class="cc-ic">${ICONS[x.id]||'🔌'}</div><div><div class="cc-name">${esc(x.name)}</div><div class="cc-sync"><span class="dot" style="background:${dot}"></span> ${ago(x.last_sync)}</div></div></div>`;
+  }).join('');
+}
+
+// BURN-IN
+async function loadBurnIn(){
+  const bi=await getBi();
+  if(!bi){document.getElementById('bi-score-card').innerHTML='<div class="empty"><div class="et">Não lấy được dữ liệu</div></div>';return}
+  const score=bi.burn_in_score??86;const status=bi.burn_in_status||'DEGRADED';
+  document.getElementById('bi-score-card').innerHTML=`
+    <div class="bi-score ${status}">${score}</div>
+    <div style="font-size:13px;color:var(--text2);margin-top:6px">/ 100 — <strong>${status}</strong></div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">Day ${bi.days_elapsed||1} / 7 &nbsp;·&nbsp; Start: ${bi.start_date?.slice(0,10)||'–'}</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:2px">Total events: ${bi.total_events||0}</div>`;
+  document.getElementById('bi-rates').innerHTML=
+    bar('✅ Success',bi.success_rate||0,pct(bi.success_rate||0),'var(--green)')+
+    bar('❌ Failure',bi.failure_rate||0,pct(bi.failure_rate||0),'var(--red)')+
+    bar('🔄 Retry',bi.retry_rate||0,pct(bi.retry_rate||0),'var(--yellow)')+
+    `<div class="hbar"><div class="hbar-lbl">⏱️ Avg</div><div class="hbar-val" style="text-align:left">${bi.avg_runtime_ms||0}ms</div></div>`;
+  document.getElementById('bi-flow').innerHTML=`<div class="metrics">
+    <div class="metric"><div class="metric-lbl">Flow Gaps</div><div class="metric-val ${(bi.flow_gaps||0)===0?'ok':'err'}">${bi.flow_gaps||0}</div></div>
+    <div class="metric"><div class="metric-lbl">Orphans</div><div class="metric-val ${(bi.orphan_workflows||0)===0?'ok':'warn'}">${bi.orphan_workflows||0}</div></div>
+    <div class="metric"><div class="metric-lbl">Missing Ev.</div><div class="metric-val ${(bi.missing_evidence||0)===0?'ok':'warn'}">${bi.missing_evidence||0}</div></div>
+  </div>`;
+  const doms=bi.by_domain||{};
+  document.getElementById('bi-domains').innerHTML=Object.entries(doms).map(([name,d])=>{
+    const rate=d.rate||0;const c=rate>=.95?'var(--green)':rate>=.8?'var(--yellow)':'var(--red)';
+    return`<div class="bi-dom"><div class="bi-dom-name">${esc(name)}</div><div class="bi-dom-track"><div class="bi-dom-fill" style="width:${(rate*100).toFixed(0)}%;background:${c}"></div></div><div class="bi-dom-val">${d.success||0}/${d.total||0} — ${pct(rate)}</div></div>`;
+  }).join('');
+  const recent=bi.recent_events||[];
+  document.getElementById('bi-recent').innerHTML=recent.length
+    ?`<table><thead><tr><th>Domain</th><th>Action</th><th>Status</th><th>Duration</th><th>Time</th></tr></thead><tbody>${recent.map(e=>`<tr><td><span class="tag tp">${esc(e.domain)}</span></td><td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.action)}</td><td><span class="tag ${e.status==='success'?'tg':e.status==='failure'?'tr':'ty'}">${esc(e.status)}</span></td><td style="color:var(--text3)">${e.duration_ms}ms</td><td style="color:var(--text3)">${ago(e.recorded_at)}</td></tr>`).join('')}</tbody></table>`
+    :'<div class="empty"><div class="et">Chưa có events</div></div>';
+}
+
+// CHAT
+function sendQ(msg){document.getElementById('chat-input').value=msg;sendChat()}
+async function sendChat(){
+  const inp=document.getElementById('chat-input');const msg=inp.value.trim();if(!msg)return;
+  inp.value='';inp.style.height='';
+  const btn=document.getElementById('chat-send');btn.disabled=true;
+  addBub('user',msg,'👤');
+  const typing=addBub('bot','⏳ đang suy nghĩ...','🤖');
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,language:'vi'})});
+    const d=await r.json();
+    const text=d.reply||d.response||d.message||JSON.stringify(d).slice(0,500);
+    const sources=d.sources?.join(' · ')||'';
+    typing.querySelector('.chat-bub').textContent=text;
+    if(sources){const s=document.createElement('div');s.className='chat-src';s.textContent='Sources: '+sources;typing.querySelector('div').appendChild(s)}
+  }catch(e){typing.querySelector('.chat-bub').textContent='❌ Lỗi: '+e.message}
+  btn.disabled=false;
+  document.getElementById('chat-msgs').scrollTop=999999;
+}
+function addBub(role,text,icon){
+  const msgs=document.getElementById('chat-msgs');
+  const el=document.createElement('div');el.className='chat-msg '+role;
+  const av=document.createElement('div');av.className='chat-av';av.textContent=icon;
+  const wrap=document.createElement('div');
+  const bub=document.createElement('div');bub.className='chat-bub';bub.textContent=text;
+  wrap.appendChild(bub);el.appendChild(av);el.appendChild(wrap);
+  msgs.appendChild(el);msgs.scrollTop=999999;return el;
+}
+
+// BOOT
+(async()=>{await renderHome();startAutoRefresh()})();
+</script>
+</body>
+</html>

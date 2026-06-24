@@ -11,31 +11,33 @@ echo  ██║ ╚═╝ ██║██║
 echo  ╚═╝     ╚═╝╚═╝  Executive Assistant
 echo.
 
-:: --- Python AI Service ---
-echo [1/3] Starting Python AI Service (port 4002)...
-start "Mi AI Service" cmd /c "cd /d %~dp0ai-service && python -m uvicorn main:app --host 0.0.0.0 --port 4002 --reload 2>&1 | tee ../logs/ai-service.log"
-
-timeout /t 2 /nobreak >nul
-
-:: --- Agent Engine Bridge ---
-echo [2/4] Starting Agent Engine Bridge (port 4003)...
-start "Mi Agent Engine" cmd /c "cd /d %~dp0 && node agent-engine/bridge.mjs 2>&1 | tee logs/agent-engine.log"
-
-timeout /t 2 /nobreak >nul
-
-:: --- Node Server (Remote Access ON) ---
-echo [3/4] Starting Mi Server (port 4001, remote enabled)...
-cd /d %~dp0server
-if not exist node_modules (
-  echo Installing Node dependencies...
-  call npm install
+:: --- Big Data Infra (Docker) ---
+echo [0/4] Starting Big Data infra (PostgreSQL + MinIO + Qdrant)...
+docker info >nul 2>&1
+if %errorlevel%==0 (
+  cd /d %~dp0infra\bigdata
+  docker-compose up -d >nul 2>&1
+  echo [0/4] Big Data infra started
+  cd /d %~dp0
+) else (
+  echo [0/4] Docker not ready — skipping Big Data infra
 )
-start "Mi Server" cmd /c "cd /d %~dp0server && set MOBILE_ACCESS=1 && set HOST=0.0.0.0 && npm run dev 2>&1 | tee ../logs/server.log"
 
-timeout /t 3 /nobreak >nul
+:: --- Start all services via PM2 ---
+echo [1/4] Starting all services via PM2 ecosystem...
+cd /d %~dp0
+pm2 start ecosystem.config.js 2>nul
+pm2 save 2>nul
+
+timeout /t 5 /nobreak >nul
+
+echo [2/4] Verifying processes...
+pm2 list
+
+timeout /t 2 /nobreak >nul
 
 :: --- Get Tailscale IP ---
-echo [4/4] Detecting network...
+echo [3/4] Detecting network...
 for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "tailscale"') do (
   set TAILSCALE_IP=%%a
 )

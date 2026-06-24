@@ -1,22 +1,22 @@
 # DATA_FRESHNESS_GUARD
 
-Generated: 2026-06-15T01:45:19.538Z
+Generated: 2026-06-23T16:19:51.237Z
 Target: DATA_FRESHNESS_GUARD_READY
 Overall status: stale
 
 | Source | Status | Age Min | Threshold Min | Stale | Last Sync |
 | --- | --- | --- | --- | --- | --- |
-| Gmail | stale | 701 | 120 | yes | 2026-06-14T14:03:57.278Z |
-| Calendar | fresh | 29 | 120 | no | 2026-06-15T01:15:55.067Z |
-| Drive | fresh | 29 | 240 | no | 2026-06-15T01:15:55.856Z |
-| Sheets | fresh | 29 | 240 | no | 2026-06-15T01:15:58.312Z |
-| Asana | fresh | 29 | 240 | no | 2026-06-15T01:16:06.185Z |
-| Health | fresh | 29 | 1440 | no | 2026-06-15T01:16:06.195Z |
-| Website bakudanramen.com | fresh | 29 | 1440 | no | 2026-06-15T01:16:07.960Z |
-| Website rawsushibar.com | fresh | 29 | 1440 | no | 2026-06-15T01:16:07.961Z |
-| QuickBooks | degraded | 0 | 1440 | no | 2026-06-15T01:45:19.533Z |
-| Work Orders | fresh | 2091 | 2880 | no | 2026-06-13T14:54:18.677Z |
-| Graph | fresh | 60 | 1440 | no | 2026-06-15T00:45:12.896Z |
-| Memory | fresh | 16 | 1440 | no | 2026-06-15T01:28:50.665Z |
+| Gmail | stale | 13096 | 120 | yes | 2026-06-14T14:03:57.278Z |
+| Calendar | stale | 4779 | 120 | yes | 2026-06-20T08:40:36.358Z |
+| Drive | stale | 4779 | 240 | yes | 2026-06-20T08:40:37.132Z |
+| Sheets | degraded | 0 | 240 | no | 2026-06-23T16:19:46.040Z |
+| Asana | fresh | 30 | 240 | no | 2026-06-23T15:49:59.322Z |
+| Health | fresh | 30 | 1440 | no | 2026-06-23T15:49:59.331Z |
+| Website bakudanramen.com | fresh | 30 | 1440 | no | 2026-06-23T15:50:01.157Z |
+| Website rawsushibar.com | fresh | 30 | 1440 | no | 2026-06-23T15:50:01.160Z |
+| QuickBooks | degraded | 0 | 1440 | no | 2026-06-23T16:19:51.227Z |
+| Work Orders | stale | 10852 | 2880 | yes | 2026-06-16T03:27:31.657Z |
+| Graph | fresh | 0 | 1440 | no | 2026-06-23T16:19:46.904Z |
+| Memory | stale | 5299 | 1440 | yes | 2026-06-20T00:01:00.988Z |
 
 Rules: fresh = within threshold, warning = degraded connector/error with timestamp, stale = beyond threshold/missing/error. Stale sources are escalated into the incident registry.

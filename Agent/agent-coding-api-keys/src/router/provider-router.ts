@@ -49,13 +49,14 @@ import type { SourceCandidate } from '../runtime/model-quota-service.js';
 import { classifyUpstreamError, classifyThrownError, shouldDisableKeyForError, shouldTripProviderForError } from '../runtime/upstream-error-classifier.js';
 import type { UpstreamErrorType } from '../runtime/upstream-error-classifier.js';
 import { truncateContext, estimateRequestTokens } from '../runtime/context-truncator.js';
+import { concurrencyLimiter } from '../runtime/concurrency-limiter.js';
 
 // ── Feature flags ────────────────────────────────────────────────────────────
 
 const PROVIDER_ROTATION_ENABLED = process.env['PROVIDER_ROTATION_ENABLED'] !== 'false';
 const KEY_ROTATION_ENABLED      = process.env['KEY_ROTATION_ENABLED'] !== 'false';
 const RESERVE_FALLBACK_ON_OPUS_EXHAUSTION = process.env['RESERVE_FALLBACK_ON_OPUS_EXHAUSTION'] !== 'false';
-const PRIMARY_PROVIDER_IDS = ['antigravity', 'opusmax'] as const;
+const PRIMARY_PROVIDER_IDS = ['opusmax', 'antigravity'] as const;
 const OPUS_QUOTA_REQUESTS = new Set([
   'claude-opus-4',
   'claude-opus-4-6',
@@ -68,6 +69,19 @@ const OPUS_QUOTA_REQUESTS = new Set([
 
 function isModelScopedLimitError(type: UpstreamErrorType): boolean {
   return type === 'quota_exceeded' || type === 'rate_limited';
+}
+
+function isBackoffError(type: UpstreamErrorType): boolean {
+  return type === 'concurrency_limit' || type === 'rate_limited';
+}
+
+function shouldBackoffBeforeNextSource(providerId: string, type: UpstreamErrorType): boolean {
+  if (providerId === 'opusmax' && isBackoffError(type)) return false;
+  return isBackoffError(type);
+}
+
+function backoffMsForAttempt(index: number): number {
+  return [5_000, 15_000, 30_000][Math.min(index, 2)] ?? 30_000;
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -123,6 +137,12 @@ interface ProviderAttemptResult {
   contextTruncated?: boolean;
   originalTokens?: number;
   truncatedTokens?: number;
+  /** Streaming success is committed only after the first valid SSE event. */
+  confirmStreamStart?: () => void;
+  /** Streaming start errors update source health without recording success. */
+  rejectStreamStart?: (errorType: UpstreamErrorType, message: string) => void;
+  /** For streaming: release function to free the concurrency slot when stream ends. */
+  releaseSlot?: () => void;
 }
 
 // ── Router ───────────────────────────────────────────────────────────────────
@@ -226,14 +246,14 @@ export class ProviderRouter {
   }
 
   /** Streaming route with 2-level key+provider rotation. */
-  async routeStream(request: UniversalChatRequest): Promise<StreamRouteResult> {
+  async routeStream(request: UniversalChatRequest, excludedSourceIds: ReadonlySet<string> = new Set()): Promise<StreamRouteResult> {
     const start = Date.now();
     const reqId = this.nextReqId();
     const rotWin = providerRotationService.getCurrentWindow();
     const [primaryId, ...fallbackIds] = this.resolveProviderOrder(request);
     const allAttempts: RouteAttempt[] = [];
     const allFailedKeys: Array<{ providerId: string; keyId: string; errorType: UpstreamErrorType; error: string }> = [];
-    const attemptedSourceIds = new Set<string>();
+    const attemptedSourceIds = new Set<string>(excludedSourceIds);
 
     console.log(`[router] ▶  ${reqId}  stream=true  window="${rotWin.windowLabel}"  primary=${primaryId}  fallbacks=[${fallbackIds.join(',')}]`);
 
@@ -257,11 +277,24 @@ export class ProviderRouter {
           fallbackCount: allAttempts.filter((a) => !a.ok).length,
         };
 
-        providerControl.recordRouted(providerId, latency);
-        circuitBreakers.recordSuccess(providerId);
-        quotaOrchestrator.consume(providerId);
+        let streamStartFinalized = false;
+        const confirmStreamStart = () => {
+          if (streamStartFinalized) return;
+          streamStartFinalized = true;
+          result.confirmStreamStart?.();
+          providerControl.recordRouted(providerId, latency);
+          circuitBreakers.recordSuccess(providerId);
+          quotaOrchestrator.consume(providerId);
+          console.log(`[router] ✓  ${reqId}  ${providerId}  source=${result.sourceId}  key=${result.keyId}  stream START OK  (${latency}ms)`);
+        };
+        const rejectStreamStart = (errorType: string, message: string) => {
+          if (streamStartFinalized) return;
+          streamStartFinalized = true;
+          result.rejectStreamStart?.(errorType as UpstreamErrorType, message);
+          console.warn(`[router] ✗  ${reqId}  ${providerId}  source=${result.sourceId}  stream START FAILED [${errorType}]`);
+        };
 
-        console.log(`[router] ✓  ${reqId}  ${providerId}  source=${result.sourceId}  key=${result.keyId}  stream OK  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
+        console.log(`[router] ◌  ${reqId}  ${providerId}  source=${result.sourceId}  key=${result.keyId}  stream OPEN  (${latency}ms)${usedFallback ? '  [FALLBACK]' : ''}${result.contextTruncated ? `  [TRUNCATED ${result.originalTokens}→${result.truncatedTokens}tok]` : ''}`);
 
         this.log(request, result.model, allAttempts, providerId, result.keyId, latency, undefined, undefined, usedFallback, rotInfo, result.contextTruncated, result.originalTokens, result.truncatedTokens);
         return {
@@ -269,6 +302,10 @@ export class ProviderRouter {
           provider: { id: providerId, kind: result.providerKind },
           model: result.model,
           attempts: allAttempts,
+          ...(result.sourceId ? { sourceId: result.sourceId } : {}),
+          confirmStreamStart,
+          rejectStreamStart,
+          ...(result.releaseSlot ? { releaseSlot: result.releaseSlot } : {}),
         };
       }
 
@@ -399,18 +436,30 @@ export class ProviderRouter {
     const failedKeys: ProviderAttemptResult['failedKeys'] = [];
     const attempts: RouteAttempt[] = [];
     let shouldTripProvider = false;
+    let timeoutCount = 0;
+    // For opusmax, bail after 2 timeouts in one request to avoid ~75s × N-source wait.
+    const timeoutBailThreshold = providerId === 'opusmax' ? 2 : Infinity;
 
     for (const candidate of candidates) {
       const { key, model, sourceId, sourceLabel } = candidate;
+      // Skip if this sourceId was already attempted (multiple model variants can share one sourceId).
+      if (attemptedSourceIds.has(sourceId)) continue;
       attemptedSourceIds.add(sourceId);
       const keyStart = Date.now();
-      console.log(`[router]   → ${providerId}  source=${sourceId} (${sourceLabel})  key=${key.id}  requested=${request.model}  resolved=${model}  reason=${resolution.reason}  stream=${streaming}`);
+
+      const slotBefore = concurrencyLimiter.snapshotFor(sourceId);
+      const releaseSlot = await concurrencyLimiter.acquire(sourceId);
+      const active = concurrencyLimiter.getActive(sourceId);
+
+      console.log(`[router]   → ${providerId}  source=${sourceId} (${sourceLabel})  key=${key.id}  requested=${request.model}  resolved=${model}  reason=${resolution.reason}  stream=${streaming}  source_active=${active} queued_before=${slotBefore.queued}`);
 
       try {
         if (streaming) {
           const upstream = await provider.fetchStream({ ...request, model }, key);
 
           if (!upstream.ok) {
+            // Release slot immediately on HTTP error — slot is no longer needed.
+            releaseSlot();
             const rawBody = await upstream.text();
             const classified = classifyUpstreamError(upstream.status, rawBody);
             const latency = Date.now() - keyStart;
@@ -436,34 +485,75 @@ export class ProviderRouter {
 
             // Auth failure: no point trying other keys on this provider
             if (classified.type === 'auth_failed') break;
+            if (classified.type === 'timeout') {
+              timeoutCount++;
+              if (timeoutCount >= timeoutBailThreshold) {
+                console.warn(`[router]   ✗ ${providerId}: ${timeoutCount} timeouts — bailing on remaining sources`);
+                break;
+              }
+            }
+            if (shouldBackoffBeforeNextSource(providerId, classified.type)) {
+              const delay = backoffMsForAttempt(failedKeys.filter((k) => k.errorType === classified.type).length - 1);
+              console.warn(`[router]   ↻ ${providerId}  source=${sourceId}  ${classified.type} backoff=${delay}ms before trying another source`);
+              await new Promise((r) => setTimeout(r, delay));
+            }
             continue;
           }
 
-          // Stream response is open — return immediately (no double-billing fallback)
+          // HTTP 200 only means the stream is open. Do not record success/quota yet:
+          // Anthropic-compatible providers can send an error as the first SSE event.
           const latency = Date.now() - keyStart;
-          apiKeyRotationService.markSuccess(providerId, key.id);
-          providerKeyService.recordSuccess(key as RuntimeKey);
-          modelQuotaService.recordSuccess(providerId, key, model);
-          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel });
+          const attempt: RouteAttempt = { providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel };
+          attempts.push(attempt);
+          let finalized = false;
+          const confirmStreamStart = () => {
+            if (finalized) return;
+            finalized = true;
+            apiKeyRotationService.markSuccess(providerId, key.id);
+            providerKeyService.recordSuccess(key as RuntimeKey);
+            modelQuotaService.recordSuccess(providerId, key, model);
+          };
+          const rejectStreamStart = (errorType: UpstreamErrorType, message: string) => {
+            if (finalized) return;
+            finalized = true;
+            attempt.ok = false;
+            attempt.error = `${errorType}: ${message.slice(0, 100)}`;
+            const isModelScopedQuota = isModelScopedLimitError(errorType) && modelQuotaService.hasTrackedLimit(providerId, key, model);
+            if (isModelScopedQuota) {
+              modelQuotaService.markExhausted(providerId, key, model, message);
+            }
+            modelQuotaService.markSourceFailure(candidate, errorType, message);
+            providerControl.recordError(providerId, errorType, errorType);
+          };
           return {
             ok: true, providerId, keyId: key.id, sourceId, sourceLabel,
             upstream, providerKind: provider.config.kind, model,
             attempts, failedKeys, shouldTripProvider: false,
+            confirmStreamStart,
+            rejectStreamStart,
+            releaseSlot,
             ...truncMeta,
           };
 
         } else {
-          const response = await provider.chat({ ...request, model }, key);
-          const latency = Date.now() - keyStart;
+          // Non-streaming: hold slot for the full round-trip, always release in finally.
+          try {
+            const response = await provider.chat({ ...request, model }, key);
+            const latency = Date.now() - keyStart;
 
-          apiKeyRotationService.markSuccess(providerId, key.id);
-          providerKeyService.recordSuccess(key as RuntimeKey);
-          modelQuotaService.recordSuccess(providerId, key, model);
-          attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel });
-          return { ok: true, providerId, keyId: key.id, sourceId, sourceLabel, response, attempts, failedKeys, shouldTripProvider: false, ...truncMeta };
+            apiKeyRotationService.markSuccess(providerId, key.id);
+            providerKeyService.recordSuccess(key as RuntimeKey);
+            modelQuotaService.recordSuccess(providerId, key, model);
+            attempts.push({ providerId, model, latencyMs: latency, ok: true, keyId: key.id, sourceId, sourceLabel });
+            return { ok: true, providerId, keyId: key.id, sourceId, sourceLabel, response, attempts, failedKeys, shouldTripProvider: false, ...truncMeta };
+          } finally {
+            releaseSlot();
+          }
         }
 
       } catch (error) {
+        // Release slot on any uncaught exception.
+        releaseSlot();
         const classified = classifyThrownError(error);
         const errMsg = error instanceof Error ? error.message : String(error);
         const latency = Date.now() - keyStart;
@@ -488,6 +578,18 @@ export class ProviderRouter {
         }
 
         if (classified.type === 'auth_failed') break;
+        if (classified.type === 'timeout') {
+          timeoutCount++;
+          if (timeoutCount >= timeoutBailThreshold) {
+            console.warn(`[router]   ✗ ${providerId}: ${timeoutCount} timeouts — bailing on remaining sources`);
+            break;
+          }
+        }
+        if (shouldBackoffBeforeNextSource(providerId, classified.type)) {
+          const delay = backoffMsForAttempt(failedKeys.filter((k) => k.errorType === classified.type).length - 1);
+          console.warn(`[router]   ↻ ${providerId}  source=${sourceId}  ${classified.type} backoff=${delay}ms before trying another source`);
+          await new Promise((r) => setTimeout(r, delay));
+        }
         continue;
       }
     }
@@ -535,6 +637,12 @@ export class ProviderRouter {
       const sourceOrderedProviders = providerSources
         .filter((entry) => entry.candidates.length > 0)
         .sort((a, b) => {
+          // OpusMax always beats antigravity regardless of source window position.
+          // Source window rotation applies within NKQ keys only (not across providers).
+          const aIsOpus = a.providerId === 'opusmax';
+          const bIsOpus = b.providerId === 'opusmax';
+          if (aIsOpus && !bIsOpus) return -1;
+          if (bIsOpus && !aIsOpus) return 1;
           const aSource = a.candidates[0]?.sourceId ?? a.providerId;
           const bSource = b.candidates[0]?.sourceId ?? b.providerId;
           return sourceWindow.sourceOrder.indexOf(aSource) - sourceWindow.sourceOrder.indexOf(bSource);
@@ -642,7 +750,7 @@ export class ProviderRouter {
   }
 
   private shouldTripProviderForSource(candidate: SourceCandidate, errorType: UpstreamErrorType): boolean {
-    if (candidate.providerId === 'opusmax' && (errorType === 'provider_down' || errorType === 'timeout' || errorType === 'rate_limited')) {
+    if (candidate.providerId === 'opusmax' && (errorType === 'provider_down' || errorType === 'timeout' || errorType === 'rate_limited' || errorType === 'concurrency_limit')) {
       return false;
     }
     return shouldTripProviderForError(errorType);

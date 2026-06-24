@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-06-24T01:14:00.000Z",
+  "phase": 4,
+  "title": "Mi SEO Dashboard Proof",
+  "endpoints": {
+    "GET /api/seo/dashboard": {
+      "status": "live",
+      "agents_total": 7,
+      "agents_online": 7,
+      "all_online": true,
+      "seo_score_summary": "operational"
+    },
+    "GET /api/seo/agents": {
+      "status": "live",
+      "total": 7,
+      "online": 7,
+      "agents": [
+        "seo-local-maps-agent:4011",
+        "seo-website-agent:4012",
+        "seo-technical-agent:4013",
+        "seo-schema-agent:4014",
+        "seo-content-agent:4015",
+        "seo-citation-agent:4016",
+        "seo-analytics-agent:4017"
+      ]
+    },
+    "GET /api/seo/connectors/status": {
+      "status": "live",
+      "connectors_reported": 5,
+      "real_connectors_active": 2,
+      "missing_credentials": 3
+    },
+    "GET /api/seo/reports/latest": {
+      "status": "live"
+    },
+    "GET /api/seo/issues": {
+      "status": "live"
+    },
+    "GET /api/seo/opportunities": {
+      "status": "live"
+    },
+    "GET /api/seo/locations": {
+      "status": "live",
+      "locations": ["bandera", "stone-oak", "the-rim"]
+    },
+    "GET /api/seo/kpis": {
+      "status": "live",
+      "kpis": {
+        "agents_online": 7,
+        "seo_health": "healthy",
+        "citations_confirmed": 2,
+        "citations_total": 13,
+        "connector_status": {
+          "crawler": "success",
+          "citation_scan": "success",
+          "gsc": "missing_credentials",
+          "gbp": "missing_credentials",
+          "ga4": "missing_credentials"
+        }
+      }
+    }
+  },
+  "dashboard_shows": {
+    "7_7_agent_status": true,
+    "connector_status": true,
+    "last_sync_time": true,
+    "real_vs_seeded_data_ratio": true,
+    "seo_score": true,
+    "open_technical_issues": true,
+    "ranking_opportunities": true,
+    "citation_issues": true,
+    "review_growth": false,
+    "top_pages": false,
+    "top_keywords": false,
+    "traffic_trend": false,
+    "order_attribution": false
+  }
+}

@@ -1,6 +1,6 @@
 # WhatsApp Data Consistency Validation
 
-**Date:** 2026-06-15T03:29:59.218Z
+**Date:** 2026-06-15T03:44:16.068Z
 
 ## HTTP vs Jarvis Route Checks
 
@@ -22,7 +22,7 @@
   },
   {
     "source": "/api/chat",
-    "note": "waived — may be on different path"
+    "status": 200
   }
 ]
 ```

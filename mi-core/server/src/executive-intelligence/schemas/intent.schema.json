@@ -1,0 +1,25 @@
+{
+  "$id": "intent.schema.json",
+  "type": "object",
+  "required": ["primary_intent", "confidence", "hypotheses", "needs_execution"],
+  "properties": {
+    "primary_intent": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "needs_execution": { "type": "boolean" },
+    "hypotheses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["intent", "confidence", "why"],
+        "properties": {
+          "intent": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "why": { "type": "string" },
+          "missing_information": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "suggested_departments": { "type": "array", "items": { "type": "string" } }
+  }
+}

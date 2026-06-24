@@ -23,7 +23,8 @@ import path from 'path';
 import { getHolidayContextString, getWeekContext } from './holiday-engine';
 import { getTimeContextForAI, getOwnerTimezone } from '../utils/timezone';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = path.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path.join(MI_CORE_ROOT, '.local-agent-global');
 const MEM_DIR = path.join(GLOBAL_DIR, 'executive-memory-v2');
 
 function readMem(file: string): Record<string, unknown> {
@@ -52,9 +53,9 @@ export function buildExecutiveContext(): string {
 
   const blocks: string[] = [];
 
-  // ── CEO Identity ──
+  // ── Owner Identity ──
   blocks.push(`=== WHO YOU ARE WORKING FOR ===
-CEO: ${owner.full_role || 'CEO'}, Vietnamese entrepreneur
+Anh: ${owner.full_role || 'business owner'}, Vietnamese entrepreneur
 Location: ${owner.city || 'Ho Chi Minh City'}, ${owner.country || 'Vietnam'} — ICT/UTC+7
 Current time: ${ownerTime}
 Timezone: ${ownerTz} (Owner Primary — all conversations, scheduling, reminders use this)
@@ -87,9 +88,9 @@ Manager: ${(biz.operations as Record<string,string>)?.staff_manager || 'Maria'}`
   blocks.push(`=== CURRENT WEEK & HOLIDAYS (Owner timezone) ===
 ${holidayCtx}`);
 
-  // ── Workflows CEO expects ──
+  // ── Workflows anh expects ──
   const wf = workflows.common_workflows || {};
-  const wfLines = ['=== HOW CEO EXPECTS YOU TO WORK ==='];
+  const wfLines = ['=== HOW ANH EXPECTS YOU TO WORK ==='];
   for (const [key, w] of Object.entries(wf)) {
     wfLines.push(`\n[${key.replace(/_/g,' ').toUpperCase()}] (trigger: ${w.trigger})`);
     wf[key].steps.forEach(s => wfLines.push(`  ${s}`));
@@ -112,20 +113,20 @@ When unsure: ${prefs.when_unsure || 'make best inference, state assumptions'}`);
 export function buildSystemPrompt(additionalContext: string[] = []): string {
   const execCtx = buildExecutiveContext();
 
-  const corePrompt = `Bạn là Mi — Jarvis-style Executive Assistant của CEO.
+  const corePrompt = `Bạn là Mi — Jarvis-style Executive Assistant của anh.
 
-IDENTITY: Bạn không phải chatbot. Bạn là người trợ lý thực sự đang làm việc cho CEO.
-- Xưng "em", gọi CEO là "anh"
-- Luôn nói tiếng Việt tự nhiên (trừ khi CEO dùng tiếng Anh)
+IDENTITY: Bạn không phải chatbot. Bạn là người trợ lý thực sự đang làm việc cho anh.
+- Xưng "em", gọi người dùng là "anh"
+- Luôn nói tiếng Việt tự nhiên (trừ khi anh dùng tiếng Anh)
 - Không hỏi lại những điều rõ ràng
-- Khi CEO nói 1 câu, em đã hiểu full context — không cần giải thích lại
+- Khi anh nói 1 câu, em phải hiểu full context — không cần giải thích lại
 
 TIMEZONE RULE: Owner timezone (Asia/Ho_Chi_Minh / ICT / UTC+7) là PRIMARY.
-Khi CEO nói "hôm nay", "ngày mai", "tuần này", "sáng", "chiều", "tối", "lên lịch", "nhắc" → dùng OWNER timezone.
+Khi anh nói "hôm nay", "ngày mai", "tuần này", "sáng", "chiều", "tối", "lên lịch", "nhắc" → dùng OWNER timezone.
 Store times (Chicago CDT, Los Angeles PDT) chỉ mang tính tham khảo.
 
 THINKING MODE: Trước khi trả lời, em suy luận:
-1. CEO đang hỏi gì thực sự? (intent behind the words)
+1. Anh đang hỏi gì thực sự? (intent behind the words)
 2. Có data nào em đang có không?
 3. Nếu không có data → suy luận từ context + knowledge
 4. Output: HÀNH ĐỘNG cụ thể, không phải checklist

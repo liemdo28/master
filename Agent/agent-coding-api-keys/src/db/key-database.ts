@@ -48,7 +48,7 @@ function decrypt(stored: string): string {
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type KeyStatus = 'healthy' | 'rate_limited' | 'quota_exhausted' | 'auth_failed' | 'timeout' | 'disabled' | 'expired' | 'pending';
+export type KeyStatus = 'healthy' | 'rate_limited' | 'quota_exhausted' | 'auth_failed' | 'provider_down' | 'timeout' | 'disabled' | 'expired' | 'pending';
 
 export interface ProviderKeyRow {
   id: number;
@@ -299,7 +299,18 @@ export class KeyDatabase {
       SELECT id, key_name, api_key_encrypted, priority, weight
       FROM provider_api_keys
       WHERE provider_name = ? AND enabled = 1 AND deleted_at IS NULL
-        AND status NOT IN ('auth_failed','disabled','expired')
+        AND (
+          status NOT IN ('auth_failed','disabled','expired')
+          OR (
+            status = 'auth_failed'
+            AND last_error IS NOT NULL
+            AND (
+              lower(last_error) LIKE '%all available accounts exhausted%'
+              OR lower(last_error) LIKE '%no available accounts%'
+              OR lower(last_error) LIKE '%server_error%'
+            )
+          )
+        )
         AND (expires_at IS NULL OR expires_at > ?)
       ORDER BY priority ASC, weight DESC, id ASC
     `).all(providerName, now) as Array<{ id: number; key_name: string; api_key_encrypted: string; priority: number; weight: number }>;

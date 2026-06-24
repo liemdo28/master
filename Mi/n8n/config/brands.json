@@ -1,0 +1,30 @@
+{
+  "registry_version": "1.0.0",
+  "generated_at": "2026-06-24",
+  "description": "Multi-brand registry. Every n8n workflow MUST accept brand_id (single brand, 'all', or list). NO workflow may hardcode Bakudan-only logic.",
+  "brands": [
+    {
+      "brand_id": "bakudan",
+      "display_name": "Bakudan Ramen",
+      "domain": "bakudanramen.com",
+      "active": true,
+      "locations": ["main_store", "downtown", "southside"],
+      "integrations": ["seo", "reviews", "doordash", "food-safety", "quickbooks"]
+    },
+    {
+      "brand_id": "rawsushi",
+      "display_name": "Raw Sushi",
+      "domain": "rawsushi.example.com",
+      "active": true,
+      "locations": ["main_store"],
+      "integrations": ["seo", "reviews", "doordash", "food-safety"]
+    }
+  ],
+  "default_brand": "bakudan",
+  "default_brand_id_when_unspecified": "all",
+  "notes": [
+    "All workflows must support brand_id='all' (run across every active brand).",
+    "location_id may be 'all' (every location of the brand) or a specific location key.",
+    "Adding a new brand: append to 'brands' array — no code changes needed for workflows that read this file."
+  ]
+}

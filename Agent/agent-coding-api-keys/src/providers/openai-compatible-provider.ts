@@ -67,14 +67,16 @@ export class OpenAICompatibleProvider extends BaseProvider {
       });
 
       if (this.shouldFallbackStreamToNonStream(response.status)) {
-        const fallback = await this.fetchNonStreamAsSSE(request, key);
+        const fallback = await this.fetchNonStreamAsSSE(request, key, 30_000);
         if (fallback) return fallback;
       }
 
       return response;
     } catch (error) {
       if (this.id === 'opusmax') {
-        const fallback = await this.fetchNonStreamAsSSE(request, key);
+        // Stream timed out or failed — retry as non-stream with a short 30s budget.
+        // Non-stream skips chunked-streaming overhead and often succeeds when streaming hangs.
+        const fallback = await this.fetchNonStreamAsSSE(request, key, 30_000);
         if (fallback) return fallback;
       }
       throw error;
@@ -135,14 +137,14 @@ export class OpenAICompatibleProvider extends BaseProvider {
     return this.id === 'opusmax' && [429, 502, 503, 504].includes(status);
   }
 
-  private async fetchNonStreamAsSSE(request: UniversalChatRequest, key: import('../types.js').ProviderKey): Promise<Response | null> {
+  private async fetchNonStreamAsSSE(request: UniversalChatRequest, key: import('../types.js').ProviderKey, timeoutMs?: number): Promise<Response | null> {
     const payload = this.buildPayload(request, false);
     try {
       const response = await fetch(this.endpoint('/chat/completions'), {
         method: 'POST',
         headers: this.buildHeaders(key.value),
         body: JSON.stringify(payload),
-        signal: this.timeoutSignal(),
+        signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : this.timeoutSignal(),
       });
       if (!response.ok) return null;
       const data = await response.json() as OpenAIResponse;

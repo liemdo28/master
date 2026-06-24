@@ -1,0 +1,157 @@
+{
+  "rules": [
+    {
+      "category": "Cold Holding",
+      "item": "Walk-in Cooler",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Close door, re-temp in 10 min, alert MOD if still high"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Walk-in Freezer",
+      "operator": "<=",
+      "target": 0,
+      "unit": "F",
+      "correctiveAction": "Close door, alert MOD if above 0°F"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Prep Area Cooler",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Alert MOD; move product if above 40°F"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Ramen Refrigeration Top",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Do not serve exposed product if high; cool/replace"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Ramen Refrigeration Below",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Cover/cool/replace and alert MOD if high"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Line Freezer",
+      "operator": "<=",
+      "target": 0,
+      "unit": "F",
+      "correctiveAction": "Alert MOD; verify product condition"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Tapas Refrigeration Top",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Do not serve exposed product if high; cool/replace"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Tapas Refrigeration Below",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "Cover/cool/replace and alert MOD if high"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Bowl Warmers",
+      "operator": ">=",
+      "target": 100,
+      "unit": "F",
+      "correctiveAction": "Adjust warmer and re-temp"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Pork Chashu",
+      "operator": ">=",
+      "target": 100,
+      "unit": "F",
+      "correctiveAction": "Verify SOP; if below hot holding standard, do not serve"
+    },
+    {
+      "category": "Cold Holding",
+      "item": "Chicken Chashu",
+      "operator": "<=",
+      "target": 40,
+      "unit": "F",
+      "correctiveAction": "If above 40°F, cover/cool/replace and alert MOD"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Seasoned Eggs",
+      "operator": ">=",
+      "target": 100,
+      "unit": "F",
+      "correctiveAction": "Must have designated timer; verify 4-hour holding"
+    },
+    {
+      "category": "Cooking Equipment",
+      "item": "Fryer 1",
+      "operator": ">=",
+      "target": 325,
+      "unit": "F",
+      "correctiveAction": "Adjust temperature dial and alert MOD"
+    },
+    {
+      "category": "Cooking Equipment",
+      "item": "Fryer 2",
+      "operator": ">=",
+      "target": 325,
+      "unit": "F",
+      "correctiveAction": "Adjust temperature dial and alert MOD"
+    },
+    {
+      "category": "Cooking Equipment",
+      "item": "Pasta Boiler 1",
+      "operator": ">=",
+      "target": 200,
+      "unit": "F",
+      "correctiveAction": "Adjust temp and re-temp in 10 min"
+    },
+    {
+      "category": "Cooking Equipment",
+      "item": "Pasta Boiler 2",
+      "operator": ">=",
+      "target": 200,
+      "unit": "F",
+      "correctiveAction": "Adjust temp and re-temp in 10 min"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Pork Broth",
+      "operator": ">=",
+      "target": 200,
+      "unit": "F",
+      "correctiveAction": "Adjust temp and re-temp in 10 min"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Chicken Broth",
+      "operator": ">=",
+      "target": 200,
+      "unit": "F",
+      "correctiveAction": "Adjust temp and re-temp in 10 min"
+    },
+    {
+      "category": "Hot Holding",
+      "item": "Veggie Broth",
+      "operator": ">=",
+      "target": 200,
+      "unit": "F",
+      "correctiveAction": "Adjust temp and re-temp in 10 min"
+    }
+  ],
+  "lastSynced": "2026-06-19T01:12:54.313Z"
+}

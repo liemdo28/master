@@ -32,7 +32,7 @@ async function syncDrive(maxFiles = 50) {
         orderBy: 'modifiedTime desc',
         q: "trashed=false",
     });
-    const files = (res.data.files || []).map(f => ({
+    const files = (res.data.files || []).map((f) => ({
         id: f.id || '',
         name: f.name || '',
         mime_type: MIME_LABELS[f.mimeType || ''] || f.mimeType || '',

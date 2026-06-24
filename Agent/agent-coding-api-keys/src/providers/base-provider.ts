@@ -75,7 +75,7 @@ export abstract class BaseProvider {
       ? providerSpecific
       : Number.isFinite(globalTimeout)
         ? globalTimeout
-        : Math.min(this.config.timeoutMs, 60_000);
+        : Math.min(this.config.timeoutMs, this.id === 'opusmax' ? 45_000 : 60_000);
     return AbortSignal.timeout(Math.max(configured, 5_000));
   }
 

@@ -48,7 +48,17 @@ export async function syncDrive(maxFiles = 50): Promise<DriveSnapshot> {
     q: "trashed=false",
   });
 
-  const files: DriveFile[] = (res.data.files || []).map(f => ({
+  const files: DriveFile[] = (res.data.files || []).map((f: {
+    id?: string | null;
+    name?: string | null;
+    mimeType?: string | null;
+    modifiedTime?: string | null;
+    size?: string | null;
+    webViewLink?: string | null;
+    owners?: Array<{ displayName?: string | null; emailAddress?: string | null }> | null;
+    shared?: boolean | null;
+    parents?: string[] | null;
+  }) => ({
     id: f.id || '',
     name: f.name || '',
     mime_type: MIME_LABELS[f.mimeType || ''] || f.mimeType || '',

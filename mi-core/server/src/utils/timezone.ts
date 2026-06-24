@@ -24,15 +24,27 @@ export const STORE_TIMEZONES: Record<string, { timezone: string; tzCode: string;
 
 // ── Load owner profile ─────────────────────────────────────────────────────────
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const MEM_DIR = path.join(GLOBAL_DIR, 'executive-memory-v2');
-const OWNER_PROFILE_PATH = path.join(MEM_DIR, 'owner_profile.json');
+const REPO_LOCAL_OWNER_PROFILE = path.resolve(process.cwd(), '.local-agent-global', 'executive-memory-v2', 'owner_profile.json');
+const REPO_PARENT_OWNER_PROFILE = path.resolve(process.cwd(), '..', '.local-agent-global', 'executive-memory-v2', 'owner_profile.json');
+const GLOBAL_OWNER_PROFILE = path.join(GLOBAL_DIR, 'executive-memory-v2', 'owner_profile.json');
+const OWNER_PROFILE_PATHS = [
+  process.env.MI_OWNER_PROFILE_PATH,
+  REPO_LOCAL_OWNER_PROFILE,
+  REPO_PARENT_OWNER_PROFILE,
+  GLOBAL_OWNER_PROFILE,
+].filter(Boolean) as string[];
 
 function readOwnerProfile(): Record<string, unknown> {
-  try {
-    return JSON.parse(fs.readFileSync(OWNER_PROFILE_PATH, 'utf-8'));
-  } catch {
-    return {};
+  for (const profilePath of OWNER_PROFILE_PATHS) {
+    try {
+      if (fs.existsSync(profilePath)) {
+        return JSON.parse(fs.readFileSync(profilePath, 'utf-8'));
+      }
+    } catch {
+      // Try the next profile path before falling back to the built-in owner timezone.
+    }
   }
+  return {};
 }
 
 // ── Owner timezone config ───────────────────────────────────────────────────────
@@ -106,6 +118,7 @@ export function getTimeContextForAI(): string {
   }).join('\n');
 
   return `=== TIME CONTEXT (OWNER PRIMARY) ===
+Owner timezone PRIMARY: ${ownerTz} (${OWNER_TZ_CODE})
 Owner location: ${ownerTz} (${OWNER_TZ_CODE})
 Owner current time: ${owner.full}
 Owner date: ${owner.date} (${owner.weekday})

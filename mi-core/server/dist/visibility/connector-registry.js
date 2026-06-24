@@ -294,4 +294,34 @@ exports.connectorRegistry = {
             saveRegistry(DEFAULT_CONNECTORS);
         }
     },
+    // DEV2: Live-probe HTTP connectors and update registry to match real state.
+    // Prevents registry from showing "healthy" when the service is offline.
+    async liveProbe() {
+        const HTTP_CONNECTORS = [
+            { id: 'accounting', url: 'http://127.0.0.1:8844/health' },
+        ];
+        for (const { id, url } of HTTP_CONNECTORS) {
+            let health = 'offline';
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 2500);
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const body = await res.json();
+                    health = body?.ok === true ? 'healthy' : 'degraded';
+                }
+                else {
+                    health = 'degraded';
+                }
+            }
+            catch {
+                health = 'offline';
+            }
+            exports.connectorRegistry.update(id, {
+                health_status: health,
+                last_health_check: new Date().toISOString(),
+            });
+        }
+    },
 };

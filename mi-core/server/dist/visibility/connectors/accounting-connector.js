@@ -39,10 +39,10 @@ async function syncAccounting() {
     // Try live API first
     try {
         const [stats, costs] = await Promise.all([
-            fetchAccounting('/api/stats'),
-            fetchAccounting('/api/costs'),
+            fetchAccounting('/stats'),
+            fetchAccounting('/costs'),
         ]);
-        const ledgerRes = await fetchAccounting('/api/stats/ledger');
+        const ledgerRes = await fetchAccounting('/stats/ledger');
         const ledgerOk = ledgerRes?.ok !== false;
         const snap = {
             status: 'live',

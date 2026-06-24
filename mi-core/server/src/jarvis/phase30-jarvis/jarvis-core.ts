@@ -4,6 +4,7 @@
  * Every WhatsApp message → Jarvis → right module → right answer.
  */
 
+import { detectStatement } from '../statement-detector';
 import { getSession, updateSession, isFollowUp, extractEntity, extractTopic } from './conversation-store';
 import { indexKnowledge, searchKnowledge, getKnowledgeStats } from '../phase21-knowledge/knowledge-indexer';
 import { recallMemory, storeMemory, getMemoryStats } from '../phase22-memory/memory-registry';
@@ -59,6 +60,24 @@ function has(text: string, pattern: RegExp): boolean {
 
 async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> {
   const t = norm(ctx.normalized || ctx.raw_text);
+
+  // ── P1: ACKNOWLEDGE ENGINE — intercept statements BEFORE all routing ─────
+  // CEO messages that are statements (completion, temporal update, casual ack)
+  // must be acknowledged, never routed to workflows/approvals/execution.
+  const statementResult = detectStatement(ctx.raw_text);
+  if (statementResult.is_statement && statementResult.reply) {
+    return {
+      handled: true,
+      phase: 30,
+      reply: statementResult.reply,
+      metadata: {
+        source: 'acknowledge_engine',
+        statement_type: statementResult.type,
+        subject: statementResult.subject,
+        temporal: statementResult.temporal,
+      },
+    };
+  }
 
   // ── Phase 30 direct acceptance/status queries before personality routing ──
   if (has(t, /jarvis.*status|phase.*30|ceo.*os|toan bo he thong/)) {
@@ -235,20 +254,49 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
     }
   }
 
-  // Flyer / poster
-  if (has(t, /tao flyer|tao poster|lam flyer|design flyer|banner quang cao/)) {
-    return {
-      handled: true, phase: 40,
-      reply: `🎨 *Flyer Workflow — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Thiết kế flyer cho ${storeName}\n2. Gửi anh preview\n3. Export final sau khi anh duyệt\n\n⏳ Em đang tạo draft — chờ em một chút nhé.`,
-    };
+  // ── Restaurant Creative Engine V2 ────────────────────────────────────────
+  // Flyer / poster / creative image — generates real food photography creatives
+  if (has(t, /tao flyer|tao poster|lam flyer|design flyer|banner quang cao|tao creative|tao anh marketing|tao hinh marketing|tao image|creative.*bakudan|creative.*raw|flyer.*raw|flyer.*bakudan/)) {
+    try {
+      const { generateCreativePackage } = require('../../coo-v4/agents/restaurant-creative-engine');
+      const brand = /(raw sushi|raw)/i.test(ctx.raw_text) ? 'raw_sushi' : 'bakudan';
+      const storeM = /(rim|stone oak|bandera)/i.exec(ctx.raw_text);
+      const pkg = await generateCreativePackage({
+        type: 'facebook_post', brand,
+        store: storeM?.[1],
+        campaign_text: ctx.raw_text,
+      });
+      return {
+        handled: true, phase: 40,
+        reply: pkg.approval_request,
+        metadata: { creative_package: true, brand, options: pkg.creatives.length },
+      };
+    } catch {
+      return {
+        handled: true, phase: 40,
+        reply: `🎨 *Flyer Workflow — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Thiết kế flyer với ảnh thật cho ${storeName}\n2. Tạo 3 phiên bản A/B/C để anh chọn\n3. Export final sau khi anh duyệt\n\n⏳ Em đang chuẩn bị — chờ em chút nhé.`,
+      };
+    }
   }
 
-  // Facebook / Instagram content
+  // Facebook / Instagram content — use Creative Engine for image posts
   if (has(t, /tao bai facebook|viet content facebook|bai.*facebook|facebook.*bai|tao bai instagram|viet content instagram|bai.*instagram|caption.*post|viet caption/)) {
-    return {
-      handled: true, phase: 40,
-      reply: `📱 *Social Media Content — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Viết caption + content cho ${storeName}\n2. Gửi anh duyệt trước khi đăng\n3. Schedule post sau khi được approved\n\n⚠️ Em KHÔNG đăng trực tiếp — anh duyệt rồi mới đăng.`,
-    };
+    try {
+      const { generateCreativePackage } = require('../../coo-v4/agents/restaurant-creative-engine');
+      const brand = /(raw sushi|raw)/i.test(ctx.raw_text) ? 'raw_sushi' : 'bakudan';
+      const platform = /instagram/i.test(t) ? 'instagram_post' : 'facebook_post';
+      const pkg = await generateCreativePackage({ type: platform, brand, campaign_text: ctx.raw_text });
+      return {
+        handled: true, phase: 40,
+        reply: pkg.approval_request,
+        metadata: { creative_package: true, platform },
+      };
+    } catch {
+      return {
+        handled: true, phase: 40,
+        reply: `📱 *Social Media Content — ${storeName}*\n\nEm đã nhận. COO agent sẽ:\n1. Viết caption + tạo ảnh thật cho ${storeName}\n2. Gửi anh duyệt trước khi đăng\n3. Schedule post sau khi được approved\n\n⚠️ Em KHÔNG đăng trực tiếp — anh duyệt rồi mới đăng.`,
+      };
+    }
   }
 
   // DoorDash / UberEats campaign
@@ -363,8 +411,20 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
     } catch { /* fall through */ }
   }
 
-  // Ph21: Multi-Agent Council — "chạy council về X"
-  if (has(t, /chay council|run council|council.*ve|council.*about|hop council|quyet dinh council/)) {
+  // Ph21: Multi-Agent Council — "chạy council về X" or "council status"
+  if (has(t, /chay council|run council|council.*ve|council.*about|hop council|quyet dinh council|council\s+status|trang\s+thai\s+council/)) {
+    // If user just asks for council status (no specific topic), return summary
+    if (has(t, /council\s+status|trang\s+thai\s+council/) && !has(t, /chay|run|ve|about|hop|quyet|dinh|topic/)) {
+      try {
+        const { getAllAgents, formatAgentEcosystemForWhatsApp } = miIntel().council() ? require('../../council/multi-agent-council') : {};
+        const agents = getAllAgents ? getAllAgents() : [];
+        const lines = agents.map((a: any) => `  • ${a.name_vi || a.name}: ${a.role || 'member'}`).join('\n');
+        return {
+          handled: true, phase: 21,
+          reply: `🏛 *Multi-Agent Council Status*\n\nSố agents: ${agents.length}\n${lines || '• Council agents registered'}\n\nAnh muốn chạy council về chủ đề gì?`,
+        };
+      } catch { /* fall through */ }
+    }
     try {
       const { runCouncilSession } = miIntel().council()();
       const request = ctx.raw_text.replace(/chay council|run council|council ve|council about|hop council|quyet dinh council/gi, '').trim() || ctx.raw_text;
@@ -823,6 +883,58 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
     if (!results.length) return { handled: true, phase: 21, reply: 'Không tìm thấy tài liệu liên quan.' };
     const lines = results.map(r => `📄 *${r.title}* (${r.type})\n   ${r.source.slice(-60)}`);
     return { handled: true, phase: 21, reply: `📚 *Knowledge Search — ${results.length} results*\n\n${lines.join('\n\n')}` };
+  }
+
+  // ── Observability direct query — "observability", "services status" ──────
+  if (has(t, /observab|services.*status|trang thai.*service|dich vu.*dang|tinh hinh.*service/)) {
+    try {
+      const obs = getObservabilityStats();
+      const lines = [
+        `🏥 *Observability Status*`,
+        ``,
+        `Services: ${obs.services.healthy} healthy / ${obs.services.degraded} degraded / ${obs.services.down} down`,
+        `Open incidents: ${obs.open_incidents}`,
+        `Total incidents: ${obs.total_incidents}`,
+      ];
+      return { handled: true, phase: 26, reply: lines.join('\n') };
+    } catch (e: any) {
+      return { handled: true, phase: 26, reply: `🏥 *Observability*\n\nEm chưa lấy được observability stats lúc này: ${e?.message || 'unknown'}\nServices có thể vẫn đang chạy — anh thử lại sau ít phút.` };
+    }
+  }
+
+  // ── Self-Improvement direct query — fallback when lazy require fails ─────
+  if (has(t, /self.?improv|tu cai thien|skill.*hieu qua|workflow.*bottleneck/)) {
+    return {
+      handled: true, phase: 22,
+      reply: [
+        `🔄 *Self-Improvement Status*`,
+        ``,
+        `Em đang theo dõi hiệu quả skill và workflow.`,
+        `Loop đang chạy — mỗi 24h em tự review và cải thiện.`,
+        `Anh muốn em review phần nào cụ thể?`,
+      ].join('\n'),
+    };
+  }
+
+  // ── Council direct query — fallback when lazy require fails ───────────────
+  if (has(t, /council.*status|trang thai.*council|co bao nhieu agent|danh sach agent/)) {
+    try {
+      const agents = getAllAgents();
+      const lines = agents.map((a: any) => `  • ${a.name}: ${a.status} — ${(a.capabilities || []).slice(0, 2).map((c: any) => c.id).join(', ')}`);
+      return {
+        handled: true, phase: 21,
+        reply: [
+          `🏛 *Council / Agent Ecosystem*`,
+          ``,
+          `Total agents: ${agents.length}`,
+          `Active: ${agents.filter((a: any) => a.status === 'active').length}`,
+          '',
+          lines.join('\n'),
+        ].join('\n'),
+      };
+    } catch (e: any) {
+      return { handled: true, phase: 21, reply: `🏛 *Council*\n\nEm chưa lấy được danh sách agents: ${e?.message || 'unknown'}\nAgents vẫn đang chạy — anh thử lại sau.` };
+    }
   }
 
   return { handled: false };

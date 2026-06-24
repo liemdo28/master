@@ -6,7 +6,12 @@ import path from 'path';
 const RATE_LIMIT_AUDIT = path.resolve(__dirname, '../../..', 'reports', 'evidence', 'knowledge-rate-limit', 'runtime-429-audit.jsonl');
 
 function internalKey(): string {
-  return process.env.MI_CORE_API_KEY || 'mi-core-secret-2026';
+  const key = process.env.MI_CORE_API_KEY;
+  if (!key) {
+    console.warn('[RateLimit] MI_CORE_API_KEY not set — internal rate-limit bypass disabled');
+    return '';  // fail-safe: empty string means no request will match
+  }
+  return key;
 }
 
 // Bypass rate limiting ONLY for authenticated Jarvis API calls.

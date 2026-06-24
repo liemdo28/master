@@ -1,0 +1,82 @@
+[
+  {
+    "connector_id": "gmail",
+    "name": "Gmail",
+    "detected": [
+      "freshness=stale"
+    ],
+    "attempted": true,
+    "recovered": false,
+    "result": "invalid_grant",
+    "checked_at": "2026-06-23T16:19:47.646Z"
+  },
+  {
+    "connector_id": "google-calendar",
+    "name": "Google Calendar",
+    "detected": [
+      "freshness=stale"
+    ],
+    "attempted": true,
+    "recovered": false,
+    "result": "invalid_grant",
+    "checked_at": "2026-06-23T16:19:51.151Z"
+  },
+  {
+    "connector_id": "google-drive",
+    "name": "Google Drive",
+    "detected": [
+      "freshness=stale"
+    ],
+    "attempted": true,
+    "recovered": false,
+    "result": "invalid_grant",
+    "checked_at": "2026-06-23T16:19:51.220Z"
+  },
+  {
+    "connector_id": "asana",
+    "name": "Asana",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-23T16:19:51.221Z"
+  },
+  {
+    "connector_id": "quickbooks-runtime",
+    "name": "QuickBooks Runtime",
+    "detected": [
+      "freshness=degraded"
+    ],
+    "attempted": true,
+    "recovered": true,
+    "result": "{\"generated_at\":\"2026-06-23T16:19:51.224Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
+    "checked_at": "2026-06-23T16:19:51.228Z"
+  },
+  {
+    "connector_id": "health-export",
+    "name": "Huawei Health Export",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-23T16:19:51.228Z"
+  },
+  {
+    "connector_id": "website-bakudan",
+    "name": "bakudanramen.com",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-23T16:19:51.228Z"
+  },
+  {
+    "connector_id": "website-raw",
+    "name": "rawsushibar.com",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-23T16:19:51.229Z"
+  }
+]

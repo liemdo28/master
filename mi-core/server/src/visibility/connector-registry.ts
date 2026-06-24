@@ -25,6 +25,7 @@ export interface Connector {
   approval_required: boolean;
   cache_path: string;
   health_status: HealthStatus;
+  last_health_check?: string;
   setup_hint?: string;
   config?: Record<string, unknown>;
 }
@@ -55,7 +56,7 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: true,
     cache_path: 'dashboard/',
     health_status: 'unknown',
-    config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'E:/Project/Master/dashboard.bakudanramen.com' },
+    config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com' },
   },
   {
     connector_id: 'asana',
@@ -112,6 +113,20 @@ const DEFAULT_CONNECTORS: Connector[] = [
     cache_path: 'google-drive/',
     health_status: 'unknown',
     setup_hint: 'Same OAuth as Gmail — add Drive scope: https://www.googleapis.com/auth/drive.readonly',
+  },
+  {
+    connector_id: 'google-sheets',
+    name: 'Google Sheets',
+    type: 'api',
+    status: 'pending',
+    auth_status: 'not_configured',
+    last_sync: null,
+    read_capability: ['spreadsheets', 'ranges', 'values'],
+    write_capability: ['values'],
+    approval_required: true,
+    cache_path: 'google-sheets/',
+    health_status: 'unknown',
+    setup_hint: 'Same OAuth as Gmail — requires scope: https://www.googleapis.com/auth/spreadsheets',
   },
   {
     connector_id: 'health-export',
@@ -171,6 +186,24 @@ const DEFAULT_CONNECTORS: Connector[] = [
     config: { api_url: 'http://127.0.0.1:8844', db_path: 'E:/Project/Master/accounting-engine/ledgers/accounting.db' },
   },
   {
+    connector_id: 'quickbooks-runtime',
+    name: 'QuickBooks Runtime',
+    type: 'local',
+    status: 'active',
+    auth_status: 'connected',
+    last_sync: null,
+    read_capability: ['company-state', 'activity-log', 'sync-status', 'duplicate-checks', 'transactions'],
+    write_capability: [],
+    approval_required: false,
+    cache_path: 'quickbooks/',
+    health_status: 'unknown',
+    setup_hint: 'QuickBooks runtime lives on laptop1 with Dev1. Dev1 must open QuickBooks Desktop/company file on laptop1, keep QB Web Connector running, then trigger force sync.',
+    config: {
+      checksum_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
+      agent_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
+    },
+  },
+  {
     connector_id: 'food-safety',
     name: 'Food Safety Gateway',
     type: 'local',
@@ -192,7 +225,17 @@ function ensureDir(p: string) {
 
 function loadRegistry(): Connector[] {
   try {
-    return JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8'));
+    const existing = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8')) as Connector[];
+    const merged = [...existing];
+    let changed = false;
+    for (const connector of DEFAULT_CONNECTORS) {
+      if (!merged.some(c => c.connector_id === connector.connector_id)) {
+        merged.push(connector);
+        changed = true;
+      }
+    }
+    if (changed) saveRegistry(merged);
+    return merged;
   } catch {
     return DEFAULT_CONNECTORS;
   }
@@ -201,6 +244,27 @@ function loadRegistry(): Connector[] {
 function saveRegistry(connectors: Connector[]) {
   ensureDir(path.dirname(REGISTRY_PATH));
   fs.writeFileSync(REGISTRY_PATH, JSON.stringify(connectors, null, 2));
+}
+
+function effectiveHealth(connector: Connector): HealthStatus {
+  if (connector.health_status !== 'unknown') return connector.health_status;
+
+  if (connector.auth_status !== 'connected') return 'offline';
+
+  const cacheDir = path.join(GLOBAL_DIR, 'visibility', connector.cache_path || '');
+  const dataPath = path.join(cacheDir, 'data.json');
+  const summaryPath = path.join(cacheDir, 'summary.json');
+  const errorsPath = path.join(cacheDir, 'errors.json');
+  if (fs.existsSync(dataPath) || fs.existsSync(summaryPath)) {
+    try {
+      const errors = fs.existsSync(errorsPath) ? JSON.parse(fs.readFileSync(errorsPath, 'utf-8')) : [];
+      return Array.isArray(errors) && errors.length > 0 ? 'degraded' : 'healthy';
+    } catch {
+      return 'degraded';
+    }
+  }
+
+  return connector.last_sync ? 'healthy' : 'offline';
 }
 
 export const connectorRegistry = {
@@ -235,21 +299,54 @@ export const connectorRegistry = {
       total: all.length,
       connected: all.filter(c => c.auth_status === 'connected').length,
       not_configured: all.filter(c => c.auth_status === 'not_configured').length,
-      healthy: all.filter(c => c.health_status === 'healthy').length,
-      connectors: all.map(c => ({
-        id: c.connector_id,
-        name: c.name,
-        auth: c.auth_status,
-        health: c.health_status,
-        last_sync: c.last_sync,
-        setup_hint: c.auth_status !== 'connected' ? c.setup_hint : undefined,
-      })),
+      healthy: all.filter(c => effectiveHealth(c) === 'healthy').length,
+      connectors: all.map(c => {
+        const health = effectiveHealth(c);
+        return {
+          id: c.connector_id,
+          name: c.name,
+          auth: c.auth_status,
+          health,
+          last_sync: c.last_sync,
+          setup_hint: c.auth_status !== 'connected' || health !== 'healthy' ? c.setup_hint : undefined,
+        };
+      }),
     };
   },
 
   init() {
     if (!fs.existsSync(REGISTRY_PATH)) {
       saveRegistry(DEFAULT_CONNECTORS);
+    }
+  },
+
+  // DEV2: Live-probe HTTP connectors and update registry to match real state.
+  // Prevents registry from showing "healthy" when the service is offline.
+  async liveProbe(): Promise<void> {
+    const HTTP_CONNECTORS: Array<{ id: string; url: string }> = [
+      { id: 'accounting', url: 'http://127.0.0.1:8844/health' },
+    ];
+
+    for (const { id, url } of HTTP_CONNECTORS) {
+      let health: HealthStatus = 'offline';
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 2500);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timer);
+        if (res.ok) {
+          const body = await res.json() as { ok?: boolean };
+          health = body?.ok === true ? 'healthy' : 'degraded';
+        } else {
+          health = 'degraded';
+        }
+      } catch {
+        health = 'offline';
+      }
+      connectorRegistry.update(id, {
+        health_status: health,
+        last_health_check: new Date().toISOString(),
+      });
     }
   },
 };

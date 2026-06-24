@@ -75,6 +75,8 @@ import { providerControl } from './runtime/provider-control.js';
 import { providerRotationService } from './runtime/provider-rotation-service.js';
 import { apiKeyRotationService } from './runtime/api-key-rotation-service.js';
 import { modelQuotaService } from './runtime/model-quota-service.js';
+import { concurrencyLimiter } from './runtime/concurrency-limiter.js';
+import { gatewayRequestQueue } from './runtime/gateway-request-queue.js';
 import { keyDb } from './db/key-database.js';
 import { providerKeyService } from './services/provider-key-service.js';
 import { keysManager } from './keys/keys-manager.js';
@@ -90,6 +92,72 @@ const config = loadGatewayConfig();
 const providers = config.providers.map(createProvider);
 const health = new HealthManager(providers, config.healthIntervalMs);
 const router = new ProviderRouter(config, providers, health);
+
+function getGatewayRuntimeSnapshot(requestedModel = 'claude-opus-4-6') {
+  const sourceRotation = getSourceWindowSnapshot(requestedModel);
+  return {
+    ts: Date.now(),
+    queue: gatewayRequestQueue.snapshot(),
+    source_concurrency: concurrencyLimiter.getStats(),
+    sourceRotation,
+    circuitBreakers: circuitBreakers.getStats(),
+    logStats: getLogStats(),
+  };
+}
+
+function releaseOnResponseEnd(res: http.ServerResponse, release: () => void): void {
+  let released = false;
+  const done = () => {
+    if (released) return;
+    released = true;
+    release();
+  };
+  res.once('finish', done);
+  res.once('close', done);
+}
+
+async function acquireGatewayQueueSlot(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  requestId: string,
+  protocol: string,
+): Promise<void> {
+  const abort = new AbortController();
+  const abortQueued = () => abort.abort();
+  res.once('close', abortQueued);
+  const releaseQueue = await gatewayRequestQueue.acquire(requestId, protocol, abort.signal);
+  res.off('close', abortQueued);
+  releaseOnResponseEnd(res, releaseQueue);
+  req.on('aborted', releaseQueue);
+}
+
+function startOpenAIHeartbeat(res: http.ServerResponse, requestId: string): () => void {
+  if (!res.headersSent) res.writeHead(200, SSE_HEADERS);
+  const write = () => {
+    if (!res.destroyed && !res.writableEnded) {
+      res.write(`: gateway ${requestId} routing\n\n`);
+    }
+  };
+  write();
+  const timer = setInterval(write, 10_000);
+  return () => clearInterval(timer);
+}
+
+function writeOpenAIStreamError(res: http.ServerResponse, message: string, type = 'gateway_error'): void {
+  if (res.destroyed || res.writableEnded) return;
+  if (!res.headersSent) res.writeHead(200, SSE_HEADERS);
+  const id = `chatcmpl-gateway-${Date.now()}`;
+  const created = Math.floor(Date.now() / 1000);
+  res.write(`data: ${JSON.stringify({
+    id,
+    object: 'chat.completion.chunk',
+    created,
+    model: 'gateway',
+    choices: [{ index: 0, delta: { content: '' }, finish_reason: null }],
+    error: { type, message },
+  })}\n\n`);
+  res.write('data: [DONE]\n\n');
+}
 
 function getSourceWindowSnapshot(requestedModel = 'claude-opus-4-6') {
   const providerEntries = config.providers
@@ -201,6 +269,21 @@ const server = http.createServer(async (req, res) => {
         sourceRotation: getSourceWindowSnapshot('claude-opus-4-6'),
         stats: getLogStats(),
       });
+      return;
+    }
+
+    if (req.method === 'GET' && path === '/api/gateway/runtime') {
+      sendJson(res, 200, getGatewayRuntimeSnapshot(url.searchParams.get('model') ?? 'claude-opus-4-6'));
+      return;
+    }
+
+    if (req.method === 'POST' && path === '/api/gateway/drain') {
+      sendJson(res, 200, { ok: true, drain: gatewayRequestQueue.drain(), runtime: getGatewayRuntimeSnapshot() });
+      return;
+    }
+
+    if (req.method === 'POST' && path === '/api/gateway/resume') {
+      sendJson(res, 200, { ok: true, drain: gatewayRequestQueue.resume(), runtime: getGatewayRuntimeSnapshot() });
       return;
     }
 
@@ -951,8 +1034,36 @@ const server = http.createServer(async (req, res) => {
         toolCount: request.tools?.length ?? 0,
         inputMessages: request.messages.length,
       });
+      let stopOpenAIHeartbeat: (() => void) | undefined;
+      if (request.stream) {
+        stopOpenAIHeartbeat = startOpenAIHeartbeat(res, requestId);
+      }
 
       timeline.emit({ sessionId: correlation.sessionId, requestId, type: 'request.start', source: 'server', payload: { endpoint: 'openai', model: request.model, streaming: request.stream } });
+
+      try {
+        await acquireGatewayQueueSlot(req, res, requestId, 'openai');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        finalizeLog(requestId, t0, {
+          endpoint: 'openai', model: request.model, streaming: request.stream,
+          toolCount: request.tools?.length ?? 0, inputMessages: request.messages.length,
+        }, {
+          status: 'error',
+          error: `gateway_queue: ${message}`,
+        });
+        metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: 'gateway', streaming: request.stream, streamCompleted: false, fallback: false, inputTokens: 0, outputTokens: 0 });
+        metrics.requestEnd();
+        finalizeCorrelation(correlation.requestId);
+        stopOpenAIHeartbeat?.();
+        if (request.stream) {
+          writeOpenAIStreamError(res, message, 'gateway_draining');
+          res.end();
+        } else {
+          sendJson(res, 503, { error: { type: 'gateway_draining', message }, gateway: { queue: gatewayRequestQueue.snapshot() } });
+        }
+        return;
+      }
 
       // Tool validation warnings (non-blocking)
       if (request.tools?.length) {
@@ -967,24 +1078,47 @@ const server = http.createServer(async (req, res) => {
         // transparently fall back to another provider.
         const MAX_STREAM_PEEK_RETRIES = 3;
         const PEEK_BACKOFF_MS = [150, 600, 2000];
-        let streamResult = await router.routeStream(request);
+        let streamResult;
+        try {
+          streamResult = await router.routeStream(request);
+        } catch (error) {
+          stopOpenAIHeartbeat?.();
+          const message = error instanceof Error ? error.message : String(error);
+          finalizeLog(requestId, t0, {
+            endpoint: 'openai', model: request.model, streaming: true,
+            toolCount: request.tools?.length ?? 0, inputMessages: request.messages.length,
+          }, {
+            status: 'error',
+            error: message,
+          });
+          metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: 'gateway', streaming: true, streamCompleted: false, fallback: false, inputTokens: 0, outputTokens: 0 });
+          writeOpenAIStreamError(res, message);
+          res.end();
+          metrics.requestEnd();
+          finalizeCorrelation(correlation.requestId);
+          return;
+        }
         let peekRetries = 0;
+        const excludedStreamSources = new Set<string>();
 
         if (streamResult.provider.kind === 'anthropic') {
           while (peekRetries < MAX_STREAM_PEEK_RETRIES) {
             const peek = await peekAnthropicStreamStart(streamResult.upstream);
             if (peek.ok) {
               streamResult = { ...streamResult, upstream: peek.upstream };
+              streamResult.confirmStreamStart?.();
               break;
             }
             peekRetries++;
+            const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
+            streamResult.rejectStreamStart?.(classified.type, peek.errorMessage);
+            if (streamResult.sourceId) excludedStreamSources.add(streamResult.sourceId);
             console.warn(
               `[server] stream-peek error on ${streamResult.provider.id}` +
               `  [${peek.errorType}] ${peek.errorMessage}` +
-              `  — retry ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
+              `  — source=${streamResult.sourceId ?? 'unknown'} excluded; fallback ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
             );
             if (peekRetries >= MAX_STREAM_PEEK_RETRIES) {
-              const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
               // Only quarantine the provider after the stream start failed for
               // a real provider outage. Quota/rate/client errors should be
               // visible in logs without poisoning provider health.
@@ -1004,19 +1138,22 @@ const server = http.createServer(async (req, res) => {
                 error: `${classified.type}: ${peek.errorMessage}`,
               });
               metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: streamResult.provider.id, streaming: true, streamCompleted: false, fallback: streamResult.attempts.length > 1, inputTokens: 0, outputTokens: 0 });
-              sendJson(res, 503, {
-                error: { type: classified.type, upstreamType: peek.errorType, message: peek.errorMessage },
-                gateway: { retries: peekRetries },
-              });
+              streamResult.releaseSlot?.();
+              stopOpenAIHeartbeat?.();
+              writeOpenAIStreamError(res, peek.errorMessage, classified.type);
+              res.end();
               metrics.requestEnd();
               finalizeCorrelation(correlation.requestId);
               return;
             }
-            // Backoff then re-route (circuit breaker now steers away from failed provider)
+            // Backoff then re-route: release old slot before acquiring a new one.
+            streamResult.releaseSlot?.();
             await new Promise((r) => setTimeout(r, PEEK_BACKOFF_MS[peekRetries - 1] ?? 600));
-            streamResult = await router.routeStream(request);
+            streamResult = await router.routeStream(request, excludedStreamSources);
           }
         }
+        streamResult.confirmStreamStart?.();
+        stopOpenAIHeartbeat?.();
 
         const id = `chatcmpl-${streamResult.provider.id}-${Date.now()}`;
         const created = Math.floor(Date.now() / 1000);
@@ -1029,18 +1166,22 @@ const server = http.createServer(async (req, res) => {
         // Handle client disconnect
         res.on('close', () => { streamLifecycle.clientDisconnected(id); });
 
-        res.writeHead(200, SSE_HEADERS);
-        await dispatchStream({
-          upstream: streamResult.upstream,
-          res,
-          inboundProtocol: 'openai',
-          providerKind: streamResult.provider.kind,
-          completionId: id,
-          created,
-          model: streamResult.model,
-          providerId: streamResult.provider.id,
-        });
-        res.end();
+        try {
+          if (!res.headersSent) res.writeHead(200, SSE_HEADERS);
+          await dispatchStream({
+            upstream: streamResult.upstream,
+            res,
+            inboundProtocol: 'openai',
+            providerKind: streamResult.provider.kind,
+            completionId: id,
+            created,
+            model: streamResult.model,
+            providerId: streamResult.provider.id,
+          });
+          res.end();
+        } finally {
+          streamResult.releaseSlot?.();
+        }
 
         // Finalize stream lifecycle
         streamLifecycle.complete(id);
@@ -1111,28 +1252,50 @@ const server = http.createServer(async (req, res) => {
 
       timeline.emit({ sessionId: correlation.sessionId, requestId, type: 'request.start', source: 'server', payload: { endpoint: 'anthropic', model: request.model, streaming: request.stream } });
 
+      try {
+        await acquireGatewayQueueSlot(req, res, requestId, 'anthropic');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        finalizeLog(requestId, t0, {
+          endpoint: 'anthropic', model: request.model, streaming: request.stream,
+          toolCount: request.tools?.length ?? 0, inputMessages: request.messages.length,
+        }, {
+          status: 'error',
+          error: `gateway_queue: ${message}`,
+        });
+        metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: 'gateway', streaming: request.stream, streamCompleted: false, fallback: false, inputTokens: 0, outputTokens: 0 });
+        metrics.requestEnd();
+        finalizeCorrelation(correlation.requestId);
+        sendJson(res, 503, { error: { type: 'gateway_draining', message }, gateway: { queue: gatewayRequestQueue.snapshot() } });
+        return;
+      }
+
       if (request.stream) {
         // ── Stream-start peek (same as OpenAI endpoint) ──
         const MAX_STREAM_PEEK_RETRIES = 3;
         const PEEK_BACKOFF_MS = [150, 600, 2000];
         let streamResult = await router.routeStream(request);
         let peekRetries = 0;
+        const excludedStreamSources = new Set<string>();
 
         if (streamResult.provider.kind === 'anthropic') {
           while (peekRetries < MAX_STREAM_PEEK_RETRIES) {
             const peek = await peekAnthropicStreamStart(streamResult.upstream);
             if (peek.ok) {
               streamResult = { ...streamResult, upstream: peek.upstream };
+              streamResult.confirmStreamStart?.();
               break;
             }
             peekRetries++;
+            const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
+            streamResult.rejectStreamStart?.(classified.type, peek.errorMessage);
+            if (streamResult.sourceId) excludedStreamSources.add(streamResult.sourceId);
             console.warn(
               `[server] stream-peek error on ${streamResult.provider.id}` +
               `  [${peek.errorType}] ${peek.errorMessage}` +
-              `  — retry ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
+              `  — source=${streamResult.sourceId ?? 'unknown'} excluded; fallback ${peekRetries}/${MAX_STREAM_PEEK_RETRIES}`,
             );
             if (peekRetries >= MAX_STREAM_PEEK_RETRIES) {
-              const classified = classifyStreamPeekFailure(peek.errorType, peek.errorMessage);
               // Only quarantine the provider after the stream start failed for
               // a real provider outage. Quota/rate/client errors should be
               // visible in logs without poisoning provider health.
@@ -1152,6 +1315,7 @@ const server = http.createServer(async (req, res) => {
                 error: `${classified.type}: ${peek.errorMessage}`,
               });
               metrics.record({ timestamp: Date.now(), durationMs: Date.now() - t0, success: false, providerId: streamResult.provider.id, streaming: true, streamCompleted: false, fallback: streamResult.attempts.length > 1, inputTokens: 0, outputTokens: 0 });
+              streamResult.releaseSlot?.();
               sendJson(res, 503, {
                 error: { type: classified.type, upstreamType: peek.errorType, message: peek.errorMessage },
                 gateway: { retries: peekRetries },
@@ -1160,10 +1324,13 @@ const server = http.createServer(async (req, res) => {
               finalizeCorrelation(correlation.requestId);
               return;
             }
+            // Backoff then re-route: release old slot before acquiring a new one.
+            streamResult.releaseSlot?.();
             await new Promise((r) => setTimeout(r, PEEK_BACKOFF_MS[peekRetries - 1] ?? 600));
-            streamResult = await router.routeStream(request);
+            streamResult = await router.routeStream(request, excludedStreamSources);
           }
         }
+        streamResult.confirmStreamStart?.();
 
         const id = `msg_gw_${Date.now()}`;
         const created = Math.floor(Date.now() / 1000);
@@ -1174,18 +1341,22 @@ const server = http.createServer(async (req, res) => {
 
         res.on('close', () => { streamLifecycle.clientDisconnected(id); });
 
-        res.writeHead(200, SSE_HEADERS);
-        await dispatchStream({
-          upstream: streamResult.upstream,
-          res,
-          inboundProtocol: 'anthropic',
-          providerKind: streamResult.provider.kind,
-          completionId: id,
-          created,
-          model: streamResult.model,
-          providerId: streamResult.provider.id,
-        });
-        res.end();
+        try {
+          res.writeHead(200, SSE_HEADERS);
+          await dispatchStream({
+            upstream: streamResult.upstream,
+            res,
+            inboundProtocol: 'anthropic',
+            providerKind: streamResult.provider.kind,
+            completionId: id,
+            created,
+            model: streamResult.model,
+            providerId: streamResult.provider.id,
+          });
+          res.end();
+        } finally {
+          streamResult.releaseSlot?.();
+        }
 
         streamLifecycle.complete(id);
         timeline.emit({ sessionId: correlation.sessionId, requestId, type: 'stream.complete', source: 'server', payload: { streamId: id } });

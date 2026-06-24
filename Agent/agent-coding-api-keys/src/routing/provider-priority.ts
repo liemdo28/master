@@ -4,8 +4,8 @@
  * Quota-aware, circuit-breaker-aware provider scoring.
  *
  * Priority table (lower score = higher priority):
- *   1  Antigravity NKQ  — burn included 250 req/month first
- *   2  OpusMax          — unlimited fallback
+ *   1  OpusMax          — primary, quota-based
+ *   2  Antigravity NKQ  — fallback, 2 keys rotating every 5 min
  *   3  Anthropic        — direct pay-as-you-go
  *   4  OpenRouter       — aggregator
  *   5  OpenAI           — direct OpenAI
@@ -34,16 +34,16 @@ import { quotaManager } from '../runtime/quota-manager.js';
 /**
  * The DEFAULT provider that ALL requests MUST start at.
  * NO exceptions. The QuotaOrchestrator enforces rotation AFTER this provider's
- * batch limit is reached.
+ * quota limit is reached.
  */
-export const DEFAULT_PROVIDER = 'antigravity-nkq' as const;
+export const DEFAULT_PROVIDER = 'opusmax' as const;
 
 /**
  * Canonical provider ID mapping.
- * The runtime uses 'antigravity' internally; this alias exists for
+ * The runtime uses 'opusmax' internally; this alias exists for
  * operator-facing clarity.
  */
-export const DEFAULT_PROVIDER_ID = 'antigravity';
+export const DEFAULT_PROVIDER_ID = 'opusmax';
 
 // ── Base priority table ─────────────────────────────────────────────────────
 
@@ -52,15 +52,15 @@ export const DEFAULT_PROVIDER_ID = 'antigravity';
  * Any provider not listed gets priority 90 (last resort).
  *
  * MANDATORY PRIORITY ORDER:
- *   1. antigravity-nkq  (priority: 1, preferred: true)
- *   2. opusmax
+ *   1. opusmax       (priority: 1, preferred: true)
+ *   2. antigravity   (priority: 20, NKQ fallback)
  *   3. anthropic
  *   4. openrouter
  *   5. openai / local
  */
 export const PROVIDER_BASE_PRIORITY: Record<string, number> = {
-    antigravity: 1,   // FORCED PRIORITY 1 — NKQ must always be tried first
-    opusmax: 20,
+    opusmax: 1,      // PRIMARY — quota-based, first priority
+    antigravity: 20,  // FALLBACK — NKQ provider, 2 keys rotating every 5 min
     anthropic: 30,
     openrouter: 40,
     openai: 50,
@@ -75,8 +75,8 @@ export const PROVIDER_BASE_PRIORITY: Record<string, number> = {
  * when it has available quota.
  */
 export const PROVIDER_PREFERENCES: Record<string, { preferred: boolean; priority: number }> = {
-    antigravity: { preferred: true, priority: 1 },
-    opusmax: { preferred: false, priority: 2 },
+    opusmax: { preferred: true, priority: 1 },
+    antigravity: { preferred: false, priority: 2 },
     anthropic: { preferred: false, priority: 3 },
     openrouter: { preferred: false, priority: 4 },
     ollama: { preferred: false, priority: 5 },

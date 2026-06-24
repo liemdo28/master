@@ -13,7 +13,30 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const COMPLIANCE_ROOT = 'E:/Project/Master/.local-agent-global/reference-brain/us-business-compliance';
+
+// Path fallback chain for US Compliance DB
+function resolveComplianceRoot() {
+  if (process.env.MI_REFERENCE_BRAIN_PATH) {
+    const p = process.env.MI_REFERENCE_BRAIN_PATH;
+    if (fs.existsSync(p)) return p;
+  }
+  // B. mi-core root (3 levels up from this file: local-agent/knowledge-federation/ -> mi-core/)
+  const miCoreRoot = path.resolve(__dirname, '..', '..');
+  const miCorePath = path.join(miCoreRoot, '.local-agent-global', 'reference-brain', 'us-business-compliance');
+  if (fs.existsSync(miCorePath)) return miCorePath;
+  // C. workspace root
+  const masterRoot = path.resolve(miCoreRoot, '..');
+  const masterPath = path.join(masterRoot, '.local-agent-global', 'reference-brain', 'us-business-compliance');
+  if (fs.existsSync(masterPath)) return masterPath;
+  // D. GLOBAL_DIR
+  if (process.env.GLOBAL_DIR) {
+    const gPath = path.join(process.env.GLOBAL_DIR, 'reference-brain', 'us-business-compliance');
+    if (fs.existsSync(gPath)) return gPath;
+  }
+  return null;
+}
+
+const COMPLIANCE_ROOT = resolveComplianceRoot();
 
 const JURISDICTION_MAP = {
   california:  ['california', 'stockton', 'labor-law', 'payroll', 'food-safety', 'permits'],

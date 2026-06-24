@@ -8,8 +8,10 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR  = process.env.GLOBAL_DIR  || 'E:/Project/Master/.local-agent-global';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+// Path resolution: prefer mi-core root, then workspace root
+const MI_CORE_ROOT = path.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR  = process.env.GLOBAL_DIR  || path.join(MI_CORE_ROOT, '.local-agent-global');
+const MASTER_ROOT = process.env.MASTER_ROOT || path.resolve(MI_CORE_ROOT, '..');
 const DB_PATH = path.join(GLOBAL_DIR, 'knowledge-db', 'knowledge.db');
 const STATS_PATH = path.join(GLOBAL_DIR, 'knowledge-db', 'stats.json');
 const LOG_PATH   = path.join(GLOBAL_DIR, 'knowledge-db', 'ingestion_log.json');

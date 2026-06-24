@@ -479,15 +479,16 @@ async function main() {
   console.log(`Time: ${new Date().toISOString()}`);
   console.log(`Filter: ${SECTION_FILTER || 'ALL sections'}`);
 
-  await sectionA();
-  await sectionB();
-  await sectionC();
-  await sectionD();
-  await sectionE();
-  await sectionF();
-  await sectionG();
-  await sectionH();
-  await sectionBD();
+  const pause = (ms) => new Promise(r => setTimeout(r, ms));
+  await sectionA(); await pause(3000);
+  await sectionB(); await pause(3000);
+  await sectionC(); await pause(5000);
+  await sectionD(); await pause(2000);
+  await sectionE(); await pause(2000);
+  await sectionF(); await pause(2000);
+  await sectionG(); await pause(5000);
+  await sectionH(); await pause(3000);
+  await sectionBD(); await pause(3000);
   await masterFlow();
 
   console.log('\n═══════════════════════════════════════');

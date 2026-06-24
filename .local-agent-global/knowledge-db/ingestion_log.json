@@ -1,23 +1,23 @@
 [
   {
     "source": "master-workspace",
-    "ingested": 3,
-    "skipped": 11178,
+    "ingested": 210,
+    "skipped": 11504,
     "errors": 0,
-    "at": "2026-06-09T15:28:37.912Z"
+    "at": "2026-06-10T10:15:21.602Z"
   },
   {
     "source": "visibility-cache",
     "ingested": 0,
     "skipped": 10,
     "errors": 0,
-    "at": "2026-06-09T15:28:38.023Z"
+    "at": "2026-06-10T10:15:21.721Z"
   },
   {
     "source": "executive-memory",
     "ingested": 0,
     "skipped": 7,
     "errors": 0,
-    "at": "2026-06-09T15:28:38.063Z"
+    "at": "2026-06-10T10:15:21.762Z"
   }
 ]

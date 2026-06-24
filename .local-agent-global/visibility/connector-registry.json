@@ -5,7 +5,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-09T15:58:38.257Z",
+    "last_sync": "2026-06-24T04:06:24.601Z",
     "read_capability": [
       "files",
       "folders",
@@ -28,7 +28,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-09T15:58:38.259Z",
+    "last_sync": "2026-06-24T04:06:24.707Z",
     "read_capability": [
       "tasks",
       "users",
@@ -45,16 +45,16 @@
     "health_status": "healthy",
     "config": {
       "base_url": "http://dashboard.bakudanramen.com",
-      "local_path": "E:/Project/Master/dashboard.bakudanramen.com"
+      "local_path": "E:/Project/Master/Bakudan/dashboard.bakudanramen.com"
     }
   },
   {
     "connector_id": "asana",
     "name": "Asana",
     "type": "api",
-    "status": "pending",
-    "auth_status": "not_configured",
-    "last_sync": null,
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-24T04:06:36.193Z",
     "read_capability": [
       "tasks",
       "projects",
@@ -68,15 +68,16 @@
     "approval_required": true,
     "cache_path": "asana/",
     "health_status": "unknown",
-    "setup_hint": "Set ASANA_TOKEN in .env — get from app.asana.com/0/my-apps"
+    "setup_hint": "Asana cache/API evidence current; monitor token/network/rate-limit during burn-in.",
+    "last_health_check": "2026-06-14T15:25:45.954Z"
   },
   {
     "connector_id": "gmail",
     "name": "Gmail",
     "type": "api",
-    "status": "pending",
-    "auth_status": "not_configured",
-    "last_sync": null,
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-14T14:03:57.278Z",
     "read_capability": [
       "emails",
       "threads",
@@ -89,16 +90,22 @@
     ],
     "approval_required": true,
     "cache_path": "gmail/",
-    "health_status": "unknown",
-    "setup_hint": "Set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET in .env — Google Cloud Console → OAuth 2.0"
+    "health_status": "healthy",
+    "setup_hint": "Set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET in .env â€” Google Cloud Console â†’ OAuth 2.0",
+    "metadata": {
+      "unread_count": 201,
+      "draft_created": "r-1341956680736541856",
+      "sync_source": "P2 real Google OAuth API call",
+      "message_id_sample": "19ec625b3b940fae"
+    }
   },
   {
     "connector_id": "google-calendar",
     "name": "Google Calendar",
     "type": "api",
-    "status": "pending",
-    "auth_status": "not_configured",
-    "last_sync": null,
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-20T08:40:36.358Z",
     "read_capability": [
       "events",
       "calendars",
@@ -109,16 +116,16 @@
     ],
     "approval_required": true,
     "cache_path": "google-calendar/",
-    "health_status": "unknown",
-    "setup_hint": "Same OAuth as Gmail — shares GOOGLE_CLIENT_ID/SECRET"
+    "health_status": "healthy",
+    "setup_hint": "Same OAuth as Gmail â€” shares GOOGLE_CLIENT_ID/SECRET"
   },
   {
     "connector_id": "google-drive",
     "name": "Google Drive",
     "type": "api",
-    "status": "pending",
-    "auth_status": "not_configured",
-    "last_sync": null,
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-20T08:40:37.132Z",
     "read_capability": [
       "files",
       "folders",
@@ -131,16 +138,16 @@
     ],
     "approval_required": true,
     "cache_path": "google-drive/",
-    "health_status": "unknown",
-    "setup_hint": "Same OAuth as Gmail — add Drive scope: https://www.googleapis.com/auth/drive.readonly"
+    "health_status": "healthy",
+    "setup_hint": "Same OAuth as Gmail â€” add Drive scope: https://www.googleapis.com/auth/drive.readonly"
   },
   {
     "connector_id": "health-export",
     "name": "Huawei Health Export",
     "type": "export",
-    "status": "pending",
-    "auth_status": "not_configured",
-    "last_sync": null,
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-24T04:06:36.209Z",
     "read_capability": [
       "steps",
       "sleep",
@@ -150,8 +157,8 @@
     "write_capability": [],
     "approval_required": false,
     "cache_path": "health/",
-    "health_status": "unknown",
-    "setup_hint": "Export from Huawei Health app → place JSON/XML in .local-agent-global/visibility/health/export/"
+    "health_status": "healthy",
+    "setup_hint": "Export from Huawei Health app â†’ place JSON/XML in .local-agent-global/visibility/health/export/"
   },
   {
     "connector_id": "website-raw",
@@ -159,7 +166,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": null,
+    "last_sync": "2026-06-24T04:06:37.241Z",
     "read_capability": [
       "files",
       "content",
@@ -171,7 +178,7 @@
     ],
     "approval_required": true,
     "cache_path": "websites/raw/",
-    "health_status": "unknown",
+    "health_status": "healthy",
     "config": {
       "local_path": "E:/Project/Master/RawSushi"
     }
@@ -182,7 +189,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": null,
+    "last_sync": "2026-06-24T04:06:37.239Z",
     "read_capability": [
       "files",
       "content",
@@ -194,7 +201,7 @@
     ],
     "approval_required": true,
     "cache_path": "websites/bakudan/",
-    "health_status": "unknown",
+    "health_status": "healthy",
     "config": {
       "local_path": "E:/Project/Master/Bakudan"
     }
@@ -205,7 +212,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-09T15:58:38.262Z",
+    "last_sync": "2026-06-24T04:06:36.222Z",
     "read_capability": [
       "ledger",
       "stats",
@@ -218,11 +225,12 @@
     "approval_required": false,
     "cache_path": "accounting/",
     "health_status": "healthy",
-    "setup_hint": "Start: node E:/Project/Master/accounting-engine/api/server.js (port 8844)",
+    "setup_hint": "Running: node api/server.js at 127.0.0.1:8844 — ONLINE",
     "config": {
       "api_url": "http://127.0.0.1:8844",
       "db_path": "E:/Project/Master/accounting-engine/ledgers/accounting.db"
-    }
+    },
+    "last_health_check": "2026-06-24T04:24:13.783Z"
   },
   {
     "connector_id": "food-safety",
@@ -230,7 +238,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-09T15:58:38.263Z",
+    "last_sync": "2026-06-24T04:06:36.293Z",
     "read_capability": [
       "inspection-records",
       "audit-trail",
@@ -244,5 +252,69 @@
     "config": {
       "root_path": "E:/Project/Master/food-safety-gateway"
     }
+  },
+  {
+    "connector_id": "whatsapp",
+    "name": "WhatsApp (Mi Gateway)",
+    "type": "api",
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-13T14:44:12.122Z",
+    "read_capability": [
+      "messages",
+      "commands"
+    ],
+    "write_capability": [
+      "messages"
+    ],
+    "approval_required": false,
+    "health_status": "healthy",
+    "config": {
+      "relay_url": "http://localhost:3211"
+    }
+  },
+  {
+    "connector_id": "quickbooks-runtime",
+    "name": "QuickBooks Runtime",
+    "type": "local",
+    "status": "active",
+    "auth_status": "connected",
+    "last_sync": "2026-06-24T04:06:36.290Z",
+    "read_capability": [
+      "company-state",
+      "activity-log",
+      "sync-status",
+      "duplicate-checks",
+      "transactions"
+    ],
+    "write_capability": [],
+    "approval_required": false,
+    "cache_path": "quickbooks/",
+    "health_status": "degraded",
+    "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Current evidence imported and certified; keep QB Desktop/Web Connector/agent running for daily sync.",
+    "config": {
+      "checksum_db": "E:/Project/Master/mi-core/data/qb-agent.db",
+      "agent_db": "E:/Project/Master/mi-core/data/qb-agent.db"
+    }
+  },
+  {
+    "connector_id": "google-sheets",
+    "name": "Google Sheets",
+    "type": "api",
+    "status": "pending",
+    "auth_status": "connected",
+    "last_sync": "2026-06-24T04:06:29.072Z",
+    "read_capability": [
+      "spreadsheets",
+      "ranges",
+      "values"
+    ],
+    "write_capability": [
+      "values"
+    ],
+    "approval_required": true,
+    "cache_path": "google-sheets/",
+    "health_status": "degraded",
+    "setup_hint": "Same OAuth as Gmail â€” requires scope: https://www.googleapis.com/auth/spreadsheets"
   }
 ]

@@ -1,9 +1,9 @@
 {
-  "total": 11,
-  "with_issues": 0,
-  "has_reports": 8,
+  "total": 16,
+  "with_issues": 1,
+  "has_reports": 7,
   "types": [
-    "node",
-    "project"
+    "project",
+    "node"
   ]
 }

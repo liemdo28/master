@@ -1,0 +1,76 @@
+{
+  "workflow_id": "doordash-weekly-campaign-review",
+  "name": "DoorDash Weekly Campaign Review",
+  "domain": "doordash",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": true,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 10 * * 1",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Weekly DoorDash campaign review. Triggers DoorDash agent, Mi reviews recommendations, approval required before changes.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "doordash",
+        "event_type": "doordash_weekly_review_request",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "trigger_doordash_agent",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "doordash",
+        "action": "weekly_campaign_review",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 3,
+      "type": "http_request",
+      "name": "approval_for_changes",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/approval/request",
+      "body": {
+        "workflow_id": "doordash-weekly-campaign-review",
+        "domain": "doordash",
+        "action": "apply_campaign_changes",
+        "brand_id": "{{brand_id}}",
+        "decision_needed": "approve_campaign_changes"
+      }
+    },
+    {
+      "order": 4,
+      "type": "http_request",
+      "name": "log_result",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "doordash-weekly-campaign-review",
+        "domain": "doordash",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "{{trigger_doordash_agent.status}}",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

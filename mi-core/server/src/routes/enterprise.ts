@@ -5,6 +5,31 @@ import { cancelJob, claimNextJob, completeJob, enqueueJob, failJob, getQueueJob,
 import { isPostgresAvailable } from '../bigdata/db-client';
 import { isMinioAvailable } from '../bigdata/minio-client';
 import { isQdrantAvailable } from '../bigdata/memory-indexer';
+import {
+  buildOmegaBriefing,
+  getPriorityPlan,
+  getProgramPhase,
+  getProgramRuntimeStatus,
+  listProgramPhases,
+} from '../enterprise-v6/program-runtime';
+import {
+  answerEnterpriseBrainQuestion,
+  getEnterpriseBrainConnectorLayer,
+  getEnterpriseBrainOntology,
+  getEnterpriseBrainSnapshot,
+  getEnterpriseBrainStatus,
+  listEnterpriseBrainDomains,
+  runEnterpriseBrainAcceptance,
+} from '../enterprise-v6/enterprise-brain-v4';
+import {
+  answerHealthQuestion,
+  answerUniversalConnectorQuestion,
+  certifyGoogleConnectorRuntime,
+  certifyHealthRuntime,
+  certifyUniversalConnectorProof,
+  finalEnterpriseBrainV4Certification,
+  importHealthDataFromFile,
+} from '../enterprise-v6/enterprise-brain-v4-closeout';
 
 export const enterpriseRouter = Router();
 
@@ -40,6 +65,99 @@ enterpriseRouter.get('/health', async (_req: Request, res: Response) => {
     },
     timestamp: new Date().toISOString(),
   });
+});
+
+enterpriseRouter.get('/program/status', (_req: Request, res: Response) => {
+  res.json(getProgramRuntimeStatus());
+});
+
+enterpriseRouter.get('/program/phases', (req: Request, res: Response) => {
+  res.json({ phases: listProgramPhases(String(req.query.program || '')) });
+});
+
+enterpriseRouter.get('/program/phases/:phase', (req: Request, res: Response) => {
+  const phase = getProgramPhase(req.params.phase);
+  if (!phase) return res.status(404).json({ error: 'phase not found' });
+  res.json({ phase });
+});
+
+enterpriseRouter.get('/program/priorities/:priority', (req: Request, res: Response) => {
+  res.json({ priority: req.params.priority, phases: getPriorityPlan(req.params.priority) });
+});
+
+enterpriseRouter.get('/program/omega-briefing', (req: Request, res: Response) => {
+  res.json(buildOmegaBriefing(String(req.query.input || 'Mi, dieu gi la quan trong nhat hom nay?')));
+});
+
+enterpriseRouter.get('/brain-v4/status', (_req: Request, res: Response) => {
+  res.json(getEnterpriseBrainStatus());
+});
+
+enterpriseRouter.get('/brain-v4/domains', (_req: Request, res: Response) => {
+  res.json({ domains: listEnterpriseBrainDomains() });
+});
+
+enterpriseRouter.get('/brain-v4/connectors', (_req: Request, res: Response) => {
+  res.json(getEnterpriseBrainConnectorLayer());
+});
+
+enterpriseRouter.get('/brain-v4/ontology', (_req: Request, res: Response) => {
+  res.json(getEnterpriseBrainOntology());
+});
+
+enterpriseRouter.get('/brain-v4/snapshot', (_req: Request, res: Response) => {
+  res.json(getEnterpriseBrainSnapshot());
+});
+
+enterpriseRouter.get('/brain-v4/acceptance', async (_req: Request, res: Response) => {
+  res.json(await runEnterpriseBrainAcceptance());
+});
+
+enterpriseRouter.get('/brain-v4/answer', async (req: Request, res: Response) => {
+  const q = String(req.query.q || '');
+  if (!q) return res.status(400).json({ error: 'q required' });
+  res.json(await answerEnterpriseBrainQuestion(q));
+});
+
+enterpriseRouter.post('/brain-v4/answer', async (req: Request, res: Response) => {
+  const q = String(req.body?.question || req.body?.q || '');
+  if (!q) return res.status(400).json({ error: 'question required' });
+  res.json(await answerEnterpriseBrainQuestion(q));
+});
+
+enterpriseRouter.get('/brain-v4/health/answer', (req: Request, res: Response) => {
+  const q = String(req.query.q || '');
+  if (!q) return res.status(400).json({ error: 'q required' });
+  res.json(answerHealthQuestion(q));
+});
+
+enterpriseRouter.post('/brain-v4/health/import', (req: Request, res: Response) => {
+  const sourcePath = String(req.body?.source_path || '');
+  if (!sourcePath) return res.status(400).json({ error: 'source_path required' });
+  const result = importHealthDataFromFile(sourcePath);
+  res.status(result.ok ? 200 : 400).json(result);
+});
+
+enterpriseRouter.get('/brain-v4/health/certification', (_req: Request, res: Response) => {
+  res.json(certifyHealthRuntime());
+});
+
+enterpriseRouter.get('/brain-v4/connector-proof', async (req: Request, res: Response) => {
+  const q = String(req.query.q || 'Hôm nay anh có gì cần xử lý?');
+  res.json(await answerUniversalConnectorQuestion(q));
+});
+
+enterpriseRouter.post('/brain-v4/connector-proof', async (req: Request, res: Response) => {
+  const q = String(req.body?.question || req.body?.q || 'Hôm nay anh có gì cần xử lý?');
+  res.json(await answerUniversalConnectorQuestion(q));
+});
+
+enterpriseRouter.get('/brain-v4/google-connector-certification', async (_req: Request, res: Response) => {
+  res.json(await certifyGoogleConnectorRuntime());
+});
+
+enterpriseRouter.get('/brain-v4/final-certification', async (_req: Request, res: Response) => {
+  res.json(await finalEnterpriseBrainV4Certification());
 });
 
 enterpriseRouter.get('/providers', (_req: Request, res: Response) => {

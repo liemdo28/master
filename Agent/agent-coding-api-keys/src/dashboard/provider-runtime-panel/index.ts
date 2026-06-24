@@ -878,16 +878,16 @@ function renderRotation(orch) {
     if (p.state === 'ACTIVE') act = p;
     else if (p.state === 'STANDBY') sby = p;
   });
-  setText('until-switch', (orch.requestsUntilSwitch || 0) + ' req until switch');
+  // Batch routing deprecated — show source rotation info instead
+  setText('until-switch', 'source window rotation (5 min)');
   if (!act && !sby) { setHtml('rot-body', '<div class="nodata">No rotation providers active</div>'); return; }
   var cur = act || sby;
-  var bpct = cur.currentBatchLimit > 0 ? Math.round(cur.currentBatchUsage / cur.currentBatchLimit * 100) : 0;
   var flow = (orch.rotationOrder || []).map(function(id, i) {
     var p = (orch.providers || []).find(function(x) { return x.provider === id; });
     var isCur = p && p.state === 'ACTIVE';
     var arrow = i > 0 ? '<span class="rarr">→</span>' : '';
     return arrow + '<span class="rpill ' + (isCur ? 'rpill-cur' : 'rpill-nxt') + '">' +
-      id + ' (' + (p ? p.currentBatchLimit : '?') + ')</span>';
+      id + ' (quota ' + (p ? p.remainingQuota : '?') + ')</span>';
   }).join('');
 
   setHtml('rot-body',
@@ -898,14 +898,14 @@ function renderRotation(orch) {
         '<span class="badge ' + stateClass(cur.state) + '">' + cur.state + '</span>' +
       '</div>' +
       '<div class="batch-row">' +
-        '<div class="batch-hd"><span>Batch Progress</span><span class="batch-ct">' +
-          cur.currentBatchUsage + ' / ' + cur.currentBatchLimit + '</span></div>' +
-        '<div class="track"><div class="fill' + (act ? '' : ' sd-fill') + '" style="width:' + bpct + '%"></div></div>' +
+        '<div class="batch-hd"><span>Quota Usage</span><span class="batch-ct">' +
+          cur.usedQuota + ' / ' + cur.totalQuota + '</span></div>' +
+        '<div class="track"><div class="fill' + (act ? '' : ' sd-fill') + '" style="width:' + (cur.totalQuota > 0 ? Math.round(cur.usedQuota / cur.totalQuota * 100) : 0) + '%"></div></div>' +
       '</div>' +
       (sby ?
         '<div class="nxt"><span class="nxt-arr">→</span><span>Next:</span>' +
         '<span class="nxt-p">' + sby.provider.toUpperCase() + '</span>' +
-        '<span style="color:var(--text-dim)">(' + sby.currentBatchLimit + ' req batch)</span></div>' : '') +
+        '<span style="color:var(--text-dim)">(quota ' + sby.remainingQuota + ' remaining)</span></div>' : '') +
       '<div class="rot-flow">' + flow + '</div>' +
     '</div>'
   );

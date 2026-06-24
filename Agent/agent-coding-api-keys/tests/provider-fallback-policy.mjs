@@ -101,6 +101,12 @@ const keyRotation = await import('../dist/runtime/api-key-rotation-service.js');
 }
 
 {
+  const err = classifier.classifyUpstreamError(502, '{"error":{"message":"No available accounts: no available accounts","type":"api_error"}}');
+  assert(err.type === 'provider_down', 'OpusMax no-available-accounts errors are provider_down, not auth_failed', JSON.stringify(err));
+  assert(classifier.shouldDisableKeyForError(err.type) === false, 'OpusMax no-available-accounts errors do not disable the key');
+}
+
+{
   const err = classifier.classifyThrownError(new Error('fetch failed'));
   assert(err.type === 'provider_down', 'fetch failed is classified as provider_down', JSON.stringify(err));
 }

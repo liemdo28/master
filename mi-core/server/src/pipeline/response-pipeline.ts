@@ -21,16 +21,133 @@ import { detectProjectTarget, detectActionType, routeCommand } from '../projects
 import { buildSystemPrompt, detectReasoningType, buildActionPlan } from '../intelligence/executive-context';
 import { getHolidayContextString, getWeekContext } from '../intelligence/holiday-engine';
 import { getFederatedContext, searchAll } from '../knowledge-federation/index';
+import { getUSComplianceDBPath } from '../knowledge/reference-brain-path';
 import { getPlatformHealthText } from '../visibility/platform-health';
 import { createTaskDraft, parseTaskFromMessage, formatTaskDraftResponse } from '../projects/task-manager';
 import { draftContent, formatContentDraftResponse, getLastPost } from '../projects/content-scheduler';
-import { askAi, ChatMessage } from '../services/ai-client';
+import { askAi, askAiWithBrain, ChatMessage } from '../services/ai-client';
 import { getPending } from '../approval/gate';
 import { MiMode } from '../services/mi-brain';
+import { classifyIntent } from '../brain/intent-classifier';
+import { selectBrainConfig } from '../brain/brain-router';
+import { searchCompliance, formatComplianceContext, isComplianceDBAvailable } from '../knowledge/compliance-retrieval';
 import { isDailyWorkAction, handleDailyWorkAction } from '../actions/daily-work-actions';
+import { scrubReply } from '../middleware/response-scrubber';
+import { recordLatency } from '../operations/latency-monitor';
 import { resolveStore, resolvePerson, answerStoreQuery } from '../memory2/store-context';
 import { searchLocalFiles, formatFileResults } from '../actions/file-search';
 import { isDataAnalystMessage, handleDataAnalystMessage, buildDataAnalystRouteContext } from '../actions/data-analyst-handler';
+
+// ── Asset Registry Direct Handler (Phase 14 fix) ─────────────────────────────
+
+function isAssetQuery(msg: string): 'projects' | 'services' | 'ownership' | 'source_health' | null {
+  const t = msg.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/đ/gi, 'd').replace(/[^a-z0-9\s?!]/g, ' ');
+
+  // Project list queries
+  if (/\b(project\s*(nao|gi|dao|co\s*gi|la\s*gi|hien\s*tai|list|nhe)|danh\s*sach\s*project|du\s*an\s*(nao|hien|co)|list\s*project|cac\s*project)\b/.test(t)) return 'projects';
+  // Service health queries
+  if (/\b(service\s*(nao|gi|down|dang\s*down|bi\s*down|loi|loi|mat)|dich\s*vu\s*(nao|down|bi)|which\s*service|service.*healthy|service.*ok)\b/.test(t)) return 'services';
+  // Ownership queries
+  if (/\b(thuoc\s*(phong|bo\s*phan|team)|phu\s*trach\s*(boi|la)|quan\s*ly\s*boi|owner|ai\s*lam\s*chu)\b/.test(t)) return 'ownership';
+  // Source/data health
+  if (/\b(toast|quickbooks|doordash|food.?safe|data\s*source|nguon\s*du\s*lieu).*(healthy|ok|loi|status|tinh\s*trang)\b/.test(t) ||
+      /\b(healthy|ok|loi|status)\b.*\b(toast|quickbooks|doordash)\b/.test(t)) return 'source_health';
+
+  return null;
+}
+
+async function tryAnswerAssetQuery(message: string): Promise<string | null> {
+  const queryType = isAssetQuery(message);
+  if (!queryType) return null;
+
+  try {
+    // Use direct module import — avoids self-referential HTTP + auth complexity
+    const { PROJECTS, getActiveProjects, getCriticalProjects } = require('../company-os/project-registry');
+    const { SERVICES, checkAllServicesHealth } = require('../company-os/service-registry');
+    const { DATA_SOURCES } = require('../company-os/data-source-registry');
+
+    if (queryType === 'projects') {
+      const active: Array<{ id: string; name: string; criticality: string; owner_dept: string }> = getActiveProjects();
+      const critical: Array<{ id: string; name: string; owner_dept: string }> = getCriticalProjects();
+      const nonCritical = active.filter((p: { criticality: string }) => p.criticality !== 'CRITICAL');
+      const lines = [
+        `📋 *Company Projects (${active.length} active / ${PROJECTS.length} total)*`,
+        '',
+        '*🔴 Critical:*',
+        ...critical.map((p: { name: string; owner_dept: string }) => `• ${p.name} — ${p.owner_dept}`),
+        '',
+        '*📦 Active:*',
+        ...nonCritical.slice(0, 15).map((p: { name: string }) => `• ${p.name}`),
+      ];
+      return lines.join('\n');
+    }
+
+    if (queryType === 'services') {
+      const results = await checkAllServicesHealth() as Array<{ name: string; healthy: boolean; error?: string }>;
+      const down = results.filter(r => !r.healthy);
+      const up   = results.filter(r => r.healthy);
+      const lines = [
+        `🔍 *Service Health (${up.length}/${results.length} healthy)*`,
+        '',
+      ];
+      if (down.length === 0) {
+        lines.push('✅ Tất cả services đang online.');
+      } else {
+        lines.push('*🔴 Down:*');
+        down.forEach((s: { name: string; error?: string }) => lines.push(`• ${s.name} — ${s.error || 'unreachable'}`));
+      }
+      if (up.length) {
+        lines.push('', '*✅ Online:*');
+        up.forEach((s: { name: string }) => lines.push(`• ${s.name}`));
+      }
+      return lines.join('\n');
+    }
+
+    if (queryType === 'ownership') {
+      const msg_lower = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd');
+      const allProjects: Array<{ id: string; name: string; owner_dept: string; business_purpose: string }> = PROJECTS;
+      const match = allProjects.find(p =>
+        msg_lower.includes(p.id.toLowerCase()) ||
+        p.name.toLowerCase().split(/\s+/).some((word: string) => word.length > 3 && msg_lower.includes(word))
+      );
+      if (match) {
+        return `🏢 *${match.name}*\nDept: ${match.owner_dept}\nMục đích: ${match.business_purpose}`;
+      }
+      const lines = ['🏢 *Department Ownership*', ''];
+      allProjects.filter(p => p.owner_dept && p.owner_dept !== 'unknown').slice(0, 12).forEach(p => {
+        lines.push(`• ${p.name} → ${p.owner_dept}`);
+      });
+      return lines.join('\n');
+    }
+
+    if (queryType === 'source_health') {
+      const msg_norm = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd');
+      const allSources: Array<{ id: string; name: string; health?: string; last_known_health?: string; credential_status: string }> = DATA_SOURCES;
+      const specific = allSources.find(s =>
+        msg_norm.includes(s.id.toLowerCase()) ||
+        s.name.toLowerCase().split(/\s+/).some((w: string) => w.length > 3 && msg_norm.includes(w))
+      );
+      if (specific) {
+        const h = specific.health ?? specific.last_known_health ?? 'unknown';
+        const icon = h === 'healthy' ? '✅' : h === 'degraded' ? '⚠️' : '❓';
+        return `${icon} *${specific.name}*\nStatus: ${h}\nCredentials: ${specific.credential_status}`;
+      }
+      const lines = ['📡 *Data Source Health*', ''];
+      allSources.forEach(s => {
+        const h = s.health ?? s.last_known_health ?? 'unknown';
+        const icon = h === 'healthy' ? '✅' : h === 'degraded' ? '⚠️' : '❓';
+        lines.push(`${icon} ${s.name} — ${h}`);
+      });
+      return lines.join('\n');
+    }
+  } catch (e) {
+    console.error('[AssetQuery] Error:', e instanceof Error ? e.message : String(e));
+  }
+
+  return null;
+}
 
 export interface PipelineInput {
   message: string;
@@ -54,7 +171,18 @@ export async function runPipeline(input: PipelineInput): Promise<PipelineOutput>
   let kbHits = 0;
   let extraContext = '';
 
-  // ── 0a. Data Analyst — intercept before AI ────────────────────────────────
+  // ── 0. Brain Router — classify intent, select optimal brain ─────────────
+  const classifiedIntent = classifyIntent(message);
+  const brainConfig = selectBrainConfig(classifiedIntent);
+  console.log(`[Mi Brain] domain=${classifiedIntent.domain} brain=${brainConfig.brain} model=${brainConfig.model} confidence=${classifiedIntent.confidence.toFixed(2)}`);
+
+  // ── 0a. Asset Registry — direct answer, no LLM ───────────────────────────
+  const assetQueryReply = await tryAnswerAssetQuery(message);
+  if (assetQueryReply) {
+    return { reply: assetQueryReply, model: 'asset-registry', sources: ['company-asset-registry'], memory_context: '', kb_hits: 0 };
+  }
+
+  // ── 0b. Data Analyst — intercept before AI ────────────────────────────────
   if (isDataAnalystMessage(message)) {
     const directAnswer = handleDataAnalystMessage(message);
     if (directAnswer) {
@@ -105,7 +233,23 @@ export async function runPipeline(input: PipelineInput): Promise<PipelineOutput>
     kbHits = kbResults.length;
   }
 
-  // (Compliance DB search handled by knowledge-federation/index.ts searchAll)
+  // ── 3b. US Compliance DB — WS4 ───────────────────────────────────────────
+  if (classifiedIntent.requires_compliance_db && isComplianceDBAvailable()) {
+    try {
+      const compResults = searchCompliance(message, {
+        limit: 3,
+        jurisdiction: classifiedIntent.jurisdiction,
+        min_score: 0.04,
+      });
+      if (compResults.length > 0) {
+        liveDataParts.push(formatComplianceContext(compResults, message));
+        sources.push('us-compliance-db');
+        console.log(`[Mi Compliance] ${compResults.length} docs found for: "${message.slice(0, 60)}"`);
+      }
+    } catch (e) {
+      console.warn('[Mi] Compliance DB search error:', e);
+    }
+  }
 
   // ── 4. Executive Reasoning Chain ──
   if (reasoningTypes.some(t => ['holiday_business_impact', 'marketing_action', 'content_reference', 'scheduling'].includes(t))) {
@@ -309,16 +453,46 @@ export async function runPipeline(input: PipelineInput): Promise<PipelineOutput>
     }
   }
 
+  // ── 15b. Company Asset Registry — Phase 6 ──
+  if (/company.*project|du an cong ty|service.*down|department.*own|source.*health|project.*owner|company.*asset|list.*project|agent.*project/i.test(message)) {
+    try {
+      const MI_PORT = process.env.MI_PORT || '4001';
+      const apiKey = process.env.MI_CORE_API_KEY || '';
+      const assetRes = await fetch(`http://localhost:${MI_PORT}/api/company-os/assets`, {
+        headers: { 'x-api-key': apiKey, 'x-mi-auth': apiKey },
+        signal: AbortSignal.timeout(5000),
+      });
+      if (assetRes.ok) {
+        const asset = await assetRes.json() as Record<string, unknown>;
+        const summary = asset.summary as Record<string, string> | undefined;
+        const parts = [
+          `Departments: ${(asset.departments as Record<string, number>)?.active ?? '?'}/${(asset.departments as Record<string, number>)?.total ?? '?'} active`,
+          `Projects: ${(asset.projects as Record<string, number>)?.active ?? '?'} active, ${(asset.projects as Record<string, number>)?.critical ?? '?'} critical`,
+          `Services: ${(asset.services as Record<string, number>)?.total ?? '?'} total (${(asset.services as Record<string, number>)?.pm2 ?? '?'} PM2)`,
+          summary?.projects ? `Projects: ${summary.projects}` : '',
+          summary?.services ? `Services: ${summary.services}` : '',
+        ].filter(Boolean).join('\n');
+        liveDataParts.push(`[Company Asset Registry]\n${parts}`);
+        sources.push('company-asset-registry');
+      }
+    } catch { /* non-blocking */ }
+  }
+
   // ── 16. Build full system prompt (always includes exec brain) ──
   const systemPrompt = buildSystemPrompt(liveDataParts);
 
+  // ── P0-3 Gate-First: scrub secrets from LLM context BEFORE sending to model ──
+  const safeSystemPrompt = scrubReply(systemPrompt, 'llm_context_system');
+
   // ── 17. Build messages ──
-  const messages: ChatMessage[] = [{ role: 'system', content: systemPrompt }];
+  const messages: ChatMessage[] = [{ role: 'system', content: safeSystemPrompt }];
   for (const h of history.slice(-8)) messages.push({ role: h.role, content: h.content });
-  messages.push({ role: 'user', content: message });
+  messages.push({ role: 'user', content: scrubReply(message, 'llm_context_user') });
 
-  // ── 18. AI call ──
-  const aiRes = await askAi(messages);
+  // ── 18. AI call — use brain-router-selected model ──
+  const _aiT0 = Date.now();
+  const aiRes = await askAiWithBrain(messages, brainConfig);
+  recordLatency('ai_inference', Date.now() - _aiT0, 'response_pipeline');
 
-  return { reply: aiRes.text, model: aiRes.model, sources, memory_context: memContext, kb_hits: kbHits };
+  return { reply: aiRes.text, model: `${brainConfig.brain}/${aiRes.model}`, sources, memory_context: memContext, kb_hits: kbHits };
 }

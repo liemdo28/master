@@ -1,0 +1,98 @@
+{
+  "activeProviders": [
+    "antigravity",
+    "opusmax",
+    "anthropic",
+    "openrouter",
+    "ollama"
+  ],
+  "mode": "fallback",
+  "providers": {
+    "opusmax": {
+      "baseURL": "https://opusmax.shop/v1",
+      "model": "claude-opus-4-7-standard",
+      "models": [
+        "claude-opus-4-7-standard",
+        "claude-opus-4-6-standard"
+      ],
+      "aliases": {
+        "claude-opus-4-7": ["claude-opus-4-7-standard"],
+        "claude-opus-4.7": ["claude-opus-4-7-standard"],
+        "claude-opus-4-6": ["claude-opus-4-6-standard"],
+        "claude-sonnet-4-6": ["claude-opus-4-6-standard"],
+        "claude-opus-4": ["claude-opus-4-7-standard"]
+      },
+      "keys": [
+        {
+          "id": "key-1",
+          "value": "YOUR_KEY_HERE",
+          "active": true,
+          "label": "OpusMax Key 1 (2026-06-03)"
+        },
+        {
+          "id": "key-2",
+          "value": "YOUR_KEY_HERE",
+          "active": true,
+          "label": "OpusMax Key 2 (2026-06-08)"
+        }
+      ]
+    },
+    "antigravity": {
+      "baseURL": "https://api.nkq.vn/v1",
+      "model": "claude-opus-4-7",
+      "models": [
+        "claude-opus-4-7",
+        "claude-opus-4-6",
+        "claude-opus-4"
+      ],
+      "aliases": {
+        "claude-opus-4-7": ["claude-opus-4-7"],
+        "claude-opus-4.7": ["claude-opus-4-7"],
+        "claude-opus-4-8": ["claude-opus-4-7"],
+        "claude-opus-4.8": ["claude-opus-4-7"],
+        "claude-opus-4-6": ["claude-opus-4-6"],
+        "claude-opus-4.6": ["claude-opus-4-6"]
+      },
+      "keys": [
+        {
+          "id": "key-1",
+          "value": "YOUR_KEY_HERE",
+          "active": true,
+          "label": "NKQ Key 1 (AGOP-6094)"
+        },
+        {
+          "id": "key-2",
+          "value": "YOUR_KEY_HERE",
+          "active": true,
+          "label": "NKQ Key 2 (AGOP-7B43)"
+        },
+        {
+          "id": "key-3",
+          "value": "YOUR_KEY_HERE",
+          "active": true,
+          "label": "NKQ Key 3 (AGOP-B0D9)"
+        }
+      ]
+    },
+    "anthropic": {
+      "baseURL": "https://api.anthropic.com",
+      "model": "claude-sonnet-4-6",
+      "keys": []
+    },
+    "openai": {
+      "baseURL": "https://api.openai.com/v1",
+      "model": "gpt-4o",
+      "keys": []
+    },
+    "gemini": {
+      "baseURL": "https://generativelanguage.googleapis.com/v1beta",
+      "model": "gemini-2.0-flash",
+      "keys": []
+    },
+    "ollama": {
+      "baseURL": "http://localhost:11434",
+      "model": "llama3",
+      "keys": []
+    }
+  }
+}

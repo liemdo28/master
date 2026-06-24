@@ -55,6 +55,7 @@ export interface KeyHealthEntry {
 // ── Cooldown durations (ms) ──────────────────────────────────────────────────
 
 const COOLDOWNS: Record<UpstreamErrorType, number> = {
+  concurrency_limit: 10_000,      // 10 s — transient, other streams finish quickly
   rate_limited:    60_000,        // 60 s
   timeout:         30_000,        // 30 s
   provider_down:   30_000,        // 30 s
@@ -68,6 +69,15 @@ const COOLDOWNS: Record<UpstreamErrorType, number> = {
   sse_tool_unsupported: 0,         // no cooldown — provider capability mismatch
   unknown:         15_000,        // 15 s
 };
+
+function cooldownFor(providerId: string, errorType: UpstreamErrorType): number {
+  // NKQ occasionally returns a provider_down SSE event for one request while
+  // the same key/model remains healthy. The gateway queue already serializes
+  // Cline traffic, so a second 30 s key quarantine only makes all three Cline
+  // auto-retries fail locally despite available provider quota.
+  if (providerId === 'antigravity' && errorType === 'provider_down') return 0;
+  return COOLDOWNS[errorType] ?? 15_000;
+}
 
 // ── Implementation ───────────────────────────────────────────────────────────
 
@@ -141,7 +151,7 @@ export class ApiKeyRotationService {
     entry.lastErrorType = errorType;
     entry.lastErrorMessage = message.slice(0, 200);
 
-    const cooldownMs = COOLDOWNS[errorType] ?? 15_000;
+    const cooldownMs = cooldownFor(providerId, errorType);
 
     if (errorType === 'auth_failed') {
       entry.status = 'auth_failed';
@@ -155,8 +165,12 @@ export class ApiKeyRotationService {
                    : errorType === 'timeout'         ? 'timeout'
                    : 'cooldown';
       entry.cooldownUntil = Date.now() + cooldownMs;
+    } else {
+      // Model/client errors and transient NKQ provider_down do not make the
+      // credential unusable. Keep it eligible for the next queued request.
+      entry.status = 'healthy';
+      entry.cooldownUntil = null;
     }
-    // invalid_model / unknown with cooldownMs=0 → stays healthy, key not the problem
 
     return entry.status;
   }

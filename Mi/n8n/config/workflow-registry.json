@@ -1,0 +1,121 @@
+{
+  "registry_version": "2.0.0",
+  "generated_at": "2026-06-24",
+  "contract_version": "1.0.0",
+  "description": "Master workflow registry. Every workflow follows the n8n-Mi contract (workflow_id, domain, trigger_type, source='n8n', mi_required, approval_required, brand_id, location_id, status, started_at, completed_at, error).",
+  "workflows": [
+    {
+      "id": "mi-system-health-check",
+      "name": "Mi System Health Check",
+      "domain": "system",
+      "file": "workflows/system/mi-system-health-check.json",
+      "schedule": "*/5 * * * *",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": false,
+      "brands_supported": ["all"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "seo-daily-audit",
+      "name": "SEO Daily Audit Trigger",
+      "domain": "seo",
+      "file": "workflows/seo/seo-daily-audit.json",
+      "schedule": "0 7 * * *",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": true,
+      "brands_supported": ["all", "bakudan", "rawsushi"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "seo-weekly-executive-report",
+      "name": "SEO Weekly Executive Report",
+      "domain": "seo",
+      "file": "workflows/seo/seo-weekly-executive-report.json",
+      "schedule": "0 9 * * 1",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": false,
+      "brands_supported": ["all", "bakudan", "rawsushi"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "review-monitoring",
+      "name": "Review Monitoring Trigger",
+      "domain": "reviews",
+      "file": "workflows/reviews/review-monitoring.json",
+      "schedule": "0 * * * *",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": true,
+      "brands_supported": ["all", "bakudan", "rawsushi"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "food-safety-daily-reminder",
+      "name": "Food Safety Daily Reminder",
+      "domain": "food-safety",
+      "file": "workflows/food-safety/food-safety-daily-reminder.json",
+      "schedule": "0 6 * * *",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": true,
+      "brands_supported": ["all", "bakudan", "rawsushi"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "quickbooks-daily-sync",
+      "name": "QuickBooks Daily Sync",
+      "domain": "quickbooks",
+      "file": "workflows/quickbooks/quickbooks-daily-sync.json",
+      "schedule": "0 5 * * *",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": false,
+      "brands_supported": ["all", "bakudan"],
+      "status": "exported",
+      "version": "1.0.0"
+    },
+    {
+      "id": "doordash-weekly-campaign-review",
+      "name": "DoorDash Weekly Campaign Review",
+      "domain": "doordash",
+      "file": "workflows/doordash/doordash-weekly-campaign-review.json",
+      "schedule": "0 10 * * 1",
+      "trigger_type": "schedule",
+      "source": "n8n",
+      "mi_required": true,
+      "approval_required": true,
+      "brands_supported": ["all", "bakudan", "rawsushi"],
+      "status": "exported",
+      "version": "1.0.0"
+    }
+  ],
+  "summary": {
+    "total_workflows": 7,
+    "by_domain": {
+      "system": 1,
+      "seo": 2,
+      "reviews": 1,
+      "food-safety": 1,
+      "quickbooks": 1,
+      "doordash": 1,
+      "websites": 0
+    },
+    "mi_required": 7,
+    "approval_required": 5,
+    "multi_brand": 7
+  }
+}

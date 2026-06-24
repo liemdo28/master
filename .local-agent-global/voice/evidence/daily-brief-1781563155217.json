@@ -1,0 +1,15 @@
+{
+  "workflow_id": "daily-brief-1781563155217",
+  "audio_id": "a129df57-7e47-4098-a3ac-d2acddcabdd2",
+  "audio_path": "E:\\Project\\Master\\.local-agent-global\\voice\\tts\\daily-brief-1781563155217_a129df57-7e47-4098-a3ac-d2acddcabdd2.mp3",
+  "text_content": "Mi Daily Brief — Thứ Ba, 16 tháng 6, 2026\n\n Email: 42 chưa đọc, 10 quan trọng\n Lịch: 0 sự kiện hôm nay\n Tasks: 855 tasks, 63 quá hạn\n\n Cần xử lý:\n  • 42 emails chưa đọc\n  • 63 Asana tasks overdue\n\n Chờ duyệt: 257 action(s)\n  • [L3] Approval required for dangerous command: Deploy production now #2\n  • [L3] Approval required for dangerous command: Deploy lên production #3\n  • [L3] Approval required for dangerous command: Push to prod #4\n\nTrả lời: /mi [câu hỏi] để hỏi Mi",
+  "text_report": "📋 *Mi Daily Brief — Thứ Ba, 16 tháng 6, 2026*\n\n📧 *Email:* 42 chưa đọc, 10 quan trọng\n📅 *Lịch:* 0 sự kiện hôm nay\n✅ *Tasks:* 855 tasks, 63 quá hạn\n\n⚠️ *Cần xử lý:*\n  • 42 emails chưa đọc\n  • 63 Asana tasks overdue\n\n🔐 *Chờ duyệt:* 257 action(s)\n  • [L3] Approval required for dangerous command: Deploy production now #2\n  • [L3] Approval required for dangerous command: Deploy lên production #3\n  • [L3] Approval required for dangerous command: Push to prod #4\n\n_Trả lời: /mi [câu hỏi] để hỏi Mi_",
+  "recipient": "",
+  "is_ceo": true,
+  "approval_status": "skipped_ceo",
+  "whatsapp_sent": false,
+  "voice": "vi-VN-HoaiMyNeural",
+  "file_size_bytes": 281520,
+  "synthesis_ms": 15702,
+  "created_at": "2026-06-15T22:39:30.919Z"
+}

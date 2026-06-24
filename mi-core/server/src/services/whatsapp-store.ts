@@ -86,8 +86,10 @@ function readJson<T>(filePath: string, fallback: T): T {
 }
 
 function writeJson(filePath: string, data: any) {
-  ensureDir();
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  try {
+    ensureDir();
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  } catch { /* non-critical store write failure */ }
 }
 
 // ── Messages ────────────────────────────────────────────────────────────────

@@ -1,0 +1,17 @@
+{
+  "name": "@bakudan-seo/shared",
+  "version": "1.0.0",
+  "description": "Shared core for Bakudan SEO agents (config, db, contracts, logs, reports, events, queue, mi-client)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/test-shared.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

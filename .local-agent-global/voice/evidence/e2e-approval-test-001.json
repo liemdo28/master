@@ -1,0 +1,16 @@
+{
+  "workflow_id": "e2e-approval-test-001",
+  "audio_id": "d1624995-9c45-4561-bb05-614eaa199acd",
+  "audio_path": "E:\\Project\\Master\\.local-agent-global\\voice\\tts\\e2e-approval-test-001_d1624995-9c45-4561-bb05-614eaa199acd.mp3",
+  "text_content": "Đây là thông báo quan trọng từ Mi-Core cho nhân viên.",
+  "recipient": "+84999999999",
+  "recipient_name": "Staff Member",
+  "is_ceo": false,
+  "approval_id": "c7290ea1-e371-4669-b457-24832bae303a",
+  "approval_status": "pending_approval",
+  "whatsapp_sent": false,
+  "voice": "vi-VN-HoaiMyNeural",
+  "file_size_bytes": 21744,
+  "synthesis_ms": 3971,
+  "created_at": "2026-06-15T22:39:35.024Z"
+}

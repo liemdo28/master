@@ -1,0 +1,844 @@
+{
+  "synced_at": "2026-06-20T08:39:59.195Z",
+  "unread_count": 42,
+  "important_count": 5,
+  "emails": [
+    {
+      "id": "19ee3cd86aeb2f73",
+      "thread_id": "19ee3cd86aeb2f73",
+      "subject": "Bạn sẽ làm gì nếu có 1 ngày ở Tuy Hòa?",
+      "from": "VietJet Newsletter <promotion@newsletter.vietjetair.com>",
+      "date": "Sat, 20 Jun 2026 12:22:37 +0530",
+      "snippet": "Bạn sẽ làm gì nếu có 1 ngày ở Tuy Hòa? Ngay cả khi chỉ có 1 ngày tại Tuy Hòa, bạn vẫn có thể cảm nhận trọn vẹn vẻ đẹp thiên nhiên và ẩm thực đặc sắc của vùng đất Phú Yên qua lịch trình gợi ý dưới đây:",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee367094a09bf5",
+      "thread_id": "19ee364a02c93423",
+      "subject": "[Raw] Golira Food Data",
+      "from": "Liem Do <liem.dt0208@gmail.com>",
+      "date": "Sat, 20 Jun 2026 12:00:40 +0700",
+      "snippet": "LIEM DO (Mr.) ------------------&quot;------------------ P: 0931 773 657 E: liem.dt0208@gmail.com",
+      "labels": [
+        "SENT"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ee33338301ad62",
+      "thread_id": "19ee33338301ad62",
+      "subject": "🔴 HOTSALE TỪ 45K - Chỉ 20 & 21/6!",
+      "from": "CellphoneS <cskh@cellphones.com.vn>",
+      "date": "Sat, 20 Jun 2026 04:04:04 +0000",
+      "snippet": "➥ Gửi Liem Do deal hot cuối tuần - Xiaomi 17 Ultra lần đầu giảm sốc, Tivi góp từ 15K/ngày, phụ kiện -50%,... Xem Ngay!‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee22ebca31f2ad",
+      "thread_id": "19ee22ebca31f2ad",
+      "subject": "Bang Sao Ke Dien Tu The Tin Dung HSBC/ HSBC Credit Card e-Statement 20260621",
+      "from": "HSBC Vietnam <hsbc-estatement@mail.hsbc.com.vn>",
+      "date": "Sat, 20 Jun 2026 07:19:31 +0800",
+      "snippet": "*Please click here if you can not view this email. *Vui lòng nhấn vào đây nếu Quý khách không xem được thư điện tử này. Ngân hàng TNHH một thành viên HSBC (Việt Nam), 235 Đồng Khởi, Quận 1, Tp. Hồ Chí",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee2050e13248c2",
+      "thread_id": "19ee2050e13248c2",
+      "subject": "Daily Agenda for Liem Do as of 5am",
+      "from": "Google Calendar <calendar-notification@google.com>",
+      "date": "Fri, 19 Jun 2026 22:34:02 +0000",
+      "snippet": "Google Calendar Liem Do, here is your schedule for: Sat Jun 20, 2026 All day Sat Jun 20 Stockton - Pay Water Finance Asana Google Calendar You are receiving this email at the account liem.dt0208@gmail",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee1e23df163978",
+      "thread_id": "19ee1e23df163978",
+      "subject": "Railway mobile app, one-click PgBouncer, manage templates in the CLI",
+      "from": "Railway <hello@news.railway.app>",
+      "date": "Fri, 19 Jun 2026 21:56:00 +0000",
+      "snippet": "It&#39;s Friday and you know what that means! Here&#39;s a summary of the stuff we shipped this week ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee1d802df26739",
+      "thread_id": "19ee1d802df26739",
+      "subject": "Weekly statements",
+      "from": "Tracy E <tracy@fourseasonsfood.com>",
+      "date": "Fri, 19 Jun 2026 16:43:48 -0500",
+      "snippet": "Thank you and have a wonderful weekend! Warmest Regards, Tracy Elias Four Seasons Food Inc. 2010 Holmes Rd, Houston, Tx 77045 Phone: 713-383-8818 Fax: 713-383-8838 Direct:832-356-2687 Be like me, be",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee1b90a5cc53d7",
+      "thread_id": "19ee1b90a5cc53d7",
+      "subject": "[AD] Liêm, pack your bags - new deals just landed!",
+      "from": "Agoda Deals <no-reply@sg.newsletter.agoda-emails.com>",
+      "date": "Fri, 19 Jun 2026 21:10:59 +0000 (UTC)",
+      "snippet": "Psst…exclusive deals inside. Don&#39;t leave them stranded. Agoda.com Hotels &amp; Homes Flights Deals Airport Transfer Activities Get all your deals here! Promotions Limited time price drop in Vietna",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee17cdfe29b4eb",
+      "thread_id": "19ee17cdfe29b4eb",
+      "subject": "Hoan thien ho so cua ban tren VietnamWorks/ Improve Your Resume On VietnamWorks",
+      "from": "VietnamWorks <services@vietnamworks.com>",
+      "date": "Fri, 19 Jun 2026 20:05:06 +0000",
+      "snippet": "Neu ban khong doc duoc font chu Tieng Viet, vui long chon View &gt; Encoding &gt; Unicode (UTF-8) Vietnamworks.com Chào Liem, Cảm ơn bạn đã tin tưởng và lựa chọn VietnamWorks để tìm kiếm công việc mơ",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ee0ce5620adbbc",
+      "thread_id": "19ee0ce5620adbbc",
+      "subject": "Các công việc gợi ý trong tuần cực Hot có thể Bạn quan tâm !!!",
+      "from": "\"Careerviet.vn\" <info@careerviet-jobalert.vn>",
+      "date": "Fri, 19 Jun 2026 22:24:39 +0530",
+      "snippet": "ĐỪNG BỎ QUA! APPLY NGAY! ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee0b7e4972e468",
+      "thread_id": "19ee0b7e4972e468",
+      "subject": "liem.dt0208, catch up on moments you've missed",
+      "from": "Instagram <notification@priority.instagram.com>",
+      "date": "Fri, 19 Jun 2026 09:30:03 -0700",
+      "snippet": "quynhnhu.ngo , acury.hien and others posted something new. Catch up on Instagram quynhnhu.ngo, acury.hien and others posted something new. Open Instagram 1 You have 1 notification you may not have see",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee08080f156776",
+      "thread_id": "19ee08080f156776",
+      "subject": "Your Subscription Renewal",
+      "from": "Apple <no_reply@email.apple.com>",
+      "date": "Fri, 19 Jun 2026 15:29:38 +0000 (GMT)",
+      "snippet": "Subscription renewal Google One Google One Storage 100 GB (1 year) ₫459.000/year Dear Do, We hope you are enjoying your subscription, which will renew soon. Starting from 20 July 2026, your",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee065d7428c0d0",
+      "thread_id": "19ee065d7428c0d0",
+      "subject": "Security alert",
+      "from": "Google <no-reply@accounts.google.com>",
+      "date": "Fri, 19 Jun 2026 15:00:30 GMT",
+      "snippet": "You allowed OpenAI access to some of your Google Account data liem.dt0208@gmail.com If you didn&#39;t allow OpenAI access to some of your Google Account data, someone else may be trying to access your",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ee061ed8ec6ed1",
+      "thread_id": "19ee061ed8ec6ed1",
+      "subject": "Liem, please verify your new device",
+      "from": "LinkedIn <security-noreply@linkedin.com>",
+      "date": "Fri, 19 Jun 2026 14:56:10 +0000 (UTC)",
+      "snippet": "Liem, please verify your new device ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ee03e97b71fd40",
+      "thread_id": "19ee03e97b71fd40",
+      "subject": "You don't need to know SEO. AIOSEO figures it out.",
+      "from": "Gabriela from All in One SEO <support@aioseo.com>",
+      "date": "Fri, 19 Jun 2026 14:16:28 +0000",
+      "snippet": "Basic is $49.50 through June 24. Normally $99. ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edfe9fe63a0b05",
+      "thread_id": "19edfe9fe63a0b05",
+      "subject": "[QC] Trade Marketing Assistant Manager và 9 việc làm phù hợp nhất dành cho bạn",
+      "from": "VietnamWorks <jobalerts@vietnamworks.com>",
+      "date": "Fri, 19 Jun 2026 12:45:13 +0000",
+      "snippet": "Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm được công việc mơ ước của mình. Dựa trên thông tin của bạn, chúng tôi đã tìm được những công việc mới nhất phù",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edfc855004abc0",
+      "thread_id": "19edfc855004abc0",
+      "subject": "Liêm, top price drops in Hạ Long, selected for you!",
+      "from": "Agoda Price Alerts <no-reply@sg.newsletter.agoda-emails.com>",
+      "date": "Fri, 19 Jun 2026 12:08:26 +0000 (UTC)",
+      "snippet": "Check out today&#39;s top price drops on Agoda! Agoda.com Hotels &amp; Homes Flights Deals Airport Transfer Activities Liêm, experience the best of Hạ Long Your journey starts here! Hạ Long June 20,",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edf89e740cda2e",
+      "thread_id": "19edf89e740cda2e",
+      "subject": "See who's behind that photo",
+      "from": "ClarityCheck <hello@claritycheck.com>",
+      "date": "Fri, 19 Jun 2026 11:00:14 +0000",
+      "snippet": "Hi there, Reverse image lookup can reveal helpful information when something about a photo doesn&#39;t feel right. When image verification helps people: Understanding who you&#39;re really talking to",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edf6127877c9bc",
+      "thread_id": "19edf6127877c9bc",
+      "subject": "[QC] Chào hè cùng ưu đãi hấp dẫn từ HSBC",
+      "from": "HSBC Vietnam <hsbc@informationservices.hsbc.com.vn>",
+      "date": "Fri, 19 Jun 2026 18:15:44 +0800",
+      "snippet": "Tận hưởng ưu đãi đến 25% cho du lịch, ẩm thực, mua sắm và hơn thế nữa. Tận hưởng mùa hè trọn vẹn cùng HSBC Hãy để mọi kế hoạch mùa hè của bạn thú vị hơn với những đặc quyền dành riêng cho Chủ Thẻ Tín",
+      "labels": [
+        "UNREAD",
+        "QC (delete)",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edf219b52097ae",
+      "thread_id": "19edf219b52097ae",
+      "subject": "Chỉ còn 3 ngày nữa để nhận quà miễn phí 🚨",
+      "from": "Traveloka <newsletter@your.traveloka.com>",
+      "date": "Fri, 19 Jun 2026 09:06:21 +0000 (UTC)",
+      "snippet": "‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edf31cddffea32",
+      "thread_id": "19edf31cddffea32",
+      "subject": "[QC] Chạy bộ cùng người thân. Nhận quà chất.",
+      "from": "Samsung Electronics Vietnam <samsungelectronics@vn.email.samsung.com>",
+      "date": "Fri, 19 Jun 2026 08:44:17 GMT",
+      "snippet": "Tham gia Step Up Challenge để rinh quà hấp dẫn! Tham gia Step Up Challenge để rinh quà hấp dẫn! Nếu không thể xem email này, vui lòng nhấn vào đây Hero_Image_Cta Rewards_CTA Disclaimer How_to_join_CTA",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edef977f65025e",
+      "thread_id": "19edef977f65025e",
+      "subject": "SSI – Thông báo khôi phục dịch vụ chuyển tiền",
+      "from": "\"CTCP Chung khoan SSI (SSI)\" <noreply@ssi.com.vn>",
+      "date": "Fri, 19 Jun 2026 08:22:30 +0000 (UTC)",
+      "snippet": "Kính gửi Quý khách hàng, Công ty Cổ phần Chứng khoán SSI (SSI) trân trọng thông báo: Dịch vụ chuyển tiền ra Ngân hàng đã được khôi phục và hoạt động bình thường kể từ 14h00 ngày 19/06/2026. Quý khách",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edebab0c625b5a",
+      "thread_id": "19ede5c1e168b298",
+      "subject": "New sign-in to your OpenAI account",
+      "from": "OpenAI <noreply@tm.openai.com>",
+      "date": "Fri, 19 Jun 2026 07:13:54 +0000 (UTC)",
+      "snippet": "New sign-in details for your OpenAI account. Hello, We noticed a new sign-in to your OpenAI account. App: Codex Time: June 19, 2026 at 12:13 AM (PDT) Approximate location: Stockton, US Device: Edge on",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edeba78da21cff",
+      "thread_id": "19ede5bc508f78ad",
+      "subject": "Your temporary ChatGPT login code",
+      "from": "noreply@tm.openai.com",
+      "date": "Fri, 19 Jun 2026 07:13:39 +0000 (UTC)",
+      "snippet": "Enter this temporary verification code to continue: 907056 Didn&#39;t request a verification code? You can ignore this email. Best, The ChatGPT team ChatGPT Help center",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19edea74d3ec24af",
+      "thread_id": "19edea74d3ec24af",
+      "subject": "SSI - Thông báo gián đoạn dịch vụ chuyển tiền",
+      "from": "\"CTCP Chung khoan SSI (SSI)\" <noreply@ssi.com.vn>",
+      "date": "Fri, 19 Jun 2026 06:52:45 +0000 (UTC)",
+      "snippet": "Kính gửi Quý khách hàng, Công ty Cổ phần Chứng khoán SSI (SSI) trân trọng thông báo: Dịch vụ chuyển tiền ra ngân hàng đang gặp gián đoạn kể từ 10h30 ngày 19/06/2026. Đội ngũ kỹ thuật của SSI đang khẩn",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ede5c1e168b298",
+      "thread_id": "19ede5c1e168b298",
+      "subject": "New sign-in to your OpenAI account",
+      "from": "OpenAI <noreply@tm.openai.com>",
+      "date": "Fri, 19 Jun 2026 05:30:36 +0000 (UTC)",
+      "snippet": "New sign-in details for your OpenAI account. Hello, We noticed a new sign-in to your OpenAI account. App: Codex Time: June 19, 2026 at 12:30 PM (+07) Approximate location: Ho Chi Minh City, VN Device:",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ede5bc508f78ad",
+      "thread_id": "19ede5bc508f78ad",
+      "subject": "Your temporary ChatGPT login code",
+      "from": "noreply@tm.openai.com",
+      "date": "Fri, 19 Jun 2026 05:30:12 +0000 (UTC)",
+      "snippet": "Enter this temporary verification code to continue: 936017 Didn&#39;t request a verification code? You can ignore this email. Best, The ChatGPT team ChatGPT Help center",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19ede58d3615469d",
+      "thread_id": "19ede58d3615469d",
+      "subject": "Biên lai chuyển tiền qua tài khoản",
+      "from": "VCBDigibank@info.vietcombank.com.vn",
+      "date": "19 Jun 2026 12:27:02 +0700",
+      "snippet": "Biên lai chuyển tiền qua tài khoản (Payment Receipt) Ngày, giờ giao dịch Trans. Date, Time 12:27 Thứ Sáu 19/06/2026 Số lệnh giao dịch Order Number 14746059212 Tài khoản nguồn Debit Account",
+      "labels": [
+        "From LD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19edcc17354c9939",
+      "thread_id": "19edcc17354c9939",
+      "subject": "You have no events scheduled today.",
+      "from": "Google Calendar <calendar-notification@google.com>",
+      "date": "Thu, 18 Jun 2026 22:02:05 +0000",
+      "snippet": "Google Calendar Liem Do, you have no events scheduled today Fri Jun 19, 2026 You are receiving this email at the account liem.dt0208@gmail.com because you are subscribed to receive daily agendas for",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edc5cbc7c7779d",
+      "thread_id": "19edc5cbc7c7779d",
+      "subject": "What's new in Quo: Tasks, improved search, call waiting, and more",
+      "from": "Tina at Quo <tinamcauley@quo.com>",
+      "date": "Thu, 18 Jun 2026 20:12:05 +0000",
+      "snippet": "Quo&#39;s logo Hi Liem, Does this sound familiar? You finish a call, know exactly what needs to happen next, and then that next step gets buried in a sticky note, another app, or forgotten altogether.",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edbbdb1f3f10cb",
+      "thread_id": "19edbbdb1f3f10cb",
+      "subject": "This weekend is your last chance for Git GUI pricing.",
+      "from": "GitKraken <no-reply@gitkraken.com>",
+      "date": "Thu, 18 Jun 2026 10:17:56 -0700",
+      "snippet": "Save 70% on GitKraken before pricing evolves on Sunday. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edb8f8d18a96eb",
+      "thread_id": "19edb8f8d18a96eb",
+      "subject": "The next chapter in short-term rental management is almost here.",
+      "from": "Hostaway <marketing@hostaway.com>",
+      "date": "Thu, 18 Jun 2026 12:27:56 -0400",
+      "snippet": "[WEBINAR] Sign up for a special live announcement ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edb3de4d408dc2",
+      "thread_id": "19edb3de4d408dc2",
+      "subject": "Why your site isn't showing up in Google",
+      "from": "Gabriela from All in One SEO <support@aioseo.com>",
+      "date": "Thu, 18 Jun 2026 14:46:12 +0000",
+      "snippet": "Most WordPress sites have the same fixable problem. $49.50 this week. ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edaec6bb5fae20",
+      "thread_id": "19edaec6bb5fae20",
+      "subject": "Railway mobile app is now available for iOS",
+      "from": "Railway <hello@news.railway.app>",
+      "date": "Thu, 18 Jun 2026 13:29:47 +0000",
+      "snippet": "Railway mobile app is now available for iOS ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edad854c5fc2d0",
+      "thread_id": "19edad854c5fc2d0",
+      "subject": "[QC] Embedded Software Development Engineer và 9 việc làm phù hợp nhất dành cho bạn",
+      "from": "VietnamWorks <jobalerts@vietnamworks.com>",
+      "date": "Thu, 18 Jun 2026 13:07:42 +0000",
+      "snippet": "Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm được công việc mơ ước của mình. Dựa trên thông tin của bạn, chúng tôi đã tìm được những công việc mới nhất phù",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19edac6b623a3cdc",
+      "thread_id": "19edac6b623a3cdc",
+      "subject": "Learn more about Chợ Tốt and discover other Pages you might be…",
+      "from": "LinkedIn <notifications-noreply@linkedin.com>",
+      "date": "Thu, 18 Jun 2026 12:48:34 +0000 (UTC)",
+      "snippet": "Liem, 2 new updates for you ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "HR/LinkedIn",
+        "CATEGORY_SOCIAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19eda63829e32114",
+      "thread_id": "19eda63829e32114",
+      "subject": "2 million people got their report",
+      "from": "ClarityCheck <hello@claritycheck.com>",
+      "date": "Thu, 18 Jun 2026 11:00:09 +0000",
+      "snippet": "Hi there, Did you know that over 2 million people unlocked their image reports? 76% discovered the photo on hidden dating profiles 64% found the image stolen from someone else&#39;s social media 71%",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19eda3b62d4e78c2",
+      "thread_id": "19eda3b62d4e78c2",
+      "subject": "Cách kiếm lãi hằng ngày với Margin Lending",
+      "from": "Bitfinex <noreply@mail.bitfinex.com>",
+      "date": "Thu, 18 Jun 2026 10:16:24 +0000",
+      "snippet": "Cách kiếm lợi nhuận trong mọi chu kỳ bull hay bear ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿ ͏ ﻿",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed9d83570753ee",
+      "thread_id": "19ed9d83570753ee",
+      "subject": "Your temporary ChatGPT login code",
+      "from": "noreply@tm.openai.com",
+      "date": "Thu, 18 Jun 2026 08:28:02 +0000 (UTC)",
+      "snippet": "Enter this temporary verification code to continue: 056969. ChatGPT Log-in Code Hi there, We noticed a suspicious log-in on your account. If that was you, enter this code: 056969 If you were not tryin",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19ed9d651fa0cf09",
+      "thread_id": "19ed9d651fa0cf09",
+      "subject": "TẶNG BẠN VÉ XEM PHIM MIỄN PHÍ TẠI CGV | DÙNG NGAY 💥",
+      "from": "CGV Cinemas Vietnam <newsletter@membership.cgv.vn>",
+      "date": "Thu, 18 Jun 2026 13:56:01 +0530",
+      "snippet": "TẢI APP ĐỂ NHẬN VÉ 2D MIỄN PHÍ 1. CHI TIẾT CHƯƠNG TRÌNH - Tặng 01 coupon VÉ 2D MIỄN PHÍ , chỉ cho tài khoản nhận được thông báo. - Ưu đãi áp dụng khi mua từ 2 vé xem phim bất kỳ định dạng 2D TRỰC TUYẾ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed99f8865adc31",
+      "thread_id": "19ed99f8865adc31",
+      "subject": "Your first puzzle is here, Liem 🧩",
+      "from": "LinkedIn <messages-noreply@linkedin.com>",
+      "date": "Thu, 18 Jun 2026 07:20:37 +0000 (UTC)",
+      "snippet": "Millions of professionals are already testing their skills with LinkedIn&#39;s daily puzzle games ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "HR/LinkedIn",
+        "CATEGORY_SOCIAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ed9291d35129c5",
+      "thread_id": "19ed9291d35129c5",
+      "subject": "Đơn hàng #260618D1VWW2FC đã giao hàng thành công",
+      "from": "Shopee <info@mail.shopee.vn>",
+      "date": "Thu, 18 Jun 2026 05:16:50 +0000 (UTC)",
+      "snippet": "Xin chào liemdo28, Đơn hàng #260618D1VWW2FC của bạn đã được giao thành công ngày 18/06/2026. Vui lòng đăng nhập Shopee để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong vòng 3 ngày. Sau khi",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed917e01a3e082",
+      "thread_id": "19ed917e01a3e082",
+      "subject": "Hôm nay ăn gì? Thịt cá tươi có Grab lo!",
+      "from": "\"Grab Việt Nam\" <no-reply@grab.com>",
+      "date": "Wed, 17 Jun 2026 22:58:00 -0600",
+      "snippet": "Đặt GrabMart – đầy đủ món tươi ngon cho bữa cơm nhà. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed8f6019118718",
+      "thread_id": "19ed8f6019118718",
+      "subject": "💝 Giá 'khác biệt' cho điều 'đặc biệt'",
+      "from": "CellphoneS <cskh@cellphones.com.vn>",
+      "date": "Thu, 18 Jun 2026 04:15:50 +0000",
+      "snippet": "👨 Tặng PMH 𝗔𝗣𝗣𝗟𝗘 trị giá 1.5TR · Mac &amp; iPad cũ đẹp giá tốt · Ngày của Cha chọn Apple Watch làm quà góp từ 16K/ngày »‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed8cc2f4d4bc32",
+      "thread_id": "19ed1d49c2a8955c",
+      "subject": "Re: RE: External: Re: BAKU7619/PAST DUE ACTION REQUIRED!!!",
+      "from": "\"Nguyễn Kiều Nguyên\" <nkthanhnguyen09@gmail.com>",
+      "date": "Thu, 18 Jun 2026 10:34:42 +0700",
+      "snippet": "Hi anh Hoang, B1 có thể đã pay dư 1 INV Cụ thể như ảnh bên dưới: Vào Thứ 5, 18 thg 6, 2026 vào lúc 02:43 Nguyễn Kiều Nguyên &lt;nkthanhnguyen09@gmail.com&gt; đã viết: 6 INV bên B1 không có: &gt; in",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19ed8cb776cd0e48",
+      "thread_id": "19ed8cb776cd0e48",
+      "subject": "Verify your login",
+      "from": "Flickr <donotreply@flickr.net>",
+      "date": "Thu, 18 Jun 2026 03:34:32 +0000 (UTC)",
+      "snippet": "Please use this one-time passcode to complete login: 114897 This code will expire after 10 minutes. If this login wasn&#39;t you, or you are having issues with your account, please contact us. Thanks!",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19ed8bcbf06bb104",
+      "thread_id": "19ed8bcbf06bb104",
+      "subject": "Bản tin - Gói Hội Viên GrabUnlimited",
+      "from": "\"Grab Việt Nam\" <no-reply@grab.com>",
+      "date": "Wed, 17 Jun 2026 21:18:09 -0600",
+      "snippet": "Freeship mọi đơn hàng, ưu đãi mọi chuyến xe Grab thông báo deal mới cho Liem Do ngay nè! Tháng mới rộn ràng vì Grab tung vô vàn deal cho bạn &quot;iu&quot; nè! Mở app là có deal, làm gì cũng có ưu đãi",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ed89d1996175cf",
+      "thread_id": "19ed89d1996175cf",
+      "subject": "Document shared with you: \"Google Business Optimization Bakudan\"",
+      "from": "\"Hoang Le (via Google Docs)\" <drive-shares-dm-noreply@google.com>",
+      "date": "Thu, 18 Jun 2026 02:43:54 +0000",
+      "snippet": "Hoang Le shared a document Hoang Le (hoang@heoventures.com) has invited you to edit the following document: Google Business Optimization Bakudan Open Does this item look suspicious? Block sender Googl",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ed83a3f76a73de",
+      "thread_id": "19ed83a3f76a73de",
+      "subject": "Chế độ cài đặt mới về quyền riêng tư cho các dịch vụ Tìm kiếm",
+      "from": "Google <google-noreply@google.com>",
+      "date": "Wed, 17 Jun 2026 17:55:56 -0700",
+      "snippet": "liem.dt0208@gmail.com Chào Hoang, Chúng tôi đang cập nhật các chế độ cài đặt để mang đến cho bạn nhiều quyền kiểm soát hơn nữa đối với nhật ký đã lưu và các đề xuất được cá nhân hoá trên các dịch vụ",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ed7ccfc99d8ddb",
+      "thread_id": "19ed7ccfc99d8ddb",
+      "subject": "You have no events scheduled today.",
+      "from": "Google Calendar <calendar-notification@google.com>",
+      "date": "Wed, 17 Jun 2026 22:56:35 +0000",
+      "snippet": "Google Calendar Liem Do, you have no events scheduled today Thu Jun 18, 2026 You are receiving this email at the account liem.dt0208@gmail.com because you are subscribed to receive daily agendas for",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    }
+  ],
+  "labels": [
+    "CHAT",
+    "SENT",
+    "INBOX",
+    "IMPORTANT",
+    "TRASH",
+    "DRAFT",
+    "SPAM",
+    "CATEGORY_FORUMS",
+    "CATEGORY_UPDATES",
+    "CATEGORY_PERSONAL",
+    "CATEGORY_PROMOTIONS",
+    "CATEGORY_SOCIAL",
+    "YELLOW_STAR",
+    "STARRED",
+    "UNREAD",
+    "[Imap]/Sent",
+    "Hotel Promotion / booking",
+    "Pinterest",
+    "Hoang Le/Bakudan Website",
+    "HR",
+    "CoderScool",
+    "Shopping/NameCheap",
+    "Team VN/Viviwang",
+    "Account/BVSC",
+    "From LD",
+    "Shopping/Coursera",
+    "Thuy Van",
+    "Account/Netflix",
+    "Account/Grab",
+    "Account/VNDIRECT",
+    "Shopping/Quora",
+    "Hoang Le/Domain",
+    "Account/MBS",
+    "Shopping/Costco",
+    "Flightaware",
+    "Anh Hesston/Raw Sushi",
+    "Marketing Searching",
+    "Marketing Searching/Digital Ocean",
+    "Shopping/Walmart",
+    "Account",
+    "Account/HSBC/HSBC VN",
+    "Hoang Le/Domain/Sale Number",
+    "QC (delete)",
+    "Asianconnect (Sport)",
+    "Thu Vien Phap Luat",
+    "Account/VCSC",
+    "Shopping/Elementor",
+    "Shopping/Vimeo",
+    "HR/jobstreet",
+    "HR/LinkedIn",
+    "Hoang Le/Infused tea",
+    "Hoang Le/Tax Return",
+    "Hoang Le/Amazon",
+    "Team VN/Nguyen",
+    "Anh Hesston/Bakudan/Login Token",
+    "Anh Hesston/Bakudan",
+    "Anh Hesston/Bakudan/Gunsnro sescobra",
+    "Account/HSBC/HSBC HK",
+    "Shopping/Arturia",
+    "HR/Freelancer.com",
+    "BA Class",
+    "Shopping/Tiki",
+    "Shopping/Yelps",
+    "[Imap]/Drafts",
+    "From LD/Vietnam Airlines",
+    "Facebook",
+    "Shopping/Adayroi",
+    "Hoang Le/Weekly Report",
+    "Netflix",
+    "Notes",
+    "Hotel Promotion / booking/Booking.com",
+    "Team VN",
+    "Shopping/DesignCrowd",
+    "Shopping",
+    "From LD/Asana",
+    "Google",
+    "Shopping/Tiki/Hoa Don",
+    "HR/VietnamWorks",
+    "Shopping/Canva",
+    "Shopping/Slickdeal Alerts",
+    "Account/SSI",
+    "Anh Hesston",
+    "Account/HSBC",
+    "Shopping/Lazada",
+    "Hoang Le"
+  ]
+}

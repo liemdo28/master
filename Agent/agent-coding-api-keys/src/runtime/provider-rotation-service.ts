@@ -6,11 +6,11 @@
  * Rotation logic:
  *   windowIndex = floor(currentMinute / 5) % providerCount
  *
- * Example (2 providers: antigravity, opusmax):
- *   00:00 – 00:04  →  primary: antigravity,  fallback: opusmax
- *   00:05 – 00:09  →  primary: opusmax,       fallback: antigravity
- *   00:10 – 00:14  →  primary: antigravity,  fallback: opusmax
- *   00:15 – 00:19  →  primary: opusmax,       fallback: antigravity
+ * Example (2 providers: opusmax, antigravity):
+ *   00:00 – 00:04  →  primary: opusmax,       fallback: antigravity
+ *   00:05 – 00:09  →  primary: antigravity,    fallback: opusmax
+ *   00:10 – 00:14  →  primary: opusmax,       fallback: antigravity
+ *   00:15 – 00:19  →  primary: antigravity,    fallback: opusmax
  *   (loops forever)
  *
  * Configuration is driven by the providers array injected at construction.
@@ -50,9 +50,9 @@ export class ProviderRotationService {
   /**
    * @param providers Ordered list of provider IDs. The first provider gets
    *   the first slot (window 0), second gets window 1, etc., cycling forever.
-   *   Defaults to ['antigravity', 'opusmax'].
+   *   Defaults to ['opusmax', 'antigravity'] — OpusMax is primary, NKQ fallback.
    */
-  constructor(providers: string[] = ['antigravity', 'opusmax'], windowMinutes = 5) {
+  constructor(providers: string[] = ['opusmax', 'antigravity'], windowMinutes = 5) {
     if (providers.length === 0) throw new Error('ProviderRotationService: providers list cannot be empty');
     this.providers = providers;
     this.windowMinutes = windowMinutes;
@@ -118,14 +118,14 @@ export class ProviderRotationService {
 /**
  * Global time-based rotation service.
  * Providers are read from ROTATION_PROVIDERS env var (comma-separated)
- * or fall back to ['antigravity', 'opusmax'].
+ * or fall back to ['opusmax', 'antigravity'].
  *
- * To add a new provider: set ROTATION_PROVIDERS=antigravity,opusmax,openrouter
+ * To add a new provider: set ROTATION_PROVIDERS=opusmax,antigravity,openrouter
  * No code changes required.
  */
 const configuredProviders = process.env['ROTATION_PROVIDERS']
   ? process.env['ROTATION_PROVIDERS'].split(',').map((s) => s.trim()).filter(Boolean)
-  : ['antigravity', 'opusmax'];
+  : ['opusmax', 'antigravity'];
 
 const configuredWindowMinutes = Number.parseInt(process.env['ROTATION_WINDOW_MINUTES'] || '5', 10);
 

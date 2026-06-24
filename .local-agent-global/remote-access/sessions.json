@@ -1,18 +1,10 @@
 [
   {
-    "token": "d724fe3b1c70ec3dc6827634b58982ad42a315de4b4cd776b286bf75f3e30a67",
+    "token": "f2908d2bd958638399f444334bd5e1ba11723cd3e62eb86eb1a825bd3822bfc8",
     "device_id": "dev_00c087283efe2f1c",
     "ip": "127.0.0.1",
-    "created_at": "2026-06-09T11:04:55.577Z",
-    "expires_at": "2026-06-09T19:04:55.577Z",
-    "active": true
-  },
-  {
-    "token": "69a49a83869ea77179c04e80fee411410c128abc2ba518d4644e01c2c52ae3e1",
-    "device_id": "dev_3d37a40b46bb4379",
-    "ip": "100.123.168.74",
-    "created_at": "2026-06-09T12:39:15.670Z",
-    "expires_at": "2026-06-09T20:39:15.670Z",
+    "created_at": "2026-06-10T15:40:57.933Z",
+    "expires_at": "2026-06-10T23:40:57.933Z",
     "active": true
   }
 ]

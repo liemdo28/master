@@ -1,0 +1,26 @@
+{
+  "agent": "seo-schema-agent",
+  "type": "schema-audit",
+  "generated_at": "2026-06-18T06:20:44.190Z",
+  "payload": {
+    "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ",
+    "schema_items_count": 17,
+    "validation_overview": [
+      {
+        "location_id": "bandera",
+        "valid": true,
+        "issues": []
+      },
+      {
+        "location_id": "stone-oak",
+        "valid": true,
+        "issues": []
+      },
+      {
+        "location_id": "the-rim",
+        "valid": true,
+        "issues": []
+      }
+    ]
+  }
+}

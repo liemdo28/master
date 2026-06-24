@@ -6,8 +6,10 @@ const knowledge_db_1 = require("../knowledge/knowledge-db");
 const pack_manager_1 = require("../knowledge/pack-manager");
 const reference_brain_path_1 = require("../knowledge/reference-brain-path");
 exports.knowledgeRouter = (0, express_1.Router)();
-const KNOWLEDGE_API_KEY = process.env.MI_CORE_API_KEY || 'mi-core-secret-2026';
+const KNOWLEDGE_API_KEY = process.env.MI_CORE_API_KEY || '';
 function requireApiKey(req, res, next) {
+    if (!KNOWLEDGE_API_KEY)
+        return res.status(503).json({ error: 'Server not configured — MI_CORE_API_KEY missing' });
     const key = req.headers['x-api-key'] || req.body?.api_key || '';
     if (key !== KNOWLEDGE_API_KEY)
         return res.status(401).json({ error: 'Unauthorized' });

@@ -8,7 +8,8 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = path.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path.join(MI_CORE_ROOT, '.local-agent-global');
 const MEM_DIR = path.join(GLOBAL_DIR, 'executive-memory-v2');
 
 const FILES = {

@@ -15,9 +15,11 @@
 import fs from 'fs';
 import path from 'path';
 import { search as kbSearch } from '../knowledge/knowledge-db';
+import { getUSComplianceDBPath } from '../knowledge/reference-brain-path';
 
-const GLOBAL_DIR  = process.env.GLOBAL_DIR  || 'E:/Project/Master/.local-agent-global';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const MI_CORE_ROOT = path.resolve(__dirname, '..', '..', '..');
+const GLOBAL_DIR  = process.env.GLOBAL_DIR  || path.join(MI_CORE_ROOT, '.local-agent-global');
+const MASTER_ROOT = process.env.MASTER_ROOT || path.resolve(MI_CORE_ROOT, '..');
 
 export interface FederatedResult {
   source: string;
@@ -223,6 +225,49 @@ function searchWorkflows(query: string): FederatedResult[] {
   } catch { return []; }
 }
 
+// ── Source 7: US Compliance DB ────────────────────────────────────────────
+function searchUSComplianceDB(query: string, jurisdiction?: string): FederatedResult[] {
+  const complianceRoot = getUSComplianceDBPath();
+  if (!complianceRoot) return [];
+
+  const results: FederatedResult[] = [];
+  const categories = jurisdiction 
+    ? [jurisdiction.toLowerCase()] 
+    : ['federal', 'california', 'texas', 'stockton', 'san-antonio', 'labor-law', 'payroll', 'tax', 'food-safety', 'permits', 'accounting'];
+
+  for (const cat of categories) {
+    const catDir = path.join(complianceRoot, cat);
+    if (!fs.existsSync(catDir)) continue;
+    try {
+      const files = fs.readdirSync(catDir).filter(f => f.endsWith('.md') || f.endsWith('.txt'));
+      for (const file of files.slice(0, 10)) {
+        try {
+          const filePath = path.join(catDir, file);
+          const content = fs.readFileSync(filePath, 'utf-8');
+          const score = scoreMatch(content, query);
+          if (score > 0.25) {
+            const idx = content.toLowerCase().indexOf(query.toLowerCase().split(' ')[0]);
+            const start = Math.max(0, idx - 100);
+            const snippet = (start > 0 ? '...' : '') + content.slice(start, start + 300) + '...';
+            results.push({
+              source: `us-compliance/${cat}`,
+              domain: 'compliance',
+              title: file.replace(/\.(md|txt)$/, '').replace(/[-_]/g, ' '),
+              snippet,
+              confidence: score * 0.9,
+              timestamp: fs.statSync(filePath).mtime.toISOString(),
+              file_path: filePath,
+              requires_disclaimer: 'Verify with CPA/legal professional before filing or taking action',
+              metadata: { jurisdiction: cat },
+            });
+          }
+        } catch { /* skip */ }
+      }
+    } catch { /* skip */ }
+  }
+  return results.slice(0, 8);
+}
+
 // ── Main federation functions ─────────────────────────────────────────────
 
 export function searchAll(query: string, opts: FederatedSearchOptions = {}): FederatedResult[] {
@@ -233,6 +278,7 @@ export function searchAll(query: string, opts: FederatedSearchOptions = {}): Fed
   const shouldSearch = (d: Domain) => !domains?.length || domains.includes(d);
 
   if (shouldSearch('knowledge-db'))      allResults.push(...searchKnowledgeDB(query, 5));
+  if (shouldSearch('compliance'))        allResults.push(...searchUSComplianceDB(query, opts.jurisdiction));
   if (shouldSearch('executive-memory'))  allResults.push(...searchExecutiveMemory(query));
   if (shouldSearch('project-registry'))  allResults.push(...searchProjectRegistry(query, project));
   if (shouldSearch('connector-cache'))   allResults.push(...searchConnectorCaches(query));

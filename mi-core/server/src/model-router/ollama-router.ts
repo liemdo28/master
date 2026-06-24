@@ -53,8 +53,9 @@ export async function selectModel(role: ModelRole): Promise<string | null> {
   const models = await getInstalledModels();
   const names = models.map(m => m.name);
   for (const candidate of ROLE_PRIORITY[role]) {
-    // Fuzzy match: "qwen3:8b" matches "qwen3:8b-q4_K_M" etc.
-    const found = names.find(n => n === candidate || n.startsWith(candidate.split(':')[0] + ':'));
+    // Exact match first, then quantization-suffix only (e.g. qwen3:8b-q4_K_M)
+    const found = names.find(n => n === candidate)
+               ?? names.find(n => n.startsWith(candidate + '-'));
     if (found) return found;
   }
   // Fallback: first available non-embedding model

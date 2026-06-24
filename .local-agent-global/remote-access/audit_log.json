@@ -30,5 +30,13 @@
     "action": "login_ok",
     "result": "ok",
     "detail": "iPhone"
+  },
+  {
+    "ts": "2026-06-10T15:40:57.945Z",
+    "device_id": "dev_00c087283efe2f1c",
+    "ip": "127.0.0.1",
+    "action": "login_ok",
+    "result": "ok",
+    "detail": "Unknown Device"
   }
 ]

@@ -1,0 +1,212 @@
+{
+  "agent": "seo-content-agent",
+  "type": "content-plan",
+  "generated_at": "2026-06-18T06:20:45.564Z",
+  "payload": {
+    "summary": "9 content briefs created",
+    "content_calendar": [
+      {
+        "topic": "Best Ramen in San Antonio",
+        "status": "planned"
+      },
+      {
+        "topic": "Tonkotsu vs Miso Ramen",
+        "status": "planned"
+      },
+      {
+        "topic": "Ramen Near The Rim and La Cantera",
+        "status": "planned"
+      },
+      {
+        "topic": "Japanese Food Near Stone Oak",
+        "status": "planned"
+      },
+      {
+        "topic": "Ramen Near UTSA",
+        "status": "planned"
+      },
+      {
+        "topic": "Vegetarian Ramen Options",
+        "status": "planned"
+      },
+      {
+        "topic": "Happy Hour with Ramen and Cocktails",
+        "status": "planned"
+      },
+      {
+        "topic": "Garlic Tonkotsu Ramen",
+        "status": "planned"
+      },
+      {
+        "topic": "Spicy Ramen in San Antonio",
+        "status": "planned"
+      }
+    ],
+    "briefs": [
+      {
+        "id": "brief:best-ramen-in-san-antonio",
+        "topic": "Best Ramen in San Antonio",
+        "target_keyword": "Best Ramen in San Antonio",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 1
+      },
+      {
+        "id": "brief:tonkotsu-vs-miso-ramen",
+        "topic": "Tonkotsu vs Miso Ramen",
+        "target_keyword": "Tonkotsu vs Miso Ramen",
+        "intent": "informational",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": null
+      },
+      {
+        "id": "brief:ramen-near-the-rim",
+        "topic": "Ramen Near The Rim and La Cantera",
+        "target_keyword": "Ramen Near The Rim",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 5
+      },
+      {
+        "id": "brief:japanese-food-in-san-antonio",
+        "topic": "Japanese Food Near Stone Oak",
+        "target_keyword": "Japanese Food in San Antonio",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 3
+      },
+      {
+        "id": "brief:ramen-near-utsa",
+        "topic": "Ramen Near UTSA",
+        "target_keyword": "Ramen Near UTSA",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 4
+      },
+      {
+        "id": "brief:vegetarian-ramen-in-san-antonio",
+        "topic": "Vegetarian Ramen Options",
+        "target_keyword": "Vegetarian Ramen in San Antonio",
+        "intent": "informational",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 8
+      },
+      {
+        "id": "brief:happy-hour-ramen-san-antonio",
+        "topic": "Happy Hour with Ramen and Cocktails",
+        "target_keyword": "Happy Hour Ramen San Antonio",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": 9
+      },
+      {
+        "id": "brief:garlic-tonkotsu-ramen",
+        "topic": "Garlic Tonkotsu Ramen",
+        "target_keyword": "Garlic Tonkotsu Ramen",
+        "intent": "informational",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": null
+      },
+      {
+        "id": "brief:spicy-ramen-in-san-antonio",
+        "topic": "Spicy Ramen in San Antonio",
+        "target_keyword": "Spicy Ramen in San Antonio",
+        "intent": "commercial",
+        "outline": [
+          "Intro",
+          "Why this matters",
+          "Bakudan picks",
+          "Locations",
+          "CTA"
+        ],
+        "cta": "Order online or visit a Bakudan location.",
+        "internal_links": [],
+        "publish_status": "planned",
+        "update_status": "pending",
+        "assigned_keyword_priority": null
+      }
+    ],
+    "publish_tracker": "pending",
+    "internal_linking_tracker": "pending"
+  }
+}

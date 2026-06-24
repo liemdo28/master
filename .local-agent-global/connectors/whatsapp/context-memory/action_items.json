@@ -1,0 +1,12 @@
+[
+  {
+    "source_message_id": "skill-1781250522381",
+    "chat_id": "extract action items từ: Maria cần kiểm tra nhiệt độ tủ lạnh, David phải sửa cooler",
+    "text": "Cần kiểm tra nhiệt độ tủ lạnh, David phải sửa cooler",
+    "owner": "Maria",
+    "status": "open",
+    "id": "AI-MQAMKJDA",
+    "created_at": "2026-06-12T07:48:42.382Z",
+    "updated_at": "2026-06-12T07:48:42.382Z"
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "brand": "Bakudan Ramen",
+  "website": "https://bakudanramen.com",
+  "order_url": "https://order.bakudanramen.com",
+  "menu_url": "https://bakudanramen.com/menu",
+  "locations": [
+    {
+      "id": "bandera",
+      "name": "Bakudan Ramen - Bandera",
+      "address": "PLACEHOLDER_BANDERA_ADDRESS, San Antonio, TX",
+      "phone": "PLACEHOLDER_PHONE_BANDERA",
+      "geo": { "lat": 0.0, "lng": 0.0 },
+      "hours": "11:00-22:00",
+      "cuisine": ["Japanese", "Ramen"],
+      "price_range": "$$",
+      "menu_url": "https://bakudanramen.com/menu",
+      "order_url": "https://order.bakudanramen.com/bandera",
+      "website_url": "https://bakudanramen.com/locations/bandera",
+      "gbp_place_id": "PLACEHOLDER_GBP_BANDERA"
+    },
+    {
+      "id": "stone-oak",
+      "name": "Bakudan Ramen - Stone Oak",
+      "address": "PLACEHOLDER_STONEOAK_ADDRESS, San Antonio, TX",
+      "phone": "PLACEHOLDER_PHONE_STONEOAK",
+      "geo": { "lat": 0.0, "lng": 0.0 },
+      "hours": "11:00-22:00",
+      "cuisine": ["Japanese", "Ramen"],
+      "price_range": "$$",
+      "menu_url": "https://bakudanramen.com/menu",
+      "order_url": "https://order.bakudanramen.com/stone-oak",
+      "website_url": "https://bakudanramen.com/locations/stone-oak",
+      "gbp_place_id": "PLACEHOLDER_GBP_STONEOAK"
+    },
+    {
+      "id": "the-rim",
+      "name": "Bakudan Ramen - The Rim",
+      "address": "PLACEHOLDER_THERIM_ADDRESS, San Antonio, TX",
+      "phone": "PLACEHOLDER_PHONE_THERIM",
+      "geo": { "lat": 0.0, "lng": 0.0 },
+      "hours": "11:00-22:00",
+      "cuisine": ["Japanese", "Ramen"],
+      "price_range": "$$",
+      "menu_url": "https://bakudanramen.com/menu",
+      "order_url": "https://order.bakudanramen.com/the-rim",
+      "website_url": "https://bakudanramen.com/locations/the-rim",
+      "gbp_place_id": "PLACEHOLDER_GBP_THERIM"
+    }
+  ]
+}

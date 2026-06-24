@@ -25,6 +25,7 @@ export type UpstreamErrorType =
   | 'auth_failed'
   | 'quota_exceeded'
   | 'rate_limited'
+  | 'concurrency_limit'
   | 'invalid_model'
   | 'model_locked'
   | 'model_not_allowed'
@@ -163,6 +164,16 @@ export function classifyUpstreamError(status: number, body: string): ClassifiedE
     lower.includes('no available accounts')
   ) {
     return { type: 'provider_down', raw: body, status, retryable: true, label: 'Provider Down' };
+  }
+
+  // ── Concurrency limit — transient, retry quickly (10s cooldown) ───────
+  // Must be checked before generic rate_limited (also 429) to get a shorter cooldown.
+  if (
+    lower.includes('concurrency limit') ||
+    lower.includes('concurrency_limit') ||
+    lower.includes('concurrent') && lower.includes('limit')
+  ) {
+    return { type: 'concurrency_limit', raw: body, status, retryable: true, label: 'Concurrency Limit' };
   }
 
   // ── Rate limiting (429) ────────────────────────────────────────────────

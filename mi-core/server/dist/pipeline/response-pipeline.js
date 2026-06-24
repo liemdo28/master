@@ -28,9 +28,114 @@ const intent_classifier_1 = require("../brain/intent-classifier");
 const brain_router_1 = require("../brain/brain-router");
 const compliance_retrieval_1 = require("../knowledge/compliance-retrieval");
 const daily_work_actions_1 = require("../actions/daily-work-actions");
+const response_scrubber_1 = require("../middleware/response-scrubber");
+const latency_monitor_1 = require("../operations/latency-monitor");
 const store_context_1 = require("../memory2/store-context");
 const file_search_1 = require("../actions/file-search");
 const data_analyst_handler_1 = require("../actions/data-analyst-handler");
+// ── Asset Registry Direct Handler (Phase 14 fix) ─────────────────────────────
+function isAssetQuery(msg) {
+    const t = msg.toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/đ/gi, 'd').replace(/[^a-z0-9\s?!]/g, ' ');
+    // Project list queries
+    if (/\b(project\s*(nao|gi|dao|co\s*gi|la\s*gi|hien\s*tai|list|nhe)|danh\s*sach\s*project|du\s*an\s*(nao|hien|co)|list\s*project|cac\s*project)\b/.test(t))
+        return 'projects';
+    // Service health queries
+    if (/\b(service\s*(nao|gi|down|dang\s*down|bi\s*down|loi|loi|mat)|dich\s*vu\s*(nao|down|bi)|which\s*service|service.*healthy|service.*ok)\b/.test(t))
+        return 'services';
+    // Ownership queries
+    if (/\b(thuoc\s*(phong|bo\s*phan|team)|phu\s*trach\s*(boi|la)|quan\s*ly\s*boi|owner|ai\s*lam\s*chu)\b/.test(t))
+        return 'ownership';
+    // Source/data health
+    if (/\b(toast|quickbooks|doordash|food.?safe|data\s*source|nguon\s*du\s*lieu).*(healthy|ok|loi|status|tinh\s*trang)\b/.test(t) ||
+        /\b(healthy|ok|loi|status)\b.*\b(toast|quickbooks|doordash)\b/.test(t))
+        return 'source_health';
+    return null;
+}
+async function tryAnswerAssetQuery(message) {
+    const queryType = isAssetQuery(message);
+    if (!queryType)
+        return null;
+    try {
+        // Use direct module import — avoids self-referential HTTP + auth complexity
+        const { PROJECTS, getActiveProjects, getCriticalProjects } = require('../company-os/project-registry');
+        const { SERVICES, checkAllServicesHealth } = require('../company-os/service-registry');
+        const { DATA_SOURCES } = require('../company-os/data-source-registry');
+        if (queryType === 'projects') {
+            const active = getActiveProjects();
+            const critical = getCriticalProjects();
+            const nonCritical = active.filter((p) => p.criticality !== 'CRITICAL');
+            const lines = [
+                `📋 *Company Projects (${active.length} active / ${PROJECTS.length} total)*`,
+                '',
+                '*🔴 Critical:*',
+                ...critical.map((p) => `• ${p.name} — ${p.owner_dept}`),
+                '',
+                '*📦 Active:*',
+                ...nonCritical.slice(0, 15).map((p) => `• ${p.name}`),
+            ];
+            return lines.join('\n');
+        }
+        if (queryType === 'services') {
+            const results = await checkAllServicesHealth();
+            const down = results.filter(r => !r.healthy);
+            const up = results.filter(r => r.healthy);
+            const lines = [
+                `🔍 *Service Health (${up.length}/${results.length} healthy)*`,
+                '',
+            ];
+            if (down.length === 0) {
+                lines.push('✅ Tất cả services đang online.');
+            }
+            else {
+                lines.push('*🔴 Down:*');
+                down.forEach((s) => lines.push(`• ${s.name} — ${s.error || 'unreachable'}`));
+            }
+            if (up.length) {
+                lines.push('', '*✅ Online:*');
+                up.forEach((s) => lines.push(`• ${s.name}`));
+            }
+            return lines.join('\n');
+        }
+        if (queryType === 'ownership') {
+            const msg_lower = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd');
+            const allProjects = PROJECTS;
+            const match = allProjects.find(p => msg_lower.includes(p.id.toLowerCase()) ||
+                p.name.toLowerCase().split(/\s+/).some((word) => word.length > 3 && msg_lower.includes(word)));
+            if (match) {
+                return `🏢 *${match.name}*\nDept: ${match.owner_dept}\nMục đích: ${match.business_purpose}`;
+            }
+            const lines = ['🏢 *Department Ownership*', ''];
+            allProjects.filter(p => p.owner_dept && p.owner_dept !== 'unknown').slice(0, 12).forEach(p => {
+                lines.push(`• ${p.name} → ${p.owner_dept}`);
+            });
+            return lines.join('\n');
+        }
+        if (queryType === 'source_health') {
+            const msg_norm = message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd');
+            const allSources = DATA_SOURCES;
+            const specific = allSources.find(s => msg_norm.includes(s.id.toLowerCase()) ||
+                s.name.toLowerCase().split(/\s+/).some((w) => w.length > 3 && msg_norm.includes(w)));
+            if (specific) {
+                const h = specific.health ?? specific.last_known_health ?? 'unknown';
+                const icon = h === 'healthy' ? '✅' : h === 'degraded' ? '⚠️' : '❓';
+                return `${icon} *${specific.name}*\nStatus: ${h}\nCredentials: ${specific.credential_status}`;
+            }
+            const lines = ['📡 *Data Source Health*', ''];
+            allSources.forEach(s => {
+                const h = s.health ?? s.last_known_health ?? 'unknown';
+                const icon = h === 'healthy' ? '✅' : h === 'degraded' ? '⚠️' : '❓';
+                lines.push(`${icon} ${s.name} — ${h}`);
+            });
+            return lines.join('\n');
+        }
+    }
+    catch (e) {
+        console.error('[AssetQuery] Error:', e instanceof Error ? e.message : String(e));
+    }
+    return null;
+}
 async function runPipeline(input) {
     const { message, mode, history } = input;
     const sources = ['executive-brain', 'holiday-engine'];
@@ -41,7 +146,12 @@ async function runPipeline(input) {
     const classifiedIntent = (0, intent_classifier_1.classifyIntent)(message);
     const brainConfig = (0, brain_router_1.selectBrainConfig)(classifiedIntent);
     console.log(`[Mi Brain] domain=${classifiedIntent.domain} brain=${brainConfig.brain} model=${brainConfig.model} confidence=${classifiedIntent.confidence.toFixed(2)}`);
-    // ── 0a. Data Analyst — intercept before AI ────────────────────────────────
+    // ── 0a. Asset Registry — direct answer, no LLM ───────────────────────────
+    const assetQueryReply = await tryAnswerAssetQuery(message);
+    if (assetQueryReply) {
+        return { reply: assetQueryReply, model: 'asset-registry', sources: ['company-asset-registry'], memory_context: '', kb_hits: 0 };
+    }
+    // ── 0b. Data Analyst — intercept before AI ────────────────────────────────
     if ((0, data_analyst_handler_1.isDataAnalystMessage)(message)) {
         const directAnswer = (0, data_analyst_handler_1.handleDataAnalystMessage)(message);
         if (directAnswer) {
@@ -291,14 +401,43 @@ async function runPipeline(input) {
             liveDataParts.push(`[Project Search: "${q}"]\n${projectHits.slice(0, 5).map((p) => `${p.name} (${p.type}) — ${p.path}`).join('\n')}`);
         }
     }
+    // ── 15b. Company Asset Registry — Phase 6 ──
+    if (/company.*project|du an cong ty|service.*down|department.*own|source.*health|project.*owner|company.*asset|list.*project|agent.*project/i.test(message)) {
+        try {
+            const MI_PORT = process.env.MI_PORT || '4001';
+            const apiKey = process.env.MI_CORE_API_KEY || '';
+            const assetRes = await fetch(`http://localhost:${MI_PORT}/api/company-os/assets`, {
+                headers: { 'x-api-key': apiKey, 'x-mi-auth': apiKey },
+                signal: AbortSignal.timeout(5000),
+            });
+            if (assetRes.ok) {
+                const asset = await assetRes.json();
+                const summary = asset.summary;
+                const parts = [
+                    `Departments: ${asset.departments?.active ?? '?'}/${asset.departments?.total ?? '?'} active`,
+                    `Projects: ${asset.projects?.active ?? '?'} active, ${asset.projects?.critical ?? '?'} critical`,
+                    `Services: ${asset.services?.total ?? '?'} total (${asset.services?.pm2 ?? '?'} PM2)`,
+                    summary?.projects ? `Projects: ${summary.projects}` : '',
+                    summary?.services ? `Services: ${summary.services}` : '',
+                ].filter(Boolean).join('\n');
+                liveDataParts.push(`[Company Asset Registry]\n${parts}`);
+                sources.push('company-asset-registry');
+            }
+        }
+        catch { /* non-blocking */ }
+    }
     // ── 16. Build full system prompt (always includes exec brain) ──
     const systemPrompt = (0, executive_context_1.buildSystemPrompt)(liveDataParts);
+    // ── P0-3 Gate-First: scrub secrets from LLM context BEFORE sending to model ──
+    const safeSystemPrompt = (0, response_scrubber_1.scrubReply)(systemPrompt, 'llm_context_system');
     // ── 17. Build messages ──
-    const messages = [{ role: 'system', content: systemPrompt }];
+    const messages = [{ role: 'system', content: safeSystemPrompt }];
     for (const h of history.slice(-8))
         messages.push({ role: h.role, content: h.content });
-    messages.push({ role: 'user', content: message });
+    messages.push({ role: 'user', content: (0, response_scrubber_1.scrubReply)(message, 'llm_context_user') });
     // ── 18. AI call — use brain-router-selected model ──
+    const _aiT0 = Date.now();
     const aiRes = await (0, ai_client_1.askAiWithBrain)(messages, brainConfig);
+    (0, latency_monitor_1.recordLatency)('ai_inference', Date.now() - _aiT0, 'response_pipeline');
     return { reply: aiRes.text, model: `${brainConfig.brain}/${aiRes.model}`, sources, memory_context: memContext, kb_hits: kbHits };
 }

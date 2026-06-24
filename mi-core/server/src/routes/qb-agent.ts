@@ -11,7 +11,8 @@ import fs from 'fs';
 import crypto from 'crypto';
 import * as sheetSync from '../services/qbAgentSheetSyncService';
 
-const DATA_DIR = process.env.MI_DATA_DIR || path.join(process.cwd(), 'data');
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || path.resolve(__dirname, '../../..');
+const DATA_DIR = process.env.MI_DATA_DIR || path.join(MI_CORE_ROOT, 'data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const db = new Database(path.join(DATA_DIR, 'qb-agent.db'));
@@ -178,13 +179,15 @@ db.exec(`
 function requireAgentAuth(req: Request, res: Response, next: () => void) {
   const MI_CORE_API_KEY = process.env.MI_CORE_API_KEY || process.env.AGENT_CODING_API_KEY || '';
   if (!MI_CORE_API_KEY) return next(); // not configured → open
+  // Accept API key via X-API-Key header (preferred) to avoid conflicts with session Bearer tokens
+  const apiKey = (req.headers['x-api-key'] as string) || '';
   const auth = req.headers['authorization'] || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
-  if (token !== MI_CORE_API_KEY) {
-    res.status(401).json({ error: 'Unauthorized' });
-    return;
+  const bearerToken = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
+  // Accept if X-API-Key matches OR if Bearer token IS the API key (legacy laptop bridge compatibility)
+  if (apiKey === MI_CORE_API_KEY || bearerToken === MI_CORE_API_KEY) {
+    return next();
   }
-  next();
+  res.status(401).json({ error: 'Unauthorized' });
 }
 
 function now() { return new Date().toISOString(); }

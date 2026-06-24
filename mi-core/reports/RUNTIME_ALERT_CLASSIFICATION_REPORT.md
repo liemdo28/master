@@ -1,10 +1,10 @@
 # RUNTIME_ALERT_CLASSIFICATION_REPORT
 
-Generated: 2026-06-15T01:45:19.541Z
+Generated: 2026-06-23T16:19:51.245Z
 Target: RUNTIME_ALERT_CLASSIFICATION_READY
 
 INFO: 0
-WARNING: 9
+WARNING: 13
 CRITICAL: 0
 
 | Severity | Source | Rule | Message | Evidence |
@@ -15,8 +15,12 @@ CRITICAL: 0
 | WARNING | Agent Engine | pm2_restart_increase | Agent Engine: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | Gmail | connector_stale | Gmail is stale | E:\Project\Master\.local-agent-global\visibility\gmail\data.json |
+| WARNING | Calendar | connector_stale | Calendar is stale | E:\Project\Master\.local-agent-global\visibility\google-calendar\data.json |
+| WARNING | Drive | connector_stale | Drive is stale | E:\Project\Master\.local-agent-global\visibility\google-drive\data.json |
+| WARNING | Work Orders | connector_stale | Work Orders is stale | E:\Project\Master\mi-core\.local-agent-global\work-orders |
+| WARNING | Memory | connector_stale | Memory is stale | E:\Project\Master\mi-core\.local-agent-global\operational-memory |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown | pm2_status=pm2_unavailable |
-| WARNING | Visibility | runtime_not_green | Visibility is degraded | 1 connector(s) unhealthy |
+| WARNING | Visibility | runtime_not_green | Visibility is degraded | 2 connector(s) unhealthy |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded | Connector is not fully healthy |
 
 Classification rules: Ollama timeout once = WARNING; repeated timeout = CRITICAL; PM2 restart > 3/hour = CRITICAL; connector stale/missing = WARNING; dashboard mismatch = CRITICAL.

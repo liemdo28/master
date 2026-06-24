@@ -1,0 +1,218 @@
+{
+  "signal": {
+    "type": "revenue_drop",
+    "magnitude": -10,
+    "period": "recent",
+    "context": {}
+  },
+  "hypotheses": [
+    {
+      "id": "hyp-21",
+      "dimension": "traffic",
+      "title_vi": "Giảm lưu lượng truy cập",
+      "description": "Lượng khách hàng truy cập website/app giảm so với kỳ trước",
+      "probability": "likely",
+      "probability_score": 0.6000000000000001,
+      "evidence": [
+        "Doanh thu giảm 10%",
+        "Có thể lượng truy cập giảm tương ứng"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra analytics traffic 7 ngày gần nhất",
+        "So sánh traffic tuần này vs tuần trước",
+        "Kiểm tra traffic từ các kênh chính"
+      ],
+      "expected_impact": "Xác suất 60% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-22",
+      "dimension": "conversion",
+      "title_vi": "Giảm tỷ lệ chuyển đổi",
+      "description": "Khách hàng truy cập nhưng ít đặt hàng hơn",
+      "probability": "possible",
+      "probability_score": 0.44999999999999996,
+      "evidence": [
+        "Doanh thu giảm 10%",
+        "Traffic có thể ổn định nhưng conversion giảm"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra conversion funnel",
+        "Review UX checkout flow",
+        "Kiểm tra giá có competitive không"
+      ],
+      "expected_impact": "Xác suất 45% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-23",
+      "dimension": "aov",
+      "title_vi": "Giảm giá trị đơn hàng trung bình",
+      "description": "Khách hàng đặt ít hơn mỗi đơn hàng",
+      "probability": "possible",
+      "probability_score": 0.37,
+      "evidence": [
+        "Doanh thu giảm 10%",
+        "AOV giảm = mỗi khách trả ít hơn"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra AOV 7/30 ngày",
+        "Review upsell/cross-sell performance",
+        "Kiểm tra combo deals"
+      ],
+      "expected_impact": "Xác suất 37% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-24",
+      "dimension": "seasonality",
+      "title_vi": "Ảnh hưởng mùa vụ",
+      "description": "Doanh thu giảm do yếu tố thời vụ tự nhiên",
+      "probability": "possible",
+      "probability_score": 0.3,
+      "evidence": [
+        "So sánh cùng kỳ năm trước",
+        "Xu hướng ngành hàng trong giai đoạn này"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "So sánh doanh thu cùng kỳ năm trước",
+        "Kiểm tra xu hướng ngành",
+        "Xác định xem có phải mùa thấp điểm không"
+      ],
+      "expected_impact": "Xác suất 30% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-25",
+      "dimension": "competition",
+      "title_vi": "Áp lực cạnh tranh",
+      "description": "Đối thủ mới hoặc chương trình khuyến mãi mạnh hơn",
+      "probability": "unlikely",
+      "probability_score": 0.25,
+      "evidence": [
+        "Có đối thủ mới khai trương?",
+        "Đối thủ có chương trình promo lớn không?"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra hoạt động đối thủ gần đây",
+        "So sánh giá và khuyến mãi",
+        "Đánh giá market share"
+      ],
+      "expected_impact": "Xác suất 25% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-26",
+      "dimension": "reviews",
+      "title_vi": "Đánh giá tiêu cực",
+      "description": "Review xấu tăng, ảnh hưởng đến quyết định mua hàng",
+      "probability": "unlikely",
+      "probability_score": 0.2,
+      "evidence": [
+        "Kiểm tra review trên Google/Yelp",
+        "Negative sentiment tăng?"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra reviews 7 ngày gần nhất",
+        "So sánh rating trung bình",
+        "Phân tích complaint patterns"
+      ],
+      "expected_impact": "Xác suất 20% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-27",
+      "dimension": "operations",
+      "title_vi": "Vấn đề vận hành",
+      "description": "Mất hàng, hết hàng, chậm trễ giao hàng ảnh hưởng doanh thu",
+      "probability": "unlikely",
+      "probability_score": 0.2,
+      "evidence": [
+        "Kiểm tra inventory levels",
+        "Tình trạng giao hàng gần đây"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra inventory/hàng tồn",
+        "Review order fulfillment rate",
+        "Kiểm tra supplier status"
+      ],
+      "expected_impact": "Xác suất 20% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-29",
+      "dimension": "marketing",
+      "title_vi": "Giảm hiệu quả marketing",
+      "description": "Campaign không hiệu quả, ROI quảng cáo giảm",
+      "probability": "unlikely",
+      "probability_score": 0.2,
+      "evidence": [
+        "Kiểm tra ROAS",
+        "Ad spend efficiency"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra ROAS 7 ngày",
+        "Review campaign performance",
+        "So sánh CPA với benchmark"
+      ],
+      "expected_impact": "Xác suất 20% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-28",
+      "dimension": "pricing",
+      "title_vi": "Vấn đề về giá",
+      "description": "Giá không competitive hoặc thay đổi giá ảnh hưởng demand",
+      "probability": "unlikely",
+      "probability_score": 0.15,
+      "evidence": [
+        "Kiểm tra lịch sử thay đổi giá",
+        "So sánh giá với đối thủ"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Review pricing history",
+        "So sánh giá với competitors",
+        "Kiểm tra margin analysis"
+      ],
+      "expected_impact": "Xác suất 15% là nguyên nhân",
+      "data_needed": []
+    },
+    {
+      "id": "hyp-30",
+      "dimension": "labor",
+      "title_vi": "Vấn đề nhân sự",
+      "description": "Thiếu nhân viên ảnh hưởng chất lượng dịch vụ",
+      "probability": "unlikely",
+      "probability_score": 0.15,
+      "evidence": [
+        "Kiểm tra staffing level",
+        "Turnover rate gần đây"
+      ],
+      "counter_evidence": [],
+      "recommended_actions": [
+        "Kiểm tra staffing vs schedule",
+        "Review employee availability",
+        "Đánh giá training gaps"
+      ],
+      "expected_impact": "Xác suất 15% là nguyên nhân",
+      "data_needed": []
+    }
+  ],
+  "top_3_actions": [
+    "Kiểm tra analytics traffic 7 ngày gần nhất",
+    "Kiểm tra conversion funnel",
+    "Kiểm tra AOV 7/30 ngày"
+  ],
+  "overall_assessment": "Signal: revenue_drop (-10%)\nMost likely cause: Giảm lưu lượng truy cập (probability: 60%)\nDimensions analyzed: 10",
+  "confidence": 0.6000000000000001,
+  "analysis_timestamp": "2026-06-24T00:43:18.026Z"
+}

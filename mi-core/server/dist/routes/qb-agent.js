@@ -48,7 +48,8 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
 const sheetSync = __importStar(require("../services/qbAgentSheetSyncService"));
-const DATA_DIR = process.env.MI_DATA_DIR || path_1.default.join(process.cwd(), 'data');
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || path_1.default.resolve(__dirname, '../../..');
+const DATA_DIR = process.env.MI_DATA_DIR || path_1.default.join(MI_CORE_ROOT, 'data');
 if (!fs_1.default.existsSync(DATA_DIR))
     fs_1.default.mkdirSync(DATA_DIR, { recursive: true });
 const db = new better_sqlite3_1.default(path_1.default.join(DATA_DIR, 'qb-agent.db'));
@@ -214,13 +215,15 @@ function requireAgentAuth(req, res, next) {
     const MI_CORE_API_KEY = process.env.MI_CORE_API_KEY || process.env.AGENT_CODING_API_KEY || '';
     if (!MI_CORE_API_KEY)
         return next(); // not configured → open
+    // Accept API key via X-API-Key header (preferred) to avoid conflicts with session Bearer tokens
+    const apiKey = req.headers['x-api-key'] || '';
     const auth = req.headers['authorization'] || '';
-    const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
-    if (token !== MI_CORE_API_KEY) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
+    const bearerToken = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
+    // Accept if X-API-Key matches OR if Bearer token IS the API key (legacy laptop bridge compatibility)
+    if (apiKey === MI_CORE_API_KEY || bearerToken === MI_CORE_API_KEY) {
+        return next();
     }
-    next();
+    res.status(401).json({ error: 'Unauthorized' });
 }
 function now() { return new Date().toISOString(); }
 function cid() { return crypto_1.default.randomUUID(); }

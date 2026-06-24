@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojqttt-c25bd4",
+  "objectiveRunId": "run-mqojqttp-94961a",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch đánh giá rủi ro | 4 steps, ~2min | Risk: undefined",
+  "sha256": "5927bf8bb303b70b27cbf8e1e7bff88e4a5eedb66a9d10aa8e0c5909e339efdb",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojqttp-94961a\\5927bf8bb303b70b27cbf8e1e7bff88e4a5eedb66a9d10aa8e0c5909e339efdb.json",
+  "capturedAt": "2026-06-22T01:38:23.489Z",
+  "readOnly": true
+}

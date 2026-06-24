@@ -35,7 +35,7 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     .card-title span{font-size:11px;font-weight:400;text-transform:none;letter-spacing:0}
 
     /* stats row */
-    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .stats{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
     .stat-card{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:14px 16px}
     .stat-val{font-size:26px;font-weight:700;line-height:1}
     .stat-label{font-size:11px;color:var(--muted);margin-top:5px}
@@ -145,6 +145,8 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
     <div class="stat-card"><div class="stat-val" id="healthyCount">0</div><div class="stat-label">Healthy</div></div>
     <div class="stat-card"><div class="stat-val" id="requestCount">0</div><div class="stat-label">Requests logged</div></div>
     <div class="stat-card"><div class="stat-val" id="toolCount">0</div><div class="stat-label">Tool requests</div></div>
+    <div class="stat-card"><div class="stat-val" id="queueActive">0</div><div class="stat-label">Active requests</div></div>
+    <div class="stat-card"><div class="stat-val" id="queueQueued">0</div><div class="stat-label">Queued requests</div></div>
     <div class="stat-card"><div class="stat-val">${Object.keys(config.modelAliases).length}</div><div class="stat-label">Model aliases</div></div>
   </section>
 
@@ -169,7 +171,7 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
   <section class="card">
     <div class="card-title">Supply Sources <span>source · key · model · cooldown</span></div>
     <table>
-      <thead><tr><th>Source</th><th>Provider</th><th>Model</th><th>Key</th><th>Status</th><th>Cooldown</th><th>Last Error</th><th>Attempts</th><th>Action</th></tr></thead>
+      <thead><tr><th>Source</th><th>Provider</th><th>Model</th><th>Key</th><th>Status</th><th>Active</th><th>Queued</th><th>Limit</th><th>Cooldown</th><th>Reset ETA</th><th>Last Error</th><th>Attempts</th><th>Action</th></tr></thead>
       <tbody id="sources"></tbody>
     </table>
   </section>
@@ -276,6 +278,7 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
   function renderSources(src){
     const rows=((src&&src.supplySources)||[]).map(s=>{
       const cd=s.cooldownRemainingMs?Math.ceil(s.cooldownRemainingMs/1000)+'s':'—';
+      const reset=s.resetEtaMs?Math.ceil(s.resetEtaMs/1000)+'s':'—';
       const err=s.lastErrorType||s.lastError||'—';
       const action=s.status==='disabled'
         ? '<button onclick="sourceAction(\\''+s.id+'\\',\\'enable\\')" style="padding:4px 8px">Enable</button>'
@@ -287,13 +290,17 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
         '<td class="mono">'+s.model+'</td>'+
         '<td class="mono">'+(s.keyLabel||s.keyId)+' / '+(s.maskedKey||'')+'</td>'+
         '<td class="src-'+s.status+'">'+s.status+'</td>'+
+        '<td class="mono">'+(s.activeRequests||0)+'</td>'+
+        '<td class="mono">'+(s.queuedRequests||0)+'</td>'+
+        '<td class="mono">'+(s.concurrencyLimit||1)+'</td>'+
         '<td class="mono">'+cd+'</td>'+
+        '<td class="mono">'+reset+'</td>'+
         '<td class="mono">'+String(err).slice(0,80)+'</td>'+
         '<td class="mono">'+(s.attempts||0)+' / '+(s.failures||0)+'</td>'+
         '<td>'+action+'</td>'+
       '</tr>';
     });
-    document.getElementById('sources').innerHTML=rows.length?rows.join(''):'<tr><td colspan="9" style="color:var(--muted)">No supply sources</td></tr>';
+    document.getElementById('sources').innerHTML=rows.length?rows.join(''):'<tr><td colspan="13" style="color:var(--muted)">No supply sources</td></tr>';
   }
 
   function renderAliases(){
@@ -304,9 +311,11 @@ export function dashboardHtml(config: GatewayConfig, health: ProviderHealth[]): 
 
   async function refresh(){
     try{
-      const [status,logs]=await Promise.all([fetch('/api/status').then(r=>r.json()),fetch('/api/logs').then(r=>r.json())]);
+      const [status,logs,runtime]=await Promise.all([fetch('/api/status').then(r=>r.json()),fetch('/api/logs').then(r=>r.json()),fetch('/api/gateway/runtime').then(r=>r.json())]);
       S.providers=status.providers;S.health=status.health;
-      S.sourceRotation=status.sourceRotation;
+      S.sourceRotation=runtime.sourceRotation||status.sourceRotation;
+      document.getElementById('queueActive').textContent=(runtime.queue&&runtime.queue.active_requests)||0;
+      document.getElementById('queueQueued').textContent=(runtime.queue&&runtime.queue.queued_requests)||0;
       renderProviders();renderSources(S.sourceRotation);renderLogs(logs.logs||[]);
     }catch(e){console.warn('refresh failed',e)}
   }

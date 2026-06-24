@@ -20,7 +20,7 @@
       "port": 3700,
       "autoPort": false,
       "cwd": "E:/Project/Master/agent-os/agent-control"
-    }
+    },
     {
       "name": "mi-ui",
       "runtimeExecutable": "npx",
@@ -28,6 +28,20 @@
       "port": 4010,
       "autoPort": true,
       "cwd": "E:/Project/Master/mi-core/ui"
+    },
+    {
+      "name": "mi-core",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server/dist/index.js"],
+      "port": 4001,
+      "cwd": "E:/Project/Master/mi-core"
+    },
+    {
+      "name": "creative-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "--no-clipboard", "-p", "5199"],
+      "port": 5199,
+      "cwd": "E:/Project/Master/.local-agent-global/coo-v4/creatives/png/serve"
     }
   ]
 }

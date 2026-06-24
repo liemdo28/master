@@ -20,8 +20,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const MI_CORE_ROOT = path.resolve(__dirname, '..', '..');
+const GLOBAL_DIR = process.env.GLOBAL_DIR || path.join(MI_CORE_ROOT, '.local-agent-global');
+const MASTER_ROOT = process.env.MASTER_ROOT || path.resolve(MI_CORE_ROOT, '..');
 
 // ── Source paths ─────────────────────────────────────────────────────────────
 

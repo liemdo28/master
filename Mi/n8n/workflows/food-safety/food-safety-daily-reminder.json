@@ -1,0 +1,82 @@
+{
+  "workflow_id": "food-safety-daily-reminder",
+  "name": "Food Safety Daily Reminder",
+  "domain": "food-safety",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": true,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 6 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Daily food safety reminder. Asks Mi-Core which stores need reminders, sends approved WhatsApp reminder, logs delivery.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "food-safety",
+        "event_type": "food_safety_reminder_request",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "get_stores_needing_reminders",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "food-safety",
+        "action": "get_reminder_stores",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 3,
+      "type": "http_request",
+      "name": "approval_for_whatsapp_send",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/approval/request",
+      "body": {
+        "workflow_id": "food-safety-daily-reminder",
+        "domain": "food-safety",
+        "action": "send_whatsapp_reminder",
+        "brand_id": "{{brand_id}}",
+        "decision_needed": "approve_whatsapp_reminder"
+      }
+    },
+    {
+      "order": 4,
+      "type": "condition",
+      "name": "check_approved",
+      "condition": "{{approval_for_whatsapp_send.response.approved}} === true"
+    },
+    {
+      "order": 5,
+      "type": "http_request",
+      "name": "log_delivery",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "food-safety-daily-reminder",
+        "domain": "food-safety",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "completed",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

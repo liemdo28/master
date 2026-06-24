@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-06-24T01:30:00.000Z",
+  "brands": [
+    {
+      "brand_id": "bakudan",
+      "name": "Bakudan Ramen",
+      "domain": "https://bakudanramen.com",
+      "status": "active",
+      "industry": "restaurant",
+      "cuisine": "japanese_ramen",
+      "created_at": "2026-06-19T00:00:00.000Z",
+      "connectors": {
+        "crawler": { "status": "ready", "credentials_configured": true },
+        "gsc": { "status": "missing_credentials", "credentials_configured": false, "gsc_site_url": "needs_config" },
+        "ga4": { "status": "missing_credentials", "credentials_configured": false, "ga4_property_id": "needs_config" },
+        "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
+        "citation_scan": { "status": "ready", "credentials_configured": true }
+      },
+      "platforms": {
+        "website": "https://bakudanramen.com",
+        "order_online": "https://order.bakudanramen.com",
+        "facebook": "needs_config",
+        "instagram": "needs_config",
+        "yelp": "needs_config"
+      }
+    },
+    {
+      "brand_id": "raw_sushi",
+      "name": "Raw Sushi",
+      "domain": "https://rawsushibar.com",
+      "status": "needs_config",
+      "industry": "restaurant",
+      "cuisine": "japanese_sushi",
+      "created_at": "2026-06-24T00:00:00.000Z",
+      "connectors": {
+        "crawler": { "status": "ready", "credentials_configured": true },
+        "gsc": { "status": "missing_credentials", "credentials_configured": false, "gsc_site_url": "needs_config" },
+        "ga4": { "status": "missing_credentials", "credentials_configured": false, "ga4_property_id": "needs_config" },
+        "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
+        "citation_scan": { "status": "ready", "credentials_configured": true }
+      },
+      "platforms": {
+        "website": "https://rawsushibar.com",
+        "order_online": "needs_config",
+        "facebook": "needs_config",
+        "instagram": "needs_config",
+        "yelp": "needs_config"
+      }
+    },
+    {
+      "brand_id": "test_brand_3",
+      "name": "Test Brand 3",
+      "domain": "https://example.com",
+      "status": "inactive",
+      "industry": "restaurant",
+      "cuisine": "unknown",
+      "created_at": "2026-06-24T02:00:00.000Z",
+      "connectors": {
+        "gsc": { "status": "not_applicable", "credentials_configured": false },
+        "ga4": { "status": "not_applicable", "credentials_configured": false },
+        "gbp": { "status": "not_applicable", "credentials_configured": false }
+      },
+      "platforms": {
+        "website": "https://example.com"
+      }
+    }
+  ]
+}

@@ -4,10 +4,17 @@ import {
   getPlatformHealth, getProjectSnapshot,
   getBusinessSnapshot, getTasksSnapshot, getHealthSnapshot,
   getTasksForPerson_, getOverdueTasksAll, getImportantEmailsAll,
-  getTodayEventsAll, searchDrive,
+  getTodayEventsAll, searchDrive, getSheetsSnapshot, getQuickBooksSnapshot,
 } from '../visibility/visibility-hub';
 import { connectorRegistry } from '../visibility/connector-registry';
 import { syncLocalProjects } from '../visibility/connectors/local-projects';
+import { generateDataFreshnessReport } from '../visibility/data-freshness-monitor';
+import {
+  generateDev2OperationsPackage,
+  getDev2IncidentRegistry,
+  getDev2OperationsStatus,
+  getDev2RuntimeReliabilityFeed,
+} from '../operations/dev2-operations';
 
 export const visibilityRouter = Router();
 
@@ -45,6 +52,13 @@ visibilityRouter.get('/calendar', (_req: Request, res: Response) => res.json(get
 
 visibilityRouter.get('/business', (_req: Request, res: Response) => res.json(getBusinessSnapshot()));
 visibilityRouter.get('/health-data', (_req: Request, res: Response) => res.json(getHealthSnapshot()));
+visibilityRouter.get('/sheets', (_req: Request, res: Response) => res.json(getSheetsSnapshot()));
+visibilityRouter.get('/quickbooks', (_req: Request, res: Response) => res.json(getQuickBooksSnapshot()));
+visibilityRouter.get('/freshness', (_req: Request, res: Response) => res.json(generateDataFreshnessReport()));
+visibilityRouter.get('/operations', (_req: Request, res: Response) => res.json(getDev2OperationsStatus()));
+visibilityRouter.get('/operations/incidents', (_req: Request, res: Response) => res.json({ incidents: getDev2IncidentRegistry() }));
+visibilityRouter.post('/operations/run', async (_req: Request, res: Response) => res.json(await generateDev2OperationsPackage()));
+visibilityRouter.get('/runtime-reliability', (_req: Request, res: Response) => res.json(getDev2RuntimeReliabilityFeed()));
 
 visibilityRouter.get('/drive/search', (req: Request, res: Response) => {
   const { q } = req.query as { q?: string };

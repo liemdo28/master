@@ -124,9 +124,16 @@ export async function indexTextChunks(params: {
 
 export async function isQdrantAvailable(): Promise<boolean> {
   try {
-    const res = await fetch(`${QDRANT_URL}/healthz`, { signal: AbortSignal.timeout(2000) });
-    return res.ok;
+    const health = await fetch(`${QDRANT_URL}/healthz`, { signal: AbortSignal.timeout(2000) });
+    if (health.ok) return true;
+    const collections = await fetch(`${QDRANT_URL}/collections`, { signal: AbortSignal.timeout(2000) });
+    return collections.ok;
   } catch {
-    return false;
+    try {
+      const root = await fetch(`${QDRANT_URL}/`, { signal: AbortSignal.timeout(2000) });
+      return root.ok;
+    } catch {
+      return false;
+    }
   }
 }

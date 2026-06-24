@@ -1,0 +1,22 @@
+{
+  "grp-stone-oak": [
+    {
+      "message_id": "p2-1781250290837-co2",
+      "chat_id": "grp-stone-oak",
+      "sender": "+84931773657",
+      "sender_name": "+84931773657",
+      "text": "/mi tình hình hôm nay",
+      "timestamp": "2026-06-12T07:44:50.909Z"
+    }
+  ],
+  "grp-bakudan": [
+    {
+      "message_id": "cert2-1781252887118-1rg",
+      "chat_id": "grp-bakudan",
+      "sender": "+84931773657",
+      "sender_name": "+84931773657",
+      "text": "/mi action items",
+      "timestamp": "2026-06-12T08:28:07.121Z"
+    }
+  ]
+}

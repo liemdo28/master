@@ -49,19 +49,63 @@ const response_pipeline_1 = require("../pipeline/response-pipeline");
 const chat_queue_1 = require("../chat/chat-queue");
 const chat_metrics_1 = require("../chat/chat-metrics");
 const executive_snapshot_1 = require("../executive/executive-snapshot");
+const response_scrubber_1 = require("../middleware/response-scrubber");
+const latency_monitor_1 = require("../operations/latency-monitor");
+const quality_metrics_1 = require("../operations/quality-metrics");
+const decision_audit_1 = require("../operations/decision-audit");
+const conversation_store_1 = require("../chat/conversation-store");
+const gate_2 = require("../approval/gate");
+const multi_intent_engine_1 = require("../execution/multi-intent-engine");
+const multi_intent_executor_1 = require("../execution/multi-intent-executor");
+const action_intent_engine_1 = require("../execution/action-intent-engine");
+const execution_1 = require("../execution");
 exports.chatRouter = (0, express_1.Router)();
-// In-memory session history (per conversation session)
-const sessions = new Map();
+// Use SQLite-backed persistent conversation store (survives restart)
 function getHistory(sessionId) {
-    if (!sessions.has(sessionId))
-        sessions.set(sessionId, []);
-    return sessions.get(sessionId);
+    return (0, conversation_store_1.getHistory)(sessionId);
 }
 function isExecutiveStatusQuestion(message) {
     const label = (0, executive_snapshot_1.classifyExecutiveIntent)(message);
     if (label === 'graph_lookup' || label === 'action_request')
         return false;
     return /dashboard|hôm nay|hom nay|task|work order|việc|viec|duyệt|duyet|approve|email|gmail|calendar|lịch|lich|drive|qb|quickbooks|sync|raw sushi|rawsushibar|connector|kết nối|ket noi|đáng lo|dang lo|blocker/i.test(message);
+}
+function isDangerousRuntimeCommand(message) {
+    const lower = message.toLowerCase();
+    return (0, action_intent_engine_1.classifyActionIntent)(message).message_class === 'dangerous_action'
+        || /\b(deploy|deployment|tri[eể]n\s*khai|push|release|webhook)\b/.test(lower)
+        || /\b(production|prod)\b.*\b(update|deploy|release|push)\b/.test(lower)
+        || /(submit|file|n[oộ]p).*(tax|thu[eế]|irs|return|filing)/.test(lower)
+        || /(tax|thu[eế]).*(submit|file|n[oộ]p|filing)/.test(lower)
+        || /(delete|x[oó]a|drop|truncate|clear|remove).*(database|db|table|production|customer|data)/.test(lower)
+        || /(database|db|table).*(delete|x[oó]a|drop|truncate|clear|remove)/.test(lower)
+        || /(pay|payment|transfer|wire|thanh\s*to[aá]n).*(bill|invoice|\$|vendor|supplier|account|payroll|funds|money)/.test(lower)
+        || /(bill|invoice|vendor|supplier|payroll|funds|money).*(pay|payment|transfer|wire|thanh\s*to[aá]n)/.test(lower);
+}
+function createDangerousApproval(message) {
+    return (0, gate_2.enqueue)({
+        risk_level: 3,
+        category: 'dangerous_runtime_action',
+        description: `Approval required for dangerous command: ${message.slice(0, 120)}`,
+        target: message,
+        before_state: JSON.stringify({ source: 'chat', executed: false }),
+        after_state: '',
+        rollback_plan: 'No execution occurred before approval.',
+    });
+}
+function shouldUseDeterministicMultiIntent(message) {
+    const lower = message.toLowerCase();
+    const expectedSignals = [
+        /dashboard/.test(lower),
+        /\bqb\b|quickbooks/.test(lower),
+        /raw\s*seo|seo\s*raw|raw sushi.*seo|seo.*raw sushi/.test(lower),
+        /maria/.test(lower),
+    ].filter(Boolean).length;
+    return expectedSignals >= 2 && ((0, multi_intent_engine_1.isMultiIntent)(message) || message.includes('+'));
+}
+function formatMultiIntentReply(result) {
+    // P2+P3: Use CEO language filter — no internal workflow names, no IDs
+    return { reply: result.final_summary, tasks: result.children };
 }
 exports.chatRouter.post('/', async (req, res) => {
     const { message, session_id = 'default' } = req.body;
@@ -71,8 +115,15 @@ exports.chatRouter.post('/', async (req, res) => {
     const t0 = Date.now();
     try {
         const result = await (0, chat_queue_1.enqueueChat)(() => processMessage(message, session_id));
-        chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, true);
-        res.json(result);
+        const elapsed = Date.now() - t0;
+        chat_metrics_1.chatMetrics.reqEnd(elapsed, true);
+        (0, latency_monitor_1.recordLatency)('chat_response', elapsed, 'chat_http');
+        const history = getHistory(session_id);
+        if (result.reply) {
+            (0, quality_metrics_1.inferQualityFromReply)({ session_id, user_request: message, reply: result.reply, history_length: history.length });
+            (0, decision_audit_1.recordDecision)({ user_request: message, intent: 'chat', session_id, execution_decision: 'chat_response', model: result.model });
+        }
+        res.json((0, response_scrubber_1.scrubChatResult)(result, 'chat'));
     }
     catch (e) {
         if (e instanceof chat_queue_1.ChatQueueFullError) {
@@ -89,7 +140,7 @@ exports.chatRouter.post('/', async (req, res) => {
     }
 });
 exports.chatRouter.delete('/history/:sessionId', (req, res) => {
-    sessions.delete(req.params.sessionId);
+    (0, conversation_store_1.clearSession)(req.params.sessionId);
     res.json({ ok: true });
 });
 async function handleWsChat(ws, msg) {
@@ -103,7 +154,7 @@ async function handleWsChat(ws, msg) {
     try {
         const result = await (0, chat_queue_1.enqueueChat)(() => processMessage(message, session_id));
         chat_metrics_1.chatMetrics.reqEnd(Date.now() - t0, true);
-        ws.send(JSON.stringify({ type: 'response', ...result }));
+        ws.send(JSON.stringify({ type: 'response', ...(0, response_scrubber_1.scrubChatResult)(result, 'ws_chat') }));
     }
     catch (e) {
         if (e instanceof chat_queue_1.ChatQueueFullError || e instanceof chat_queue_1.ChatTimeoutError) {
@@ -118,16 +169,75 @@ async function handleWsChat(ws, msg) {
 }
 async function processMessage(message, sessionId) {
     const history = getHistory(sessionId);
+    if (isDangerousRuntimeCommand(message)) {
+        const approval = createDangerousApproval(message);
+        const reply = `Approval required. Request ${approval.id} created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.`;
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', reply);
+        return {
+            reply,
+            intent: 'approval_required',
+            mode: 'ceo',
+            model: 'approval-gate',
+            approval_required: true,
+            approval_id: approval.id,
+            executed: false,
+            sources: ['/api/approval/pending'],
+        };
+    }
+    if (shouldUseDeterministicMultiIntent(message)) {
+        const multi = (0, multi_intent_executor_1.executeMultiIntent)(message, { sender: 'ceo' });
+        const formatted = formatMultiIntentReply(multi);
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', formatted.reply);
+        return {
+            reply: formatted.reply,
+            intent: 'multi_intent',
+            mode: 'ceo',
+            model: 'multi-intent-executor',
+            parent_tracking_id: multi.parent_tracking_id,
+            parent_workflow_id: multi.parent_workflow_id,
+            expected_children: multi.expected_children,
+            executed_children: multi.executed_children,
+            dropped_children: multi.dropped_children,
+            failed_children: multi.failed_children,
+            approval_pending_children: multi.approval_pending_children,
+            tasks: formatted.tasks,
+            trace_path: multi.trace_path,
+            sources: ['execution/multi-intent-engine'],
+        };
+    }
+    const executionIntent = (0, action_intent_engine_1.classifyActionIntent)(message);
+    if (executionIntent.message_class === 'action_request' && (0, execution_1.needsWorkflow)(executionIntent)) {
+        const executionResult = (0, execution_1.processCEORequest)({
+            message,
+            sender: 'ceo',
+            message_id: `chat-${Date.now()}`,
+        });
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', executionResult.response_message);
+        return {
+            reply: executionResult.response_message,
+            intent: executionResult.intent?.domain || 'execution_action',
+            mode: 'ceo',
+            model: 'execution-engine',
+            approval_required: !!executionResult.approval,
+            approval_id: executionResult.approval?.approval_id || null,
+            workflow_id: executionResult.workflow?.workflow_id || null,
+            evidence_path: executionResult.workflow?.evidence_path || null,
+            draft_preview_path: executionResult.draft?.preview_path || null,
+            execution_action: executionResult.action,
+            sources: ['execution/processCEORequest'],
+        };
+    }
     // ── FAST PATH: Daily Work Actions (file/email/calendar/task/drive/store queries) ──
     // These go directly to the pipeline which handles them with the action layer.
     // Skip old intent routing for these.
     const isActionMessage = /tìm file|find file|tìm.*rồi gửi|gửi file.*cho|find.*then send|send.*file|upload.*drive|lên drive|tạo meeting|create meeting|tạo lịch họp|raw là|bakudan ở|store nào|ở đâu.*(?:raw|bakudan)|(?:raw|bakudan).*ở đâu/i.test(message);
     if (isActionMessage) {
         const pipelineOut = await (0, response_pipeline_1.runPipeline)({ message, mode: 'ceo', history, intent: 'action' });
-        history.push({ role: 'user', content: message });
-        history.push({ role: 'assistant', content: pipelineOut.reply });
-        if (history.length > 40)
-            history.splice(0, 2);
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', pipelineOut.reply);
         return { reply: pipelineOut.reply, intent: 'action', mode: 'ceo', model: pipelineOut.model, sources: pipelineOut.sources };
     }
     const intent = (0, mi_brain_1.parseIntent)(message);
@@ -140,10 +250,8 @@ async function processMessage(message, sessionId) {
         'pending_approvals',
     ].includes(intent.type)) {
         const answer = await (0, executive_snapshot_1.formatExecutiveSnapshotAnswer)(message);
-        history.push({ role: 'user', content: message });
-        history.push({ role: 'assistant', content: answer.reply });
-        if (history.length > 40)
-            history.splice(0, 2);
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', answer.reply);
         return { reply: answer.reply, intent: answer.intent, mode: intent.mode, model: 'executive-snapshot', sources: answer.sources };
     }
     // Reminder
@@ -260,10 +368,8 @@ async function processMessage(message, sessionId) {
         // If message is about CREATING an event, route to pipeline (action layer)
         if (/t.o|create|schedule|meeting|l.ch h.p|\bm.i\b/i.test(message)) {
             const pipelineOut = await (0, response_pipeline_1.runPipeline)({ message, mode: intent.mode, history, intent: intent.type });
-            history.push({ role: 'user', content: message });
-            history.push({ role: 'assistant', content: pipelineOut.reply });
-            if (history.length > 40)
-                history.splice(0, 2);
+            (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+            (0, conversation_store_1.addMessage)(sessionId, 'assistant', pipelineOut.reply);
             return { reply: pipelineOut.reply, intent: intent.type, mode: intent.mode, model: pipelineOut.model, sources: pipelineOut.sources };
         }
         const { getTodayEventsAll } = await Promise.resolve().then(() => __importStar(require('../visibility/visibility-hub')));
@@ -281,10 +387,8 @@ async function processMessage(message, sessionId) {
         // Route all task creation / write actions to pipeline
         if (/task|t.o|create|assign|giao|update|check/i.test(message)) {
             const pipelineOut = await (0, response_pipeline_1.runPipeline)({ message, mode: intent.mode, history, intent: intent.type });
-            history.push({ role: 'user', content: message });
-            history.push({ role: 'assistant', content: pipelineOut.reply });
-            if (history.length > 40)
-                history.splice(0, 2);
+            (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+            (0, conversation_store_1.addMessage)(sessionId, 'assistant', pipelineOut.reply);
             return { reply: pipelineOut.reply, intent: intent.type, mode: intent.mode, model: pipelineOut.model, sources: pipelineOut.sources };
         }
         return { reply: 'Dashboard connector đang check trạng thái — sẽ show qua pipeline response.', intent: intent.type, mode: intent.mode, model: 'built-in' };
@@ -314,10 +418,8 @@ async function processMessage(message, sessionId) {
     // ── PROJECT CONNECTOR / TASK / POST — route to pipeline ──────────────────
     if (/tạo task|create task|giao task|giao việc.*(?:maria|hoang|nguyên|nguyen)|task.*for.*(?:maria|hoang|nguyên|nguyen)|schedule.*post|lên lịch.*post|seo.*post/i.test(message)) {
         const pipelineOut = await (0, response_pipeline_1.runPipeline)({ message, mode: intent.mode, history, intent: intent.type });
-        history.push({ role: 'user', content: message });
-        history.push({ role: 'assistant', content: pipelineOut.reply });
-        if (history.length > 40)
-            history.splice(0, 2);
+        (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+        (0, conversation_store_1.addMessage)(sessionId, 'assistant', pipelineOut.reply);
         return { reply: pipelineOut.reply, intent: intent.type, mode: intent.mode, model: pipelineOut.model, sources: pipelineOut.sources };
     }
     if (intent.type === 'health_view') {
@@ -369,11 +471,9 @@ Chỉ JSON.`;
     }
     // General chat — run through full pipeline (Memory + KB + Visibility + AI)
     const pipelineOut = await (0, response_pipeline_1.runPipeline)({ message, mode: intent.mode, history, intent: intent.type });
-    // Update session history
-    history.push({ role: 'user', content: message });
-    history.push({ role: 'assistant', content: pipelineOut.reply });
-    if (history.length > 40)
-        history.splice(0, 2);
+    // Persist to SQLite (survives restart)
+    (0, conversation_store_1.addMessage)(sessionId, 'user', message);
+    (0, conversation_store_1.addMessage)(sessionId, 'assistant', pipelineOut.reply);
     return {
         reply: pipelineOut.reply,
         intent: intent.type,

@@ -1,6 +1,6 @@
 {
-  "scanned_at": "2026-06-09T12:31:50.338Z",
-  "total": 23,
+  "scanned_at": "2026-06-16T03:37:55.783Z",
+  "total": 30,
   "projects": [
     {
       "project_id": "accounting-engine",
@@ -24,7 +24,7 @@
       "file_count": 62,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:43.805Z"
+      "last_scanned": "2026-06-16T03:37:36.916Z"
     },
     {
       "project_id": "antigravity-gateway",
@@ -42,15 +42,15 @@
         3456
       ],
       "start_cmd": "node dist/server.js",
-      "test_cmd": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs",
+      "test_cmd": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs && node tests/gateway-queue-policy.mjs",
       "build_cmd": "tsc",
       "health_url": "http://localhost:3456/health",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 236,
+      "file_count": 239,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:43.899Z"
+      "last_scanned": "2026-06-16T03:37:37.074Z"
     },
     {
       "project_id": "ai-search-neon-tool",
@@ -74,7 +74,35 @@
       "file_count": 77,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:43.977Z"
+      "last_scanned": "2026-06-16T03:37:37.434Z"
+    },
+    {
+      "project_id": "doordash-campaign-agent",
+      "name": "doordash-campaign-agent",
+      "path": "E:/Project/Master/Agent/doordash-compaigns",
+      "relative_path": "Agent/doordash-compaigns",
+      "type": "app",
+      "framework": "react",
+      "package_manager": "npm",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [
+        3000,
+        3001,
+        4001
+      ],
+      "start_cmd": "node dist/server/index.js",
+      "test_cmd": "node_modules/.bin/tsx src/tests/run-tests.ts",
+      "build_cmd": "tsc && vite build",
+      "health_url": "http://localhost:3000/health",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 128,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:38.456Z"
     },
     {
       "project_id": "shared-workspace",
@@ -98,7 +126,7 @@
       "file_count": 32,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:44.017Z"
+      "last_scanned": "2026-06-16T03:37:38.885Z"
     },
     {
       "project_id": "agent-coding",
@@ -124,7 +152,7 @@
       "file_count": 1233,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:44.071Z"
+      "last_scanned": "2026-06-16T03:37:39.056Z"
     },
     {
       "project_id": "bakudan-website",
@@ -150,7 +178,7 @@
       "file_count": 1277,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:44.574Z"
+      "last_scanned": "2026-06-16T03:37:40.285Z"
     },
     {
       "project_id": "dashboard-bakudanramen-qa",
@@ -171,10 +199,10 @@
       "health_url": "",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 1458,
+      "file_count": 1622,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:46.818Z"
+      "last_scanned": "2026-06-16T03:37:40.383Z"
     },
     {
       "project_id": "growth-dashboard",
@@ -198,7 +226,7 @@
       "file_count": 36,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:46.912Z"
+      "last_scanned": "2026-06-16T03:37:40.733Z"
     },
     {
       "project_id": "integration-system",
@@ -219,10 +247,10 @@
       "health_url": "",
       "location": "remote",
       "machine": "laptop-remote",
-      "file_count": 1783,
+      "file_count": 880,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:46.947Z"
+      "last_scanned": "2026-06-16T03:37:42.644Z"
     },
     {
       "project_id": "mobile-taskflow",
@@ -246,7 +274,7 @@
       "file_count": 159,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:47.274Z"
+      "last_scanned": "2026-06-16T03:37:43.331Z"
     },
     {
       "project_id": "packing-list-automation",
@@ -270,13 +298,40 @@
       "file_count": 630,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:47.859Z"
+      "last_scanned": "2026-06-16T03:37:44.926Z"
     },
     {
       "project_id": "review-automation-system",
       "name": "review-automation-system",
       "path": "E:/Project/Master/Bakudan/review-automation-system",
       "relative_path": "Bakudan/review-automation-system",
+      "type": "app",
+      "framework": "unknown",
+      "package_manager": "none",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [
+        4001,
+        8000
+      ],
+      "start_cmd": "",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "http://localhost:4001/health",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 183,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:45.756Z"
+    },
+    {
+      "project_id": "bakudan-releases",
+      "name": "bakudan-releases",
+      "path": "E:/Project/Master/bakudan-releases",
+      "relative_path": "bakudan-releases",
       "type": "app",
       "framework": "unknown",
       "package_manager": "none",
@@ -291,10 +346,37 @@
       "health_url": "",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 172,
+      "file_count": 2,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:45.836Z"
+    },
+    {
+      "project_id": "mi-ceo-observer",
+      "name": "mi-ceo-observer",
+      "path": "E:/Project/Master/mi-ceo-observer",
+      "relative_path": "mi-ceo-observer",
+      "type": "app",
+      "framework": "node",
+      "package_manager": "npm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [
+        3212,
+        4001
+      ],
+      "start_cmd": "node src/index.js",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "http://localhost:3212/health",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 19,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:48.032Z"
+      "last_scanned": "2026-06-16T03:37:45.968Z"
     },
     {
       "project_id": "mi-core",
@@ -302,23 +384,55 @@
       "path": "E:/Project/Master/mi-core",
       "relative_path": "mi-core",
       "type": "app",
-      "framework": "unknown",
+      "framework": "node",
       "package_manager": "npm",
       "language": "javascript",
       "git_remote": "",
       "git_branch": "",
       "git_dirty": false,
-      "ports": [],
+      "ports": [
+        3211,
+        4001,
+        4003,
+        5432,
+        6333,
+        8000,
+        9000
+      ],
       "start_cmd": "",
       "test_cmd": "",
       "build_cmd": "",
+      "health_url": "http://localhost:3211/health",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 13247,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:46.140Z"
+    },
+    {
+      "project_id": "mi-node-agent",
+      "name": "mi-node-agent",
+      "path": "E:/Project/Master/mi-node-agent",
+      "relative_path": "mi-node-agent",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "none",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node dist/server.js",
+      "test_cmd": "",
+      "build_cmd": "tsc",
       "health_url": "",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 1029,
+      "file_count": 3,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:48.061Z"
+      "last_scanned": "2026-06-16T03:37:46.220Z"
     },
     {
       "project_id": "ai-search-neon-tool",
@@ -342,7 +456,7 @@
       "file_count": 163,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:48.238Z"
+      "last_scanned": "2026-06-16T03:37:46.460Z"
     },
     {
       "project_id": "it-takes-two-inspired-game",
@@ -366,7 +480,7 @@
       "file_count": 187,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:48.397Z"
+      "last_scanned": "2026-06-16T03:37:46.941Z"
     },
     {
       "project_id": "linktreehl",
@@ -392,7 +506,7 @@
       "file_count": 273,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:49.049Z"
+      "last_scanned": "2026-06-16T03:37:47.743Z"
     },
     {
       "project_id": "openclaw-personal",
@@ -416,7 +530,7 @@
       "file_count": 7,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:49.073Z"
+      "last_scanned": "2026-06-16T03:37:47.834Z"
     },
     {
       "project_id": "phuyen-2026",
@@ -442,7 +556,7 @@
       "file_count": 941,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:49.303Z"
+      "last_scanned": "2026-06-16T03:37:50.228Z"
     },
     {
       "project_id": "tu-vi-bat-tu-assistant",
@@ -466,7 +580,7 @@
       "file_count": 18,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:49.323Z"
+      "last_scanned": "2026-06-16T03:37:50.387Z"
     },
     {
       "project_id": "tuya",
@@ -490,7 +604,7 @@
       "file_count": 1021,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-09T12:31:50.043Z"
+      "last_scanned": "2026-06-16T03:37:51.859Z"
     },
     {
       "project_id": "qb-ops-agent",
@@ -514,7 +628,7 @@
       "file_count": 33,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:50.098Z"
+      "last_scanned": "2026-06-16T03:37:52.023Z"
     },
     {
       "project_id": "rawwebsite",
@@ -535,10 +649,10 @@
       "health_url": "",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 192,
+      "file_count": 370,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:50.221Z"
+      "last_scanned": "2026-06-16T03:37:53.857Z"
     },
     {
       "project_id": "whatsapp-ai-gateway",
@@ -553,18 +667,94 @@
       "git_branch": "",
       "git_dirty": false,
       "ports": [
-        3210
+        3210,
+        3211,
+        4001
       ],
       "start_cmd": "node src/index.js",
-      "test_cmd": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js",
+      "test_cmd": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
       "build_cmd": "",
       "health_url": "http://localhost:3210/health",
       "location": "remote",
       "machine": "laptop-remote",
-      "file_count": 995,
+      "file_count": 1104,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-09T12:31:50.338Z"
+      "last_scanned": "2026-06-16T03:37:54.128Z"
+    },
+    {
+      "project_id": "agent-coding",
+      "name": "agent-coding",
+      "path": "E:/Project/Master/_archive/integration-system-nested-Agent-Coding-20260609-193828",
+      "relative_path": "_archive/integration-system-nested-Agent-Coding-20260609-193828",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "pnpm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [
+        4001
+      ],
+      "start_cmd": "node bin/local-agent.js",
+      "test_cmd": "node --test tests/smoke.test.js tests/modules.test.js tests/closed-loop.test.js tests/closed-loop-phase6-stress.test.js tests/review-ops-proxy.test.js",
+      "build_cmd": "node scripts/build-check.js",
+      "health_url": "http://localhost:4001/health",
+      "location": "remote",
+      "machine": "laptop-remote",
+      "file_count": 1221,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:55.569Z"
+    },
+    {
+      "project_id": "mi-node-agent",
+      "name": "mi-node-agent",
+      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
+      "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "none",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node dist/server.js",
+      "test_cmd": "",
+      "build_cmd": "tsc",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 3,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:55.649Z"
+    },
+    {
+      "project_id": "whatsapp-ai-gateway",
+      "name": "whatsapp-ai-gateway",
+      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
+      "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "npm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node src/index.js",
+      "test_cmd": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "remote",
+      "machine": "laptop-remote",
+      "file_count": 506,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:55.783Z"
     }
   ]
 }

@@ -96,6 +96,16 @@ authRouter.get('/google/callback', async (req: Request, res: Response) => {
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!process.env.MI_PIN && !process.env.MI_PIN_HASH) return next();
+  // Allow machine-to-machine requests authenticated via X-API-Key (qb-ops-agent, gateway, etc.)
+  const apiKey = req.headers['x-api-key'] as string;
+  const validApiKey = process.env.MI_CORE_API_KEY || process.env.AGENT_CODING_API_KEY || '';
+  if (apiKey && validApiKey && apiKey === validApiKey) return next();
+  // Allow localhost browser access (CEO dashboard on same machine — PIN protects remote access only)
+  if (process.env.LOCALHOST_BYPASS !== 'false') {
+    const ip = req.ip || req.socket?.remoteAddress || '';
+    const isLocal = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+    if (isLocal) return next();
+  }
   const token = extractToken(req);
   if (!token || !sessions.has(token)) {
     return res.status(401).json({ error: 'Unauthorized — login with PIN' });

@@ -1,0 +1,351 @@
+[
+  {
+    "approval_id": "review-10061",
+    "review_id": 10061,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:18:18.113Z",
+    "action": "edit",
+    "original_reply": "Hi Mi Approval Guest, thank you for sharing your experience with us. We're sorry to hear that the wait was longer than expected and that your order was incorrect. Your feedback is important, and we will address these issues with our team to improve our service. We hope you'll consider giving us another chance in the future to provide you with a better experience. Thank you for your understanding!",
+    "final_reply": "Thanks for letting us know. We are sorry the wait and order were not right at Bandera, and we appreciate the chance to review this with our team.",
+    "result": {
+      "status": "edited_by_ceo",
+      "review_id": 10061,
+      "reply_text": "Thanks for letting us know. We are sorry the wait and order were not right at Bandera, and we appreciate the chance to review this with our team."
+    }
+  },
+  {
+    "approval_id": "review-10061",
+    "review_id": 10061,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:20:00.747Z",
+    "action": "approve",
+    "original_reply": "Hi Mi Approval Guest, thank you for sharing your experience with us. We're sorry to hear that the wait was longer than expected and that your order was incorrect. Your feedback is important, and we will address these issues with our team to improve our service. We hope you'll consider giving us another chance in the future to provide you with a better experience. Thank you for your understanding!",
+    "final_reply": "Thanks for letting us know. We are sorry the wait and order were not right at Bandera, and we appreciate the chance to review this with our team.",
+    "result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": 317,
+        "mode": "operator_assisted",
+        "review_id": 10061
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10061,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10062",
+    "review_id": 10062,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:22:03.520Z",
+    "action": "edit",
+    "original_reply": "Hi Mi Approval Guest 2, we truly appreciate your feedback. We’re sorry to hear that your food was late and that an item was missing from your order. This is not the experience we aim to provide, and we will address these issues with our team. Your satisfaction is important to us, and we hope you’ll consider giving us another chance to serve you better in the future. Thank you for bringing this to our attention.",
+    "final_reply": "Thanks for telling us. We are sorry the order was late and missing an item at Bandera, and we appreciate the chance to review this with our team.",
+    "result": {
+      "status": "edited_by_ceo",
+      "review_id": 10062,
+      "reply_text": "Thanks for telling us. We are sorry the order was late and missing an item at Bandera, and we appreciate the chance to review this with our team."
+    }
+  },
+  {
+    "approval_id": "review-10062",
+    "review_id": 10062,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:22:03.570Z",
+    "action": "approve",
+    "original_reply": "Hi Mi Approval Guest 2, we truly appreciate your feedback. We’re sorry to hear that your food was late and that an item was missing from your order. This is not the experience we aim to provide, and we will address these issues with our team. Your satisfaction is important to us, and we hope you’ll consider giving us another chance to serve you better in the future. Thank you for bringing this to our attention.",
+    "final_reply": "Thanks for telling us. We are sorry the order was late and missing an item at Bandera, and we appreciate the chance to review this with our team.",
+    "result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10062
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10062,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10063",
+    "review_id": 10063,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:22:52.685Z",
+    "action": "reject",
+    "original_reply": "We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.",
+    "final_reply": "We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.",
+    "result": {
+      "status": "rejected_by_ceo",
+      "review_id": 10063,
+      "reason": "Rejected by CEO via WhatsApp"
+    }
+  },
+  {
+    "approval_id": "review-10064",
+    "review_id": 10064,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:22:52.717Z",
+    "action": "escalate",
+    "original_reply": "Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.",
+    "final_reply": "Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10064,
+      "reason": "Escalated by CEO via WhatsApp",
+      "job_id": 318
+    }
+  },
+  {
+    "approval_id": "review-10065",
+    "review_id": 10065,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:13.753Z",
+    "action": "approval_timeout",
+    "original_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10065,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 319
+    }
+  },
+  {
+    "approval_id": "review-10066",
+    "review_id": 10066,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:13.769Z",
+    "action": "approval_timeout",
+    "original_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "final_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10066,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 320
+    }
+  },
+  {
+    "approval_id": "review-10067",
+    "review_id": 10067,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:13.786Z",
+    "action": "approval_timeout",
+    "original_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "final_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10067,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 321
+    }
+  },
+  {
+    "approval_id": "review-10068",
+    "review_id": 10068,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:13.972Z",
+    "action": "approval_timeout",
+    "original_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10068,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 322
+    }
+  },
+  {
+    "approval_id": "review-10069",
+    "review_id": 10069,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:13.987Z",
+    "action": "approval_timeout",
+    "original_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "final_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10069,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 323
+    }
+  },
+  {
+    "approval_id": "review-10070",
+    "review_id": 10070,
+    "actor": "mi-core",
+    "channel": "timeout",
+    "timestamp": "2026-06-11T03:30:14.003Z",
+    "action": "approval_timeout",
+    "original_reply": "Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.",
+    "final_reply": "Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10070,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 324
+    }
+  },
+  {
+    "approval_id": "review-10065",
+    "review_id": 10065,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.692Z",
+    "action": "unauthorized_command",
+    "original_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "error": "Sender not authorized"
+  },
+  {
+    "approval_id": "review-10066",
+    "review_id": 10066,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.736Z",
+    "action": "approve",
+    "original_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "final_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10066
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10066,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10066",
+    "review_id": 10066,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.742Z",
+    "action": "ignored_duplicate",
+    "original_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "final_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "result": {
+      "status": "posted"
+    }
+  },
+  {
+    "approval_id": "review-10067",
+    "review_id": 10067,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.760Z",
+    "action": "edit",
+    "original_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "final_reply": "Thanks for telling us. We are sorry this missed the mark at Bandera, and we appreciate the chance to review it with our team.",
+    "result": {
+      "status": "edited_by_ceo",
+      "review_id": 10067,
+      "reply_text": "Thanks for telling us. We are sorry this missed the mark at Bandera, and we appreciate the chance to review it with our team."
+    }
+  },
+  {
+    "approval_id": "review-10067",
+    "review_id": 10067,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.794Z",
+    "action": "approve",
+    "original_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "final_reply": "Thanks for telling us. We are sorry this missed the mark at Bandera, and we appreciate the chance to review it with our team.",
+    "result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10067
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10067,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10068",
+    "review_id": 10068,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.813Z",
+    "action": "reject",
+    "original_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "result": {
+      "status": "rejected_by_ceo",
+      "review_id": 10068,
+      "reason": "Rejected by CEO via WhatsApp"
+    }
+  },
+  {
+    "approval_id": "review-10068",
+    "review_id": 10068,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.819Z",
+    "action": "ignored_duplicate",
+    "original_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "result": {
+      "status": "rejected_by_ceo"
+    }
+  },
+  {
+    "approval_id": "review-10069",
+    "review_id": 10069,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:31:11.824Z",
+    "action": "ignored_duplicate",
+    "original_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "final_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "result": {
+      "status": "escalated"
+    }
+  },
+  {
+    "approval_id": "review-10071",
+    "review_id": 10071,
+    "actor": "CEO",
+    "channel": "whatsapp",
+    "timestamp": "2026-06-11T03:32:05.994Z",
+    "action": "escalate",
+    "original_reply": "Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.",
+    "final_reply": "Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.",
+    "result": {
+      "status": "escalated",
+      "review_id": 10071,
+      "reason": "Escalated by CEO via WhatsApp",
+      "job_id": 325
+    }
+  }
+]

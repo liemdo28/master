@@ -1,15 +1,19 @@
 {
-  "synced_at": "2026-06-09T15:58:38.263Z",
+  "synced_at": "2026-06-24T04:06:37.244Z",
   "results": {
     "local-projects": "ok",
     "dashboard": "ok",
-    "gmail": "not_configured",
-    "calendar": "not_configured",
-    "drive": "not_configured",
-    "asana": "not_configured",
-    "health": "no_export",
+    "gmail": "error: Error: invalid_grant",
+    "calendar": "error: Error: invalid_grant",
+    "drive": "error: Error: invalid_grant",
+    "google-sheets": "error",
+    "asana": "ok",
+    "health": "ok",
     "accounting": "ok",
-    "food-safety": "ok"
+    "quickbooks-runtime": "degraded",
+    "food-safety": "ok",
+    "website-bakudan": "ok",
+    "website-raw": "ok"
   },
   "errors": []
 }

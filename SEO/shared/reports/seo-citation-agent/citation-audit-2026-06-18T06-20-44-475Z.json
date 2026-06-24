@@ -1,0 +1,1355 @@
+{
+  "agent": "seo-citation-agent",
+  "type": "citation-audit",
+  "generated_at": "2026-06-18T06:20:44.475Z",
+  "payload": {
+    "summary": "57 citation entries across 19 directories x 3 locations",
+    "citation_audit": [
+      {
+        "id": "cite:bandera:gbp",
+        "location_id": "bandera",
+        "directory_id": "gbp",
+        "directory_name": "Google Business Profile",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.350Z"
+      },
+      {
+        "id": "cite:bandera:apple",
+        "location_id": "bandera",
+        "directory_id": "apple",
+        "directory_name": "Apple Business Connect",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.351Z"
+      },
+      {
+        "id": "cite:bandera:bing",
+        "location_id": "bandera",
+        "directory_id": "bing",
+        "directory_name": "Bing Places",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.353Z"
+      },
+      {
+        "id": "cite:bandera:yelp",
+        "location_id": "bandera",
+        "directory_id": "yelp",
+        "directory_name": "Yelp",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.355Z"
+      },
+      {
+        "id": "cite:bandera:tripadvisor",
+        "location_id": "bandera",
+        "directory_id": "tripadvisor",
+        "directory_name": "Tripadvisor",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.382Z"
+      },
+      {
+        "id": "cite:bandera:facebook",
+        "location_id": "bandera",
+        "directory_id": "facebook",
+        "directory_name": "Facebook",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.383Z"
+      },
+      {
+        "id": "cite:bandera:instagram",
+        "location_id": "bandera",
+        "directory_id": "instagram",
+        "directory_name": "Instagram",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.385Z"
+      },
+      {
+        "id": "cite:bandera:restaurantji",
+        "location_id": "bandera",
+        "directory_id": "restaurantji",
+        "directory_name": "Restaurantji",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.387Z"
+      },
+      {
+        "id": "cite:bandera:restaurant-guru",
+        "location_id": "bandera",
+        "directory_id": "restaurant-guru",
+        "directory_name": "Restaurant Guru",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.388Z"
+      },
+      {
+        "id": "cite:bandera:the-rim-directory",
+        "location_id": "bandera",
+        "directory_id": "the-rim-directory",
+        "directory_name": "The Rim Directory",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.389Z"
+      },
+      {
+        "id": "cite:bandera:doordash",
+        "location_id": "bandera",
+        "directory_id": "doordash",
+        "directory_name": "DoorDash",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.391Z"
+      },
+      {
+        "id": "cite:bandera:ubereats",
+        "location_id": "bandera",
+        "directory_id": "ubereats",
+        "directory_name": "Uber Eats",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.393Z"
+      },
+      {
+        "id": "cite:bandera:grubhub",
+        "location_id": "bandera",
+        "directory_id": "grubhub",
+        "directory_name": "Grubhub",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.394Z"
+      },
+      {
+        "id": "cite:bandera:toast",
+        "location_id": "bandera",
+        "directory_id": "toast",
+        "directory_name": "Toast",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.396Z"
+      },
+      {
+        "id": "cite:bandera:waze",
+        "location_id": "bandera",
+        "directory_id": "waze",
+        "directory_name": "Waze",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.397Z"
+      },
+      {
+        "id": "cite:bandera:mapbox",
+        "location_id": "bandera",
+        "directory_id": "mapbox",
+        "directory_name": "Mapbox",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.399Z"
+      },
+      {
+        "id": "cite:bandera:tomtom",
+        "location_id": "bandera",
+        "directory_id": "tomtom",
+        "directory_name": "TomTom",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.400Z"
+      },
+      {
+        "id": "cite:bandera:here",
+        "location_id": "bandera",
+        "directory_id": "here",
+        "directory_name": "HERE",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.402Z"
+      },
+      {
+        "id": "cite:bandera:local-sa",
+        "location_id": "bandera",
+        "directory_id": "local-sa",
+        "directory_name": "San Antonio Local Directories",
+        "tier": 3,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.403Z"
+      },
+      {
+        "id": "cite:stone-oak:gbp",
+        "location_id": "stone-oak",
+        "directory_id": "gbp",
+        "directory_name": "Google Business Profile",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.405Z"
+      },
+      {
+        "id": "cite:stone-oak:apple",
+        "location_id": "stone-oak",
+        "directory_id": "apple",
+        "directory_name": "Apple Business Connect",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.406Z"
+      },
+      {
+        "id": "cite:stone-oak:bing",
+        "location_id": "stone-oak",
+        "directory_id": "bing",
+        "directory_name": "Bing Places",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.408Z"
+      },
+      {
+        "id": "cite:stone-oak:yelp",
+        "location_id": "stone-oak",
+        "directory_id": "yelp",
+        "directory_name": "Yelp",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.410Z"
+      },
+      {
+        "id": "cite:stone-oak:tripadvisor",
+        "location_id": "stone-oak",
+        "directory_id": "tripadvisor",
+        "directory_name": "Tripadvisor",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.411Z"
+      },
+      {
+        "id": "cite:stone-oak:facebook",
+        "location_id": "stone-oak",
+        "directory_id": "facebook",
+        "directory_name": "Facebook",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.412Z"
+      },
+      {
+        "id": "cite:stone-oak:instagram",
+        "location_id": "stone-oak",
+        "directory_id": "instagram",
+        "directory_name": "Instagram",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.414Z"
+      },
+      {
+        "id": "cite:stone-oak:restaurantji",
+        "location_id": "stone-oak",
+        "directory_id": "restaurantji",
+        "directory_name": "Restaurantji",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.415Z"
+      },
+      {
+        "id": "cite:stone-oak:restaurant-guru",
+        "location_id": "stone-oak",
+        "directory_id": "restaurant-guru",
+        "directory_name": "Restaurant Guru",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.417Z"
+      },
+      {
+        "id": "cite:stone-oak:the-rim-directory",
+        "location_id": "stone-oak",
+        "directory_id": "the-rim-directory",
+        "directory_name": "The Rim Directory",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.418Z"
+      },
+      {
+        "id": "cite:stone-oak:doordash",
+        "location_id": "stone-oak",
+        "directory_id": "doordash",
+        "directory_name": "DoorDash",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.419Z"
+      },
+      {
+        "id": "cite:stone-oak:ubereats",
+        "location_id": "stone-oak",
+        "directory_id": "ubereats",
+        "directory_name": "Uber Eats",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.421Z"
+      },
+      {
+        "id": "cite:stone-oak:grubhub",
+        "location_id": "stone-oak",
+        "directory_id": "grubhub",
+        "directory_name": "Grubhub",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.423Z"
+      },
+      {
+        "id": "cite:stone-oak:toast",
+        "location_id": "stone-oak",
+        "directory_id": "toast",
+        "directory_name": "Toast",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.425Z"
+      },
+      {
+        "id": "cite:stone-oak:waze",
+        "location_id": "stone-oak",
+        "directory_id": "waze",
+        "directory_name": "Waze",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.427Z"
+      },
+      {
+        "id": "cite:stone-oak:mapbox",
+        "location_id": "stone-oak",
+        "directory_id": "mapbox",
+        "directory_name": "Mapbox",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.428Z"
+      },
+      {
+        "id": "cite:stone-oak:tomtom",
+        "location_id": "stone-oak",
+        "directory_id": "tomtom",
+        "directory_name": "TomTom",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.430Z"
+      },
+      {
+        "id": "cite:stone-oak:here",
+        "location_id": "stone-oak",
+        "directory_id": "here",
+        "directory_name": "HERE",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.432Z"
+      },
+      {
+        "id": "cite:stone-oak:local-sa",
+        "location_id": "stone-oak",
+        "directory_id": "local-sa",
+        "directory_name": "San Antonio Local Directories",
+        "tier": 3,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.434Z"
+      },
+      {
+        "id": "cite:the-rim:gbp",
+        "location_id": "the-rim",
+        "directory_id": "gbp",
+        "directory_name": "Google Business Profile",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.436Z"
+      },
+      {
+        "id": "cite:the-rim:apple",
+        "location_id": "the-rim",
+        "directory_id": "apple",
+        "directory_name": "Apple Business Connect",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.438Z"
+      },
+      {
+        "id": "cite:the-rim:bing",
+        "location_id": "the-rim",
+        "directory_id": "bing",
+        "directory_name": "Bing Places",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.439Z"
+      },
+      {
+        "id": "cite:the-rim:yelp",
+        "location_id": "the-rim",
+        "directory_id": "yelp",
+        "directory_name": "Yelp",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.441Z"
+      },
+      {
+        "id": "cite:the-rim:tripadvisor",
+        "location_id": "the-rim",
+        "directory_id": "tripadvisor",
+        "directory_name": "Tripadvisor",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.443Z"
+      },
+      {
+        "id": "cite:the-rim:facebook",
+        "location_id": "the-rim",
+        "directory_id": "facebook",
+        "directory_name": "Facebook",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.445Z"
+      },
+      {
+        "id": "cite:the-rim:instagram",
+        "location_id": "the-rim",
+        "directory_id": "instagram",
+        "directory_name": "Instagram",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.447Z"
+      },
+      {
+        "id": "cite:the-rim:restaurantji",
+        "location_id": "the-rim",
+        "directory_id": "restaurantji",
+        "directory_name": "Restaurantji",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.448Z"
+      },
+      {
+        "id": "cite:the-rim:restaurant-guru",
+        "location_id": "the-rim",
+        "directory_id": "restaurant-guru",
+        "directory_name": "Restaurant Guru",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.450Z"
+      },
+      {
+        "id": "cite:the-rim:the-rim-directory",
+        "location_id": "the-rim",
+        "directory_id": "the-rim-directory",
+        "directory_name": "The Rim Directory",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.452Z"
+      },
+      {
+        "id": "cite:the-rim:doordash",
+        "location_id": "the-rim",
+        "directory_id": "doordash",
+        "directory_name": "DoorDash",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.454Z"
+      },
+      {
+        "id": "cite:the-rim:ubereats",
+        "location_id": "the-rim",
+        "directory_id": "ubereats",
+        "directory_name": "Uber Eats",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.456Z"
+      },
+      {
+        "id": "cite:the-rim:grubhub",
+        "location_id": "the-rim",
+        "directory_id": "grubhub",
+        "directory_name": "Grubhub",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.458Z"
+      },
+      {
+        "id": "cite:the-rim:toast",
+        "location_id": "the-rim",
+        "directory_id": "toast",
+        "directory_name": "Toast",
+        "tier": 1,
+        "claimed": true,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.460Z"
+      },
+      {
+        "id": "cite:the-rim:waze",
+        "location_id": "the-rim",
+        "directory_id": "waze",
+        "directory_name": "Waze",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.462Z"
+      },
+      {
+        "id": "cite:the-rim:mapbox",
+        "location_id": "the-rim",
+        "directory_id": "mapbox",
+        "directory_name": "Mapbox",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.464Z"
+      },
+      {
+        "id": "cite:the-rim:tomtom",
+        "location_id": "the-rim",
+        "directory_id": "tomtom",
+        "directory_name": "TomTom",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.465Z"
+      },
+      {
+        "id": "cite:the-rim:here",
+        "location_id": "the-rim",
+        "directory_id": "here",
+        "directory_name": "HERE",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.467Z"
+      },
+      {
+        "id": "cite:the-rim:local-sa",
+        "location_id": "the-rim",
+        "directory_id": "local-sa",
+        "directory_name": "San Antonio Local Directories",
+        "tier": 3,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.469Z"
+      }
+    ],
+    "nap_mismatch_count": 0,
+    "nap_match_rate": 100,
+    "directories_claimed": 24,
+    "priority_fix_list": [
+      {
+        "id": "cite:bandera:tripadvisor",
+        "location_id": "bandera",
+        "directory_id": "tripadvisor",
+        "directory_name": "Tripadvisor",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.382Z"
+      },
+      {
+        "id": "cite:bandera:facebook",
+        "location_id": "bandera",
+        "directory_id": "facebook",
+        "directory_name": "Facebook",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.383Z"
+      },
+      {
+        "id": "cite:bandera:instagram",
+        "location_id": "bandera",
+        "directory_id": "instagram",
+        "directory_name": "Instagram",
+        "tier": 1,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.385Z"
+      },
+      {
+        "id": "cite:bandera:restaurantji",
+        "location_id": "bandera",
+        "directory_id": "restaurantji",
+        "directory_name": "Restaurantji",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.387Z"
+      },
+      {
+        "id": "cite:bandera:restaurant-guru",
+        "location_id": "bandera",
+        "directory_id": "restaurant-guru",
+        "directory_name": "Restaurant Guru",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.388Z"
+      },
+      {
+        "id": "cite:bandera:the-rim-directory",
+        "location_id": "bandera",
+        "directory_id": "the-rim-directory",
+        "directory_name": "The Rim Directory",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.389Z"
+      },
+      {
+        "id": "cite:bandera:waze",
+        "location_id": "bandera",
+        "directory_id": "waze",
+        "directory_name": "Waze",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.397Z"
+      },
+      {
+        "id": "cite:bandera:mapbox",
+        "location_id": "bandera",
+        "directory_id": "mapbox",
+        "directory_name": "Mapbox",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.399Z"
+      },
+      {
+        "id": "cite:bandera:tomtom",
+        "location_id": "bandera",
+        "directory_id": "tomtom",
+        "directory_name": "TomTom",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.400Z"
+      },
+      {
+        "id": "cite:bandera:here",
+        "location_id": "bandera",
+        "directory_id": "here",
+        "directory_name": "HERE",
+        "tier": 2,
+        "claimed": false,
+        "nap_match": true,
+        "fields_validated": [
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "website_url",
+          "order_url",
+          "menu_url",
+          "categories"
+        ],
+        "last_audited": "2026-06-18T06:20:44.402Z"
+      }
+    ]
+  }
+}

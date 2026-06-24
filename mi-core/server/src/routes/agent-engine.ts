@@ -19,7 +19,7 @@ async function bridgeRequest(method: string, path: string, body?: object): Promi
     const options = {
       hostname: url.hostname,
       port: parseInt(url.port || '4003'),
-      path: url.pathname,
+      path: `${url.pathname}${url.search}`,
       method: method.toUpperCase(),
       headers: {
         'Content-Type': 'application/json',
@@ -63,6 +63,55 @@ agentEngineRouter.get('/capabilities', async (_req: Request, res: Response) => {
   try {
     const result = await bridgeRequest('GET', '/capabilities');
     res.json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+// ── Operator Harness ─────────────────────────────────────────────────────────
+agentEngineRouter.get('/harness/catalog', async (_req: Request, res: Response) => {
+  try {
+    const result = await bridgeRequest('GET', '/harness/catalog');
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.get('/harness/plan', async (req: Request, res: Response) => {
+  try {
+    const profile = encodeURIComponent(String(req.query.profile || 'core'));
+    const result = await bridgeRequest('GET', `/harness/plan?profile=${profile}`);
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.get('/harness/brief', async (req: Request, res: Response) => {
+  try {
+    const profile = encodeURIComponent(String(req.query.profile || 'core'));
+    const result = await bridgeRequest('GET', `/harness/brief?profile=${profile}`);
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.get('/harness/context', async (req: Request, res: Response) => {
+  try {
+    const profile = encodeURIComponent(String(req.query.profile || 'core'));
+    const result = await bridgeRequest('GET', `/harness/context?profile=${profile}`);
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.post('/harness/materialize', async (req: Request, res: Response) => {
+  try {
+    const result = await bridgeRequest('POST', '/harness/materialize', req.body);
+    res.status(result.status as number).json(result.data);
   } catch (e: unknown) {
     res.status(503).json({ error: (e as Error).message });
   }

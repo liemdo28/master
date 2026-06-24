@@ -7,7 +7,6 @@
 import fs from 'fs';
 import path from 'path';
 
-const ASANA_TOKEN = process.env.ASANA_TOKEN;
 const BASE_URL = 'https://app.asana.com/api/1.0';
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'asana');
@@ -43,13 +42,13 @@ export interface AsanaSnapshot {
   tasks_by_assignee: Record<string, AsanaTask[]>;
 }
 
-function isConfigured(): boolean { return !!ASANA_TOKEN; }
+function isConfigured(): boolean { return !!process.env.ASANA_TOKEN; }
 
 async function asanaFetch(endpoint: string): Promise<unknown> {
   if (!isConfigured()) throw new Error('ASANA_TOKEN not set in .env');
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
-      Authorization: `Bearer ${ASANA_TOKEN}`,
+      Authorization: `Bearer ${process.env.ASANA_TOKEN}`,
       Accept: 'application/json',
     },
     signal: AbortSignal.timeout(15000),

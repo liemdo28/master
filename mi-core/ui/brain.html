@@ -83,6 +83,20 @@
     <div id="kb-log" class="log-box" style="display:none"></div>
   </div>
 
+  <!-- US Compliance DB -->
+  <div class="card full">
+    <div class="card-title">🇺🇸 US Compliance DB <span id="usc-badge" class="badge partial">—</span></div>
+    <div id="usc-content">Loading...</div>
+    <div id="usc-missing-warning" style="display:none;margin-top:10px;padding:10px;background:#3a0000;border:1px solid #5a0000;border-radius:8px;font-size:12px;color:#f87171"></div>
+    <div id="usc-search-row" style="display:flex;gap:6px;margin-top:10px">
+      <input id="usc-q" placeholder="Search US Compliance DB..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;font-size:12px;outline:none"/>
+      <button class="btn btn-secondary" onclick="searchCompliance()">Search</button>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text-dim)">Sample queries:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px" id="usc-samples"></div>
+    <div id="usc-results"></div>
+  </div>
+
   <!-- Memory -->
   <div class="card">
     <div class="card-title">🧠 Executive Memory <span id="mem-badge" class="badge partial">—</span></div>
@@ -93,6 +107,27 @@
   <div class="card">
     <div class="card-title">🤖 AI / Ollama <span id="ai-badge" class="badge partial">—</span></div>
     <div id="ai-content">Loading...</div>
+  </div>
+
+  <!-- Operator Harness -->
+  <div class="card full">
+    <div class="card-title">🧭 Operator Harness <span id="harness-badge" class="badge partial">—</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <select id="harness-profile" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:7px 10px;font-size:12px;outline:none">
+        <option value="core">core</option>
+        <option value="coding">coding</option>
+        <option value="ops">ops</option>
+        <option value="whatsapp">whatsapp</option>
+        <option value="visibility">visibility</option>
+        <option value="daily-work">daily-work</option>
+        <option value="compliance">compliance</option>
+        <option value="remote-control">remote-control</option>
+      </select>
+      <button class="btn btn-primary" onclick="loadHarnessBrief()">Smart Brief</button>
+      <button class="btn btn-secondary" onclick="materializeHarness()">Materialize</button>
+    </div>
+    <div id="harness-content">Loading harness...</div>
+    <div id="harness-log" class="log-box" style="display:none"></div>
   </div>
 
   <!-- Connectors -->
@@ -125,12 +160,15 @@ const API = 'http://localhost:4001/api';
 
 async function load() {
   try {
-    const [brain, connectors] = await Promise.all([
+    const [brain, connectors, compliance] = await Promise.all([
       fetch(`${API}/brain/status`).then(r => r.json()),
       fetch(`${API}/visibility/connectors`).then(r => r.json()),
+      fetch(`${API}/knowledge/us-compliance/status`).then(r => r.json()),
     ]);
     renderBrain(brain);
     renderConnectors(connectors);
+    renderCompliance(compliance);
+    loadHarnessBrief();
   } catch { document.querySelector('.container').innerHTML = '<div style="padding:40px;color:#888;text-align:center">Mi server offline — run start.bat</div>'; }
 }
 
@@ -152,12 +190,12 @@ function renderBrain(b) {
     <div class="stat-row"><span class="stat-label">Not Configured</span><span class="stat-value">${v.not_configured}</span></div>
   `;
 
-  // KB
-  const kb = l.knowledge_db;
+  // KB (brain/status exposes this as knowledge_federation)
+  const kb = l.knowledge_federation || l.knowledge_db || { status: 'EMPTY', total_docs: 0, categories: [] };
   document.getElementById('kb-badge').outerHTML = `<span id="kb-badge" class="badge ${kb.status==='READY'?'ready':'partial'}">${kb.status}</span>`;
   const cats = (kb.categories||[]).map(c => `<span class="chip ok">${c.category} (${c.c})</span>`).join('');
   document.getElementById('kb-content').innerHTML = `
-    <div class="stat-row"><span class="stat-label">Total Docs</span><span class="stat-value">${kb.total_docs.toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-label">Total Docs</span><span class="stat-value">${(kb.total_docs||0).toLocaleString()}</span></div>
     <div class="kb-cats">${cats || '<span style="color:#888;font-size:12px">No docs yet — click Ingest</span>'}</div>
   `;
 
@@ -246,6 +284,78 @@ async function searchKB() {
 
 document.getElementById('kb-q')?.addEventListener('keydown', e => { if(e.key==='Enter') searchKB(); });
 
+// ── US Compliance DB ──────────────────────────────────────────────────────
+const SAMPLE_QUERIES = [
+  'Texas restaurant sales tax',
+  'California sick leave law',
+  'San Antonio food permit',
+  'Stockton restaurant compliance',
+  'Payroll checklist Raw California',
+  'Accounting checklist Bakudan Texas',
+];
+
+function renderCompliance(c) {
+  const badge = document.getElementById('usc-badge');
+  const content = document.getElementById('usc-content');
+  const warning = document.getElementById('usc-missing-warning');
+  const samples = document.getElementById('usc-samples');
+
+  const statusMap = { READY:'ready', PARTIAL:'partial', MISSING:'offline', ERROR:'offline' };
+  badge.className = `badge ${statusMap[c.status]||'partial'}`;
+  badge.textContent = c.status;
+
+  if (!c.exists) {
+    warning.style.display = 'block';
+    warning.textContent = `US Compliance DB not found. Checked paths:\n${(c.checked_paths||[]).join('\n')}`;
+    content.innerHTML = `<div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" style="color:var(--danger)">MISSING</span></div>`;
+    document.getElementById('usc-search-row').style.display = 'none';
+  } else {
+    warning.style.display = 'none';
+    const jurisChips = (c.jurisdictions||[]).map(j => `<span class="chip ok">${j}</span>`).join('');
+    const domainChips = (c.domains||[]).map(d => `<span class="chip">${d}</span>`).join('');
+    content.innerHTML = `
+      <div class="stat-row"><span class="stat-label">Resolved Path</span><span class="stat-value" style="font-size:11px;word-break:break-all">${c.resolved_path}</span></div>
+      <div class="stat-row"><span class="stat-label">Raw Size</span><span class="stat-value">${c.raw_size_mb} MB</span></div>
+      <div class="stat-row"><span class="stat-label">Documents</span><span class="stat-value">${c.document_count}</span></div>
+      <div class="stat-row"><span class="stat-label">Chunks</span><span class="stat-value">${c.chunk_count}</span></div>
+      <div class="stat-row"><span class="stat-label">Sources</span><span class="stat-value">${c.source_count}</span></div>
+      <div class="stat-row"><span class="stat-label">Searchable</span><span class="stat-value">${c.searchable?'✓ Yes':'✗ No'}</span></div>
+      <div class="stat-row"><span class="stat-label">Last Indexed</span><span class="stat-value">${c.last_indexed||'—'}</span></div>
+      <div class="stat-row"><span class="stat-label">Catalog</span><span class="stat-value">${c.catalog_exists?'✓':'✗'}</span></div>
+      <div class="stat-row"><span class="stat-label">Manifest</span><span class="stat-value">${c.manifest_exists?'✓':'✗'}</span></div>
+      ${jurisChips ? `<div style="margin-top:8px;font-size:11px;color:var(--text-dim)">Jurisdictions:</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${jurisChips}</div>` : ''}
+      ${domainChips ? `<div style="margin-top:8px;font-size:11px;color:var(--text-dim)">Domains:</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${domainChips}</div>` : ''}
+    `;
+  }
+
+  // Render sample query buttons
+  samples.innerHTML = SAMPLE_QUERIES.map(q =>
+    `<button class="btn btn-secondary" style="font-size:10px;padding:3px 8px" onclick="document.getElementById('usc-q').value='${q}';searchCompliance()">${q}</button>`
+  ).join('');
+}
+
+async function searchCompliance() {
+  const q = document.getElementById('usc-q').value.trim();
+  if (!q) return;
+  const el = document.getElementById('usc-results');
+  el.innerHTML = '<div style="font-size:12px;color:var(--text-dim);margin-top:8px">Searching...</div>';
+  try {
+    const r = await fetch(`${API}/knowledge/search?q=${encodeURIComponent(q)}&limit=5&category=compliance`);
+    const results = await r.json();
+    if (!results.length) { el.innerHTML = '<div style="font-size:12px;color:#888;margin-top:8px">No compliance results found</div>'; return; }
+    el.innerHTML = `<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${results.map(r=>`
+      <div style="background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:8px 10px">
+        <div style="font-size:12px;font-weight:600">${r.title}</div>
+        <div style="font-size:10px;color:#888;margin-bottom:4px">${r.source} · ${r.category}</div>
+        <div style="font-size:11px;color:#ccc">${r.snippet}</div>
+      </div>`).join('')}</div>`;
+  } catch (e) {
+    el.innerHTML = `<div style="font-size:12px;color:var(--danger);margin-top:8px">Search failed: ${e.message}</div>`;
+  }
+}
+
+document.getElementById('usc-q')?.addEventListener('keydown', e => { if(e.key==='Enter') searchCompliance(); });
+
 async function checkGoogleAuth() {
   try {
     const r = await fetch(`${API}/auth/google/status`);
@@ -301,6 +411,54 @@ async function installAllPacks() {
   log.textContent = `Total docs added: ${d.total_installed}\n${JSON.stringify(d.results, null, 2)}`;
   loadPacks(); load();
 }
+
+async function loadHarnessBrief() {
+  const profile = document.getElementById('harness-profile')?.value || 'core';
+  const badge = document.getElementById('harness-badge');
+  const content = document.getElementById('harness-content');
+  try {
+    const r = await fetch(`${API}/agent-engine/harness/brief?profile=${encodeURIComponent(profile)}`);
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Harness unavailable');
+    const b = d.brief;
+    badge.className = 'badge ready';
+    badge.textContent = profile;
+    content.innerHTML = `
+      <div class="stat-row"><span class="stat-label">Profile</span><span class="stat-value">${b.profile}</span></div>
+      <div class="stat-row"><span class="stat-label">Surfaces</span><span class="stat-value">${b.surfaces.length}</span></div>
+      <div class="stat-row"><span class="stat-label">Recent Reports</span><span class="stat-value">${b.reports.length}</span></div>
+      <div class="stat-row"><span class="stat-label">mi-core Changes</span><span class="stat-value">${b.git.changedCount ?? 'unknown'}</span></div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">${b.surfaces.map(s=>`<span class="chip">${s}</span>`).join('')}</div>
+    `;
+    const log = document.getElementById('harness-log');
+    log.style.display = 'block';
+    log.textContent = b.text;
+  } catch (e) {
+    badge.className = 'badge offline';
+    badge.textContent = 'OFFLINE';
+    content.innerHTML = `<div style="font-size:12px;color:var(--text-dim)">Agent Engine bridge offline — start agent-engine bridge to use harness.</div>`;
+  }
+}
+
+async function materializeHarness() {
+  const profile = document.getElementById('harness-profile')?.value || 'core';
+  const log = document.getElementById('harness-log');
+  log.style.display = 'block';
+  log.textContent = `Materializing ${profile}...`;
+  try {
+    const r = await fetch(`${API}/agent-engine/harness/materialize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile }),
+    });
+    const d = await r.json();
+    log.textContent = JSON.stringify(d, null, 2);
+  } catch (e) {
+    log.textContent = `Harness materialize failed: ${e.message}`;
+  }
+}
+
+document.getElementById('harness-profile')?.addEventListener('change', loadHarnessBrief);
 
 load();
 checkGoogleAuth();

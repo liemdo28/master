@@ -10,6 +10,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { ProviderKey } from '../types.js';
 import type { UpstreamErrorType } from './upstream-error-classifier.js';
+import { concurrencyLimiter } from './concurrency-limiter.js';
 
 interface ModelQuotaEntry {
   providerId: string;
@@ -62,6 +63,10 @@ export interface SupplySourceSnapshot {
   lastFailureAt?: number | undefined;
   attempts: number;
   failures: number;
+  activeRequests: number;
+  queuedRequests: number;
+  concurrencyLimit: number;
+  resetEtaMs?: number | undefined;
   quota?: ModelQuotaSnapshot | undefined;
 }
 
@@ -85,27 +90,39 @@ const SOURCE_WINDOW_MS = 5 * 60 * 1_000;
 // Start probing EARLY_RESET_PROBE_MS before expected window reset (= 4h means probe starts 1h into window).
 const EARLY_RESET_PROBE_MS = 4 * 60 * 60 * 1_000;    // start probing 1h after firstUsedAt
 const EXHAUSTED_PROBE_INTERVAL_MS = 5 * 60 * 1_000;   // probe every 5 min
-// Source health cooldown for quota_exceeded: 1h retry window (not full 5h).
-// The probe will re-exhaust if NKQ is still capped, or recover if NKQ has reset.
-const QUOTA_RETRY_COOLDOWN_MS = 60 * 60 * 1_000;
+// Source health cooldown for quota_exceeded.
+// OpusMax: probe every 20 min — quota may partially restore before the full 5h window.
+// NKQ and others: 1h retry window.
+const OPUSMAX_QUOTA_RETRY_COOLDOWN_MS = 20 * 60 * 1_000;  // 20 minutes
+const QUOTA_RETRY_COOLDOWN_MS = 60 * 60 * 1_000;          // 1 hour (NKQ / others)
 
-const NKQ_NEW_KEY_PREFIX = 'AGOP-7B43-';
+const NKQ_KEY2_PREFIX = 'AGOP-7B43-';
+const NKQ_KEY3_PREFIX = 'AGOP-B0D9-';
 const NKQ_LEGACY_KEY_PREFIX = 'AGOP-6094-';
 
+// SOURCE ORDER: OpusMax first (primary), NKQ fallback with 2-key rotation every 5 min
 const SOURCE_ORDER = [
-  'nkq-key2-opus-4-7',      // db-15 (AGOP-7B43) — primary active NKQ key
-  'nkq-key2-opus-4-6',      // db-15 (AGOP-7B43) — primary active NKQ key
-  'nkq-key1-opus-4-7',      // db-1  (AGOP-6094) — disabled / future
-  'nkq-key1-opus-4-6',      // db-1  (AGOP-6094) — disabled / future
-  'opusmax-db18-opus-4-6',  // db-18 opusmax key 1
-  'opusmax-db18-opus-4-7',  // db-18 opusmax key 1
-  'opusmax-db18-opus-4-8',  // db-18 opusmax key 1
-  'opusmax-db19-opus-4-6',  // db-19 opusmax key 2 — fallback when db-18 exhausted
-  'opusmax-db19-opus-4-7',  // db-19 opusmax key 2
-  'opusmax-db19-opus-4-8',  // db-19 opusmax key 2
+  // OpusMax sources (primary)
+  'opusmax-db18-opus-4-7',  'opusmax-db18-opus-4-7-standard',  'opusmax-db18-opus-4-7-thinking',
+  'opusmax-db18-opus-4-6',  'opusmax-db18-opus-4-6-standard',  'opusmax-db18-opus-4-6-thinking',
+  'opusmax-db18-opus-4-8',  'opusmax-db18-opus-4-8-standard',  'opusmax-db18-opus-4-8-thinking',
+  'opusmax-db18-auto',
+  'opusmax-db19-opus-4-7',  'opusmax-db19-opus-4-7-standard',  'opusmax-db19-opus-4-7-thinking',
+  'opusmax-db19-opus-4-6',  'opusmax-db19-opus-4-6-standard',  'opusmax-db19-opus-4-6-thinking',
+  'opusmax-db19-opus-4-8',  'opusmax-db19-opus-4-8-standard',  'opusmax-db19-opus-4-8-thinking',
+  'opusmax-db19-auto',
+  'opusmax-db16-opus-4-7',  'opusmax-db16-opus-4-7-standard',  'opusmax-db16-opus-4-7-thinking',
+  'opusmax-db16-opus-4-6',  'opusmax-db16-opus-4-6-standard',  'opusmax-db16-opus-4-6-thinking',
+  'opusmax-db16-opus-4-8',  'opusmax-db16-opus-4-8-standard',  'opusmax-db16-opus-4-8-thinking',
+  'opusmax-db16-auto',
+  // NKQ sources (fallback, 2 keys rotating every 5 min)
+  'nkq-key2-opus-4-7',  'nkq-key2-opus-4-6',
+  'nkq-key3-opus-4-7',  'nkq-key3-opus-4-6',
+  'nkq-key1-opus-4-7',  'nkq-key1-opus-4-6',
 ];
 
 const SOURCE_COOLDOWNS: Partial<Record<UpstreamErrorType, number>> = {
+  concurrency_limit: 10_000,  // 10s — transient; other streams finish quickly
   rate_limited: 60_000,
   provider_down: 30_000,
   timeout: 30_000,
@@ -114,6 +131,7 @@ const SOURCE_COOLDOWNS: Partial<Record<UpstreamErrorType, number>> = {
 };
 
 const OPUSMAX_PROVIDER_DOWN_COOLDOWN_MS = 0;
+const NKQ_PROVIDER_DOWN_COOLDOWN_MS = 0;
 
 const MODEL_ALIASES: Record<string, string> = {
   'claude-opus-4.6': 'claude-opus-4-6',
@@ -262,10 +280,14 @@ class ModelQuotaService {
 
     if (errorType === 'quota_exceeded') {
       source.status = 'exhausted';
-      // Use a 1h retry window instead of the full 5h quota window.
-      // After 1h, isSourceHealthUsable clears the block and the next request
-      // probes NKQ. If NKQ has reset → recovery. If still capped → re-exhaust + another 1h.
-      source.cooldownUntil = Date.now() + QUOTA_RETRY_COOLDOWN_MS;
+      // OpusMax: probe every 20 min — quota may partially restore before the full 5h window.
+      //   If probe succeeds → keep pulling until exhausted again.
+      //   If probe fails → re-exhaust + another 20 min.
+      // NKQ / others: 1h retry window.
+      const cooldownMs = candidate.providerId === 'opusmax'
+        ? OPUSMAX_QUOTA_RETRY_COOLDOWN_MS
+        : QUOTA_RETRY_COOLDOWN_MS;
+      source.cooldownUntil = Date.now() + cooldownMs;
       return;
     }
 
@@ -343,6 +365,9 @@ class ModelQuotaService {
     if (candidate.providerId === 'opusmax' && (errorType === 'provider_down' || errorType === 'timeout')) {
       return OPUSMAX_PROVIDER_DOWN_COOLDOWN_MS;
     }
+    if (candidate.providerId === 'antigravity' && errorType === 'provider_down') {
+      return NKQ_PROVIDER_DOWN_COOLDOWN_MS;
+    }
     return SOURCE_COOLDOWNS[errorType] ?? 0;
   }
 
@@ -400,7 +425,7 @@ class ModelQuotaService {
       }
     }
 
-    if (!this.isNkqKey2(key)) return null;
+    if (!this.isModernNkqKey(key)) return null;
 
     switch (this.normalizeModel(model)) {
       case 'claude-opus-4-6':
@@ -413,8 +438,16 @@ class ModelQuotaService {
     }
   }
 
-  private isNewNkqKey(key: ProviderKey): boolean {
-    return key.id === 'db-15' || key.id === 'key-2' || key.value.startsWith(NKQ_NEW_KEY_PREFIX);
+  private isNkqKey2(key: ProviderKey): boolean {
+    return key.id === 'db-15' || key.id === 'key-2' || key.value.startsWith(NKQ_KEY2_PREFIX);
+  }
+
+  private isNkqKey3(key: ProviderKey): boolean {
+    return key.id === 'key-3' || key.value.startsWith(NKQ_KEY3_PREFIX);
+  }
+
+  private isModernNkqKey(key: ProviderKey): boolean {
+    return this.isNkqKey2(key) || this.isNkqKey3(key);
   }
 
   private isLegacyNkqKey(key: ProviderKey): boolean {
@@ -423,10 +456,6 @@ class ModelQuotaService {
 
   private isNkqKey1(key: ProviderKey): boolean {
     return this.isLegacyNkqKey(key);
-  }
-
-  private isNkqKey2(key: ProviderKey): boolean {
-    return this.isNewNkqKey(key);
   }
 
   private getCandidateModels(providerId: string, key: ProviderKey, requestedModel: string, defaultResolvedModel: string): string[] {
@@ -463,7 +492,7 @@ class ModelQuotaService {
       if (requested === 'claude-opus-4-6') return ['claude-opus-4-6', 'claude-opus-4-7'];
       return ['claude-opus-4-7', 'claude-opus-4-6'];
     }
-    if (!this.isNkqKey2(key)) return [defaultResolvedModel];
+    if (!this.isModernNkqKey(key)) return [defaultResolvedModel];
 
     if (requested === 'claude-opus-4-6') return ['claude-opus-4-6', 'claude-opus-4-7'];
     return ['claude-opus-4-7', 'claude-opus-4-6'];
@@ -479,13 +508,15 @@ class ModelQuotaService {
       if (normalized === 'claude-opus-4-6') return 'nkq-key2-opus-4-6';
       if (normalized === 'claude-opus-4-7' || normalized === 'claude-opus-4-8') return 'nkq-key2-opus-4-7';
     }
+    if (providerId === 'antigravity' && this.isNkqKey3(key)) {
+      if (normalized === 'claude-opus-4-6') return 'nkq-key3-opus-4-6';
+      if (normalized === 'claude-opus-4-7' || normalized === 'claude-opus-4-8') return 'nkq-key3-opus-4-7';
+    }
     if (providerId === 'opusmax') {
-      // Per-key source IDs so each opusmax key has independent health tracking.
-      // When db-18 is exhausted, db-19 sources remain usable.
+      // Per-key + per-pool source IDs so OpusMax raw/standard/thinking/auto
+      // pools fail over independently instead of one model error blocking all.
       const keySlug = key.id.replace('db-', 'db');  // "db-18" → "db18"
-      if (normalized.includes('4-7')) return `opusmax-${keySlug}-opus-4-7`;
-      if (normalized.includes('4-8')) return `opusmax-${keySlug}-opus-4-8`;
-      return `opusmax-${keySlug}-opus-4-6`;
+      return `opusmax-${keySlug}-${this.getOpusMaxSourceModelSlug(model)}`;
     }
     return `${providerId}:${key.id}:standard`;
   }
@@ -519,14 +550,43 @@ class ModelQuotaService {
         return 'NKQ key2 Opus 4.7';
       case 'nkq-key2-opus-4-6':
         return 'NKQ key2 Opus 4.6';
+      case 'nkq-key3-opus-4-7':
+        return 'NKQ key3 Opus 4.7';
+      case 'nkq-key3-opus-4-6':
+        return 'NKQ key3 Opus 4.6';
       case 'opusmax-db18-opus-4-6':
       case 'opusmax-db18-opus-4-7':
       case 'opusmax-db18-opus-4-8':
+      case 'opusmax-db18-opus-4-6-standard':
+      case 'opusmax-db18-opus-4-7-standard':
+      case 'opusmax-db18-opus-4-8-standard':
+      case 'opusmax-db18-opus-4-6-thinking':
+      case 'opusmax-db18-opus-4-7-thinking':
+      case 'opusmax-db18-opus-4-8-thinking':
+      case 'opusmax-db18-auto':
         return 'OpusMax key1 (db-18)';
       case 'opusmax-db19-opus-4-6':
       case 'opusmax-db19-opus-4-7':
       case 'opusmax-db19-opus-4-8':
+      case 'opusmax-db19-opus-4-6-standard':
+      case 'opusmax-db19-opus-4-7-standard':
+      case 'opusmax-db19-opus-4-8-standard':
+      case 'opusmax-db19-opus-4-6-thinking':
+      case 'opusmax-db19-opus-4-7-thinking':
+      case 'opusmax-db19-opus-4-8-thinking':
+      case 'opusmax-db19-auto':
         return 'OpusMax key2 (db-19)';
+      case 'opusmax-db16-opus-4-6':
+      case 'opusmax-db16-opus-4-7':
+      case 'opusmax-db16-opus-4-8':
+      case 'opusmax-db16-opus-4-6-standard':
+      case 'opusmax-db16-opus-4-7-standard':
+      case 'opusmax-db16-opus-4-8-standard':
+      case 'opusmax-db16-opus-4-6-thinking':
+      case 'opusmax-db16-opus-4-7-thinking':
+      case 'opusmax-db16-opus-4-8-thinking':
+      case 'opusmax-db16-auto':
+        return 'OpusMax Pro key (db-16)';
       default:
         return `${providerId} ${key.id} ${model}`;
     }
@@ -536,6 +596,20 @@ class ModelQuotaService {
     const id = this.getSourceId(providerId, key, model);
     const idx = SOURCE_ORDER.indexOf(id);
     return idx >= 0 ? idx + 1 : 100;
+  }
+
+  private getOpusMaxSourceModelSlug(model: string): string {
+    const normalized = model.replace(/\./g, '-').toLowerCase();
+    if (normalized === 'auto') return 'auto';
+    if (normalized.includes('4-8')) return this.withOpusMaxTier('opus-4-8', normalized);
+    if (normalized.includes('4-7')) return this.withOpusMaxTier('opus-4-7', normalized);
+    return this.withOpusMaxTier('opus-4-6', normalized);
+  }
+
+  private withOpusMaxTier(base: string, normalizedModel: string): string {
+    if (/-thinking$/i.test(normalizedModel)) return `${base}-thinking`;
+    if (/-standard$/i.test(normalizedModel)) return `${base}-standard`;
+    return base;
   }
 
   private sortBySourceWindow(candidates: SourceCandidate[]): SourceCandidate[] {
@@ -596,6 +670,8 @@ class ModelQuotaService {
     const quota = this.getKeyModelSnapshot(candidate.providerId, candidate.key, candidate.model) ?? undefined;
     const exhausted = quota?.exhausted === true && !this.canUse(candidate.providerId, candidate.key, candidate.model);
     const status = exhausted ? 'exhausted' : health.status;
+    const concurrency = concurrencyLimiter.snapshotFor(candidate.sourceId);
+    const resetAt = quota?.resetAt ?? health.cooldownUntil ?? null;
     return {
       id: candidate.sourceId,
       provider: candidate.providerId,
@@ -613,6 +689,10 @@ class ModelQuotaService {
       lastFailureAt: health.lastFailureAt ?? undefined,
       attempts: health.attempts,
       failures: health.failures,
+      activeRequests: concurrency.active,
+      queuedRequests: concurrency.queued,
+      concurrencyLimit: concurrency.limit,
+      resetEtaMs: resetAt ? Math.max(0, resetAt - Date.now()) : undefined,
       quota,
     };
   }

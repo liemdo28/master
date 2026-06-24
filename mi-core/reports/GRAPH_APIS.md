@@ -11,7 +11,7 @@ All endpoints require:
 ```
 x-api-key: <MI_CORE_API_KEY>
 ```
-Default key: `mi-core-secret-2026` (override via `MI_CORE_API_KEY` env var).
+Key: set `MI_CORE_API_KEY` in `server/.env`. No default — server returns 503 if unset.
 
 ---
 

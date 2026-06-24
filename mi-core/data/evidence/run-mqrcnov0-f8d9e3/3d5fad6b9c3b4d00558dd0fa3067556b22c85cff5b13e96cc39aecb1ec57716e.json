@@ -1,0 +1,19 @@
+{
+  "primary_intent": {
+    "intent": "people_concern",
+    "label_vi": "Lo ngại nhân sự",
+    "confidence": 0.7,
+    "evidence_keywords": [
+      "staff"
+    ],
+    "suggested_investigation": [
+      "Review staffing levels",
+      "Check attendance",
+      "Review pending HR items",
+      "Assess team performance"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

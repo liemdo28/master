@@ -1,0 +1,20 @@
+{
+  "primary_intent": {
+    "intent": "revenue_concern",
+    "label_vi": "Lo ngại doanh thu",
+    "confidence": 0.85,
+    "evidence_keywords": [
+      "profit",
+      "profit"
+    ],
+    "suggested_investigation": [
+      "Analyze revenue trends",
+      "Compare with prior period",
+      "Check conversion rates",
+      "Review AOV and traffic"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

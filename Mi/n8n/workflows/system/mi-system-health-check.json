@@ -1,0 +1,66 @@
+{
+  "workflow_id": "mi-system-health-check",
+  "name": "Mi System Health Check",
+  "domain": "system",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "*/5 * * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Checks Mi-Core, n8n, and key agent health every 5 minutes. Logs status to Mi-Core.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "check_mi_core",
+      "method": "GET",
+      "url": "{{MI_CORE_URL}}/api/health",
+      "timeout_ms": 5000,
+      "expected_status": 200
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "check_n8n",
+      "method": "GET",
+      "url": "http://localhost:5678/healthz",
+      "timeout_ms": 5000,
+      "expected_status": 200
+    },
+    {
+      "order": 3,
+      "type": "http_request",
+      "name": "check_accounting_engine",
+      "method": "GET",
+      "url": "http://127.0.0.1:8844/health",
+      "timeout_ms": 5000
+    },
+    {
+      "order": 4,
+      "type": "http_request",
+      "name": "log_to_mi_core",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "mi-system-health-check",
+        "domain": "system",
+        "source": "n8n",
+        "brand_id": "all",
+        "location_id": "all",
+        "task_id": "",
+        "status": "completed",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": "",
+        "evidence": [
+          {"component": "mi-core", "status": "{{check_mi_core.status}}"},
+          {"component": "n8n", "status": "{{check_n8n.status}}"},
+          {"component": "accounting-engine", "status": "{{check_accounting_engine.status}}"}
+        ]
+      }
+    }
+  ]
+}

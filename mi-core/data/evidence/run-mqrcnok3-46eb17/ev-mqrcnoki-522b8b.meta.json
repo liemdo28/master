@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnoki-522b8b",
+  "objectiveRunId": "run-mqrcnok3-46eb17",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: service_degradation (75%), Alternatives: 0, Ambiguous: true",
+  "sha256": "bb4f56c0f44b6202925fb34df0084467aabefdb348dd5e27f044767c6a22d3aa",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnok3-46eb17\\bb4f56c0f44b6202925fb34df0084467aabefdb348dd5e27f044767c6a22d3aa.json",
+  "capturedAt": "2026-06-24T00:43:17.922Z",
+  "readOnly": true
+}

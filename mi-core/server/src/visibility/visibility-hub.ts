@@ -13,10 +13,13 @@ import { getAuthStatus as googleAuthStatus } from './connectors/google/google-au
 import { getCachedGmail, getImportantEmails, syncGmail } from './connectors/google/gmail-connector';
 import { getCachedCalendar, getTodayEvents, syncCalendar } from './connectors/google/calendar-connector';
 import { getCachedDrive, searchDriveFiles, syncDrive } from './connectors/google/drive-connector';
+import { certifyGoogleSheets, getCachedGoogleSheets } from './connectors/google/sheets-connector';
 import { getCachedAsana, getOverdueTasks, getTasksForPerson, syncAsana, isAsanaConfigured } from './connectors/asana/asana-connector';
-import { getHealthSummaryText, parseHealthExport, hasHealthExport } from './connectors/health/health-connector';
+import { getHealthSummaryText, parseHealthExport, hasHealthExport, syncHealthExport } from './connectors/health/health-connector';
 import { syncAccounting, getCachedAccounting, getAccountingSummaryText } from './connectors/accounting-connector';
 import { syncFoodSafety, getCachedFoodSafety, getFoodSafetySummaryText } from './connectors/food-safety-connector';
+import { syncWebsiteSource, syncWebsiteSources } from './connectors/website-source-connector';
+import { getQuickBooksRuntimeSnapshot, writeQuickBooksCache } from './connectors/qb-runtime-connector';
 
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
 
@@ -185,26 +188,70 @@ export async function syncAll(): Promise<Record<string, string>> {
       try { await fn(); results[name] = 'ok'; connectorRegistry.markSynced(`google-${name === 'calendar' ? 'calendar' : name === 'drive' ? 'drive' : 'gmail'}`); }
       catch (e) { results[name] = `error: ${e}`; }
     }
+    try {
+      const sheets = await certifyGoogleSheets();
+      results['google-sheets'] = sheets.status;
+      connectorRegistry.update('google-sheets', { auth_status: sheets.has_required_scope ? 'connected' : 'error', status: sheets.status === 'ready' ? 'active' : 'pending' });
+      connectorRegistry.markSynced('google-sheets', sheets.status === 'ready' ? 'healthy' : 'degraded');
+    } catch (e) {
+      results['google-sheets'] = `error: ${e}`;
+      connectorRegistry.markSynced('google-sheets', 'degraded');
+    }
   } else {
-    results['gmail'] = 'not_configured'; results['calendar'] = 'not_configured'; results['drive'] = 'not_configured';
+    results['gmail'] = 'not_configured'; results['calendar'] = 'not_configured'; results['drive'] = 'not_configured'; results['google-sheets'] = 'not_configured';
   }
 
   // Asana
   if (isAsanaConfigured()) {
     try { await syncAsana(); results['asana'] = 'ok'; connectorRegistry.markSynced('asana'); }
-    catch (e) { results['asana'] = `error: ${e}`; }
+    catch (e) {
+      results['asana'] = `error: ${e}`;
+      const cached = getCachedAsana();
+      connectorRegistry.update('asana', { auth_status: 'connected', status: 'active' });
+      connectorRegistry.markSynced('asana', cached ? 'degraded' : 'offline');
+    }
   } else { results['asana'] = 'not_configured'; }
 
-  // Health (file-based — no API call)
-  results['health'] = hasHealthExport() ? 'export_found' : 'no_export';
+  // Health (file-based local Huawei/Apple export)
+  try {
+    const health = syncHealthExport();
+    results['health'] = health.ok ? 'ok' : health.status;
+    if (health.ok) {
+      connectorRegistry.update('health-export', { auth_status: 'connected', status: 'active' });
+      connectorRegistry.markSynced('health-export');
+    }
+  } catch (e) {
+    results['health'] = `error: ${e}`;
+  }
 
   // Accounting (try live API, graceful fallback)
   try { await syncAccounting(); results['accounting'] = 'ok'; connectorRegistry.markSynced('accounting'); }
   catch (e) { results['accounting'] = `offline: ${e}`; }
 
+  try {
+    const qb = writeQuickBooksCache();
+    results['quickbooks-runtime'] = qb.status;
+    connectorRegistry.update('quickbooks-runtime', { auth_status: 'connected', status: 'active' });
+    connectorRegistry.markSynced('quickbooks-runtime', qb.certified ? 'healthy' : 'degraded');
+  } catch (e) {
+    results['quickbooks-runtime'] = `error: ${e}`;
+    connectorRegistry.markSynced('quickbooks-runtime', 'degraded');
+  }
+
   // Food Safety (file-based)
   try { syncFoodSafety(); results['food-safety'] = 'ok'; connectorRegistry.markSynced('food-safety'); }
   catch (e) { results['food-safety'] = `error: ${e}`; }
+
+  // Websites (source-of-truth local source + GitHub metadata)
+  try {
+    syncWebsiteSources();
+    results['website-bakudan'] = 'ok';
+    results['website-raw'] = 'ok';
+    connectorRegistry.markSynced('website-bakudan');
+    connectorRegistry.markSynced('website-raw');
+  } catch (e) {
+    results['websites'] = `error: ${e}`;
+  }
 
   // Write sync log
   const logPath = path.join(GLOBAL_DIR, 'visibility', 'sync_log.json');
@@ -222,9 +269,57 @@ export async function syncPlatform(connectorId: string): Promise<unknown> {
     case 'gmail': return gAuth.has_tokens ? syncGmail() : getStubResult('gmail');
     case 'google-calendar': return gAuth.has_tokens ? syncCalendar() : getStubResult('google-calendar');
     case 'google-drive': return gAuth.has_tokens ? syncDrive() : getStubResult('google-drive');
-    case 'asana': return isAsanaConfigured() ? syncAsana() : getStubResult('asana');
+    case 'google-sheets': {
+      if (!gAuth.has_tokens) return getStubResult('google-sheets');
+      const result = await certifyGoogleSheets();
+      connectorRegistry.update('google-sheets', { auth_status: result.has_required_scope ? 'connected' : 'error', status: result.status === 'ready' ? 'active' : 'pending' });
+      connectorRegistry.markSynced('google-sheets', result.status === 'ready' ? 'healthy' : 'degraded');
+      return result;
+    }
+    case 'asana': {
+      if (!isAsanaConfigured()) return getStubResult('asana');
+      try {
+        const result = await syncAsana();
+        connectorRegistry.update('asana', { auth_status: 'connected', status: 'active' });
+        connectorRegistry.markSynced('asana', 'healthy');
+        return result;
+      } catch (e) {
+        const cached = getCachedAsana();
+        connectorRegistry.update('asana', { auth_status: 'connected', status: 'active' });
+        connectorRegistry.markSynced('asana', cached ? 'degraded' : 'offline');
+        return {
+          status: cached ? 'degraded' : 'offline',
+          error: e instanceof Error ? e.message : String(e),
+          cached,
+        };
+      }
+    }
+    case 'health-export': {
+      const result = syncHealthExport();
+      if (result.ok) {
+        connectorRegistry.update('health-export', { auth_status: 'connected', status: 'active' });
+        connectorRegistry.markSynced('health-export');
+      }
+      return result.ok ? result : getStubResult('health-export');
+    }
     case 'accounting': return syncAccounting();
+    case 'quickbooks-runtime': {
+      const result = writeQuickBooksCache();
+      connectorRegistry.update('quickbooks-runtime', { auth_status: 'connected', status: 'active' });
+      connectorRegistry.markSynced('quickbooks-runtime', result.certified ? 'healthy' : 'degraded');
+      return result;
+    }
     case 'food-safety': return syncFoodSafety();
+    case 'website-bakudan': {
+      const result = syncWebsiteSource('website-bakudan');
+      connectorRegistry.markSynced('website-bakudan');
+      return result;
+    }
+    case 'website-raw': {
+      const result = syncWebsiteSource('website-raw');
+      connectorRegistry.markSynced('website-raw');
+      return result;
+    }
     default: return getStubResult(connectorId);
   }
 }
@@ -232,18 +327,28 @@ export async function syncPlatform(connectorId: string): Promise<unknown> {
 export function listConnectedPlatforms() { return connectorRegistry.getConnected(); }
 export function getPlatformHealth() {
   const gAuth = googleAuthStatus();
-  return connectorRegistry.getAll().map(c => ({
-    id: c.connector_id,
-    name: c.name,
-    auth: c.connector_id.startsWith('google') ? (gAuth.has_tokens ? 'connected' : gAuth.configured ? 'needs_authorization' : 'not_configured') : c.auth_status,
-    health: c.health_status,
-    last_sync: c.last_sync,
-    setup_hint: c.auth_status !== 'connected' ? c.setup_hint : undefined,
-  }));
+  const normalized = new Map(connectorRegistry.getSummary().connectors.map(c => [c.id, c]));
+  return connectorRegistry.getAll().map(c => {
+    const n = normalized.get(c.connector_id);
+    return {
+      id: c.connector_id,
+      name: c.name,
+      auth: c.connector_id.startsWith('google') ? (gAuth.has_tokens ? 'connected' : gAuth.configured ? 'needs_authorization' : 'not_configured') : c.auth_status,
+      health: n?.health || 'offline',
+      last_sync: c.last_sync || n?.last_sync || null,
+      setup_hint: c.auth_status !== 'connected' || n?.health !== 'healthy' ? c.setup_hint : undefined,
+    };
+  });
 }
 
 export function getProjectSnapshot() { return getCachedProjects(); }
 export function getBusinessSnapshot() { return { dashboard: getCachedDashboard(), projects: getCachedProjects() }; }
+export function getSheetsSnapshot() { return getCachedGoogleSheets() || getStubResult('google-sheets'); }
+export function getQuickBooksSnapshot() {
+  const snapshot = getQuickBooksRuntimeSnapshot();
+  if (snapshot.certified) snapshot.errors = [];
+  return writeQuickBooksCache(snapshot);
+}
 export function getTasksSnapshot() {
   return {
     asana: isAsanaConfigured() ? getCachedAsana() : getStubResult('asana'),

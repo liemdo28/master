@@ -1,0 +1,80 @@
+{
+  "input_summary": "operational_concern: 4 findings, 1 evidence points",
+  "overall_confidence": 0.1,
+  "confidence_level": "very_low",
+  "assumptions": [
+    {
+      "id": "data-freshness",
+      "description": "Dữ liệu sử dụng phản ánh trạng thái hiện tại",
+      "impact_if_wrong": "high",
+      "can_verify": true,
+      "verification_method": "Kiểm tra timestamp dữ liệu đầu vào"
+    },
+    {
+      "id": "consistency",
+      "description": "Các kết luận nhất quán với nhau",
+      "impact_if_wrong": "medium",
+      "can_verify": true,
+      "verification_method": "So sánh chéo các kết luận"
+    },
+    {
+      "id": "completeness",
+      "description": "Đã thu thập đủ dữ liệu để đưa ra kết luận",
+      "impact_if_wrong": "high",
+      "can_verify": true,
+      "verification_method": "Danh sách kiểm tra dữ liệu còn thiếu"
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-data-freshness",
+      "description": "Nếu \"Dữ liệu sử dụng phản ánh trạng thái hiện tại\" là sai → phân tích có thể không chính xác",
+      "probability": "medium",
+      "consequence": "Quyết định CEO có thể dựa trên thông tin không đầy đủ",
+      "mitigation": "Kiểm tra timestamp dữ liệu đầu vào"
+    },
+    {
+      "id": "risk-completeness",
+      "description": "Nếu \"Đã thu thập đủ dữ liệu để đưa ra kết luận\" là sai → phân tích có thể không chính xác",
+      "probability": "medium",
+      "consequence": "Quyết định CEO có thể dựa trên thông tin không đầy đủ",
+      "mitigation": "Danh sách kiểm tra dữ liệu còn thiếu"
+    }
+  ],
+  "alternative_explanations": [
+    {
+      "hypothesis": "Có thể có yếu tố bên ngoài chưa được xem xét",
+      "plausibility": 0.4,
+      "evidence_for": [
+        "Môi trường kinh doanh luôn có biến động"
+      ],
+      "evidence_against": [
+        "Đã kiểm tra nhiều nguồn dữ liệu"
+      ]
+    },
+    {
+      "hypothesis": "Kết luận có thể là do trùng hợp thay vì nguyên nhân thật",
+      "plausibility": 0.25,
+      "evidence_for": [
+        "Tương quan không phải nhân quả"
+      ],
+      "evidence_against": []
+    }
+  ],
+  "evidence_quality": "weak",
+  "missing_evidence": [
+    "Cần thêm nguồn dữ liệu độc lập để xác nhận"
+  ],
+  "blind_spots": [
+    "Phân tích có thể bị ảnh hưởng bởi thiên kiến xác nhận (confirmation bias)",
+    "Tình hình có thể thay đổi từ khi thu thập dữ liệu",
+    "Có thể có thông tin CEO biết mà Mi chưa có"
+  ],
+  "reflection_timestamp": "2026-06-24T00:43:17.777Z",
+  "recommendation_to_ceo": {
+    "should_act": false,
+    "urgency": "needs_more_info",
+    "summary_vi": "Cần thêm bằng chứng trước khi báo cáo (confidence: 10%)",
+    "caveats_vi": "⚠️ 2 rủi ro cần CEO lưu ý"
+  }
+}

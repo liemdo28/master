@@ -21,7 +21,7 @@ async function syncCalendar() {
     const cal = googleapis_1.google.calendar({ version: 'v3', auth });
     // Get calendar list
     const calList = await cal.calendarList.list();
-    const calendars = calList.data.items?.map(c => c.summary || '') || [];
+    const calendars = calList.data.items?.map((c) => c.summary || '') || [];
     const calMap = {};
     for (const c of calList.data.items || []) {
         if (c.id && c.summary)
@@ -59,7 +59,7 @@ async function syncCalendar() {
                     description: e.description?.slice(0, 300) ?? undefined,
                     calendar: calMap[calItem.id] || calItem.id,
                     is_all_day: isAllDay,
-                    attendees: (e.attendees || []).map(a => a.email || a.displayName || '').filter(Boolean),
+                    attendees: (e.attendees || []).map((a) => a.email || a.displayName || '').filter(Boolean),
                     status: e.status || 'confirmed',
                 });
             }

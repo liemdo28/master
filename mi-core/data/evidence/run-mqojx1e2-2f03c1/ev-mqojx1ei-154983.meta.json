@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojx1ei-154983",
+  "objectiveRunId": "run-mqojx1e2-2f03c1",
+  "sourceType": "decision_matrix",
+  "sourceRef": "executive-decision-engine",
+  "summary": "📊 Decision Matrix: 1 issues analyzed\n🔴 Critical: 0 | 🟠 High: 0 | 🟡 Medium: 0 | 🟢 Low: 1\n✅ No critical issues detected",
+  "sha256": "46d3ef57fa3f15385b42b5d13d208e83a7930db144e6697d387b549dd5c7901e",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojx1e2-2f03c1\\46d3ef57fa3f15385b42b5d13d208e83a7930db144e6697d387b549dd5c7901e.json",
+  "capturedAt": "2026-06-22T01:43:13.242Z",
+  "readOnly": true
+}
