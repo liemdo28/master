@@ -1,10 +1,10 @@
 # BURN_IN_WATCHDOG_FEED_REPORT
 
-Generated: 2026-06-23T16:19:51.245Z
+Generated: 2026-06-24T07:16:02.678Z
 Target: BURN_IN_WATCHDOG_FEED_READY
 Burn-in score: 0
 Ollama timeouts: 0
-Mi-Core uptime %: 77.66
+Mi-Core uptime %: 76.04
 
 ## PM2 Restarts
 | Service | Restarts | Restarts Last Hour | Alert |
@@ -18,13 +18,12 @@ Mi-Core uptime %: 77.66
 ## Stale Data
 | Source | Status | Age Min | Threshold Min |
 | --- | --- | --- | --- |
-| Gmail | stale | 13096 | 120 |
-| Calendar | stale | 4779 | 120 |
-| Drive | stale | 4779 | 240 |
+| Gmail | stale | 13992 | 120 |
+| Calendar | stale | 5675 | 120 |
+| Drive | stale | 5675 | 240 |
 | Sheets | degraded | 0 | 240 |
 | QuickBooks | degraded | 0 | 1440 |
-| Work Orders | stale | 10852 | 2880 |
-| Memory | stale | 5299 | 1440 |
+| Work Orders | stale | 11749 | 2880 |
 
 ## Flow Gaps
 | Severity | Source | Rule | Message |
@@ -38,7 +37,7 @@ Mi-Core uptime %: 77.66
 | WARNING | Calendar | connector_stale | Calendar is stale |
 | WARNING | Drive | connector_stale | Drive is stale |
 | WARNING | Work Orders | connector_stale | Work Orders is stale |
-| WARNING | Memory | connector_stale | Memory is stale |
+| CRITICAL | Mi-Core | runtime_down | Mi-Core is down |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded |

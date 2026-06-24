@@ -8,7 +8,7 @@
     "attempted": true,
     "recovered": false,
     "result": "invalid_grant",
-    "checked_at": "2026-06-23T16:19:47.646Z"
+    "checked_at": "2026-06-24T07:16:02.512Z"
   },
   {
     "connector_id": "google-calendar",
@@ -19,7 +19,7 @@
     "attempted": true,
     "recovered": false,
     "result": "invalid_grant",
-    "checked_at": "2026-06-23T16:19:51.151Z"
+    "checked_at": "2026-06-24T07:16:02.585Z"
   },
   {
     "connector_id": "google-drive",
@@ -30,7 +30,7 @@
     "attempted": true,
     "recovered": false,
     "result": "invalid_grant",
-    "checked_at": "2026-06-23T16:19:51.220Z"
+    "checked_at": "2026-06-24T07:16:02.655Z"
   },
   {
     "connector_id": "asana",
@@ -39,7 +39,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-23T16:19:51.221Z"
+    "checked_at": "2026-06-24T07:16:02.655Z"
   },
   {
     "connector_id": "quickbooks-runtime",
@@ -49,8 +49,8 @@
     ],
     "attempted": true,
     "recovered": true,
-    "result": "{\"generated_at\":\"2026-06-23T16:19:51.224Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
-    "checked_at": "2026-06-23T16:19:51.228Z"
+    "result": "{\"generated_at\":\"2026-06-24T07:16:02.659Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
+    "checked_at": "2026-06-24T07:16:02.662Z"
   },
   {
     "connector_id": "health-export",
@@ -59,7 +59,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-23T16:19:51.228Z"
+    "checked_at": "2026-06-24T07:16:02.662Z"
   },
   {
     "connector_id": "website-bakudan",
@@ -68,7 +68,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-23T16:19:51.228Z"
+    "checked_at": "2026-06-24T07:16:02.662Z"
   },
   {
     "connector_id": "website-raw",
@@ -77,6 +77,6 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-23T16:19:51.229Z"
+    "checked_at": "2026-06-24T07:16:02.663Z"
   }
 ]

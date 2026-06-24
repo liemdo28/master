@@ -1,0 +1,223 @@
+{
+  "agent": "seo-analytics-agent",
+  "type": "weekly-kpi",
+  "generated_at": "2026-06-24T07:51:14.397Z",
+  "payload": {
+    "summary": "Weekly KPI snapshot - 13 pages, 9 keywords, 0 technical issues",
+    "metrics": {
+      "locations_count": 0,
+      "gbp_profiles": 0,
+      "pages_audited": 13,
+      "keywords_tracked": 9,
+      "technical_issues": 0,
+      "citations_tracked": 0,
+      "content_briefs": 9,
+      "reviews_tracked": 0
+    },
+    "opportunities": {
+      "high_impressions_low_ctr_pages": [],
+      "keywords_pos_4_to_15": [],
+      "weak_map_locations": []
+    },
+    "dashboard_payload": {
+      "weekly_kpis": {
+        "locations_count": 0,
+        "gbp_profiles": 0,
+        "pages_audited": 13,
+        "keywords_tracked": 9,
+        "technical_issues": 0,
+        "citations_tracked": 0,
+        "content_briefs": 9,
+        "reviews_tracked": 0
+      },
+      "rankings": [
+        {
+          "id": "ranking_snapshots_1782287474110_klpjgc",
+          "keyword": "Best Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/best-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.110Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474116_clq40x",
+          "keyword": "Tonkotsu Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.116Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474124_lw55jk",
+          "keyword": "Japanese Food in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/japanese-food-san-antonio",
+          "_ts": "2026-06-24T07:51:14.124Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474130_q91kbw",
+          "keyword": "Ramen Near UTSA",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-utsa",
+          "_ts": "2026-06-24T07:51:14.130Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474136_vjr5b4",
+          "keyword": "Ramen Near The Rim",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+          "_ts": "2026-06-24T07:51:14.136Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474142_w9lc6u",
+          "keyword": "Ramen Near La Cantera",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": null,
+          "_ts": "2026-06-24T07:51:14.142Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474149_yea5ny",
+          "keyword": "Ramen in Stone Oak",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-stone-oak",
+          "_ts": "2026-06-24T07:51:14.149Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474156_mwe25u",
+          "keyword": "Vegetarian Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.156Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474161_sw4u5l",
+          "keyword": "Happy Hour Ramen San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.161Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474282_h24tgz",
+          "keyword": "Best Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/best-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.282Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474292_mi5uvm",
+          "keyword": "Tonkotsu Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.292Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474299_yccx59",
+          "keyword": "Japanese Food in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/japanese-food-san-antonio",
+          "_ts": "2026-06-24T07:51:14.299Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474307_51ogof",
+          "keyword": "Ramen Near UTSA",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-utsa",
+          "_ts": "2026-06-24T07:51:14.307Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474315_890x9c",
+          "keyword": "Ramen Near The Rim",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+          "_ts": "2026-06-24T07:51:14.315Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474322_o5icxz",
+          "keyword": "Ramen Near La Cantera",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": null,
+          "_ts": "2026-06-24T07:51:14.322Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474330_wdrjpu",
+          "keyword": "Ramen in Stone Oak",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-stone-oak",
+          "_ts": "2026-06-24T07:51:14.330Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474337_jmbxhu",
+          "keyword": "Vegetarian Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.337Z"
+        },
+        {
+          "id": "ranking_snapshots_1782287474343_umgwuu",
+          "keyword": "Happy Hour Ramen San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+          "_ts": "2026-06-24T07:51:14.343Z"
+        }
+      ],
+      "opportunities": {
+        "high_impressions_low_ctr_pages": [],
+        "keywords_pos_4_to_15": [],
+        "weak_map_locations": []
+      },
+      "generated_at": "2026-06-24T07:51:14.363Z"
+    }
+  }
+}

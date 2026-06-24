@@ -63,6 +63,7 @@ import { remoteRouter } from './routes/remote';
 import { dataAnalystRouter } from './routes/data-analyst';
 import { whatsappRouter } from './routes/whatsapp';
 import { ceoObserverRouter } from './routes/ceo-observer';
+import { ceoControlRouter } from './routes/ceo-control';
 import { skillRouter } from './routes/skill-router';
 import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
@@ -206,6 +207,7 @@ app.use('/api/reminders',   requireAuth, remindersRouter);
 app.use('/api/workspace',   requireAuth, workspaceRouter);
 app.use('/api/knowledge',   requireAuth, knowledgeRouter);
 app.use('/api/ceo-observer', requireAuth, ceoObserverRouter); // Session A proxy
+app.use('/api/ceo',         ceoControlRouter);               // CEO Control Center (Phase 23D)
 
 // Internal / already protected / public
 app.use('/api/remote',      remoteRouter);       // Remote access (has own auth)

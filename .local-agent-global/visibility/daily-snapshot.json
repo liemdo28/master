@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-23T16:19:51.246Z",
-  "date": "Thứ Ba, 23 tháng 6, 2026",
+  "generated_at": "2026-06-24T07:16:02.679Z",
+  "date": "Thứ Tư, 24 tháng 6, 2026",
   "platforms": {
     "connected": [
       "Master Workspace",
@@ -15,7 +15,7 @@
     "not_configured": []
   },
   "projects": {
-    "total": 15,
+    "total": 16,
     "with_issues": 1,
     "top_issues": [
       {
@@ -30,7 +30,7 @@
       "artifact-registry",
       "Bakudan",
       "cv-builder",
-      "mi-core"
+      "Mi"
     ]
   },
   "dashboard": {
@@ -39,8 +39,8 @@
     "reports_count": 20
   },
   "tasks": {
-    "asana_status": "synced (855 tasks, 73 overdue)",
-    "asana_overdue": 73,
+    "asana_status": "synced (855 tasks, 75 overdue)",
+    "asana_overdue": 75,
     "asana_my_tasks": 855,
     "dashboard_status": "no_tasks_module"
   },
@@ -76,6 +76,6 @@
     "1 project có uncommitted changes",
     "42 emails chưa đọc",
     "1 sự kiện hôm nay",
-    "73 Asana tasks overdue"
+    "75 Asana tasks overdue"
   ]
 }

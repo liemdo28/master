@@ -1,11 +1,11 @@
 # RUNTIME_ALERT_CLASSIFICATION_REPORT
 
-Generated: 2026-06-23T16:19:51.245Z
+Generated: 2026-06-24T07:16:02.678Z
 Target: RUNTIME_ALERT_CLASSIFICATION_READY
 
 INFO: 0
-WARNING: 13
-CRITICAL: 0
+WARNING: 12
+CRITICAL: 1
 
 | Severity | Source | Rule | Message | Evidence |
 | --- | --- | --- | --- | --- |
@@ -18,7 +18,7 @@ CRITICAL: 0
 | WARNING | Calendar | connector_stale | Calendar is stale | E:\Project\Master\.local-agent-global\visibility\google-calendar\data.json |
 | WARNING | Drive | connector_stale | Drive is stale | E:\Project\Master\.local-agent-global\visibility\google-drive\data.json |
 | WARNING | Work Orders | connector_stale | Work Orders is stale | E:\Project\Master\mi-core\.local-agent-global\work-orders |
-| WARNING | Memory | connector_stale | Memory is stale | E:\Project\Master\mi-core\.local-agent-global\operational-memory |
+| CRITICAL | Mi-Core | runtime_down | Mi-Core is down | This operation was aborted |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown | pm2_status=pm2_unavailable |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded | 2 connector(s) unhealthy |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded | Connector is not fully healthy |

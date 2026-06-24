@@ -99,6 +99,7 @@ const remote_1 = require("./routes/remote");
 const data_analyst_1 = require("./routes/data-analyst");
 const whatsapp_1 = require("./routes/whatsapp");
 const ceo_observer_1 = require("./routes/ceo-observer");
+const ceo_control_1 = require("./routes/ceo-control");
 const skill_router_1 = require("./routes/skill-router");
 const browser_agent_1 = require("./routes/browser-agent");
 const doordash_agent_1 = require("./routes/doordash-agent");
@@ -230,6 +231,7 @@ app.use('/api/reminders', auth_2.requireAuth, reminders_1.remindersRouter);
 app.use('/api/workspace', auth_2.requireAuth, workspace_1.workspaceRouter);
 app.use('/api/knowledge', auth_2.requireAuth, knowledge_1.knowledgeRouter);
 app.use('/api/ceo-observer', auth_2.requireAuth, ceo_observer_1.ceoObserverRouter); // Session A proxy
+app.use('/api/ceo', ceo_control_1.ceoControlRouter); // CEO Control Center (Phase 23D)
 // Internal / already protected / public
 app.use('/api/remote', remote_1.remoteRouter); // Remote access (has own auth)
 app.use('/api/auth', auth_1.authRouter); // Auth endpoints (must be public)

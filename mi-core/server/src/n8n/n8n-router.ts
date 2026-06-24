@@ -10,25 +10,26 @@
  */
 
 import { Router, Request, Response } from 'express';
+import { createAllSeoWorkflows } from './seo-workflow-builder';
 
 export const n8nRouter = Router();
 
-const N8N_BASE = process.env.N8N_URL || 'http://localhost:5678';
-const N8N_USER = process.env.N8N_USER || 'mi-admin';
-const N8N_PASS = process.env.N8N_PASS || 'mi-n8n-secure-2025';
+const N8N_BASE = process.env.N8N_URL     || 'http://localhost:5678';
+const N8N_KEY  = process.env.N8N_API_KEY || '';
 
 function authHeaders(): Record<string, string> {
-  const b64 = Buffer.from(`${N8N_USER}:${N8N_PASS}`).toString('base64');
-  return { 'Authorization': `Basic ${b64}`, 'Content-Type': 'application/json' };
+  return { 'X-N8N-API-KEY': N8N_KEY, 'Content-Type': 'application/json' };
 }
 
 async function n8nGet(path: string) {
+  if (!N8N_KEY) throw new Error('N8N_API_KEY not configured');
   const res = await fetch(`${N8N_BASE}${path}`, { headers: authHeaders() });
   if (!res.ok) throw new Error(`n8n ${path} → ${res.status}`);
   return res.json();
 }
 
 async function n8nPost(path: string, body: unknown = {}) {
+  if (!N8N_KEY) throw new Error('N8N_API_KEY not configured');
   const res = await fetch(`${N8N_BASE}${path}`, {
     method: 'POST', headers: authHeaders(), body: JSON.stringify(body),
   });
@@ -132,4 +133,40 @@ n8nRouter.post('/evidence', (req: Request, res: Response) => {
 
 n8nRouter.get('/evidence', (_req: Request, res: Response) => {
   res.json({ ok: true, count: evidenceLog.length, records: evidenceLog.slice(0, 50) });
+});
+
+// ── SEO Workflow Library builder ──────────────────────────────────────────────
+n8nRouter.post('/seo-workflows/create', async (_req: Request, res: Response) => {
+  try {
+    const result = await createAllSeoWorkflows();
+    res.json({ ok: true, ...result });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: (e as Error).message });
+  }
+});
+
+n8nRouter.get('/seo-workflows/status', async (_req: Request, res: Response) => {
+  const N8N_KEY_VAL = process.env.N8N_API_KEY || '';
+  if (!N8N_KEY_VAL) return res.json({ ok: false, error: 'N8N_API_KEY not set' });
+  try {
+    const r = await fetch(`${N8N_BASE}/api/v1/workflows?limit=100`,
+      { headers: { 'X-N8N-API-KEY': N8N_KEY_VAL } });
+    const data = await r.json() as { data: { name: string; active: boolean }[] };
+    const seoWfs = (data.data || []).filter((w: { name: string }) => w.name.startsWith('seo-'));
+    const required = ['seo-daily-audit','seo-weekly-executive-report','seo-technical-health-check',
+      'seo-content-opportunity-scan','seo-schema-validation','seo-review-summary','seo-dashboard-sync'];
+    const existing = new Set(seoWfs.map((w: { name: string }) => w.name));
+    const missing = required.filter(n => !existing.has(n));
+    return res.json({
+      ok: true,
+      total_required: 7,
+      existing: seoWfs.length,
+      missing_count: missing.length,
+      missing,
+      workflows: seoWfs,
+      status: missing.length === 0 ? 'N8N_SEO_WORKFLOWS_READY' : 'N8N_SEO_WORKFLOWS_PARTIAL',
+    });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: (e as Error).message });
+  }
 });
