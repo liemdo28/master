@@ -1,10 +1,10 @@
 # BURN_IN_WATCHDOG_FEED_REPORT
 
-Generated: 2026-06-24T08:16:02.366Z
+Generated: 2026-06-24T11:54:33.701Z
 Target: BURN_IN_WATCHDOG_FEED_READY
-Burn-in score: 0
+Burn-in score: 16
 Ollama timeouts: 0
-Mi-Core uptime %: 76.29
+Mi-Core uptime %: 76.04
 
 ## PM2 Restarts
 | Service | Restarts | Restarts Last Hour | Alert |
@@ -18,12 +18,8 @@ Mi-Core uptime %: 76.29
 ## Stale Data
 | Source | Status | Age Min | Threshold Min |
 | --- | --- | --- | --- |
-| Gmail | stale | 14052 | 120 |
-| Calendar | stale | 5735 | 120 |
-| Drive | stale | 5735 | 240 |
-| Sheets | degraded | 0 | 240 |
+| Gmail | stale | 14271 | 120 |
 | QuickBooks | degraded | 0 | 1440 |
-| Work Orders | stale | 11809 | 2880 |
 
 ## Flow Gaps
 | Severity | Source | Rule | Message |
@@ -34,9 +30,7 @@ Mi-Core uptime %: 76.29
 | WARNING | Agent Engine | pm2_restart_increase | Agent Engine: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |
 | WARNING | Gmail | connector_stale | Gmail is stale |
-| WARNING | Calendar | connector_stale | Calendar is stale |
-| WARNING | Drive | connector_stale | Drive is stale |
-| WARNING | Work Orders | connector_stale | Work Orders is stale |
+| CRITICAL | Mi-Core | runtime_down | Mi-Core is down |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded |

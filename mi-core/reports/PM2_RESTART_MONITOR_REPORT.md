@@ -1,11 +1,11 @@
 # PM2_RESTART_MONITOR_REPORT
 
-Generated: 2026-06-24T08:16:02.116Z
+Generated: 2026-06-24T11:54:31.182Z
 Target: PM2_RESTART_MONITOR_READY
 
 | Service | PM2 Name | Status | Restarts | Restarts Last Hour | Crashes | PM2 PID | Port PID | Port Match | Alert |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Mi-Core | mi-core | pm2_unavailable | 0 | 0 | 0 |  | 32104 |  | WARNING |
+| Mi-Core | mi-core | pm2_unavailable | 0 | 0 | 0 |  | 37080 |  | WARNING |
 | AI Service | mi-ai-service | pm2_unavailable | 0 | 0 | 0 |  | 10200 |  | WARNING |
 | Ollama | ollama | pm2_unavailable | 0 | 0 | 0 |  | 12720 |  | WARNING |
 | Agent Engine | agent-engine | pm2_unavailable | 0 | 0 | 0 |  |  |  | WARNING |

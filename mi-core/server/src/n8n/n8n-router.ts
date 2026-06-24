@@ -10,11 +10,10 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { createAllSeoWorkflows } from './seo-workflow-builder';
 
 export const n8nRouter = Router();
 
-const N8N_BASE = process.env.N8N_URL     || 'http://localhost:5678';
+const N8N_BASE = process.env.N8N_URL || 'http://localhost:5678';
 const N8N_KEY  = process.env.N8N_API_KEY || '';
 
 function authHeaders(): Record<string, string> {
@@ -22,14 +21,12 @@ function authHeaders(): Record<string, string> {
 }
 
 async function n8nGet(path: string) {
-  if (!N8N_KEY) throw new Error('N8N_API_KEY not configured');
   const res = await fetch(`${N8N_BASE}${path}`, { headers: authHeaders() });
   if (!res.ok) throw new Error(`n8n ${path} → ${res.status}`);
   return res.json();
 }
 
 async function n8nPost(path: string, body: unknown = {}) {
-  if (!N8N_KEY) throw new Error('N8N_API_KEY not configured');
   const res = await fetch(`${N8N_BASE}${path}`, {
     method: 'POST', headers: authHeaders(), body: JSON.stringify(body),
   });
@@ -135,38 +132,59 @@ n8nRouter.get('/evidence', (_req: Request, res: Response) => {
   res.json({ ok: true, count: evidenceLog.length, records: evidenceLog.slice(0, 50) });
 });
 
-// ── SEO Workflow Library builder ──────────────────────────────────────────────
-n8nRouter.post('/seo-workflows/create', async (_req: Request, res: Response) => {
-  try {
-    const result = await createAllSeoWorkflows();
-    res.json({ ok: true, ...result });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: (e as Error).message });
+// ── Failure Alert — called by mi-failure-alert-handler workflow ──────────────
+interface FailureAlert {
+  workflow_id: string;
+  workflow_name?: string;
+  execution_id: string;
+  status: string;
+  error: string;
+  owner_department: string;
+  severity: string;
+  failed_at?: string;
+}
+
+const failureLog: FailureAlert[] = [];
+
+n8nRouter.post('/failure', (req: Request, res: Response) => {
+  const alert = req.body as FailureAlert;
+  if (!alert.workflow_id || !alert.execution_id) {
+    return res.status(400).json({ error: 'workflow_id and execution_id required' });
   }
+  const record: FailureAlert = {
+    ...alert,
+    failed_at: alert.failed_at || new Date().toISOString(),
+  };
+  failureLog.unshift(record);
+  if (failureLog.length > 200) failureLog.splice(200);
+
+  console.error(`[n8n][FAILURE] workflow=${record.workflow_id} exec=${record.execution_id} err=${record.error} severity=${record.severity}`);
+  return res.json({ ok: true, alert_received: true, record });
 });
 
-n8nRouter.get('/seo-workflows/status', async (_req: Request, res: Response) => {
-  const N8N_KEY_VAL = process.env.N8N_API_KEY || '';
-  if (!N8N_KEY_VAL) return res.json({ ok: false, error: 'N8N_API_KEY not set' });
+n8nRouter.get('/failures', (_req: Request, res: Response) => {
+  res.json({ ok: true, count: failureLog.length, failures: failureLog.slice(0, 50) });
+});
+
+// ── Workflow health summary ──────────────────────────────────────────────────
+n8nRouter.get('/workflow-health', async (_req: Request, res: Response) => {
   try {
-    const r = await fetch(`${N8N_BASE}/api/v1/workflows?limit=100`,
-      { headers: { 'X-N8N-API-KEY': N8N_KEY_VAL } });
-    const data = await r.json() as { data: { name: string; active: boolean }[] };
-    const seoWfs = (data.data || []).filter((w: { name: string }) => w.name.startsWith('seo-'));
-    const required = ['seo-daily-audit','seo-weekly-executive-report','seo-technical-health-check',
-      'seo-content-opportunity-scan','seo-schema-validation','seo-review-summary','seo-dashboard-sync'];
-    const existing = new Set(seoWfs.map((w: { name: string }) => w.name));
-    const missing = required.filter(n => !existing.has(n));
-    return res.json({
-      ok: true,
-      total_required: 7,
-      existing: seoWfs.length,
-      missing_count: missing.length,
-      missing,
-      workflows: seoWfs,
-      status: missing.length === 0 ? 'N8N_SEO_WORKFLOWS_READY' : 'N8N_SEO_WORKFLOWS_PARTIAL',
-    });
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: (e as Error).message });
+    const data = await n8nGet('/api/v1/workflows?limit=50') as { data: any[] };
+    const workflows = data.data || [];
+    const summary = workflows.map((w: any) => ({
+      id: w.id,
+      name: w.name,
+      active: w.active,
+      timeout_s: w.settings?.executionTimeout || null,
+      created: w.createdAt?.slice(0, 10),
+      updated: w.updatedAt?.slice(0, 10),
+      trigger: w.nodes?.find((n: any) => n.type?.includes('trigger') || n.type?.includes('Trigger'))?.type || 'unknown',
+      recent_failures: failureLog.filter(f => f.workflow_id === w.id).length,
+    }));
+    const active_count = summary.filter((w: any) => w.active).length;
+    const failed_count = failureLog.length;
+    res.json({ ok: true, total: summary.length, active: active_count, recent_failures: failed_count, workflows: summary });
+  } catch (e: any) {
+    res.status(503).json({ ok: false, error: e.message });
   }
 });

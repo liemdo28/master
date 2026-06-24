@@ -23,6 +23,8 @@ const SCOPES = [
   'https://www.googleapis.com/auth/gmail.compose',
   'https://www.googleapis.com/auth/calendar.events',
   'https://www.googleapis.com/auth/drive.file',
+  // SEO (full write needed for sitemap delete)
+  'https://www.googleapis.com/auth/webmasters',
 ];
 
 export interface GoogleTokens {

@@ -213,11 +213,10 @@ class ProviderControl {
      * Only takes effect if no provider has been selected yet.
      */
     setDefault(providerId: string): void {
-        if (this._activeProvider === null) {
-            this._activeProvider = providerId;
-            this._mode = 'manual';
-            this._activeSince = Date.now();
-            console.log(`[provider-control] Default active provider: ${providerId}`);
+        // Start in assisted-auto so quota-based routing (opusmax-first) takes effect immediately.
+        // Manual override is only activated by explicit operator action via the dashboard.
+        if (this._mode !== 'manual') {
+            console.log(`[provider-control] Default mode: assisted-auto (quota-based routing active)`);
         }
     }
 

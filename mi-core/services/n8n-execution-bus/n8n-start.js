@@ -21,7 +21,10 @@ log(`CWD: ${process.cwd()}`);
 const env = {
   ...process.env,
   N8N_PORT: '5678',
-  N8N_LOG_LEVEL: 'info',
+  N8N_HOST: '127.0.0.1',
+  N8N_LISTEN_ADDRESS: '127.0.0.1',
+  N8N_LOG_LEVEL: 'warn',
+  WEBHOOK_URL: 'http://127.0.0.1:5678',
 };
 
 const child = spawn(process.execPath, [n8nBin, 'start'], {

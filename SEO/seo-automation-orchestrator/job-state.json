@@ -1,12 +1,12 @@
 {
   "daily-website-crawl": {
     "jobId": "daily-website-crawl",
-    "runId": "daily-website-crawl-1782288000023",
+    "runId": "daily-website-crawl-1781942401772",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 10297,
-    "started_at": "2026-06-24T08:00:00.023Z",
-    "completed_at": "2026-06-24T08:00:10.320Z",
+    "duration_ms": 17248,
+    "started_at": "2026-06-20T08:00:01.772Z",
+    "completed_at": "2026-06-20T08:00:19.020Z",
     "error": null,
     "result_summary": {
       "ok": true,
@@ -15,12 +15,12 @@
   },
   "daily-gbp-sync": {
     "jobId": "daily-gbp-sync",
-    "runId": "daily-gbp-sync-1782288000018",
+    "runId": "daily-gbp-sync-1781942401748",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 9,
-    "started_at": "2026-06-24T08:00:00.018Z",
-    "completed_at": "2026-06-24T08:00:00.027Z",
+    "duration_ms": 43,
+    "started_at": "2026-06-20T08:00:01.748Z",
+    "completed_at": "2026-06-20T08:00:01.791Z",
     "error": null,
     "result_summary": {
       "ok": true,
@@ -29,12 +29,12 @@
   },
   "daily-gsc-sync": {
     "jobId": "daily-gsc-sync",
-    "runId": "daily-gsc-sync-1782288000020",
+    "runId": "daily-gsc-sync-1781942401775",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 8,
-    "started_at": "2026-06-24T08:00:00.020Z",
-    "completed_at": "2026-06-24T08:00:00.028Z",
+    "duration_ms": 24,
+    "started_at": "2026-06-20T08:00:01.775Z",
+    "completed_at": "2026-06-20T08:00:01.799Z",
     "error": null,
     "result_summary": {
       "ok": true,
@@ -43,12 +43,12 @@
   },
   "daily-ga4-sync": {
     "jobId": "daily-ga4-sync",
-    "runId": "daily-ga4-sync-1782288000021",
+    "runId": "daily-ga4-sync-1781942401779",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 9,
-    "started_at": "2026-06-24T08:00:00.021Z",
-    "completed_at": "2026-06-24T08:00:00.030Z",
+    "duration_ms": 24,
+    "started_at": "2026-06-20T08:00:01.779Z",
+    "completed_at": "2026-06-20T08:00:01.803Z",
     "error": null,
     "result_summary": {
       "ok": true,
@@ -57,12 +57,12 @@
   },
   "daily-technical-audit": {
     "jobId": "daily-technical-audit",
-    "runId": "daily-technical-audit-1782288000023",
+    "runId": "daily-technical-audit-1781942401781",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 350,
-    "started_at": "2026-06-24T08:00:00.023Z",
-    "completed_at": "2026-06-24T08:00:00.373Z",
+    "duration_ms": 674,
+    "started_at": "2026-06-20T08:00:01.781Z",
+    "completed_at": "2026-06-20T08:00:02.455Z",
     "error": null,
     "result_summary": {
       "ok": true,
@@ -71,54 +71,12 @@
   },
   "daily-schema-validation": {
     "jobId": "daily-schema-validation",
-    "runId": "daily-schema-validation-1782288000022",
+    "runId": "daily-schema-validation-1781942401770",
     "status": "completed",
     "attempts": 1,
-    "duration_ms": 262,
-    "started_at": "2026-06-24T08:00:00.022Z",
-    "completed_at": "2026-06-24T08:00:00.284Z",
-    "error": null,
-    "result_summary": {
-      "ok": true,
-      "records": 0
-    }
-  },
-  "weekly-content-plan": {
-    "jobId": "weekly-content-plan",
-    "runId": "weekly-content-plan-1782287462535",
-    "status": "completed",
-    "attempts": 1,
-    "duration_ms": 364,
-    "started_at": "2026-06-24T07:51:02.535Z",
-    "completed_at": "2026-06-24T07:51:02.899Z",
-    "error": null,
-    "result_summary": {
-      "ok": true,
-      "records": 0
-    }
-  },
-  "weekly-citation-scan": {
-    "jobId": "weekly-citation-scan",
-    "runId": "weekly-citation-scan-1782287464711",
-    "status": "completed",
-    "attempts": 1,
-    "duration_ms": 7601,
-    "started_at": "2026-06-24T07:51:04.711Z",
-    "completed_at": "2026-06-24T07:51:12.313Z",
-    "error": null,
-    "result_summary": {
-      "ok": true,
-      "records": 0
-    }
-  },
-  "weekly-executive-seo-report": {
-    "jobId": "weekly-executive-seo-report",
-    "runId": "weekly-executive-seo-report-1782287474082",
-    "status": "completed",
-    "attempts": 1,
-    "duration_ms": 144,
-    "started_at": "2026-06-24T07:51:14.082Z",
-    "completed_at": "2026-06-24T07:51:14.226Z",
+    "duration_ms": 470,
+    "started_at": "2026-06-20T08:00:01.770Z",
+    "completed_at": "2026-06-20T08:00:02.240Z",
     "error": null,
     "result_summary": {
       "ok": true,

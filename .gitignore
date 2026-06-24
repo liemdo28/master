@@ -22,6 +22,14 @@ build/
 # Logs
 *.log
 
+# Secrets — never commit
+*.tokens.json
+google-tokens.json
+**/google-tokens.json
+**/*-tokens.json
+**/oauth*.json
+**/service-account*.json
+
 # Embedded git repos (tracked separately)
 Agent/agent-coding/
 Agent/ai-search-tool/
@@ -66,3 +74,4 @@ n.pm2/dump.pm2nn*.env.localn
 # Secret vault
 vault/secrets/
 *.env.local
+node_modules

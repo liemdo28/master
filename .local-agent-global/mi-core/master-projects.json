@@ -1,7 +1,31 @@
 {
-  "scanned_at": "2026-06-24T05:19:44.224Z",
-  "total": 36,
+  "scanned_at": "2026-06-16T03:37:55.783Z",
+  "total": 30,
   "projects": [
+    {
+      "project_id": "accounting-engine",
+      "name": "accounting-engine",
+      "path": "E:/Project/Master/accounting-engine",
+      "relative_path": "accounting-engine",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "npm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node bin/accounting.js",
+      "test_cmd": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 62,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:36.916Z"
+    },
     {
       "project_id": "antigravity-gateway",
       "name": "antigravity-gateway",
@@ -18,15 +42,15 @@
         3456
       ],
       "start_cmd": "node dist/server.js",
-      "test_cmd": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs && node tests/api-key-rotation-policy.mjs && node tests/gateway-queue-policy.mjs",
+      "test_cmd": "npm run build && node tests/provider-fallback-policy.mjs && node tests/supply-source-policy.mjs && node tests/gateway-queue-policy.mjs",
       "build_cmd": "tsc",
       "health_url": "http://localhost:3456/health",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 249,
+      "file_count": 239,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:41.698Z"
+      "last_scanned": "2026-06-16T03:37:37.074Z"
     },
     {
       "project_id": "ai-search-neon-tool",
@@ -50,7 +74,7 @@
       "file_count": 77,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:41.757Z"
+      "last_scanned": "2026-06-16T03:37:37.434Z"
     },
     {
       "project_id": "doordash-campaign-agent",
@@ -75,10 +99,10 @@
       "health_url": "http://localhost:3000/health",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 137,
+      "file_count": 128,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:41.823Z"
+      "last_scanned": "2026-06-16T03:37:38.456Z"
     },
     {
       "project_id": "shared-workspace",
@@ -102,7 +126,7 @@
       "file_count": 32,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:41.885Z"
+      "last_scanned": "2026-06-16T03:37:38.885Z"
     },
     {
       "project_id": "agent-coding",
@@ -128,7 +152,7 @@
       "file_count": 1233,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:41.952Z"
+      "last_scanned": "2026-06-16T03:37:39.056Z"
     },
     {
       "project_id": "bakudan-website",
@@ -154,7 +178,7 @@
       "file_count": 1277,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.028Z"
+      "last_scanned": "2026-06-16T03:37:40.285Z"
     },
     {
       "project_id": "dashboard-bakudanramen-qa",
@@ -168,19 +192,17 @@
       "git_remote": "",
       "git_branch": "",
       "git_dirty": false,
-      "ports": [
-        3306
-      ],
+      "ports": [],
       "start_cmd": "",
       "test_cmd": "",
       "build_cmd": "",
-      "health_url": "http://localhost:3306/health",
+      "health_url": "",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 1953,
+      "file_count": 1622,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.126Z"
+      "last_scanned": "2026-06-16T03:37:40.383Z"
     },
     {
       "project_id": "growth-dashboard",
@@ -204,7 +226,7 @@
       "file_count": 36,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.187Z"
+      "last_scanned": "2026-06-16T03:37:40.733Z"
     },
     {
       "project_id": "integration-system",
@@ -228,7 +250,7 @@
       "file_count": 880,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.250Z"
+      "last_scanned": "2026-06-16T03:37:42.644Z"
     },
     {
       "project_id": "mobile-taskflow",
@@ -252,7 +274,7 @@
       "file_count": 159,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.316Z"
+      "last_scanned": "2026-06-16T03:37:43.331Z"
     },
     {
       "project_id": "packing-list-automation",
@@ -276,7 +298,7 @@
       "file_count": 630,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.387Z"
+      "last_scanned": "2026-06-16T03:37:44.926Z"
     },
     {
       "project_id": "review-automation-system",
@@ -303,7 +325,58 @@
       "file_count": 183,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.499Z"
+      "last_scanned": "2026-06-16T03:37:45.756Z"
+    },
+    {
+      "project_id": "bakudan-releases",
+      "name": "bakudan-releases",
+      "path": "E:/Project/Master/bakudan-releases",
+      "relative_path": "bakudan-releases",
+      "type": "app",
+      "framework": "unknown",
+      "package_manager": "none",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 2,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:45.836Z"
+    },
+    {
+      "project_id": "mi-ceo-observer",
+      "name": "mi-ceo-observer",
+      "path": "E:/Project/Master/mi-ceo-observer",
+      "relative_path": "mi-ceo-observer",
+      "type": "app",
+      "framework": "node",
+      "package_manager": "npm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [
+        3212,
+        4001
+      ],
+      "start_cmd": "node src/index.js",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "http://localhost:3212/health",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 19,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:45.968Z"
     },
     {
       "project_id": "mi-core",
@@ -332,10 +405,34 @@
       "health_url": "http://localhost:3211/health",
       "location": "local",
       "machine": "main-pc",
-      "file_count": 15281,
+      "file_count": 13247,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.586Z"
+      "last_scanned": "2026-06-16T03:37:46.140Z"
+    },
+    {
+      "project_id": "mi-node-agent",
+      "name": "mi-node-agent",
+      "path": "E:/Project/Master/mi-node-agent",
+      "relative_path": "mi-node-agent",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "none",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node dist/server.js",
+      "test_cmd": "",
+      "build_cmd": "tsc",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 3,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:46.220Z"
     },
     {
       "project_id": "ai-search-neon-tool",
@@ -359,7 +456,7 @@
       "file_count": 163,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.646Z"
+      "last_scanned": "2026-06-16T03:37:46.460Z"
     },
     {
       "project_id": "it-takes-two-inspired-game",
@@ -383,7 +480,7 @@
       "file_count": 187,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.710Z"
+      "last_scanned": "2026-06-16T03:37:46.941Z"
     },
     {
       "project_id": "linktreehl",
@@ -409,7 +506,7 @@
       "file_count": 273,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.776Z"
+      "last_scanned": "2026-06-16T03:37:47.743Z"
     },
     {
       "project_id": "openclaw-personal",
@@ -433,7 +530,7 @@
       "file_count": 7,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.836Z"
+      "last_scanned": "2026-06-16T03:37:47.834Z"
     },
     {
       "project_id": "phuyen-2026",
@@ -459,7 +556,7 @@
       "file_count": 941,
       "has_dockerfile": true,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:42.923Z"
+      "last_scanned": "2026-06-16T03:37:50.228Z"
     },
     {
       "project_id": "tu-vi-bat-tu-assistant",
@@ -483,7 +580,7 @@
       "file_count": 18,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:42.982Z"
+      "last_scanned": "2026-06-16T03:37:50.387Z"
     },
     {
       "project_id": "tuya",
@@ -507,7 +604,31 @@
       "file_count": 1021,
       "has_dockerfile": false,
       "has_env": false,
-      "last_scanned": "2026-06-24T05:19:43.044Z"
+      "last_scanned": "2026-06-16T03:37:51.859Z"
+    },
+    {
+      "project_id": "qb-ops-agent",
+      "name": "qb-ops-agent",
+      "path": "E:/Project/Master/qb-ops-agent",
+      "relative_path": "qb-ops-agent",
+      "type": "app",
+      "framework": "node",
+      "package_manager": "npm",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node dist/index.js",
+      "test_cmd": "jest",
+      "build_cmd": "tsc",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 33,
+      "has_dockerfile": false,
+      "has_env": true,
+      "last_scanned": "2026-06-16T03:37:52.023Z"
     },
     {
       "project_id": "rawwebsite",
@@ -531,379 +652,35 @@
       "file_count": 370,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.227Z"
+      "last_scanned": "2026-06-16T03:37:53.857Z"
     },
     {
-      "project_id": "bakudan-seo-analytics-agent",
-      "name": "@bakudan-seo/analytics-agent",
-      "path": "E:/Project/Master/SEO/seo-analytics-agent",
-      "relative_path": "SEO/seo-analytics-agent",
-      "type": "app",
-      "framework": "node",
+      "project_id": "whatsapp-ai-gateway",
+      "name": "whatsapp-ai-gateway",
+      "path": "E:/Project/Master/whatsapp-ai-gateway",
+      "relative_path": "whatsapp-ai-gateway",
+      "type": "api-server",
+      "framework": "express",
       "package_manager": "npm",
       "language": "javascript",
       "git_remote": "",
       "git_branch": "",
       "git_dirty": false,
       "ports": [
-        4001,
-        4017
+        3210,
+        3211,
+        4001
       ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
+      "start_cmd": "node src/index.js",
+      "test_cmd": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
       "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
+      "health_url": "http://localhost:3210/health",
+      "location": "remote",
+      "machine": "laptop-remote",
+      "file_count": 1104,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.328Z"
-    },
-    {
-      "project_id": "bakudan-seo-automation-orchestrator",
-      "name": "@bakudan-seo/automation-orchestrator",
-      "path": "E:/Project/Master/SEO/seo-automation-orchestrator",
-      "relative_path": "SEO/seo-automation-orchestrator",
-      "type": "app",
-      "framework": "unknown",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4020
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 6,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.425Z"
-    },
-    {
-      "project_id": "bakudan-seo-citation-agent",
-      "name": "@bakudan-seo/citation-agent",
-      "path": "E:/Project/Master/SEO/seo-citation-agent",
-      "relative_path": "SEO/seo-citation-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4016
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.484Z"
-    },
-    {
-      "project_id": "bakudan-seo-content-agent",
-      "name": "@bakudan-seo/content-agent",
-      "path": "E:/Project/Master/SEO/seo-content-agent",
-      "relative_path": "SEO/seo-content-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4015
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.546Z"
-    },
-    {
-      "project_id": "bakudan-seo-local-maps-agent",
-      "name": "@bakudan-seo/local-maps-agent",
-      "path": "E:/Project/Master/SEO/seo-local-maps-agent",
-      "relative_path": "SEO/seo-local-maps-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4011
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.609Z"
-    },
-    {
-      "project_id": "bakudan-seo-schema-agent",
-      "name": "@bakudan-seo/schema-agent",
-      "path": "E:/Project/Master/SEO/seo-schema-agent",
-      "relative_path": "SEO/seo-schema-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4014
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.671Z"
-    },
-    {
-      "project_id": "bakudan-seo-technical-agent",
-      "name": "@bakudan-seo/technical-agent",
-      "path": "E:/Project/Master/SEO/seo-technical-agent",
-      "relative_path": "SEO/seo-technical-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4012,
-        4013
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.733Z"
-    },
-    {
-      "project_id": "bakudan-seo-website-agent",
-      "name": "@bakudan-seo/website-agent",
-      "path": "E:/Project/Master/SEO/seo-website-agent",
-      "relative_path": "SEO/seo-website-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4001,
-        4012,
-        4013
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4001/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 7,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.792Z"
-    },
-    {
-      "project_id": "bakudan-seo-shared",
-      "name": "@bakudan-seo/shared",
-      "path": "E:/Project/Master/SEO/shared",
-      "relative_path": "SEO/shared",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "npm",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [],
-      "start_cmd": "",
-      "test_cmd": "node test/test-shared.js",
-      "build_cmd": "",
-      "health_url": "",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 165,
-      "has_dockerfile": false,
-      "has_env": false,
-      "last_scanned": "2026-06-24T05:19:43.851Z"
-    },
-    {
-      "project_id": "bakudan-seo-analytics-agent",
-      "name": "@bakudan-seo/analytics-agent",
-      "path": "E:/Project/Master/seo-analytics-agent",
-      "relative_path": "seo-analytics-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4007
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4007/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 3,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.911Z"
-    },
-    {
-      "project_id": "bakudan-seo-citation-agent",
-      "name": "@bakudan-seo/citation-agent",
-      "path": "E:/Project/Master/seo-citation-agent",
-      "relative_path": "seo-citation-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4006
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4006/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 3,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:43.970Z"
-    },
-    {
-      "project_id": "bakudan-seo-content-agent",
-      "name": "@bakudan-seo/content-agent",
-      "path": "E:/Project/Master/seo-content-agent",
-      "relative_path": "seo-content-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4005
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4005/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 3,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:44.028Z"
-    },
-    {
-      "project_id": "bakudan-seo-schema-agent",
-      "name": "@bakudan-seo/schema-agent",
-      "path": "E:/Project/Master/seo-schema-agent",
-      "relative_path": "seo-schema-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4004
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4004/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 3,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:44.089Z"
-    },
-    {
-      "project_id": "bakudan-seo-technical-agent",
-      "name": "@bakudan-seo/technical-agent",
-      "path": "E:/Project/Master/seo-technical-agent",
-      "relative_path": "seo-technical-agent",
-      "type": "app",
-      "framework": "node",
-      "package_manager": "none",
-      "language": "javascript",
-      "git_remote": "",
-      "git_branch": "",
-      "git_dirty": false,
-      "ports": [
-        4003
-      ],
-      "start_cmd": "node index.js",
-      "test_cmd": "node test.js",
-      "build_cmd": "",
-      "health_url": "http://localhost:4003/health",
-      "location": "local",
-      "machine": "main-pc",
-      "file_count": 3,
-      "has_dockerfile": false,
-      "has_env": true,
-      "last_scanned": "2026-06-24T05:19:44.147Z"
+      "last_scanned": "2026-06-16T03:37:54.128Z"
     },
     {
       "project_id": "agent-coding",
@@ -929,7 +706,55 @@
       "file_count": 1221,
       "has_dockerfile": false,
       "has_env": true,
-      "last_scanned": "2026-06-24T05:19:44.224Z"
+      "last_scanned": "2026-06-16T03:37:55.569Z"
+    },
+    {
+      "project_id": "mi-node-agent",
+      "name": "mi-node-agent",
+      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
+      "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "none",
+      "language": "typescript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node dist/server.js",
+      "test_cmd": "",
+      "build_cmd": "tsc",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 3,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:55.649Z"
+    },
+    {
+      "project_id": "whatsapp-ai-gateway",
+      "name": "whatsapp-ai-gateway",
+      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
+      "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
+      "type": "api-server",
+      "framework": "express",
+      "package_manager": "npm",
+      "language": "javascript",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "node src/index.js",
+      "test_cmd": "node -e \"const fs=require('fs');const p='data';try{for(const f of fs.readdirSync(p)){if(/^gateway-test-/.test(f))try{fs.unlinkSync(p+'/'+f)}catch(_){}}}catch(_){}\" && node tests/run-tests.js && node tests/food-safety-tests.js && node tests/template-tests.js && node tests/template/dynamic-template-sync-tests.js && node tests/template-ocr-tests.js && node tests/printable-form-tests.js && node tests/architecture-tests.js && node tests/nlp/nlp-intent-tests.js && node tests/windows/runtime-service-tests.js && node tests/phase1-regression-tests.js && node tests/updater-tests.js && node tests/agent-os-tests.js && node tests/food-safety-intelligence-tests.js && node tests/pilot-tests.js && node tests/stone-oak-pilot-tests.js",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "remote",
+      "machine": "laptop-remote",
+      "file_count": 506,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-16T03:37:55.783Z"
     }
   ]
 }

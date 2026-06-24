@@ -63,10 +63,10 @@ import { remoteRouter } from './routes/remote';
 import { dataAnalystRouter } from './routes/data-analyst';
 import { whatsappRouter } from './routes/whatsapp';
 import { ceoObserverRouter } from './routes/ceo-observer';
-import { ceoControlRouter } from './routes/ceo-control';
 import { skillRouter } from './routes/skill-router';
 import { browserAgentRouter } from './routes/browser-agent';
 import { doordashAgentRouter } from './routes/doordash-agent';
+import { doordashMetricsRouter } from './routes/doordash-metrics';
 import { bigdataRouter, initBigData } from './routes/bigdata';
 import { enterpriseRouter } from './routes/enterprise';
 import { voiceRouter } from './routes/voice';
@@ -117,6 +117,9 @@ import { installAllPacks } from './knowledge/pack-manager';
 import { startScheduler } from './cron/sync-scheduler';
 import { getKeyStatus } from './services/whatsapp-key-manager';
 import { n8nRouter } from './n8n/n8n-router';
+import { gscRouter } from './routes/gsc';
+import { ceoControlRouter } from './routes/ceo-control';
+import ceoObjectiveRouter from './ceo-command-center';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -207,7 +210,6 @@ app.use('/api/reminders',   requireAuth, remindersRouter);
 app.use('/api/workspace',   requireAuth, workspaceRouter);
 app.use('/api/knowledge',   requireAuth, knowledgeRouter);
 app.use('/api/ceo-observer', requireAuth, ceoObserverRouter); // Session A proxy
-app.use('/api/ceo',         ceoControlRouter);               // CEO Control Center (Phase 23D)
 
 // Internal / already protected / public
 app.use('/api/remote',      remoteRouter);       // Remote access (has own auth)
@@ -223,6 +225,7 @@ app.use('/api/data-analyst',    dataAnalystRouter);
 app.use('/api/skills',          skillRouter);
 app.use('/api/browser',         browserAgentRouter);
 app.use('/api/doordash-agent',  doordashAgentRouter);
+app.use('/api/doordash',        doordashMetricsRouter);
 app.use('/api/bigdata',         bigdataRouter);
 app.use('/api/enterprise',      enterpriseRouter);
 app.use('/api/voice',           voiceRouter);
@@ -246,6 +249,9 @@ app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: W
 app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
 app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
+app.use('/api/seo/gsc',             gscRouter);              // Phase 4: Google Search Console
+app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
+app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
   res.json({
     tools: [

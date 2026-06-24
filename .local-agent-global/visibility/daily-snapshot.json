@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T08:16:02.366Z",
+  "generated_at": "2026-06-24T12:50:52.052Z",
   "date": "Thứ Tư, 24 tháng 6, 2026",
   "platforms": {
     "connected": [
@@ -45,17 +45,17 @@
     "dashboard_status": "no_tasks_module"
   },
   "emails": {
-    "status": "synced (42 unread, 5 important)",
-    "unread": 42,
-    "important": 5
+    "status": "synced (41 unread, 7 important)",
+    "unread": 41,
+    "important": 7
   },
   "calendar": {
     "status": "synced (1 events today)",
     "today_count": 1,
     "events_today": [
       {
-        "title": "Stockton - Pay Water",
-        "start": "2026-06-20"
+        "title": "Pay Copperpoint with raw credit card",
+        "start": "2026-06-24"
       }
     ]
   },
@@ -74,7 +74,7 @@
   },
   "action_items": [
     "1 project có uncommitted changes",
-    "42 emails chưa đọc",
+    "41 emails chưa đọc",
     "1 sự kiện hôm nay",
     "75 Asana tasks overdue"
   ]

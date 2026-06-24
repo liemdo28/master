@@ -1,6 +1,6 @@
 {
   "connector_id": "website-bakudan",
-  "synced_at": "2026-06-24T08:16:07.825Z",
+  "synced_at": "2026-06-24T12:25:21.040Z",
   "status": "ok",
   "website": "bakudanramen.com",
   "local_source_path": "E:/Project/Master/Bakudan/bakudanramen.com-current",
@@ -1306,5 +1306,5 @@
     ".env",
     ".htpasswd"
   ],
-  "summary_text": "bakudanramen.com: 29 pages, 1107 assets, repo https://github.com/liemdo28/bakudanwebsite_sub.git, branch fix/seo-404-pages-phase23, synced 2026-06-24T08:16:07.825Z"
+  "summary_text": "bakudanramen.com: 29 pages, 1107 assets, repo https://github.com/liemdo28/bakudanwebsite_sub.git, branch fix/seo-404-pages-phase23, synced 2026-06-24T12:25:21.040Z"
 }

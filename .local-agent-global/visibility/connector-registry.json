@@ -5,7 +5,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:15:57.074Z",
+    "last_sync": "2026-06-24T12:24:26.002Z",
     "read_capability": [
       "files",
       "folders",
@@ -28,7 +28,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:15:57.151Z",
+    "last_sync": "2026-06-24T12:24:26.119Z",
     "read_capability": [
       "tasks",
       "users",
@@ -54,7 +54,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:07.802Z",
+    "last_sync": "2026-06-24T12:25:21.020Z",
     "read_capability": [
       "tasks",
       "projects",
@@ -67,7 +67,7 @@
     ],
     "approval_required": true,
     "cache_path": "asana/",
-    "health_status": "healthy",
+    "health_status": "unknown",
     "setup_hint": "Asana cache/API evidence current; monitor token/network/rate-limit during burn-in.",
     "last_health_check": "2026-06-14T15:25:45.954Z"
   },
@@ -105,7 +105,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-20T08:40:36.358Z",
+    "last_sync": "2026-06-24T12:25:11.012Z",
     "read_capability": [
       "events",
       "calendars",
@@ -125,7 +125,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-20T08:40:37.132Z",
+    "last_sync": "2026-06-24T12:25:11.800Z",
     "read_capability": [
       "files",
       "folders",
@@ -147,7 +147,7 @@
     "type": "export",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:07.809Z",
+    "last_sync": "2026-06-24T12:25:21.027Z",
     "read_capability": [
       "steps",
       "sleep",
@@ -166,7 +166,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:08.371Z",
+    "last_sync": "2026-06-24T12:25:21.537Z",
     "read_capability": [
       "files",
       "content",
@@ -189,7 +189,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:08.369Z",
+    "last_sync": "2026-06-24T12:25:21.536Z",
     "read_capability": [
       "files",
       "content",
@@ -212,7 +212,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:07.813Z",
+    "last_sync": "2026-06-24T12:25:21.032Z",
     "read_capability": [
       "ledger",
       "stats",
@@ -230,7 +230,7 @@
       "api_url": "http://127.0.0.1:8844",
       "db_path": "E:/Project/Master/accounting-engine/ledgers/accounting.db"
     },
-    "last_health_check": "2026-06-24T06:15:59.231Z"
+    "last_health_check": "2026-06-24T12:44:28.671Z"
   },
   {
     "connector_id": "food-safety",
@@ -238,7 +238,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:07.824Z",
+    "last_sync": "2026-06-24T12:25:21.039Z",
     "read_capability": [
       "inspection-records",
       "audit-trail",
@@ -279,7 +279,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:07.822Z",
+    "last_sync": "2026-06-24T12:25:21.037Z",
     "read_capability": [
       "company-state",
       "activity-log",
@@ -301,9 +301,9 @@
     "connector_id": "google-sheets",
     "name": "Google Sheets",
     "type": "api",
-    "status": "pending",
+    "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T08:16:01.204Z",
+    "last_sync": "2026-06-24T12:25:13.829Z",
     "read_capability": [
       "spreadsheets",
       "ranges",
@@ -314,7 +314,7 @@
     ],
     "approval_required": true,
     "cache_path": "google-sheets/",
-    "health_status": "degraded",
+    "health_status": "healthy",
     "setup_hint": "Same OAuth as Gmail â€” requires scope: https://www.googleapis.com/auth/spreadsheets"
   }
 ]

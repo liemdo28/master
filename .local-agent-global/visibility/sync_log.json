@@ -1,12 +1,12 @@
 {
-  "synced_at": "2026-06-24T08:16:08.372Z",
+  "synced_at": "2026-06-24T12:25:21.538Z",
   "results": {
     "local-projects": "ok",
     "dashboard": "ok",
-    "gmail": "error: Error: invalid_grant",
-    "calendar": "error: Error: invalid_grant",
-    "drive": "error: Error: invalid_grant",
-    "google-sheets": "error",
+    "gmail": "ok",
+    "calendar": "ok",
+    "drive": "ok",
+    "google-sheets": "ready",
     "asana": "ok",
     "health": "ok",
     "accounting": "ok",

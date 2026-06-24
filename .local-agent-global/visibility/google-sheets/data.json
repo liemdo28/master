@@ -1,15 +1,32 @@
 {
-  "synced_at": "2026-06-24T08:16:01.138Z",
-  "status": "error",
+  "synced_at": "2026-06-24T12:25:11.801Z",
+  "status": "ready",
   "has_required_scope": true,
   "required_scope": "https://www.googleapis.com/auth/spreadsheets",
+  "spreadsheet_id": "1c2gPP5gF44g2zJcWIPmUEA7gTSOJIw9XrK1bn3N6tpM",
+  "spreadsheet_url": "https://docs.google.com/spreadsheets/d/1c2gPP5gF44g2zJcWIPmUEA7gTSOJIw9XrK1bn3N6tpM/edit",
   "read_test": {
-    "ok": false,
-    "error": "invalid_grant"
+    "ok": true,
+    "range": "certification!A1:D2",
+    "rows": 2,
+    "values": [
+      [
+        "source",
+        "status",
+        "synced_at",
+        "purpose"
+      ],
+      [
+        "mi-core",
+        "GOOGLE_SHEETS_READY",
+        "2026-06-24T12:25:11.801Z",
+        "Dev3 workspace production certification"
+      ]
+    ]
   },
   "update_test": {
-    "ok": false,
-    "error": "invalid_grant"
-  },
-  "error": "invalid_grant"
+    "ok": true,
+    "range": "certification!A1:D2",
+    "updated_cells": 8
+  }
 }

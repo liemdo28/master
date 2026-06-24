@@ -17,7 +17,7 @@
       "E:\\Project\\Master\\Agent\\doordash-compaigns\\DOORDASH_REAL_WORLD_VALIDATION_REPORT.md"
     ],
     "has_qa": true,
-    "last_modified": "2026-06-18T10:24:37.407Z"
+    "last_modified": "2026-06-24T08:28:02.205Z"
   },
   {
     "name": "artifact-registry",
@@ -26,7 +26,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T07:03:34.895Z"
+    "last_modified": "2026-06-24T08:28:01.628Z"
   },
   {
     "name": "Bakudan",
@@ -92,7 +92,7 @@
       "E:\\Project\\Master\\mi-core\\ACTIVE_SOURCE_AUDIT.md"
     ],
     "has_qa": false,
-    "last_modified": "2026-06-24T06:23:13.751Z"
+    "last_modified": "2026-06-24T11:28:58.245Z"
   },
   {
     "name": "Other",
@@ -140,7 +140,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-19T05:47:47.746Z"
+    "last_modified": "2026-06-24T09:19:18.608Z"
   },
   {
     "name": "SEO",
@@ -157,7 +157,7 @@
       "E:\\Project\\Master\\SEO\\SEO_VALIDATION_REPORT.md"
     ],
     "has_qa": false,
-    "last_modified": "2026-06-24T01:18:43.921Z"
+    "last_modified": "2026-06-24T08:28:02.302Z"
   },
   {
     "name": "seo-analytics-agent",
@@ -166,7 +166,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T05:41:16.463Z"
+    "last_modified": "2026-06-24T08:28:15.325Z"
   },
   {
     "name": "seo-citation-agent",
@@ -175,7 +175,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T05:41:16.463Z"
+    "last_modified": "2026-06-24T08:28:15.326Z"
   },
   {
     "name": "seo-content-agent",
@@ -184,7 +184,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T05:41:16.462Z"
+    "last_modified": "2026-06-24T08:28:15.328Z"
   },
   {
     "name": "seo-schema-agent",
@@ -193,7 +193,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T05:41:16.462Z"
+    "last_modified": "2026-06-24T08:28:15.329Z"
   },
   {
     "name": "seo-technical-agent",
@@ -202,7 +202,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-18T05:41:16.459Z"
+    "last_modified": "2026-06-24T08:28:15.330Z"
   },
   {
     "name": "web-app",

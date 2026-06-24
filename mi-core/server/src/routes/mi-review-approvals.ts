@@ -116,3 +116,39 @@ miReviewApprovalsRouter.get('/review-approvals/audit', (req: Request, res: Respo
   const limit = parseInt(String(req.query.limit || '100'), 10);
   res.json({ ok: true, audit: getReviewApprovalAudit(limit) });
 });
+
+// ── Phase 27D: n8n Failure Alert ─────────────────────────────────────────────
+const workflowFailures: any[] = [];
+
+miReviewApprovalsRouter.post('/workflows/failure', (req: Request, res: Response) => {
+  const { workflow_id, execution_id, status, error, owner_department, severity, workflow_name, failed_at } = req.body;
+  if (!workflow_id || !execution_id) {
+    return res.status(400).json({ ok: false, error: 'workflow_id and execution_id required' });
+  }
+  const record = {
+    workflow_id, workflow_name: workflow_name || workflow_id,
+    execution_id, status: status || 'failed',
+    error: error || 'unknown', owner_department: owner_department || 'unknown',
+    severity: severity || 'P1',
+    failed_at: failed_at || new Date().toISOString(),
+  };
+  workflowFailures.unshift(record);
+  if (workflowFailures.length > 200) workflowFailures.splice(200);
+  console.error(`[Mi][n8n-FAILURE] ${record.workflow_name} | ${record.error} | severity=${record.severity}`);
+  return res.json({ ok: true, alert_received: true, record });
+});
+
+miReviewApprovalsRouter.get('/workflows/failures', (_req: Request, res: Response) => {
+  res.json({ ok: true, count: workflowFailures.length, failures: workflowFailures.slice(0, 50) });
+});
+
+// ── Phase 27H: CEO Workflow Health ───────────────────────────────────────────
+miReviewApprovalsRouter.get('/workflows/health', async (_req: Request, res: Response) => {
+  try {
+    const r = await fetch('http://localhost:4001/api/n8n/workflow-health', { signal: AbortSignal.timeout(5000) });
+    const data = await r.json() as Record<string, unknown>;
+    res.json({ ok: true, source: 'n8n', ...data });
+  } catch (e: any) {
+    res.status(503).json({ ok: false, error: e.message });
+  }
+});

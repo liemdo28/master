@@ -1,141 +1,7 @@
 {
-  "synced_at": "2026-06-20T08:40:36.356Z",
-  "today": "Thứ Bảy, 20 tháng 6",
+  "synced_at": "2026-06-24T12:25:11.010Z",
+  "today": "Thứ Tư, 24 tháng 6",
   "events_today": [
-    {
-      "id": "_64p32d9g6csjic1g60o36e1h6d062sr1dpgisorfdk",
-      "title": "Stockton - Pay Water",
-      "start": "2026-06-20",
-      "end": "2026-06-21",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215039900003813\n\nhttps://egov.stocktonca.gov/Click2GovCX/index.html - ",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    }
-  ],
-  "events_upcoming": [
-    {
-      "id": "_64p32d9n60rj0e1l6sq38chj65062sr1dpgisorfdk",
-      "title": "JHT - 3rd partners weekly",
-      "start": "2026-06-21",
-      "end": "2026-06-22",
-      "description": "https://app.asana.com/1/1175942980830614/project/1180285550257848/task/1215707085744231\n\nDownload all number sale\n    https://auth.uber.com/login/?breeze_local_zone=phx3&next_url=https%3A%2F%2Frestaurant.uber.com%2Fpayments%3ForgUUID%3Deb4edb4e-b766-4269-802b-42c5423ea574&state=KE7NeTCoWTtReBn8NejnE",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n68sj4c9l64q3adpm6l062sr1dpgisorfdk",
-      "title": "Stockton - 3rd partners weekly",
-      "start": "2026-06-21",
-      "end": "2026-06-22",
-      "description": "https://app.asana.com/1/1175942980830614/project/1178165912182121/task/1215729215145765\n\nDownload all number sale\n    https://restaurant.uber.com/home/fb950bb3-3dda-468b-9ce1-c5e20782e43f - infoheoholding@gmail.com / R@wsushi2/ 9729\n    https://restaurant.grubhub.com/menu/2039482/sections/r2wZ0mrfEe",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9k6ssjad9h68r32e9h6p062sr1dpgisorfdk",
-      "title": "JHT - Update Withdraw Payroll",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215479551261916\n\nhttps://toast.estratex.com/CompanyCode?ReturnUrl=%2f&AspxAutoDetectCookieSupport=1\n\nB@kudanramen1\n\nhttps://docs.google.com/spreadsheets/d/1eODGRPWE-HcccajNIU2m7Xoz2EwKSH7Uny5lFQ1U9ak/edit#gid=1712274410",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9m64s30c9g74oj6dhn6t062sr1dpgisorfdk",
-      "title": "Stockton - Payroll - Liem",
-      "start": "2026-06-22",
-      "end": "2026-06-26",
-      "description": "https://app.asana.com/1/1175942980830614/project/1178165912182121/task/1215618010913677\n\nhttps://docs.google.com/spreadsheets/d/1K1ycBuw2mdqZjWfHGw_DG-T5sYXF8LbWEOAs63lssPk/edit#gid=19578552\nhttps://docs.google.com/spreadsheets/d/1hJthlVL-E0WxKGwExWSCxfiO9ri38uopHQrats4PQZU/edit#gid=1903658670\nhttps",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9m64s32c9o6krjecpj6p062sr1dpgisorfdk",
-      "title": "JHT - Payroll - Double Check Tip",
-      "start": "2026-06-22",
-      "end": "2026-06-25",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215618118577336\n\n- Receive email\n- Compare Tip on file w Toasttab\n- Check Amount of Omar (1,8k) and Elizabeth (1,522k)\n- Submit before 23h Wed (VN time)\n\nhttps://toast.estratex.com/CompanyCode?ReturnUrl=%2f&AspxAutoDetectCookieS",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n60rj0d1k70r32cpm71062sr1dpgisorfdk",
-      "title": "B3 - Labor Comparesion",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215707044861368\n\nhttps://docs.google.com/spreadsheets/d/1I3y_nrR1eERipfS2RK0U5AVqP6fAFCvGYpuq4LdLWEA/edit#gid=751547586\n\nhttps://docs.google.com/spreadsheets/d/1YnCgfmloy3GyXvyFaQ53_buLk0iZs7_fCTjCH4SDbNE/edit#gid=535445295\n\nhtt",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n60rj0d1k74pjadpg65062sr1dpgisorfdk",
-      "title": "JHT - Labor Comparesion",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215707044935701\n\nhttps://docs.google.com/spreadsheets/d/1I3y_nrR1eERipfS2RK0U5AVqP6fAFCvGYpuq4LdLWEA/edit#gid=751547586\n\nhttps://docs.google.com/spreadsheets/d/1YnCgfmloy3GyXvyFaQ53_buLk0iZs7_fCTjCH4SDbNE/edit#gid=535445295\n\nhtt",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n60rjec1h6cs30chm6p062sr1dpgisorfdk",
-      "title": "Stockton - Labor Tracking",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215707701380266\n\nhttps://docs.google.com/spreadsheets/d/1UKU2y7peO5ZsnhS332sKgLXJpThooUyHiyEqMYrRwyc/edit\nhttps://app.joinhomebase.com/dashboard/location ( hoangdle@gmail.com / Rawsushi1)",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n60rjec1h6ko3ie1h61062sr1dpgisorfdk",
-      "title": "JHT - Send Weekly Report to David",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215707701509810\n\n    https://restaurant.uber.com/home/fb950bb3-3dda-468b-9ce1-c5e20782e43f - bakudanramen210@gmail.com / bakudan1 /8080\n    to gm@bakudanramen.com\n        cc bakudanramen210@gmail.com / hoang.d.le@gmail.com \n    ",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9n60rjec1h6sojgdpi69062sr1dpgisorfdk",
-      "title": "B2 - Labor Comparesion",
-      "start": "2026-06-22",
-      "end": "2026-06-23",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215707701718722\n\n\n\n",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
-    {
-      "id": "_64p32d9m6cpjec9m74p3ee1o6h062sr1dpgisorfdk",
-      "title": "JHT - Pay Gas and Electric",
-      "start": "2026-06-23",
-      "end": "2026-06-24",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215633716927884\n\nhttps://secure.cpsenergy.com/mma/wssHome.jsp\nBakudanramen // Ramenbar#123\nBy JHT CC\n4246 3153 1896 6155 10/23 800 Hoang D Le\n4246 3152 8829 9082 04/24 247 Hoang Le",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    },
     {
       "id": "_64p32d9i6spjcc9p70o32d9h75062sr1dpgisorfdk",
       "title": "Pay Copperpoint with raw credit card",
@@ -146,7 +12,9 @@
       "is_all_day": true,
       "attendees": [],
       "status": "confirmed"
-    },
+    }
+  ],
+  "events_upcoming": [
     {
       "id": "_64p32d9n60rj2cpl6go3ad9l6p062sr1dpgisorfdk",
       "title": "Cal Saver - Double check Raw Payroll",
@@ -175,6 +43,50 @@
       "start": "2026-06-27",
       "end": "2026-06-28",
       "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215505913544027\n\nhttps://www.pge.com/ - rawsushi / afroken",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d1g68p3ae9h74pjgdpp75062sr1dpgisorfdk",
+      "title": "Remain - Pay IFT for anh Hoang",
+      "start": "2026-06-28",
+      "end": "2026-06-29",
+      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1214022591938799\n\n",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d9i6so3ccpj6ssjicpm6l062sr1dpgisorfdk",
+      "title": "Update Price for Packing List",
+      "start": "2026-06-28",
+      "end": "2026-06-29",
+      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215270633799365\n\n",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d9i6so3echh74p34cpo6l062sr1dpgisorfdk",
+      "title": "Credit Card - Send summary payment",
+      "start": "2026-06-28",
+      "end": "2026-07-01",
+      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215270721922385\n\nSend email for it with https://docs.google.com/spreadsheets/d/1d_W4C5ATT7q5d_ovWdPGvipLp27mu0RBrDXbP0uL_p8/edit?usp=drive_web&ouid=117446680563120457078",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d9m64rjgcph64q36c1l65062sr1dpgisorfdk",
+      "title": "Stockton - Sale Report",
+      "start": "2026-07-01",
+      "end": "2026-07-02",
+      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215617831143051\n\nPlease send out sale report for RAW Stockton to Raymond, Hoang, Anh\n\nToast Net sale \nRaymond's email : ParkWestPlace@am.jll.com\nhttps://auth.toasttab.com/login?state=g6Fo2SB6Wjc2ckJ1SVhWNmJIcVBGSEpVME5fSEVqUE9rd",
       "calendar": "Liem’s tasks - My Workspace (via Asana)",
       "is_all_day": true,
       "attendees": [],
