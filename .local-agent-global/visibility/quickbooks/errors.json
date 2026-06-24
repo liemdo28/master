@@ -2,15 +2,15 @@
   {
     "connector_id": "quickbooks-runtime",
     "status": "degraded",
-    "gap": "Latest QB heartbeat is stale (11381 minutes old)",
-    "generated_at": "2026-06-24T07:46:08.557Z",
+    "gap": "Latest QB heartbeat is stale (11411 minutes old)",
+    "generated_at": "2026-06-24T08:16:07.818Z",
     "handoff_package_path": "E:\\Project\\Master\\.local-agent-global\\visibility\\quickbooks\\dev1-handoff-package.json"
   },
   {
     "connector_id": "quickbooks-runtime",
     "status": "degraded",
-    "gap": "Last successful QB sync is stale (8597 minutes old)",
-    "generated_at": "2026-06-24T07:46:08.557Z",
+    "gap": "Last successful QB sync is stale (8627 minutes old)",
+    "generated_at": "2026-06-24T08:16:07.818Z",
     "handoff_package_path": "E:\\Project\\Master\\.local-agent-global\\visibility\\quickbooks\\dev1-handoff-package.json"
   }
 ]

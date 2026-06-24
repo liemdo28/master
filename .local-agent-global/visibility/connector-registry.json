@@ -5,7 +5,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:45:57.067Z",
+    "last_sync": "2026-06-24T08:15:57.074Z",
     "read_capability": [
       "files",
       "folders",
@@ -28,7 +28,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:45:57.163Z",
+    "last_sync": "2026-06-24T08:15:57.151Z",
     "read_capability": [
       "tasks",
       "users",
@@ -54,7 +54,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:08.543Z",
+    "last_sync": "2026-06-24T08:16:07.802Z",
     "read_capability": [
       "tasks",
       "projects",
@@ -147,7 +147,7 @@
     "type": "export",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:08.547Z",
+    "last_sync": "2026-06-24T08:16:07.809Z",
     "read_capability": [
       "steps",
       "sleep",
@@ -166,7 +166,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:09.007Z",
+    "last_sync": "2026-06-24T08:16:08.371Z",
     "read_capability": [
       "files",
       "content",
@@ -189,7 +189,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:09.006Z",
+    "last_sync": "2026-06-24T08:16:08.369Z",
     "read_capability": [
       "files",
       "content",
@@ -212,7 +212,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:08.553Z",
+    "last_sync": "2026-06-24T08:16:07.813Z",
     "read_capability": [
       "ledger",
       "stats",
@@ -238,7 +238,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:08.560Z",
+    "last_sync": "2026-06-24T08:16:07.824Z",
     "read_capability": [
       "inspection-records",
       "audit-trail",
@@ -279,7 +279,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:08.559Z",
+    "last_sync": "2026-06-24T08:16:07.822Z",
     "read_capability": [
       "company-state",
       "activity-log",
@@ -303,7 +303,7 @@
     "type": "api",
     "status": "pending",
     "auth_status": "connected",
-    "last_sync": "2026-06-24T07:46:01.186Z",
+    "last_sync": "2026-06-24T08:16:01.204Z",
     "read_capability": [
       "spreadsheets",
       "ranges",

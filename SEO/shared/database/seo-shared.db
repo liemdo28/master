@@ -1162,34 +1162,34 @@
       "id": "status:seo-local-maps-agent",
       "agent": "seo-local-maps-agent",
       "version": "1.0.0",
-      "uptime_s": 26116,
+      "uptime_s": 26236,
       "port": 4011,
       "mi_enabled": true,
       "pid": 10268,
-      "last_seen": "2026-06-24T08:14:24.145Z",
-      "_ts": "2026-06-24T08:14:24.149Z"
+      "last_seen": "2026-06-24T08:16:24.182Z",
+      "_ts": "2026-06-24T08:16:24.185Z"
     },
     {
       "id": "status:seo-content-agent",
       "agent": "seo-content-agent",
       "version": "1.0.0",
-      "uptime_s": 26109,
+      "uptime_s": 26229,
       "port": 4015,
       "mi_enabled": true,
       "pid": 30324,
-      "last_seen": "2026-06-24T08:14:17.110Z",
-      "_ts": "2026-06-24T08:14:17.119Z"
+      "last_seen": "2026-06-24T08:16:17.146Z",
+      "_ts": "2026-06-24T08:16:17.151Z"
     },
     {
       "id": "status:seo-website-agent",
       "agent": "seo-website-agent",
       "version": "1.0.0",
-      "uptime_s": 26109,
+      "uptime_s": 26199,
       "port": 4012,
       "mi_enabled": true,
       "pid": 20668,
-      "last_seen": "2026-06-24T08:14:17.345Z",
-      "_ts": "2026-06-24T08:14:17.356Z"
+      "last_seen": "2026-06-24T08:15:47.365Z",
+      "_ts": "2026-06-24T08:15:47.369Z"
     },
     {
       "id": "status:seo-schema-agent",
@@ -1206,34 +1206,34 @@
       "id": "status:seo-technical-agent",
       "agent": "seo-technical-agent",
       "version": "1.0.0",
-      "uptime_s": 26109,
+      "uptime_s": 26229,
       "port": 4013,
       "mi_enabled": true,
       "pid": 13392,
-      "last_seen": "2026-06-24T08:14:17.484Z",
-      "_ts": "2026-06-24T08:14:17.488Z"
+      "last_seen": "2026-06-24T08:16:17.505Z",
+      "_ts": "2026-06-24T08:16:17.508Z"
     },
     {
       "id": "status:seo-citation-agent",
       "agent": "seo-citation-agent",
       "version": "1.0.0",
-      "uptime_s": 26109,
+      "uptime_s": 26229,
       "port": 4016,
       "mi_enabled": true,
       "pid": 27460,
-      "last_seen": "2026-06-24T08:14:17.453Z",
-      "_ts": "2026-06-24T08:14:17.462Z"
+      "last_seen": "2026-06-24T08:16:17.489Z",
+      "_ts": "2026-06-24T08:16:17.493Z"
     },
     {
       "id": "status:seo-analytics-agent",
       "agent": "seo-analytics-agent",
       "version": "1.0.0",
-      "uptime_s": 26049,
+      "uptime_s": 26229,
       "port": 4017,
       "mi_enabled": true,
       "pid": 31984,
-      "last_seen": "2026-06-24T08:13:17.320Z",
-      "_ts": "2026-06-24T08:13:17.325Z"
+      "last_seen": "2026-06-24T08:16:17.380Z",
+      "_ts": "2026-06-24T08:16:17.386Z"
     }
   ],
   "agent_tasks": [
@@ -35697,6 +35697,234 @@
         "ok": true
       },
       "_ts": "2026-06-24T08:14:24.161Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288887151_v2hdeg",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:14:47.151Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288887411_exg4xp",
+      "agent": "seo-analytics-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-analytics-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:14:47.411Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288887482_49iyyh",
+      "agent": "seo-citation-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-citation-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:14:47.482Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288887515_y6exv6",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:14:47.515Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288894176_e2q3lp",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:14:54.176Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288917140_bzryw6",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:17.140Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288917378_coy9e5",
+      "agent": "seo-analytics-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-analytics-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:17.378Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288917544_o40vl5",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:17.544Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288924186_8d5v3o",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:24.186Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288947150_ltsied",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:47.150Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288947390_55ljec",
+      "agent": "seo-website-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-website-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:47.390Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288947403_r78m4q",
+      "agent": "seo-schema-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-schema-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:47.403Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288947520_cqa6d5",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:47.520Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288954188_3fve3s",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:15:54.188Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288977163_rcdj43",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:16:17.163Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288977405_zxf2ud",
+      "agent": "seo-website-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-website-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:16:17.405Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288977414_2ji1z3",
+      "agent": "seo-schema-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-schema-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:16:17.414Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288977521_mpv2mq",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:16:17.521Z"
+    },
+    {
+      "id": "mi_sync_logs_1782288984196_36f43s",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-24T08:16:24.196Z"
     }
   ],
   "reports": [
