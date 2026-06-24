@@ -1,21 +1,21 @@
 # DEV2_RUNTIME_RELIABILITY_SNAPSHOT
 
-Generated: 2026-06-22T02:38:09.699Z
+Generated: 2026-06-23T16:19:51.245Z
 Target: DAILY_RELIABILITY_SNAPSHOT_READY
 Burn-in score: 0
 
 ## Uptime
 | Service | Status | Uptime % | Restarts | Crashes |
 | --- | --- | --- | --- | --- |
-| Mi-Core | up | 74.32 | 0 | 0 |
-| AI Service | up | 95.95 | 0 | 0 |
+| Mi-Core | up | 77.66 | 0 | 0 |
+| AI Service | up | 85.11 | 0 | 0 |
 | Ollama | up | 100 | 0 | 0 |
 | Agent Engine | unknown | 0 | 0 | 0 |
-| Visibility | degraded | 8.11 | 0 | 0 |
+| Visibility | degraded | 6.38 | 0 | 0 |
 | Gmail | up | 100 | 0 | 0 |
 | Calendar | up | 100 | 0 | 0 |
 | Drive | up | 100 | 0 | 0 |
-| QB Connector | degraded | 8.11 | 0 | 0 |
+| QB Connector | degraded | 6.38 | 0 | 0 |
 | Health Connector | up | 100 | 0 | 0 |
 
 ## Ollama
@@ -27,18 +27,18 @@ Timeout count: 0
 ## Connector Freshness
 | Source | Status | Stale | Age Min |
 | --- | --- | --- | --- |
-| Gmail | stale | yes | 10834 |
-| Calendar | stale | yes | 2518 |
-| Drive | stale | yes | 2518 |
+| Gmail | stale | yes | 13096 |
+| Calendar | stale | yes | 4779 |
+| Drive | stale | yes | 4779 |
 | Sheets | degraded | no | 0 |
 | Asana | fresh | no | 30 |
 | Health | fresh | no | 30 |
 | Website bakudanramen.com | fresh | no | 30 |
 | Website rawsushibar.com | fresh | no | 30 |
 | QuickBooks | degraded | no | 0 |
-| Work Orders | stale | yes | 8591 |
+| Work Orders | stale | yes | 10852 |
 | Graph | fresh | no | 0 |
-| Memory | stale | yes | 3037 |
+| Memory | stale | yes | 5299 |
 
 ## Active Incidents
 | Type | Source | Summary | Escalation |

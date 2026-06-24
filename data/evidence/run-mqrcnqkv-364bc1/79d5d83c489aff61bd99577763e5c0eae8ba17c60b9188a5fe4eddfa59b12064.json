@@ -1,0 +1,20 @@
+{
+  "primary_intent": {
+    "intent": "general_status_check",
+    "label_vi": "Kiểm tra tổng quát",
+    "confidence": 0.5,
+    "evidence_keywords": [
+      "how are we",
+      "doing"
+    ],
+    "suggested_investigation": [
+      "Run health check",
+      "Review active priorities",
+      "Check pending actions",
+      "Summarize current state"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": false
+}

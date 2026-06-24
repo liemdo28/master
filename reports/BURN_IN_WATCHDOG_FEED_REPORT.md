@@ -1,10 +1,10 @@
 # BURN_IN_WATCHDOG_FEED_REPORT
 
-Generated: 2026-06-22T02:38:09.699Z
+Generated: 2026-06-23T16:19:51.245Z
 Target: BURN_IN_WATCHDOG_FEED_READY
 Burn-in score: 0
 Ollama timeouts: 0
-Mi-Core uptime %: 74.32
+Mi-Core uptime %: 77.66
 
 ## PM2 Restarts
 | Service | Restarts | Restarts Last Hour | Alert |
@@ -18,13 +18,13 @@ Mi-Core uptime %: 74.32
 ## Stale Data
 | Source | Status | Age Min | Threshold Min |
 | --- | --- | --- | --- |
-| Gmail | stale | 10834 | 120 |
-| Calendar | stale | 2518 | 120 |
-| Drive | stale | 2518 | 240 |
+| Gmail | stale | 13096 | 120 |
+| Calendar | stale | 4779 | 120 |
+| Drive | stale | 4779 | 240 |
 | Sheets | degraded | 0 | 240 |
 | QuickBooks | degraded | 0 | 1440 |
-| Work Orders | stale | 8591 | 2880 |
-| Memory | stale | 3037 | 1440 |
+| Work Orders | stale | 10852 | 2880 |
+| Memory | stale | 5299 | 1440 |
 
 ## Flow Gaps
 | Severity | Source | Rule | Message |

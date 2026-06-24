@@ -63,6 +63,16 @@ export interface EvidenceStore {
    * Get the filesystem path to the evidence root.
    */
   getRootPath(): string;
+
+  /**
+   * Verify append-only evidence immutability for one evidence item.
+   */
+  isEvidenceImmutable(evidenceId: string): boolean;
+
+  /**
+   * Verify all evidence artifacts for one run.
+   */
+  verifyRunIntegrity(runId: string): { allValid: boolean; total: number; valid: number; invalid: string[] };
 }
 
 // ── In-memory index (lightweight — for metadata lookup) ────────────────────────

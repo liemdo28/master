@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnopr-d4599c",
+  "objectiveRunId": "run-mqrcnopl-6eaf10",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch phân tích doanh thu | 6 steps, ~4min | Risk: undefined",
+  "sha256": "5d9ca66ba90e81ad0d7564168c3c649552d1e0b439fb16295454ac82d0d61734",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnopl-6eaf10\\5d9ca66ba90e81ad0d7564168c3c649552d1e0b439fb16295454ac82d0d61734.json",
+  "capturedAt": "2026-06-24T00:43:18.111Z",
+  "readOnly": true
+}

@@ -1,0 +1,35 @@
+{
+  "primary_intent": {
+    "intent": "operational_concern",
+    "label_vi": "Lo ngại vận hành",
+    "confidence": 0.8,
+    "evidence_keywords": [
+      "error"
+    ],
+    "suggested_investigation": [
+      "Check PM2 process health",
+      "Review error logs",
+      "Check connector status",
+      "Verify service uptime"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "technology_concern",
+      "label_vi": "Lo ngại công nghệ",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "API",
+        "API"
+      ],
+      "suggested_investigation": [
+        "Check server health",
+        "Review recent deployments",
+        "Check error rates",
+        "Assess technical debt"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

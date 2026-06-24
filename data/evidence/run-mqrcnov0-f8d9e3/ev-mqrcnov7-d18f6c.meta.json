@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnov7-d18f6c",
+  "objectiveRunId": "run-mqrcnov0-f8d9e3",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch phân tích nhân sự | 3 steps, ~2min | Risk: undefined",
+  "sha256": "dfdd167f7934bfe74b8424f679451dd1b4265a65237a998f936be127ba17342e",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnov0-f8d9e3\\dfdd167f7934bfe74b8424f679451dd1b4265a65237a998f936be127ba17342e.json",
+  "capturedAt": "2026-06-24T00:43:18.307Z",
+  "readOnly": true
+}

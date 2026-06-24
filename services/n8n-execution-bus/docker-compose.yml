@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: mi-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=mi-admin
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-mi-n8n-secure-2025}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-mi-core-n8n-key-2025-secure}
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Ho_Chi_Minh
+      - N8N_LOG_LEVEL=info
+      - N8N_LOG_OUTPUT=file
+      - N8N_LOG_FILE_LOCATION=/home/node/.n8n/logs/n8n.log
+      # Mi-Core integration
+      - MI_CORE_URL=http://host.docker.internal:4001
+      - MI_CORE_API_KEY=${MI_CORE_API_KEY:-}
+      # Webhook return URL for evidence
+      - MI_EVIDENCE_WEBHOOK=http://host.docker.internal:4001/api/n8n/evidence
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/home/node/.n8n/workflow-templates
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  n8n_data:
+    name: mi_n8n_data

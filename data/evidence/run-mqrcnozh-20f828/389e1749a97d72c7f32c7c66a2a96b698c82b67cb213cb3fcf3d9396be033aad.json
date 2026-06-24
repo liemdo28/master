@@ -1,0 +1,38 @@
+{
+  "primary_intent": {
+    "intent": "marketing_concern",
+    "label_vi": "Lo ngại marketing",
+    "confidence": 0.7,
+    "evidence_keywords": [
+      "review",
+      "rating",
+      "review",
+      "rating"
+    ],
+    "suggested_investigation": [
+      "Review campaign performance",
+      "Check review scores",
+      "Analyze traffic sources",
+      "Assess brand sentiment"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "performance_review",
+      "label_vi": "Đánh giá hiệu suất",
+      "confidence": 0.65,
+      "evidence_keywords": [
+        "review",
+        "review"
+      ],
+      "suggested_investigation": [
+        "Gather performance metrics",
+        "Compare against targets",
+        "Review department scores",
+        "Identify improvement areas"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

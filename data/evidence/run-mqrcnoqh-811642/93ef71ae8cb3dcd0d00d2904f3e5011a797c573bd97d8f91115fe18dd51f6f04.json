@@ -1,0 +1,94 @@
+{
+  "plan_id": "plan-1782261798140-14",
+  "created_at": "2026-06-24T00:43:18.140Z",
+  "intent": "technology_concern",
+  "title": "Kế hoạch chẩn đoán công nghệ",
+  "description": "Kiểm tra hệ thống kỹ thuật, phát hiện sự cố, đề xuất giải pháp",
+  "total_steps": 4,
+  "estimated_total_seconds": 105,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Kiểm tra server và infrastructure",
+      "description": "Check PM2 processes, database health, API status",
+      "engine": "infra-check",
+      "required_data": [
+        "pm2_status",
+        "db_health"
+      ],
+      "outputs": [
+        "infra_report"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Quét code quality",
+      "description": "Check for recent errors, tech debt, security issues",
+      "engine": "code-scanner",
+      "required_data": [
+        "error_logs",
+        "recent_changes"
+      ],
+      "outputs": [
+        "code_report"
+      ],
+      "estimated_seconds": 40,
+      "dependencies": [],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Tổng hợp và đề xuất",
+      "description": "Combine findings, prioritize fixes",
+      "engine": "tech-analysis",
+      "required_data": [
+        "infra_report",
+        "code_report"
+      ],
+      "outputs": [
+        "tech_diagnosis"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "1",
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "QA và tạo brief",
+      "description": "Validate diagnosis, generate CEO summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "tech_diagnosis"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "3"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-4",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.7,
+  "requires_ceo_approval": false
+}

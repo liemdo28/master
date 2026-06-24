@@ -29,6 +29,14 @@ const messageDedupStore = (() => {
   try { return require('../routing/message-dedup-store'); } catch (_) { return null; }
 })();
 
+// ── Phase 21.7: Session & Context Isolation ───────────────────────────────────
+const centralSessionManager = (() => {
+  try { return require('../sessions/whatsapp-session-manager'); } catch (_) { return null; }
+})();
+const sendGuard = (() => {
+  try { return require('../sessions/whatsapp-send-guard'); } catch (_) { return null; }
+})();
+
 // CEO Operating Model Router (new routing priority)
 const operatingModelRouter = (() => {
   try { return require('../workflows/operating-model-router'); } catch (_) { return null; }
@@ -178,6 +186,22 @@ async function sendMiForwardResult({ client, chatId, msg, text, forwardResult, r
       return false;
     }
 
+    // ── Phase 21.7: Send Guard — block duplicate sends for same message ───
+    if (sendGuard && traceBase.inbound_message_id) {
+      const guardResult = sendGuard.beginMessage(traceBase.inbound_message_id, route, 'mi_core_response');
+      if (!guardResult.canSend) {
+        log.warn('[SEND_GUARD] BLOCKED_DUPLICATE in sendMiForwardResult', {
+          messageId: traceBase.inbound_message_id,
+          route,
+        });
+        traceMiForward('outbound_blocked_send_guard', {
+          ...traceBase,
+          suppress_reason: 'send_guard_duplicate',
+        });
+        return false;
+      }
+    }
+
     log.info('[MESSAGE_FLOW] ' + route + '_reply', {
       ...runtimeTraceBase,
       route,
@@ -300,6 +324,22 @@ async function handleAgentMiCommand({ client, msg, chatId, isGroup, phone, name,
     return false;
   }
 
+  // ── Phase 21.7: MI_CORE_PRIORITY_LOCK for /mi command ─────────────────
+  if (isMi && centralSessionManager) {
+    centralSessionManager.setSession({
+      chatId,
+      senderPhone: phone,
+      owner: 'mi_core',
+      workflow: 'mi_command',
+      lastMessageId: getInboundMessageId(msg),
+    });
+    log.info('[SESSION_MANAGER] MI_CORE_PRIORITY_LOCK', {
+      ...runtimeTraceBase,
+      route: 'mi_command_session_lock',
+      reason: 'ceo_mi_core_priority',
+    });
+  }
+
   const chat = await msg.getChat().catch(() => null);
   const groupName = chat?.name || '';
   const handler = isAgent ? agentMiRouter.handleAgentMessage : agentMiRouter.handleMiMessage;
@@ -412,6 +452,13 @@ async function handleImageMessage(client, msg) {
   const chatId = msg.from;
   const timestamp = msg.timestamp ? new Date(msg.timestamp * 1000).toISOString() : new Date().toISOString();
   const messageId = msg.id._serialized || String(Date.now());
+
+  // ── Phase 21.7: CEO sender isolation — food safety MUST NOT respond in CEO direct chat
+  const senderPhone = (msg.author || msg.from || '').replace('@c.us', '').replace('@g.us', '');
+  if (miAccess.isCeoSender(senderPhone) && !chatId.includes('@g.us')) {
+    log.info('[MESSAGE_FLOW] food_safety_blocked_ceo_direct_chat', { chatId, senderPhone, messageId });
+    return; // CEO direct chat images are NOT food safety scope
+  }
 
   // ── Safety gate: check allowed chats ───────────────────────
   if (!sheetSource) {
@@ -838,6 +885,21 @@ async function handleTextMessage(client, msg) {
       log.info('[MESSAGE_FLOW] no_prefix_non_ceo_silent_drop', { ...runtimeTraceBase, route: 'no_prefix_silent_drop', phone });
       return; // P0 FIX: non-CEO no-prefix must NOT fall through to GREETING block
     } else {
+      // ── Phase 21.7: MI_CORE_PRIORITY_LOCK — claim owner, close others ─────
+      if (centralSessionManager) {
+        centralSessionManager.setSession({
+          chatId,
+          senderPhone: phone,
+          owner: 'mi_core',
+          workflow: 'ceo_no_prefix',
+          lastMessageId: inboundMessageId,
+        });
+        log.info('[SESSION_MANAGER] MI_CORE_PRIORITY_LOCK', {
+          ...runtimeTraceBase,
+          closedOwners: 'all_others',
+          reason: 'ceo_mi_core_priority',
+        });
+      }
       const result = await agentMiRouter.handleMiMessage({
         chatId,
         groupId: '',
@@ -850,29 +912,47 @@ async function handleTextMessage(client, msg) {
       });
       await saveMessage({ phone, name, direction: 'in', message: text, intent: 'no_prefix', aiReplied: false });
       if (result.payload) {
-        const forwardResult = await agentMiForwarder.forwardToMi(result.payload);
-        const sent = await sendMiForwardResult({
-          client,
-          chatId,
-          msg,
-          text,
-          forwardResult,
-          runtimeTraceBase,
-          route: 'no_prefix_mi_forward',
-          intent: 'mi_no_prefix',
-          phone,
-          name,
-        });
-        if (forwardResult.ok && forwardResult.reply && !sent) {
-          // Forward succeeded but sendMiForwardResult suppressed (dedup/stale guard)
-          log.info('[MESSAGE_FLOW] no_prefix_mi_forward_suppressed', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_suppressed' });
-        } else if (!forwardResult.ok) {
-          // Mi-core unreachable — silent drop, mi-core handles retry
-          log.warn('[MESSAGE_FLOW] no_prefix_mi_forward_failed_silent_drop', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_failed', error: forwardResult.error || '' });
+        // ── Send Guard: check before forwarding ─────────────────────────────
+        let canSendText = true;
+        if (sendGuard && inboundMessageId) {
+          const guardResult = sendGuard.beginMessage(inboundMessageId, 'mi_core', 'text');
+          canSendText = guardResult.canSend;
+          if (!canSendText) {
+            log.warn('[SEND_GUARD] BLOCKED_DUPLICATE', { messageId: inboundMessageId, route: 'no_prefix_mi_forward' });
+          }
+        }
+        if (canSendText) {
+          const forwardResult = await agentMiForwarder.forwardToMi(result.payload);
+          const sent = await sendMiForwardResult({
+            client,
+            chatId,
+            msg,
+            text,
+            forwardResult,
+            runtimeTraceBase,
+            route: 'no_prefix_mi_forward',
+            intent: 'mi_no_prefix',
+            phone,
+            name,
+          });
+          if (forwardResult.ok && forwardResult.reply && !sent) {
+            log.info('[MESSAGE_FLOW] no_prefix_mi_forward_suppressed', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_suppressed' });
+          } else if (!forwardResult.ok) {
+            log.warn('[MESSAGE_FLOW] no_prefix_mi_forward_failed_silent_drop', { ...runtimeTraceBase, route: 'no_prefix_mi_forward_failed', error: forwardResult.error || '' });
+          }
         }
       } else if (result.reply) {
-        await replyService.send(client, chatId, result.reply);
-        await saveMessage({ phone, name, direction: 'out', message: result.reply, intent: 'mi_no_prefix', aiReplied: true });
+        // ── Send Guard: check before local reply ───────────────────────────
+        let canSend = true;
+        if (sendGuard && inboundMessageId) {
+          const guardResult = sendGuard.beginMessage(inboundMessageId, 'mi_core', 'text');
+          canSend = guardResult.canSend;
+        }
+        if (canSend) {
+          await replyService.send(client, chatId, result.reply);
+          if (sendGuard && inboundMessageId) sendGuard.recordSend(inboundMessageId, 'mi_core', 'text');
+          await saveMessage({ phone, name, direction: 'out', message: result.reply, intent: 'mi_no_prefix', aiReplied: true });
+        }
       }
       return;
     }

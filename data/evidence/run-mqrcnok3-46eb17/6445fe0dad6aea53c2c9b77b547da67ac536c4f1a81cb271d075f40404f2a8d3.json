@@ -1,0 +1,93 @@
+{
+  "plan_id": "plan-1782261797910-5",
+  "created_at": "2026-06-24T00:43:17.910Z",
+  "intent": "service_degradation",
+  "title": "Kế hoạch chẩn đoán hiệu năng",
+  "description": "Xác định nguyên nhân giảm hiệu năng và đề xuất giải pháp",
+  "total_steps": 4,
+  "estimated_total_seconds": 85,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Đo hiệu năng hiện tại",
+      "description": "Measure response times, CPU, memory, DB query times",
+      "engine": "perf-monitor",
+      "required_data": [
+        "system_metrics"
+      ],
+      "outputs": [
+        "perf_snapshot"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "So sánh baseline",
+      "description": "Compare current metrics with historical baseline",
+      "engine": "baseline-compare",
+      "required_data": [
+        "perf_snapshot",
+        "historical_metrics"
+      ],
+      "outputs": [
+        "deviation_report"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Xác định bottleneck",
+      "description": "Identify the root cause of degradation",
+      "engine": "bottleneck-analyzer",
+      "required_data": [
+        "deviation_report"
+      ],
+      "outputs": [
+        "root_cause"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "QA và tạo brief",
+      "description": "Validate diagnosis, generate CEO summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "root_cause"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "3"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-4",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.75,
+  "requires_ceo_approval": false
+}

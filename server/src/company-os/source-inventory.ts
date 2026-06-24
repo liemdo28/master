@@ -4,7 +4,7 @@
  * No-bloat rule: ACTIVE | SHADOW | INSTALLED_NOT_USED | BROKEN | DEPRECATED | REMOVE
  */
 
-export type SourceClass = 'ACTIVE' | 'SHADOW' | 'INSTALLED_NOT_USED' | 'BROKEN' | 'DEPRECATED' | 'REMOVE';
+export type SourceClass = 'ACTIVE' | 'SHADOW' | 'INSTALLED_NOT_USED' | 'BROKEN' | 'DEPRECATED' | 'REMOVE' | 'PLANNED';
 
 export interface SourceEntry {
   id: string;
@@ -98,14 +98,14 @@ export function getSourcesByDept(deptId: string): SourceEntry[] {
 
 export function sourceInventorySummary(): string {
   const counts: Record<SourceClass, number> = {
-    ACTIVE: 0, SHADOW: 0, INSTALLED_NOT_USED: 0, BROKEN: 0, DEPRECATED: 0, REMOVE: 0,
+    ACTIVE: 0, SHADOW: 0, INSTALLED_NOT_USED: 0, BROKEN: 0, DEPRECATED: 0, REMOVE: 0, PLANNED: 0,
   };
   for (const s of SOURCE_INVENTORY) counts[s.class]++;
 
   const lines = [
     `Source Inventory — ${SOURCE_INVENTORY.length} total`,
     `  ACTIVE:             ${counts.ACTIVE}`,
-    `  PLANNED:            ${SOURCE_INVENTORY.filter(s => s.class === 'PLANNED' as unknown as SourceClass).length}`,
+    `  PLANNED:            ${counts.PLANNED}`,
     `  INSTALLED_NOT_USED: ${counts.INSTALLED_NOT_USED}`,
     `  SHADOW:             ${counts.SHADOW}`,
     `  BROKEN:             ${counts.BROKEN}`,

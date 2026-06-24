@@ -137,7 +137,7 @@ async function ensureTab(
   if (_ensuredTabs.has(tabName)) return;
 
   const meta = await sheets.spreadsheets.get({ spreadsheetId });
-  const existing = (meta.data.sheets || []).map(s => s.properties?.title);
+  const existing = (meta.data.sheets || []).map((s: sheets_v4.Schema$Sheet) => s.properties?.title);
 
   if (!existing.includes(tabName)) {
     await sheets.spreadsheets.batchUpdate({

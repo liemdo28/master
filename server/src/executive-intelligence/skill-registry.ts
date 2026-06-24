@@ -13,7 +13,9 @@ import { SkillManifest, SkillPolicy } from './types';
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
-const SKILLS_DIR = path.resolve(__dirname, 'skills');
+// Skills live in src/ — TypeScript doesn't copy non-.ts files to dist
+const SKILLS_DIR = process.env.EI_SKILLS_DIR
+  || path.resolve(__dirname, '../../src/executive-intelligence/skills');
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

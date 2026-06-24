@@ -1,0 +1,19 @@
+{
+  "primary_intent": {
+    "intent": "service_degradation",
+    "label_vi": "Giảm hiệu năng dịch vụ",
+    "confidence": 0.75,
+    "evidence_keywords": [
+      "chậm"
+    ],
+    "suggested_investigation": [
+      "Check response times",
+      "Review resource usage",
+      "Check database performance",
+      "Analyze traffic patterns"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": true,
+  "confidence_threshold_met": true
+}

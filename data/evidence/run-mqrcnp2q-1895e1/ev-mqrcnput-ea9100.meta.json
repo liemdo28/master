@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnput-ea9100",
+  "objectiveRunId": "run-mqrcnp2q-1895e1",
+  "sourceType": "reflection",
+  "sourceRef": "executive-reflection",
+  "summary": "Confidence: 40% (low) | Assumptions: 2 | Missing: 1",
+  "sha256": "1729dfb0437ba047436cd69d896b818decc89b5d64652f68baab236f2fb12cc2",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnp2q-1895e1\\1729dfb0437ba047436cd69d896b818decc89b5d64652f68baab236f2fb12cc2.json",
+  "capturedAt": "2026-06-24T00:43:19.590Z",
+  "readOnly": true
+}

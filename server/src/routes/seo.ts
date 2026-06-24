@@ -1,10 +1,21 @@
 /**
- * SEO Agent Integration Router
- * Phase 7: File-backed persistence — state survives Mi-Core restarts.
+ * SEO Agent Integration Router — Phase 6.5: Multi-Brand Production System
+ * 
+ * CRITICAL: No hardcoded brand/domain/location data.
+ * All brand data loaded from SEO/shared/config/brands.json + locations.json.
+ * To add Brand N: insert config rows. Zero source code changes.
  */
 import { Router, Request, Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  getActiveBrands, getAllBrands, getBrandById, getBrandDomain,
+  getActiveLocationsForBrand, getAllLocationsForBrand, getAllLocations, getLocationById,
+  addConnectorRun, getConnectorRuns, getDataSourcesByBrand,
+  computeBrandHealth, computeLocationHealth,
+  loadBrandConfig,
+  type BrandRecord, type LocationRecord, type ConnectorRunRecord,
+} from '../seo/brand-config';
 
 export const seoRouter = Router();
 
@@ -15,7 +26,7 @@ const STALE_MS = 5 * 60 * 1000;
 
 function ensureDir(d: string) { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); }
 
-// ── Data stores (declared first so persistState can reference them) ──────────
+// ── Data stores ─────────────────────────────────────────────────────────────
 interface SeoAgentRecord {
   agentId: string; version: string; port: number; status: string;
   health: string; uptime_s: number; last_sync_at: string; registered_at: string;
@@ -71,7 +82,415 @@ seoIssues = _p.issues; seoOpportunities = _p.opportunities;
 connectorResults = _p.connectorResults;
 orchestratorJobs = _p.orchestratorJobs; orchestratorLog = _p.orchestratorLog;
 
-// ── Agent endpoints ─────────────────────────────────────────────────────────
+// ── Brand API Endpoints ────────────────────────────────────────────────────
+
+// GET /api/seo/brands — list all brands
+seoRouter.get('/brands', (_req: Request, res: Response) => {
+  const brands = getAllBrands();
+  const active = brands.filter(b => b.status === 'active');
+  res.json({
+    ok: true,
+    total: brands.length,
+    active: active.length,
+    brands: brands.map(b => {
+      const health = computeBrandHealth(b.brand_id);
+      const locs = getAllLocationsForBrand(b.brand_id);
+      return {
+        brand_id: b.brand_id,
+        name: b.name,
+        domain: b.domain,
+        status: b.status,
+        industry: b.industry,
+        location_count: locs.length,
+        active_locations: locs.filter(l => l.status === 'active').length,
+        health_score: health.score,
+        health_status: health.status,
+        connectors: b.connectors ? Object.entries(b.connectors).map(([k, v]) => ({
+          type: k, status: v.status, credentials_configured: v.credentials_configured,
+        })) : [],
+      };
+    }),
+  });
+});
+
+// GET /api/seo/brands/:brandId — single brand detail
+seoRouter.get('/brands/:brandId', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+  const health = computeBrandHealth(brand.brand_id);
+  const locs = getAllLocationsForBrand(brand.brand_id);
+  res.json({
+    ok: true,
+    brand: {
+      ...brand,
+      health_score: health.score,
+      health_status: health.status,
+      health_details: health.details,
+      locations: locs,
+    },
+  });
+});
+
+// GET /api/seo/brands/:brandId/dashboard — brand dashboard
+seoRouter.get('/brands/:brandId/dashboard', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+
+  const health = computeBrandHealth(brand.brand_id);
+  const locs = getAllLocationsForBrand(brand.brand_id);
+  const activeLocs = locs.filter(l => l.status === 'active');
+  const agents = Array.from(seoAgents.values());
+  const online = agents.filter(a => a.status === 'online').length;
+  const brandIssues = seoIssues.filter(i => i.brand_id === brand.brand_id);
+  const brandOpps = seoOpportunities.filter(o => o.brand_id === brand.brand_id);
+  const brandRuns = getConnectorRuns(brand.brand_id);
+
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    domain: brand.domain,
+    brand_status: brand.status,
+    health_score: health.score,
+    health_status: health.status,
+    health_details: health.details,
+    location_count: locs.length,
+    active_locations: activeLocs.length,
+    locations: locs.map(l => ({
+      location_id: l.location_id,
+      name: l.name,
+      status: l.status,
+      health: computeLocationHealth(brand.brand_id, l.location_id),
+    })),
+    agents_online: online,
+    agents_total: agents.length,
+    issues_count: brandIssues.length,
+    opportunities_count: brandOpps.length,
+    connector_status: brand.connectors ? Object.entries(brand.connectors).map(([k, v]) => ({
+      type: k, status: v.status, credentials_configured: v.credentials_configured,
+      last_run_at: v.last_run_at, last_success_at: v.last_success_at, last_error: v.last_error,
+    })) : [],
+    connector_runs_recent: brandRuns.slice(-10),
+    data_source_summary: getDataSourcesByBrand().filter(d => d.brand_id === brand.brand_id),
+    generated_at: new Date().toISOString(),
+  });
+});
+
+// GET /api/seo/brands/:brandId/locations — brand locations
+seoRouter.get('/brands/:brandId/locations', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+  const locs = getAllLocationsForBrand(brand.brand_id);
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    total: locs.length,
+    active: locs.filter(l => l.status === 'active').length,
+    needs_config: locs.filter(l => l.status === 'needs_location_config').length,
+    locations: locs.map(l => ({
+      ...l,
+      health: computeLocationHealth(brand.brand_id, l.location_id),
+    })),
+  });
+});
+
+// GET /api/seo/brands/:brandId/kpis — brand KPIs
+seoRouter.get('/brands/:brandId/kpis', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+
+  const agents = Array.from(seoAgents.values());
+  const online = agents.filter(a => a.status === 'online').length;
+  const health = computeBrandHealth(brand.brand_id);
+  const brandReports = seoReports.filter(r => r.brand_id === brand.brand_id || (!r.brand_id && brand.brand_id === 'bakudan'));
+  const locs = getAllLocationsForBrand(brand.brand_id);
+
+  // Connector data from persist
+  const brandRuns = getConnectorRuns(brand.brand_id);
+  const lastCrawl = brandRuns.filter(r => r.connector_type === 'crawler').slice(-1)[0];
+  const lastCitation = brandRuns.filter(r => r.connector_type === 'citation_scan').slice(-1)[0];
+
+  // Also check in-memory connectorResults for backwards compat
+  const crawlerData = connectorResults['crawler'];
+  const citationData = connectorResults['citation_scan'];
+  const gscData = connectorResults['gsc'];
+
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    kpis: {
+      brand_health_score: health.score,
+      brand_health_status: health.status,
+      agents_online: online,
+      agents_total: 7,
+      seo_health: online === 7 ? 'healthy' : online >= 5 ? 'degraded' : 'critical',
+      locations_total: locs.length,
+      locations_active: locs.filter(l => l.status === 'active').length,
+      pages_crawled: lastCrawl?.records_processed || crawlerData?.records || 0,
+      broken_links: crawlerData?.broken_links_found || 0,
+      citations_confirmed: lastCitation?.records_processed || citationData?.confirmed_listings || 0,
+      citations_total: citationData?.records || 0,
+      nap_consistent: citationData?.nap_consistent_count || 0,
+      gsc_keywords: gscData?.records || 0,
+      connector_status: brand.connectors ? Object.keys(brand.connectors).reduce((acc: any, k) => {
+        acc[k] = brand.connectors![k].status;
+        return acc;
+      }, {}) : {},
+      last_crawl: lastCrawl?.completed_at || crawlerData?.data?.[0]?.fetched_at || null,
+      last_citation_scan: lastCitation?.completed_at || citationData?.data?.[0]?.fetched_at || null,
+      tasks_completed: seoTasks.filter(t => t.status === 'completed' && (!t.brand_id || t.brand_id === brand.brand_id)).length,
+      tasks_pending: seoTasks.filter(t => t.status === 'pending' && (!t.brand_id || t.brand_id === brand.brand_id)).length,
+      reports_total: brandReports.length,
+    },
+  });
+});
+
+// GET /api/seo/brands/:brandId/issues — brand issues
+seoRouter.get('/brands/:brandId/issues', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+
+  // Filter issues by brand_id from both stored issues and report-generated issues
+  const reportIssues = seoReports
+    .filter(r => r.brand_id === brand.brand_id || (!r.brand_id && brand.brand_id === 'bakudan'))
+    .flatMap(r => r.payload?.issues || r.issues || []);
+  const storedIssues = seoIssues.filter(i => i.brand_id === brand.brand_id || (!i.brand_id && brand.brand_id === 'bakudan'));
+  const allIssues = [...storedIssues, ...reportIssues].slice(-200);
+
+  // Group by check type
+  const byCheck: Record<string, number> = {};
+  for (const issue of allIssues) {
+    const check = issue.check || issue.check_type || 'unknown';
+    byCheck[check] = (byCheck[check] || 0) + 1;
+  }
+
+  // Group by location
+  const byLocation: Record<string, number> = {};
+  for (const issue of allIssues) {
+    const loc = issue.location_id || 'brand-level';
+    byLocation[loc] = (byLocation[loc] || 0) + 1;
+  }
+
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    total: allIssues.length,
+    issues: allIssues,
+    by_check_type: byCheck,
+    by_location: byLocation,
+  });
+});
+
+// GET /api/seo/brands/:brandId/opportunities — brand opportunities
+seoRouter.get('/brands/:brandId/opportunities', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+
+  const reportOpps = seoReports
+    .filter(r => r.brand_id === brand.brand_id || (!r.brand_id && brand.brand_id === 'bakudan'))
+    .flatMap(r => r.payload?.opportunities || r.opportunities || []);
+  const storedOpps = seoOpportunities.filter(o => o.brand_id === brand.brand_id || (!o.brand_id && brand.brand_id === 'bakudan'));
+
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    total: [...storedOpps, ...reportOpps].length,
+    opportunities: [...storedOpps, ...reportOpps].slice(-200),
+  });
+});
+
+// GET /api/seo/brands/:brandId/connectors/status — brand connector status
+seoRouter.get('/brands/:brandId/connectors/status', (req: Request, res: Response) => {
+  const brand = getBrandById(req.params.brandId);
+  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+
+  const brandRuns = getConnectorRuns(brand.brand_id);
+  const connectorTypes = ['crawler', 'gsc', 'gbp', 'ga4', 'citation_scan'];
+
+  res.json({
+    ok: true,
+    brand_id: brand.brand_id,
+    brand_name: brand.name,
+    connectors: connectorTypes.map(type => {
+      const config = brand.connectors?.[type];
+      const runs = brandRuns.filter(r => r.connector_type === type);
+      const lastRun = runs.length ? runs[runs.length - 1] : null;
+      return {
+        id: type,
+        name: type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        brand_id: brand.brand_id,
+        status: config?.status || 'not_configured',
+        credentials_configured: config?.credentials_configured || false,
+        last_success: config?.last_success_at || lastRun?.completed_at || null,
+        last_error: config?.last_error || lastRun?.error || null,
+        last_run_at: lastRun?.started_at || null,
+        records_last_run: lastRun?.records_processed || 0,
+      };
+    }),
+  });
+});
+
+// ── Dashboard: All Brands ──────────────────────────────────────────────────
+
+// GET /api/seo/dashboard — global dashboard (all brands)
+seoRouter.get('/dashboard', (_req: Request, res: Response) => {
+  const brands = getAllBrands();
+  const activeBrands = brands.filter(b => b.status === 'active');
+  const agents = Array.from(seoAgents.values());
+  const online = agents.filter(a => a.status === 'online').length;
+  const totalIssues = seoReports.reduce((s, r) => s + (r.issues_count || 0), 0);
+  const allLocs = getAllLocations();
+
+  // Compute brand-level summaries
+  const brandSummaries = brands.map(b => {
+    const health = computeBrandHealth(b.brand_id);
+    const locs = getAllLocationsForBrand(b.brand_id);
+    const brandIssues = seoIssues.filter(i => i.brand_id === b.brand_id);
+    const dataSources = getDataSourcesByBrand().filter(d => d.brand_id === b.brand_id);
+    const realSources = dataSources.filter(d => d.source !== 'seeded' && d.record_count > 0);
+    const seededSources = dataSources.filter(d => d.source === 'seeded');
+    const totalReal = realSources.reduce((s, d) => s + d.record_count, 0);
+    const totalSeeded = seededSources.reduce((s, d) => s + d.record_count, 0);
+
+    return {
+      brand_id: b.brand_id,
+      name: b.name,
+      domain: b.domain,
+      status: b.status,
+      health_score: health.score,
+      health_status: health.status,
+      location_count: locs.length,
+      issues_count: brandIssues.length,
+      real_vs_seeded: { real: totalReal, seeded: totalSeeded, ratio: totalReal > 0 ? `${Math.round(totalReal / (totalReal + totalSeeded) * 100)}% real` : '0% real' },
+      connector_status: b.connectors ? Object.entries(b.connectors).map(([k, v]) => ({
+        type: k, status: v.status,
+      })) : [],
+    };
+  });
+
+  res.json({
+    ok: true,
+    brand_count: brands.length,
+    location_count: allLocs.length,
+    brands_online: activeBrands.length,
+    agents_online: online,
+    agents_total: 7,
+    all_agents_online: online === 7,
+    brand_health_score: Math.round(brandSummaries.reduce((s, b) => s + b.health_score, 0) / Math.max(brands.length, 1)),
+    issues_by_brand: brandSummaries.map(b => ({ brand_id: b.brand_id, name: b.name, issues: b.issues_count })),
+    opportunities_by_brand: brandSummaries.map(b => {
+      const brandOpps = seoOpportunities.filter(o => o.brand_id === b.brand_id);
+      return { brand_id: b.brand_id, name: b.name, opportunities: brandOpps.length };
+    }),
+    real_vs_seeded_ratio_by_brand: brandSummaries.map(b => ({ brand_id: b.brand_id, name: b.name, ...b.real_vs_seeded })),
+    connector_status_by_brand: brandSummaries.map(b => ({ brand_id: b.brand_id, name: b.name, connectors: b.connector_status })),
+    brands: brandSummaries,
+    last_sync: agents.length ? agents.sort((a, b) => b.last_sync_at.localeCompare(a.last_sync_at))[0].last_sync_at : null,
+    agents: agents.map(a => ({
+      id: a.agentId, status: a.status, health: a.health, port: a.port,
+      uptime_s: a.uptime_s, last_sync_at: a.last_sync_at, error_state: a.error_state,
+      tasks_completed: a.tasks_completed, tasks_pending: a.tasks_pending,
+    })),
+    seo_score_summary: { overall: online === 7 ? 'operational' : 'degraded', agents_reporting: agents.length },
+    open_issues_count: totalIssues,
+    ranking_opportunities: seoReports.filter(r => r.type === 'ranking').length,
+    citation_issues: seoReports.filter(r => r.type === 'citation').length,
+    technical_issues: seoReports.filter(r => r.type === 'technical').length,
+    sync_logs_count: seoSyncLogs.length,
+    tasks_total: seoTasks.length,
+    tasks_completed: seoTasks.filter(t => t.status === 'completed').length,
+    tasks_pending: seoTasks.filter(t => t.status === 'pending').length,
+  });
+});
+
+// ── KPIs (all brands) ─────────────────────────────────────────────────────
+
+seoRouter.get('/kpis', (_req: Request, res: Response) => {
+  const agents = Array.from(seoAgents.values());
+  const online = agents.filter(a => a.status === 'online').length;
+  const brands = getActiveBrands();
+  const allLocs = getAllLocations();
+  const cd = connectorResults['crawler']; const ci = connectorResults['citation_scan']; const gs = connectorResults['gsc'];
+  res.json({
+    ok: true,
+    brand_count: brands.length,
+    location_count: allLocs.length,
+    kpis: {
+      agents_online: online, agents_total: 7,
+      seo_health: online === 7 ? 'healthy' : online >= 5 ? 'degraded' : 'critical',
+      pages_crawled: cd?.records || 0,
+      broken_links: cd?.broken_links_found || 0,
+      citations_confirmed: ci?.confirmed_listings || 0, citations_total: ci?.records || 0, nap_consistent: ci?.nap_consistent_count || 0,
+      gsc_keywords: gs?.records || 0,
+      connector_status: { crawler: cd?.status || 'not_run', gsc: gs?.status || 'not_run', gbp: connectorResults['gbp']?.status || 'not_run', ga4: connectorResults['ga4']?.status || 'not_run', citation_scan: ci?.status || 'not_run' },
+      last_crawl: cd?.data?.[0]?.fetched_at || null, last_citation_scan: ci?.data?.[0]?.fetched_at || null,
+      tasks_completed: seoTasks.filter(t => t.status === 'completed').length,
+      tasks_pending: seoTasks.filter(t => t.status === 'pending').length,
+      reports_total: seoReports.length,
+    },
+    kpis_by_brand: brands.map(b => {
+      const health = computeBrandHealth(b.brand_id);
+      const locs = getAllLocationsForBrand(b.brand_id);
+      return { brand_id: b.brand_id, name: b.name, health_score: health.score, location_count: locs.length };
+    }),
+  });
+});
+
+// ── Locations (all) ────────────────────────────────────────────────────────
+
+seoRouter.get('/locations', (_req: Request, res: Response) => {
+  const allLocs = getAllLocations();
+  res.json({
+    ok: true,
+    total: allLocs.length,
+    locations: allLocs.map(l => ({
+      id: l.location_id,
+      brand_id: l.brand_id,
+      name: l.name,
+      status: l.status,
+    })),
+  });
+});
+
+// ── Data Sources (all brands) ──────────────────────────────────────────────
+
+seoRouter.get('/data-sources', (_req: Request, res: Response) => {
+  const sources = getDataSourcesByBrand();
+  const brands = getActiveBrands();
+  const brandSummary = brands.map(b => {
+    const brandSources = sources.filter(s => s.brand_id === b.brand_id);
+    const real = brandSources.filter(s => s.source !== 'seeded').reduce((sum, s) => sum + s.record_count, 0);
+    const seeded = brandSources.filter(s => s.source === 'seeded').reduce((sum, s) => sum + s.record_count, 0);
+    return {
+      brand_id: b.brand_id,
+      name: b.name,
+      real,
+      seeded,
+      ratio: real > 0 ? `${Math.round(real / (real + seeded) * 100)}% real` : '0% real',
+    };
+  });
+
+  const totalReal = sources.filter(s => s.source !== 'seeded').reduce((sum, s) => sum + s.record_count, 0);
+  const totalSeeded = sources.filter(s => s.source === 'seeded').reduce((sum, s) => sum + s.record_count, 0);
+
+  res.json({
+    ok: true,
+    sources: sources,
+    by_brand: brandSummary,
+    real_vs_seeded: {
+      real: totalReal,
+      seeded: totalSeeded,
+      ratio: totalReal > 0 ? `${Math.round(totalReal / (totalReal + totalSeeded) * 100)}% real` : '0% real',
+    },
+  });
+});
+
+// ── Existing Agent Endpoints (backward compat) ─────────────────────────────
+
 seoRouter.post('/agents/register', (req: Request, res: Response) => {
   const { agent, version, port } = req.body;
   const agentId = agent || req.headers['x-agent-id'] as string;
@@ -190,28 +609,9 @@ seoRouter.post('/tasks/:taskId/complete', (req: Request, res: Response) => {
   res.json({ ok: true, task });
 });
 
-// ── Dashboard ───────────────────────────────────────────────────────────────
 seoRouter.get('/reports/latest', (_req: Request, res: Response) => {
   const agents = Array.from(seoAgents.values());
   res.json({ ok: true, reports: agents.map(a => ({ agent: a.agentId, last_report: a.last_report || null, last_sync_at: a.last_sync_at })), total: seoReports.length });
-});
-
-seoRouter.get('/dashboard', (_req: Request, res: Response) => {
-  const agents = Array.from(seoAgents.values());
-  const online = agents.filter(a => a.status === 'online').length;
-  const totalIssues = seoReports.reduce((s, r) => s + (r.issues_count || 0), 0);
-  res.json({ ok: true, agents_total: agents.length, agents_online: online, agents_target: 7, all_online: online === 7,
-    last_sync: agents.length ? agents.sort((a, b) => b.last_sync_at.localeCompare(a.last_sync_at))[0].last_sync_at : null,
-    agents: agents.map(a => ({ id: a.agentId, status: a.status, health: a.health, port: a.port,
-      uptime_s: a.uptime_s, last_sync_at: a.last_sync_at, error_state: a.error_state,
-      tasks_completed: a.tasks_completed, tasks_pending: a.tasks_pending })),
-    seo_score_summary: { overall: agents.length === 7 ? 'operational' : 'degraded', agents_reporting: agents.length },
-    open_issues_count: totalIssues, ranking_opportunities: seoReports.filter(r => r.type === 'ranking').length,
-    citation_issues: seoReports.filter(r => r.type === 'citation').length,
-    technical_issues: seoReports.filter(r => r.type === 'technical').length,
-    sync_logs_count: seoSyncLogs.length, tasks_total: seoTasks.length,
-    tasks_completed: seoTasks.filter(t => t.status === 'completed').length,
-    tasks_pending: seoTasks.filter(t => t.status === 'pending').length });
 });
 
 seoRouter.get('/sync-logs', (_req: Request, res: Response) => {
@@ -219,8 +619,28 @@ seoRouter.get('/sync-logs', (_req: Request, res: Response) => {
 });
 
 // ── Connectors ──────────────────────────────────────────────────────────────
+
 seoRouter.get('/connectors/status', (_req: Request, res: Response) => {
-  res.json({ ok: true, connectors: Object.values(connectorResults).length ? Object.values(connectorResults) : getDefaultConnectorStatus() });
+  const brands = getActiveBrands();
+  const connectorTypes = ['crawler', 'gsc', 'gbp', 'ga4', 'citation_scan'];
+  const byBrand = brands.map(b => ({
+    brand_id: b.brand_id,
+    name: b.name,
+    connectors: connectorTypes.map(type => {
+      const config = b.connectors?.[type];
+      return {
+        id: type,
+        brand_id: b.brand_id,
+        name: type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        status: config?.status || 'not_configured',
+        credentials_configured: config?.credentials_configured || false,
+        last_success: config?.last_success_at || null,
+        last_error: config?.last_error || null,
+      };
+    }),
+  }));
+
+  res.json({ ok: true, connectors: byBrand });
 });
 
 seoRouter.post('/connectors/run', async (req: Request, res: Response) => {
@@ -249,40 +669,22 @@ seoRouter.get('/connectors/latest', (_req: Request, res: Response) => {
   res.json({ ok: true, connectors: connectorResults });
 });
 
-seoRouter.get('/data-sources', (_req: Request, res: Response) => {
-  const agents = Array.from(seoAgents.values());
-  const seeded = agents.length * 3;
-  const real = Object.values(connectorResults).reduce((s: number, c: any) => s + (c?.records || 0), 0);
-  res.json({ ok: true, sources: [
-    { type: 'seeded', record_count: seeded },
-    { type: 'crawler', record_count: (connectorResults as any).crawler?.records || 0, status: (connectorResults as any).crawler?.status || 'not_run' },
-    { type: 'gsc', record_count: (connectorResults as any).gsc?.records || 0, status: (connectorResults as any).gsc?.status || 'not_run' },
-    { type: 'gbp', record_count: (connectorResults as any).gbp?.records || 0, status: (connectorResults as any).gbp?.status || 'not_run' },
-    { type: 'ga4', record_count: (connectorResults as any).ga4?.records || 0, status: (connectorResults as any).ga4?.status || 'not_run' },
-    { type: 'citation_scan', record_count: (connectorResults as any).citation_scan?.records || 0, status: (connectorResults as any).citation_scan?.status || 'not_run' },
-  ], real_vs_seeded: { real, seeded, ratio: real > 0 ? `${Math.round(real / (real + seeded) * 100)}% real` : '0% real' } });
-});
+// ── Issues & Opportunities (global) ──────────────────────────��─────────────
 
-function getDefaultConnectorStatus() {
-  return [
-    { id: 'crawler', name: 'Website Crawler', status: 'idle', credentials_configured: true, last_success: null, last_error: null },
-    { id: 'gsc', name: 'Google Search Console', status: 'idle', credentials_configured: false, last_success: null, last_error: null },
-    { id: 'gbp', name: 'Google Business Profile', status: 'idle', credentials_configured: false, last_success: null, last_error: null },
-    { id: 'ga4', name: 'Google Analytics 4', status: 'idle', credentials_configured: false, last_success: null, last_error: null },
-    { id: 'citation_scan', name: 'Citation Checker', status: 'idle', credentials_configured: true, last_success: null, last_error: null },
-  ];
-}
-
-// ── Issues & Opportunities ──────────────────────────────────────────────────
 seoRouter.post('/issues', (req: Request, res: Response) => {
   const issue = { id: `issue_${Date.now()}`, ts: new Date().toISOString(), ...req.body };
   seoIssues.push(issue); saveState();
   res.json({ ok: true, issue });
 });
 
-seoRouter.get('/issues', (_req: Request, res: Response) => {
+seoRouter.get('/issues', (req: Request, res: Response) => {
+  const brandId = req.query.brand_id as string | undefined;
   const reportIssues = seoReports.filter(r => r.payload?.issues || r.issues).flatMap(r => r.payload?.issues || r.issues || []);
-  res.json({ ok: true, issues: [...seoIssues, ...reportIssues].slice(-200), total: seoIssues.length + reportIssues.length });
+  let allIssues = [...seoIssues, ...reportIssues].slice(-200);
+  if (brandId) {
+    allIssues = allIssues.filter((i: any) => i.brand_id === brandId);
+  }
+  res.json({ ok: true, issues: allIssues, total: allIssues.length });
 });
 
 seoRouter.post('/opportunities', (req: Request, res: Response) => {
@@ -291,41 +693,33 @@ seoRouter.post('/opportunities', (req: Request, res: Response) => {
   res.json({ ok: true, opportunity: opp });
 });
 
-seoRouter.get('/opportunities', (_req: Request, res: Response) => {
+seoRouter.get('/opportunities', (req: Request, res: Response) => {
+  const brandId = req.query.brand_id as string | undefined;
   const reportOpps = seoReports.filter(r => r.payload?.opportunities || r.opportunities).flatMap(r => r.payload?.opportunities || r.opportunities || []);
-  res.json({ ok: true, opportunities: [...seoOpportunities, ...reportOpps].slice(-200), total: seoOpportunities.length + reportOpps.length });
+  let allOpps = [...seoOpportunities, ...reportOpps].slice(-200);
+  if (brandId) {
+    allOpps = allOpps.filter((o: any) => o.brand_id === brandId);
+  }
+  res.json({ ok: true, opportunities: allOpps, total: allOpps.length });
 });
 
-seoRouter.get('/locations', (_req: Request, res: Response) => {
-  res.json({ ok: true, locations: [
-    { id: 'bandera', name: 'Bakudan Ramen - Bandera', status: 'active' },
-    { id: 'stone-oak', name: 'Bakudan Ramen - Stone Oak', status: 'active' },
-    { id: 'the-rim', name: 'Bakudan Ramen - The Rim', status: 'active' },
-  ] });
-});
+// ── Orchestrator (brand-aware) ─────────────────────────────────────────────
 
-seoRouter.get('/kpis', (_req: Request, res: Response) => {
-  const agents = Array.from(seoAgents.values());
-  const online = agents.filter(a => a.status === 'online').length;
-  const cd = (connectorResults as any).crawler; const ci = (connectorResults as any).citation_scan; const gs = (connectorResults as any).gsc;
-  res.json({ ok: true, kpis: {
-    agents_online: online, agents_total: 7, seo_health: online === 7 ? 'healthy' : online >= 5 ? 'degraded' : 'critical',
-    pages_crawled: cd?.records || 0, broken_links: cd?.broken_links_found || 0,
-    citations_confirmed: ci?.confirmed_listings || 0, citations_total: ci?.records || 0, nap_consistent: ci?.nap_consistent_count || 0,
-    gsc_keywords: gs?.records || 0,
-    connector_status: { crawler: cd?.status || 'not_run', gsc: gs?.status || 'not_run', gbp: (connectorResults as any).gbp?.status || 'not_run', ga4: (connectorResults as any).ga4?.status || 'not_run', citation_scan: ci?.status || 'not_run' },
-    last_crawl: cd?.data?.[0]?.fetched_at || null, last_citation_scan: ci?.data?.[0]?.fetched_at || null,
-    tasks_completed: seoTasks.filter(t => t.status === 'completed').length, tasks_pending: seoTasks.filter(t => t.status === 'pending').length,
-    reports_total: seoReports.length } });
-});
-
-// ── Orchestrator ────────────────────────────────────────────────────────────
 seoRouter.post('/orchestrator/run/:jobId', async (req: Request, res: Response) => {
-  const jobId = req.params.jobId; const now = new Date().toISOString();
-  const running = orchestratorJobs.find(j => j.job_id === jobId && j.status === 'running');
-  if (running) return res.json({ ok: false, error: 'job_already_running', job: running });
-  const job = { id: `job_${Date.now()}`, job_id: jobId, status: 'running', started_at: now, completed_at: null, result: null, error: null };
-  orchestratorJobs.push(job); orchestratorLog.push({ job_id: jobId, action: 'started', ts: now });
+  const jobId = req.params.jobId;
+  const brandId = (req.query.brand_id as string) || 'all';
+  const now = new Date().toISOString();
+
+  // Resolve brands to run
+  let targetBrands: BrandRecord[];
+  if (brandId === 'all') {
+    targetBrands = getActiveBrands();
+  } else {
+    const b = getBrandById(brandId);
+    if (!b) return res.status(404).json({ ok: false, error: `brand_not_found: ${brandId}` });
+    targetBrands = [b];
+  }
+
   const agentMap: Record<string, { port: number; endpoint: string }> = {
     'daily-website-crawl': { port: 4011, endpoint: '/run/connectors?connector=crawler' },
     'daily-gbp-sync': { port: 4011, endpoint: '/run/connectors?connector=gbp' },
@@ -338,37 +732,129 @@ seoRouter.post('/orchestrator/run/:jobId', async (req: Request, res: Response) =
     'weekly-executive-seo-report': { port: 4017, endpoint: '/run/audit' },
     'monthly-full-seo-audit': { port: 4012, endpoint: '/run/audit' },
   };
+
   const target = agentMap[jobId];
-  if (!target) { job.status = 'failed'; job.error = `Unknown job: ${jobId}`; job.completed_at = new Date().toISOString(); saveState(); return res.json({ ok: false, error: job.error, job }); }
-  try {
-    const http = require('http');
-    const method = target.endpoint.startsWith('/run/connectors') ? 'GET' : 'POST';
-    const result: any = await new Promise((resolve) => {
-      const r = http.request({ hostname: 'localhost', port: target.port, path: target.endpoint, method, timeout: 120000 }, (response: any) => {
-        let body = ''; response.on('data', (d: string) => body += d);
-        response.on('end', () => { try { resolve(JSON.parse(body)); } catch { resolve({ ok: false, raw: body }); } });
-      });
-      r.on('error', (e: Error) => resolve({ ok: false, error: e.message }));
-      r.on('timeout', () => { r.destroy(); resolve({ ok: false, error: 'timeout' }); }); r.end();
-    });
-    job.status = result.ok ? 'completed' : 'failed'; job.result = result; job.error = result.error || null;
-    job.completed_at = new Date().toISOString(); orchestratorLog.push({ job_id: jobId, action: job.status, ts: job.completed_at });
-    // Merge connector results so KPIs/dashboard reflect latest data
-    if (result?.ok && result?.result?.results) {
-      for (const [k, v] of Object.entries(result.result.results as Record<string, any>)) connectorResults[k] = v;
+  if (!target) {
+    return res.status(400).json({ ok: false, error: `Unknown job: ${jobId}` });
+  }
+
+  const jobs: any[] = [];
+
+  for (const brand of targetBrands) {
+    const running = orchestratorJobs.find(j => j.job_id === jobId && j.brand_id === brand.brand_id && j.status === 'running');
+    if (running) {
+      jobs.push({ brand_id: brand.brand_id, status: 'skipped', reason: 'already_running', job: running });
+      continue;
     }
-    saveState(); res.json({ ok: true, job });
-  } catch (e: any) { job.status = 'failed'; job.error = e.message; job.completed_at = new Date().toISOString(); saveState(); res.json({ ok: false, error: e.message, job }); }
+
+    const job: {
+      id: string;
+      job_id: string;
+      brand_id: string;
+      location_id: string | null;
+      status: string;
+      started_at: string;
+      completed_at: string | null;
+      records_processed: number;
+      result: unknown;
+      error: string | null;
+    } = {
+      id: `job_${Date.now()}_${brand.brand_id}`,
+      job_id: jobId,
+      brand_id: brand.brand_id,
+      location_id: null,
+      status: 'running',
+      started_at: now,
+      completed_at: null,
+      records_processed: 0,
+      result: null,
+      error: null,
+    };
+    orchestratorJobs.push(job);
+    orchestratorLog.push({ job_id: jobId, brand_id: brand.brand_id, action: 'started', ts: now });
+
+    try {
+      const http = require('http');
+      const method = target.endpoint.startsWith('/run/connectors') ? 'GET' : 'POST';
+      // Append brand_id to crawler endpoint for brand-scoped crawling
+      let endpoint = target.endpoint;
+      if (target.endpoint.includes('connector=crawler') && brand.domain) {
+        endpoint += `&brand_id=${brand.brand_id}`;
+      }
+      const result: any = await new Promise((resolve) => {
+        const r = http.request({ hostname: 'localhost', port: target.port, path: endpoint, method, timeout: 120000 }, (response: any) => {
+          let body = ''; response.on('data', (d: string) => body += d);
+          response.on('end', () => { try { resolve(JSON.parse(body)); } catch { resolve({ ok: false, raw: body }); } });
+        });
+        r.on('error', (e: Error) => resolve({ ok: false, error: e.message }));
+        r.on('timeout', () => { r.destroy(); resolve({ ok: false, error: 'timeout' }); }); r.end();
+      });
+      job.status = result.ok ? 'completed' : 'failed';
+      job.result = result;
+      job.error = result.error || null;
+      job.completed_at = new Date().toISOString();
+      job.records_processed = result?.result?.results?.crawler?.records || result?.records || 0;
+      orchestratorLog.push({ job_id: jobId, brand_id: brand.brand_id, action: job.status, ts: job.completed_at });
+
+      // Record connector run
+      addConnectorRun({
+        id: `run_${Date.now()}_${brand.brand_id}`,
+        brand_id: brand.brand_id,
+        connector_type: target.endpoint.includes('connector=') ? target.endpoint.split('connector=')[1].split('&')[0] : jobId,
+        status: job.status,
+        started_at: job.started_at,
+        completed_at: job.completed_at || undefined,
+        records_processed: job.records_processed,
+        error: job.error || undefined,
+        source: 'orchestrator',
+      });
+
+      // Merge connector results
+      const innerResults = (result?.result?.results) || (result?.results) || null;
+      if (innerResults && typeof innerResults === 'object') {
+        for (const [k, v] of Object.entries(innerResults as Record<string, any>)) {
+          if (v && typeof v === 'object' && ('status' in v || 'records' in v)) {
+            connectorResults[k] = v;
+          }
+        }
+      }
+    } catch (e: any) {
+      job.status = 'failed'; job.error = e.message;
+      job.completed_at = new Date().toISOString();
+    }
+
+    jobs.push({ brand_id: brand.brand_id, brand_name: brand.name, job });
+  }
+
+  saveState();
+  res.json({
+    ok: true,
+    job_id: jobId,
+    brand_id: brandId,
+    brands_processed: targetBrands.map(b => b.brand_id),
+    results: jobs,
+  });
 });
 
 seoRouter.get('/orchestrator/status', (_req: Request, res: Response) => {
-  res.json({ ok: true, jobs_total: orchestratorJobs.length,
+  res.json({
+    ok: true,
+    jobs_total: orchestratorJobs.length,
     jobs_running: orchestratorJobs.filter(j => j.status === 'running').length,
     jobs_completed: orchestratorJobs.filter(j => j.status === 'completed').length,
     jobs_failed: orchestratorJobs.filter(j => j.status === 'failed').length,
-    recent_jobs: orchestratorJobs.slice(-20), log: orchestratorLog.slice(-50) });
+    recent_jobs: orchestratorJobs.slice(-20),
+    log: orchestratorLog.slice(-50),
+  });
 });
 
 seoRouter.get('/orchestrator/jobs', (_req: Request, res: Response) => {
   res.json({ ok: true, jobs: orchestratorJobs });
+});
+
+// ── Config reload ──────────────────────────────────────────────────────────
+
+seoRouter.post('/config/reload', (_req: Request, res: Response) => {
+  loadBrandConfig();
+  res.json({ ok: true, message: 'Brand config reloaded', brands: getAllBrands().length, locations: getAllLocations().length });
 });

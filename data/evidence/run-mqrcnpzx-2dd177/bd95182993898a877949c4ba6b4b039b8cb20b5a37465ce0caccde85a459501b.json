@@ -1,0 +1,94 @@
+{
+  "plan_id": "plan-1782261799777-33",
+  "created_at": "2026-06-24T00:43:19.777Z",
+  "intent": "risk_concern",
+  "title": "Kế hoạch đánh giá rủi ro",
+  "description": "Đánh giá và xếp hạng các rủi ro hiện tại, đề xuất biện pháp giảm thiểu",
+  "total_steps": 4,
+  "estimated_total_seconds": 100,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Quét rủi ro toàn diện",
+      "description": "Scan for active risks: compliance, operational, financial, security",
+      "engine": "risk-scanner",
+      "required_data": [
+        "compliance_data",
+        "operational_data"
+      ],
+      "outputs": [
+        "risk_inventory"
+      ],
+      "estimated_seconds": 45,
+      "dependencies": [],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Xếp hạng rủi ro",
+      "description": "Score risks by probability and impact, create risk matrix",
+      "engine": "risk-scoring",
+      "required_data": [
+        "risk_inventory"
+      ],
+      "outputs": [
+        "risk_matrix"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Đề xuất giảm thiểu",
+      "description": "Generate mitigation strategies for top risks",
+      "engine": "risk-mitigation",
+      "required_data": [
+        "risk_matrix"
+      ],
+      "outputs": [
+        "mitigation_plan"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "QA và tạo brief",
+      "description": "Validate risk assessment, generate executive summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "risk_matrix",
+        "mitigation_plan"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "3"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-4",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.9,
+  "requires_ceo_approval": false
+}
