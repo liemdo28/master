@@ -92,9 +92,10 @@ function collectEvidenceForRun(
     runId,
     {
       sourceType: 'intent_analysis',
+      objectiveRunId: runId,
       sourceRef: 'executive-intent-engine',
       summary: `Primary intent: ${intent.primary_intent.intent} (${Math.round(intent.primary_intent.confidence * 100)}%), ` +
-        `Alternatives: ${intent.alternatives.length}, Ambiguous: ${intent.is_ambiguous}`,
+          `Alternatives: ${intent.alternatives.length}, Ambiguous: ${intent.is_ambiguous}`,
       readOnly: true,
     },
     JSON.stringify({
@@ -112,8 +113,9 @@ function collectEvidenceForRun(
       runId,
       {
         sourceType: 'execution_plan',
+        objectiveRunId: runId,
         sourceRef: 'executive-planner',
-        summary: `Plan: ${plan.title} | ${plan.total_steps} steps, ~${Math.ceil(plan.estimated_total_seconds / 60)}min | Risk: ${plan.risk_level}`,
+        summary: `Plan: ${plan.title} | ${plan.total_steps} steps, ~${Math.ceil(plan.estimated_total_seconds / 60)}min | Risk: ${plan.risk_level || 'medium'}`,
         readOnly: true,
       },
       JSON.stringify(plan, null, 2),
@@ -127,6 +129,7 @@ function collectEvidenceForRun(
       runId,
       {
         sourceType: 'reflection',
+        objectiveRunId: runId,
         sourceRef: 'executive-reflection',
         summary: `Confidence: ${Math.round(reflection.overall_confidence * 100)}% (${reflection.confidence_level}) | ` +
           `Assumptions: ${reflection.assumptions.length} | Missing: ${reflection.missing_evidence.length}`,
@@ -143,6 +146,7 @@ function collectEvidenceForRun(
       runId,
       {
         sourceType: 'business_analysis',
+        objectiveRunId: runId,
         sourceRef: 'business-reasoning-engine',
         summary: `Signal: ${businessAnalysis.signal.type} (${businessAnalysis.signal.magnitude}%) | ` +
           `Hypotheses: ${businessAnalysis.hypotheses.length}`,
@@ -159,14 +163,15 @@ function collectEvidenceForRun(
       runId,
       {
         sourceType: 'decision_matrix',
+        objectiveRunId: runId,
         sourceRef: 'executive-decision-engine',
         summary: decisionMatrix.summary,
         readOnly: true,
       },
       JSON.stringify({
         summary: decisionMatrix.summary,
-        issues: decisionMatrix.issues,
-        recommended_priority: decisionMatrix.recommendedPriority,
+        issues: decisionMatrix.prioritized.map(p => p.issue),
+        recommended_priority: decisionMatrix.recommended_ceo_focus,
       }, null, 2),
     );
     evidenceIds.push(dmEvidence.id);
@@ -178,6 +183,7 @@ function collectEvidenceForRun(
     runId,
     {
       sourceType: 'context_snapshot',
+      objectiveRunId: runId,
       sourceRef: 'executive-memory-layer',
       summary: snapshot.summary,
       readOnly: true,

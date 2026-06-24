@@ -115,6 +115,7 @@ import { fullIngest } from './knowledge/knowledge-db';
 import { installAllPacks } from './knowledge/pack-manager';
 import { startScheduler } from './cron/sync-scheduler';
 import { getKeyStatus } from './services/whatsapp-key-manager';
+import { n8nRouter } from './n8n/n8n-router';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -242,6 +243,7 @@ app.use('/api/operations',      requireAuth, operationsRouter);  // DEV3: Operat
 app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: Workflow Execution Ledger & Metrics
 app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
+app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
 app.get('/api/tools', (_req, res) => {
   res.json({
     tools: [

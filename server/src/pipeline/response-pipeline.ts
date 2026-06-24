@@ -454,8 +454,7 @@ export async function runPipeline(input: PipelineInput): Promise<PipelineOutput>
   }
 
   // ── 15b. Company Asset Registry — Phase 6 ──
-  if (classifiedIntent.domain === 'company_asset' ||
-      /company.*project|du an cong ty|service.*down|department.*own|source.*health|project.*owner|company.*asset|list.*project|agent.*project/i.test(message)) {
+  if (/company.*project|du an cong ty|service.*down|department.*own|source.*health|project.*owner|company.*asset|list.*project|agent.*project/i.test(message)) {
     try {
       const MI_PORT = process.env.MI_PORT || '4001';
       const apiKey = process.env.MI_CORE_API_KEY || '';

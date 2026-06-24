@@ -15,6 +15,7 @@ export type BusinessDimension =
   | 'aov'           // average order value
   | 'reviews'
   | 'campaigns'
+  | 'marketing'
   | 'competition'
   | 'operations'
   | 'labor'

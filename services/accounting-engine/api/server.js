@@ -72,8 +72,12 @@ export function createApp(db) {
   return app;
 }
 
-// Run directly
-if (process.argv[1] && process.argv[1].endsWith('server.js')) {
+// Run directly OR via PM2 ProcessContainerFork (argv[1] will be ContainerFork path)
+const _isMain = process.argv[1] && (
+  process.argv[1].endsWith('server.js') ||
+  process.argv[1].includes('ProcessContainerFork')
+);
+if (_isMain) {
   const db  = openDatabase();
   const app = createApp(db);
   const server = app.listen(PORT, HOST, () => {

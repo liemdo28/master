@@ -1,0 +1,138 @@
+{
+  "plan_id": "plan-1782261797836-2",
+  "created_at": "2026-06-24T00:43:17.836Z",
+  "intent": "revenue_concern",
+  "title": "Kế hoạch phân tích doanh thu",
+  "description": "Phân tích sâu nguyên nhân giảm doanh thu, đề xuất hành động",
+  "total_steps": 6,
+  "estimated_total_seconds": 215,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Thu thập dữ liệu doanh thu",
+      "description": "Gather revenue data from all stores, compare with prior periods",
+      "engine": "data-collector",
+      "required_data": [
+        "revenue_data",
+        "historical_revenue"
+      ],
+      "outputs": [
+        "revenue_snapshot"
+      ],
+      "estimated_seconds": 60,
+      "dependencies": [],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Phân tích traffic và conversion",
+      "description": "Analyze traffic sources, conversion rates, AOV trends",
+      "engine": "business-reasoning",
+      "required_data": [
+        "revenue_snapshot",
+        "traffic_data"
+      ],
+      "outputs": [
+        "traffic_analysis"
+      ],
+      "estimated_seconds": 45,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Kiểm tra yếu tố bên ngoài",
+      "description": "Check seasonality, competition, market conditions",
+      "engine": "market-analyzer",
+      "required_data": [
+        "revenue_snapshot"
+      ],
+      "outputs": [
+        "external_factors"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "Đánh giá chiến dịch marketing",
+      "description": "Review active campaigns, ad spend, ROI",
+      "engine": "marketing-review",
+      "required_data": [
+        "campaign_data",
+        "ad_spend"
+      ],
+      "outputs": [
+        "marketing_report"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-4",
+      "status": "pending"
+    },
+    {
+      "order": 5,
+      "title": "Tạo giả thuyết và xếp hạng",
+      "description": "Combine all data into ranked hypotheses with probability scores",
+      "engine": "analysis",
+      "required_data": [
+        "revenue_snapshot",
+        "traffic_analysis",
+        "external_factors",
+        "marketing_report"
+      ],
+      "outputs": [
+        "hypotheses_ranked"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [
+        "2",
+        "3",
+        "4"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-5",
+      "status": "pending"
+    },
+    {
+      "order": 6,
+      "title": "QA và tạo brief",
+      "description": "Validate analysis, generate executive brief",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "hypotheses_ranked"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "5"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-6",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.85,
+  "requires_ceo_approval": false
+}

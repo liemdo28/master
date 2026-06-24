@@ -229,6 +229,49 @@ bigdataRouter.get('/query', async (req: Request, res: Response) => {
   }
 });
 
+// ── Dashboard Connector ───────────────────────────────────────────────────────
+bigdataRouter.get('/connectors/dashboard/status', async (_req: Request, res: Response) => {
+  const apiUrl = process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com';
+  const secret = process.env.MI_SNAPSHOT_SECRET || '';
+  if (!secret) {
+    return res.json({ connected: false, note: 'MI_SNAPSHOT_SECRET not set in .env' });
+  }
+  try {
+    const r = await fetch(`${apiUrl}/api/mi/snapshot`, {
+      headers: { 'x-mi-token': secret },
+      signal: AbortSignal.timeout(6000),
+    });
+    if (r.ok) {
+      const data = await r.json() as Record<string, unknown>;
+      return res.json({ connected: true, status: r.status, snapshot: data });
+    }
+    return res.json({ connected: false, status: r.status, note: await r.text() });
+  } catch (e) {
+    return res.status(500).json({ connected: false, error: String(e) });
+  }
+});
+
+// ── Toast POS Connector ───────────────────────────────────────────────────────
+bigdataRouter.get('/connectors/toast/status', async (_req: Request, res: Response) => {
+  try {
+    const { getToastStatus } = await import('../bigdata/connectors/toast/ingest');
+    const status = await getToastStatus();
+    res.json(status);
+  } catch (e) {
+    res.status(500).json({ connected: false, error: String(e) });
+  }
+});
+
+bigdataRouter.post('/connectors/toast/sync', async (_req: Request, res: Response) => {
+  try {
+    const { ingestToast } = await import('../bigdata/connectors/toast/ingest');
+    await ingestToast();
+    res.json({ ok: true, synced_at: new Date().toISOString() });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
 // ── Init buckets (called on server start) ────────────────────────────────────
 export async function initBigData(): Promise<void> {
   try {

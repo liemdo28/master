@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnorh-6e6edb",
+  "objectiveRunId": "run-mqrcnora-b97494",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch phân tích chiến lược | 4 steps, ~2min | Risk: undefined",
+  "sha256": "d3f4d9535aa341d631c6e216c07c97f362b5f1ec5e72286ac95be3bc26ba83a3",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnora-b97494\\d3f4d9535aa341d631c6e216c07c97f362b5f1ec5e72286ac95be3bc26ba83a3.json",
+  "capturedAt": "2026-06-24T00:43:18.173Z",
+  "readOnly": true
+}

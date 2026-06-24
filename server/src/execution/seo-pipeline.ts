@@ -19,6 +19,7 @@ import fs from 'fs';
 import path from 'path';
 import type { ExecutionWorkflow } from './workflow-creation-layer';
 import { advanceWorkflowStep, updateWorkflowStatus } from './workflow-creation-layer';
+import { getAllBrands } from '../seo/brand-config';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -384,12 +385,31 @@ function createImageAssets(draft: SEODraft): SEOImageAssets {
 
 // ── Public Pipeline API ────────────────────────────────────────────────────
 
+// ── Brand-aware pipeline (Phase 6.5) ────────────────────────────────────
+// Brand/website/topic data loaded from shared config — zero hardcoded brands.
+
+function resolveEntity(wf: ExecutionWorkflow): { entity: string; website: string; brand_id: string } {
+  // Try to match target_entity against known brands first
+  const target = (wf.target_entity || '').toLowerCase();
+  const brands = getAllBrands();
+  for (const b of brands) {
+    if (target === b.name.toLowerCase() || target === b.brand_id || target === b.domain.replace(/^https?:\/\//, '').replace(/^www\./, '')) {
+      return { entity: b.name, website: b.domain, brand_id: b.brand_id };
+    }
+  }
+  // Fallback: return whatever was provided
+  return {
+    entity: wf.target_entity || 'Unknown',
+    website: `${(wf.target_entity || 'unknown').toLowerCase().replace(/\s+/g, '')}.com`,
+    brand_id: 'unknown',
+  };
+}
+
 export function runSEOPipeline(wf: ExecutionWorkflow): SEODraft | null {
-  const entity = wf.target_entity || 'Raw Sushi';
-  const website = entity === 'Raw Sushi' ? 'rawsushibar.com' : `${entity.toLowerCase().replace(/\s+/g, '')}.com`;
+  const { entity, website, brand_id } = resolveEntity(wf);
 
   // Step 1: Resolve entity
-  advanceWorkflowStep(wf.workflow_id, 'SEO-1', 'done', `Entity: ${entity}, Website: ${website}`);
+  advanceWorkflowStep(wf.workflow_id, 'SEO-1', 'done', `Entity: ${entity}, Website: ${website}, Brand: ${brand_id}`);
   updateWorkflowStatus(wf.workflow_id, 'drafting');
 
   // Step 2: Pick topic
@@ -430,4 +450,4 @@ export function runSEOPipeline(wf: ExecutionWorkflow): SEODraft | null {
   return draft;
 }
 
-export { pickTopic, RAW_SUSHI_TOPICS };
+export { pickTopic, RAW_SUSHI_TOPICS, resolveEntity };

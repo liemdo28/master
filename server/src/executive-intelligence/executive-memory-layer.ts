@@ -90,6 +90,7 @@ export interface OperationalRisk {
 }
 
 export interface DepartmentScore {
+  id: string;
   department: string;
   timestamp: string;
   score: number;        // 0-100
@@ -331,6 +332,7 @@ export const executiveIntelligenceMemory = {
       score < lastScore - 2 ? 'declining' : 'stable';
 
     const item: DepartmentScore = {
+      id: `dept-${crypto.randomUUID().slice(0, 8)}`,
       department: dept,
       timestamp: new Date().toISOString(),
       score,

@@ -1,0 +1,35 @@
+{
+  "primary_intent": {
+    "intent": "revenue_concern",
+    "label_vi": "Lo ngại doanh thu",
+    "confidence": 0.85,
+    "evidence_keywords": [
+      "down"
+    ],
+    "suggested_investigation": [
+      "Analyze revenue trends",
+      "Compare with prior period",
+      "Check conversion rates",
+      "Review AOV and traffic"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "marketing_concern",
+      "label_vi": "Lo ngại marketing",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "social",
+        "social"
+      ],
+      "suggested_investigation": [
+        "Review campaign performance",
+        "Check review scores",
+        "Analyze traffic sources",
+        "Assess brand sentiment"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

@@ -892,17 +892,10 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
       const lines = [
         `🏥 *Observability Status*`,
         ``,
-        `Services: ${obs.services.up} up / ${obs.services.degraded} degraded / ${obs.services.down} down`,
+        `Services: ${obs.services.healthy} healthy / ${obs.services.degraded} degraded / ${obs.services.down} down`,
         `Open incidents: ${obs.open_incidents}`,
-        `Last check: ${obs.last_check || 'N/A'}`,
+        `Total incidents: ${obs.total_incidents}`,
       ];
-      if (obs.services_list?.length) {
-        lines.push('', '*Services:*');
-        for (const s of obs.services_list.slice(0, 8)) {
-          const icon = s.status === 'up' ? '🟢' : s.status === 'degraded' ? '🟡' : '🔴';
-          lines.push(`  ${icon} ${s.name}: ${s.status}`);
-        }
-      }
       return { handled: true, phase: 26, reply: lines.join('\n') };
     } catch (e: any) {
       return { handled: true, phase: 26, reply: `🏥 *Observability*\n\nEm chưa lấy được observability stats lúc này: ${e?.message || 'unknown'}\nServices có thể vẫn đang chạy — anh thử lại sau ít phút.` };

@@ -1,0 +1,49 @@
+{
+  "primary_intent": {
+    "intent": "revenue_concern",
+    "label_vi": "Lo ngại doanh thu",
+    "confidence": 0.85,
+    "evidence_keywords": [
+      "lỗ"
+    ],
+    "suggested_investigation": [
+      "Analyze revenue trends",
+      "Compare with prior period",
+      "Check conversion rates",
+      "Review AOV and traffic"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "service_degradation",
+      "label_vi": "Giảm hiệu năng dịch vụ",
+      "confidence": 0.75,
+      "evidence_keywords": [
+        "slow"
+      ],
+      "suggested_investigation": [
+        "Check response times",
+        "Review resource usage",
+        "Check database performance",
+        "Analyze traffic patterns"
+      ]
+    },
+    {
+      "intent": "technology_concern",
+      "label_vi": "Lo ngại công nghệ",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "database",
+        "database"
+      ],
+      "suggested_investigation": [
+        "Check server health",
+        "Review recent deployments",
+        "Check error rates",
+        "Assess technical debt"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

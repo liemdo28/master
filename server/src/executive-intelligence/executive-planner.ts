@@ -42,6 +42,7 @@ export interface ExecutionPlan {
   confidence: number;        // plan confidence from intent analysis
   requires_ceo_approval: boolean;
   approval_reason?: string;
+  risk_level?: 'low' | 'medium' | 'high';
 }
 
 // ── Plan templates per intent ──────────────────────────────────────────────────

@@ -12,18 +12,18 @@ A 7-agent constellation that runs every layer of Bakudan Ramen SEO under a singl
                           └─────────────▲─────────────┘
                                         │ register / status / reports
                                         │ tasks / config
-        ┌────────────┬────────────┬─────┴──────┬────────────┬────────────┬────────────┐
-        ▼            ▼            ▼            ▼            ▼            ▼            ▼
-  Local Maps     Website       Technical      Schema       Content      Citation     Analytics
-   :4001          :4002          :4003         :4004        :4005        :4006        :4007
-        \            \            │             │           /            /            /
-         \            \           │             │          /            /            /
-          ▼            ▼          ▼             ▼         ▼            ▼            ▼
-                ┌──────────────────────────────────────────────────────────┐
-                │  Shared Core (SEO/shared/)                               │
-                │  • config/   • database/  • contracts/  • events/ (bus)  │
-                │  • queue/    • logs/      • reports/    • mi-client/     │
-                └──────────────────────────────────────────────────────────┘
+          ┌────────────┬────────────┬─────┴──────┬────────────┬────────────┬────────────┐
+          ▼            ▼            ▼            ▼            ▼            ▼            ▼
+    Local Maps     Website       Technical      Schema       Content      Citation     Analytics
+     :4001          :4002          :4003         :4004        :4005        :4006        :4007
+          \            \            │             │           /            /            /
+           \            \           │             │          /            /            /
+            ▼            ▼          ▼             ▼         ▼            ▼            ▼
+                  ┌──────────────────────────────────────────────────────────┐
+                  │  Shared Core (SEO/shared/)                               │
+                  │  • config/   • database/  • contracts/  • events/ (bus)  │
+                  │  • queue/    • logs/      • reports/    • mi-client/     │
+                  └──────────────────────────────────────────────────────────┘
 ```
 
 ## Agents
