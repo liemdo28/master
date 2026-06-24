@@ -6,8 +6,8 @@
       "port": 4011,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11771,
-      "last_sync_at": "2026-06-24T04:15:19.314Z",
+      "uptime_s": 12281,
+      "last_sync_at": "2026-06-24T04:23:49.492Z",
       "registered_at": "2026-06-19T11:02:40.343Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -150,8 +150,8 @@
       "port": 4014,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11765,
-      "last_sync_at": "2026-06-24T04:15:13.620Z",
+      "uptime_s": 12276,
+      "last_sync_at": "2026-06-24T04:23:43.927Z",
       "registered_at": "2026-06-19T11:04:10.370Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -190,8 +190,8 @@
       "port": 4017,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11765,
-      "last_sync_at": "2026-06-24T04:15:13.541Z",
+      "uptime_s": 12275,
+      "last_sync_at": "2026-06-24T04:23:43.760Z",
       "registered_at": "2026-06-19T11:04:10.391Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -427,8 +427,8 @@
       "port": 4015,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11765,
-      "last_sync_at": "2026-06-24T04:15:13.196Z",
+      "uptime_s": 12275,
+      "last_sync_at": "2026-06-24T04:23:43.747Z",
       "registered_at": "2026-06-19T11:04:10.392Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -653,8 +653,8 @@
       "port": 4013,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11766,
-      "last_sync_at": "2026-06-24T04:15:13.795Z",
+      "uptime_s": 12276,
+      "last_sync_at": "2026-06-24T04:23:43.933Z",
       "registered_at": "2026-06-19T11:04:10.394Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -2045,8 +2045,8 @@
       "port": 4012,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11765,
-      "last_sync_at": "2026-06-24T04:15:13.481Z",
+      "uptime_s": 12275,
+      "last_sync_at": "2026-06-24T04:23:43.753Z",
       "registered_at": "2026-06-19T11:04:10.395Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -2286,8 +2286,8 @@
       "port": 4016,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 11766,
-      "last_sync_at": "2026-06-24T04:15:13.833Z",
+      "uptime_s": 12276,
+      "last_sync_at": "2026-06-24T04:23:43.950Z",
       "registered_at": "2026-06-19T11:04:10.459Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -3651,601 +3651,6 @@
     }
   },
   "syncLogs": [
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:39:43.206Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:39:43.233Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:39:48.743Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:12.648Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:12.966Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:13.019Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:13.050Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:13.207Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:13.238Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:18.759Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:42.657Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:42.981Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:43.031Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:43.061Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:43.226Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:43.252Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:40:48.777Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:12.674Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:12.982Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:13.045Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:13.075Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:13.233Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:13.261Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:18.760Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:42.681Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:42.991Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:43.053Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:43.087Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:43.245Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:43.279Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:41:48.772Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:12.693Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:12.994Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:13.054Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:13.086Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:13.246Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:13.288Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:18.775Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:42.708Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:43.007Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:43.059Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:43.090Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:43.348Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:43.380Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:42:48.781Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:12.712Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:13.003Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:13.083Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:13.098Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:13.259Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:13.303Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:18.794Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:42.710Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:43.009Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:43.070Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:43.102Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:43.325Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:43.359Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:43:48.808Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:12.716Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:13.025Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:13.090Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:13.119Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:13.352Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:13.383Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:18.819Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:42.718Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:43.037Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:43.091Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:43.121Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:43.285Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:43.322Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:44:48.833Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:12.726Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:13.032Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:13.094Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:13.126Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:13.284Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:13.329Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:18.836Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:42.741Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:43.047Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:43.107Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:43.137Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:43.296Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:43.345Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:45:48.840Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:12.755Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:13.061Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:13.121Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:13.381Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:13.411Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:13.415Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:18.855Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:42.756Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:43.068Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:43.173Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:43.176Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:43.318Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:43.351Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:46:48.853Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:12.760Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:13.073Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:13.167Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:13.171Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:13.322Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:13.354Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:18.866Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:42.766Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:43.073Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:43.232Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:43.236Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:43.343Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:43.369Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:47:48.883Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:48:12.778Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:48:13.075Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:48:13.173Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-24T03:48:13.176Z"
-    },
     {
       "agent": "seo-technical-agent",
       "action": "status",
@@ -6150,6 +5555,601 @@
       "agent": "seo-local-maps-agent",
       "action": "status",
       "ts": "2026-06-24T04:15:19.314Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.201Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.502Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.557Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.648Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.797Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:43.833Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:15:49.327Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.237Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.510Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.569Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.634Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.805Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:13.838Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:19.334Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.905Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.910Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.916Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.932Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.939Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:16:48.958Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.437Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.455Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.515Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.523Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.531Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.541Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:18.549Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:19.336Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:43.230Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:43.529Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:43.587Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:43.669Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:46.271Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:46.316Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:17:49.348Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.251Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.541Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.605Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.708Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.841Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:13.865Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:19.357Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.256Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.553Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.627Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.692Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.858Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:43.889Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:18:49.362Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.262Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.569Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.615Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.708Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.879Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:13.912Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:19.366Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.278Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.579Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.623Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.739Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.856Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:43.888Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:19:49.382Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.284Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.590Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.639Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.730Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.863Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:13.911Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:19.395Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.291Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.602Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.652Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.791Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.872Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:43.917Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:20:49.404Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.308Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.615Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.660Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.804Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.879Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:13.926Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:19.407Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.322Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.619Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.663Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.819Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.881Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:43.930Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:21:49.418Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.554Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.617Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.665Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.757Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.885Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:13.929Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:22.132Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.324Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.621Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.667Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.763Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.887Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:43.941Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:22:49.435Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.331Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.633Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.673Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.780Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.893Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:13.938Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:19.447Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.747Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.753Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.760Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.927Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.933Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:43.950Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-24T04:23:49.492Z"
     }
   ],
   "tasks": [],
