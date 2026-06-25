@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T08:49:58.042Z",
+  "generated_at": "2026-06-25T09:19:56.625Z",
   "status": "degraded",
   "dashboard_status": "degraded",
   "certified": false,
@@ -67,11 +67,11 @@
   ],
   "errors": [],
   "gaps": [
-    "Latest QB heartbeat is stale (12885 minutes old)",
-    "Last successful QB sync is stale (10100 minutes old)"
+    "Latest QB heartbeat is stale (12915 minutes old)",
+    "Last successful QB sync is stale (10130 minutes old)"
   ],
   "action_required": true,
-  "required_dev1_action": "On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (12885 minutes old); Last successful QB sync is stale (10100 minutes old)",
+  "required_dev1_action": "On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (12915 minutes old); Last successful QB sync is stale (10130 minutes old)",
   "handoff_package_path": "E:\\Project\\Master\\.local-agent-global\\visibility\\quickbooks\\dev1-handoff-package.json",
   "daily_report_path": "E:\\Project\\Master\\mi-core\\QB_DAILY_RUNTIME_REPORT.md"
 }

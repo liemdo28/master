@@ -1,6 +1,6 @@
 {
-  "synced_at": "2026-06-25T08:49:10.377Z",
-  "unread_count": 39,
+  "synced_at": "2026-06-25T09:19:10.222Z",
+  "unread_count": 38,
   "important_count": 10,
   "emails": [
     {
@@ -26,12 +26,11 @@
       "date": "Thu, 25 Jun 2026 01:20:30 -0700",
       "snippet": "Hi Liem Do, Thank you for contacting the Business Profile API team. Since the Cloud Project is not yet approved for Business Profile API access, your request to increase the quota limit for Performanc",
       "labels": [
-        "UNREAD",
         "IMPORTANT",
         "CATEGORY_UPDATES",
         "INBOX"
       ],
-      "is_unread": true,
+      "is_unread": false,
       "is_important": true
     },
     {
