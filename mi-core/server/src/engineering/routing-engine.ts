@@ -1,83 +1,160 @@
-import type { TaskClassification } from './task-classifier';
-import { MODEL_REGISTRY } from './model-registry';
+/**
+ * Phase 34C — Routing Engine
+ * Selects the best model for a classified task using a scoring matrix.
+ */
+
+import { ModelId, MODEL_REGISTRY, ModelDefinition } from './model-registry';
+import { TaskClassification } from './task-classifier';
 
 export interface RoutingDecision {
-  selected_model:    string;
-  model_name:        string;
-  confidence:        number;
-  rationale:         string;
-  fallback_model:    string;
-  escalate_human:    boolean;
+  selected_model:   ModelId;
+  model_name:       string;
+  confidence:       number;   // 0-100
+  rationale:        string;
+  fallback_model?:  ModelId;
+  escalate_human:   boolean;
   escalation_reason?: string;
 }
 
-export function route(c: TaskClassification): RoutingDecision {
-  // Human escalation rules
-  if (c.is_p0 && c.is_production) {
-    return {
-      selected_model: 'human-dev', model_name: 'Human Developer',
-      confidence: 100, rationale: 'P0 production issue — human required',
-      fallback_model: 'claude', escalate_human: true,
-      escalation_reason: 'P0 production incident requires human oversight',
-    };
-  }
-  if (c.complexity === 'critical') {
-    return {
-      selected_model: 'human-dev', model_name: 'Human Developer',
-      confidence: 95, rationale: 'Critical complexity — human review required',
-      fallback_model: 'claude', escalate_human: true,
-      escalation_reason: 'Critical complexity task requires human approval',
-    };
-  }
+// ── Routing Rules ─────────────────────────────────────────────────────────────
+// Each rule assigns score adjustments to models based on classification signals.
 
-  // Score each available model
-  const scores: Record<string, number> = {
-    'qwen-coder': 50, 'deepseek': 50, 'kimi': 30, 'claude': 50, 'gpt': 50,
+interface RoutingRule {
+  condition: (c: TaskClassification) => boolean;
+  scores:    Partial<Record<ModelId, number>>;
+  reason:    string;
+}
+
+const ROUTING_RULES: RoutingRule[] = [
+  // Language-based routing
+  { condition: c => ['typescript','javascript','node'].includes(c.language),
+    scores: { 'qwen-coder': +30, 'claude': +10, 'gpt': +10 },
+    reason: 'Node/TS work' },
+
+  { condition: c => ['python','sql'].includes(c.language),
+    scores: { 'deepseek': +35, 'claude': +5 },
+    reason: 'Python/SQL work' },
+
+  { condition: c => c.language === 'php' || c.framework === 'laravel',
+    scores: { 'claude': +30, 'gpt': +20 },
+    reason: 'PHP/Laravel work' },
+
+  // Framework-based routing
+  { condition: c => ['react','nextjs','vue'].includes(c.framework),
+    scores: { 'gpt': +25, 'claude': +15, 'qwen-coder': +10 },
+    reason: 'Frontend framework' },
+
+  // Task type routing
+  { condition: c => c.task_type === 'bugfix' && c.complexity !== 'critical',
+    scores: { 'qwen-coder': +25, 'deepseek': +10 },
+    reason: 'Standard bugfix' },
+
+  { condition: c => c.task_type === 'review' || c.domain === 'refactor',
+    scores: { 'kimi': +30, 'claude': +20 },
+    reason: 'Code review/audit' },
+
+  { condition: c => c.domain === 'analytics' || c.domain === 'database',
+    scores: { 'deepseek': +30, 'claude': +10 },
+    reason: 'Analytics/DB work' },
+
+  { condition: c => c.domain === 'auth' || c.domain === 'deployment',
+    scores: { 'claude': +35 },
+    reason: 'Security/infra — Claude preferred' },
+
+  // Complexity routing
+  { condition: c => c.complexity === 'high',
+    scores: { 'claude': +20, 'gpt': +10, 'qwen-coder': -10 },
+    reason: 'High complexity — prefer senior models' },
+
+  { condition: c => c.complexity === 'low',
+    scores: { 'qwen-coder': +15, 'deepseek': +10 },
+    reason: 'Low complexity — prefer fast/cheap models' },
+
+  // Large repo analysis → Kimi
+  { condition: c => c.task_type === 'review' && c.complexity === 'high',
+    scores: { 'kimi': +25 },
+    reason: 'Large repo analysis' },
+];
+
+// ── Scoring ───────────────────────────────────────────────────────────────────
+
+function scoreModels(classification: TaskClassification): Record<ModelId, number> {
+  const scores: Record<ModelId, number> = {
+    'qwen-coder': 20,
+    'deepseek':   20,
+    'kimi':       15,
+    'claude':     25,
+    'gpt':        20,
+    'human-dev':  0,
   };
 
-  // Domain signals
-  if (c.domain === 'security')    { scores['claude'] += 30; scores['gpt'] += 15; }
-  if (c.domain === 'database')    { scores['deepseek'] += 20; scores['qwen-coder'] += 15; }
-  if (c.domain === 'ui')          { scores['gpt'] += 20; scores['qwen-coder'] += 10; }
-  if (c.domain === 'performance') { scores['deepseek'] += 25; scores['qwen-coder'] += 10; }
-  if (c.domain === 'api')         { scores['qwen-coder'] += 20; scores['gpt'] += 15; }
-  if (c.domain === 'testing')     { scores['claude'] += 20; scores['qwen-coder'] += 15; }
-  if (c.domain === 'auth')        { scores['claude'] += 25; scores['gpt'] += 15; }
-  if (c.domain === 'deployment')  { scores['claude'] += 20; scores['qwen-coder'] += 15; }
+  for (const rule of ROUTING_RULES) {
+    if (rule.condition(classification)) {
+      for (const [model, delta] of Object.entries(rule.scores) as [ModelId, number][]) {
+        scores[model] = (scores[model] || 0) + delta;
+      }
+    }
+  }
 
-  // Task type signals
-  if (c.task_type === 'review')   { scores['claude'] += 25; scores['gpt'] += 10; }
-  if (c.task_type === 'bugfix')   { scores['qwen-coder'] += 20; scores['deepseek'] += 20; }
-  if (c.task_type === 'feature')  { scores['qwen-coder'] += 15; scores['gpt'] += 15; }
-  if (c.task_type === 'refactor') { scores['claude'] += 20; }
+  // Human dev override for P0/production
+  if (classification.is_p0) {
+    scores['human-dev'] = 100;
+  }
 
-  // Complexity signals
-  if (c.complexity === 'high')    { scores['claude'] += 20; scores['gpt'] += 10; }
-  if (c.complexity === 'low')     { scores['qwen-coder'] += 20; scores['deepseek'] += 10; }
+  return scores;
+}
 
-  // Language signals
-  if (c.language === 'python')    { scores['qwen-coder'] += 15; scores['deepseek'] += 15; }
-  if (c.language === 'sql')       { scores['deepseek'] += 20; scores['claude'] += 15; }
+// ── Router ────────────────────────────────────────────────────────────────────
 
-  // Pick winner
-  const available = MODEL_REGISTRY.filter(m => m.available && m.id !== 'human-dev');
-  const winner = available
-    .map(m => ({ ...m, score: scores[m.id] || 50 }))
-    .sort((a, b) => b.score - a.score)[0];
+export function route(classification: TaskClassification): RoutingDecision {
+  // P0 / critical always escalates
+  if (classification.is_p0) {
+    return {
+      selected_model:  'human-dev',
+      model_name:      'Human Developer',
+      confidence:      100,
+      rationale:       'P0/critical task — requires human oversight',
+      escalate_human:  true,
+      escalation_reason: 'P0 or production-critical change',
+    };
+  }
 
-  const runnerUp = available
-    .map(m => ({ ...m, score: scores[m.id] || 50 }))
-    .sort((a, b) => b.score - a.score)[1];
+  const scores = scoreModels(classification);
 
-  const maxScore = winner.score;
-  const confidence = Math.min(99, Math.round(50 + (maxScore - 50) * 0.8));
+  // Sort by score descending (exclude human-dev from auto routing)
+  const ranked = (Object.entries(scores) as [ModelId, number][])
+    .filter(([id]) => id !== 'human-dev')
+    .sort(([, a], [, b]) => b - a);
+
+  const [topModel, topScore] = ranked[0];
+  const [fallbackModel] = ranked[1] || [];
+
+  // Confidence = normalized score (cap at 99)
+  const maxPossibleScore = 25 + 35 + 35 + 25 + 25; // theoretical max
+  const confidence = Math.min(99, Math.round((topScore / maxPossibleScore) * 100) + 40);
+
+  // Build rationale from matching rules
+  const matchedReasons = ROUTING_RULES
+    .filter(r => r.condition(classification) && (r.scores[topModel] || 0) > 0)
+    .map(r => r.reason);
+  const rationale = matchedReasons.length
+    ? matchedReasons.join('; ')
+    : `Best match for ${classification.domain}/${classification.language}`;
+
+  const escalate_human = confidence < 60 || classification.is_production;
+  const escalation_reason = confidence < 60
+    ? `Low confidence (${confidence}) — human review recommended`
+    : classification.is_production
+    ? 'Production change — human approval required'
+    : undefined;
 
   return {
-    selected_model: winner.id,
-    model_name:     winner.name,
+    selected_model:  topModel,
+    model_name:      MODEL_REGISTRY[topModel].name,
     confidence,
-    rationale: `Selected ${winner.name} for ${c.domain}/${c.task_type} task (score: ${maxScore})`,
-    fallback_model: runnerUp?.id || 'claude',
-    escalate_human: false,
+    rationale,
+    fallback_model:  fallbackModel,
+    escalate_human,
+    ...(escalation_reason ? { escalation_reason } : {}),
   };
 }

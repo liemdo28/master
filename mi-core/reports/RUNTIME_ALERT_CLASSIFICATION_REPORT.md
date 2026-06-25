@@ -1,6 +1,6 @@
 # RUNTIME_ALERT_CLASSIFICATION_REPORT
 
-Generated: 2026-06-25T02:23:06.908Z
+Generated: 2026-06-25T08:49:10.411Z
 Target: RUNTIME_ALERT_CLASSIFICATION_READY
 
 INFO: 0
@@ -15,7 +15,7 @@ CRITICAL: 1
 | WARNING | Agent Engine | pm2_restart_increase | Agent Engine: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | Gmail | connector_stale | Gmail is stale | E:\Project\Master\.local-agent-global\visibility\gmail\data.json |
-| CRITICAL | Mi-Core | runtime_down | Mi-Core is down | This operation was aborted |
+| CRITICAL | AI Service | runtime_down | AI Service is down | fetch failed |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown | pm2_status=pm2_unavailable |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded | 1 connector(s) unhealthy |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded | Connector is not fully healthy |

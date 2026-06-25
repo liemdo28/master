@@ -5,7 +5,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:22:57.248Z",
+    "last_sync": "2026-06-25T09:19:02.496Z",
     "read_capability": [
       "files",
       "folders",
@@ -28,7 +28,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:22:57.755Z",
+    "last_sync": "2026-06-25T09:19:02.539Z",
     "read_capability": [
       "tasks",
       "users",
@@ -54,7 +54,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:50.246Z",
+    "last_sync": "2026-06-25T09:19:56.611Z",
     "read_capability": [
       "tasks",
       "projects",
@@ -67,7 +67,7 @@
     ],
     "approval_required": true,
     "cache_path": "asana/",
-    "health_status": "healthy",
+    "health_status": "unknown",
     "setup_hint": "Asana cache/API evidence current; monitor token/network/rate-limit during burn-in.",
     "last_health_check": "2026-06-14T15:25:45.954Z"
   },
@@ -105,7 +105,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:41.599Z",
+    "last_sync": "2026-06-25T09:19:48.106Z",
     "read_capability": [
       "events",
       "calendars",
@@ -125,7 +125,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:42.369Z",
+    "last_sync": "2026-06-25T09:19:48.813Z",
     "read_capability": [
       "files",
       "folders",
@@ -147,7 +147,7 @@
     "type": "export",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:50.267Z",
+    "last_sync": "2026-06-25T09:19:56.617Z",
     "read_capability": [
       "steps",
       "sleep",
@@ -166,7 +166,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:51.216Z",
+    "last_sync": "2026-06-25T09:19:57.086Z",
     "read_capability": [
       "files",
       "content",
@@ -189,7 +189,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:51.215Z",
+    "last_sync": "2026-06-25T09:19:57.085Z",
     "read_capability": [
       "files",
       "content",
@@ -212,7 +212,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:50.271Z",
+    "last_sync": "2026-06-25T09:19:56.621Z",
     "read_capability": [
       "ledger",
       "stats",
@@ -224,13 +224,13 @@
     "write_capability": [],
     "approval_required": false,
     "cache_path": "accounting/",
-    "health_status": "healthy",
+    "health_status": "offline",
     "setup_hint": "Running: node api/server.js at 127.0.0.1:8844 — ONLINE",
     "config": {
       "api_url": "http://127.0.0.1:8844",
       "db_path": "E:/Project/Master/accounting-engine/ledgers/accounting.db"
     },
-    "last_health_check": "2026-06-25T01:22:57.411Z"
+    "last_health_check": "2026-06-25T09:40:14.751Z"
   },
   {
     "connector_id": "food-safety",
@@ -238,7 +238,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:50.278Z",
+    "last_sync": "2026-06-25T09:19:56.629Z",
     "read_capability": [
       "inspection-records",
       "audit-trail",
@@ -279,7 +279,7 @@
     "type": "local",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:50.277Z",
+    "last_sync": "2026-06-25T09:19:56.627Z",
     "read_capability": [
       "company-state",
       "activity-log",
@@ -303,7 +303,7 @@
     "type": "api",
     "status": "active",
     "auth_status": "connected",
-    "last_sync": "2026-06-25T02:23:44.377Z",
+    "last_sync": "2026-06-25T09:19:50.582Z",
     "read_capability": [
       "spreadsheets",
       "ranges",
