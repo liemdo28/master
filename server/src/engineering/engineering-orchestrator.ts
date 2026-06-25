@@ -1,6 +1,6 @@
 /**
  * Engineering Orchestrator — Mi CTO Brain
- * Single entry point: CEO gives objective → Mi classifies, routes, creates task,
+ * Single entry point: CEO gives objective -> Mi classifies, routes, creates task,
  * dispatches, collects evidence, reviews, generates PR, requests approval.
  */
 
@@ -12,33 +12,33 @@ import { addEvidence, generateEvidenceReport } from './evidence-engine';
 import { generatePR }            from './pr-generator';
 
 export interface DispatchResult {
-  task_id:       string;
-  status:        string;
+  task_id: string;
+  status: string;
   selected_model: string;
-  confidence:    number;
+  confidence: number;
   classification: object;
-  routing:       object;
-  pr_spec?:      object;
+  routing: object;
+  pr_spec?: object;
   evidence_report?: string;
-  next_action:   string;
+  next_action: string;
   escalate_human: boolean;
 }
 
 export async function dispatch(
   objective: string,
-  project:   string = 'mi-core',
+  project: string = 'mi-core',
   submittedCode?: string,
 ): Promise<DispatchResult> {
-  // ── Step 1: Classify ────────────────────────────────────────────────────────
+  // Step 1: Classify
   const classification = classifyTask(objective);
 
-  // ── Step 2: Route ───────────────────────────────────────────────────────────
+  // Step 2: Route
   const routing = route(classification);
 
-  // ── Step 3: Create task ─────────────────────────────────────────────────────
+  // Step 3: Create task
   const task = createTask(objective, project, classification, routing);
 
-  // ── Step 4: Log dispatch evidence ───────────────────────────────────────────
+  // Step 4: Log dispatch evidence
   addEvidence({
     task_id: task.id,
     type:    'log',
@@ -48,7 +48,7 @@ export async function dispatch(
 
   updateStatus(task.id, 'DISPATCHED');
 
-  // ── Step 5: If code submitted, run review ───────────────────────────────────
+  // Step 5: If code submitted, run review
   let prSpec;
   if (submittedCode) {
     updateStatus(task.id, 'REVIEW');
@@ -82,7 +82,7 @@ export async function dispatch(
 
     updateStatus(task.id, 'TESTING');
 
-    // ── Step 6: Generate PR ──────────────────────────────────────────────────
+    // Step 6: Generate PR
     updateStatus(task.id, 'PR_READY');
 
     prSpec = generatePR(task.id, objective, project, classification, routing, review);
@@ -99,14 +99,14 @@ export async function dispatch(
     });
   }
 
-  // ── Step 7: Evidence report ─────────────────────────────────────────────────
+  // Step 7: Evidence report
   const reportPath = generateEvidenceReport(task.id, objective, routing.model_name);
 
   const finalStatus = routing.escalate_human ? 'APPROVAL_REQUIRED' :
                       submittedCode           ? 'PR_READY'          : 'DISPATCHED';
 
   const next_action = routing.escalate_human
-    ? `APPROVAL REQUIRED — ${routing.escalation_reason}. CEO must approve before execution.`
+    ? `APPROVAL REQUIRED - ${routing.escalation_reason}. CEO must approve before execution.`
     : submittedCode
     ? `PR ready on branch ${prSpec?.branch}. Run tests then merge.`
     : `Task dispatched to ${routing.model_name}. Waiting for code submission.`;
