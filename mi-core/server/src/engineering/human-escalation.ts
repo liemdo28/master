@@ -6,6 +6,8 @@
 import { sendToCeo, queueToCeo } from '../services/whatsapp-sender';
 import { getTask } from './engineering-queue';
 import { getEvidence } from './evidence-engine';
+import { RoutingDecision } from './routing-engine';
+import { TaskClassification } from './task-classifier';
 
 export interface EscalationPayload {
   task_id:        string;
@@ -41,6 +43,15 @@ function buildMessage(p: EscalationPayload): string {
   return lines.join('\n');
 }
 
+function parseJson<T>(value: string | null | undefined): Partial<T> {
+  if (!value) return {};
+  try {
+    return JSON.parse(value) as Partial<T>;
+  } catch {
+    return {};
+  }
+}
+
 export async function escalateToHuman(taskId: string, reason: string): Promise<boolean> {
   const task     = getTask(taskId);
   const evidence = getEvidence(taskId);
@@ -50,16 +61,19 @@ export async function escalateToHuman(taskId: string, reason: string): Promise<b
     return false;
   }
 
+  const routing = parseJson<RoutingDecision>(task.routing);
+  const classification = parseJson<TaskClassification>(task.classification);
+
   const payload: EscalationPayload = {
     task_id:        taskId,
     reason,
     objective:      task.objective,
-    model:          task.routing?.model_name || task.selected_model || 'unknown',
-    complexity:     task.classification?.complexity || 'unknown',
-    domain:         task.classification?.domain || 'unknown',
-    is_p0:          task.classification?.is_p0 || false,
+    model:          routing.model_name || task.selected_model || 'unknown',
+    complexity:     classification.complexity || 'unknown',
+    domain:         classification.domain || 'unknown',
+    is_p0:          classification.is_p0 || false,
     evidence_count: evidence.length,
-    review_score:   task.review_score,
+    ...(task.review_score !== null ? { review_score: task.review_score } : {}),
   };
 
   const message = buildMessage(payload);
@@ -85,7 +99,7 @@ export async function notifyTaskComplete(taskId: string, status: 'DONE' | 'FAILE
     `${icon} *Engineering Task ${status}*`,
     `Task: \`${taskId}\``,
     `Objective: ${task.objective.slice(0, 100)}`,
-    `Model: ${task.routing?.model_name || task.selected_model}`,
+    `Model: ${parseJson<RoutingDecision>(task.routing).model_name || task.selected_model}`,
   ].join('\n');
 
   queueToCeo(msg);

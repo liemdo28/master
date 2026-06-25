@@ -1,8 +1,98 @@
 {
-  "synced_at": "2026-06-25T10:33:22.270Z",
-  "unread_count": 38,
+  "synced_at": "2026-06-25T13:06:04.169Z",
+  "unread_count": 37,
   "important_count": 10,
   "emails": [
+    {
+      "id": "19efee1a0002ee4f",
+      "thread_id": "19efee1a0002ee4f",
+      "subject": "[QC] Chuyên Gia Phân tích dữ liệu và xây dựng mô hình phát hiện gian lận - Khối Quản trị rủi ro (2026TD453499) và 9 việc làm phù hợp nhất dành cho bạn",
+      "from": "VietnamWorks <jobalerts@vietnamworks.com>",
+      "date": "Thu, 25 Jun 2026 13:04:18 +0000",
+      "snippet": "Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm được công việc mơ ước của mình. Dựa trên thông tin của bạn, chúng tôi đã tìm được những công việc mới nhất phù",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efed2303991834",
+      "thread_id": "19efed2303991834",
+      "subject": "Learn more about TIKI and discover other Pages you might be interested…",
+      "from": "LinkedIn <notifications-noreply@linkedin.com>",
+      "date": "Thu, 25 Jun 2026 12:47:27 +0000 (UTC)",
+      "snippet": "Liem, 2 new updates for you ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "HR/LinkedIn",
+        "CATEGORY_SOCIAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19efe79032f2630e",
+      "thread_id": "19efe79032f2630e",
+      "subject": "Your Sushi Chef job at Raw Sushi Bistro is about to expire",
+      "from": "Homebase <noreply@joinhomebase.com>",
+      "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
+      "snippet": "Your job post expires in 3 days Hi Admin LD, Your Sushi Chef job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your job",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efe78ff15011ae",
+      "thread_id": "19efe78ff15011ae",
+      "subject": "Your Server/Waitstaff job at Raw Sushi Bistro is about to expire",
+      "from": "Homebase <noreply@joinhomebase.com>",
+      "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
+      "snippet": "Your job post expires in 3 days Hi Admin LD, Your Server/Waitstaff job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efe790522548f5",
+      "thread_id": "19efe790522548f5",
+      "subject": "Your Busser job at Raw Sushi Bistro is about to expire",
+      "from": "Homebase <noreply@joinhomebase.com>",
+      "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
+      "snippet": "Your job post expires in 3 days Hi Admin LD, Your Busser job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your job post",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efe7002a53fdf2",
+      "thread_id": "19efe7002a53fdf2",
+      "subject": "Your image search expires in 48 hours",
+      "from": "ClarityCheck <hello@claritycheck.com>",
+      "date": "Thu, 25 Jun 2026 11:00:11 +0000",
+      "snippet": "This is the last email about your image search. Your report expires in 48 hours. After that, we won&#39;t contact you again. See My Report What you may find: Public websites where this image appears,",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
     {
       "id": "19efe28a12351396",
       "thread_id": "19efe28a12351396",
@@ -659,96 +749,6 @@
       "labels": [
         "UNREAD",
         "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef62ddc5d508cb",
-      "thread_id": "19ee1d802df26739",
-      "subject": "Fwd: Weekly statements",
-      "from": "Tracy E <tracy@fourseasonsfood.com>",
-      "date": "Tue, 23 Jun 2026 15:29:57 -0500",
-      "snippet": "Good afternoon Hoang, May we have May&#39;s payment this weekend? Thank you and have a wonderful day! Warmest Regards, Tracy Elias Four Seasons Food Inc. 2010 Holmes Rd, Houston, Tx 77045 Phone: 713-",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef5cd7d9617e02",
-      "thread_id": "19ef5cd7d9617e02",
-      "subject": "New photos were added to Bakudan Ramen",
-      "from": "Google Business Profile <businessprofile-noreply@google.com>",
-      "date": "Tue, 23 Jun 2026 11:45:44 -0700",
-      "snippet": "Bakudan Ramen These photos were just added to your Business Profile Photo added by Gerard Vertucci Photo added by Gerard Vertucci Photo added by Gerard Vertucci Photo added by Gerard Vertucci Photo",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef4fd69feb357a",
-      "thread_id": "19ef4fd69feb357a",
-      "subject": "REMINDER: Only 24 hours before everything changes",
-      "from": "Hostaway <marketing@hostaway.com>",
-      "date": "Tue, 23 Jun 2026 10:58:07 -0400",
-      "snippet": "Save your seat for our special live announcement ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef4f5fd1b188a7",
-      "thread_id": "19ef4f5fd1b188a7",
-      "subject": "You don't have to learn everything about SEO",
-      "from": "Gabriela from All in One SEO <support@aioseo.com>",
-      "date": "Tue, 23 Jun 2026 14:29:12 +0000",
-      "snippet": "You just need to know what to fix. AIOSEO tells you. ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef49c1f0002e0a",
-      "thread_id": "19ef49c1f0002e0a",
-      "subject": "[QC] Specialist, BI & Process Automation và 9 việc làm phù hợp nhất dành cho bạn",
-      "from": "VietnamWorks <jobalerts@vietnamworks.com>",
-      "date": "Tue, 23 Jun 2026 13:12:11 +0000",
-      "snippet": "Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm được công việc mơ ước của mình. Dựa trên thông tin của bạn, chúng tôi đã tìm được những công việc mới nhất phù",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef43a046e2f839",
-      "thread_id": "19ef43a046e2f839",
-      "subject": "💌 Ở đây có deal MUA 1 TẶNG 1",
-      "from": "CellphoneS <cskh@cellphones.com.vn>",
-      "date": "Tue, 23 Jun 2026 11:18:57 +0000",
-      "snippet": "😍 Mua Đồng hồ tặng Tai nghe · Mua Tablet tặng Phụ kiện · Mua Robot hút bụi tặng Máy lọc không khí - XEM NGAY »‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
         "INBOX"
       ],
       "is_unread": true,

@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { listTasks } from './engineering-queue';
 import { listAvailableModels } from './model-registry';
+import { TaskClassification } from './task-classifier';
 
 const SCORECARD_PATH = path.join(
   process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core',
@@ -26,7 +27,7 @@ export interface ModelStats {
 }
 
 export function computeScorecard(): ModelStats[] {
-  const tasks = listTasks(500);
+  const tasks = listTasks({ limit: 500 });
   const models = listAvailableModels();
 
   const stats: Record<string, ModelStats> = {};
@@ -49,7 +50,12 @@ export function computeScorecard(): ModelStats[] {
     if (t.status === 'FAILED') stats[mid].failed++;
     if (t.review_score)        (scores[mid] = scores[mid] || []).push(t.review_score);
 
-    const domain = t.classification?.domain || 'general';
+    let domain = 'general';
+    try {
+      domain = (JSON.parse(t.classification || '{}') as Partial<TaskClassification>).domain || domain;
+    } catch {
+      domain = 'general';
+    }
     stats[mid].domains[domain] = (stats[mid].domains[domain] || 0) + 1;
 
     if (!stats[mid].last_used || t.created_at > stats[mid].last_used!) {

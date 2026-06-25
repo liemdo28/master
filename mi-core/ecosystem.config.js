@@ -180,6 +180,37 @@ module.exports = {
       merge_logs: true,
     },
 
+    // ── QuickBooks Ops Agent (QBWC + heartbeat, port 3457) ──────────────────
+    {
+      name: 'qb-ops-agent',
+      script: 'dist/index.js',
+      cwd: __dirname + '/services/qb-ops-agent',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '256M',
+      restart_delay: 10000,
+      max_restarts: 10,
+      min_uptime: 10000,
+      env: {
+        NODE_ENV: 'development',
+        MI_CORE_URL: 'http://127.0.0.1:4001',
+        QBWC_PORT: '3457',
+        MACHINE_ID: 'qb-laptop-01',
+      },
+      env_production: {
+        NODE_ENV: 'production',
+        MI_CORE_URL: 'http://127.0.0.1:4001',
+        QBWC_PORT: '3457',
+        MACHINE_ID: 'qb-laptop-01',
+      },
+      error_file: __dirname + '/services/qb-ops-agent/logs/pm2-error.log',
+      out_file:   __dirname + '/services/qb-ops-agent/logs/pm2-out.log',
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      merge_logs: true,
+    },
+
     // ── Node Agent (secondary device discovery) ──────────────────────────────
     {
       name: 'mi-node-agent',
