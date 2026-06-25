@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-24T12:50:52.052Z",
-  "date": "Thứ Tư, 24 tháng 6, 2026",
+  "generated_at": "2026-06-25T00:41:58.286Z",
+  "date": "Thứ Năm, 25 tháng 6, 2026",
   "platforms": {
     "connected": [
       "Master Workspace",
@@ -39,25 +39,20 @@
     "reports_count": 20
   },
   "tasks": {
-    "asana_status": "synced (855 tasks, 75 overdue)",
-    "asana_overdue": 75,
+    "asana_status": "synced (855 tasks, 76 overdue)",
+    "asana_overdue": 76,
     "asana_my_tasks": 855,
     "dashboard_status": "no_tasks_module"
   },
   "emails": {
-    "status": "synced (41 unread, 7 important)",
-    "unread": 41,
-    "important": 7
+    "status": "synced (39 unread, 4 important)",
+    "unread": 39,
+    "important": 4
   },
   "calendar": {
-    "status": "synced (1 events today)",
-    "today_count": 1,
-    "events_today": [
-      {
-        "title": "Pay Copperpoint with raw credit card",
-        "start": "2026-06-24"
-      }
-    ]
+    "status": "synced (0 events today)",
+    "today_count": 0,
+    "events_today": []
   },
   "health": {
     "status": "export_available",
@@ -74,8 +69,7 @@
   },
   "action_items": [
     "1 project có uncommitted changes",
-    "41 emails chưa đọc",
-    "1 sự kiện hôm nay",
-    "75 Asana tasks overdue"
+    "39 emails chưa đọc",
+    "76 Asana tasks overdue"
   ]
 }

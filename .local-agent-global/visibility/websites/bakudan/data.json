@@ -1,16 +1,16 @@
 {
   "connector_id": "website-bakudan",
-  "synced_at": "2026-06-24T12:25:21.040Z",
+  "synced_at": "2026-06-25T01:12:47.950Z",
   "status": "ok",
   "website": "bakudanramen.com",
   "local_source_path": "E:/Project/Master/Bakudan/bakudanramen.com-current",
   "production_domain": "https://bakudanramen.com",
   "github_repository": "https://github.com/liemdo28/bakudanwebsite_sub.git",
-  "branch": "fix/seo-404-pages-phase23",
+  "branch": "seo/phase-28-homepage-og-tags",
   "last_commit": {
-    "sha": "487f0571df76d9328b42a60a422cfd5f0abbea4a",
-    "committed_at": "2026-06-24 13:21:39 +0700",
-    "subject": "fix: add clean URL rewrites for 7 SEO 404 pages — Phase 23E"
+    "sha": "86d05dd069ac1140c9d0a7a1cdeb1c2a456b8749",
+    "committed_at": "2026-06-25 00:34:42 +0700",
+    "subject": "fix(P0): add /api/admin/* routes — fix dashboard + pages broken in admin SPA"
   },
   "deploy_method": "GitHub Actions SCP deploy to server target directory",
   "deploy_files": [
@@ -1201,8 +1201,10 @@
     ],
     "configs": [
       ".htaccess",
+      "api/.htaccess",
       "integrations/linktreehl-next/package.json",
       "integrations/linktreehl-next/tsconfig.json",
+      "links/.htaccess",
       "package.json"
     ],
     "deployment_files": [
@@ -1238,8 +1240,8 @@
       "type": "Repo",
       "name": "https://github.com/liemdo28/bakudanwebsite_sub.git",
       "attributes": {
-        "branch": "fix/seo-404-pages-phase23",
-        "latest_commit": "487f0571df76d9328b42a60a422cfd5f0abbea4a"
+        "branch": "seo/phase-28-homepage-og-tags",
+        "latest_commit": "86d05dd069ac1140c9d0a7a1cdeb1c2a456b8749"
       }
     },
     {
@@ -1306,5 +1308,5 @@
     ".env",
     ".htpasswd"
   ],
-  "summary_text": "bakudanramen.com: 29 pages, 1107 assets, repo https://github.com/liemdo28/bakudanwebsite_sub.git, branch fix/seo-404-pages-phase23, synced 2026-06-24T12:25:21.040Z"
+  "summary_text": "bakudanramen.com: 29 pages, 1107 assets, repo https://github.com/liemdo28/bakudanwebsite_sub.git, branch seo/phase-28-homepage-og-tags, synced 2026-06-25T01:12:47.950Z"
 }

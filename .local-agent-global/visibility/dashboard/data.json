@@ -60,5 +60,5 @@
   "has_api": false,
   "has_tasks": false,
   "readme_summary": "# TaskFlow v2 — Deploy Guide\n\n## What changed from v1\n\n### New Features\n\n- ✅ **User Registration** — users can self-register (no admin account creation required)\n- ✅ **Calendar View** — monthly calendar (Asana-style) displaying tasks by due date\n- ✅ **Inbox** — notifications for: task assignments, new comments, tasks approaching or past due\n- ✅ **Email Notifications** — automatic email delivery for each notification event\n- ✅ **PWA** — installable on Desktop, Android, and iOS\n- ✅ **Dark Theme** ",
-  "scanned_at": "2026-06-24T12:24:26.117Z"
+  "scanned_at": "2026-06-25T01:11:49.884Z"
 }

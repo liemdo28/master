@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-24T12:50:52.134Z",
+  "generated_at": "2026-06-25T01:12:47.941Z",
   "failure_type": "scheduled_task_admin_and_sync_runner_pending",
   "expected_checksum": null,
   "actual_checksum": null,
   "last_successful_sync": "2026-06-14T15:04:32.890153+00:00",
   "company_detected": true,
   "qb_open": true,
-  "required_dev1_action": "On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (11686 minutes old); Last successful QB sync is stale (8901 minutes old)",
+  "required_dev1_action": "On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (12428 minutes old); Last successful QB sync is stale (9643 minutes old)",
   "screenshots_or_log_paths": [
     "C:\\Users\\hoang\\Downloads\\source\\setup-all\\Bakudan\\integration-system\\desktop-app\\DEV1_LAPTOP1_QB_FINALIZE.ps1",
     "C:\\Users\\hoang\\Downloads\\source\\setup-all\\Bakudan\\integration-system\\desktop-app\\runtime\\quarantine",
@@ -14,8 +14,8 @@
   ],
   "dashboard_status": "needs_dev1_action",
   "gaps": [
-    "Latest QB heartbeat is stale (11686 minutes old)",
-    "Last successful QB sync is stale (8901 minutes old)"
+    "Latest QB heartbeat is stale (12428 minutes old)",
+    "Last successful QB sync is stale (9643 minutes old)"
   ],
   "errors": []
 }

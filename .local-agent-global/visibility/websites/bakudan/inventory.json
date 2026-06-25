@@ -1183,8 +1183,10 @@
   ],
   "configs": [
     ".htaccess",
+    "api/.htaccess",
     "integrations/linktreehl-next/package.json",
     "integrations/linktreehl-next/tsconfig.json",
+    "links/.htaccess",
     "package.json"
   ],
   "deployment_files": [

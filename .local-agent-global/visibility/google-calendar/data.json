@@ -1,19 +1,7 @@
 {
-  "synced_at": "2026-06-24T12:25:11.010Z",
-  "today": "Thứ Tư, 24 tháng 6",
-  "events_today": [
-    {
-      "id": "_64p32d9i6spjcc9p70o32d9h75062sr1dpgisorfdk",
-      "title": "Pay Copperpoint with raw credit card",
-      "start": "2026-06-24",
-      "end": "2026-06-25",
-      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215273619801519\n\nhttps://ce.copperpoint.com/account-management/automatic-payment\nhoang.d.le@gmail.com\nBakudan$1\nMake monthly payment  using Capital One Card\nMonthly payment of $ 653.10  send email for completion of task",
-      "calendar": "Liem’s tasks - My Workspace (via Asana)",
-      "is_all_day": true,
-      "attendees": [],
-      "status": "confirmed"
-    }
-  ],
+  "synced_at": "2026-06-25T01:12:36.468Z",
+  "today": "Thứ Năm, 25 tháng 6",
+  "events_today": [],
   "events_upcoming": [
     {
       "id": "_64p32d9n60rj2cpl6go3ad9l6p062sr1dpgisorfdk",
@@ -87,6 +75,28 @@
       "start": "2026-07-01",
       "end": "2026-07-02",
       "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215617831143051\n\nPlease send out sale report for RAW Stockton to Raymond, Hoang, Anh\n\nToast Net sale \nRaymond's email : ParkWestPlace@am.jll.com\nhttps://auth.toasttab.com/login?state=g6Fo2SB6Wjc2ckJ1SVhWNmJIcVBGSEpVME5fSEVqUE9rd",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d9k6ssj6d1m70p30d9h75062sr1dpgisorfdk",
+      "title": "Pay Amtrust Modesto",
+      "start": "2026-07-02",
+      "end": "2026-07-03",
+      "description": "https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215479346820519\n\nlogon to make payment on policy\n\nhttps://auth.amtrustgroup.com/AuthServer/account/login?returnUrl=d&clientId=2cfaca7f-b6a6-43c3-a5ea-2858a6433501&redirectUri=https%3A%2F%2Fao.amtrustgroup.com%2FInsureds%2FLogin.",
+      "calendar": "Liem’s tasks - My Workspace (via Asana)",
+      "is_all_day": true,
+      "attendees": [],
+      "status": "confirmed"
+    },
+    {
+      "id": "_64p32d9m64s32dhn64sj6d1g6t062sr1dpgisorfdk",
+      "title": "Stockton - Prepayment - Sale and Use Tax",
+      "start": "2026-07-02",
+      "end": "2026-07-06",
+      "description": "https://app.asana.com/1/1175942980830614/project/1178165912182121/task/1215618167193407\n\n\nhttps://onlineservices.cdtfa.ca.gov/_/\nrawstockton // B@kudan1\nUse the Total Income on Qb\nhoang.d.le@gmail.com // R@wsushi1\nhttps://docs.google.com/spreadsheets/d/1k9IxpDsQ6EmLJ8FanzX-2Empk43hsA2BdyoP_rdnMmw/ed",
       "calendar": "Liem’s tasks - My Workspace (via Asana)",
       "is_all_day": true,
       "attendees": [],

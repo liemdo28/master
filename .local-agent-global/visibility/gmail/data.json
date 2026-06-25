@@ -1,8 +1,263 @@
 {
-  "synced_at": "2026-06-24T12:24:33.608Z",
-  "unread_count": 41,
-  "important_count": 7,
+  "synced_at": "2026-06-25T01:11:55.650Z",
+  "unread_count": 39,
+  "important_count": 4,
   "emails": [
+    {
+      "id": "19efbe576718d637",
+      "thread_id": "19efb7de86096e75",
+      "subject": "Re: Payment",
+      "from": "Hoang Le <hoang.d.le@gmail.com>",
+      "date": "Wed, 24 Jun 2026 16:09:02 -0700",
+      "snippet": "Yes, thank you for the reminder. On Wed, Jun 24, 2026 at 2:16 PM Tracy E &lt;tracy@fourseasonsfood.com&gt; wrote: Good afternoon Hoang, Would you mind taking care of May&#39;s payment this Friday?",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19efbba375c372f0",
+      "thread_id": "19efbba375c372f0",
+      "subject": "Daily Agenda for Liem Do as of 5am",
+      "from": "Google Calendar <calendar-notification@google.com>",
+      "date": "Wed, 24 Jun 2026 22:22:25 +0000",
+      "snippet": "Google Calendar Liem Do, here is your schedule for: Thu Jun 25, 2026 All day Mon Jun 22 – Thu Jun 25 Stockton - Payroll - Liem Finance Asana Google Calendar You are receiving this email at the account",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efbb5fdc1173a4",
+      "thread_id": "19efbb5fdc1173a4",
+      "subject": "Let Cowork do something real for you",
+      "from": "Claude Team <no-reply@email.claude.com>",
+      "date": "Wed, 24 Jun 2026 22:17:45 +0000",
+      "snippet": "Pick a prompt. Point Claude at your files or email. The best way to see what Cowork can do is to point it at something real.͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏ Anthropic Claude by Anthropic Try Cowork on your",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efb7de86096e75",
+      "thread_id": "19efb7de86096e75",
+      "subject": "Fwd: Payment",
+      "from": "Tracy E <tracy@fourseasonsfood.com>",
+      "date": "Wed, 24 Jun 2026 16:15:29 -0500",
+      "snippet": "Good afternoon Hoang, Would you mind taking care of May&#39;s payment this Friday? Thank you and have a wonderful day! Warmest Regards, Tracy Elias Four Seasons Food Inc. 2010 Holmes Rd, Houston, Tx",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efaf4f9ee8fc36",
+      "thread_id": "19efaf4f9ee8fc36",
+      "subject": "Learn more about our updated Terms of Service",
+      "from": "Google <google-noreply@google.com>",
+      "date": "Wed, 24 Jun 2026 11:46:58 -0700",
+      "snippet": "liem.dt0208@gmail.com Every couple of years, we update our Terms of Service. We wanted to let you know ahead of time that the next update will be on July 30, 2026. These changes won&#39;t affect the",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efaa7cb1bbaf7e",
+      "thread_id": "19efaa7cb1bbaf7e",
+      "subject": "Bakudan Ramen, are you open on 4th of July?",
+      "from": "Google Business Profile <businessprofile-noreply@google.com>",
+      "date": "Wed, 24 Jun 2026 10:22:40 -0700",
+      "snippet": "Keep your listing up to date ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍ ‍",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efa5f34e1f8232",
+      "thread_id": "19efa5f34e1f8232",
+      "subject": "Ask. Analyze. Act. Meet Hostaway AI CoHost",
+      "from": "Hostaway <marketing@hostaway.com>",
+      "date": "Wed, 24 Jun 2026 12:02:47 -0400",
+      "snippet": "Understand what matters, know what to do next, and grow faster. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efa3522a132583",
+      "thread_id": "19efa3522a132583",
+      "subject": "Set up a Google tag on your website",
+      "from": "Google Tag Manager <tagmanager-noreply@google.com>",
+      "date": "Wed, 24 Jun 2026 08:17:26 -0700",
+      "snippet": "Finish setting up measurement on your website You recently viewed instructions on how to set up measurement on your website. We haven&#39;t found a Google tag on your website, so we&#39;re sharing",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ef9fbd5ff89c41",
+      "thread_id": "19ef9fbd5ff89c41",
+      "subject": "Mã bản quyền cho sản phẩm",
+      "from": "\"Chiaki.vn - Chăm sóc khách hàng\" <cskh@chiaki.vn>",
+      "date": "Wed, 24 Jun 2026 14:14:49 +0000",
+      "snippet": "Xin chào liem.dt0208@gmail.com Người bán đã bàn giao sản phẩm: Tài Khoản Netflix Chính Chủ - Gói 4K Premium Chất Lượng Cao - Xem Phim Không Quảng Cáo Trên Nhiều Thiết Bị - 1 USER, 3 tháng. Vui lòng",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19ef9e73821ee8c8",
+      "thread_id": "19ef9e73821ee8c8",
+      "subject": "Liêm, top price drops in Hanoi, selected for you!",
+      "from": "Agoda Price Alerts <no-reply@sg.newsletter.agoda-emails.com>",
+      "date": "Wed, 24 Jun 2026 13:52:19 +0000 (UTC)",
+      "snippet": "Check out today&#39;s top price drops on Agoda! Agoda.com Hotels &amp; Homes Flights Deals Airport Transfer Activities Liêm, experience the best of Hanoi Your journey starts here! Hanoi June 27, 2026",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ef9e52e6b5d113",
+      "thread_id": "19ef9e52e6b5d113",
+      "subject": "WhatsApp + your WordPress site = more sales",
+      "from": "Syed Balkhi - WPBeginner <support@wpbeginner.com>",
+      "date": "Wed, 24 Jun 2026 13:49:10 +0000",
+      "snippet": "Hey Liem, What happens when a visitor lands on your site, has a question, and there&#39;s no one around to answer it? They don&#39;t wait. They don&#39;t email. They just leave... and you rarely ever",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ef9bcf9d50bf0b",
+      "thread_id": "19ef9bcf9d50bf0b",
+      "subject": "Chiaki - Đặt hàng thành công",
+      "from": "\"Chiaki.vn - Chăm sóc khách hàng\" <cskh@chiaki.vn>",
+      "date": "Wed, 24 Jun 2026 13:06:10 +0000",
+      "snippet": "Xin chào Liem Do! Bạn có thông báo đơn hàng trên hệ thống thương mại điện tử chiaki.vn.‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ef9bce5007ba1a",
+      "thread_id": "19ef9bce5007ba1a",
+      "subject": "Biên lai chuyển tiền qua tài khoản",
+      "from": "VCBDigibank@info.vietcombank.com.vn",
+      "date": "24 Jun 2026 20:06:04 +0700",
+      "snippet": "Biên lai chuyển tiền qua tài khoản (Payment Receipt) Ngày, giờ giao dịch Trans. Date, Time 20:06 Thứ Tư 24/06/2026 Số lệnh giao dịch Order Number 14823847419 Tài khoản nguồn Debit Account 038100059556",
+      "labels": [
+        "From LD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ef9bcc8b0a5e10",
+      "thread_id": "19ef9bcc8b0a5e10",
+      "subject": "[QC] Data Manager và 9 việc làm phù hợp nhất dành cho bạn",
+      "from": "VietnamWorks <jobalerts@vietnamworks.com>",
+      "date": "Wed, 24 Jun 2026 13:05:57 +0000",
+      "snippet": "Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm được công việc mơ ước của mình. Dựa trên thông tin của bạn, chúng tôi đã tìm được những công việc mới nhất phù",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ef9bbe10e46fd7",
+      "thread_id": "19ef9bbe10e46fd7",
+      "subject": "Đổi mật khẩu VCB Digibank/VCB Digibank password change",
+      "from": "VCBDigibank@info.vietcombank.com.vn",
+      "date": "24 Jun 2026 20:04:58 +0700",
+      "snippet": "Đổi mật khẩu VCB Digibank VCB Digibank password change Ngân hàng TMCP Ngoại thương Việt Nam xin thông báo Quý khách đã thực hiện đổi mật khẩu dịch vụ VCB Digibank thành công. Để đảm bảo an toàn trong",
+      "labels": [
+        "From LD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19ef9af6d65239f0",
+      "thread_id": "19ef9af6d65239f0",
+      "subject": "liemdo28/master - 2 internal incidents detected",
+      "from": "GitGuardian Team <support@gitguardian.com>",
+      "date": "Wed, 24 Jun 2026 12:51:22 +0000 (UTC)",
+      "snippet": "2 internal secret incidents detected! Google Cloud OAuth2 Access Token 2026-06-24 12:50:54 PM (UTC) See on GitGuardian liemdo28/​master (commit 01ff8fd) See on GitHub Generic High Entropy Secret 2026-",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19ef9a78e9fca2f2",
+      "thread_id": "19ef9a78e9fca2f2",
+      "subject": "liemdo28/laptop1 - 2 internal incidents detected",
+      "from": "GitGuardian Team <support@gitguardian.com>",
+      "date": "Wed, 24 Jun 2026 12:42:46 +0000 (UTC)",
+      "snippet": "2 internal secret incidents detected! Generic High Entropy Secret 2026-06-24 12:42:08 PM (UTC) See on GitGuardian liemdo28/​laptop1 (commit 0030808) See on GitHub Username Password 2026-06-24 12:42:08",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
     {
       "id": "19ef949c6086be27",
       "thread_id": "19ef949c6086be27",
@@ -491,266 +746,6 @@
       "from": "\"Grab Việt Nam\" <no-reply@grab.com>",
       "date": "Tue, 23 Jun 2026 00:20:15 -0600",
       "snippet": "An tâm có tài đón đúng giờ Họp sáng quan trọng không bao giờ trễ Đặt trước chuyến xe ngay Main Banner Với những buổi sáng có cuộc họp quan trọng, tính năng Đặt trước chuyến xe sẽ giúp bạn luôn có mặt",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef2f3c1fcce27a",
-      "thread_id": "19ef2f3c1fcce27a",
-      "subject": "Biên lai chuyển tiền qua tài khoản",
-      "from": "VCBDigibank@info.vietcombank.com.vn",
-      "date": "23 Jun 2026 12:28:39 +0700",
-      "snippet": "Biên lai chuyển tiền qua tài khoản (Payment Receipt) Ngày, giờ giao dịch Trans. Date, Time 12:28 Thứ Ba 23/06/2026 Số lệnh giao dịch Order Number 14803295412 Tài khoản nguồn Debit Account 038100059556",
-      "labels": [
-        "From LD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": false,
-      "is_important": false
-    },
-    {
-      "id": "19ef2d31c86d912a",
-      "thread_id": "19ef2d31c86d912a",
-      "subject": "Đơn hàng #260623SECF01P0 đã giao hàng thành công",
-      "from": "Shopee <info@mail.shopee.vn>",
-      "date": "Tue, 23 Jun 2026 04:53:01 +0000 (UTC)",
-      "snippet": "Xin chào liemdo28, Đơn hàng #260623SECF01P0 của bạn đã được giao thành công ngày 23/06/2026. Vui lòng đăng nhập Shopee để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong vòng 3 ngày. Sau khi",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef2b6a31c5fd68",
-      "thread_id": "19ef2b6a31c5fd68",
-      "subject": "New My Nevada Tax Device Login",
-      "from": "Do Not Reply <NoReply@tax.state.nv.us>",
-      "date": "Mon, 22 Jun 2026 21:21:54 -0700",
-      "snippet": "Your liem.dt0208 My Nevada Tax account just logged in from a new device. When: Monday, Jun 22, 2026 9:21:51 PM IP Address: 45.18.225.137 If this was you, you may ignore this notification. You won&#39;",
-      "labels": [
-        "UNREAD",
-        "IMPORTANT",
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": true
-    },
-    {
-      "id": "19ef2b65895b54a2",
-      "thread_id": "19ef2b65895b54a2",
-      "subject": "My Nevada Tax Security Code",
-      "from": "Do Not Reply <NoReply@tax.state.nv.us>",
-      "date": "Mon, 22 Jun 2026 21:21:35 -0700",
-      "snippet": "475298 is your security code",
-      "labels": [
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": false,
-      "is_important": false
-    },
-    {
-      "id": "19ef25923258c742",
-      "thread_id": "19eef5dc6e7ace9c",
-      "subject": "Verification code for Toast",
-      "from": "no-reply@toasttab.com",
-      "date": "Tue, 23 Jun 2026 02:39:45 +0000 (UTC)",
-      "snippet": "MFA code for Toast Your code is: 917445 You&#39;re receiving this email because you have an account in Toast.",
-      "labels": [
-        "UNREAD",
-        "IMPORTANT",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": true
-    },
-    {
-      "id": "19ef2586eb99cfe9",
-      "thread_id": "19eef5dc6e7ace9c",
-      "subject": "Verification code for Toast",
-      "from": "no-reply@toasttab.com",
-      "date": "Tue, 23 Jun 2026 02:38:58 +0000 (UTC)",
-      "snippet": "MFA code for Toast Your code is: 015951 You&#39;re receiving this email because you have an account in Toast.",
-      "labels": [
-        "UNREAD",
-        "IMPORTANT",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": true
-    },
-    {
-      "id": "19ef25861753fd14",
-      "thread_id": "19eef5dc6e7ace9c",
-      "subject": "Verification code for Toast",
-      "from": "no-reply@toasttab.com",
-      "date": "Tue, 23 Jun 2026 02:38:55 +0000 (UTC)",
-      "snippet": "MFA code for Toast Your code is: 218910 You&#39;re receiving this email because you have an account in Toast.",
-      "labels": [
-        "UNREAD",
-        "IMPORTANT",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": true
-    },
-    {
-      "id": "19ef23b300175c3a",
-      "thread_id": "19ef23b300175c3a",
-      "subject": "[QC] Đừng bỏ lỡ! Ưu đãi Vay tiêu dùng với lãi suất hấp dẫn dành riêng cho bạn",
-      "from": "HSBC Vietnam <HSBC@informationservices.hsbc.com.vn>",
-      "date": "Tue, 23 Jun 2026 10:07:04 +0800",
-      "snippet": "Giải pháp Vay tiêu dùng đến từ HSBC Tài Chính Linh Hoạt Tận Hưởng Cuộc Sống Dễ dàng chinh phục mọi dự định, ước mơ của bạn với giải pháp Vay tiêu dùng đến từ HSBC. • Lãi suất theo dư nợ giảm dần chỉ t",
-      "labels": [
-        "UNREAD",
-        "QC (delete)",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef1932bcfd7b21",
-      "thread_id": "19ef1932bcfd7b21",
-      "subject": "[GitHub] Your personal access token (classic) is about to expire",
-      "from": "GitHub <noreply@github.com>",
-      "date": "Mon, 22 Jun 2026 16:03:34 -0700",
-      "snippet": "Hi @liemdo28, We noticed your personal access token (classic) &quot;Antigravity IDE (read:user repo user:email workflow)&quot; with read:user, repo, user:email, and workflow scopes will expire in abou",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef165f71345457",
-      "thread_id": "19ef165f71345457",
-      "subject": "Daily Agenda for Liem Do as of 5am",
-      "from": "Google Calendar <calendar-notification@google.com>",
-      "date": "Mon, 22 Jun 2026 22:14:11 +0000",
-      "snippet": "Google Calendar Liem Do, here is your schedule for: Tue Jun 23, 2026 All day Mon Jun 22 – Thu Jun 25 Stockton - Payroll - Liem Finance Asana All day Mon Jun 22 – Wed Jun 24 JHT - Payroll - Double Chec",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef126416396856",
-      "thread_id": "19eef5dc6e7ace9c",
-      "subject": "Verification code for Toast",
-      "from": "no-reply@toasttab.com",
-      "date": "Mon, 22 Jun 2026 21:04:32 +0000 (UTC)",
-      "snippet": "MFA code for Toast Your code is: 492335 You&#39;re receiving this email because you have an account in Toast.",
-      "labels": [
-        "UNREAD",
-        "IMPORTANT",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": true
-    },
-    {
-      "id": "19ef06a423f69140",
-      "thread_id": "19ef06a423f69140",
-      "subject": "Get more frequent customers with Store Loyalty Program (With no Marketing fees.)",
-      "from": "brixson.alonzo@ext.doordash.com",
-      "date": "Mon, 22 Jun 2026 12:39:14 -0500",
-      "snippet": "Hey, My name is Brix, your Account Manager and I am reaching out on behalf of DoorDash. We are reaching out to you to introduce you to the STORE LOYALTY PROGRAM of DoorDash. This is a restaurant-",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef000c2e58ec7d",
-      "thread_id": "19eeff527c02f473",
-      "subject": "Meeting Summary for Bakudan Ramen weekly",
-      "from": "\"Maria Perez via Otter.ai\" <no-reply@otter.ai>",
-      "date": "Mon, 22 Jun 2026 15:44:01 +0000 (UTC)",
-      "snippet": "Maria Perez has shared notes from Bakudan Ramen weekly, Jun 22 . Hoang Le and David Perez discussed operational issues and improvements at Bakudan Ramen. They noted a 30% drop in sales at B2,",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19eeff646266aeca",
-      "thread_id": "19eeff527c02f473",
-      "subject": "Meeting Summary for Bakudan Ramen weekly",
-      "from": "\"Hoang Le via Otter.ai\" <no-reply@otter.ai>",
-      "date": "Mon, 22 Jun 2026 15:32:34 +0000 (UTC)",
-      "snippet": "Hoang Le has shared notes from Bakudan Ramen weekly, Jun 22 . Hoang Le and David Perez discussed the performance of Bakudan Ramen stores, noting a 30% drop in B2 sales possibly due to Father&#39;s Day",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19eeff527c02f473",
-      "thread_id": "19eeff527c02f473",
-      "subject": "Meeting Summary for Bakudan Ramen weekly",
-      "from": "\"Omar Matus via Otter.ai\" <no-reply@otter.ai>",
-      "date": "Mon, 22 Jun 2026 15:31:20 +0000 (UTC)",
-      "snippet": "Omar Matus has shared notes from Bakudan Ramen weekly, Jun 22 . Hoang Le and Miles Sasaki discussed the need for more automation in their work processes and the importance of working with colleagues t",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19eefd7ad95e919b",
-      "thread_id": "19eefd7ad95e919b",
-      "subject": "Omar Matus shared Bakudan Ramen weekly in Otter",
-      "from": "\"Omar Matus via Otter.ai\" <no-reply@otter.ai>",
-      "date": "Mon, 22 Jun 2026 14:59:08 +0000 (UTC)",
-      "snippet": "Omar Matus shared a conversation with you Otter.ai logo Omar Matus shared a conversation with you Bakudan Ramen weekly Mon Jun 22, 10:00 am Open in Otter To stop the recording, open the meeting notes",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef092e53e3b4e8",
-      "thread_id": "19ef092e53e3b4e8",
-      "subject": "The SEO checklist your posts have never had",
-      "from": "Gabriela from All in One SEO <support@aioseo.com>",
-      "date": "Mon, 22 Jun 2026 14:30:06 +0000",
-      "snippet": "Basic is $49.50 through June 24. Normally $99. ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ͏ ‍͏ ",
       "labels": [
         "CATEGORY_PROMOTIONS",
         "UNREAD",
