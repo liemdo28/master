@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
+const qbwc_server_1 = require("./soap/qbwc-server");
 const startup_1 = require("./agent/startup");
 const machine_id_1 = require("./agent/machine-id");
 const heartbeat_1 = require("./agent/heartbeat");
@@ -12,8 +13,13 @@ const local_db_1 = require("./storage/local-db");
 const logs_1 = require("./storage/logs");
 const HEARTBEAT_INTERVAL_MS = (parseInt(process.env.HEARTBEAT_INTERVAL_SECONDS || '60', 10)) * 1000;
 const WORKFLOW_INTERVAL_MS = (parseInt(process.env.WORKFLOW_CHECK_INTERVAL_MINUTES || '15', 10)) * 60 * 1000;
+const COMMAND_POLL_INTERVAL_MS = (parseInt(process.env.COMMAND_POLL_INTERVAL_SECONDS || '60', 10)) * 1000;
+const MI_CORE_URL = process.env.MI_CORE_URL || 'http://localhost:4001';
+const MI_CORE_API_KEY = process.env.MI_CORE_API_KEY || '';
+const MACHINE_ID = process.env.MACHINE_ID || 'qb-laptop-01';
 let heartbeatTimer = null;
 let workflowTimer = null;
+let commandPollTimer = null;
 let isShuttingDown = false;
 async function heartbeatCycle() {
     if (isShuttingDown)
@@ -114,17 +120,87 @@ async function workflowCycle() {
         logs_1.logger.error('Workflow cycle failed', { error: err instanceof Error ? err.message : String(err) });
     }
 }
+async function miCoreFetch(path, options = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (MI_CORE_API_KEY)
+        headers['X-API-Key'] = MI_CORE_API_KEY;
+    return fetch(`${MI_CORE_URL}${path}`, { ...options, headers: { ...headers, ...(options.headers || {}) } });
+}
+async function executeTriggerSync(cmd) {
+    const identity = (0, machine_id_1.getMachineIdentity)();
+    const companyFiles = (0, company_files_1.getTrackedCompanyFiles)(identity.machine_id);
+    if (!companyFiles.length) {
+        logs_1.logger.warn('[CMD] TRIGGER_SYNC: no company files configured, skipping');
+        return;
+    }
+    logs_1.logger.info('[CMD] TRIGGER_SYNC: starting forced sync', { command_id: cmd.command_id, files: companyFiles.length });
+    await workflowCycle();
+    logs_1.logger.info('[CMD] TRIGGER_SYNC: done', { command_id: cmd.command_id });
+}
+async function commandPollCycle() {
+    if (isShuttingDown)
+        return;
+    try {
+        const res = await miCoreFetch(`/api/qb-agent/commands?machine_id=${encodeURIComponent(MACHINE_ID)}`);
+        if (!res.ok) {
+            logs_1.logger.warn('[CMD] Poll failed', { status: res.status });
+            return;
+        }
+        const { commands } = await res.json();
+        if (!commands?.length)
+            return;
+        for (const cmd of commands) {
+            logs_1.logger.info('[CMD] Processing command', { command_id: cmd.command_id, type: cmd.command_type });
+            // Ack first so we don't re-process on next poll
+            await miCoreFetch(`/api/qb-agent/commands/${cmd.command_id}/ack`, { method: 'POST' }).catch(() => { });
+            try {
+                if (cmd.command_type === 'TRIGGER_SYNC') {
+                    await executeTriggerSync(cmd);
+                    await miCoreFetch(`/api/qb-agent/commands/${cmd.command_id}/result`, {
+                        method: 'POST',
+                        body: JSON.stringify({ status: 'completed', result: { triggered_by: 'qb-ops-agent', ts: new Date().toISOString() } }),
+                    });
+                }
+                else {
+                    logs_1.logger.warn('[CMD] Unknown command type — skipping', { type: cmd.command_type });
+                    await miCoreFetch(`/api/qb-agent/commands/${cmd.command_id}/result`, {
+                        method: 'POST',
+                        body: JSON.stringify({ status: 'error', error: `unknown command type: ${cmd.command_type}` }),
+                    });
+                }
+            }
+            catch (err) {
+                const message = err instanceof Error ? err.message : String(err);
+                logs_1.logger.error('[CMD] Command execution failed', { command_id: cmd.command_id, error: message });
+                await miCoreFetch(`/api/qb-agent/commands/${cmd.command_id}/result`, {
+                    method: 'POST',
+                    body: JSON.stringify({ status: 'error', error: message }),
+                }).catch(() => { });
+            }
+        }
+    }
+    catch (err) {
+        logs_1.logger.error('[CMD] Command poll error', { error: err instanceof Error ? err.message : String(err) });
+    }
+}
 async function main() {
     await (0, startup_1.onStartup)();
+    // Start QBWC SOAP server (port 3457)
+    (0, qbwc_server_1.startQbwcServer)();
     // Initial runs
     await heartbeatCycle();
     await workflowCycle();
+    await commandPollCycle();
     // Schedule recurring
     heartbeatTimer = setInterval(heartbeatCycle, HEARTBEAT_INTERVAL_MS);
     workflowTimer = setInterval(workflowCycle, WORKFLOW_INTERVAL_MS);
+    commandPollTimer = setInterval(commandPollCycle, COMMAND_POLL_INTERVAL_MS);
     logs_1.logger.info('qb-ops-agent running', {
         heartbeatInterval: HEARTBEAT_INTERVAL_MS,
         workflowInterval: WORKFLOW_INTERVAL_MS,
+        commandPollInterval: COMMAND_POLL_INTERVAL_MS,
+        miCoreUrl: MI_CORE_URL,
+        machineId: MACHINE_ID,
     });
 }
 process.on('SIGINT', async () => {
@@ -134,6 +210,8 @@ process.on('SIGINT', async () => {
         clearInterval(heartbeatTimer);
     if (workflowTimer)
         clearInterval(workflowTimer);
+    if (commandPollTimer)
+        clearInterval(commandPollTimer);
     await (0, startup_1.onShutdown)();
     (0, local_db_1.closeDb)();
     process.exit(0);
