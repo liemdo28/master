@@ -1,8 +1,24 @@
 {
-  "synced_at": "2026-06-25T13:06:04.169Z",
-  "unread_count": 37,
-  "important_count": 10,
+  "synced_at": "2026-06-25T13:36:03.846Z",
+  "unread_count": 36,
+  "important_count": 11,
   "emails": [
+    {
+      "id": "19efef2f46495df6",
+      "thread_id": "19efb7de86096e75",
+      "subject": "Re: Payment",
+      "from": "Tracy E <tracy@fourseasonsfood.com>",
+      "date": "Thu, 25 Jun 2026 08:22:12 -0500",
+      "snippet": "My pleasure. Thank you and have a wonderful day! Warmest Regards, Tracy Elias Four Seasons Food Inc. 2010 Holmes Rd, Houston, Tx 77045 Phone: 713-383-8818 Fax: 713-383-8838 Direct:832-356-2687 Be like",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
     {
       "id": "19efee1a0002ee4f",
       "thread_id": "19efee1a0002ee4f",
@@ -34,21 +50,6 @@
       "is_important": false
     },
     {
-      "id": "19efe79032f2630e",
-      "thread_id": "19efe79032f2630e",
-      "subject": "Your Sushi Chef job at Raw Sushi Bistro is about to expire",
-      "from": "Homebase <noreply@joinhomebase.com>",
-      "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
-      "snippet": "Your job post expires in 3 days Hi Admin LD, Your Sushi Chef job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your job",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
       "id": "19efe78ff15011ae",
       "thread_id": "19efe78ff15011ae",
       "subject": "Your Server/Waitstaff job at Raw Sushi Bistro is about to expire",
@@ -70,6 +71,21 @@
       "from": "Homebase <noreply@joinhomebase.com>",
       "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
       "snippet": "Your job post expires in 3 days Hi Admin LD, Your Busser job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your job post",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efe79032f2630e",
+      "thread_id": "19efe79032f2630e",
+      "subject": "Your Sushi Chef job at Raw Sushi Bistro is about to expire",
+      "from": "Homebase <noreply@joinhomebase.com>",
+      "date": "Thu, 25 Jun 2026 11:10:02 +0000 (UTC)",
+      "snippet": "Your job post expires in 3 days Hi Admin LD, Your Sushi Chef job at Raw Sushi Bistro expires in 3 days and will no longer be visible to applicants. Still trying to fill the role? Reactivate your job",
       "labels": [
         "UNREAD",
         "CATEGORY_UPDATES",
@@ -146,12 +162,11 @@
       "date": "Thu, 25 Jun 2026 01:19:17 -0700",
       "snippet": "Hi Liem Do, Thank you for contacting the Business Profile API team. Since the Cloud Project is not yet approved for Business Profile API access, your request to increase the quota limit for Account",
       "labels": [
-        "UNREAD",
         "IMPORTANT",
         "CATEGORY_UPDATES",
         "INBOX"
       ],
-      "is_unread": true,
+      "is_unread": false,
       "is_important": true
     },
     {
@@ -731,21 +746,6 @@
       "from": "Google Calendar <calendar-notification@google.com>",
       "date": "Tue, 23 Jun 2026 22:18:11 +0000",
       "snippet": "Google Calendar Liem Do, here is your schedule for: Wed Jun 24, 2026 All day Mon Jun 22 – Thu Jun 25 Stockton - Payroll - Liem Finance Asana All day Mon Jun 22 – Wed Jun 24 JHT - Payroll - Double Chec",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef63ae321ac9f8",
-      "thread_id": "19ef63ae321ac9f8",
-      "subject": "From AI demos to real developer workflows",
-      "from": "Microsoft <Microsoft@e-mails.microsoft.com>",
-      "date": "Tue, 23 Jun 2026 13:44:41 -0700",
-      "snippet": "Developer news, updates, and training resources ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ",
       "labels": [
         "UNREAD",
         "CATEGORY_UPDATES",

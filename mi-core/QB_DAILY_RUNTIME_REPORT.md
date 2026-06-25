@@ -1,5 +1,5 @@
 # QB Daily Runtime Report
-Generated: 2026-06-25T13:06:54.806Z
+Generated: 2026-06-25T13:36:54.121Z
 Status: degraded
 Certified: no
 ## Runtime Signal
@@ -25,9 +25,9 @@ Certified: no
 - duplicate_bills: 0
 - duplicate_payments: 0
 ## Sync Gaps
-- Latest QB heartbeat is stale (13142 minutes old)
-- Last successful QB sync is stale (10357 minutes old)
+- Latest QB heartbeat is stale (13172 minutes old)
+- Last successful QB sync is stale (10387 minutes old)
 ## Dev1 Action
-Required: On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (13142 minutes old); Last successful QB sync is stale (10357 minutes old)
+Required: On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (13172 minutes old); Last successful QB sync is stale (10387 minutes old)
 Handoff package: E:\Project\Master\.local-agent-global\visibility\quickbooks\dev1-handoff-package.json
 Verdict: QB_RUNTIME_NEEDS_DEV1_ACTION

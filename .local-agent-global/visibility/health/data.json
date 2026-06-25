@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-06-25T13:06:54.796Z",
+  "last_updated": "2026-06-25T13:36:54.110Z",
   "source": {
     "connector_id": "health-export",
     "kind": "huawei_health_export",
     "source_path": "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json",
-    "imported_at": "2026-06-25T13:06:54.796Z"
+    "imported_at": "2026-06-25T13:36:54.110Z"
   },
   "today": {
     "date": "2026-06-13",
@@ -17,7 +17,7 @@
     "max_hr": 148,
     "hrv_ms": 42.3,
     "recovery_score": 80,
-    "updated_at": "2026-06-25T13:06:54.796Z"
+    "updated_at": "2026-06-25T13:36:54.110Z"
   },
   "weekly": {
     "week_start": "2026-06-07",
@@ -96,7 +96,7 @@
       "name": "Huawei Health Export",
       "attributes": {
         "source_path": "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json",
-        "imported_at": "2026-06-25T13:06:54.796Z"
+        "imported_at": "2026-06-25T13:36:54.110Z"
       }
     },
     {
