@@ -1,21 +1,21 @@
 # DEV2_RUNTIME_RELIABILITY_SNAPSHOT
 
-Generated: 2026-06-24T11:54:33.702Z
+Generated: 2026-06-25T02:23:06.910Z
 Target: DAILY_RELIABILITY_SNAPSHOT_READY
 Burn-in score: 16
 
 ## Uptime
 | Service | Status | Uptime % | Restarts | Crashes |
 | --- | --- | --- | --- | --- |
-| Mi-Core | down | 76.04 | 0 | 0 |
-| AI Service | up | 85.42 | 0 | 0 |
+| Mi-Core | down | 74.53 | 0 | 0 |
+| AI Service | up | 86.79 | 0 | 0 |
 | Ollama | up | 100 | 0 | 0 |
 | Agent Engine | unknown | 0 | 0 | 0 |
-| Visibility | degraded | 6.25 | 0 | 0 |
+| Visibility | degraded | 5.66 | 0 | 0 |
 | Gmail | up | 100 | 0 | 0 |
 | Calendar | up | 100 | 0 | 0 |
 | Drive | up | 100 | 0 | 0 |
-| QB Connector | degraded | 6.25 | 0 | 0 |
+| QB Connector | degraded | 5.66 | 0 | 0 |
 | Health Connector | up | 100 | 0 | 0 |
 
 ## Ollama
@@ -27,7 +27,7 @@ Timeout count: 0
 ## Connector Freshness
 | Source | Status | Stale | Age Min |
 | --- | --- | --- | --- |
-| Gmail | stale | yes | 14271 |
+| Gmail | stale | yes | 15139 |
 | Calendar | fresh | no | 29 |
 | Drive | fresh | no | 29 |
 | Sheets | fresh | no | 29 |
@@ -36,9 +36,9 @@ Timeout count: 0
 | Website bakudanramen.com | fresh | no | 29 |
 | Website rawsushibar.com | fresh | no | 29 |
 | QuickBooks | degraded | no | 0 |
-| Work Orders | fresh | no | 207 |
+| Work Orders | fresh | no | 1075 |
 | Graph | fresh | no | 60 |
-| Memory | fresh | no | 1 |
+| Memory | fresh | no | 142 |
 
 ## Active Incidents
 | Type | Source | Summary | Escalation |

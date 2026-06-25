@@ -1,11 +1,11 @@
 # OLLAMA_HEALTH_MONITOR_REPORT
 
-Generated: 2026-06-24T11:54:31.182Z
+Generated: 2026-06-25T02:23:02.876Z
 Target: OLLAMA_HEALTH_MONITOR_READY
 
 | Reachable | Model Loaded | Selected Model | Latency MS | Timeout Count | Failure Count | Last Success | Last Timeout |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| yes | yes | qwen3:8b | 12 | 0 | 0 | 2026-06-24T11:54:31.182Z |  |
+| yes | yes | qwen3:8b | 12 | 0 | 0 | 2026-06-25T02:23:02.876Z |  |
 
 Answer: Ollama đang ổn. Model đang dùng: qwen3:8b. Latency health check: 12ms.
 
