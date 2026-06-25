@@ -57,6 +57,7 @@ import { memoryRouter } from './routes/memory';
 import { brainRouter } from './routes/brain';
 import { agentEngineRouter } from './routes/agent-engine';
 import { qbAgentRouter } from './routes/qb-agent';
+import { qbFinancialRouter } from './routes/qb-financial';
 import { integrationAgentReleasesRouter } from './routes/integrationAgentReleases';
 import { projectsRouter } from './routes/projects';
 import { remoteRouter } from './routes/remote';
@@ -119,6 +120,8 @@ import { getKeyStatus } from './services/whatsapp-key-manager';
 import { n8nRouter } from './n8n/n8n-router';
 import { gscRouter } from './routes/gsc';
 import { ceoControlRouter } from './routes/ceo-control';
+import { ga4AnalyticsRouter } from './routes/ga4-analytics';
+import { gbpAnalyticsRouter } from './routes/gbp-analytics';
 import ceoObjectiveRouter from './ceo-command-center';
 
 // dotenv already loaded at top of file — do not call again here.
@@ -205,6 +208,7 @@ app.use('/api/visibility',  requireAuth, visibilityRouter);
 app.use('/api/chat',        requireAuth, chatRouter);
 app.use('/api/jarvis',      requireAuth, jarvisRouter);
 app.use('/api/qb-agent',    requireAuth, qbAgentRouter);
+app.use('/api/qb',          qbFinancialRouter);
 app.use('/api/projects',    requireAuth, projectsRouter);
 app.use('/api/reminders',   requireAuth, remindersRouter);
 app.use('/api/workspace',   requireAuth, workspaceRouter);
@@ -250,6 +254,8 @@ app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Product
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
 app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
 app.use('/api/seo/gsc',             gscRouter);              // Phase 4: Google Search Console
+app.use('/api/analytics',         ga4AnalyticsRouter);              // Phase 33: GA4 Revenue Intelligence
+app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B: Google Business Profile
 app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {

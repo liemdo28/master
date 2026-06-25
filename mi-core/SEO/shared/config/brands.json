@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-06-24T01:30:00.000Z",
+  "updated_at": "2026-06-24T12:00:00.000Z",
   "brands": [
     {
       "brand_id": "bakudan",
@@ -12,8 +12,8 @@
       "created_at": "2026-06-19T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "missing_credentials", "credentials_configured": false, "gsc_site_url": "needs_config" },
-        "ga4": { "status": "missing_credentials", "credentials_configured": false, "ga4_property_id": "needs_config" },
+        "gsc": { "status": "configured", "credentials_configured": true, "gsc_site_url": "sc-domain:bakudanramen.com" },
+        "ga4": { "status": "configured", "credentials_configured": true, "ga4_property_id": "G-3GZ2RYDR6M", "measurement_id": "G-3GZ2RYDR6M" },
         "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
@@ -29,14 +29,14 @@
       "brand_id": "raw_sushi",
       "name": "Raw Sushi",
       "domain": "https://rawsushibar.com",
-      "status": "needs_config",
+      "status": "active",
       "industry": "restaurant",
       "cuisine": "japanese_sushi",
       "created_at": "2026-06-24T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "missing_credentials", "credentials_configured": false, "gsc_site_url": "needs_config" },
-        "ga4": { "status": "missing_credentials", "credentials_configured": false, "ga4_property_id": "needs_config" },
+        "gsc": { "status": "configured", "credentials_configured": true, "gsc_site_url": "sc-domain:rawsushibar.com" },
+        "ga4": { "status": "configured", "credentials_configured": true, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "needs_numeric_id" },
         "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
