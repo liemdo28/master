@@ -1,6 +1,6 @@
 # Dev1 QuickBooks Handoff Package
 
-Generated: 2026-06-25T09:19:56.625Z
+Generated: 2026-06-25T10:34:09.943Z
 Failure type: scheduled_task_admin_and_sync_runner_pending
 Expected checksum: none
 Actual checksum: none
@@ -10,7 +10,7 @@ QB open: true
 
 ## Required Dev1 Action
 
-On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (12915 minutes old); Last successful QB sync is stale (10130 minutes old)
+On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbeat is stale (12989 minutes old); Last successful QB sync is stale (10205 minutes old)
 
 ## Screenshots / Logs
 
@@ -20,5 +20,5 @@ On Laptop1, review QB connector runtime and clear these gaps: Latest QB heartbea
 
 ## Gaps
 
-- Latest QB heartbeat is stale (12915 minutes old)
-- Last successful QB sync is stale (10130 minutes old)
+- Latest QB heartbeat is stale (12989 minutes old)
+- Last successful QB sync is stale (10205 minutes old)

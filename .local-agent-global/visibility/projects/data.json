@@ -17,7 +17,7 @@
       "E:\\Project\\Master\\Agent\\doordash-compaigns\\DOORDASH_REAL_WORLD_VALIDATION_REPORT.md"
     ],
     "has_qa": true,
-    "last_modified": "2026-06-24T08:28:02.205Z"
+    "last_modified": "2026-06-25T09:27:41.260Z"
   },
   {
     "name": "artifact-registry",
@@ -47,15 +47,6 @@
     ],
     "has_qa": false,
     "last_modified": "2026-06-11T03:45:17.001Z"
-  },
-  {
-    "name": "cv-builder",
-    "path": "E:\\Project\\Master\\cv-builder",
-    "type": "project",
-    "issues": [],
-    "reports": [],
-    "has_qa": false,
-    "last_modified": "2026-06-22T04:38:33.837Z"
   },
   {
     "name": "Mi",
@@ -92,7 +83,7 @@
       "E:\\Project\\Master\\mi-core\\ACTIVE_SOURCE_AUDIT.md"
     ],
     "has_qa": false,
-    "last_modified": "2026-06-25T02:47:53.673Z"
+    "last_modified": "2026-06-25T09:35:10.545Z"
   },
   {
     "name": "Other",
@@ -131,7 +122,7 @@
       "E:\\Project\\Master\\RawSushi\\RawWebsite\\reports\\PRODUCTION_HARDENING_REPORT.md"
     ],
     "has_qa": false,
-    "last_modified": "2026-06-25T08:20:09.527Z"
+    "last_modified": "2026-06-25T09:35:10.544Z"
   },
   {
     "name": "reports",
@@ -140,7 +131,7 @@
     "issues": [],
     "reports": [],
     "has_qa": false,
-    "last_modified": "2026-06-24T09:19:18.608Z"
+    "last_modified": "2026-06-25T10:29:12.164Z"
   },
   {
     "name": "SEO",
@@ -157,7 +148,7 @@
       "E:\\Project\\Master\\SEO\\SEO_VALIDATION_REPORT.md"
     ],
     "has_qa": false,
-    "last_modified": "2026-06-24T08:28:02.302Z"
+    "last_modified": "2026-06-25T09:27:41.261Z"
   },
   {
     "name": "seo-analytics-agent",
@@ -203,14 +194,5 @@
     "reports": [],
     "has_qa": false,
     "last_modified": "2026-06-24T08:28:15.330Z"
-  },
-  {
-    "name": "web-app",
-    "path": "E:\\Project\\Master\\web-app",
-    "type": "project",
-    "issues": [],
-    "reports": [],
-    "has_qa": false,
-    "last_modified": "2026-06-22T07:20:32.991Z"
   }
 ]
