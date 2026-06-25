@@ -23,6 +23,12 @@ const SCOPES = [
   'https://www.googleapis.com/auth/gmail.compose',
   'https://www.googleapis.com/auth/calendar.events',
   'https://www.googleapis.com/auth/drive.file',
+  // SEO (full write needed for sitemap delete)
+  'https://www.googleapis.com/auth/webmasters',
+  // GA4 Analytics Data API
+  'https://www.googleapis.com/auth/analytics.readonly',
+  // GBP (Google Business Profile) — Phase 34B local intent signals
+  'https://www.googleapis.com/auth/business.manage',
 ];
 
 export interface GoogleTokens {
