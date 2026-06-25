@@ -1,8 +1,23 @@
 {
-  "synced_at": "2026-06-25T09:19:10.222Z",
+  "synced_at": "2026-06-25T10:33:22.270Z",
   "unread_count": 38,
   "important_count": 10,
   "emails": [
+    {
+      "id": "19efe28a12351396",
+      "thread_id": "19efe28a12351396",
+      "subject": "Báo cáo cập nhật GMD - OUTPERFORM - Duy trì lợi thế cạnh tranh",
+      "from": "Chung Khoan Bao Viet <online@bvsc.com.vn>",
+      "date": "Thu, 25 Jun 2026 09:42:15 +0000 (UTC)",
+      "snippet": "Kính chào Quý Khách, Công ty Cổ phần Chứng khoán Bảo Việt xin gửi tới Quý khách hàng Báo cáo cập nhật Công ty Cổ phần Gemadept (HSX: GMD) với nội dung tóm tắt như sau: Khuyến nghị: OUTPERFORM Giá kỳ",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
     {
       "id": "19efdf29c515407d",
       "thread_id": "19efdf29c515407d",
@@ -734,21 +749,6 @@
       "labels": [
         "CATEGORY_PROMOTIONS",
         "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef42a19cb985f8",
-      "thread_id": "19ef42a19cb985f8",
-      "subject": "2005 - Cognizant - 1.8 lac p.a. 2007 - TCS - 3.2 lac p.a. 2010 - TCS - 5.6 lac p.a. 20...",
-      "from": "Quora Digest <english-quora-digest@quora.com>",
-      "date": "Tue, 23 Jun 2026 11:07:38 +0000",
-      "snippet": "2005 - Cognizant - 1.8 lac pa 2007 - TCS - 3.2 lac pa 2010 - TCS - 5.6 lac pa 2014 - TCS - 6.5 lac pa (horrible concept of reducing salary) 2015 - CTS - 9 lac pa 2017 - Accenture - 1… Top stories for",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
         "INBOX"
       ],
       "is_unread": true,
