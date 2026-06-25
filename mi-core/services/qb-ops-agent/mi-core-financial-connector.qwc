@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<QBWCXML>
+  <AppName>Mi-Core Financial Connector</AppName>
+  <AppID></AppID>
+  <AppURL>http://localhost:3457/qbwc</AppURL>
+  <AppDescription>Mi-Core CEO OS — syncs QuickBooks financial data (accounts, receipts, invoices)</AppDescription>
+  <AppSupport>http://localhost:3457/api/status</AppSupport>
+  <UserName>mi-qb-agent</UserName>
+  <OwnerID>{57F3B9D1-A8B2-4E3C-9D1F-2B7A5C8E4F6D}</OwnerID>
+  <FileID>{A3C5E7B9-1D2F-4A6C-8E0B-3F5D7A9C1E2B}</FileID>
+  <QBType>QBFS</QBType>
+  <Scheduler>
+    <RunEveryNMinutes>60</RunEveryNMinutes>
+  </Scheduler>
+</QBWCXML>

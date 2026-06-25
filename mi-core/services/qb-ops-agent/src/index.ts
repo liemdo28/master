@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { startQbwcServer } from './soap/qbwc-server';
 import { onStartup, onShutdown } from './agent/startup';
 import { getMachineIdentity } from './agent/machine-id';
 import { sendHeartbeat } from './agent/heartbeat';
@@ -207,6 +208,9 @@ async function commandPollCycle(): Promise<void> {
 
 async function main(): Promise<void> {
   await onStartup();
+
+  // Start QBWC SOAP server (port 3457)
+  startQbwcServer();
 
   // Initial runs
   await heartbeatCycle();
