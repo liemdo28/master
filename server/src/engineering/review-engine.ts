@@ -120,4 +120,16 @@ export function reviewCode(taskId: string, code: string, priorCode?: string): Re
   const total_score = checks.reduce((sum, c) => sum + c.score, 0);
   const passed      = total_score >= 80;
 
-  const blockers    = checks.filter(c =
+  const blockers     = checks.filter(c => c.score < 50);
+  const suggestions  = checks.filter(c => !c.passed && c.score >= 50).map(c => c.detail);
+
+  return {
+    task_id:     taskId,
+    passed,
+    total_score,
+    checks,
+    blockers:    blockers.map(c => c.name),
+    suggestions,
+    reviewed_at: new Date().toISOString(),
+  };
+}
