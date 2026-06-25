@@ -45,6 +45,9 @@ const MODEL_PROVIDER: Record<string, string> = {
   'gemini-1.5-pro':      'gemini',
   'deepseek-coder':      'deepseek',
   'deepseek-chat':       'deepseek',
+  'grok-beta':           'xai',
+  'grok-2':              'xai',
+  'grok-2-mini':         'xai',
 };
 
 export async function routeToProvider(req: ProviderRequest): Promise<ProviderResponse> {
@@ -64,6 +67,7 @@ export async function routeToProvider(req: ProviderRequest): Promise<ProviderRes
       case 'anthropic': return await callAnthropic(model, messages, req, start);
       case 'gemini':    return await callGemini(model, req, start);
       case 'deepseek':  return await callDeepSeek(model, messages, req, start);
+      case 'xai':       return await callXAI(model, messages, req, start);
       default:
         return { content: '', model, provider, tokens: 0, latency_ms: 0, error: `Unknown provider: ${provider}` };
     }
@@ -230,27 +234,26 @@ async function callDeepSeek(
   };
 }
 
+// ── xAI (Grok) — OpenAI-compatible endpoint ───────────────────────────────────
+async function callXAI(model: string, messages: any[], req: ProviderRequest, start: number): Promise<ProviderResponse> {
+  const key = process.env.XAI_API_KEY;
+  if (!key) return { content: '', model, provider: 'xai', tokens: 0, latency_ms: 0, error: 'XAI_API_KEY not set' };
+  const body = JSON.stringify({ model, messages, max_tokens: req.max_tokens || 1024, temperature: req.temperature ?? 0.3 });
+  const raw = await post({
+    hostname: 'api.x.ai', path: '/v1/chat/completions', method: 'POST',
+    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+  }, body);
+  const j = JSON.parse(raw);
+  if (j.error) return { content: '', model, provider: 'xai', tokens: 0, latency_ms: Date.now() - start, error: j.error.message };
+  return { content: j.choices?.[0]?.message?.content || '', model, provider: 'xai', tokens: j.usage?.total_tokens || 0, latency_ms: Date.now() - start };
+}
+
 export function listProviders(): { provider: string; configured: boolean; models: string[] }[] {
   return [
-    {
-      provider:   'openai',
-      configured: !!process.env.OPENAI_API_KEY,
-      models:     ['gpt-4o', 'gpt-4o-mini'],
-    },
-    {
-      provider:   'anthropic',
-      configured: !!process.env.ANTHROPIC_API_KEY,
-      models:     ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'],
-    },
-    {
-      provider:   'gemini',
-      configured: !!process.env.GEMINI_API_KEY,
-      models:     ['gemini-2.0-flash', 'gemini-1.5-pro'],
-    },
-    {
-      provider:   'deepseek',
-      configured: !!process.env.DEEPSEEK_API_KEY,
-      models:     ['deepseek-coder', 'deepseek-chat'],
-    },
+    { provider: 'openai',    configured: !!process.env.OPENAI_API_KEY,    models: ['gpt-4o', 'gpt-4o-mini'] },
+    { provider: 'anthropic', configured: !!process.env.ANTHROPIC_API_KEY, models: ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'] },
+    { provider: 'gemini',    configured: !!process.env.GEMINI_API_KEY,    models: ['gemini-2.0-flash', 'gemini-1.5-pro'] },
+    { provider: 'deepseek',  configured: !!process.env.DEEPSEEK_API_KEY,  models: ['deepseek-coder', 'deepseek-chat'] },
+    { provider: 'xai',       configured: !!process.env.XAI_API_KEY,       models: ['grok-2', 'grok-2-mini', 'grok-beta'] },
   ];
 }

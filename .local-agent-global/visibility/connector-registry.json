@@ -230,7 +230,7 @@
       "api_url": "http://127.0.0.1:8844",
       "db_path": "E:/Project/Master/accounting-engine/ledgers/accounting.db"
     },
-    "last_health_check": "2026-06-25T09:40:14.751Z"
+    "last_health_check": "2026-06-25T10:03:18.075Z"
   },
   {
     "connector_id": "food-safety",
