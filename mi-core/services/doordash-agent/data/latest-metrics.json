@@ -1,36 +1,120 @@
 {
-  "scraped_at": "2026-06-24T11:00:34.548Z",
+  "scraped_at": "2026-06-24T15:04:13.796Z",
   "accounts": [
     {
       "account_id": "bakudan-1",
+      "scraped_at": "2026-06-24T15:03:39.354Z",
+      "stores": [
+        {
+          "store_name": "default",
+          "page_url": "https://merchant-portal.doordash.com/analytics",
+          "orders_today": null,
+          "orders_week": null,
+          "revenue_today": null,
+          "revenue_week": null,
+          "avg_rating": null,
+          "total_reviews": null,
+          "raw_elements_count": 5,
+          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9ed93f62f924",
+          "raw_elements": [
+            "DoorDash",
+            "We're having trouble loading the page you requested. Try again\n            later.",
+            "Error Details",
+            "Client IP: 171.235.33.28",
+            "Ray ID: a10c9ed93f62f924"
+          ],
+          "dollar_amounts": []
+        }
+      ],
+      "error": null,
       "brand": "Bakudan Ramen",
-      "error": "LOGIN_FAILED",
-      "scraped_at": "2026-06-24T10:59:05.827Z",
-      "stores": [],
       "label": "B1"
     },
     {
       "account_id": "bakudan-2",
+      "scraped_at": "2026-06-24T15:03:49.072Z",
+      "stores": [
+        {
+          "store_name": "default",
+          "page_url": "https://merchant-portal.doordash.com/analytics",
+          "orders_today": null,
+          "orders_week": null,
+          "revenue_today": null,
+          "revenue_week": null,
+          "avg_rating": null,
+          "total_reviews": null,
+          "raw_elements_count": 5,
+          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f15e93ddb51",
+          "raw_elements": [
+            "DoorDash",
+            "We're having trouble loading the page you requested. Try again\n            later.",
+            "Error Details",
+            "Client IP: 171.235.33.28",
+            "Ray ID: a10c9f15e93ddb51"
+          ],
+          "dollar_amounts": []
+        }
+      ],
+      "error": null,
       "brand": "Bakudan Ramen",
-      "error": "LOGIN_FAILED",
-      "scraped_at": "2026-06-24T10:59:35.494Z",
-      "stores": [],
       "label": "B2"
     },
     {
       "account_id": "bakudan-3",
+      "scraped_at": "2026-06-24T15:03:58.394Z",
+      "stores": [
+        {
+          "store_name": "default",
+          "page_url": "https://merchant-portal.doordash.com/analytics",
+          "orders_today": null,
+          "orders_week": null,
+          "revenue_today": null,
+          "revenue_week": null,
+          "avg_rating": null,
+          "total_reviews": null,
+          "raw_elements_count": 5,
+          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f502edbfdba",
+          "raw_elements": [
+            "DoorDash",
+            "We're having trouble loading the page you requested. Try again\n            later.",
+            "Error Details",
+            "Client IP: 171.235.33.28",
+            "Ray ID: a10c9f502edbfdba"
+          ],
+          "dollar_amounts": []
+        }
+      ],
+      "error": null,
       "brand": "Bakudan Ramen",
-      "error": "LOGIN_FAILED",
-      "scraped_at": "2026-06-24T11:00:05.255Z",
-      "stores": [],
       "label": "B3"
     },
     {
       "account_id": "raw-sushi",
+      "scraped_at": "2026-06-24T15:04:07.939Z",
+      "stores": [
+        {
+          "store_name": "default",
+          "page_url": "https://merchant-portal.doordash.com/analytics",
+          "orders_today": null,
+          "orders_week": null,
+          "revenue_today": null,
+          "revenue_week": null,
+          "avg_rating": null,
+          "total_reviews": null,
+          "raw_elements_count": 5,
+          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f8bd86afcf6",
+          "raw_elements": [
+            "DoorDash",
+            "We're having trouble loading the page you requested. Try again\n            later.",
+            "Error Details",
+            "Client IP: 171.235.33.28",
+            "Ray ID: a10c9f8bd86afcf6"
+          ],
+          "dollar_amounts": []
+        }
+      ],
+      "error": null,
       "brand": "Raw Sushi Bar",
-      "error": "LOGIN_FAILED",
-      "scraped_at": "2026-06-24T11:00:34.547Z",
-      "stores": [],
       "label": "Raw"
     }
   ]

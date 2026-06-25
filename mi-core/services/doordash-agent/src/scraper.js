@@ -193,6 +193,15 @@ async function login(page, account) {
   }
 }
 
+async function extractStoreList(page) {
+  return page.evaluate(() => {
+    // DoorDash merchant portal has a store selector or store list
+    // Look for any element with store names
+    const allText = document.body.innerText;
+    return { bodyText: allText.slice(0, 5000), fullText: allText };
+  });
+}
+
 async function scrapeMetrics(page, accountId) {
   const metrics = {
     account_id: accountId,
@@ -202,31 +211,77 @@ async function scrapeMetrics(page, accountId) {
   };
 
   try {
-    // Take screenshot of portal home
-    const ss = path.join(SESSION_DIR, `${accountId}-portal.png`);
-    await page.screenshot({ path: ss });
-
-    const bodyText = await page.textContent('body').catch(() => '');
-    const pageUrl = page.url();
-
-    // Try to find store switcher or navigate to analytics
+    // Navigate to analytics and wait for SPA to fully render
     const analyticsUrls = [
       `${PORTAL_URL}analytics`,
       `${PORTAL_URL}home`,
-      `${PORTAL_URL}store`,
+      `${PORTAL_URL}reports`,
     ];
 
-    let analyticsText = bodyText;
+    let loaded = false;
     for (const url of analyticsUrls) {
       try {
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-        await page.waitForTimeout(2000);
-        analyticsText = await page.textContent('body').catch(() => '');
-        const analyticsSS = path.join(SESSION_DIR, `${accountId}-analytics.png`);
-        await page.screenshot({ path: analyticsSS });
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 });
+        // Wait extra time for React SPA to hydrate and render data
+        await page.waitForTimeout(5000);
+        loaded = true;
+        const ss = path.join(SESSION_DIR, `${accountId}-analytics.png`);
+        await page.screenshot({ path: ss, fullPage: true });
         break;
       } catch { continue; }
     }
+
+    if (!loaded) {
+      // Fallback: take screenshot of whatever loaded
+      const ss = path.join(SESSION_DIR, `${accountId}-portal.png`);
+      await page.screenshot({ path: ss, fullPage: true });
+    }
+
+    // Extract data using Playwright evaluate (reads from DOM after render)
+    const pageData = await page.evaluate(() => {
+      const data = {
+        bodyText: document.body.innerText.slice(0, 8000),
+        allElements: [],
+        numbers: [],
+        dollarAmounts: [],
+      };
+
+      // Walk all text nodes to find meaningful data
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        const text = node.textContent.trim();
+        if (text && text.length > 0 && text.length < 200) {
+          data.allElements.push(text);
+        }
+      }
+
+      // Find dollar amounts anywhere
+      const dollarPattern = /\$[\d,]+(?:\.\d{2})?/g;
+      let match;
+      const fullText = document.body.innerText;
+      while ((match = dollarPattern.exec(fullText)) !== null) {
+        data.dollarAmounts.push(match[0]);
+      }
+
+      // Find standalone numbers that might be order counts
+      const numPattern = /\b(\d{1,6})\b/g;
+      while ((match = numPattern.exec(fullText)) !== null) {
+        const n = parseInt(match[1]);
+        if (n > 0 && n < 10000) data.numbers.push(n);
+      }
+
+      // Look for specific DoorDash data elements
+      const metrics = {};
+      const elements = document.querySelectorAll('[data-testid]');
+      elements.forEach(el => {
+        const testId = el.getAttribute('data-testid');
+        metrics[testId] = el.textContent.trim().slice(0, 200);
+      });
+      data.testIdElements = metrics;
+
+      return data;
+    });
 
     const store = {
       store_name: 'default',
@@ -239,20 +294,40 @@ async function scrapeMetrics(page, accountId) {
       total_reviews: null,
     };
 
-    // Parse metrics from page text
-    const ordersMatch = analyticsText.match(/(\d+)\s*orders?\s*today/i) ||
-                        analyticsText.match(/today[:\s]*(\d+)\s*orders?/i) ||
-                        analyticsText.match(/orders?\s*today[:\s]*(\d+)/i);
-    if (ordersMatch) store.orders_today = parseInt(ordersMatch[1]);
+    // Parse from extracted data
+    const allText = pageData.bodyText;
+    const elements = pageData.allElements || [];
 
-    const revenueMatch = analyticsText.match(/\$\s*([0-9,]+(?:\.\d{2})?)\s*(?:today|revenue|net sales)/i);
-    if (revenueMatch) store.revenue_today = revenueMatch[1].replace(',', '');
+    // Find dollar amounts for revenue
+    if (pageData.dollarAmounts.length > 0) {
+      store.revenue_today = pageData.dollarAmounts[0].replace('$', '').replace(',', '');
+    }
 
-    const ratingMatch = analyticsText.match(/([3-5]\.\d)\s*(?:stars?|\/\s*5)/i) ||
-                        analyticsText.match(/(?:rating|score)[:\s]*([3-5]\.\d)/i);
-    if (ratingMatch) store.avg_rating = parseFloat(ratingMatch[1]);
+    // Search all text elements for order/revenue patterns
+    for (const el of elements) {
+      const lower = el.toLowerCase();
+      if (lower.includes('order') && lower.match(/\d/)) {
+        const num = el.match(/(\d+)/);
+        if (num) store.orders_today = parseInt(num[1]);
+      }
+      if (lower.includes('revenue') || lower.includes('net sale')) {
+        const amt = el.match(/\$([\d,]+(?:\.\d{2})?)/);
+        if (amt) store.revenue_today = amt[1].replace(',', '');
+      }
+      if (lower.includes('rating') || lower.includes('star')) {
+        const rt = el.match(/([3-5]\.\d)/);
+        if (rt) store.avg_rating = parseFloat(rt[1]);
+      }
+    }
 
-    store.raw_text_snippet = analyticsText.slice(0, 500);
+    // Store store-specific name if available
+    if (elements.length > 0) {
+      store.raw_elements_count = elements.length;
+    }
+
+    store.raw_text_snippet = allText.slice(0, 1000);
+    store.raw_elements = elements.slice(0, 100);
+    store.dollar_amounts = pageData.dollarAmounts;
     metrics.stores.push(store);
 
   } catch (err) {

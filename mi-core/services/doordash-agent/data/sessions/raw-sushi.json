@@ -1,21 +1,11 @@
 {
   "cookies": [
     {
-      "name": "dd_session_id",
-      "value": "sx_262057340a3847339e0f367151672361",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1782300272.984823,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "dd_device_id",
       "value": "dx_e9c9580c9d6a4f0b942b492057ad05a8",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1813834473.256203,
+      "expires": 1813849007.868252,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -29,16 +19,6 @@
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "xUSdZHOZ8VePtP_Mj86IKXlM_XLHTeUsgmmpbinmVH4-1782298472.8159418-1.0.1.1-6GBiNqg2ZpsjI_Xx5hYH3lJqy03JOHZcm6V_Ll5SIrgkVY3vPbxyO8Gg1Hf3QRV7fxRp8dJHfAHSbqSvxBMdCVhc3YXYHLOma1ufOV0A7zrxXXwUg_iPPSkvo0.mxLhb26BPB84k.WNuFEYUW8MRJQ",
-      "domain": ".www.doordash.com",
-      "path": "/",
-      "expires": 1782300272.985307,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
     },
     {
       "name": "_cfuvid",
@@ -61,41 +41,11 @@
       "sameSite": "Lax"
     },
     {
-      "name": "dd-identity-session-id",
-      "value": "88d95025-1ef4-4d74-aee5-cadf531b038e",
-      "domain": ".identity.doordash.com",
-      "path": "/",
-      "expires": 1782302079.640275,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "hyeJset8Sxax1Rzj2L9_OpHiFgD4zputh1kTxm4oLzY-1782298473.413281-1.0.1.1-NMYKorLbfhuuwVONQQD_Ws2duBZ79XCgDEXNDOgse2mgKebPIpQ6B9IgcUKkCtNN0fizGxHQZBHTjZmM2A7BxKDSWlkAHBIvu8_5vLJu8m6QvO4UakbUMz.I1OmKjTop",
-      "domain": ".identity.doordash.com",
-      "path": "/",
-      "expires": 1782300273.611253,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "_cfuvid",
       "value": "4XHdvvhlWetazcRaUeL6JE9UJAMkYawJoBCji1ffx1A-1782298473.413281-1.0.1.1-5k9ZDxdXPFsgL6I0sSbEvASqFePmdhzGMF8FpJylN8U",
       "domain": ".identity.doordash.com",
       "path": "/",
       "expires": -1,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "GQvQrFS9Q2HSiopLRHTRaV3wbiKx9rjFvMw6t6uo_2Q-1782298473.7583032-1.0.1.1-.9NrzVN206aHo1bkBDTHGm1E0P0LbtPB3mgbwdmCgSbcms.laqa7lh_WXXd2DYjCJfSuuyGmw5HZF8hVpQm1Om2qiFuCjZNhFkhcFaxMpg1AidjbY4g9VCaqAoOGKZ7T",
-      "domain": ".cdn4dd.com",
-      "path": "/",
-      "expires": 1782300273.725894,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
@@ -115,7 +65,7 @@
       "value": "21801f6a-0301-4152-9de8-a7f9e39ebcf9",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1813834479,
+      "expires": 1813849009,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -141,26 +91,6 @@
       "sameSite": "Lax"
     },
     {
-      "name": "__cf_bm",
-      "value": "m6WyRamBU98FS0kdrAShhwkuYSBNHRnK.CNyGfSg570-1782298474.4160743-1.0.1.1-YQbepr0yCLAPksuo1jC1aoYcucAWA1LS_EO2QXVWv_8RbNOAjFnPs15JQEFKNaAD7yOX6kavqQSSbnieMGseiqG4jw6cT4qxkY05A0YubeE4kgoXTyLI.W5Wn1AJ1CCg",
-      "domain": ".hs-analytics.net",
-      "path": "/",
-      "expires": 1782300274.364922,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "kw524b.DtyYYDq83sVU7Uux4P1FgXvIgPBdycbGfk8o-1782298474.5212126-1.0.1.1-8Ycz2e4_fCTeOyy2MknKYcQ3IgryLak2hlJN5MjI_4F2boarGy8FEVMBucN0NfPkfo4ZYLM4r2u8O9wcBy0ok332jrtd1h0tPkAMhMDyZlY79.FxTS97XSR9RTNzRvB6",
-      "domain": ".hs-scripts.com",
-      "path": "/",
-      "expires": 1782300274.472732,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "https://identity.doordash.com_oeu1782298474330r0.269929243156417$$16840376286$$session_state",
       "value": "{\"lastSessionTimestamp\":1782298474332,\"sessionId\":\"ee35c87e-7167-4a26-acf8-7f6b2fc68127\"}",
       "domain": "a12600010354.cdn.optimizely.com",
@@ -169,46 +99,6 @@
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "ZtJ2lJ6d_g3he_GW1BOuYG9UijSBdg4gUWd9jLhK4mM-1782298474.6564796-1.0.1.1-ri870X1tANUIsB6v6.0uGg7tah.9PncbzzTmBvuw9grS_1_p5OGOXcva854lnJ6aixFCCbbSsnex4HclmjLPRagGiKHcbZKkoVSpqXy0TFTKJCVUYV_mgBuFbF84EsKl",
-      "domain": ".hsadspixel.net",
-      "path": "/",
-      "expires": 1782300274.60463,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "qyfa7YKdqzIbR4AKQEz1Sm8i8vQRMdi7BRs_Jf4uWpk-1782298474.6600368-1.0.1.1-rrdEBLLih7QSnl0xp9780Sop83_gf0ZvhPCiRWCGE9CtG1bXE5xFGJ1S0mI6VaG5pbzmpWArPYb2bUNdKWel7.BzmYl41kBe7w1EMLGfbNrTXSVxXXnSIjo.JWssWL4B",
-      "domain": ".hs-banner.com",
-      "path": "/",
-      "expires": 1782300274.607024,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": ".jJwAb13Z0sSW6IbbG1KNRqnmNTkon.kzHmtfQGYLy4-1782298474.5448782-1.0.1.1-_CLEUGB7jrMnsjvFHmeKTTtFMBrzYvYs2xjuKKhCpqyKR2ICMu8e4qiJsvLt0YnjYnG06yua5pOj8Fv_kKxVbDi.A9LZnXazN2JnXkTmdsGArijK1sp0ZGVRMxoHoqIi",
-      "domain": ".hubspot.com",
-      "path": "/",
-      "expires": 1782300274.745073,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "_rdt_uuid",
-      "value": "1782298474746.d619b551-8192-48be-9afa-f46ca58b8f1e",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1790074474,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "Strict"
     },
     {
       "name": "li_sugr",
@@ -237,16 +127,6 @@
       "path": "/",
       "expires": 1782384873.94336,
       "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "oHc_LkXcFM_rlS4x0ajHBAN0fozH6Gd8ju0TnXx6cqY-1782298474.8257096-1.0.1.1-ojJDZgUMdVF8S.Lm3GupY0ovQPNFeyrWtunz3kzv0PT7p3j1HhnG_6QSnZc13Nn8Bu6h3fKG_NvhpV_mrAuNqwiMiStvPoNf963p308uFxf3mgH8sSamPCm.QY87sVnL",
-      "domain": ".linkedin.com",
-      "path": "/",
-      "expires": 1782300274.943384,
-      "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
@@ -281,21 +161,11 @@
       "sameSite": "Lax"
     },
     {
-      "name": "__hssc",
-      "value": "67496974.1.1782298474379",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1782300274,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
       "name": "_cq_duid",
       "value": "1.1782298475.pJB7y8BlavqeHzBV",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1790182475,
+      "expires": 1790197007,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -395,7 +265,7 @@
       "value": "GA1.1.1552582621.1782298475",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1816858475.499106,
+      "expires": 1816873007.564852,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -409,16 +279,6 @@
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
-    },
-    {
-      "name": "_ga_ZQM307EKR7",
-      "value": "GS2.1.s1782298475$o1$g0$t1782298475$j60$l0$h0",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1816858475.498677,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
     },
     {
       "name": "sa-user-id",
@@ -501,16 +361,6 @@
       "sameSite": "Lax"
     },
     {
-      "name": "_cq_s",
-      "value": "IfQ7ij1dQTeu12tz:hx9iGog/Ncuo/9yc0ZBBg717DsOlofmr39NK0vwP3H7Ct6iyBGfLoEuKN7b9DSLCJLr7/iNv9v+y4xCa9BtJMODFaszOZmvcdflObqCaZ1XNBT4qkcNI2X5v3eP3OKC7un1Ev8MYLg/4Xen0kiCQYjs5Z2mcQBAiFrX2BNn+8xQSFv1weza+PbU49e41pvua9m5wabe2H2X8L9ZLZpaq59qUQumjmHT0aRV+Z32advwFYqedcP7F32DIL60haVbA87iZ5ID+G8Q7i5d9RBcQeFKEBRjiXXNfhjzrEftZKfuAGlO1nN9B0NhKBCbzUhB2v7V+RGrdnVgULzY33GG5oDh9tuGpa1fdLkCBnAWsdbme867A2pgbUtYtGvWUjZMx3kgN18342lJ+ZbGCONbqIYuMFNftXyZZ7NXLyxizsA==:rL6UV7JcCwiF9klf1+xpYw==",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1782903276,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "visitor_id1082273",
       "value": "836126966",
       "domain": "mx.info.doordash.com",
@@ -526,16 +376,6 @@
       "domain": "mx.info.doordash.com",
       "path": "/",
       "expires": 1813834476.994073,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
-      "name": "lpv1082273",
-      "value": "aHR0cHM6Ly9pZGVudGl0eS5kb29yZGFzaC5jb20vYXV0aD9jbGllbnRfaWQ9MTY0MzU4MDYwNTg2MDc3NTE2NCZyZWRpcmVjdF91cmk9aHR0cHMlM0ElMkYlMkZtZXJjaGFudC1wb3J0YWwuZG9vcmRhc2guY29tJTJGYXV0aF9jYWxsYmFjayZzY29wZT0qJnByb21wdD1ub25lJnJlc3BvbnNlX3R5cGU9Y29kZSZsYXlvdXQ9bWVyY2hhbnRfd2ViX3YyJnN0YXRlPTE4Njk5YjU5LTY3ZjgtNGU1YS1hMDAwLTU4NGY3YmM0OTZiMyZhbGxvd1JlZGlyZWN0PXRydWUmZmFpbHVyZVJlZGlyZWN0PSUyRm1lcmNoYW50JTJGbG9naW4%3D",
-      "domain": "mx.info.doordash.com",
-      "path": "/",
-      "expires": 1782300276.994091,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -581,16 +421,6 @@
       "sameSite": "None"
     },
     {
-      "name": "lpv1074543",
-      "value": "aHR0cHM6Ly9pZGVudGl0eS5kb29yZGFzaC5jb20vYXV0aD9jbGllbnRfaWQ9MTY0MzU4MDYwNTg2MDc3NTE2NCZyZWRpcmVjdF91cmk9aHR0cHMlM0ElMkYlMkZtZXJjaGFudC1wb3J0YWwuZG9vcmRhc2guY29tJTJGYXV0aF9jYWxsYmFjayZzY29wZT0qJnByb21wdD1ub25lJnJlc3BvbnNlX3R5cGU9Y29kZSZsYXlvdXQ9bWVyY2hhbnRfd2ViX3YyJnN0YXRlPTE4Njk5YjU5LTY3ZjgtNGU1YS1hMDAwLTU4NGY3YmM0OTZiMyZhbGxvd1JlZGlyZWN0PXRydWUmZmFpbHVyZVJlZGlyZWN0PSUyRm1lcmNoYW50JTJGbG9naW4%3D",
-      "domain": "go.info.doordash.com",
-      "path": "/",
-      "expires": 1782300277.023166,
-      "httpOnly": false,
-      "secure": true,
-      "sameSite": "None"
-    },
-    {
       "name": "visitor_id1074543",
       "value": "843248464",
       "domain": "identity.doordash.com",
@@ -621,16 +451,6 @@
       "sameSite": "Lax"
     },
     {
-      "name": "_ga_BD9FCYG4N0",
-      "value": "GS2.1.s1782298475$o1$g0$t1782298479$j56$l0$h0",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1816858479.045865,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
       "name": "ttcsid_CHMKL6BC77UCDSLJ1RC0",
       "value": "1782298475681::F96JbyEc5gRsRhN9Vfn0.1.1782298479063.0",
       "domain": ".doordash.com",
@@ -651,16 +471,6 @@
       "sameSite": "Lax"
     },
     {
-      "name": "amplitude_id_c110169fac0dd2b32727081d8c7869f8doordash.com",
-      "value": "eyJkZXZpY2VJZCI6IjI4NzZlOTk1LTQwMTMtNDY2MS1iNjAyLTU3ODZhMzc0N2E4ZFIiLCJ1c2VySWQiOm51bGwsIm9wdE91dCI6ZmFsc2UsInNlc3Npb25JZCI6MTc4MjI5ODQ3NDI5MSwibGFzdEV2ZW50VGltZSI6MTc4MjI5ODQ3OTY4MywiZXZlbnRJZCI6NSwiaWRlbnRpZnlJZCI6MCwic2VxdWVuY2VOdW1iZXIiOjV9",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1816858479.683539,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
       "name": "optimizelySession",
       "value": "1782298479689",
       "domain": ".doordash.com",
@@ -669,16 +479,6 @@
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
-    },
-    {
-      "name": "__cf_bm",
-      "value": "t6CGwpKcqxjgUCZPAHEaIVwFJO00LngH_vQ4uomk4SY-1782298480.1509442-1.0.1.1-Hch0hi1evfs1fBo.FIJ2vj.1C23EhQ09dx3tE1h2K46oZRapXMmmYBXwNvw4nLrlukfdXNhr9380zlQcs72oB2za.A3oqjLPA7.kftjzj_1Rz_q6C8N4L3teL697x1Zg",
-      "domain": ".doordash.com",
-      "path": "/",
-      "expires": 1782300280.372203,
-      "httpOnly": true,
-      "secure": true,
-      "sameSite": "None"
     },
     {
       "name": "_cfuvid",
@@ -691,21 +491,123 @@
       "sameSite": "None"
     },
     {
-      "name": "_cq_session",
-      "value": "1.1782298475064.IW8899zQLJnNkuRc.1782298479087",
+      "name": "dd_session_id",
+      "value": "sx_c6cef8dc86644ccf8886b9fce069ce4b",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1816858480.84937,
+      "expires": 1782314804.936374,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
     },
     {
-      "name": "_rdt_pn",
-      "value": ":125~68e702a0ca9b88f8de5f4d7adc4f53881c5136d61bf93ab9621a7691ba7ad571|125~0bc5057959b47fc83fdfefbbe35ce34344c7ed56cf84cd3afc177746aa8bf953",
+      "name": "ddweb_mx_portal_token",
+      "value": "eyJhbGciOiJIUzI1NiJ9.eyJvcmlnX2lhdCI6MTc4MjMwNDAxMCwicGVkcmVnYWwiOnsiaWQiOiIzMWQ0NGFlZC0xYmU0LTRhMTYtYjYwYS00ZmE1NjZjMzI2ZGUiLCJwZHJuIjoiNHNOd1ZSYy4yNjA5MzQ2MzYiLCJ0ZW5hbnQiOiJkYXNocHJvZCJ9LCJhY3Rvcl9pZCI6IjI2MDkzNDYzNiIsImV4cCI6MTc4MjU2MzIxMCwidXNlciI6eyJhdXRoX3ZlcnNpb24iOjQsImlzX3N0YWZmIjpmYWxzZSwiaWQiOjI2MDkzNDYzNiwiZW1haWwiOiJoLm9hbmcuZC5sZUBnbWFpbC5jb20ifSwiY2lkIjoxNjQzNTgwNjA1ODYwNzc1MTY0fQ.OtmNDwYkHIDDP0h7CjfbX3T6UHztCpF95nqzD6xxYxI:af0fd231-8bd1-4cec-b18f-6a01885f1a40",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1790074482,
+      "expires": 1813849007.868141,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ajs_user_id",
+      "value": "260934636",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1813849009,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "9NnxYU34YhikTAen3rvDS.mwITCizi_UKsoPbW9t.RQ-1782313006.046914-1.0.1.1-iCo7YG1ZseOEk5qYgbI2mLmGHERmhOC8L90lZ2uaah5kfRlCCLNxRqwADJho1_71oKxx.nLr.pilbCG8bLciKBerqzDEhe.cuWIUHcw8A1XZAdqc7QzcINq30V6xP_N_",
+      "domain": ".cdn4dd.com",
+      "path": "/",
+      "expires": 1782314806.104496,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "v3mCkDAKVceuvYflqO258z_X6dQY6VH9Uarmoj0hfv0-1782313006.4307964-1.0.1.1-H2kyh2LcmVX0qESLBqeyC.QBdFx2ijOlWxUxI7lDquiVd40vugIh8gOSpBhnqS4huyLeyB4Dn6RzG5B_NoJJsdD9BiEi0ir0aMXShIo5trGXc5q84Whc_7.7qP5DzgT0",
+      "domain": ".hs-analytics.net",
+      "path": "/",
+      "expires": 1782314806.147465,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "dd_language",
+      "value": "en-US",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "Gg.I.zif4QWUViYM.snFK5bVIk8AZSckv3p0He8uKTE-1782313007.1682255-1.0.1.1-iM7MIZAarY0FbV8MyIEtJPfJSLwxwsADWudOEblrj9718jgAJVWWp6Vw5mpx.OwvrHdLetKFZVjeZ8aS7HRhKAhuX.LjsSpykeT99inUvr_zo0EPmJxFoDMQ_hjxKKb9",
+      "domain": ".hs-scripts.com",
+      "path": "/",
+      "expires": 1782314806.886385,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "zNt2MypqIBGpcSnBrSvY.tDbSJ5Gr4ohyy_t3kYrUF8-1782313007-1.2.1.1-4FYvtxN9XBGwiUSjHqqNeYPwrdX1oyyNhSmn9RJ.9vWirGVHb0cWMzLwEP9Y7BZRcCiArdrpytkouK4m8OvMqd2_mEVyWF3gx4VvpO1BbbWK1q60UOi.qRI.hwv8AphSOdiLY37lN_RtZSc8YjbphfH6BpJqi4k9Wn9_g9wy3MOMOFKCAwA4Rkggf5QpQm64ozxBe8dttINCfDHVGn0Nq2BUsrW2NpAwgaTPM3r.vV.L618k8nc25slzbAVUhVKGy6Yq3av1IJdP1tlwaZ8eDADJkCtG0OSPd2bFjdCpWNRkTVY.Vf7uPlMVJ_zr_CeT7Ahpf3bogj2g.25zvDHv8w",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1813849006.95305,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None",
+      "partitionKey": "https://doordash.com",
+      "_crHasCrossSiteAncestor": false
+    },
+    {
+      "name": "__cf_bm",
+      "value": "LkMof3rRwhDX_ip58KZVtDAwR6r2sP3_KH19Wi8gN28-1782313007.2457998-1.0.1.1-xLsY53B.gi7wLdk30s0C82lQ.8718t2vHAragvbI4z2F2J4USgLy3xgGa1q5ZVUFvNHZZXAOPdWu_tOi.DuWYlAG9u4PLPHf.3kdIJLtsGMOWceCIE2Vs5kz4hnF9VR8",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1782314806.953134,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "ila_ZlSYQVNmCqDJwMRX4b7_h0wmHiUEMo9yLLDK4ak-1782313007.3552628-1.0.1.1-CTsojTmwPslW6EXxv94Rx7EjHSky43yZ0pOtnPtSZ8uGXNKW0V3V1WkwabCDjsvKD5rUAzqRHmvZy5KYUoVzPnvdMnhb7w02hfNBFF7YwThy2HvVAuq9ePPFxLXDWGuj",
+      "domain": ".hsadspixel.net",
+      "path": "/",
+      "expires": 1782314807.065027,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "5RvFkRXs9Hoq..cpR4qcGGcB92SPlpXV4tPi58dJupA-1782313007.3794332-1.0.1.1-F1hKbCjAl5vmuzDvGzGEDlT0rI5p63r5X4JGGzVNR8jPQ2oi.rP_cGI62XFa66SbDsxjYaa5EmkfihwGjpYuVVLoc6amYJBRO1CFsVWLUaq0G9UXvniCuVkKeHq.mfjC",
+      "domain": ".hs-banner.com",
+      "path": "/",
+      "expires": 1782314807.098816,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_rdt_uuid",
+      "value": "1782298474746.d619b551-8192-48be-9afa-f46ca58b8f1e",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1790089007,
       "httpOnly": false,
       "secure": true,
       "sameSite": "Strict"
@@ -715,12 +617,81 @@
       "value": ":a36412e1611fc2bc9c9fcfff2c1ecf78b36a1b1cb8261f47118b107f2ef37bf5",
       "domain": ".doordash.com",
       "path": "/",
-      "expires": 1790074482,
+      "expires": 1790089007,
       "httpOnly": false,
       "secure": true,
       "sameSite": "Strict"
+    },
+    {
+      "name": "_rdt_pn",
+      "value": ":125~68e702a0ca9b88f8de5f4d7adc4f53881c5136d61bf93ab9621a7691ba7ad571|125~0bc5057959b47fc83fdfefbbe35ce34344c7ed56cf84cd3afc177746aa8bf953",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1790089007,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "_cq_session",
+      "value": "2.1782313007433.1g9NabyKy0Wo0Xgy.1782313007433",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1816873007.433592,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_ga_BD9FCYG4N0",
+      "value": "GS2.1.s1782313007$o2$g0$t1782313007$j60$l0$h0",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1816873007.488803,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "dd_market_id",
+      "value": "1",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1783522607.868306,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_ZQM307EKR7",
+      "value": "GS2.1.s1782313007$o2$g1$t1782313008$j59$l0$h0",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1816873008.566691,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_cq_s",
+      "value": "4fR9zrPC/juTnHHe:WkEJEgjuao8J5BFYgDu8QnVAOguWXzBYsAIvDfjicCyDgfv8666lfLUWM7ddghKtz2E4UOhH576Xb2cyCEMqxXGL33/pqWxEvC+m9ewy+3g5muvzJKNVk3YiTO1tKpNGlDqX9eenygYsb0bvRKgqKL01gqtL/50bjLdKYQTal1/TPyp1deTS/ZnwEc49tXu8W4gm2kxiL+YdeOv71zmVP7Mr+dhAosotPh2F2Q8YO3TZAsJXeODQMwQGX6xfJoD8jvmlBZ31pFv73i7p1t3akGIKZVZGWAojJue0dCl30FdPWEkn6EnOPtnaF8+mnaenN3ESPChVH403w72lhFxCete9Dic8dxgJJZOIM9MvjI/jP3uneVUXOL+XeEoikSvr4n0KMhr0ELJGWj9m3sBNuWJmDnEdp42kY01dxHF+Ng==:YA0+vPROQFfgo0/88ETo8A==",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1782917808,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "amplitude_id_c110169fac0dd2b32727081d8c7869f8doordash.com",
+      "value": "eyJkZXZpY2VJZCI6IjI4NzZlOTk1LTQwMTMtNDY2MS1iNjAyLTU3ODZhMzc0N2E4ZFIiLCJ1c2VySWQiOiIyNjA5MzQ2MzYiLCJvcHRPdXQiOmZhbHNlLCJzZXNzaW9uSWQiOjE3ODIzMTMwMDYwNDcsImxhc3RFdmVudFRpbWUiOjE3ODIzMTMwMDk0NjksImV2ZW50SWQiOjEyLCJpZGVudGlmeUlkIjoyLCJzZXF1ZW5jZU51bWJlciI6MTR9",
+      "domain": ".doordash.com",
+      "path": "/",
+      "expires": 1816873009.469699,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
     }
   ],
-  "localStorage": {},
-  "savedAt": 1782298483137
+  "savedAt": 1782313447938
 }
