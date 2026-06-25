@@ -10,6 +10,7 @@ import { createTask, updateStatus, getTask } from './engineering-queue';
 import { reviewCode }            from './review-engine';
 import { addEvidence, generateEvidenceReport } from './evidence-engine';
 import { generatePR }            from './pr-generator';
+import { escalateToHuman, notifyTaskComplete, notifyP0 } from './human-escalation';
 
 export interface DispatchResult {
   task_id:       string;
@@ -47,6 +48,11 @@ export async function dispatch(
   });
 
   updateStatus(task.id, 'DISPATCHED');
+
+  // ── P0 escalation — notify CEO immediately ──────────────────────────────────
+  if (classification.is_p0) {
+    notifyP0(task.id, objective).catch(() => {});
+  }
 
   // ── Step 5: If code submitted, run review ───────────────────────────────────
   let prSpec;
@@ -94,9 +100,14 @@ export async function dispatch(
       content: `Branch: ${prSpec.branch}\nTitle: ${prSpec.title}\nDraft: ${prSpec.is_draft}`,
     });
 
-    updateStatus(task.id, routing.escalate_human ? 'APPROVAL_REQUIRED' : 'PR_READY', {
-      pr_branch: prSpec.branch,
-    });
+    const finalTaskStatus = routing.escalate_human ? 'APPROVAL_REQUIRED' : 'PR_READY';
+    updateStatus(task.id, finalTaskStatus, { pr_branch: prSpec.branch });
+
+    if (routing.escalate_human) {
+      escalateToHuman(task.id, routing.escalation_reason || 'Human approval required').catch(() => {});
+    } else {
+      notifyTaskComplete(task.id, 'DONE').catch(() => {});
+    }
   }
 
   // ── Step 7: Evidence report ─────────────────────────────────────────────────

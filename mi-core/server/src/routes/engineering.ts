@@ -14,6 +14,8 @@ import { reviewCode }    from '../engineering/review-engine';
 import { classifyTask }  from '../engineering/task-classifier';
 import { route }         from '../engineering/routing-engine';
 import { getEvidence }   from '../engineering/evidence-engine';
+import { runTests, getMiCoreSmokeTests } from '../engineering/test-orchestrator';
+import { writeScorecardFile, computeScorecard } from '../engineering/model-scorecard';
 
 export const engineeringRouter = Router();
 
@@ -70,4 +72,39 @@ engineeringRouter.post('/review', (req: Request, res: Response) => {
   if (!task_id || !code) return res.status(400).json({ error: 'task_id and code required' });
   const result = reviewCode(task_id, code, prior_code);
   res.json(result);
+});
+
+// Phase 34F — Test Orchestrator
+// POST /api/engineering/test  Body: { task_id, cases? }
+engineeringRouter.post('/test', async (req: Request, res: Response) => {
+  const { task_id, cases } = req.body || {};
+  if (!task_id) return res.status(400).json({ error: 'task_id required' });
+  try {
+    const testCases = cases || getMiCoreSmokeTests();
+    const result    = await runTests(task_id, testCases);
+    res.json(result);
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Phase 34K — Model Scorecard
+// GET /api/engineering/scorecard
+engineeringRouter.get('/scorecard', (_req: Request, res: Response) => {
+  try {
+    const stats = computeScorecard();
+    res.json({ scorecard: stats, generated_at: new Date().toISOString() });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/engineering/scorecard/export  → writes MODEL_SCORECARD.md
+engineeringRouter.post('/scorecard/export', (_req: Request, res: Response) => {
+  try {
+    const filePath = writeScorecardFile();
+    res.json({ success: true, path: filePath });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 });
