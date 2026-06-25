@@ -168,3 +168,56 @@ agenviewRouter.get('/skills', (_req: Request, res: Response) => {
     ok(res, Object.values(store.certifications || {}));
   } catch { ok(res, []); }
 });
+
+// ── Engineering Dashboard (Phase 34J) ────────────────────────────────────────
+
+agenviewRouter.get('/engineering', (_req: Request, res: Response) => {
+  try {
+    const { listTasks, getQueueStats } = require('../engineering/engineering-queue');
+    const { listAvailableModels }      = require('../engineering/model-registry');
+    const tasks      = listTasks(20);
+    const stats      = getQueueStats();
+    const models     = listAvailableModels();
+
+    // Build model scoreboard from task history
+    const modelScores: Record<string, { dispatched: number; done: number; failed: number }> = {};
+    for (const t of listTasks(200)) {
+      const m = t.selected_model || 'unknown';
+      if (!modelScores[m]) modelScores[m] = { dispatched: 0, done: 0, failed: 0 };
+      modelScores[m].dispatched++;
+      if (t.status === 'DONE')   modelScores[m].done++;
+      if (t.status === 'FAILED') modelScores[m].failed++;
+    }
+
+    const scorecard = models.map((m: any) => ({
+      id:         m.id,
+      name:       m.name,
+      available:  m.available,
+      cost:       m.cost,
+      speed:      m.speed,
+      dispatched: modelScores[m.id]?.dispatched || 0,
+      done:       modelScores[m.id]?.done       || 0,
+      failed:     modelScores[m.id]?.failed     || 0,
+      success_rate: modelScores[m.id]?.dispatched
+        ? Math.round(((modelScores[m.id].done) / modelScores[m.id].dispatched) * 100)
+        : null,
+    }));
+
+    ok(res, {
+      queue_stats: stats,
+      recent_tasks: tasks.slice(0, 10).map((t: any) => ({
+        id:        t.id,
+        objective: t.objective.slice(0, 80),
+        status:    t.status,
+        model:     t.selected_model,
+        domain:    t.classification?.domain,
+        complexity: t.classification?.complexity,
+        created_at: t.created_at,
+        finished_at: t.finished_at,
+      })),
+      model_scorecard: scorecard,
+    });
+  } catch (e: any) {
+    ok(res, { error: e.message });
+  }
+});

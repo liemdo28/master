@@ -5,23 +5,21 @@
  */
 
 export interface ReviewCheck {
-  name:    string;
-  passed:  boolean;
-  score:   number;    // 0-20 each (5 checks × 20 = 100)
-  detail:  string;
+  name: string;
+  passed: boolean;
+  score: number;    // 0-20 each (5 checks × 20 = 100)
+  detail: string;
 }
 
 export interface ReviewResult {
-  task_id:       string;
-  total_score:   number;
-  passed:        boolean;   // score >= 80
-  checks:        ReviewCheck[];
-  blockers:      string[];
-  suggestions:   string[];
-  reviewed_at:   string;
+  task_id: string;
+  total_score: number;
+  passed: boolean;   // score >= 80
+  checks: ReviewCheck[];
+  blockers: string[];
+  suggestions: string[];
+  reviewed_at: string;
 }
-
-// ── Static analysis patterns ──────────────────────────────────────────────────
 
 const SECURITY_PATTERNS = [
   { pattern: /eval\s*\(/, label: 'eval() usage' },
@@ -48,11 +46,8 @@ const ARCHITECTURE_PATTERNS = [
   { pattern: /\/\/ FIXME/i, label: 'FIXME comment' },
 ];
 
-// ── Review functions ──────────────────────────────────────────────────────────
-
 function checkSyntax(code: string): ReviewCheck {
   const issues: string[] = [];
-  // Basic heuristics — real impl would use AST parser
   if ((code.match(/\{/g) || []).length !== (code.match(/\}/g) || []).length) {
     issues.push('Unbalanced braces');
   }
@@ -90,12 +85,10 @@ function checkPerformance(code: string): ReviewCheck {
 function checkRegression(code: string, priorCode?: string): ReviewCheck {
   const issues: string[] = [];
   if (!priorCode) {
-    // Without prior code, check that tests are included or referenced
     if (!code.includes('test(') && !code.includes('describe(') && !code.includes('expect(')) {
       issues.push('No test code found — ensure tests cover changed code');
     }
   } else {
-    // Basic diff check
     const removedExports = (priorCode.match(/^export\s+/gm) || []).length -
                            (code.match(/^export\s+/gm) || []).length;
     if (removedExports > 0) issues.push(`${removedExports} exports removed — check consumers`);
@@ -115,8 +108,6 @@ function checkArchitecture(code: string): ReviewCheck {
   };
 }
 
-// ── Main review ───────────────────────────────────────────────────────────────
-
 export function reviewCode(taskId: string, code: string, priorCode?: string): ReviewResult {
   const checks = [
     checkSyntax(code),
@@ -129,15 +120,15 @@ export function reviewCode(taskId: string, code: string, priorCode?: string): Re
   const total_score = checks.reduce((sum, c) => sum + c.score, 0);
   const passed      = total_score >= 80;
 
-  const blockers    = checks.filter(c => !c.passed && c.name !== 'Regression').map(c => `${c.name}: ${c.detail}`);
-  const suggestions = checks.filter(c => c.detail !== 'OK' && c.passed).map(c => `${c.name}: ${c.detail}`);
+  const blockers     = checks.filter(c => c.score < 50);
+  const suggestions  = checks.filter(c => !c.passed && c.score >= 50).map(c => c.detail);
 
   return {
     task_id:     taskId,
-    total_score,
     passed,
+    total_score,
     checks,
-    blockers,
+    blockers:    blockers.map(c => c.name),
     suggestions,
     reviewed_at: new Date().toISOString(),
   };

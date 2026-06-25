@@ -1,6 +1,6 @@
 /**
- * Mi AI Platform Routes
- * POST /api/ai/workflow        — full pipeline (classify→memory→analyze→execute→evidence→learn)
+ * Mi AI Platform Routes — Phase 34
+ * POST /api/ai/workflow        — full 10-stage pipeline
  * POST /api/ai/chat            — route prompt to best provider
  * GET  /api/ai/providers       — list configured providers
  * POST /api/ai/rag/search      — RAG search
@@ -9,6 +9,7 @@
  * POST /api/ai/vision/qa       — screenshot QA
  * POST /api/ai/voice/stt       — speech to text (base64 audio)
  * POST /api/ai/voice/tts       — text to speech
+ * POST /api/ai/voice/classify  — classify voice command
  * POST /api/ai/browser/run     — browser automation task
  * POST /api/ai/browser/smoke   — smoke test a URL
  * POST /api/ai/benchmark       — benchmark task across models

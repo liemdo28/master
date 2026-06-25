@@ -1,10 +1,11 @@
 /**
  * Engineering Division API Routes
- * POST /api/engineering/dispatch   — CEO submits objective
- * GET  /api/engineering/tasks      — list queue
- * GET  /api/engineering/tasks/:id  — task detail
- * GET  /api/engineering/stats      — queue stats + model scoreboard
- * POST /api/engineering/review     — submit code for review
+ * POST /api/engineering/dispatch   - CEO submits objective
+ * GET  /api/engineering/tasks      - list queue
+ * GET  /api/engineering/tasks/:id  - task detail
+ * GET  /api/engineering/stats      - queue stats + model scoreboard
+ * POST /api/engineering/review     - submit code for review
+ * POST /api/engineering/classify   - classify objective without dispatch
  */
 
 import { Router, Request, Response } from 'express';
@@ -14,6 +15,7 @@ import { reviewCode }    from '../engineering/review-engine';
 import { classifyTask }  from '../engineering/task-classifier';
 import { route }         from '../engineering/routing-engine';
 import { getEvidence }   from '../engineering/evidence-engine';
+import { MODEL_REGISTRY, listAvailableModels, ModelId } from '../engineering/model-registry';
 
 export const engineeringRouter = Router();
 
@@ -50,7 +52,19 @@ engineeringRouter.get('/tasks/:id', (req: Request, res: Response) => {
 // GET /api/engineering/stats
 engineeringRouter.get('/stats', (_req: Request, res: Response) => {
   const queue_stats = getQueueStats();
-  res.json({ queue_stats, generated_at: new Date().toISOString() });
+  const models = listAvailableModels().map(m => ({
+    id: m.id,
+    name: m.name,
+    cost: m.cost,
+    speed: m.speed,
+    strengths: m.strengths,
+    available: m.available,
+  }));
+  res.json({
+    queue_stats,
+    models,
+    generated_at: new Date().toISOString(),
+  });
 });
 
 // POST /api/engineering/classify
