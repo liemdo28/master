@@ -1,10 +1,11 @@
 /**
  * Engineering Division API Routes
- * POST /api/engineering/dispatch   — CEO submits objective
- * GET  /api/engineering/tasks      — list queue
- * GET  /api/engineering/tasks/:id  — task detail
- * GET  /api/engineering/stats      — queue stats + model scoreboard
- * POST /api/engineering/review     — submit code for review
+ * POST /api/engineering/dispatch   - CEO submits objective
+ * GET  /api/engineering/tasks      - list queue
+ * GET  /api/engineering/tasks/:id  - task detail
+ * GET  /api/engineering/stats      - queue stats + model scoreboard
+ * POST /api/engineering/review     - submit code for review
+ * POST /api/engineering/classify   - classify objective without dispatch
  */
 
 import { Router, Request, Response } from 'express';
@@ -14,8 +15,7 @@ import { reviewCode }    from '../engineering/review-engine';
 import { classifyTask }  from '../engineering/task-classifier';
 import { route }         from '../engineering/routing-engine';
 import { getEvidence }   from '../engineering/evidence-engine';
-import { runTests, getMiCoreSmokeTests } from '../engineering/test-orchestrator';
-import { writeScorecardFile, computeScorecard } from '../engineering/model-scorecard';
+import { MODEL_REGISTRY, listAvailableModels, ModelId } from '../engineering/model-registry';
 
 export const engineeringRouter = Router();
 
@@ -52,7 +52,19 @@ engineeringRouter.get('/tasks/:id', (req: Request, res: Response) => {
 // GET /api/engineering/stats
 engineeringRouter.get('/stats', (_req: Request, res: Response) => {
   const queue_stats = getQueueStats();
-  res.json({ queue_stats, generated_at: new Date().toISOString() });
+  const models = listAvailableModels().map(m => ({
+    id: m.id,
+    name: m.name,
+    cost: m.cost,
+    speed: m.speed,
+    strengths: m.strengths,
+    available: m.available,
+  }));
+  res.json({
+    queue_stats,
+    models,
+    generated_at: new Date().toISOString(),
+  });
 });
 
 // POST /api/engineering/classify
@@ -72,39 +84,4 @@ engineeringRouter.post('/review', (req: Request, res: Response) => {
   if (!task_id || !code) return res.status(400).json({ error: 'task_id and code required' });
   const result = reviewCode(task_id, code, prior_code);
   res.json(result);
-});
-
-// Phase 34F — Test Orchestrator
-// POST /api/engineering/test  Body: { task_id, cases? }
-engineeringRouter.post('/test', async (req: Request, res: Response) => {
-  const { task_id, cases } = req.body || {};
-  if (!task_id) return res.status(400).json({ error: 'task_id required' });
-  try {
-    const testCases = cases || getMiCoreSmokeTests();
-    const result    = await runTests(task_id, testCases);
-    res.json(result);
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// Phase 34K — Model Scorecard
-// GET /api/engineering/scorecard
-engineeringRouter.get('/scorecard', (_req: Request, res: Response) => {
-  try {
-    const stats = computeScorecard();
-    res.json({ scorecard: stats, generated_at: new Date().toISOString() });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// POST /api/engineering/scorecard/export  → writes MODEL_SCORECARD.md
-engineeringRouter.post('/scorecard/export', (_req: Request, res: Response) => {
-  try {
-    const filePath = writeScorecardFile();
-    res.json({ success: true, path: filePath });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
 });

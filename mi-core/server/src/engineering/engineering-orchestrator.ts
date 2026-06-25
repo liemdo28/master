@@ -1,6 +1,6 @@
 /**
  * Engineering Orchestrator — Mi CTO Brain
- * Single entry point: CEO gives objective → Mi classifies, routes, creates task,
+ * Single entry point: CEO gives objective -> Mi classifies, routes, creates task,
  * dispatches, collects evidence, reviews, generates PR, requests approval.
  */
 
@@ -10,36 +10,35 @@ import { createTask, updateStatus, getTask } from './engineering-queue';
 import { reviewCode }            from './review-engine';
 import { addEvidence, generateEvidenceReport } from './evidence-engine';
 import { generatePR }            from './pr-generator';
-import { escalateToHuman, notifyTaskComplete, notifyP0 } from './human-escalation';
 
 export interface DispatchResult {
-  task_id:       string;
-  status:        string;
+  task_id: string;
+  status: string;
   selected_model: string;
-  confidence:    number;
+  confidence: number;
   classification: object;
-  routing:       object;
-  pr_spec?:      object;
+  routing: object;
+  pr_spec?: object;
   evidence_report?: string;
-  next_action:   string;
+  next_action: string;
   escalate_human: boolean;
 }
 
 export async function dispatch(
   objective: string,
-  project:   string = 'mi-core',
+  project: string = 'mi-core',
   submittedCode?: string,
 ): Promise<DispatchResult> {
-  // ── Step 1: Classify ────────────────────────────────────────────────────────
+  // Step 1: Classify
   const classification = classifyTask(objective);
 
-  // ── Step 2: Route ───────────────────────────────────────────────────────────
+  // Step 2: Route
   const routing = route(classification);
 
-  // ── Step 3: Create task ─────────────────────────────────────────────────────
+  // Step 3: Create task
   const task = createTask(objective, project, classification, routing);
 
-  // ── Step 4: Log dispatch evidence ───────────────────────────────────────────
+  // Step 4: Log dispatch evidence
   addEvidence({
     task_id: task.id,
     type:    'log',
@@ -49,12 +48,7 @@ export async function dispatch(
 
   updateStatus(task.id, 'DISPATCHED');
 
-  // ── P0 escalation — notify CEO immediately ──────────────────────────────────
-  if (classification.is_p0) {
-    notifyP0(task.id, objective).catch(() => {});
-  }
-
-  // ── Step 5: If code submitted, run review ───────────────────────────────────
+  // Step 5: If code submitted, run review
   let prSpec;
   if (submittedCode) {
     updateStatus(task.id, 'REVIEW');
@@ -88,7 +82,7 @@ export async function dispatch(
 
     updateStatus(task.id, 'TESTING');
 
-    // ── Step 6: Generate PR ──────────────────────────────────────────────────
+    // Step 6: Generate PR
     updateStatus(task.id, 'PR_READY');
 
     prSpec = generatePR(task.id, objective, project, classification, routing, review);
@@ -100,24 +94,19 @@ export async function dispatch(
       content: `Branch: ${prSpec.branch}\nTitle: ${prSpec.title}\nDraft: ${prSpec.is_draft}`,
     });
 
-    const finalTaskStatus = routing.escalate_human ? 'APPROVAL_REQUIRED' : 'PR_READY';
-    updateStatus(task.id, finalTaskStatus, { pr_branch: prSpec.branch });
-
-    if (routing.escalate_human) {
-      escalateToHuman(task.id, routing.escalation_reason || 'Human approval required').catch(() => {});
-    } else {
-      notifyTaskComplete(task.id, 'DONE').catch(() => {});
-    }
+    updateStatus(task.id, routing.escalate_human ? 'APPROVAL_REQUIRED' : 'PR_READY', {
+      pr_branch: prSpec.branch,
+    });
   }
 
-  // ── Step 7: Evidence report ─────────────────────────────────────────────────
+  // Step 7: Evidence report
   const reportPath = generateEvidenceReport(task.id, objective, routing.model_name);
 
   const finalStatus = routing.escalate_human ? 'APPROVAL_REQUIRED' :
                       submittedCode           ? 'PR_READY'          : 'DISPATCHED';
 
   const next_action = routing.escalate_human
-    ? `APPROVAL REQUIRED — ${routing.escalation_reason}. CEO must approve before execution.`
+    ? `APPROVAL REQUIRED - ${routing.escalation_reason}. CEO must approve before execution.`
     : submittedCode
     ? `PR ready on branch ${prSpec?.branch}. Run tests then merge.`
     : `Task dispatched to ${routing.model_name}. Waiting for code submission.`;
