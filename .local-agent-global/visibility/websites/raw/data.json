@@ -1,6 +1,6 @@
 {
   "connector_id": "website-raw",
-  "synced_at": "2026-06-25T01:12:48.251Z",
+  "synced_at": "2026-06-25T02:23:50.627Z",
   "status": "ok",
   "website": "rawsushibar.com",
   "local_source_path": "E:/Project/Master/RawSushi/RawWebsite",
@@ -433,5 +433,5 @@
   ],
   "risks": [],
   "secret_files_excluded": [],
-  "summary_text": "rawsushibar.com: 123 pages, 6 assets, repo https://github.com/liemdo28/rawwebsite.git, branch master, synced 2026-06-25T01:12:48.251Z"
+  "summary_text": "rawsushibar.com: 123 pages, 6 assets, repo https://github.com/liemdo28/rawwebsite.git, branch master, synced 2026-06-25T02:23:50.627Z"
 }

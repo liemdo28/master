@@ -1,35 +1,35 @@
 {
-  "generated_at": "2026-06-25T00:41:58.298Z",
+  "generated_at": "2026-06-25T02:23:06.933Z",
   "runtime": {
-    "generated_at": "2026-06-25T00:41:50.805Z",
+    "generated_at": "2026-06-25T02:23:02.626Z",
     "window_days": 30,
-    "overall_status": "degraded",
+    "overall_status": "down",
     "services": [
       {
         "service_id": "mi-core",
         "service": "Mi-Core",
-        "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 1723,
-        "http_status": 200,
+        "status": "down",
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 6972,
+        "http_status": null,
         "restart_count": 0,
         "crash_count": 0,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_match": null,
         "uptime_ms": null,
-        "details": null,
+        "details": "This operation was aborted",
         "uptime_checks": 79,
-        "downtime_checks": 26,
-        "uptime_percent": 75.24,
-        "downtime_minutes_estimate": 780
+        "downtime_checks": 27,
+        "uptime_percent": 74.53,
+        "downtime_minutes_estimate": 810
       },
       {
         "service_id": "ai-service",
         "service": "AI Service",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 608,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 1028,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -38,17 +38,17 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 91,
+        "uptime_checks": 92,
         "downtime_checks": 14,
-        "uptime_percent": 86.67,
+        "uptime_percent": 86.79,
         "downtime_minutes_estimate": 420
       },
       {
         "service_id": "ollama",
         "service": "Ollama",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 6,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 3,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -57,7 +57,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -66,7 +66,7 @@
         "service_id": "agent-engine",
         "service": "Agent Engine",
         "status": "unknown",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -85,7 +85,7 @@
         "service_id": "visibility",
         "service": "Visibility",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -97,14 +97,14 @@
         "details": "1 connector(s) unhealthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "gmail",
         "service": "Gmail",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -114,7 +114,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -123,7 +123,7 @@
         "service_id": "calendar",
         "service": "Calendar",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -133,7 +133,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -142,7 +142,7 @@
         "service_id": "drive",
         "service": "Drive",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -152,7 +152,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -161,7 +161,7 @@
         "service_id": "qb",
         "service": "QB Connector",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -173,14 +173,14 @@
         "details": "Connector is not fully healthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "health",
         "service": "Health Connector",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -190,7 +190,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -199,7 +199,7 @@
     "target": "UPTIME_MONITOR_READY"
   },
   "pm2_restart_monitor": {
-    "generated_at": "2026-06-25T00:41:50.988Z",
+    "generated_at": "2026-06-25T02:23:02.876Z",
     "services": [
       {
         "service_id": "mi-core",
@@ -213,7 +213,7 @@
         "uptime_ms": null,
         "uptime_reset_repeatedly": false,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_matches_pm2": null,
         "status": "pm2_unavailable",
         "alert": "WARNING"
@@ -322,7 +322,7 @@
     "target": "PM2_RESTART_MONITOR_READY"
   },
   "ollama_health_monitor": {
-    "generated_at": "2026-06-25T00:41:50.988Z",
+    "generated_at": "2026-06-25T02:23:02.876Z",
     "reachable": true,
     "model_loaded": true,
     "selected_model": "qwen3:8b",
@@ -334,16 +334,16 @@
       "qwen3:8b",
       "qwen3:14b"
     ],
-    "response_latency_ms": 4,
+    "response_latency_ms": 12,
     "timeout_count": 0,
     "failure_count": 0,
-    "last_successful_response": "2026-06-25T00:41:50.988Z",
+    "last_successful_response": "2026-06-25T02:23:02.876Z",
     "last_timeout_time": null,
-    "answer_vi": "Ollama đang ổn. Model đang dùng: qwen3:8b. Latency health check: 4ms.",
+    "answer_vi": "Ollama đang ổn. Model đang dùng: qwen3:8b. Latency health check: 12ms.",
     "target": "OLLAMA_HEALTH_MONITOR_READY"
   },
   "chat_reliability_metrics": {
-    "generated_at": "2026-06-25T00:41:50.995Z",
+    "generated_at": "2026-06-25T02:23:02.888Z",
     "chat_request_count": 0,
     "success_count": 0,
     "timeout_count": 0,
@@ -370,8 +370,8 @@
       "circuit_breaker_trips": 0,
       "avg_latency_ms": 0,
       "p95_latency_ms": 0,
-      "uptime_s": 25893,
-      "reset_at": "2026-06-24T17:30:17.729Z",
+      "uptime_s": 3612,
+      "reset_at": "2026-06-25T01:22:50.358Z",
       "queue": {
         "active": 0,
         "waiting": 0,
@@ -382,7 +382,7 @@
     "target": "CHAT_RELIABILITY_METRICS_READY"
   },
   "runtime_alerts": {
-    "generated_at": "2026-06-25T00:41:58.286Z",
+    "generated_at": "2026-06-25T02:23:06.908Z",
     "alerts": [
       {
         "severity": "WARNING",
@@ -422,6 +422,13 @@
         "evidence": "E:\\Project\\Master\\.local-agent-global\\visibility\\gmail\\data.json"
       },
       {
+        "severity": "CRITICAL",
+        "source": "Mi-Core",
+        "rule": "runtime_down",
+        "message": "Mi-Core is down",
+        "evidence": "This operation was aborted"
+      },
+      {
         "severity": "WARNING",
         "source": "Agent Engine",
         "rule": "runtime_not_green",
@@ -446,12 +453,12 @@
     "summary": {
       "INFO": 0,
       "WARNING": 9,
-      "CRITICAL": 0
+      "CRITICAL": 1
     },
     "target": "RUNTIME_ALERT_CLASSIFICATION_READY"
   },
   "burn_in_watchdog_feed": {
-    "generated_at": "2026-06-25T00:41:58.286Z",
+    "generated_at": "2026-06-25T02:23:06.909Z",
     "pm2_restarts": [
       {
         "service_id": "mi-core",
@@ -465,7 +472,7 @@
         "uptime_ms": null,
         "uptime_reset_repeatedly": false,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_matches_pm2": null,
         "status": "pm2_unavailable",
         "alert": "WARNING"
@@ -543,21 +550,21 @@
     "mi_core_uptime": {
       "service_id": "mi-core",
       "service": "Mi-Core",
-      "status": "up",
-      "checked_at": "2026-06-25T00:41:48.312Z",
-      "response_ms": 1723,
-      "http_status": 200,
+      "status": "down",
+      "checked_at": "2026-06-25T02:22:54.364Z",
+      "response_ms": 6972,
+      "http_status": null,
       "restart_count": 0,
       "crash_count": 0,
       "pm2_pid": null,
-      "port_pid": 24812,
+      "port_pid": 26260,
       "port_match": null,
       "uptime_ms": null,
-      "details": null,
+      "details": "This operation was aborted",
       "uptime_checks": 79,
-      "downtime_checks": 26,
-      "uptime_percent": 75.24,
-      "downtime_minutes_estimate": 780
+      "downtime_checks": 27,
+      "uptime_percent": 74.53,
+      "downtime_minutes_estimate": 810
     },
     "connector_health": {
       "total": 14,
@@ -570,21 +577,21 @@
           "name": "Master Workspace (Local)",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.743Z"
+          "last_sync": "2026-06-25T02:22:57.248Z"
         },
         {
           "id": "dashboard-bakudan",
           "name": "Dashboard bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.835Z"
+          "last_sync": "2026-06-25T02:22:57.755Z"
         },
         {
           "id": "asana",
           "name": "Asana",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.331Z"
+          "last_sync": "2026-06-25T01:53:48.886Z"
         },
         {
           "id": "gmail",
@@ -598,49 +605,49 @@
           "name": "Google Calendar",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:36.614Z"
+          "last_sync": "2026-06-25T01:53:38.151Z"
         },
         {
           "id": "google-drive",
           "name": "Google Drive",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:37.322Z"
+          "last_sync": "2026-06-25T01:53:39.055Z"
         },
         {
           "id": "health-export",
           "name": "Huawei Health Export",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.336Z"
+          "last_sync": "2026-06-25T01:53:48.893Z"
         },
         {
           "id": "website-raw",
           "name": "rawsushibar.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.394Z"
         },
         {
           "id": "website-bakudan",
           "name": "bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.393Z"
         },
         {
           "id": "accounting",
           "name": "Accounting Engine",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.341Z"
+          "last_sync": "2026-06-25T01:53:48.897Z"
         },
         {
           "id": "food-safety",
           "name": "Food Safety Gateway",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.347Z"
+          "last_sync": "2026-06-25T01:53:48.905Z"
         },
         {
           "id": "whatsapp",
@@ -654,7 +661,7 @@
           "name": "QuickBooks Runtime",
           "auth": "connected",
           "health": "degraded",
-          "last_sync": "2026-06-25T00:41:58.270Z",
+          "last_sync": "2026-06-25T02:23:06.862Z",
           "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Current evidence imported and certified; keep QB Desktop/Web Connector/agent running for daily sync."
         },
         {
@@ -662,7 +669,7 @@
           "name": "Google Sheets",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:39.019Z"
+          "last_sync": "2026-06-25T01:53:42.036Z"
         }
       ]
     },
@@ -675,7 +682,7 @@
         "auth_status": "connected",
         "last_sync": "2026-06-14T14:03:57.278Z",
         "last_synced_at": "2026-06-14T14:03:57.278Z",
-        "age_minutes": 15038,
+        "age_minutes": 15139,
         "threshold_minutes": 120,
         "freshness_score": 0,
         "stale": true,
@@ -689,8 +696,8 @@
         "connector_id": "quickbooks-runtime",
         "connector_health": "degraded",
         "auth_status": "connected",
-        "last_sync": "2026-06-25T00:41:58.270Z",
-        "last_synced_at": "2026-06-25T00:41:58.270Z",
+        "last_sync": "2026-06-25T02:23:06.862Z",
+        "last_synced_at": "2026-06-25T02:23:06.862Z",
         "age_minutes": 0,
         "threshold_minutes": 1440,
         "freshness_score": 100,
@@ -702,12 +709,25 @@
     ],
     "failed_workflows": [
       {
-        "id": "runtime-failure-agent-engine-agent-engine-unknown",
-        "first_seen": "2026-06-14T15:48:58.502Z",
-        "last_seen": "2026-06-25T00:41:58.282Z",
+        "id": "runtime-failure-mi-core-mi-core-down",
+        "first_seen": "2026-06-14T15:47:19.780Z",
+        "last_seen": "2026-06-25T02:23:06.890Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 103,
+        "recurrence": 27,
+        "type": "runtime_failure",
+        "source": "Mi-Core",
+        "summary": "Mi-Core down",
+        "escalation": "escalated",
+        "evidence": "This operation was aborted"
+      },
+      {
+        "id": "runtime-failure-agent-engine-agent-engine-unknown",
+        "first_seen": "2026-06-14T15:48:58.502Z",
+        "last_seen": "2026-06-25T02:23:06.898Z",
+        "status": "open",
+        "resolved": false,
+        "recurrence": 104,
         "type": "runtime_failure",
         "source": "Agent Engine",
         "summary": "Agent Engine unknown",
@@ -717,10 +737,10 @@
       {
         "id": "sync-failure-gmail-gmail-freshness-stale",
         "first_seen": "2026-06-14T16:05:16.431Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.905Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 102,
+        "recurrence": 103,
         "type": "sync_failure",
         "source": "Gmail",
         "summary": "Gmail freshness stale",
@@ -730,10 +750,10 @@
       {
         "id": "runtime-failure-visibility-visibility-degraded",
         "first_seen": "2026-06-14T17:42:06.074Z",
-        "last_seen": "2026-06-25T00:41:58.283Z",
+        "last_seen": "2026-06-25T02:23:06.899Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "Visibility",
         "summary": "Visibility degraded",
@@ -743,10 +763,10 @@
       {
         "id": "runtime-failure-qb-connector-qb-connector-degraded",
         "first_seen": "2026-06-14T17:42:06.075Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.904Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "QB Connector",
         "summary": "QB Connector degraded",
@@ -756,10 +776,10 @@
       {
         "id": "sync-failure-quickbooks-quickbooks-freshness-degraded",
         "first_seen": "2026-06-14T17:42:06.076Z",
-        "last_seen": "2026-06-25T00:41:58.285Z",
+        "last_seen": "2026-06-25T02:23:06.906Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 98,
+        "recurrence": 99,
         "type": "sync_failure",
         "source": "QuickBooks",
         "summary": "QuickBooks freshness degraded",
@@ -806,6 +826,13 @@
         "evidence": "E:\\Project\\Master\\.local-agent-global\\visibility\\gmail\\data.json"
       },
       {
+        "severity": "CRITICAL",
+        "source": "Mi-Core",
+        "rule": "runtime_down",
+        "message": "Mi-Core is down",
+        "evidence": "This operation was aborted"
+      },
+      {
         "severity": "WARNING",
         "source": "Agent Engine",
         "rule": "runtime_not_green",
@@ -827,37 +854,37 @@
         "evidence": "Connector is not fully healthy"
       }
     ],
-    "burn_in_score": 41,
+    "burn_in_score": 16,
     "target": "BURN_IN_WATCHDOG_FEED_READY"
   },
   "daily_reliability_snapshot": {
-    "generated_at": "2026-06-25T00:41:58.286Z",
+    "generated_at": "2026-06-25T02:23:06.910Z",
     "uptime": [
       {
         "service_id": "mi-core",
         "service": "Mi-Core",
-        "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 1723,
-        "http_status": 200,
+        "status": "down",
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 6972,
+        "http_status": null,
         "restart_count": 0,
         "crash_count": 0,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_match": null,
         "uptime_ms": null,
-        "details": null,
+        "details": "This operation was aborted",
         "uptime_checks": 79,
-        "downtime_checks": 26,
-        "uptime_percent": 75.24,
-        "downtime_minutes_estimate": 780
+        "downtime_checks": 27,
+        "uptime_percent": 74.53,
+        "downtime_minutes_estimate": 810
       },
       {
         "service_id": "ai-service",
         "service": "AI Service",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 608,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 1028,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -866,17 +893,17 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 91,
+        "uptime_checks": 92,
         "downtime_checks": 14,
-        "uptime_percent": 86.67,
+        "uptime_percent": 86.79,
         "downtime_minutes_estimate": 420
       },
       {
         "service_id": "ollama",
         "service": "Ollama",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 6,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 3,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -885,7 +912,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -894,7 +921,7 @@
         "service_id": "agent-engine",
         "service": "Agent Engine",
         "status": "unknown",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -913,7 +940,7 @@
         "service_id": "visibility",
         "service": "Visibility",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -925,14 +952,14 @@
         "details": "1 connector(s) unhealthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "gmail",
         "service": "Gmail",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -942,7 +969,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -951,7 +978,7 @@
         "service_id": "calendar",
         "service": "Calendar",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -961,7 +988,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -970,7 +997,7 @@
         "service_id": "drive",
         "service": "Drive",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -980,7 +1007,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -989,7 +1016,7 @@
         "service_id": "qb",
         "service": "QB Connector",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1001,14 +1028,14 @@
         "details": "Connector is not fully healthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "health",
         "service": "Health Connector",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1018,7 +1045,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -1037,7 +1064,7 @@
         "uptime_ms": null,
         "uptime_reset_repeatedly": false,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_matches_pm2": null,
         "status": "pm2_unavailable",
         "alert": "WARNING"
@@ -1112,7 +1139,7 @@
       }
     ],
     "ollama_health": {
-      "generated_at": "2026-06-25T00:41:50.988Z",
+      "generated_at": "2026-06-25T02:23:02.876Z",
       "reachable": true,
       "model_loaded": true,
       "selected_model": "qwen3:8b",
@@ -1124,16 +1151,16 @@
         "qwen3:8b",
         "qwen3:14b"
       ],
-      "response_latency_ms": 4,
+      "response_latency_ms": 12,
       "timeout_count": 0,
       "failure_count": 0,
-      "last_successful_response": "2026-06-25T00:41:50.988Z",
+      "last_successful_response": "2026-06-25T02:23:02.876Z",
       "last_timeout_time": null,
-      "answer_vi": "Ollama đang ổn. Model đang dùng: qwen3:8b. Latency health check: 4ms.",
+      "answer_vi": "Ollama đang ổn. Model đang dùng: qwen3:8b. Latency health check: 12ms.",
       "target": "OLLAMA_HEALTH_MONITOR_READY"
     },
     "connector_freshness": {
-      "generated_at": "2026-06-25T00:41:58.282Z",
+      "generated_at": "2026-06-25T02:23:06.889Z",
       "overall_status": "stale",
       "sources": [
         {
@@ -1144,7 +1171,7 @@
           "auth_status": "connected",
           "last_sync": "2026-06-14T14:03:57.278Z",
           "last_synced_at": "2026-06-14T14:03:57.278Z",
-          "age_minutes": 15038,
+          "age_minutes": 15139,
           "threshold_minutes": 120,
           "freshness_score": 0,
           "stale": true,
@@ -1158,8 +1185,8 @@
           "connector_id": "google-calendar",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:36.614Z",
-          "last_synced_at": "2026-06-25T00:12:36.614Z",
+          "last_sync": "2026-06-25T01:53:38.151Z",
+          "last_synced_at": "2026-06-25T01:53:38.151Z",
           "age_minutes": 29,
           "threshold_minutes": 120,
           "freshness_score": 76,
@@ -1174,8 +1201,8 @@
           "connector_id": "google-drive",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:37.322Z",
-          "last_synced_at": "2026-06-25T00:12:37.322Z",
+          "last_sync": "2026-06-25T01:53:39.055Z",
+          "last_synced_at": "2026-06-25T01:53:39.055Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -1190,8 +1217,8 @@
           "connector_id": "google-sheets",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:39.019Z",
-          "last_synced_at": "2026-06-25T00:12:39.019Z",
+          "last_sync": "2026-06-25T01:53:42.036Z",
+          "last_synced_at": "2026-06-25T01:53:42.036Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -1206,8 +1233,8 @@
           "connector_id": "asana",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.331Z",
-          "last_synced_at": "2026-06-25T00:12:46.331Z",
+          "last_sync": "2026-06-25T01:53:48.886Z",
+          "last_synced_at": "2026-06-25T01:53:48.886Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -1222,8 +1249,8 @@
           "connector_id": "health-export",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.336Z",
-          "last_synced_at": "2026-06-25T00:12:46.336Z",
+          "last_sync": "2026-06-25T01:53:48.893Z",
+          "last_synced_at": "2026-06-25T01:53:48.893Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -1238,8 +1265,8 @@
           "connector_id": "website-bakudan",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.724Z",
-          "last_synced_at": "2026-06-25T00:12:46.724Z",
+          "last_sync": "2026-06-25T01:53:49.393Z",
+          "last_synced_at": "2026-06-25T01:53:49.393Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -1254,8 +1281,8 @@
           "connector_id": "website-raw",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.724Z",
-          "last_synced_at": "2026-06-25T00:12:46.724Z",
+          "last_sync": "2026-06-25T01:53:49.394Z",
+          "last_synced_at": "2026-06-25T01:53:49.394Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -1270,8 +1297,8 @@
           "connector_id": "quickbooks-runtime",
           "connector_health": "degraded",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:41:58.270Z",
-          "last_synced_at": "2026-06-25T00:41:58.270Z",
+          "last_sync": "2026-06-25T02:23:06.862Z",
+          "last_synced_at": "2026-06-25T02:23:06.862Z",
           "age_minutes": 0,
           "threshold_minutes": 1440,
           "freshness_score": 100,
@@ -1285,9 +1312,9 @@
           "status": "fresh",
           "last_sync": "2026-06-24T08:28:02.137Z",
           "last_synced_at": "2026-06-24T08:28:02.137Z",
-          "age_minutes": 974,
+          "age_minutes": 1075,
           "threshold_minutes": 2880,
-          "freshness_score": 66,
+          "freshness_score": 63,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -1296,11 +1323,11 @@
         {
           "source": "Graph",
           "status": "fresh",
-          "last_sync": "2026-06-24T17:30:18.998Z",
-          "last_synced_at": "2026-06-24T17:30:18.998Z",
-          "age_minutes": 432,
+          "last_sync": "2026-06-25T01:22:51.827Z",
+          "last_synced_at": "2026-06-25T01:22:51.827Z",
+          "age_minutes": 60,
           "threshold_minutes": 1440,
-          "freshness_score": 70,
+          "freshness_score": 96,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -1311,9 +1338,9 @@
           "status": "fresh",
           "last_sync": "2026-06-25T00:01:05.357Z",
           "last_synced_at": "2026-06-25T00:01:05.357Z",
-          "age_minutes": 41,
+          "age_minutes": 142,
           "threshold_minutes": 1440,
-          "freshness_score": 97,
+          "freshness_score": 90,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -1325,15 +1352,28 @@
       "error_count": 0,
       "no_hallucination_guardrail": "Em chưa có đủ dữ liệu thật để kết luận."
     },
-    "burn_in_score": 41,
+    "burn_in_score": 16,
     "active_incidents": [
+      {
+        "id": "runtime-failure-mi-core-mi-core-down",
+        "first_seen": "2026-06-14T15:47:19.780Z",
+        "last_seen": "2026-06-25T02:23:06.890Z",
+        "status": "open",
+        "resolved": false,
+        "recurrence": 27,
+        "type": "runtime_failure",
+        "source": "Mi-Core",
+        "summary": "Mi-Core down",
+        "escalation": "escalated",
+        "evidence": "This operation was aborted"
+      },
       {
         "id": "runtime-failure-agent-engine-agent-engine-unknown",
         "first_seen": "2026-06-14T15:48:58.502Z",
-        "last_seen": "2026-06-25T00:41:58.282Z",
+        "last_seen": "2026-06-25T02:23:06.898Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 103,
+        "recurrence": 104,
         "type": "runtime_failure",
         "source": "Agent Engine",
         "summary": "Agent Engine unknown",
@@ -1343,10 +1383,10 @@
       {
         "id": "sync-failure-gmail-gmail-freshness-stale",
         "first_seen": "2026-06-14T16:05:16.431Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.905Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 102,
+        "recurrence": 103,
         "type": "sync_failure",
         "source": "Gmail",
         "summary": "Gmail freshness stale",
@@ -1356,10 +1396,10 @@
       {
         "id": "runtime-failure-visibility-visibility-degraded",
         "first_seen": "2026-06-14T17:42:06.074Z",
-        "last_seen": "2026-06-25T00:41:58.283Z",
+        "last_seen": "2026-06-25T02:23:06.899Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "Visibility",
         "summary": "Visibility degraded",
@@ -1369,10 +1409,10 @@
       {
         "id": "runtime-failure-qb-connector-qb-connector-degraded",
         "first_seen": "2026-06-14T17:42:06.075Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.904Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "QB Connector",
         "summary": "QB Connector degraded",
@@ -1382,10 +1422,10 @@
       {
         "id": "sync-failure-quickbooks-quickbooks-freshness-degraded",
         "first_seen": "2026-06-14T17:42:06.076Z",
-        "last_seen": "2026-06-25T00:41:58.285Z",
+        "last_seen": "2026-06-25T02:23:06.906Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 98,
+        "recurrence": 99,
         "type": "sync_failure",
         "source": "QuickBooks",
         "summary": "QuickBooks freshness degraded",
@@ -1398,7 +1438,8 @@
         "No Dev1 action required from current monitoring snapshot."
       ],
       "dev2": [
-        "Escalate and refresh stale or missing connector data."
+        "Escalate and refresh stale or missing connector data.",
+        "Keep critical runtime alerts open until verified resolved."
       ],
       "dev3": [
         "Use before/after restart, latency, timeout, and burn-in score deltas during chat hardening tests."
@@ -1415,8 +1456,8 @@
       ],
       "attempted": true,
       "recovered": true,
-      "result": "{\"synced_at\":\"2026-06-25T00:41:58.256Z\",\"unread_count\":39,\"important_count\":4,\"emails\":[{\"id\":\"19efbe576718d637\",\"thread_id\":\"19efb7de86096e75\",\"subject\":\"Re: Payment\",\"from\":\"Hoang Le <hoang.d.le@gmail.com>\",\"date\":\"Wed, 24 Jun 2026 16:09:02 -0700\",\"snippet\":\"Yes, thank you for the reminder. On Wed, Jun 24, 2026 at 2:16 PM Tracy E &lt;tracy@fourseasonsfood.com&gt; wrote: Good afternoon Hoang, Would you mind taking care of May&#39;s payment this Friday?\",\"labels\":[\"UNREAD\",\"IMPORTANT\",\"CATEGORY_",
-      "checked_at": "2026-06-25T00:41:58.258Z"
+      "result": "{\"synced_at\":\"2026-06-25T02:23:06.798Z\",\"unread_count\":39,\"important_count\":5,\"emails\":[{\"id\":\"19efc5e43b160807\",\"thread_id\":\"19efc5e43b160807\",\"subject\":\"Chiaki - Giao hàng thành công\",\"from\":\"\\\"Chiaki.vn - Chăm sóc khách hàng\\\" <cskh@chiaki.vn>\",\"date\":\"Thu, 25 Jun 2026 01:21:35 +0000\",\"snippet\":\"Xin chào Liem Do! Bạn có thông báo đơn hàng trên hệ thống thương mại điện tử chiaki.vn.‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "checked_at": "2026-06-25T02:23:06.800Z"
     },
     {
       "connector_id": "google-calendar",
@@ -1425,7 +1466,7 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.258Z"
+      "checked_at": "2026-06-25T02:23:06.800Z"
     },
     {
       "connector_id": "google-drive",
@@ -1434,7 +1475,7 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.258Z"
+      "checked_at": "2026-06-25T02:23:06.800Z"
     },
     {
       "connector_id": "asana",
@@ -1443,7 +1484,7 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.259Z"
+      "checked_at": "2026-06-25T02:23:06.801Z"
     },
     {
       "connector_id": "quickbooks-runtime",
@@ -1453,8 +1494,8 @@
       ],
       "attempted": true,
       "recovered": true,
-      "result": "{\"generated_at\":\"2026-06-25T00:41:58.264Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
-      "checked_at": "2026-06-25T00:41:58.271Z"
+      "result": "{\"generated_at\":\"2026-06-25T02:23:06.838Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
+      "checked_at": "2026-06-25T02:23:06.863Z"
     },
     {
       "connector_id": "health-export",
@@ -1463,7 +1504,7 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.271Z"
+      "checked_at": "2026-06-25T02:23:06.864Z"
     },
     {
       "connector_id": "website-bakudan",
@@ -1472,7 +1513,7 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.271Z"
+      "checked_at": "2026-06-25T02:23:06.865Z"
     },
     {
       "connector_id": "website-raw",
@@ -1481,11 +1522,11 @@
       "attempted": false,
       "recovered": true,
       "result": "No recovery needed",
-      "checked_at": "2026-06-25T00:41:58.272Z"
+      "checked_at": "2026-06-25T02:23:06.867Z"
     }
   ],
   "executive_snapshot": {
-    "generated_at": "2026-06-25T00:41:58.297Z",
+    "generated_at": "2026-06-25T02:23:06.931Z",
     "connector_health": {
       "total": 14,
       "connected": 14,
@@ -1497,21 +1538,21 @@
           "name": "Master Workspace (Local)",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.743Z"
+          "last_sync": "2026-06-25T02:22:57.248Z"
         },
         {
           "id": "dashboard-bakudan",
           "name": "Dashboard bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.835Z"
+          "last_sync": "2026-06-25T02:22:57.755Z"
         },
         {
           "id": "asana",
           "name": "Asana",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.331Z"
+          "last_sync": "2026-06-25T01:53:48.886Z"
         },
         {
           "id": "gmail",
@@ -1525,49 +1566,49 @@
           "name": "Google Calendar",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:36.614Z"
+          "last_sync": "2026-06-25T01:53:38.151Z"
         },
         {
           "id": "google-drive",
           "name": "Google Drive",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:37.322Z"
+          "last_sync": "2026-06-25T01:53:39.055Z"
         },
         {
           "id": "health-export",
           "name": "Huawei Health Export",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.336Z"
+          "last_sync": "2026-06-25T01:53:48.893Z"
         },
         {
           "id": "website-raw",
           "name": "rawsushibar.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.394Z"
         },
         {
           "id": "website-bakudan",
           "name": "bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.393Z"
         },
         {
           "id": "accounting",
           "name": "Accounting Engine",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.341Z"
+          "last_sync": "2026-06-25T01:53:48.897Z"
         },
         {
           "id": "food-safety",
           "name": "Food Safety Gateway",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.347Z"
+          "last_sync": "2026-06-25T01:53:48.905Z"
         },
         {
           "id": "whatsapp",
@@ -1581,7 +1622,7 @@
           "name": "QuickBooks Runtime",
           "auth": "connected",
           "health": "degraded",
-          "last_sync": "2026-06-25T00:41:58.270Z",
+          "last_sync": "2026-06-25T02:23:06.862Z",
           "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Current evidence imported and certified; keep QB Desktop/Web Connector/agent running for daily sync."
         },
         {
@@ -1589,7 +1630,7 @@
           "name": "Google Sheets",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:39.019Z"
+          "last_sync": "2026-06-25T01:53:42.036Z"
         }
       ]
     },
@@ -1599,21 +1640,21 @@
         "name": "Master Workspace (Local)",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:41:49.743Z"
+        "last_sync": "2026-06-25T02:22:57.248Z"
       },
       {
         "id": "dashboard-bakudan",
         "name": "Dashboard bakudanramen.com",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:41:49.835Z"
+        "last_sync": "2026-06-25T02:22:57.755Z"
       },
       {
         "id": "asana",
         "name": "Asana",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.331Z"
+        "last_sync": "2026-06-25T01:53:48.886Z"
       },
       {
         "id": "gmail",
@@ -1627,49 +1668,49 @@
         "name": "Google Calendar",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:36.614Z"
+        "last_sync": "2026-06-25T01:53:38.151Z"
       },
       {
         "id": "google-drive",
         "name": "Google Drive",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:37.322Z"
+        "last_sync": "2026-06-25T01:53:39.055Z"
       },
       {
         "id": "health-export",
         "name": "Huawei Health Export",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.336Z"
+        "last_sync": "2026-06-25T01:53:48.893Z"
       },
       {
         "id": "website-raw",
         "name": "rawsushibar.com",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.724Z"
+        "last_sync": "2026-06-25T01:53:49.394Z"
       },
       {
         "id": "website-bakudan",
         "name": "bakudanramen.com",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.724Z"
+        "last_sync": "2026-06-25T01:53:49.393Z"
       },
       {
         "id": "accounting",
         "name": "Accounting Engine",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.341Z"
+        "last_sync": "2026-06-25T01:53:48.897Z"
       },
       {
         "id": "food-safety",
         "name": "Food Safety Gateway",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:46.347Z"
+        "last_sync": "2026-06-25T01:53:48.905Z"
       },
       {
         "id": "whatsapp",
@@ -1683,7 +1724,7 @@
         "name": "QuickBooks Runtime",
         "auth": "connected",
         "health": "degraded",
-        "last_sync": "2026-06-25T00:41:58.270Z",
+        "last_sync": "2026-06-25T02:23:06.862Z",
         "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Current evidence imported and certified; keep QB Desktop/Web Connector/agent running for daily sync."
       },
       {
@@ -1691,7 +1732,7 @@
         "name": "Google Sheets",
         "auth": "connected",
         "health": "healthy",
-        "last_sync": "2026-06-25T00:12:39.019Z"
+        "last_sync": "2026-06-25T01:53:42.036Z"
       }
     ],
     "stale_sources": [
@@ -1703,7 +1744,7 @@
         "auth_status": "connected",
         "last_sync": "2026-06-14T14:03:57.278Z",
         "last_synced_at": "2026-06-14T14:03:57.278Z",
-        "age_minutes": 15038,
+        "age_minutes": 15139,
         "threshold_minutes": 120,
         "freshness_score": 0,
         "stale": true,
@@ -1717,8 +1758,8 @@
         "connector_id": "quickbooks-runtime",
         "connector_health": "degraded",
         "auth_status": "connected",
-        "last_sync": "2026-06-25T00:41:58.270Z",
-        "last_synced_at": "2026-06-25T00:41:58.270Z",
+        "last_sync": "2026-06-25T02:23:06.862Z",
+        "last_synced_at": "2026-06-25T02:23:06.862Z",
         "age_minutes": 0,
         "threshold_minutes": 1440,
         "freshness_score": 100,
@@ -1730,12 +1771,25 @@
     ],
     "failed_workflows": [
       {
-        "id": "runtime-failure-agent-engine-agent-engine-unknown",
-        "first_seen": "2026-06-14T15:48:58.502Z",
-        "last_seen": "2026-06-25T00:41:58.282Z",
+        "id": "runtime-failure-mi-core-mi-core-down",
+        "first_seen": "2026-06-14T15:47:19.780Z",
+        "last_seen": "2026-06-25T02:23:06.890Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 103,
+        "recurrence": 27,
+        "type": "runtime_failure",
+        "source": "Mi-Core",
+        "summary": "Mi-Core down",
+        "escalation": "escalated",
+        "evidence": "This operation was aborted"
+      },
+      {
+        "id": "runtime-failure-agent-engine-agent-engine-unknown",
+        "first_seen": "2026-06-14T15:48:58.502Z",
+        "last_seen": "2026-06-25T02:23:06.898Z",
+        "status": "open",
+        "resolved": false,
+        "recurrence": 104,
         "type": "runtime_failure",
         "source": "Agent Engine",
         "summary": "Agent Engine unknown",
@@ -1745,10 +1799,10 @@
       {
         "id": "sync-failure-gmail-gmail-freshness-stale",
         "first_seen": "2026-06-14T16:05:16.431Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.905Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 102,
+        "recurrence": 103,
         "type": "sync_failure",
         "source": "Gmail",
         "summary": "Gmail freshness stale",
@@ -1758,10 +1812,10 @@
       {
         "id": "runtime-failure-visibility-visibility-degraded",
         "first_seen": "2026-06-14T17:42:06.074Z",
-        "last_seen": "2026-06-25T00:41:58.283Z",
+        "last_seen": "2026-06-25T02:23:06.899Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "Visibility",
         "summary": "Visibility degraded",
@@ -1771,10 +1825,10 @@
       {
         "id": "runtime-failure-qb-connector-qb-connector-degraded",
         "first_seen": "2026-06-14T17:42:06.075Z",
-        "last_seen": "2026-06-25T00:41:58.284Z",
+        "last_seen": "2026-06-25T02:23:06.904Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 99,
+        "recurrence": 100,
         "type": "runtime_failure",
         "source": "QB Connector",
         "summary": "QB Connector degraded",
@@ -1784,10 +1838,10 @@
       {
         "id": "sync-failure-quickbooks-quickbooks-freshness-degraded",
         "first_seen": "2026-06-14T17:42:06.076Z",
-        "last_seen": "2026-06-25T00:41:58.285Z",
+        "last_seen": "2026-06-25T02:23:06.906Z",
         "status": "open",
         "resolved": false,
-        "recurrence": 98,
+        "recurrence": 99,
         "type": "sync_failure",
         "source": "QuickBooks",
         "summary": "QuickBooks freshness degraded",
@@ -1795,15 +1849,15 @@
         "evidence": "E:\\Project\\Master\\.local-agent-global\\visibility\\quickbooks\\data.json"
       }
     ],
-    "burn_in_score": 41,
+    "burn_in_score": 16,
     "qb_status": {
       "source": "QuickBooks",
       "status": "degraded",
       "connector_id": "quickbooks-runtime",
       "connector_health": "degraded",
       "auth_status": "connected",
-      "last_sync": "2026-06-25T00:41:58.270Z",
-      "last_synced_at": "2026-06-25T00:41:58.270Z",
+      "last_sync": "2026-06-25T02:23:06.862Z",
+      "last_synced_at": "2026-06-25T02:23:06.862Z",
       "age_minutes": 0,
       "threshold_minutes": 1440,
       "freshness_score": 100,
@@ -1818,8 +1872,8 @@
       "connector_id": "health-export",
       "connector_health": "healthy",
       "auth_status": "connected",
-      "last_sync": "2026-06-25T00:12:46.336Z",
-      "last_synced_at": "2026-06-25T00:12:46.336Z",
+      "last_sync": "2026-06-25T01:53:48.893Z",
+      "last_synced_at": "2026-06-25T01:53:48.893Z",
       "age_minutes": 29,
       "threshold_minutes": 1440,
       "freshness_score": 98,
@@ -1831,33 +1885,33 @@
     "target": "EXECUTIVE_SNAPSHOT_READY"
   },
   "burn_in_support": {
-    "generated_at": "2026-06-25T00:41:58.298Z",
+    "generated_at": "2026-06-25T02:23:06.933Z",
     "runtime_metrics": [
       {
         "service_id": "mi-core",
         "service": "Mi-Core",
-        "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 1723,
-        "http_status": 200,
+        "status": "down",
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 6972,
+        "http_status": null,
         "restart_count": 0,
         "crash_count": 0,
         "pm2_pid": null,
-        "port_pid": 24812,
+        "port_pid": 26260,
         "port_match": null,
         "uptime_ms": null,
-        "details": null,
+        "details": "This operation was aborted",
         "uptime_checks": 79,
-        "downtime_checks": 26,
-        "uptime_percent": 75.24,
-        "downtime_minutes_estimate": 780
+        "downtime_checks": 27,
+        "uptime_percent": 74.53,
+        "downtime_minutes_estimate": 810
       },
       {
         "service_id": "ai-service",
         "service": "AI Service",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 608,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 1028,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -1866,17 +1920,17 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 91,
+        "uptime_checks": 92,
         "downtime_checks": 14,
-        "uptime_percent": 86.67,
+        "uptime_percent": 86.79,
         "downtime_minutes_estimate": 420
       },
       {
         "service_id": "ollama",
         "service": "Ollama",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
-        "response_ms": 6,
+        "checked_at": "2026-06-25T02:22:54.364Z",
+        "response_ms": 3,
         "http_status": 200,
         "restart_count": 0,
         "crash_count": 0,
@@ -1885,7 +1939,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -1894,7 +1948,7 @@
         "service_id": "agent-engine",
         "service": "Agent Engine",
         "status": "unknown",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1913,7 +1967,7 @@
         "service_id": "visibility",
         "service": "Visibility",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1925,14 +1979,14 @@
         "details": "1 connector(s) unhealthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "gmail",
         "service": "Gmail",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1942,7 +1996,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -1951,7 +2005,7 @@
         "service_id": "calendar",
         "service": "Calendar",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1961,7 +2015,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -1970,7 +2024,7 @@
         "service_id": "drive",
         "service": "Drive",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -1980,7 +2034,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -1989,7 +2043,7 @@
         "service_id": "qb",
         "service": "QB Connector",
         "status": "degraded",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -2001,14 +2055,14 @@
         "details": "Connector is not fully healthy",
         "uptime_checks": 6,
         "downtime_checks": 0,
-        "uptime_percent": 5.71,
+        "uptime_percent": 5.66,
         "downtime_minutes_estimate": 0
       },
       {
         "service_id": "health",
         "service": "Health Connector",
         "status": "up",
-        "checked_at": "2026-06-25T00:41:48.312Z",
+        "checked_at": "2026-06-25T02:22:54.364Z",
         "response_ms": null,
         "http_status": null,
         "restart_count": 0,
@@ -2018,7 +2072,7 @@
         "port_match": null,
         "uptime_ms": null,
         "details": null,
-        "uptime_checks": 105,
+        "uptime_checks": 106,
         "downtime_checks": 0,
         "uptime_percent": 100,
         "downtime_minutes_estimate": 0
@@ -2035,21 +2089,21 @@
           "name": "Master Workspace (Local)",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.743Z"
+          "last_sync": "2026-06-25T02:22:57.248Z"
         },
         {
           "id": "dashboard-bakudan",
           "name": "Dashboard bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:41:49.835Z"
+          "last_sync": "2026-06-25T02:22:57.755Z"
         },
         {
           "id": "asana",
           "name": "Asana",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.331Z"
+          "last_sync": "2026-06-25T01:53:48.886Z"
         },
         {
           "id": "gmail",
@@ -2063,49 +2117,49 @@
           "name": "Google Calendar",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:36.614Z"
+          "last_sync": "2026-06-25T01:53:38.151Z"
         },
         {
           "id": "google-drive",
           "name": "Google Drive",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:37.322Z"
+          "last_sync": "2026-06-25T01:53:39.055Z"
         },
         {
           "id": "health-export",
           "name": "Huawei Health Export",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.336Z"
+          "last_sync": "2026-06-25T01:53:48.893Z"
         },
         {
           "id": "website-raw",
           "name": "rawsushibar.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.394Z"
         },
         {
           "id": "website-bakudan",
           "name": "bakudanramen.com",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.724Z"
+          "last_sync": "2026-06-25T01:53:49.393Z"
         },
         {
           "id": "accounting",
           "name": "Accounting Engine",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.341Z"
+          "last_sync": "2026-06-25T01:53:48.897Z"
         },
         {
           "id": "food-safety",
           "name": "Food Safety Gateway",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:46.347Z"
+          "last_sync": "2026-06-25T01:53:48.905Z"
         },
         {
           "id": "whatsapp",
@@ -2119,7 +2173,7 @@
           "name": "QuickBooks Runtime",
           "auth": "connected",
           "health": "degraded",
-          "last_sync": "2026-06-25T00:41:58.270Z",
+          "last_sync": "2026-06-25T02:23:06.862Z",
           "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Current evidence imported and certified; keep QB Desktop/Web Connector/agent running for daily sync."
         },
         {
@@ -2127,12 +2181,12 @@
           "name": "Google Sheets",
           "auth": "connected",
           "health": "healthy",
-          "last_sync": "2026-06-25T00:12:39.019Z"
+          "last_sync": "2026-06-25T01:53:42.036Z"
         }
       ]
     },
     "freshness_metrics": {
-      "generated_at": "2026-06-25T00:41:58.282Z",
+      "generated_at": "2026-06-25T02:23:06.889Z",
       "overall_status": "stale",
       "sources": [
         {
@@ -2143,7 +2197,7 @@
           "auth_status": "connected",
           "last_sync": "2026-06-14T14:03:57.278Z",
           "last_synced_at": "2026-06-14T14:03:57.278Z",
-          "age_minutes": 15038,
+          "age_minutes": 15139,
           "threshold_minutes": 120,
           "freshness_score": 0,
           "stale": true,
@@ -2157,8 +2211,8 @@
           "connector_id": "google-calendar",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:36.614Z",
-          "last_synced_at": "2026-06-25T00:12:36.614Z",
+          "last_sync": "2026-06-25T01:53:38.151Z",
+          "last_synced_at": "2026-06-25T01:53:38.151Z",
           "age_minutes": 29,
           "threshold_minutes": 120,
           "freshness_score": 76,
@@ -2173,8 +2227,8 @@
           "connector_id": "google-drive",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:37.322Z",
-          "last_synced_at": "2026-06-25T00:12:37.322Z",
+          "last_sync": "2026-06-25T01:53:39.055Z",
+          "last_synced_at": "2026-06-25T01:53:39.055Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -2189,8 +2243,8 @@
           "connector_id": "google-sheets",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:39.019Z",
-          "last_synced_at": "2026-06-25T00:12:39.019Z",
+          "last_sync": "2026-06-25T01:53:42.036Z",
+          "last_synced_at": "2026-06-25T01:53:42.036Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -2205,8 +2259,8 @@
           "connector_id": "asana",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.331Z",
-          "last_synced_at": "2026-06-25T00:12:46.331Z",
+          "last_sync": "2026-06-25T01:53:48.886Z",
+          "last_synced_at": "2026-06-25T01:53:48.886Z",
           "age_minutes": 29,
           "threshold_minutes": 240,
           "freshness_score": 88,
@@ -2221,8 +2275,8 @@
           "connector_id": "health-export",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.336Z",
-          "last_synced_at": "2026-06-25T00:12:46.336Z",
+          "last_sync": "2026-06-25T01:53:48.893Z",
+          "last_synced_at": "2026-06-25T01:53:48.893Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -2237,8 +2291,8 @@
           "connector_id": "website-bakudan",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.724Z",
-          "last_synced_at": "2026-06-25T00:12:46.724Z",
+          "last_sync": "2026-06-25T01:53:49.393Z",
+          "last_synced_at": "2026-06-25T01:53:49.393Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -2253,8 +2307,8 @@
           "connector_id": "website-raw",
           "connector_health": "healthy",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:12:46.724Z",
-          "last_synced_at": "2026-06-25T00:12:46.724Z",
+          "last_sync": "2026-06-25T01:53:49.394Z",
+          "last_synced_at": "2026-06-25T01:53:49.394Z",
           "age_minutes": 29,
           "threshold_minutes": 1440,
           "freshness_score": 98,
@@ -2269,8 +2323,8 @@
           "connector_id": "quickbooks-runtime",
           "connector_health": "degraded",
           "auth_status": "connected",
-          "last_sync": "2026-06-25T00:41:58.270Z",
-          "last_synced_at": "2026-06-25T00:41:58.270Z",
+          "last_sync": "2026-06-25T02:23:06.862Z",
+          "last_synced_at": "2026-06-25T02:23:06.862Z",
           "age_minutes": 0,
           "threshold_minutes": 1440,
           "freshness_score": 100,
@@ -2284,9 +2338,9 @@
           "status": "fresh",
           "last_sync": "2026-06-24T08:28:02.137Z",
           "last_synced_at": "2026-06-24T08:28:02.137Z",
-          "age_minutes": 974,
+          "age_minutes": 1075,
           "threshold_minutes": 2880,
-          "freshness_score": 66,
+          "freshness_score": 63,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -2295,11 +2349,11 @@
         {
           "source": "Graph",
           "status": "fresh",
-          "last_sync": "2026-06-24T17:30:18.998Z",
-          "last_synced_at": "2026-06-24T17:30:18.998Z",
-          "age_minutes": 432,
+          "last_sync": "2026-06-25T01:22:51.827Z",
+          "last_synced_at": "2026-06-25T01:22:51.827Z",
+          "age_minutes": 60,
           "threshold_minutes": 1440,
-          "freshness_score": 70,
+          "freshness_score": 96,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -2310,9 +2364,9 @@
           "status": "fresh",
           "last_sync": "2026-06-25T00:01:05.357Z",
           "last_synced_at": "2026-06-25T00:01:05.357Z",
-          "age_minutes": 41,
+          "age_minutes": 142,
           "threshold_minutes": 1440,
-          "freshness_score": 97,
+          "freshness_score": 90,
           "stale": false,
           "error": null,
           "error_state": null,
@@ -2326,9 +2380,9 @@
     },
     "incident_metrics": {
       "total": 12,
-      "open": 5,
-      "resolved": 7,
-      "escalated": 1
+      "open": 6,
+      "resolved": 6,
+      "escalated": 2
     },
     "target": "DEV3_BURN_IN_SUPPORT_READY"
   },
@@ -2336,10 +2390,10 @@
     {
       "id": "runtime-failure-mi-core-mi-core-down",
       "first_seen": "2026-06-14T15:47:19.780Z",
-      "last_seen": "2026-06-24T22:41:59.676Z",
-      "status": "resolved",
-      "resolved": true,
-      "recurrence": 26,
+      "last_seen": "2026-06-25T02:23:06.890Z",
+      "status": "open",
+      "resolved": false,
+      "recurrence": 27,
       "type": "runtime_failure",
       "source": "Mi-Core",
       "summary": "Mi-Core down",
@@ -2349,10 +2403,10 @@
     {
       "id": "runtime-failure-agent-engine-agent-engine-unknown",
       "first_seen": "2026-06-14T15:48:58.502Z",
-      "last_seen": "2026-06-25T00:41:58.282Z",
+      "last_seen": "2026-06-25T02:23:06.898Z",
       "status": "open",
       "resolved": false,
-      "recurrence": 103,
+      "recurrence": 104,
       "type": "runtime_failure",
       "source": "Agent Engine",
       "summary": "Agent Engine unknown",
@@ -2362,10 +2416,10 @@
     {
       "id": "sync-failure-gmail-gmail-freshness-stale",
       "first_seen": "2026-06-14T16:05:16.431Z",
-      "last_seen": "2026-06-25T00:41:58.284Z",
+      "last_seen": "2026-06-25T02:23:06.905Z",
       "status": "open",
       "resolved": false,
-      "recurrence": 102,
+      "recurrence": 103,
       "type": "sync_failure",
       "source": "Gmail",
       "summary": "Gmail freshness stale",
@@ -2375,10 +2429,10 @@
     {
       "id": "runtime-failure-visibility-visibility-degraded",
       "first_seen": "2026-06-14T17:42:06.074Z",
-      "last_seen": "2026-06-25T00:41:58.283Z",
+      "last_seen": "2026-06-25T02:23:06.899Z",
       "status": "open",
       "resolved": false,
-      "recurrence": 99,
+      "recurrence": 100,
       "type": "runtime_failure",
       "source": "Visibility",
       "summary": "Visibility degraded",
@@ -2388,10 +2442,10 @@
     {
       "id": "runtime-failure-qb-connector-qb-connector-degraded",
       "first_seen": "2026-06-14T17:42:06.075Z",
-      "last_seen": "2026-06-25T00:41:58.284Z",
+      "last_seen": "2026-06-25T02:23:06.904Z",
       "status": "open",
       "resolved": false,
-      "recurrence": 99,
+      "recurrence": 100,
       "type": "runtime_failure",
       "source": "QB Connector",
       "summary": "QB Connector degraded",
@@ -2401,10 +2455,10 @@
     {
       "id": "sync-failure-quickbooks-quickbooks-freshness-degraded",
       "first_seen": "2026-06-14T17:42:06.076Z",
-      "last_seen": "2026-06-25T00:41:58.285Z",
+      "last_seen": "2026-06-25T02:23:06.906Z",
       "status": "open",
       "resolved": false,
-      "recurrence": 98,
+      "recurrence": 99,
       "type": "sync_failure",
       "source": "QuickBooks",
       "summary": "QuickBooks freshness degraded",

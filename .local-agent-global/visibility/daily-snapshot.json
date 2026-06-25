@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T00:41:58.286Z",
+  "generated_at": "2026-06-25T02:23:06.910Z",
   "date": "Thứ Năm, 25 tháng 6, 2026",
   "platforms": {
     "connected": [
@@ -45,9 +45,9 @@
     "dashboard_status": "no_tasks_module"
   },
   "emails": {
-    "status": "synced (39 unread, 4 important)",
+    "status": "synced (39 unread, 5 important)",
     "unread": 39,
-    "important": 4
+    "important": 5
   },
   "calendar": {
     "status": "synced (0 events today)",

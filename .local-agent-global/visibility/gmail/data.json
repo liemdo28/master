@@ -1,8 +1,24 @@
 {
-  "synced_at": "2026-06-25T01:11:55.650Z",
+  "synced_at": "2026-06-25T02:23:06.798Z",
   "unread_count": 39,
-  "important_count": 4,
+  "important_count": 5,
   "emails": [
+    {
+      "id": "19efc5e43b160807",
+      "thread_id": "19efc5e43b160807",
+      "subject": "Chiaki - Giao hàng thành công",
+      "from": "\"Chiaki.vn - Chăm sóc khách hàng\" <cskh@chiaki.vn>",
+      "date": "Thu, 25 Jun 2026 01:21:35 +0000",
+      "snippet": "Xin chào Liem Do! Bạn có thông báo đơn hàng trên hệ thống thương mại điện tử chiaki.vn.‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
     {
       "id": "19efbe576718d637",
       "thread_id": "19efb7de86096e75",
@@ -734,21 +750,6 @@
       "labels": [
         "UNREAD",
         "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef323077619b80",
-      "thread_id": "19ef323077619b80",
-      "subject": "Đặt trước chuyến xe với Grab",
-      "from": "\"Grab Việt Nam\" <no-reply@grab.com>",
-      "date": "Tue, 23 Jun 2026 00:20:15 -0600",
-      "snippet": "An tâm có tài đón đúng giờ Họp sáng quan trọng không bao giờ trễ Đặt trước chuyến xe ngay Main Banner Với những buổi sáng có cuộc họp quan trọng, tính năng Đặt trước chuyến xe sẽ giúp bạn luôn có mặt",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
         "INBOX"
       ],
       "is_unread": true,

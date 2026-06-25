@@ -1,6 +1,6 @@
 {
   "status": "live",
-  "synced_at": "2026-06-25T01:12:47.861Z",
+  "synced_at": "2026-06-25T02:23:50.267Z",
   "stats": {
     "database": {
       "sessions": 0,
@@ -39,7 +39,7 @@
       "first_sample": "2026-06-08T23:36:41.580Z",
       "last_sample": "2026-06-08T23:38:48.600Z"
     },
-    "timestamp": "2026-06-25T01:12:47.862Z"
+    "timestamp": "2026-06-25T02:23:50.270Z"
   },
   "costs": {
     "summary": {
@@ -63,7 +63,7 @@
       "model_cost_cents": null,
       "total_tokens": null
     },
-    "timestamp": "2026-06-25T01:12:47.863Z"
+    "timestamp": "2026-06-25T02:23:50.270Z"
   },
   "ledger_ok": true,
   "summary_text": "📊 Accounting Engine\n  Ledger: ✓ verified"

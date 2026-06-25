@@ -7,8 +7,8 @@
     ],
     "attempted": true,
     "recovered": true,
-    "result": "{\"synced_at\":\"2026-06-25T00:41:58.256Z\",\"unread_count\":39,\"important_count\":4,\"emails\":[{\"id\":\"19efbe576718d637\",\"thread_id\":\"19efb7de86096e75\",\"subject\":\"Re: Payment\",\"from\":\"Hoang Le <hoang.d.le@gmail.com>\",\"date\":\"Wed, 24 Jun 2026 16:09:02 -0700\",\"snippet\":\"Yes, thank you for the reminder. On Wed, Jun 24, 2026 at 2:16 PM Tracy E &lt;tracy@fourseasonsfood.com&gt; wrote: Good afternoon Hoang, Would you mind taking care of May&#39;s payment this Friday?\",\"labels\":[\"UNREAD\",\"IMPORTANT\",\"CATEGORY_",
-    "checked_at": "2026-06-25T00:41:58.258Z"
+    "result": "{\"synced_at\":\"2026-06-25T02:23:06.798Z\",\"unread_count\":39,\"important_count\":5,\"emails\":[{\"id\":\"19efc5e43b160807\",\"thread_id\":\"19efc5e43b160807\",\"subject\":\"Chiaki - Giao hàng thành công\",\"from\":\"\\\"Chiaki.vn - Chăm sóc khách hàng\\\" <cskh@chiaki.vn>\",\"date\":\"Thu, 25 Jun 2026 01:21:35 +0000\",\"snippet\":\"Xin chào Liem Do! Bạn có thông báo đơn hàng trên hệ thống thương mại điện tử chiaki.vn.‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+    "checked_at": "2026-06-25T02:23:06.800Z"
   },
   {
     "connector_id": "google-calendar",
@@ -17,7 +17,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.258Z"
+    "checked_at": "2026-06-25T02:23:06.800Z"
   },
   {
     "connector_id": "google-drive",
@@ -26,7 +26,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.258Z"
+    "checked_at": "2026-06-25T02:23:06.800Z"
   },
   {
     "connector_id": "asana",
@@ -35,7 +35,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.259Z"
+    "checked_at": "2026-06-25T02:23:06.801Z"
   },
   {
     "connector_id": "quickbooks-runtime",
@@ -45,8 +45,8 @@
     ],
     "attempted": true,
     "recovered": true,
-    "result": "{\"generated_at\":\"2026-06-25T00:41:58.264Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
-    "checked_at": "2026-06-25T00:41:58.271Z"
+    "result": "{\"generated_at\":\"2026-06-25T02:23:06.838Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
+    "checked_at": "2026-06-25T02:23:06.863Z"
   },
   {
     "connector_id": "health-export",
@@ -55,7 +55,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.271Z"
+    "checked_at": "2026-06-25T02:23:06.864Z"
   },
   {
     "connector_id": "website-bakudan",
@@ -64,7 +64,7 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.271Z"
+    "checked_at": "2026-06-25T02:23:06.865Z"
   },
   {
     "connector_id": "website-raw",
@@ -73,6 +73,6 @@
     "attempted": false,
     "recovered": true,
     "result": "No recovery needed",
-    "checked_at": "2026-06-25T00:41:58.272Z"
+    "checked_at": "2026-06-25T02:23:06.867Z"
   }
 ]
