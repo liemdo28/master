@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /**
  * Phase 34F — Test Orchestrator
  * Runs unit, API, and E2E (Playwright) tests for an engineering task.
@@ -7,73 +5,10 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
->>>>>>> seo/phase-29-revenue-execution-loop
 import { addEvidence } from './evidence-engine';
 import { updateStatus } from './engineering-queue';
 
 export type TestType = 'unit' | 'api' | 'e2e' | 'smoke';
-<<<<<<< HEAD
-export interface TestCase { name: string; type: TestType; url?: string; method?: string; body?: object; expect?: object | number | string; }
-export interface TestResult { name: string; type: TestType; passed: boolean; latency_ms: number; output: string; error?: string; }
-export interface TestSuiteResult { task_id: string; total: number; passed: number; failed: number; score: number; results: TestResult[]; summary: string; }
-
-function runApiTest(tc: TestCase): Promise<TestResult> {
-  const start = Date.now();
-  const http = require('http') as typeof import('http');
-  const https = require('https') as typeof import('https');
-  return new Promise((resolve) => {
-    const url = new URL(tc.url!);
-    const isHttps = url.protocol === 'https:';
-    const body = tc.body ? JSON.stringify(tc.body) : undefined;
-    const options: any = { hostname: url.hostname, port: url.port || (isHttps ? 443 : 80), path: url.pathname + url.search, method: tc.method || 'GET', headers: { 'Content-Type': 'application/json', ...(body ? { 'Content-Length': Buffer.byteLength(body) } : {}) } };
-    const lib = isHttps ? https : http;
-    const req = lib.request(options, (res: any) => {
-      let d = ''; res.on('data', (c: any) => d += c); res.on('end', () => {
-        const latency_ms = Date.now() - start; const status = res.statusCode as number;
-        let passed = true; let output = `HTTP ${status}: ${d.slice(0,200)}`;
-        if (typeof tc.expect === 'number') passed = status === tc.expect;
-        else if (typeof tc.expect === 'object' && tc.expect !== null) { try { const json = JSON.parse(d); passed = Object.entries(tc.expect).every(([k,v]) => json[k] === v); } catch { passed = false; } }
-        else passed = status >= 200 && status < 300;
-        resolve({ name: tc.name, type: tc.type, passed, latency_ms, output });
-      });
-    });
-    req.on('error', (e: Error) => resolve({ name: tc.name, type: 'api', passed: false, latency_ms: Date.now() - start, output: '', error: e.message }));
-    if (body) req.write(body); req.end();
-  });
-}
-
-async function runE2eTest(tc: TestCase): Promise<TestResult> {
-  const start = Date.now(); let chromium: any;
-  try { chromium = require('playwright').chromium; } catch { return { name: tc.name, type: 'e2e', passed: false, latency_ms: 0, output: '', error: 'Playwright not installed' }; }
-  const browser = await chromium.launch({ headless: true }); const page = await browser.newPage(); const errors: string[] = [];
-  page.on('pageerror', (e: any) => errors.push(e.message));
-  try { await page.goto(tc.url!, { timeout: 20000, waitUntil: 'networkidle' }); const title = await page.title(); await browser.close(); return { name: tc.name, type: 'e2e', passed: errors.length === 0, latency_ms: Date.now() - start, output: `Title: "${title}"` + (errors.length ? ` | ${errors.join('; ')}` : '') }; }
-  catch (e: any) { await browser.close(); return { name: tc.name, type: 'e2e', passed: false, latency_ms: Date.now() - start, output: '', error: e.message }; }
-}
-
-export async function runTests(taskId: string, cases: TestCase[]): Promise<TestSuiteResult> {
-  updateStatus(taskId, 'TESTING');
-  const results: TestResult[] = await Promise.all(cases.map(async (tc) => {
-    switch (tc.type) {
-      case 'api': case 'smoke': return runApiTest(tc);
-      case 'e2e': return runE2eTest(tc);
-      default: return { name: tc.name, type: tc.type, passed: false, latency_ms: 0, output: 'unit tests not supported inline', error: 'use api/e2e types' };
-    }
-  }));
-  const passed = results.filter(r => r.passed).length;
-  const score  = cases.length > 0 ? Math.round((passed / cases.length) * 100) : 0;
-  const summary = `${passed}/${cases.length} passed (${score}%). ` + results.filter(r => !r.passed).map(r => `FAIL: ${r.name}`).join(', ');
-  addEvidence({ task_id: taskId, type: 'test_result', source: 'Test Orchestrator', content: summary + '\n\n' + results.map(r => `[${r.passed?'PASS':'FAIL'}] ${r.name} (${r.latency_ms}ms): ${r.output || r.error || ''}`).join('\n') });
-  return { task_id: taskId, total: cases.length, passed, failed: cases.length - passed, score, results, summary };
-}
-
-export function getMiCoreSmokeTests(baseUrl = 'http://localhost:4001'): TestCase[] {
-  return [
-    { name: 'Health check',         type: 'api', url: `${baseUrl}/api/health`,             expect: 200 },
-    { name: 'Engineering classify', type: 'api', url: `${baseUrl}/api/engineering/classify`, method: 'POST', body: { objective: 'fix bug' }, expect: 200 },
-    { name: 'AI providers list',    type: 'api', url: `${baseUrl}/api/ai/providers`,        expect: 200 },
-    { name: 'Engineering stats',    type: 'api', url: `${baseUrl}/api/engineering/stats`,   expect: 200 },
-=======
 
 export interface TestCase {
   name:    string;
@@ -261,6 +196,5 @@ export function getMiCoreSmokeTests(baseUrl = 'http://localhost:4001'): TestCase
       method: 'POST', body: { objective: 'fix bug' }, expect: 200 },
     { name: 'AI providers list',     type: 'api', url: `${baseUrl}/api/ai/providers`,        expect: 200 },
     { name: 'Engineering stats',     type: 'api', url: `${baseUrl}/api/engineering/stats`,   expect: 200 },
->>>>>>> seo/phase-29-revenue-execution-loop
   ];
 }
