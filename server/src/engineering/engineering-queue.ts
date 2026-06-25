@@ -22,20 +22,20 @@ export type TaskStatus =
   | 'FAILED';
 
 export interface EngineeringTask {
-  id:             string;
-  objective:      string;
-  project:        string;
+  id: string;
+  objective: string;
+  project: string;
   selected_model: ModelId;
-  status:         TaskStatus;
+  status: TaskStatus;
   classification: string;   // JSON of TaskClassification
-  routing:        string;   // JSON of RoutingDecision
-  created_at:     string;
-  started_at:     string | null;
-  finished_at:    string | null;
-  evidence:       string | null;  // JSON evidence paths
-  review_score:   number | null;
-  pr_branch:      string | null;
-  error:          string | null;
+  routing: string;   // JSON of RoutingDecision
+  created_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+  evidence: string | null;  // JSON evidence paths
+  review_score: number | null;
+  pr_branch: string | null;
+  error: string | null;
 }
 
 // ── DB Init ───────────────────────────────────────────────────────────────────
@@ -86,10 +86,10 @@ function genId(): string {
 // ── CRUD ──────────────────────────────────────────────────────────────────────
 
 export function createTask(
-  objective:      string,
-  project:        string,
+  objective: string,
+  project: string,
   classification: TaskClassification,
-  routing:        RoutingDecision,
+  routing: RoutingDecision,
 ): EngineeringTask {
   const id   = genId();
   const now  = new Date().toISOString();
@@ -121,7 +121,7 @@ export function createTask(
 }
 
 export function updateStatus(
-  id:     string,
+  id: string,
   status: TaskStatus,
   extra?: Partial<Pick<EngineeringTask, 'started_at' | 'finished_at' | 'evidence' | 'review_score' | 'pr_branch' | 'error'>>,
 ): void {
