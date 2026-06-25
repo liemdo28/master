@@ -67,7 +67,7 @@
     ],
     "approval_required": true,
     "cache_path": "asana/",
-    "health_status": "healthy",
+    "health_status": "unknown",
     "setup_hint": "Asana cache/API evidence current; monitor token/network/rate-limit during burn-in.",
     "last_health_check": "2026-06-14T15:25:45.954Z"
   },
@@ -224,13 +224,13 @@
     "write_capability": [],
     "approval_required": false,
     "cache_path": "accounting/",
-    "health_status": "healthy",
+    "health_status": "offline",
     "setup_hint": "Running: node api/server.js at 127.0.0.1:8844 — ONLINE",
     "config": {
       "api_url": "http://127.0.0.1:8844",
       "db_path": "E:/Project/Master/accounting-engine/ledgers/accounting.db"
     },
-    "last_health_check": "2026-06-25T07:49:04.569Z"
+    "last_health_check": "2026-06-25T09:22:54.955Z"
   },
   {
     "connector_id": "food-safety",
