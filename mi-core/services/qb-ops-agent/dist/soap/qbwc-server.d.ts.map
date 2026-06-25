@@ -1,1 +1,1 @@
-{"version":3,"file":"qbwc-server.d.ts","sourceRoot":"","sources":["../../src/soap/qbwc-server.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;GAYG;AAEH,OAAO,OAA8B,MAAM,SAAS,CAAC;AAyErD,wBAAgB,gBAAgB,IAAI,OAAO,CAAC,WAAW,CA+FtD;AAsMD,wBAAgB,eAAe,IAAI,IAAI,CAOtC"}
+{"version":3,"file":"qbwc-server.d.ts","sourceRoot":"","sources":["../../src/soap/qbwc-server.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;GAYG;AAEH,OAAO,OAA8B,MAAM,SAAS,CAAC;AAyErD,wBAAgB,gBAAgB,IAAI,OAAO,CAAC,WAAW,CA6HtD;AAsMD,wBAAgB,eAAe,IAAI,IAAI,CAOtC"}

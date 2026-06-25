@@ -24,8 +24,28 @@ import { getAuthedClient, loadTokens } from '../visibility/connectors/google/goo
 // ── Config ───────────────────────────────────────────────────────────────────
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
 const GBP_SCOPE = 'https://www.googleapis.com/auth/business.manage';
-const ACCOUNTS_API = 'https://mybusinessbusinessinformation.googleapis.com/v1/accounts';
 const PERFORMANCE_API = 'https://businessprofileperformance.googleapis.com/v1';
+
+// Hardcoded location IDs from business.google.com (store codes)
+// Bypasses mybusinessaccountmanagement.googleapis.com (quota=0, needs apply)
+const HARDCODED_LOCATIONS = [
+  {
+    location_id: 'locations/13607740634521426033',
+    account_id:  '',
+    location_name: 'Bakudan Ramen',
+    address: '17619 La Cantera Pkwy 208, San Antonio, TX 78257',
+    website_uri: 'https://bakudanramen.com',
+    phone: '',
+  },
+  {
+    location_id: 'locations/2490512',
+    account_id:  '',
+    location_name: 'Raw Sushi Bistro',
+    address: '10742 Trinity Pkwy Suite D, Stockton, CA 95219',
+    website_uri: 'https://rawstockton.com',
+    phone: '',
+  },
+];
 
 const GBP_METRICS = [
   'CALL_CLICKS',
@@ -174,38 +194,9 @@ export async function listLocations(): Promise<any> {
     };
   }
 
-  // Step 1: list accounts
-  const accountsResp = await gbpGet(ACCOUNTS_API);
-  const accounts: any[] = accountsResp.accounts || [];
+  // Use hardcoded locations — mybusinessaccountmanagement API has quota=0
+  const allLocations = [...HARDCODED_LOCATIONS];
 
-  if (!accounts.length) {
-    return { accounts: [], locations: [], message: 'No GBP accounts found for this Google user' };
-  }
-
-  // Step 2: list locations per account
-  const allLocations: any[] = [];
-  for (const account of accounts) {
-    const accountName: string = account.name; // e.g. "accounts/12345"
-    const locUrl = `https://mybusinessbusinessinformation.googleapis.com/v1/${accountName}/locations?readMask=name,title,storefrontAddress,websiteUri,phoneNumbers`;
-    try {
-      const locResp = await gbpGet(locUrl);
-      const locs: any[] = locResp.locations || [];
-      for (const loc of locs) {
-        allLocations.push({
-          location_id: loc.name,                    // "locations/XXXXX"
-          account_id: accountName,
-          location_name: loc.title || '',
-          address: loc.storefrontAddress ? JSON.stringify(loc.storefrontAddress) : '',
-          website_uri: loc.websiteUri || '',
-          phone: loc.phoneNumbers?.primaryPhone || '',
-        });
-      }
-    } catch (e: any) {
-      console.warn(`[Mi][GBP] Could not list locations for ${accountName}:`, e.message);
-    }
-  }
-
-  // Cache in DB
   if (snapshotDb && allLocations.length) {
     const upsert = snapshotDb.prepare(`
       INSERT OR REPLACE INTO gbp_locations (location_id, account_id, location_name, address, website_uri, phone, last_synced)
@@ -220,9 +211,9 @@ export async function listLocations(): Promise<any> {
   }
 
   return {
-    accounts: accounts.map((a: any) => ({ id: a.name, name: a.accountName, type: a.type })),
     locations: allLocations,
     count: allLocations.length,
+    source: 'hardcoded',
   };
 }
 
@@ -288,12 +279,9 @@ export async function storeDailySnapshot(): Promise<any> {
     };
   }
 
-  const locResult = await listLocations();
-  if (locResult.error) return { status: 'ERROR', detail: locResult };
-
-  const locations: any[] = locResult.locations || [];
+  const locations = [...HARDCODED_LOCATIONS];
   if (!locations.length) {
-    return { status: 'NO_LOCATIONS', detail: 'No GBP locations found' };
+    return { status: 'NO_LOCATIONS', detail: 'No GBP locations configured' };
   }
 
   const today = new Date();

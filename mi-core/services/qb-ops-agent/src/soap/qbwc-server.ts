@@ -139,7 +139,37 @@ export function createQbwcServer(): express.Application {
     });
   });
 
+  // Raw XML dump for debugging parser
+  app.get('/api/qb/raw-dump', (_req: Request, res: Response) => {
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const DATA_DIR = process.env.LOCAL_DB_PATH
+        ? path.dirname(process.env.LOCAL_DB_PATH)
+        : path.join(process.cwd(), 'data');
+      const QB_DATA_FILE = path.join(DATA_DIR, 'qb-raw-data.json');
+      if (!fs.existsSync(QB_DATA_FILE)) return res.json({ status: 'no_data', file: QB_DATA_FILE });
+      const raw = JSON.parse(fs.readFileSync(QB_DATA_FILE, 'utf-8'));
+      const dump: Record<string, { request_index: number; received_at: string; xml_preview: string; xml_length: number }> = {};
+      for (const [k, v] of Object.entries(raw) as any) {
+        dump[k] = { request_index: v.request_index, received_at: v.received_at, xml_length: v.xml?.length || 0, xml_preview: (v.xml || '').substring(0, 800) };
+      }
+      res.json({ status: 'ok', entries: Object.keys(dump).length, dump });
+    } catch (e: any) {
+      res.status(500).json({ status: 'error', error: e.message });
+    }
+  });
+
   // Financial summary — parsed from raw QBXML
+  app.get('/api/qb/financial/summary', (_req: Request, res: Response) => {
+    try {
+      const summary = parseFinancialSummary();
+      res.json({ status: 'ok', ...summary });
+    } catch (e: any) {
+      res.status(500).json({ status: 'error', error: e.message });
+    }
+  });
+
   app.get('/api/financial/summary', (_req: Request, res: Response) => {
     try {
       const summary = parseFinancialSummary();

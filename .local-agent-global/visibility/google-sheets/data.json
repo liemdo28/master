@@ -1,10 +1,10 @@
 {
-  "synced_at": "2026-06-25T02:23:42.369Z",
+  "synced_at": "2026-06-25T08:49:48.393Z",
   "status": "ready",
   "has_required_scope": true,
   "required_scope": "https://www.googleapis.com/auth/spreadsheets",
-  "spreadsheet_id": "1M2L4a7iaxiTe_PxHh1_NQE6pbtHbGT7qE4ULyEfRtz0",
-  "spreadsheet_url": "https://docs.google.com/spreadsheets/d/1M2L4a7iaxiTe_PxHh1_NQE6pbtHbGT7qE4ULyEfRtz0/edit",
+  "spreadsheet_id": "17BnUXwD4iRiS5Oyq1H2PN5B1AEJsfxZIqEuXJTSSets",
+  "spreadsheet_url": "https://docs.google.com/spreadsheets/d/17BnUXwD4iRiS5Oyq1H2PN5B1AEJsfxZIqEuXJTSSets/edit",
   "read_test": {
     "ok": true,
     "range": "certification!A1:D2",
@@ -19,7 +19,7 @@
       [
         "mi-core",
         "GOOGLE_SHEETS_READY",
-        "2026-06-25T02:23:42.369Z",
+        "2026-06-25T08:49:48.393Z",
         "Dev3 workspace production certification"
       ]
     ]

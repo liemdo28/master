@@ -1,8 +1,176 @@
 {
-  "synced_at": "2026-06-25T02:23:06.798Z",
+  "synced_at": "2026-06-25T08:49:10.377Z",
   "unread_count": 39,
-  "important_count": 5,
+  "important_count": 10,
   "emails": [
+    {
+      "id": "19efdf29c515407d",
+      "thread_id": "19efdf29c515407d",
+      "subject": "💰 S-Buyback: Gói Cam Kết Giá Thu",
+      "from": "CellphoneS <cskh@cellphones.com.vn>",
+      "date": "Thu, 25 Jun 2026 08:42:24 +0000",
+      "snippet": "😎 Siêu HOT! Mua iPhone cam kết thu cũ tối thiểu 𝟲𝟱% giá trị máy - Xem Ngay »‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efdddcb5a64982",
+      "thread_id": "19efdddcb5a64982",
+      "subject": "[2-9460000041564] Your Business Profile support inquiry",
+      "from": "googlebusinessprofile-support@google.com",
+      "date": "Thu, 25 Jun 2026 01:20:30 -0700",
+      "snippet": "Hi Liem Do, Thank you for contacting the Business Profile API team. Since the Cloud Project is not yet approved for Business Profile API access, your request to increase the quota limit for Performanc",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19efddcae51723c2",
+      "thread_id": "19efddcae51723c2",
+      "subject": "[2-8402000041591] Your Business Profile support inquiry",
+      "from": "googlebusinessprofile-support@google.com",
+      "date": "Thu, 25 Jun 2026 01:19:17 -0700",
+      "snippet": "Hi Liem Do, Thank you for contacting the Business Profile API team. Since the Cloud Project is not yet approved for Business Profile API access, your request to increase the quota limit for Account",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19efddb990b1e1b5",
+      "thread_id": "19efddb990b1e1b5",
+      "subject": "[0-9133000041790] Your Business Profile support inquiry",
+      "from": "googlebusinessprofile-support@google.com",
+      "date": "Thu, 25 Jun 2026 01:18:06 -0700",
+      "snippet": "Hi Liem Do, Thank you for contacting the Business Profile API team. Since the Cloud Project is not yet approved for Business Profile API access, your request to increase the quota limit for Business",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19efdc896753a4b9",
+      "thread_id": "19efdc896753a4b9",
+      "subject": "Revision to Your Amazon.com Account",
+      "from": "Amazon <account-update@amazon.com>",
+      "date": "Thu, 25 Jun 2026 07:57:21 +0000",
+      "snippet": "Thanks for visiting Amazon.com! Per your request, we have successfully changed your password. Visit Your Account at Amazon.com to view your orders, make changes to any order that hasn&#39;t yet entere",
+      "labels": [
+        "UNREAD",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": true
+    },
+    {
+      "id": "19efdc80a4ee0d92",
+      "thread_id": "19efdc80a4ee0d92",
+      "subject": "amazon.com: Password recovery",
+      "from": "\"amazon.com\" <account-update@amazon.com>",
+      "date": "Thu, 25 Jun 2026 07:56:45 +0000",
+      "snippet": "DO TUAN LIEM, Someone is attempting to reset the password of your account. When: Jun 25, 2026 02:56 PM Indochina Time Device: Google Chrome Windows (Desktop) Near: Ho Chi Minh, Vietnam If this was you",
+      "labels": [
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": true
+    },
+    {
+      "id": "19efda8769f2a93c",
+      "thread_id": "19efda8769f2a93c",
+      "subject": "(QC) Khám phá biển Phú Yên và tìm lại những khoảng bình yên",
+      "from": "VietJet Promotion <promotion@newsletter.vietjetair.com>",
+      "date": "Thu, 25 Jun 2026 12:52:16 +0530",
+      "snippet": "Đôi khi, một chuyến đi ngắn cũng đủ để làm mới tâm trạng. Chỉ hơn 1 giờ bay, Phú Yên chào đón bạn bằng biển xanh trong vắt, những cung đường ven biển đầy nắng gió và nhịp sống thư thái. Từ tháng 6 đến",
+      "labels": [
+        "CATEGORY_PROMOTIONS",
+        "UNREAD",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efda74ba1746c1",
+      "thread_id": "19efda74ba1746c1",
+      "subject": "New skill available: Puzzle solving 🧩",
+      "from": "LinkedIn <messages-noreply@linkedin.com>",
+      "date": "Thu, 25 Jun 2026 07:20:58 +0000 (UTC)",
+      "snippet": "Millions of professionals are already testing their skills with LinkedIn&#39;s daily puzzle games ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
+      "labels": [
+        "HR/LinkedIn",
+        "CATEGORY_SOCIAL",
+        "INBOX"
+      ],
+      "is_unread": false,
+      "is_important": false
+    },
+    {
+      "id": "19efd909a8def518",
+      "thread_id": "19efd909a8def518",
+      "subject": "your agent-coding project",
+      "from": "Lily <lily@tryapekey.com>",
+      "date": "Thu, 25 Jun 2026 06:56:11 +0000",
+      "snippet": "Hi, Spotted your agent-coding repo and thought it was a neat way to build an autonomous agent capable of tackling coding tasks end-to-end. Getting it to interact with a shell and write actual code for",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_PERSONAL",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efd13d247e2ea9",
+      "thread_id": "19efd13d247e2ea9",
+      "subject": "ChatGPT - Your Business subscription renews soon",
+      "from": "OpenAI <noreply@tm.openai.com>",
+      "date": "Thu, 25 Jun 2026 04:39:53 +0000",
+      "snippet": "HeoHolding renews on Jul 01, 2026 Your ChatGPT Business subscription for the HeoHolding workspace renews on Jul 01, 2026. You&#39;ll be billed for 2 seats. You may still add or remove seats up to 24",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
+    {
+      "id": "19efcaa7c7b632f1",
+      "thread_id": "19efcaa7c7b632f1",
+      "subject": "liemdo28/master - 4 internal incidents detected",
+      "from": "GitGuardian Team <support@gitguardian.com>",
+      "date": "Thu, 25 Jun 2026 02:44:49 +0000 (UTC)",
+      "snippet": "4 internal secret incidents detected! JSON Web Token 2026-06-25 02:44:41 AM (UTC) See on GitGuardian liemdo28/​master (commit 0450b19) See on GitHub JSON Web Token 2026-06-25 02:44:41 AM (UTC) See on",
+      "labels": [
+        "UNREAD",
+        "CATEGORY_UPDATES",
+        "INBOX"
+      ],
+      "is_unread": true,
+      "is_important": false
+    },
     {
       "id": "19efc5e43b160807",
       "thread_id": "19efc5e43b160807",
@@ -579,174 +747,6 @@
       "from": "Quora Digest <english-quora-digest@quora.com>",
       "date": "Tue, 23 Jun 2026 11:07:38 +0000",
       "snippet": "2005 - Cognizant - 1.8 lac pa 2007 - TCS - 3.2 lac pa 2010 - TCS - 5.6 lac pa 2014 - TCS - 6.5 lac pa (horrible concept of reducing salary) 2015 - CTS - 9 lac pa 2017 - Accenture - 1… Top stories for",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef424ce2e8347e",
-      "thread_id": "19ef424ce2e8347e",
-      "subject": "Bảng tóm tắt sao kê Thẻ tín dụng HSBC/Credit card statement summary",
-      "from": "HSBC Vietnam <hsbc.vietnam@notification.hsbc.com.vn>",
-      "date": "Tue, 23 Jun 2026 11:01:50 +0000 (UTC)",
-      "snippet": "Kính gửi Quý khách, Cảm ơn Quý khách đã tin chọn sử dụng thẻ tín dụng của Ngân hàng TNHH Một thành viên HSBC (Việt Nam) (&quot;HSBC&quot; , &quot;Ngân Hàng&quot;). Ngân Hàng thông báo thông tin tóm tắ",
-      "labels": [
-        "UNREAD",
-        "QC (delete)",
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef4233634913fa",
-      "thread_id": "19ef4233634913fa",
-      "subject": "What we see in hesitation",
-      "from": "ClarityCheck <hello@claritycheck.com>",
-      "date": "Tue, 23 Jun 2026 11:00:07 +0000",
-      "snippet": "Hi there, You&#39;re not the first person to upload a photo and pause at the checkout page. We see it constantly. Someone searches an image, gets to the results page, then... nothing. Please don&#39;t",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef41efc67923a0",
-      "thread_id": "19ef41efc67923a0",
-      "subject": "(QC) Mách bạn mẹo tiết kiệm 20% cho dịch vụ hành lý!",
-      "from": "VietJet Promotion <promotion@newsletter.vietjetair.com>",
-      "date": "Tue, 23 Jun 2026 16:25:32 +0530",
-      "snippet": "Bạn có biết rằng chỉ với một bước chuẩn bị nhỏ trước chuyến bay, bạn có thể tiết kiệm ngay 20% chi phí mua hành lý? Chỉ cần đặt trước hành lý ngay khi mua vé hoặc trong vòng 24 giờ sau khi đặt vé thàn",
-      "labels": [
-        "CATEGORY_PROMOTIONS",
-        "UNREAD",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef40e3c76fa906",
-      "thread_id": "19ef40e3c76fa906",
-      "subject": "Thông báo về việc cập nhật Biểu Phí Dịch Vụ HSBC",
-      "from": "HSBC Vietnam <hsbc@informationservices.hsbc.com.vn>",
-      "date": "Tue, 23 Jun 2026 18:37:12 +0800",
-      "snippet": "Vui lòng không bỏ qua thông báo này Thông báo về việc cập nhật Biểu Phí Dịch Vụ HSBC MR DO TUAN LIEM thân mến, Trân trọng cảm ơn Quý khách sử dụng sản phẩm và dịch vụ của Ngân Hàng TNHH Một thành viên",
-      "labels": [
-        "UNREAD",
-        "QC (delete)",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef40a3b980f831",
-      "thread_id": "19ef40a3b980f831",
-      "subject": "Move Beyond Small Apps: Swift for iOS from IBM",
-      "from": "IBM <no-reply@m.learn.coursera.org>",
-      "date": "Tue, 23 Jun 2026 10:32:50 +0000",
-      "snippet": "Dear Liem Do, At some point, building small apps stops being enough. There&#39;s a difference between writing code for small apps and building applications with the structure, scale, and reliability",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef3feebc2f9985",
-      "thread_id": "19ef3feebc2f9985",
-      "subject": "You appeared in 4 searches this week",
-      "from": "LinkedIn <notifications-noreply@linkedin.com>",
-      "date": "Tue, 23 Jun 2026 10:20:28 +0000 (UTC)",
-      "snippet": "Liem, 1 new update for you ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏",
-      "labels": [
-        "HR/LinkedIn",
-        "CATEGORY_SOCIAL",
-        "INBOX"
-      ],
-      "is_unread": false,
-      "is_important": false
-    },
-    {
-      "id": "19ef3f711c2f3aa5",
-      "thread_id": "19ef2f3c1fcce27a",
-      "subject": "Biên lai chuyển tiền qua tài khoản",
-      "from": "VCBDigibank@info.vietcombank.com.vn",
-      "date": "23 Jun 2026 17:11:53 +0700",
-      "snippet": "Biên lai chuyển tiền qua tài khoản (Payment Receipt) Ngày, giờ giao dịch Trans. Date, Time 17:11 Thứ Ba 23/06/2026 Số lệnh giao dịch Order Number 14806746555 Tài khoản nguồn Debit Account 038100059556",
-      "labels": [
-        "From LD",
-        "CATEGORY_PERSONAL",
-        "INBOX"
-      ],
-      "is_unread": false,
-      "is_important": false
-    },
-    {
-      "id": "19ef35e62b879a08",
-      "thread_id": "19ef35e62b879a08",
-      "subject": "Bảo vệ điều quan trọng nhất với Bảo hiểm Sức khỏe Bảo Việt",
-      "from": "HSBC Vietnam <hsbc@informationservices.hsbc.com.vn>",
-      "date": "Tue, 23 Jun 2026 15:25:08 +0800",
-      "snippet": "Đăng ký trực tuyến Bảo Việt An Gia và Bảo Việt Intercare dễ dàng, tận hưởng bảo lãnh viện phí và hỗ trợ bồi thường nhanh chóng Bảo vệ điều quan trọng nhất với Bảo hiểm Sức khỏe Bảo Việt Kính gửi Quý",
-      "labels": [
-        "UNREAD",
-        "QC (delete)",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef35a67b56e3e6",
-      "thread_id": "19ef35a67b56e3e6",
-      "subject": "New skill available: Puzzle solving 🧩",
-      "from": "LinkedIn <messages-noreply@linkedin.com>",
-      "date": "Tue, 23 Jun 2026 07:20:47 +0000 (UTC)",
-      "snippet": "Millions of professionals are already testing their skills with LinkedIn&#39;s daily puzzle games ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ",
-      "labels": [
-        "HR/LinkedIn",
-        "CATEGORY_SOCIAL",
-        "INBOX"
-      ],
-      "is_unread": false,
-      "is_important": false
-    },
-    {
-      "id": "19ef35477987d025",
-      "thread_id": "19ef35477987d025",
-      "subject": "New event: IFT - Fill and Pay Tax @ Wed Jul 8, 2026 (Liem’s tasks - My Workspace (via Asana))",
-      "from": "\"Liem’s tasks - My Workspace (via Asana) (Google Calendar)\" <calendar-notification@google.com>",
-      "date": "Tue, 23 Jun 2026 07:14:19 +0000",
-      "snippet": "IFT - Fill and Pay Tax https://app.asana.com/1/1175942980830614/project/1176062378919009/task/1215950180863183 https://Nevadatax.nv.gov https://squareup.com/dashboard/sales/reports/sales-summary -",
-      "labels": [
-        "UNREAD",
-        "CATEGORY_UPDATES",
-        "INBOX"
-      ],
-      "is_unread": true,
-      "is_important": false
-    },
-    {
-      "id": "19ef32bf787023d0",
-      "thread_id": "19ef32bf787023d0",
-      "subject": "Đơn hàng #260623STDQ4X2X đã giao hàng thành công",
-      "from": "Shopee <info@mail.shopee.vn>",
-      "date": "Tue, 23 Jun 2026 06:30:05 +0000 (UTC)",
-      "snippet": "Xin chào liemdo28, Đơn hàng #260623STDQ4X2X của bạn đã được giao thành công ngày 23/06/2026. Vui lòng đăng nhập Shopee để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong vòng 3 ngày. Sau khi",
       "labels": [
         "UNREAD",
         "CATEGORY_UPDATES",

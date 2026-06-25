@@ -38,22 +38,22 @@ qbFinancialRouter.get('/financial', async (_req: Request, res: Response) => {
 });
 
 qbFinancialRouter.get('/financial/summary', async (_req: Request, res: Response) => {
-  const { status, data } = await proxyGet('/api/financial/summary');
+  const { status, data } = await proxyGet('/api/qb/financial/summary');
   res.status(status).json(data);
 });
 
 qbFinancialRouter.get('/financial/accounts', async (_req: Request, res: Response) => {
-  const { status, data } = await proxyGet('/api/financial/accounts');
+  const { status, data } = await proxyGet('/api/qb/financial/accounts');
   res.status(status).json(data);
 });
 
 qbFinancialRouter.get('/financial/receipts', async (_req: Request, res: Response) => {
-  const { status, data } = await proxyGet('/api/financial/receipts');
+  const { status, data } = await proxyGet('/api/qb/financial/receipts');
   res.status(status).json(data);
 });
 
 qbFinancialRouter.get('/financial/invoices', async (_req: Request, res: Response) => {
-  const { status, data } = await proxyGet('/api/financial/invoices');
+  const { status, data } = await proxyGet('/api/qb/financial/invoices');
   res.status(status).json(data);
 });
 
