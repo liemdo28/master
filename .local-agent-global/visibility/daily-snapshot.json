@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T08:49:10.412Z",
+  "generated_at": "2026-06-25T13:06:04.208Z",
   "date": "Thứ Năm, 25 tháng 6, 2026",
   "platforms": {
     "connected": [
@@ -15,7 +15,7 @@
     "not_configured": []
   },
   "projects": {
-    "total": 16,
+    "total": 14,
     "with_issues": 1,
     "top_issues": [
       {
@@ -29,8 +29,8 @@
       "Agent",
       "artifact-registry",
       "Bakudan",
-      "cv-builder",
-      "Mi"
+      "Mi",
+      "mi-core"
     ]
   },
   "dashboard": {
@@ -45,8 +45,8 @@
     "dashboard_status": "no_tasks_module"
   },
   "emails": {
-    "status": "synced (39 unread, 10 important)",
-    "unread": 39,
+    "status": "synced (37 unread, 10 important)",
+    "unread": 37,
     "important": 10
   },
   "calendar": {
@@ -69,7 +69,7 @@
   },
   "action_items": [
     "1 project có uncommitted changes",
-    "39 emails chưa đọc",
+    "37 emails chưa đọc",
     "76 Asana tasks overdue"
   ]
 }

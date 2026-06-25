@@ -58,5 +58,5 @@ services/whatsapp-ai-gateway/secrets/
 # Accidentally created files
 null
 relative
-{console.error(e)
+[{]console.error(e)
 datetime('now'

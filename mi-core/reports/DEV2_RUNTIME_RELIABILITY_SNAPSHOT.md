@@ -1,33 +1,33 @@
 # DEV2_RUNTIME_RELIABILITY_SNAPSHOT
 
-Generated: 2026-06-25T08:49:10.412Z
+Generated: 2026-06-25T13:06:04.208Z
 Target: DAILY_RELIABILITY_SNAPSHOT_READY
 Burn-in score: 16
 
 ## Uptime
 | Service | Status | Uptime % | Restarts | Crashes |
 | --- | --- | --- | --- | --- |
-| Mi-Core | up | 75.68 | 0 | 0 |
-| AI Service | down | 85.59 | 0 | 0 |
+| Mi-Core | down | 75.22 | 0 | 0 |
+| AI Service | up | 84.96 | 0 | 0 |
 | Ollama | up | 100 | 0 | 0 |
 | Agent Engine | unknown | 0 | 0 | 0 |
-| Visibility | degraded | 5.41 | 0 | 0 |
+| Visibility | degraded | 5.31 | 0 | 0 |
 | Gmail | up | 100 | 0 | 0 |
 | Calendar | up | 100 | 0 | 0 |
 | Drive | up | 100 | 0 | 0 |
-| QB Connector | degraded | 5.41 | 0 | 0 |
+| QB Connector | degraded | 5.31 | 0 | 0 |
 | Health Connector | up | 100 | 0 | 0 |
 
 ## Ollama
 Reachable: true
 Model loaded: true
-Latency ms: 15
+Latency ms: 17
 Timeout count: 0
 
 ## Connector Freshness
 | Source | Status | Stale | Age Min |
 | --- | --- | --- | --- |
-| Gmail | stale | yes | 15525 |
+| Gmail | stale | yes | 15782 |
 | Calendar | fresh | no | 29 |
 | Drive | fresh | no | 29 |
 | Sheets | fresh | no | 29 |
@@ -36,19 +36,19 @@ Timeout count: 0
 | Website bakudanramen.com | fresh | no | 29 |
 | Website rawsushibar.com | fresh | no | 29 |
 | QuickBooks | degraded | no | 0 |
-| Work Orders | fresh | no | 1461 |
+| Work Orders | fresh | no | 1718 |
 | Graph | fresh | no | 60 |
-| Memory | fresh | no | 528 |
+| Memory | fresh | no | 785 |
 
 ## Active Incidents
 | Type | Source | Summary | Escalation |
 | --- | --- | --- | --- |
+| runtime_failure | Mi-Core | Mi-Core down | escalated |
 | runtime_failure | Agent Engine | Agent Engine unknown | watch |
 | sync_failure | Gmail | Gmail freshness stale | escalated |
 | runtime_failure | Visibility | Visibility degraded | watch |
 | runtime_failure | QB Connector | QB Connector degraded | watch |
 | sync_failure | QuickBooks | QuickBooks freshness degraded | watch |
-| runtime_failure | AI Service | AI Service down | escalated |
 
 ## Action Required
 Dev1: No Dev1 action required from current monitoring snapshot.

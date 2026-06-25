@@ -1,6 +1,6 @@
 {
   "connector_id": "website-raw",
-  "synced_at": "2026-06-25T10:34:10.214Z",
+  "synced_at": "2026-06-25T13:36:54.839Z",
   "status": "ok",
   "website": "rawsushibar.com",
   "local_source_path": "E:/Project/Master/RawSushi/RawWebsite",
@@ -8,9 +8,9 @@
   "github_repository": "https://github.com/liemdo28/rawwebsite.git",
   "branch": "master",
   "last_commit": {
-    "sha": "09265d23a6149fcfd84c12f7fe6c69d250ada425",
-    "committed_at": "2026-06-24 20:43:58 +0700",
-    "subject": "fix(seo): homepage title/meta/OG targeted at Stockton+Modesto — target 2x CTR from 1.3% floor"
+    "sha": "20fb051a8768c4349177e392a0856fe09e0214e7",
+    "committed_at": "2026-06-25 20:35:13 +0700",
+    "subject": "chore: sync and merge all changes"
   },
   "deploy_method": "GitHub Actions scheduled publish API",
   "deploy_files": [
@@ -162,6 +162,40 @@
       "public/analytics.js",
       "public/cookie-consent.css",
       "public/cookie-consent.js",
+      "public/images/raw-photos/2025-07-28_16-41-19_835.jpeg",
+      "public/images/raw-photos/2025-07-28_16-41-26_911.jpeg",
+      "public/images/raw-photos/2025-07-28_16-41-53_196.jpeg",
+      "public/images/raw-photos/2025-07-28_16-42-24_560.jpeg",
+      "public/images/raw-photos/2025-07-28_16-42-51_813.jpeg",
+      "public/images/raw-photos/2025-07-28_16-54-56_884.jpeg",
+      "public/images/raw-photos/2025-07-28_16-55-03_471.jpeg",
+      "public/images/raw-photos/2025-07-28_17-12-47_861.jpeg",
+      "public/images/raw-photos/2025-07-28_17-12-55_263.jpeg",
+      "public/images/raw-photos/2025-07-28_17-13-59_185.jpeg",
+      "public/images/raw-photos/2025-10-27_18-02-35_154.jpeg",
+      "public/images/raw-photos/2025-10-27_18-02-41_472.jpeg",
+      "public/images/raw-photos/2025-10-27_18-02-52_413.jpeg",
+      "public/images/raw-photos/2025-10-27_18-02-57_302.jpeg",
+      "public/images/raw-photos/2025-10-27_18-03-39_455.jpeg",
+      "public/images/raw-photos/2025-10-27_18-03-49_747.jpeg",
+      "public/images/raw-photos/2025-10-27_18-03-54_050.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-01_748.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-02_699.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-03_893.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-09_117.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-12_013.jpeg",
+      "public/images/raw-photos/2025-10-27_18-05-21_956.jpeg",
+      "public/images/raw-photos/2025-12-15_16-24-42_800.jpeg",
+      "public/images/raw-photos/2025-12-15_16-24-59_416.jpeg",
+      "public/images/raw-photos/2025-12-15_16-25-12_006.jpeg",
+      "public/images/raw-photos/2025-12-15_16-25-27_537.jpeg",
+      "public/images/raw-photos/2025-12-15_16-25-38_329.jpeg",
+      "public/images/raw-photos/2025-12-15_16-25-56_513.jpeg",
+      "public/images/raw-photos/2025-12-15_16-26-36_920.jpeg",
+      "public/images/raw-photos/2025-12-15_17-08-32_179.jpeg",
+      "public/images/raw-photos/2025-12-15_17-08-39_755.jpeg",
+      "public/images/raw-photos/2025-12-15_17-08-45_913.jpeg",
+      "public/images/raw-photos/2025-12-15_17-08-51_456.jpeg",
       "rawwebsite/public/analytics.js",
       "rawwebsite/public/cookie-consent.css",
       "rawwebsite/public/cookie-consent.js"
@@ -363,7 +397,7 @@
       "name": "https://github.com/liemdo28/rawwebsite.git",
       "attributes": {
         "branch": "master",
-        "latest_commit": "09265d23a6149fcfd84c12f7fe6c69d250ada425"
+        "latest_commit": "20fb051a8768c4349177e392a0856fe09e0214e7"
       }
     },
     {
@@ -371,7 +405,7 @@
       "name": "E:/Project/Master/RawSushi/RawWebsite",
       "attributes": {
         "pages": 123,
-        "assets": 6
+        "assets": 40
       }
     },
     {
@@ -433,5 +467,5 @@
   ],
   "risks": [],
   "secret_files_excluded": [],
-  "summary_text": "rawsushibar.com: 123 pages, 6 assets, repo https://github.com/liemdo28/rawwebsite.git, branch master, synced 2026-06-25T10:34:10.214Z"
+  "summary_text": "rawsushibar.com: 123 pages, 40 assets, repo https://github.com/liemdo28/rawwebsite.git, branch master, synced 2026-06-25T13:36:54.839Z"
 }
