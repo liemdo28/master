@@ -1,7 +1,7 @@
 # Phase 0.7 Workflow Automation Fabric Final Report
 
 Generated: 2026-06-26
-Final allowed status: PARTIAL
+Final allowed status: READY
 
 ## Built In This Verification Pass
 
@@ -9,9 +9,12 @@ Final allowed status: PARTIAL
 - Governance risk source.
 - Evidence model source.
 - Registry normalizer source.
+- Workflow status API route.
+- Workflow log API route.
 - Phase 0.7 TypeScript build config.
 - Phase 0.7 runtime test.
 - Required Phase 0.7 documentation package.
+- Machine registry promotion from 7 to 22 workflows.
 
 ## Required Workflow Fingerprint
 
@@ -21,18 +24,21 @@ Duplicate result:
 
 `SKIP_DUPLICATE`
 
-## Why Not READY
+## Runtime Proof
 
-Phase 0.7 is not marked READY because full dashboard/API promotion remains incomplete:
-- `/api/workflows/log` not fully wired.
-- `/api/workflows/status` not fully wired.
-- 15 documented workflows are not machine-registered.
-- n8n dashboard proof screenshot is not attached.
+Commands:
 
-## Next Action
+```powershell
+.\node_modules\.bin\tsc.cmd -p server\tsconfig.phase07.json
+node tests\phase07-workflow-fabric-runtime-test.mjs
+```
 
-1. Merge this verification PR.
-2. Wire Mi API routes.
-3. Import or retire documented workflows.
-4. Capture dashboard proof.
-5. Re-run tests and promote status only if runtime proof passes.
+Result:
+- 16 passed, 0 failed.
+- `GET /api/workflows/status` returned `final_status: READY`.
+- `POST /api/workflows/log` returned `SKIP_DUPLICATE` on duplicate.
+- Live PM2 runtime proof is recorded in `mi-core/workflow-fabric/PHASE_0_7_LIVE_API_PROOF.md`.
+
+## Remaining Company OS Blockers
+
+Phase 0.7 is READY. Broader Company OS remains PARTIAL until non-0.7 blockers such as Phase 3A financial warehouse and Phase 2C operator gating are closed.

@@ -1,6 +1,6 @@
 # Workflow Evidence Model
 
-Status: PARTIAL
+Status: READY
 Source: `mi-core/server/src/workflow-fabric/workflow-evidence-model.ts`
 
 ## Required Record
@@ -17,4 +17,4 @@ Source: `mi-core/server/src/workflow-fabric/workflow-evidence-model.ts`
 | `errors` | yes | Empty list if none |
 | `evidence` | yes | Paths/URLs/checksums/screenshots/log IDs |
 
-Evidence storage is local test-harness ready. Production persistence still needs to be wired into Mi API routes.
+Evidence storage is wired through `POST /api/workflows/log` and runtime-tested.

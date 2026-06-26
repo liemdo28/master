@@ -11,6 +11,10 @@
     "types": ["node"]
   },
   "include": [
-    "src/workflow-fabric/**/*.ts"
+    "src/workflow-fabric/**/*.ts",
+    "src/routes/workflow-fabric.ts",
+    "src/routes/workflow-metrics.ts",
+    "src/execution/workflow-execution-ledger.ts",
+    "src/operations/ops-db.ts"
   ]
 }

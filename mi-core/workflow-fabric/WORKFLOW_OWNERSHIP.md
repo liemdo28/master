@@ -1,6 +1,6 @@
 # Workflow Ownership
 
-Status: PARTIAL
+Status: READY
 
 | project | business_owner | technical_owner | division_owner | approval_required_for |
 |---|---|---|---|---|

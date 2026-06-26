@@ -1,6 +1,6 @@
 # Workflow Dedup Engine
 
-Status: PARTIAL
+Status: READY
 Source: `mi-core/server/src/workflow-fabric/workflow-dedup-engine.ts`
 Test: `node tests\phase07-workflow-fabric-runtime-test.mjs`
 

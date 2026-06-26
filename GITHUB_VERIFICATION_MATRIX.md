@@ -7,8 +7,8 @@ Repository: `https://github.com/liemdo28/master`
 |---|---|---|---|---|---|---|
 | Phase map and source alignment | `codex/source-verification-phase-gap` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `MI_COMPANY_OS_PHASE_MAP.md`; `SOURCE_STRUCTURE_ALIGNMENT.md` | Git status plus PR diff | PARTIAL |
 | Phase 0.6 >=20 technology assets | `codex/source-verification-phase-gap` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `mi-core/server/src/technology-portfolio-office/seed-portfolio.ts` | `node tests\phase06-technology-portfolio-runtime-test.mjs` | PARTIAL |
-| Phase 0.7 workflow dedup/governance/evidence | `codex/source-verification-phase-gap` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `mi-core/server/src/workflow-fabric/` | `node tests\phase07-workflow-fabric-runtime-test.mjs` | PARTIAL |
-| n8n registry inventory | `codex/source-verification-phase-gap` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `Mi/n8n/config/workflow-registry.json`; `Mi/n8n/N8N_WORKFLOW_REGISTRY.md` | Local registry review | PARTIAL |
+| Phase 0.7 workflow dedup/governance/evidence/API | `codex/workflow-fabric-ready` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `mi-core/server/src/workflow-fabric/`; `mi-core/server/src/routes/workflow-fabric.ts` | `node tests\phase07-workflow-fabric-runtime-test.mjs` | READY |
+| n8n registry inventory | `codex/workflow-fabric-ready` | PENDING_THIS_COMMIT | PENDING_THIS_PR | `Mi/n8n/config/workflow-registry.json`; `Mi/n8n/N8N_WORKFLOW_REGISTRY.md` | `GET /api/workflows/status` proof in Phase 0.7 test | READY |
 | Missing phase completion | PENDING | PENDING | PENDING | PENDING | PENDING | BLOCKED |
 
 Verified now:
@@ -17,7 +17,7 @@ Verified now:
 - The current work must push a new PR before it can be called GitHub-verified.
 
 Local but not complete:
-- Phase 0, 0.5, 0.6, 0.7, 2A, 2B, 3B, 4, and 4A have local source/reports, but need branch/commit/PR/test/runtime binding.
+- Phase 0, 0.5, 2A, 2B, 3B, 4, and 4A have local source/reports, but need branch/commit/PR/test/runtime binding.
 
 Missing or blocked:
 - Phase 3A `financial-warehouse` expected source path is missing.
