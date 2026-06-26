@@ -1,0 +1,28 @@
+{
+  "coord_task_id": "FIN-f498d9d40d",
+  "task_name": "Build connector: Toast POS",
+  "objective_id": "OBJ-FIN-DATA-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449674.3929253,
+  "created_iso": "2026-06-26T04:54:34.392926+00:00",
+  "updated_at": 1782449674.3929331,
+  "owner": "data_engineering",
+  "priority": "MEDIUM",
+  "description": "No connector for Toast POS.",
+  "source_signals": [
+    {
+      "source": "toast",
+      "status": "MISSING"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449674.3929338
+    }
+  ]
+}

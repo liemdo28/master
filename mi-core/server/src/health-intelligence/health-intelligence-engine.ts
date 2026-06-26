@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 
 const HEALTH_DIR = path.join(
-  process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core',
+  process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core',
   '.local-agent-global/health-export'
 );
 

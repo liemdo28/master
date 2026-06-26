@@ -8,7 +8,7 @@ import path from 'path';
 import { google } from 'googleapis';
 import { getAuthedClient, loadTokens } from './google-auth';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'google-sheets');
 const DATA_PATH = path.join(CACHE_DIR, 'data.json');
 const LAST_SYNC_PATH = path.join(CACHE_DIR, 'last_sync.json');

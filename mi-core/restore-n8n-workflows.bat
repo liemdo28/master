@@ -7,9 +7,9 @@ REM If no argument, uses latest backup
 setlocal
 
 set N8N_KEY=
-for /f "tokens=2 delims==" %%A in ('findstr "N8N_API_KEY" E:\Project\Master\mi-core\.env') do set N8N_KEY=%%A
+for /f "tokens=2 delims==" %%A in ('findstr "N8N_API_KEY" D:\Project\Master\mi-core\.env') do set N8N_KEY=%%A
 
-set BACKUP_DIR=E:\Project\Master\mi-core\backups\n8n
+set BACKUP_DIR=D:\Project\Master\mi-core\backups\n8n
 
 if "%1"=="" (
   REM Use latest backup

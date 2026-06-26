@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-ae636a6f0a",
+  "name": "dbt",
+  "github": "https://github.com/dbt-labs/dbt-core",
+  "owner_division": "Finance",
+  "category": "Finance",
+  "description": "Data transformation framework",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6682358,
+  "created_iso": "2026-06-26T05:33:33.668238+00:00",
+  "updated_at": 1782452013.6682358,
+  "updated_iso": "2026-06-26T05:33:33.668245+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6682358,
+      "iso": "2026-06-26T05:33:33.668246+00:00"
+    }
+  ]
+}

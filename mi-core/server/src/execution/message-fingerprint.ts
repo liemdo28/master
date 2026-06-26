@@ -19,7 +19,7 @@ import crypto from 'crypto';
 
 // ── Configuration ───────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const FINGERPRINT_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'fingerprints');
 const DEDUP_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // cleanup every 5 min

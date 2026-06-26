@@ -15,8 +15,8 @@ import fs from 'fs';
 import path from 'path';
 import http from 'http';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const QB_AGENT_DB = process.env.QB_AGENT_DB || 'E:/Project/Master/mi-core/data/qb-agent.db';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
+const QB_AGENT_DB = process.env.QB_AGENT_DB || 'D:/Project/Master/mi-core/data/qb-agent.db';
 const ACCOUNTING_URL = 'http://127.0.0.1:8844';
 
 export interface FinanceQueryResult {

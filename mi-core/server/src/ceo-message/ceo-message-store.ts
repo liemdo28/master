@@ -11,7 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const STORE_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'ceo-messages');
 const INDEX_FILE = path.join(STORE_DIR, 'message-index.jsonl');
 

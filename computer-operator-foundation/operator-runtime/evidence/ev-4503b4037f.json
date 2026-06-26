@@ -1,0 +1,31 @@
+{
+  "evidence_id": "ev-4503b4037f",
+  "type": "execution_log",
+  "run_id": "run-d31b365fad39",
+  "task_id": "task-719d91be13e7",
+  "file_path": null,
+  "content": {
+    "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+    "actions": [
+      {
+        "type": "open_local_form",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html"
+      },
+      {
+        "type": "capture_before_screenshot"
+      },
+      {
+        "type": "capture_after_screenshot"
+      }
+    ],
+    "errors": [],
+    "name_value": "Operator Demo User",
+    "email_value": "demo@operator-runtime.local",
+    "message_value": "This is a safe local test submission. No real email involved.",
+    "status_text": "Submitted: Operator Demo User / demo@operator-runtime.local",
+    "duration_seconds": 0.788
+  },
+  "description": "Demo2 execution log",
+  "registered_at": 1782449490.520389,
+  "registered_iso": "2026-06-26T04:51:30Z"
+}

@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-adaae1164d",
+  "task_name": "Advance DuckDB past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452013.695769,
+  "created_iso": "2026-06-26T05:33:33.695770+00:00",
+  "updated_at": 1782452013.695777,
+  "owner": "finance_lead",
+  "priority": "MEDIUM",
+  "description": "DuckDB has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-00c6427630",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452013.695778
+    }
+  ]
+}

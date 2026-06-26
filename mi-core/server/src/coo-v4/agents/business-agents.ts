@@ -35,7 +35,7 @@ function httpsPost(opts: https.RequestOptions, body: string): Promise<any> {
 }
 
 async function getGoogleAccessToken(): Promise<string> {
-  const globalDir = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+  const globalDir = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
   const tokenPath = path.join(globalDir, 'visibility', 'google-tokens.json');
   let savedRefreshToken = '';
   try {

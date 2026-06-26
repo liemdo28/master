@@ -10,7 +10,7 @@ import type { Skill, SkillExecution, AgentDomain } from './types';
 
 const GLOBAL_DIR = process.env.MI_CORE_ROOT
   ? path.join(process.env.MI_CORE_ROOT, '.local-agent-global')
-  : 'E:/Project/Master/.local-agent-global';
+  : 'D:/Project/Master/.local-agent-global';
 const STORE_PATH = path.join(GLOBAL_DIR, 'coo-v4', 'skills.json');
 
 // ── Persistence ────────────────────────────────────────────────────────────

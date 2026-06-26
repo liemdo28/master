@@ -37,7 +37,7 @@ export interface ApprovalRequest {
 
 // ── Storage ────────────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const APPROVAL_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'approvals');
 
 function ensureDir() {

@@ -21,7 +21,7 @@ import { summarizeToExecutive, executiveToVoiceText, approvalToVoiceText, workfl
 export const voiceRouter = Router();
 
 const UPLOAD_DIR = path.join(
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
   'voice', 'uploads'
 );
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });

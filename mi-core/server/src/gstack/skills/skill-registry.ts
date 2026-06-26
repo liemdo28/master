@@ -20,7 +20,7 @@ import { selectBestSkillChain, discoverSkills, searchSkills } from './dynamic-sk
 // Seed the registry on module load (idempotent — only runs once per boot)
 seedBuiltinSkills();
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

@@ -6,7 +6,7 @@ import { ingestJson } from '../../ingestion-service';
 import fs from 'fs';
 import path from 'path';
 
-const REVIEW_DATA_DIR = process.env.REVIEW_DATA_DIR || 'E:/Project/Master/review-automation-system/data';
+const REVIEW_DATA_DIR = process.env.REVIEW_DATA_DIR || 'D:/Project/Master/review-automation-system/data';
 const SOURCE_NAME = 'review-automation';
 
 function readReviews(): Record<string, unknown>[] {

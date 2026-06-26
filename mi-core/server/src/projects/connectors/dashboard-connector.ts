@@ -8,8 +8,8 @@ import path from 'path';
 import http from 'http';
 import { execSync } from 'child_process';
 
-const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com';
-const CACHE_DIR      = path.join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'dashboard');
+const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'D:/Project/Master/Bakudan/dashboard.bakudanramen.com';
+const CACHE_DIR      = path.join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'dashboard');
 const DASHBOARD_API  = process.env.DASHBOARD_API_URL || 'http://dashboard.bakudanramen.com';
 
 export interface DashboardTask { id: string; title: string; assignee?: string; status: string; due_date?: string; }

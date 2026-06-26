@@ -97,10 +97,10 @@ function scanSourceForIssues(targetProject?: string): { findings: string[]; safe
 
   // Project path mapping
   const projectPaths: Record<string, string> = {
-    'mi-core': 'E:/Project/Master/mi-core/server/src',
-    'dashboard': 'E:/Project/Master/Bakudan',
-    'whatsapp-ai-gateway': 'E:/Project/Master/whatsapp-ai-gateway/src',
-    'visibility': 'E:/Project/Master/mi-core/.local-agent-global/visibility',
+    'mi-core': 'D:/Project/Master/mi-core/server/src',
+    'dashboard': 'D:/Project/Master/Bakudan',
+    'whatsapp-ai-gateway': 'D:/Project/Master/whatsapp-ai-gateway/src',
+    'visibility': 'D:/Project/Master/mi-core/.local-agent-global/visibility',
   };
 
   const targetPath = targetProject ? projectPaths[targetProject] : null;

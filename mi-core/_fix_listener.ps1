@@ -1,7 +1,7 @@
 # WhatsApp Routing Collision Fix - P0
 # Run: powershell -ExecutionPolicy Bypass -File _fix_listener.ps1
 
-$path = 'E:\Project\Master\mi-core\services\whatsapp-ai-gateway\src\whatsapp\message-listener.js'
+$path = 'D:\Project\Master\mi-core\services\whatsapp-ai-gateway\src\whatsapp\message-listener.js'
 $bak = $path + '.bak'
 $lines = [System.IO.File]::ReadAllLines($path)
 

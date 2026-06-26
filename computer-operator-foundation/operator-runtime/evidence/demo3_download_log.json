@@ -1,0 +1,19 @@
+{
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html",
+  "actions": [
+    {
+      "type": "open_test_page",
+      "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html"
+    },
+    {
+      "type": "click_download_link"
+    }
+  ],
+  "errors": [],
+  "suggested_filename": "operator-runtime-download.txt",
+  "saved_to": "D:\\Project\\computer-operator-foundation\\operator-runtime\\downloads\\operator-runtime-download.txt",
+  "file_exists": true,
+  "file_size_bytes": 52,
+  "file_content_preview": "Operator Runtime Download Proof\nLine 1\nLine 2\nLine 3",
+  "duration_seconds": 0.852
+}

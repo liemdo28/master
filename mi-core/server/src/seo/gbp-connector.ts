@@ -13,7 +13,7 @@
  *   - https://mybusinessbusinessinformation.googleapis.com/v1/{account}/locations
  *   - https://businessprofileperformance.googleapis.com/v1/locations/{locationId}:getDailyMetrics
  *
- * Snapshots stored to: E:/Project/Master/.local-agent-global/seo/gbp-snapshots.db
+ * Snapshots stored to: D:/Project/Master/.local-agent-global/seo/gbp-snapshots.db
  */
 
 import * as fs from 'fs';
@@ -22,7 +22,7 @@ import Database from 'better-sqlite3';
 import { getAuthedClient, loadTokens } from '../visibility/connectors/google/google-auth';
 
 // ── Config ───────────────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const GBP_SCOPE = 'https://www.googleapis.com/auth/business.manage';
 const PERFORMANCE_API = 'https://businessprofileperformance.googleapis.com/v1';
 

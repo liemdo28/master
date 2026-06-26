@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import http from 'http';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 export interface PlatformStatus {
   id: string;
@@ -139,7 +139,7 @@ async function checkDashboard(): Promise<PlatformStatus> {
 
 function checkMasterWorkspace(): PlatformStatus {
   const cacheFile = cacheStatus('../mi-core/master-projects.json', 60);
-  const masterRoot = process.env.MASTER_ROOT || 'E:/Project/Master';
+  const masterRoot = process.env.MASTER_ROOT || 'D:/Project/Master';
   const exists = fs.existsSync(masterRoot);
 
   if (exists) {

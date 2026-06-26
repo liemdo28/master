@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-e28efa7c9e",
+  "name": "PostHog",
+  "github": "https://github.com/PostHog/posthog",
+  "owner_division": "Marketing",
+  "category": "Marketing",
+  "description": "Product analytics platform",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.0538583,
+  "created_iso": "2026-06-26T05:31:38.053860+00:00",
+  "updated_at": 1782451898.0538583,
+  "updated_iso": "2026-06-26T05:31:38.053867+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0538583,
+      "iso": "2026-06-26T05:31:38.053869+00:00"
+    }
+  ]
+}

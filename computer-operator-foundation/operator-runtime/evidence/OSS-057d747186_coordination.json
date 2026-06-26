@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-057d747186",
+  "task_name": "Advance Kimi past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782451898.0713453,
+  "created_iso": "2026-06-26T05:31:38.071346+00:00",
+  "updated_at": 1782451898.0713525,
+  "owner": "engineering_lead",
+  "priority": "MEDIUM",
+  "description": "Kimi has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-9dc6ead4e8",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782451898.0713534
+    }
+  ]
+}

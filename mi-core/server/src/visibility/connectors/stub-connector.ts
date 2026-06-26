@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 export interface StubResult {
   connector_id: string;

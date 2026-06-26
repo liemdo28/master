@@ -68,7 +68,7 @@ export interface ConnectorRunRecord {
 
 // ── Config paths ───────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const SEO_SHARED = path.join(MI_CORE_ROOT, 'SEO', 'shared', 'config');
 const BRANDS_FILE = path.join(SEO_SHARED, 'brands.json');
 const LOCATIONS_FILE = path.join(SEO_SHARED, 'locations.json');

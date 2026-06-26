@@ -10,7 +10,7 @@ import { listAvailableModels } from './model-registry';
 import { TaskClassification } from './task-classifier';
 
 const SCORECARD_PATH = path.join(
-  process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core',
+  process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core',
   'MODEL_SCORECARD.md'
 );
 

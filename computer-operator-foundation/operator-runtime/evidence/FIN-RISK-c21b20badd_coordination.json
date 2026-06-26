@@ -1,0 +1,24 @@
+{
+  "coord_task_id": "FIN-RISK-c21b20badd",
+  "task_name": "FIN RISK: TOAST_MISSING",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449473.9627197,
+  "created_iso": "2026-06-26T04:51:13.962726+00:00",
+  "updated_at": 1782449473.9627724,
+  "owner": "data_engineering",
+  "priority": "P1",
+  "description": "toast source missing from warehouse",
+  "risk_type": "TOAST_MISSING",
+  "evidence": {},
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449473.9627805
+    }
+  ]
+}

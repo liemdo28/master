@@ -13,7 +13,7 @@ import { syncDashboardProject, getCachedDashboardProject, getDashboardStatus, ru
 import { syncRemoteProject, getCachedRemote, checkRemoteAgent, getAllRemoteStatuses, runRemoteQA, previewRemoteCommand, executeRemoteAction } from './connectors/remote-proxy-connector';
 import { enqueue } from '../approval/gate';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 // ── Intent detection ──────────────────────────────────────────────────────────
 export type ProjectTarget =

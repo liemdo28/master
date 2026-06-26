@@ -9,7 +9,7 @@ import { generateWeeklySummary, formatWeeklyDashboard } from './metrics-engine';
 import { getBurnInSummary } from './burn-in-tracker';
 import { detectFlowGaps, runBurnInCheck } from './production-hardening';
 
-const GLOBAL      = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL      = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REPORTS_DIR = path.join(GLOBAL, 'coo-v4', 'weekly-reports');
 const QB_CACHE    = path.join(GLOBAL, 'visibility', 'quickbooks', 'data.json');
 

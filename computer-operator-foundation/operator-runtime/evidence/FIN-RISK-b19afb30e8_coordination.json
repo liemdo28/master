@@ -1,0 +1,33 @@
+{
+  "coord_task_id": "FIN-RISK-b19afb30e8",
+  "task_name": "FIN RISK: PAYROLL_MISSING",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449674.423035,
+  "created_iso": "2026-06-26T04:54:34.423036+00:00",
+  "updated_at": 1782449674.4230459,
+  "owner": "data_engineering",
+  "priority": "P1",
+  "description": "Payroll source missing \u2014 labor and profit KPIs blocked",
+  "risk_type": "PAYROLL_MISSING",
+  "evidence": {
+    "source": "payroll",
+    "source_name": "Payroll System",
+    "status": "MISSING",
+    "age_days": null,
+    "owner": "hr_finance",
+    "classification": "MISSING",
+    "last_seen": null,
+    "expected_cadence": "weekly"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449674.423047
+    }
+  ]
+}

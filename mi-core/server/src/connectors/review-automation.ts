@@ -10,7 +10,7 @@ import * as fs from 'fs';
 import { queueToCeo } from '../services/whatsapp-sender';
 
 const REVIEWS_DIR = path.join(
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
   'reviews'
 );
 

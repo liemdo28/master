@@ -11,7 +11,7 @@ import type { AgentResult } from '../types';
 
 const GLOBAL_DIR = process.env.MI_CORE_ROOT
   ? path.join(process.env.MI_CORE_ROOT, '.local-agent-global')
-  : 'E:/Project/Master/.local-agent-global';
+  : 'D:/Project/Master/.local-agent-global';
 const ARTIFACTS_DIR = path.join(GLOBAL_DIR, 'coo-v4', 'artifacts');
 
 function ensureDir(d: string) { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); }

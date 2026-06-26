@@ -23,7 +23,7 @@ export const STORE_TIMEZONES: Record<string, { timezone: string; tzCode: string;
 };
 
 // ── Load owner profile ─────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REPO_LOCAL_OWNER_PROFILE = path.resolve(process.cwd(), '.local-agent-global', 'executive-memory-v2', 'owner_profile.json');
 const REPO_PARENT_OWNER_PROFILE = path.resolve(process.cwd(), '..', '.local-agent-global', 'executive-memory-v2', 'owner_profile.json');
 const GLOBAL_OWNER_PROFILE = path.join(GLOBAL_DIR, 'executive-memory-v2', 'owner_profile.json');

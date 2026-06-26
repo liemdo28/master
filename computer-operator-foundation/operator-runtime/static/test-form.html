@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Operator Test Form</title>
+<style>
+  body { font-family: Arial; padding: 20px; background: #f0f4f8; }
+  form { background: white; padding: 20px; border-radius: 8px; max-width: 500px; }
+  label { display: block; margin-top: 12px; font-weight: bold; }
+  input, textarea { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+  button { margin-top: 16px; padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  #status { margin-top: 16px; padding: 10px; background: #dcfce7; border-radius: 4px; display: none; }
+</style>
+</head>
+<body>
+<h1>Operator Test Form</h1>
+<p>This is a safe local form for browser automation proof. No real submission occurs.</p>
+<form id="testForm" onsubmit="event.preventDefault(); document.getElementById('status').style.display='block'; document.getElementById('status').textContent='Submitted: '+document.getElementById('name').value+' / '+document.getElementById('email').value;">
+  <label>Name <input id="name" type="text"></label>
+  <label>Email <input id="email" type="email"></label>
+  <label>Message <textarea id="message" rows="3"></textarea></label>
+  <button id="submitBtn" type="submit">Submit Test</button>
+</form>
+<div id="status"></div>
+</body>
+</html>

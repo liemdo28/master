@@ -11,7 +11,7 @@ import { appendFileSync, mkdirSync, existsSync } from 'fs';
 import path from 'path';
 
 const execAsync = promisify(exec);
-const LOG_DIR = path.join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'jarvis');
+const LOG_DIR = path.join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'jarvis');
 const LOG_PATH = path.join(LOG_DIR, 'task-runner.jsonl');
 
 function log(entry: Record<string, unknown>) {
@@ -55,7 +55,7 @@ export async function runApprovedTask(approvalId: string): Promise<TaskRunResult
   }
 
   try {
-    const { stdout, stderr } = await execAsync(approval.auto_command, { timeout: 60_000, cwd: 'E:/Project/Master/mi-core' });
+    const { stdout, stderr } = await execAsync(approval.auto_command, { timeout: 60_000, cwd: 'D:/Project/Master/mi-core' });
     const duration_ms = Date.now() - start;
     log({ approval_id: approvalId, command: approval.auto_command, status: 'success', duration_ms, at: new Date().toISOString() });
     return { task_id: approvalId, status: 'success', output: stdout || stderr, duration_ms };

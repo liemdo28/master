@@ -10,7 +10,7 @@ import path from 'path';
 
 const ACCOUNTING_URL = process.env.ACCOUNTING_URL || 'http://127.0.0.1:8844';
 const DB_PATH = process.env.ACCOUNTING_DB_PATH ||
-  'E:/Project/Master/accounting-engine/ledgers/accounting.db';
+  'D:/Project/Master/accounting-engine/ledgers/accounting.db';
 
 export interface AccountingSnapshot {
   status: 'live' | 'offline' | 'error';
@@ -58,7 +58,7 @@ export async function syncAccounting(): Promise<AccountingSnapshot> {
 
     // Cache to global dir
     const cacheDir = path.join(
-      process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+      process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
       'visibility', 'accounting'
     );
     fs.mkdirSync(cacheDir, { recursive: true });
@@ -69,7 +69,7 @@ export async function syncAccounting(): Promise<AccountingSnapshot> {
   } catch {
     // Offline — return cached if available
     const cacheFile = path.join(
-      process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+      process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
       'visibility', 'accounting', 'data.json'
     );
     if (fs.existsSync(cacheFile)) {
@@ -80,7 +80,7 @@ export async function syncAccounting(): Promise<AccountingSnapshot> {
     return {
       status: 'offline',
       synced_at: now,
-      summary_text: 'Accounting engine offline. Start: node E:/Project/Master/accounting-engine/api/server.js',
+      summary_text: 'Accounting engine offline. Start: node D:/Project/Master/accounting-engine/api/server.js',
     };
   }
 }
@@ -107,7 +107,7 @@ function buildSummaryText(
 export function getCachedAccounting(): AccountingSnapshot | null {
   try {
     const cacheFile = path.join(
-      process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+      process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
       'visibility', 'accounting', 'data.json'
     );
     return JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));

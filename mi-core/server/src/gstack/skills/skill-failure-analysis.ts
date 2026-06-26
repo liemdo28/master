@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { getSkillHistory } from './skill-reliability-tracker';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const SKILLS_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/skills');
 const FAILURE_FILE = path.join(SKILLS_DIR, 'failure-analysis.json');
 

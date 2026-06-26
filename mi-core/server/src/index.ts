@@ -408,7 +408,7 @@ function onListenSuccess() {
     connectorRegistry.update('asana', { auth_status: 'connected', status: 'active', health_status: 'unknown' });
   }
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    const googleTokenPath = require('path').join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'visibility', 'google-tokens.json');
+    const googleTokenPath = require('path').join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'visibility', 'google-tokens.json');
     if (require('fs').existsSync(googleTokenPath)) {
       for (const id of ['gmail', 'google-calendar', 'google-drive', 'google-contacts']) {
         connectorRegistry.update(id, { auth_status: 'connected', status: 'active' });

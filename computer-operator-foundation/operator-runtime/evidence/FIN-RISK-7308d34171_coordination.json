@@ -1,0 +1,33 @@
+{
+  "coord_task_id": "FIN-RISK-7308d34171",
+  "task_name": "FIN RISK: TOAST_MISSING",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782450179.1526911,
+  "created_iso": "2026-06-26T05:02:59.152691+00:00",
+  "updated_at": 1782450179.1526935,
+  "owner": "data_engineering",
+  "priority": "P1",
+  "description": "Toast POS source missing from warehouse",
+  "risk_type": "TOAST_MISSING",
+  "evidence": {
+    "source": "toast",
+    "source_name": "Toast POS",
+    "status": "MISSING",
+    "age_days": null,
+    "owner": "operations",
+    "classification": "MISSING",
+    "last_seen": null,
+    "expected_cadence": "daily"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782450179.1526942
+    }
+  ]
+}

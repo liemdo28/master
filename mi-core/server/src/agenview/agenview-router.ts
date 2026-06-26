@@ -17,7 +17,7 @@ import { Router, Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const GLOBAL_DIR   = path.join(MI_CORE_ROOT, '.local-agent-global');
 
 export const agenviewRouter = Router();

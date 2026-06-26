@@ -11,7 +11,7 @@ import { WorkOrder, QaCheck } from '../work-order-engine';
 import { logAction } from '../execution-ledger';
 
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 
 export interface QaResult {
   overall: 'PASS' | 'PARTIAL' | 'FAIL';

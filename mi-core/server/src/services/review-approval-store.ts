@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REVIEW_DIR = path.join(GLOBAL_DIR, 'connectors', 'review-approvals');
 const APPROVALS_PATH = path.join(REVIEW_DIR, 'approvals.json');
 const AUDIT_PATH = path.join(REVIEW_DIR, 'audit.json');

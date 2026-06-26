@@ -14,8 +14,8 @@ import path from 'path';
 import https from 'https';
 import type { AgentResult } from './types';
 
-const GLOBAL = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
-const MI_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const GLOBAL = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
+const MI_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 
 // ── Google token loader ────────────────────────────────────────────────────
 

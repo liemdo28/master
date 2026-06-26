@@ -21,7 +21,7 @@ import { syncFoodSafety, getCachedFoodSafety, getFoodSafetySummaryText } from '.
 import { syncWebsiteSource, syncWebsiteSources } from './connectors/website-source-connector';
 import { getQuickBooksRuntimeSnapshot, writeQuickBooksCache } from './connectors/qb-runtime-connector';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 export interface DailySnapshot {
   generated_at: string;

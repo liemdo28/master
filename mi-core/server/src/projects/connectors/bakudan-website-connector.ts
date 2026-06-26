@@ -1,6 +1,6 @@
 /**
  * Bakudan Website Connector (bakudanramen.com)
- * Node.js Express site at E:/Project/Master/Bakudan/bakudanramen.com-current
+ * Node.js Express site at D:/Project/Master/Bakudan/bakudanramen.com-current
  */
 
 import fs from 'fs';
@@ -8,8 +8,8 @@ import path from 'path';
 import http from 'http';
 import { execSync } from 'child_process';
 
-const BAKUDAN_ROOT = process.env.BAKUDAN_WEBSITE_ROOT || 'E:/Project/Master/Bakudan/bakudanramen.com-current';
-const CACHE_DIR    = path.join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'bakudan-website');
+const BAKUDAN_ROOT = process.env.BAKUDAN_WEBSITE_ROOT || 'D:/Project/Master/Bakudan/bakudanramen.com-current';
+const CACHE_DIR    = path.join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'bakudan-website');
 
 export interface BakudanSnapshot {
   synced_at:    string;

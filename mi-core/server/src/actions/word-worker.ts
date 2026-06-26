@@ -9,7 +9,7 @@ import fs from 'fs';
 import { spawn } from 'child_process';
 
 const OUTPUT_DIR = path.join(
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
   'action-outputs', 'word'
 );
 const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === 'win32' ? 'python' : 'python3');

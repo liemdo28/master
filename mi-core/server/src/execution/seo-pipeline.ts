@@ -66,7 +66,7 @@ export interface SEOImageAssets {
 
 // ── Storage ────────────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const DRAFT_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'seo-drafts');
 const IMAGE_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'seo-images');
 

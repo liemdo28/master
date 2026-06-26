@@ -1,0 +1,68 @@
+{
+  "run_id": "run-342eb698c425",
+  "task_id": "task-8dc100f36717",
+  "objective_id": "obj-da9f91b0",
+  "adapter": "playwright-chromium",
+  "mode": "sandbox",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html",
+  "start_time": 1782448816.9271932,
+  "start_iso": "2026-06-26T04:40:16Z",
+  "end_time": 1782448817.9601264,
+  "end_iso": "2026-06-26T04:40:17Z",
+  "duration_ms": 1032.9,
+  "action_count": 4,
+  "success": true,
+  "errors": [],
+  "screenshots": [
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo3_download.png"
+  ],
+  "downloads": [
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\downloads\\operator-runtime-download.txt"
+  ],
+  "evidence_ids": [
+    "ev-beb349c1a6",
+    "ev-0740d5b8a5",
+    "ev-33e0976028"
+  ],
+  "policy_decision": {
+    "ok": true,
+    "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html",
+    "classification": "SAFE",
+    "status": "APPROVED"
+  },
+  "status": "COMPLETED",
+  "actions": [
+    {
+      "seq": 1,
+      "type": "open_test_page",
+      "detail": "goto file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448817.5507333
+    },
+    {
+      "seq": 2,
+      "type": "capture_screenshot",
+      "detail": "save demo3_download.png",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448817.5641606
+    },
+    {
+      "seq": 3,
+      "type": "click_download_link",
+      "detail": "click #downloadLink",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448817.6765642
+    },
+    {
+      "seq": 4,
+      "type": "done",
+      "detail": "demo3 completed",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448817.9601197
+    }
+  ]
+}

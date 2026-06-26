@@ -11,7 +11,7 @@ import { setNodeRolePersistent, getNodePersistent } from './node-registry-persis
 
 const GLOBAL_DIR = process.env.MI_CORE_ROOT
   ? path.join(process.env.MI_CORE_ROOT, '.local-agent-global')
-  : 'E:/Project/Master/mi-core/.local-agent-global';
+  : 'D:/Project/Master/mi-core/.local-agent-global';
 const NODES_DIR  = path.join(GLOBAL_DIR, 'nodes');
 const LOCK_FILE  = path.join(NODES_DIR, 'leader.json');
 

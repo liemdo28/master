@@ -5,7 +5,7 @@ import * as path from 'path';
 
 export const ceoControlRouter = Router();
 
-const CEO_DB_DIR = path.join('E:/Project/Master/.local-agent-global/ceo-control');
+const CEO_DB_DIR = path.join('D:/Project/Master/.local-agent-global/ceo-control');
 const CEO_DB_PATH = path.join(CEO_DB_DIR, 'ceo-tasks.db');
 
 if (!fs.existsSync(CEO_DB_DIR)) fs.mkdirSync(CEO_DB_DIR, { recursive: true });
@@ -101,7 +101,7 @@ ceoControlRouter.get('/company-health', async (_req: Request, res: Response) => 
 
 // GET /api/ceo/reports
 ceoControlRouter.get('/reports', (_req: Request, res: Response) => {
-  const dir = 'E:/Project/Master/mi-core';
+  const dir = 'D:/Project/Master/mi-core';
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort().reverse();
   res.json({ ok: true, reports: files, count: files.length });
 });

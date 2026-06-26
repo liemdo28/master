@@ -6,7 +6,7 @@
 
 import path from 'path';
 
-const DATA_ROOT = process.env.DATA_ROOT || 'E:/Project/Master/.local-agent-global';
+const DATA_ROOT = process.env.DATA_ROOT || 'D:/Project/Master/.local-agent-global';
 const MI_PORT   = process.env.MI_PORT   || '4001';
 const BASE_URL  = `http://localhost:${MI_PORT}`;
 
@@ -176,7 +176,7 @@ const TOOL_CATALOG: Record<string, Tool> = {
     approval_required: false, evidence_output: true, failure_policy: 'SKIP',
     call: (args) => {
       const { execSync } = require('child_process');
-      const repo = String(args?.repo || 'E:/Project/Master/mi-core');
+      const repo = String(args?.repo || 'D:/Project/Master/mi-core');
       const cmd = String(args?.cmd || 'status --short');
       const out = execSync(`git -C "${repo}" ${cmd}`, { encoding: 'utf8', timeout: 10_000 });
       return Promise.resolve({ output: out });

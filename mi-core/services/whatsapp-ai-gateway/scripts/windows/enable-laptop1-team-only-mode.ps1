@@ -1,5 +1,5 @@
 param(
-  [string]$GatewayDir = "E:\Project\Master\whatsapp-ai-gateway",
+  [string]$GatewayDir = "D:\Project\Master\whatsapp-ai-gateway",
   [switch]$ConfirmLaptop1
 )
 

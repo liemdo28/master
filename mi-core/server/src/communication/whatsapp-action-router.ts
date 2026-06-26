@@ -501,7 +501,7 @@ export async function routeAssistantAction(route: NaturalRoute, _originalMessage
     case 'report_request':
       return {
         approval_required: false, approval_id: null,
-        reply: 'Em có các reports mới nhất trong E:/Project/Master/mi-core/reports/\nNếu anh muốn gửi ra ngoài, em sẽ xin xác nhận trước.',
+        reply: 'Em có các reports mới nhất trong D:/Project/Master/mi-core/reports/\nNếu anh muốn gửi ra ngoài, em sẽ xin xác nhận trước.',
         metadata: {},
       };
 

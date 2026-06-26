@@ -8,7 +8,7 @@ import path from 'path';
 import http from 'http';
 import { enqueue } from '../approval/gate';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const DASHBOARD_API = process.env.DASHBOARD_API || 'http://dashboard.bakudanramen.com';
 const ASANA_TOKEN = process.env.ASANA_TOKEN || '';
 

@@ -101,7 +101,7 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
         '📊 Dashboard của anh:',
         'URL: http://dashboard.bakudanramen.com',
         'Project graph: Dashboard → depends_on → Mi-Core',
-        'Connector: dashboard-connector trong Mi-Core; local scan thấy project dashboard-bakudanramen-qa trong E:/Project/Master.',
+        'Connector: dashboard-connector trong Mi-Core; local scan thấy project dashboard-bakudanramen-qa trong D:/Project/Master.',
       ].join('\n'),
     };
   }
@@ -667,14 +667,14 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
   if (has(t, /dashboard.*(o dau|where|location|link)|where.*dashboard/)) {
     return {
       handled: true, phase: 30,
-      reply: ['Dashboard:', 'URL: http://dashboard.bakudanramen.com', 'Node: PC (Mi-Core host)', 'Graph: Dashboard → depends_on → Mi-Core', 'Source: E:/Project/Master/Bakudan/'].join('\n'),
+      reply: ['Dashboard:', 'URL: http://dashboard.bakudanramen.com', 'Node: PC (Mi-Core host)', 'Graph: Dashboard → depends_on → Mi-Core', 'Source: D:/Project/Master/Bakudan/'].join('\n'),
     };
   }
   // Review Automation
   if (has(t, /review automation.*(may nao|where|node)|where.*review automation/)) {
     return {
       handled: true, phase: 30,
-      reply: 'Review Automation → deployed_on → Laptop1\nKnowledge graph confirms: node.laptop1 hosts project.review_automation\nSource: E:/Project/Master/Bakudan/Agent-Coding/',
+      reply: 'Review Automation → deployed_on → Laptop1\nKnowledge graph confirms: node.laptop1 hosts project.review_automation\nSource: D:/Project/Master/Bakudan/Agent-Coding/',
     };
   }
   // Integration System
@@ -750,7 +750,7 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
         '📊 Dashboard của anh:',
         'URL: http://dashboard.bakudanramen.com',
         'Project graph: Dashboard → depends_on → Mi-Core',
-        'Connector: dashboard-connector trong Mi-Core; local scan thấy project dashboard-bakudanramen-qa trong E:/Project/Master.',
+        'Connector: dashboard-connector trong Mi-Core; local scan thấy project dashboard-bakudanramen-qa trong D:/Project/Master.',
       ].join('\n'),
     };
   }

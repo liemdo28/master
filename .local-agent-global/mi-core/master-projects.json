@@ -1,11 +1,11 @@
 {
-  "scanned_at": "2026-06-16T03:37:55.783Z",
-  "total": 30,
+  "scanned_at": "2026-06-26T00:00:00.000Z",
+  "total": 33,
   "projects": [
     {
       "project_id": "accounting-engine",
       "name": "accounting-engine",
-      "path": "E:/Project/Master/accounting-engine",
+      "path": "D:/Project/Master/accounting-engine",
       "relative_path": "accounting-engine",
       "type": "api-server",
       "framework": "express",
@@ -29,7 +29,7 @@
     {
       "project_id": "antigravity-gateway",
       "name": "antigravity-gateway",
-      "path": "E:/Project/Master/Agent/agent-coding-api-keys",
+      "path": "D:/Project/Master/Agent/agent-coding-api-keys",
       "relative_path": "Agent/agent-coding-api-keys",
       "type": "app",
       "framework": "node",
@@ -55,7 +55,7 @@
     {
       "project_id": "ai-search-neon-tool",
       "name": "ai-search-neon-tool",
-      "path": "E:/Project/Master/Agent/ai-search-tool",
+      "path": "D:/Project/Master/Agent/ai-search-tool",
       "relative_path": "Agent/ai-search-tool",
       "type": "app",
       "framework": "node",
@@ -79,7 +79,7 @@
     {
       "project_id": "doordash-campaign-agent",
       "name": "doordash-campaign-agent",
-      "path": "E:/Project/Master/Agent/doordash-compaigns",
+      "path": "D:/Project/Master/Agent/doordash-compaigns",
       "relative_path": "Agent/doordash-compaigns",
       "type": "app",
       "framework": "react",
@@ -107,7 +107,7 @@
     {
       "project_id": "shared-workspace",
       "name": "shared-workspace",
-      "path": "E:/Project/Master/Agent/shared-workspace",
+      "path": "D:/Project/Master/Agent/shared-workspace",
       "relative_path": "Agent/shared-workspace",
       "type": "app",
       "framework": "unknown",
@@ -131,7 +131,7 @@
     {
       "project_id": "agent-coding",
       "name": "agent-coding",
-      "path": "E:/Project/Master/Bakudan/Agent-Coding",
+      "path": "D:/Project/Master/Bakudan/Agent-Coding",
       "relative_path": "Bakudan/Agent-Coding",
       "type": "api-server",
       "framework": "express",
@@ -157,7 +157,7 @@
     {
       "project_id": "bakudan-website",
       "name": "bakudan-website",
-      "path": "E:/Project/Master/Bakudan/bakudanramen.com-current",
+      "path": "D:/Project/Master/Bakudan/bakudanramen.com-current",
       "relative_path": "Bakudan/bakudanramen.com-current",
       "type": "api-server",
       "framework": "express",
@@ -183,7 +183,7 @@
     {
       "project_id": "dashboard-bakudanramen-qa",
       "name": "dashboard-bakudanramen-qa",
-      "path": "E:/Project/Master/Bakudan/dashboard.bakudanramen.com",
+      "path": "D:/Project/Master/Bakudan/dashboard.bakudanramen.com",
       "relative_path": "Bakudan/dashboard.bakudanramen.com",
       "type": "php-website",
       "framework": "php",
@@ -207,7 +207,7 @@
     {
       "project_id": "growth-dashboard",
       "name": "growth-dashboard",
-      "path": "E:/Project/Master/Bakudan/growth-dashboard",
+      "path": "D:/Project/Master/Bakudan/growth-dashboard",
       "relative_path": "Bakudan/growth-dashboard",
       "type": "app",
       "framework": "node",
@@ -231,7 +231,7 @@
     {
       "project_id": "integration-system",
       "name": "integration-system",
-      "path": "E:/Project/Master/Bakudan/integration-system",
+      "path": "D:/Project/Master/Bakudan/integration-system",
       "relative_path": "Bakudan/integration-system",
       "type": "app",
       "framework": "unknown",
@@ -255,7 +255,7 @@
     {
       "project_id": "mobile-taskflow",
       "name": "mobile_taskflow",
-      "path": "E:/Project/Master/Bakudan/mobile_taskflow",
+      "path": "D:/Project/Master/Bakudan/mobile_taskflow",
       "relative_path": "Bakudan/mobile_taskflow",
       "type": "app",
       "framework": "unknown",
@@ -279,7 +279,7 @@
     {
       "project_id": "packing-list-automation",
       "name": "packing-list-automation",
-      "path": "E:/Project/Master/Bakudan/packing-list",
+      "path": "D:/Project/Master/Bakudan/packing-list",
       "relative_path": "Bakudan/packing-list",
       "type": "app",
       "framework": "node",
@@ -303,7 +303,7 @@
     {
       "project_id": "review-automation-system",
       "name": "review-automation-system",
-      "path": "E:/Project/Master/Bakudan/review-automation-system",
+      "path": "D:/Project/Master/Bakudan/review-automation-system",
       "relative_path": "Bakudan/review-automation-system",
       "type": "app",
       "framework": "unknown",
@@ -330,7 +330,7 @@
     {
       "project_id": "bakudan-releases",
       "name": "bakudan-releases",
-      "path": "E:/Project/Master/bakudan-releases",
+      "path": "D:/Project/Master/bakudan-releases",
       "relative_path": "bakudan-releases",
       "type": "app",
       "framework": "unknown",
@@ -354,7 +354,7 @@
     {
       "project_id": "mi-ceo-observer",
       "name": "mi-ceo-observer",
-      "path": "E:/Project/Master/mi-ceo-observer",
+      "path": "D:/Project/Master/mi-ceo-observer",
       "relative_path": "mi-ceo-observer",
       "type": "app",
       "framework": "node",
@@ -381,7 +381,7 @@
     {
       "project_id": "mi-core",
       "name": "mi-core",
-      "path": "E:/Project/Master/mi-core",
+      "path": "D:/Project/Master/mi-core",
       "relative_path": "mi-core",
       "type": "app",
       "framework": "node",
@@ -413,7 +413,7 @@
     {
       "project_id": "mi-node-agent",
       "name": "mi-node-agent",
-      "path": "E:/Project/Master/mi-node-agent",
+      "path": "D:/Project/Master/mi-node-agent",
       "relative_path": "mi-node-agent",
       "type": "api-server",
       "framework": "express",
@@ -437,7 +437,7 @@
     {
       "project_id": "ai-search-neon-tool",
       "name": "ai-search-neon-tool",
-      "path": "E:/Project/Master/Other/dau-tu",
+      "path": "D:/Project/Master/Other/dau-tu",
       "relative_path": "Other/dau-tu",
       "type": "app",
       "framework": "node",
@@ -461,7 +461,7 @@
     {
       "project_id": "it-takes-two-inspired-game",
       "name": "It-Takes-Two-Inspired-Game",
-      "path": "E:/Project/Master/Other/It-Takes-Two-Inspired-Game",
+      "path": "D:/Project/Master/Other/It-Takes-Two-Inspired-Game",
       "relative_path": "Other/It-Takes-Two-Inspired-Game",
       "type": "app",
       "framework": "unknown",
@@ -485,7 +485,7 @@
     {
       "project_id": "linktreehl",
       "name": "linktreehl",
-      "path": "E:/Project/Master/Other/LinkTreeHL",
+      "path": "D:/Project/Master/Other/LinkTreeHL",
       "relative_path": "Other/LinkTreeHL",
       "type": "website",
       "framework": "next.js",
@@ -511,7 +511,7 @@
     {
       "project_id": "openclaw-personal",
       "name": "openclaw-personal",
-      "path": "E:/Project/Master/Other/openclaw",
+      "path": "D:/Project/Master/Other/openclaw",
       "relative_path": "Other/openclaw",
       "type": "app",
       "framework": "unknown",
@@ -535,7 +535,7 @@
     {
       "project_id": "phuyen-2026",
       "name": "phuyen-2026",
-      "path": "E:/Project/Master/Other/phuyen-2026",
+      "path": "D:/Project/Master/Other/phuyen-2026",
       "relative_path": "Other/phuyen-2026",
       "type": "app",
       "framework": "unknown",
@@ -561,7 +561,7 @@
     {
       "project_id": "tu-vi-bat-tu-assistant",
       "name": "tu-vi-bat-tu-assistant",
-      "path": "E:/Project/Master/Other/tu-vi",
+      "path": "D:/Project/Master/Other/tu-vi",
       "relative_path": "Other/tu-vi",
       "type": "app",
       "framework": "node",
@@ -585,7 +585,7 @@
     {
       "project_id": "tuya",
       "name": "Tuya",
-      "path": "E:/Project/Master/Other/Tuya",
+      "path": "D:/Project/Master/Other/Tuya",
       "relative_path": "Other/Tuya",
       "type": "app",
       "framework": "unknown",
@@ -609,7 +609,7 @@
     {
       "project_id": "qb-ops-agent",
       "name": "qb-ops-agent",
-      "path": "E:/Project/Master/qb-ops-agent",
+      "path": "D:/Project/Master/qb-ops-agent",
       "relative_path": "qb-ops-agent",
       "type": "app",
       "framework": "node",
@@ -633,7 +633,7 @@
     {
       "project_id": "rawwebsite",
       "name": "rawwebsite",
-      "path": "E:/Project/Master/RawSushi/RawWebsite",
+      "path": "D:/Project/Master/RawSushi/RawWebsite",
       "relative_path": "RawSushi/RawWebsite",
       "type": "website",
       "framework": "astro",
@@ -657,7 +657,7 @@
     {
       "project_id": "whatsapp-ai-gateway",
       "name": "whatsapp-ai-gateway",
-      "path": "E:/Project/Master/whatsapp-ai-gateway",
+      "path": "D:/Project/Master/whatsapp-ai-gateway",
       "relative_path": "whatsapp-ai-gateway",
       "type": "api-server",
       "framework": "express",
@@ -685,7 +685,7 @@
     {
       "project_id": "agent-coding",
       "name": "agent-coding",
-      "path": "E:/Project/Master/_archive/integration-system-nested-Agent-Coding-20260609-193828",
+      "path": "D:/Project/Master/_archive/integration-system-nested-Agent-Coding-20260609-193828",
       "relative_path": "_archive/integration-system-nested-Agent-Coding-20260609-193828",
       "type": "api-server",
       "framework": "express",
@@ -711,7 +711,7 @@
     {
       "project_id": "mi-node-agent",
       "name": "mi-node-agent",
-      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
+      "path": "D:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
       "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/mi-node-agent",
       "type": "api-server",
       "framework": "express",
@@ -735,7 +735,7 @@
     {
       "project_id": "whatsapp-ai-gateway",
       "name": "whatsapp-ai-gateway",
-      "path": "E:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
+      "path": "D:/Project/Master/_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
       "relative_path": "_transfer_packages/laptop1-projects-20260611-104657/whatsapp-ai-gateway",
       "type": "api-server",
       "framework": "express",
@@ -755,6 +755,78 @@
       "has_dockerfile": false,
       "has_env": false,
       "last_scanned": "2026-06-16T03:37:55.783Z"
+    },
+    {
+      "project_id": "computer-operator-foundation",
+      "name": "computer-operator-foundation",
+      "path": "D:/Project/Master/computer-operator-foundation",
+      "relative_path": "computer-operator-foundation",
+      "type": "workspace-foundation",
+      "framework": "mixed",
+      "package_manager": "none",
+      "language": "mixed",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "local",
+      "machine": "main-pc",
+      "file_count": 710,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-26T00:00:00.000Z"
+    },
+    {
+      "project_id": "laptop1-node",
+      "name": "laptop1",
+      "path": "D:/Project/laptop1",
+      "relative_path": "../laptop1",
+      "type": "managed-node",
+      "framework": "mixed",
+      "package_manager": "none",
+      "language": "mixed",
+      "git_remote": "https://github.com/liemdo28/laptop1.git",
+      "git_branch": "main",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "remote",
+      "machine": "laptop1",
+      "file_count": 0,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-26T00:00:00.000Z"
+    },
+    {
+      "project_id": "laptop2-node",
+      "name": "laptop2",
+      "path": "D:/Project/laptop2",
+      "relative_path": "../laptop2",
+      "type": "managed-node",
+      "framework": "unknown",
+      "package_manager": "none",
+      "language": "unknown",
+      "git_remote": "",
+      "git_branch": "",
+      "git_dirty": false,
+      "ports": [],
+      "start_cmd": "",
+      "test_cmd": "",
+      "build_cmd": "",
+      "health_url": "",
+      "location": "remote",
+      "machine": "laptop2",
+      "file_count": 0,
+      "has_dockerfile": false,
+      "has_env": false,
+      "last_scanned": "2026-06-26T00:00:00.000Z"
     }
   ]
 }

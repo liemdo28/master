@@ -1,8 +1,8 @@
 /**
  * Mi Company OS — Project Registry
- * Every active project in E:/Project/Master registered with owner, purpose, runtime.
+ * Every active project in D:/Project/Master registered with owner, purpose, runtime.
  * Source evidence: ecosystem.config.js, package.json, .env.example, MI_LINKED_SOURCES_AUDIT.md
- * Updated: 2026-06-18
+ * Updated: 2026-06-26
  */
 
 export type ProjectStatus   = 'ACTIVE' | 'SHADOW' | 'BROKEN' | 'ARCHIVED' | 'UNKNOWN';
@@ -11,7 +11,7 @@ export type ProjectCriticality = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 export interface Project {
   id: string;
   name: string;
-  path: string;             // relative to E:/Project/Master/
+  path: string;             // relative to D:/Project/Master/
   owner_dept: string;       // department id
   business_purpose: string;
   repo: boolean;            // has .git
@@ -119,6 +119,34 @@ export const PROJECTS: Project[] = [
     status: 'ACTIVE',
     criticality: 'MEDIUM',
     dependencies: ['mi-core'],
+  },
+  {
+    id: 'laptop1-node',
+    name: 'Laptop1 Managed Node',
+    path: '../laptop1',
+    owner_dept: 'technical-operations',
+    business_purpose: 'External laptop node managed by Mi. Hosts laptop-side operational tooling and transfer/setup artifacts.',
+    repo: true,
+    has_package_json: false,
+    runtime: 'none',
+    status: 'ACTIVE',
+    criticality: 'HIGH',
+    dependencies: ['mi-core', 'mi-node-agent'],
+    notes: 'External repo at D:/Project/laptop1. It is managed by Mi but intentionally remains outside D:/Project/Master.',
+  },
+  {
+    id: 'laptop2-node',
+    name: 'Laptop2 Managed Node',
+    path: '../laptop2',
+    owner_dept: 'technical-operations',
+    business_purpose: 'Prepared standby laptop node for Mi multi-node operations.',
+    repo: false,
+    has_package_json: false,
+    runtime: 'none',
+    status: 'SHADOW',
+    criticality: 'MEDIUM',
+    dependencies: ['mi-core', 'mi-node-agent'],
+    notes: 'Setup target. Mi exposes /mi laptop2 status and node APIs; physical source path may not exist until setup begins.',
   },
 
   // ── FINANCE LAYER ──────────────────────────────────────────────────────────
@@ -263,6 +291,20 @@ export const PROJECTS: Project[] = [
     criticality: 'HIGH',
     dependencies: [],
     notes: 'qb-ops-agent connects to this at AGENT_OS_API_URL=http://127.0.0.1:3456/api',
+  },
+  {
+    id: 'computer-operator-foundation',
+    name: 'Computer Operator Foundation',
+    path: 'computer-operator-foundation',
+    owner_dept: 'engineering',
+    business_purpose: 'Foundation docs, operator runtime proof, financial intelligence, and OSS governance work that Mi manages from Master.',
+    repo: false,
+    has_package_json: false,
+    runtime: 'python',
+    status: 'ACTIVE',
+    criticality: 'MEDIUM',
+    dependencies: ['mi-core'],
+    notes: 'Moved from D:/Project/computer-operator-foundation to D:/Project/Master/computer-operator-foundation during the 2026-06-26 root path fix.',
   },
 
   // ── STATIC / ASSETS ───────────────────────────────────────────────────────

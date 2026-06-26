@@ -1,0 +1,27 @@
+{
+  "coord_task_id": "OSS-RISK-b1444a54b6",
+  "task_name": "OSS RISK: HIGH_LICENSE_RISK",
+  "objective_id": "OBJ-OSS-RISK",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452122.9062152,
+  "created_iso": "2026-06-26T05:35:22.906216+00:00",
+  "updated_at": 1782452122.9062262,
+  "owner": "engineering_lead",
+  "priority": "P1",
+  "description": "Portainer uses Proprietary license (HIGH risk)",
+  "risk_type": "HIGH_LICENSE_RISK",
+  "evidence": {
+    "license": "Proprietary",
+    "owner_division": "IT"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452122.9062283
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { getActionItems } from './context-memory';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 function readJson<T>(file: string, def: T): T {
   try { return JSON.parse(fs.readFileSync(file, 'utf-8')); } catch { return def; }

@@ -1,0 +1,21 @@
+{
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+  "actions": [
+    {
+      "type": "open_local_form",
+      "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html"
+    },
+    {
+      "type": "capture_before_screenshot"
+    },
+    {
+      "type": "capture_after_screenshot"
+    }
+  ],
+  "errors": [],
+  "name_value": "Operator Demo User",
+  "email_value": "demo@operator-runtime.local",
+  "message_value": "This is a safe local test submission. No real email involved.",
+  "status_text": "Submitted: Operator Demo User / demo@operator-runtime.local",
+  "duration_seconds": 0.788
+}

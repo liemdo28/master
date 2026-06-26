@@ -1,6 +1,6 @@
 @echo off
 REM Phase 27F — Verify latest n8n backup
-set BACKUP_DIR=E:\Project\Master\mi-core\backups\n8n
+set BACKUP_DIR=D:\Project\Master\mi-core\backups\n8n
 
 REM Find most recent backup folder
 for /f "delims=" %%A in ('dir /b /ad /o-d "%BACKUP_DIR%" 2^>nul') do (

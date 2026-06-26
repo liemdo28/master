@@ -6,7 +6,7 @@ import { ingestJson } from '../../ingestion-service';
 import fs from 'fs';
 import path from 'path';
 
-const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com';
+const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'D:/Project/Master/Bakudan/dashboard.bakudanramen.com';
 const DASHBOARD_API  = process.env.DASHBOARD_API_URL || 'https://dashboard.bakudanramen.com';
 const MI_SNAPSHOT_SECRET = process.env.MI_SNAPSHOT_SECRET || '';
 const SOURCE_NAME    = 'dashboard-bakudan';

@@ -10,7 +10,7 @@ import path from 'path';
 import { classifyIntent, IntentResult } from './intent-router';
 
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const WO_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/work-orders');
 
 export type WoStatus =

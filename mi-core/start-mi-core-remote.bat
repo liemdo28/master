@@ -1,7 +1,7 @@
 @echo off
 title Mi-Core Remote — Central Command
 color 0A
-cd /d E:\Project\Master\mi-core
+cd /d D:\Project\Master\mi-core
 
 echo.
 echo  ========================================
@@ -53,7 +53,7 @@ echo [4/5] Starting Mi-Core server on 0.0.0.0:4001...
 set MOBILE_ACCESS=1
 set HOST=0.0.0.0
 set MI_PORT=4001
-set GLOBAL_DIR=E:\Project\Master\.local-agent-global
+set GLOBAL_DIR=D:\Project\Master\.local-agent-global
 
 cd server
 start /B "" cmd /c "node dist\index.js >> ..\logs\mi-core.log 2>&1"
@@ -115,7 +115,7 @@ echo.
 :: Open browser locally
 start "" "http://127.0.0.1:4001/liveboard.html"
 
-echo  Logs: E:\Project\Master\mi-core\logs\
+echo  Logs: D:\Project\Master\mi-core\logs\
 echo  Press Ctrl+C to stop (or close this window)
 echo.
 

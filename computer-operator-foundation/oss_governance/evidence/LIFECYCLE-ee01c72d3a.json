@@ -1,0 +1,18 @@
+{
+  "event_id": "LIFECYCLE-ee01c72d3a",
+  "project_id": "OSS-f413fd2dda",
+  "project_name": "TEST_INTEGRATION",
+  "from_stage": "DISCOVERY",
+  "to_stage": "AUDIT",
+  "approver": "test_runner",
+  "notes": "integration test",
+  "gate": {
+    "requires": [
+      "DISCOVERY"
+    ],
+    "description": "Code quality, dependencies, and licensing audit",
+    "next_action": "Scorecard ROI evaluation"
+  },
+  "ts": 1782452013.6856794,
+  "iso": "2026-06-26T05:33:33.685680+00:00"
+}

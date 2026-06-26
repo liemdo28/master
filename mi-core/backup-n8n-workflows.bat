@@ -6,9 +6,9 @@ REM Usage: backup-n8n-workflows.bat
 setlocal
 
 set N8N_KEY=
-for /f "tokens=2 delims==" %%A in ('findstr "N8N_API_KEY" E:\Project\Master\mi-core\.env') do set N8N_KEY=%%A
+for /f "tokens=2 delims==" %%A in ('findstr "N8N_API_KEY" D:\Project\Master\mi-core\.env') do set N8N_KEY=%%A
 
-set BACKUP_DIR=E:\Project\Master\mi-core\backups\n8n
+set BACKUP_DIR=D:\Project\Master\mi-core\backups\n8n
 set TIMESTAMP=%date:~10,4%-%date:~4,2%-%date:~7,2%T%time:~0,2%%time:~3,2%%time:~6,2%
 set TIMESTAMP=%TIMESTAMP: =0%
 set OUTDIR=%BACKUP_DIR%\%TIMESTAMP%

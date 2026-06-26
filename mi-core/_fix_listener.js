@@ -1,6 +1,6 @@
 // WhatsApp Routing Collision Fix - P0 (precise CRLF version)
 const fs = require('fs');
-const path = 'E:/Project/Master/mi-core/services/whatsapp-ai-gateway/src/whatsapp/message-listener.js';
+const path = 'D:/Project/Master/mi-core/services/whatsapp-ai-gateway/src/whatsapp/message-listener.js';
 
 let content = fs.readFileSync(path, 'utf8');
 const original = content;

@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-7d4aa0db85",
+  "task_name": "Advance OpenHands past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452013.6895208,
+  "created_iso": "2026-06-26T05:33:33.689521+00:00",
+  "updated_at": 1782452013.6895278,
+  "owner": "engineering_lead",
+  "priority": "MEDIUM",
+  "description": "OpenHands has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-fa66897d2a",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452013.689529
+    }
+  ]
+}

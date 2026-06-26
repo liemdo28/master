@@ -11,8 +11,8 @@ import path from 'path';
 import crypto from 'crypto';
 import { upsertEdge, upsertEntity } from '../graph/graph-db';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'health');
 const OPENHUMAN_CACHE = path.join(CACHE_DIR, 'openhuman-normalized.json');
 const HEALTH_CACHE = path.join(CACHE_DIR, 'data.json');

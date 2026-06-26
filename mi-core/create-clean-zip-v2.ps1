@@ -1,4 +1,4 @@
-$SRC = "E:\Project\Master"
+$SRC = "D:\Project\Master"
 $EXPORT_NAME = "MI_COMPANY_OS_SOURCE_AUDIT_V2_$(Get-Date -Format 'yyyyMMdd_HHmm')"
 $EXPORT_DIR = "E:\Project\Exports\$EXPORT_NAME"
 $ZIP_PATH = "E:\Project\Exports\$EXPORT_NAME.zip"

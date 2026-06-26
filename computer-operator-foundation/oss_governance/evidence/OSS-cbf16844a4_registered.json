@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-cbf16844a4",
+  "name": "Browser Use",
+  "github": "https://github.com/browser-use/browser-use",
+  "owner_division": "Operator",
+  "category": "Operator",
+  "description": "Adaptive browser-automation agent",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6644456,
+  "created_iso": "2026-06-26T05:33:33.664455+00:00",
+  "updated_at": 1782452013.6644456,
+  "updated_iso": "2026-06-26T05:33:33.664462+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6644456,
+      "iso": "2026-06-26T05:33:33.664463+00:00"
+    }
+  ]
+}

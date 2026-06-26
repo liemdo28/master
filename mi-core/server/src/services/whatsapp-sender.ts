@@ -12,7 +12,7 @@ import fs from 'fs';
 import path from 'path';
 
 const OUTBOX_PATH = path.join(
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
   'connectors', 'whatsapp', 'outbox.json'
 );
 

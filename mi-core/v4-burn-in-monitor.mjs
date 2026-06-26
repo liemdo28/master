@@ -23,8 +23,8 @@ import http from 'http';
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/mi-core/.local-agent-global';
-const PROJECT_DIR = process.env.PROJECT_DIR || 'E:/Project/Master/mi-core';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/mi-core/.local-agent-global';
+const PROJECT_DIR = process.env.PROJECT_DIR || 'D:/Project/Master/mi-core';
 const LOG_DIR = process.env.PM2_LOG_DIR || 'C:/Users/liemdo/.pm2/logs';
 const TODAY = new Date().toISOString().split('T')[0];
 const NOW_ISO = new Date().toISOString();

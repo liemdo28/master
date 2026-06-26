@@ -9,7 +9,7 @@ import path from 'path';
 import http from 'http';
 import https from 'https';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REMOTE_TOKEN = process.env.MI_REMOTE_TOKEN || 'mi-remote-changeme';
 
 export interface RemoteAgentConfig {

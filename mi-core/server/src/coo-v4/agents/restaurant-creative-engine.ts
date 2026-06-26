@@ -14,9 +14,9 @@ import type { AgentResult } from '../types';
 
 // ── Asset Library ──────────────────────────────────────────────────────────
 
-const BAKUDAN_PHOTO_ROOT = 'E:/Project/Master/Bakudan/bakudanramen.com-current';
-const RAW_PHOTO_ROOT     = 'E:/Project/Master/RawSushi/RawWebsite';
-const OUTPUT_DIR         = 'E:/Project/Master/.local-agent-global/coo-v4/creatives';
+const BAKUDAN_PHOTO_ROOT = 'D:/Project/Master/Bakudan/bakudanramen.com-current';
+const RAW_PHOTO_ROOT     = 'D:/Project/Master/RawSushi/RawWebsite';
+const OUTPUT_DIR         = 'D:/Project/Master/.local-agent-global/coo-v4/creatives';
 
 interface FoodAsset {
   file: string;

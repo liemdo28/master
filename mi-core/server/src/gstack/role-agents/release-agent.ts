@@ -53,7 +53,7 @@ export async function prepareRelease(wo: WorkOrder, qaCleared: boolean): Promise
 
   // Check 3: Build dist exists (mi-core)
   if (target === 'mi-core') {
-    const distPath = 'E:/Project/Master/mi-core/server/dist/index.js';
+    const distPath = 'D:/Project/Master/mi-core/server/dist/index.js';
     try {
       const { existsSync } = await import('fs');
       const exists = existsSync(distPath);

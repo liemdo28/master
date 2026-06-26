@@ -1,0 +1,24 @@
+{
+  "coord_task_id": "FIN-RISK-31f3afbad2",
+  "task_name": "FIN RISK: WAREHOUSE_DOWN",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449473.960447,
+  "created_iso": "2026-06-26T04:51:13.960456+00:00",
+  "updated_at": 1782449473.9604785,
+  "owner": "data_engineering",
+  "priority": "P0",
+  "description": "Financial Warehouse unreachable \u2014 all intelligence blocked",
+  "risk_type": "WAREHOUSE_DOWN",
+  "evidence": {},
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449473.960482
+    }
+  ]
+}

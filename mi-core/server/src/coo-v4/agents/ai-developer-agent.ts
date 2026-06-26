@@ -9,7 +9,7 @@ import fs   from 'fs';
 import path from 'path';
 import type { AgentResult } from '../types';
 
-const PROJECT_ROOT = process.env.MI_PROJECT_ROOT || 'E:/Project/Master';
+const PROJECT_ROOT = process.env.MI_PROJECT_ROOT || 'D:/Project/Master';
 
 // ── Read source ────────────────────────────────────────────────────────────
 

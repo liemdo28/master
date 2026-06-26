@@ -1,0 +1,28 @@
+{
+  "coord_task_id": "FIN-48512dc6d2",
+  "task_name": "Build connector: Google Analytics 4",
+  "objective_id": "OBJ-FIN-DATA-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449671.9203053,
+  "created_iso": "2026-06-26T04:54:31.920306+00:00",
+  "updated_at": 1782449671.9203134,
+  "owner": "data_engineering",
+  "priority": "MEDIUM",
+  "description": "No connector for Google Analytics 4.",
+  "source_signals": [
+    {
+      "source": "ga4",
+      "status": "MISSING"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449671.920314
+    }
+  ]
+}

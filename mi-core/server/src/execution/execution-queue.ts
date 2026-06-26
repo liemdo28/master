@@ -48,7 +48,7 @@ export interface QueueJob {
 
 // ── Storage ────────────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const QUEUE_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'execution-queue');
 
 function ensureDir() {

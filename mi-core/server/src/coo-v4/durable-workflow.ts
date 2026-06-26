@@ -14,7 +14,7 @@ import type { WorkflowState, WorkflowStatus, PlanStep, WorkflowSignal } from './
 
 const GLOBAL_DIR = process.env.MI_CORE_ROOT
   ? path.join(process.env.MI_CORE_ROOT, '.local-agent-global')
-  : 'E:/Project/Master/.local-agent-global';
+  : 'D:/Project/Master/.local-agent-global';
 const DB_DIR  = path.join(GLOBAL_DIR, 'coo-v4');
 const DB_PATH = path.join(DB_DIR, 'workflows.db');
 

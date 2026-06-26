@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { getAuthedClient } from './google-auth';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'google-calendar');
 
 export interface CalendarEvent {

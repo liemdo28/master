@@ -1,0 +1,33 @@
+{
+  "coord_task_id": "FIN-RISK-74935976c2",
+  "task_name": "FIN RISK: GBP_BLOCKED",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782450179.155575,
+  "created_iso": "2026-06-26T05:02:59.155576+00:00",
+  "updated_at": 1782450179.155583,
+  "owner": "data_engineering",
+  "priority": "P2",
+  "description": "Google Business Profile blocked \u2014 review data unavailable",
+  "risk_type": "GBP_BLOCKED",
+  "evidence": {
+    "source": "gbp",
+    "source_name": "Google Business Profile Reviews",
+    "status": "BLOCKED",
+    "age_days": null,
+    "owner": "marketing",
+    "classification": "BLOCKED",
+    "last_seen": null,
+    "expected_cadence": "daily"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782450179.155584
+    }
+  ]
+}

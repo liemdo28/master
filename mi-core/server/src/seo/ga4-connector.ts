@@ -16,7 +16,7 @@ import * as path from 'path';
 import Database from 'better-sqlite3';
 
 // ── Config ──────────────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const TOKEN_PATH = path.join(GLOBAL_DIR, 'visibility', 'google-tokens.json');
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';

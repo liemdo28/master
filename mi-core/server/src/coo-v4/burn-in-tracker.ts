@@ -8,7 +8,7 @@ import Database from 'better-sqlite3';
 import fs   from 'fs';
 import path from 'path';
 
-const GLOBAL = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const DB_PATH = path.join(GLOBAL, 'coo-v4', 'burn-in.db');
 
 // ══════════════════════════════════════════════════════════════════════════

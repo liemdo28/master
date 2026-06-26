@@ -44,7 +44,7 @@ export function seedGraph(): void {
 
   // ── Entities: Repositories ──────────────────────────────────────────────────
 
-  upsertEntity({ id: 'repo:master', name: 'E:/Project/Master', type: 'repository', description: 'Mono-repo: all Mi projects', metadata: { branch: 'main' } });
+  upsertEntity({ id: 'repo:master', name: 'D:/Project/Master', type: 'repository', description: 'Mono-repo: all Mi projects', metadata: { branch: 'main' } });
 
   // ── Edges: Ownership ────────────────────────────────────────────────────────
 

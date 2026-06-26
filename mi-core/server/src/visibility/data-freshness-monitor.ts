@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { connectorRegistry } from './connector-registry';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const MASTER_DIR = path.dirname(GLOBAL_DIR);
 const CORE_LOCAL_DIR = path.join(MASTER_DIR, 'mi-core', '.local-agent-global');
 const REPORT_PATH = path.join(GLOBAL_DIR, 'visibility', 'data-freshness.json');

@@ -1,0 +1,34 @@
+{
+  "evidence_id": "ev-38bfc2df1b",
+  "type": "crawl_summary",
+  "run_id": "run-44db3454fb4a",
+  "task_id": "task-3d508b8642ef",
+  "file_path": null,
+  "content": {
+    "base": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/",
+    "page_count": 3,
+    "pages": [
+      {
+        "seq": 1,
+        "name": "home",
+        "title": "Operator Crawl \u2014 Homepage",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html"
+      },
+      {
+        "seq": 2,
+        "name": "about",
+        "title": "Operator Crawl \u2014 About",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/about.html"
+      },
+      {
+        "seq": 3,
+        "name": "products",
+        "title": "Operator Crawl \u2014 Products",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/products.html"
+      }
+    ]
+  },
+  "description": "Local 3-page crawl summary",
+  "registered_at": 1782449496.1462119,
+  "registered_iso": "2026-06-26T04:51:36Z"
+}

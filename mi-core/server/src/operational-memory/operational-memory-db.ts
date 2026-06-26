@@ -10,7 +10,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const GLOBAL_DIR = path.join(MI_CORE_ROOT, '.local-agent-global');
 const MEM_DIR = path.join(GLOBAL_DIR, 'operational-memory');
 const MEM_DB = path.join(MEM_DIR, 'memory.db');

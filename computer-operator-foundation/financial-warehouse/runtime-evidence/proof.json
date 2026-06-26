@@ -1,0 +1,168 @@
+{
+  "phase": "3A",
+  "title": "Financial Warehouse Runtime Proof",
+  "timestamp": "2026-06-26T04:31:23.465090+00:00",
+  "server_pid": 35760,
+  "port": 5177,
+  "calls": [
+    {
+      "endpoint": "GET /health",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "service": "financial-warehouse-mvp",
+        "ts": "2026-06-26T04:31:23.228739+00:00"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (quickbooks)",
+      "status": 201,
+      "body": {
+        "classification": "STALE",
+        "health": "DEGRADED",
+        "notes": "",
+        "owner": "finance",
+        "registered_at": "2026-06-26T04:31:23.240756+00:00",
+        "source_id": "quickbooks",
+        "source_name": "QuickBooks Desktop"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (accounting_engine)",
+      "status": 201,
+      "body": {
+        "classification": "LIVE",
+        "health": "HEALTHY",
+        "notes": "",
+        "owner": "data_engineering",
+        "registered_at": "2026-06-26T04:31:23.262562+00:00",
+        "source_id": "accounting_engine",
+        "source_name": "Accounting Engine (port 8844)"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (toast)",
+      "status": 201,
+      "body": {
+        "classification": "MISSING",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "operations",
+        "registered_at": "2026-06-26T04:31:23.271169+00:00",
+        "source_id": "toast",
+        "source_name": "Toast POS"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (doordash)",
+      "status": 201,
+      "body": {
+        "classification": "MISSING",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "operations",
+        "registered_at": "2026-06-26T04:31:23.279615+00:00",
+        "source_id": "doordash",
+        "source_name": "DoorDash Merchant"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (payroll)",
+      "status": 201,
+      "body": {
+        "classification": "MISSING",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "hr_finance",
+        "registered_at": "2026-06-26T04:31:23.307760+00:00",
+        "source_id": "payroll",
+        "source_name": "Payroll System"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (ga4)",
+      "status": 201,
+      "body": {
+        "classification": "MISSING",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "marketing",
+        "registered_at": "2026-06-26T04:31:23.339149+00:00",
+        "source_id": "ga4",
+        "source_name": "Google Analytics 4"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (gsc)",
+      "status": 201,
+      "body": {
+        "classification": "MISSING",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "marketing",
+        "registered_at": "2026-06-26T04:31:23.347347+00:00",
+        "source_id": "gsc",
+        "source_name": "Google Search Console"
+      }
+    },
+    {
+      "endpoint": "POST /sources/register (gbp)",
+      "status": 201,
+      "body": {
+        "classification": "BLOCKED",
+        "health": "UNKNOWN",
+        "notes": "",
+        "owner": "marketing",
+        "registered_at": "2026-06-26T04:31:23.356130+00:00",
+        "source_id": "gbp",
+        "source_name": "Google Business Profile Reviews"
+      }
+    },
+    {
+      "endpoint": "GET /sources",
+      "status": 200,
+      "count": 8
+    },
+    {
+      "endpoint": "POST /snapshots/register (accounting_engine)",
+      "status": 201,
+      "body": {
+        "confidence": "MEDIUM",
+        "notes": "Heartbeat snapshot from local probe",
+        "record_count": 1,
+        "snapshot_at": "2026-06-26T04:31:23.410805+00:00",
+        "snapshot_id": "ae-2026-06-26-health",
+        "source_id": "accounting_engine"
+      }
+    },
+    {
+      "endpoint": "POST /snapshots/register (quickbooks)",
+      "status": 201,
+      "body": {
+        "confidence": "LOW",
+        "notes": "Simulated \u2014 no real QB data connected yet",
+        "record_count": 0,
+        "snapshot_at": "2026-06-26T04:31:23.432072+00:00",
+        "snapshot_id": "qb-2026-06-20-daily",
+        "source_id": "quickbooks"
+      }
+    },
+    {
+      "endpoint": "GET /freshness",
+      "status": 200,
+      "count": 8
+    },
+    {
+      "endpoint": "GET /runtime-proof",
+      "status": 200,
+      "body": {
+        "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl",
+        "snapshots": 2,
+        "sources": 8,
+        "status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL",
+        "ts": "2026-06-26T04:31:23.465090+00:00"
+      }
+    }
+  ],
+  "outcome": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL"
+}

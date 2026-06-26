@@ -1,5 +1,5 @@
 param(
-  [string]$GatewayRoot = "E:\Project\Master\whatsapp-ai-gateway",
+  [string]$GatewayRoot = "D:\Project\Master\whatsapp-ai-gateway",
   [string]$DashboardPort = "3211",
   [string]$MiCoreUrl = "http://localhost:4001",
   [string]$MiCoreApiKey = "",

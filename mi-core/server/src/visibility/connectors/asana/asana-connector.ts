@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 const BASE_URL = 'https://app.asana.com/api/1.0';
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'asana');
 
 export interface AsanaTask {

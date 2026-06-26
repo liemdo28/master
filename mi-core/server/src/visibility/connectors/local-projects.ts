@@ -7,8 +7,8 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
-const GLOBAL_DIR  = process.env.GLOBAL_DIR  || 'E:/Project/Master/.local-agent-global';
+const MASTER_ROOT = process.env.MASTER_ROOT || 'D:/Project/Master';
+const GLOBAL_DIR  = process.env.GLOBAL_DIR  || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR   = path.join(GLOBAL_DIR, 'visibility', 'projects');
 
 const SKIP_DIRS = new Set([

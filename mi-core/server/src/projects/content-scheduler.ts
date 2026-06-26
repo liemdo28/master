@@ -9,7 +9,7 @@ import path from 'path';
 import { enqueue } from '../approval/gate';
 import { getWeekContext } from '../intelligence/holiday-engine';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const SCHEDULE_PATH = path.join(GLOBAL_DIR, 'mi-core', 'content-schedule.json');
 
 export type BusinessTarget = 'raw-sushi' | 'bakudan' | 'both';

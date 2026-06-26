@@ -1,0 +1,160 @@
+{
+  "sources": {
+    "quickbooks": {
+      "source_id": "quickbooks",
+      "source_name": "QuickBooks Desktop",
+      "owner": "finance",
+      "classification": "STALE",
+      "health": "DEGRADED",
+      "registered_at": "2026-06-26T04:31:23.240756+00:00",
+      "notes": ""
+    },
+    "accounting_engine": {
+      "source_id": "accounting_engine",
+      "source_name": "Accounting Engine (port 8844)",
+      "owner": "data_engineering",
+      "classification": "LIVE",
+      "health": "HEALTHY",
+      "registered_at": "2026-06-26T04:31:23.262562+00:00",
+      "notes": ""
+    },
+    "toast": {
+      "source_id": "toast",
+      "source_name": "Toast POS",
+      "owner": "operations",
+      "classification": "MISSING",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.271169+00:00",
+      "notes": ""
+    },
+    "doordash": {
+      "source_id": "doordash",
+      "source_name": "DoorDash Merchant",
+      "owner": "operations",
+      "classification": "MISSING",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.279615+00:00",
+      "notes": ""
+    },
+    "payroll": {
+      "source_id": "payroll",
+      "source_name": "Payroll System",
+      "owner": "hr_finance",
+      "classification": "MISSING",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.307760+00:00",
+      "notes": ""
+    },
+    "ga4": {
+      "source_id": "ga4",
+      "source_name": "Google Analytics 4",
+      "owner": "marketing",
+      "classification": "MISSING",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.339149+00:00",
+      "notes": ""
+    },
+    "gsc": {
+      "source_id": "gsc",
+      "source_name": "Google Search Console",
+      "owner": "marketing",
+      "classification": "MISSING",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.347347+00:00",
+      "notes": ""
+    },
+    "gbp": {
+      "source_id": "gbp",
+      "source_name": "Google Business Profile Reviews",
+      "owner": "marketing",
+      "classification": "BLOCKED",
+      "health": "UNKNOWN",
+      "registered_at": "2026-06-26T04:31:23.356130+00:00",
+      "notes": ""
+    }
+  },
+  "snapshots": {
+    "ae-2026-06-26-health": {
+      "source_id": "accounting_engine",
+      "snapshot_id": "ae-2026-06-26-health",
+      "snapshot_at": "2026-06-26T04:31:23.410805+00:00",
+      "record_count": 1,
+      "confidence": "MEDIUM",
+      "notes": "Heartbeat snapshot from local probe"
+    },
+    "qb-2026-06-20-daily": {
+      "source_id": "quickbooks",
+      "snapshot_id": "qb-2026-06-20-daily",
+      "snapshot_at": "2026-06-26T04:31:23.432072+00:00",
+      "record_count": 0,
+      "confidence": "LOW",
+      "notes": "Simulated \u2014 no real QB data connected yet"
+    }
+  },
+  "freshness": {
+    "quickbooks": {
+      "source_id": "quickbooks",
+      "source_name": "QuickBooks Desktop",
+      "last_seen": "2026-06-26T04:31:23.432072+00:00",
+      "age": "PT0S",
+      "health": "LIVE",
+      "status": "LIVE"
+    },
+    "accounting_engine": {
+      "source_id": "accounting_engine",
+      "source_name": "Accounting Engine (port 8844)",
+      "last_seen": "2026-06-26T04:31:23.410805+00:00",
+      "age": "PT0S",
+      "health": "LIVE",
+      "status": "LIVE"
+    },
+    "toast": {
+      "source_id": "toast",
+      "source_name": "Toast POS",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "MISSING"
+    },
+    "doordash": {
+      "source_id": "doordash",
+      "source_name": "DoorDash Merchant",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "MISSING"
+    },
+    "payroll": {
+      "source_id": "payroll",
+      "source_name": "Payroll System",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "MISSING"
+    },
+    "ga4": {
+      "source_id": "ga4",
+      "source_name": "Google Analytics 4",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "MISSING"
+    },
+    "gsc": {
+      "source_id": "gsc",
+      "source_name": "Google Search Console",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "MISSING"
+    },
+    "gbp": {
+      "source_id": "gbp",
+      "source_name": "Google Business Profile Reviews",
+      "last_seen": null,
+      "age": null,
+      "health": "UNKNOWN",
+      "status": "BLOCKED"
+    }
+  }
+}

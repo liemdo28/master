@@ -171,7 +171,7 @@ function contextAwareClarify(text: string, lastTarget: string): string {
       return [
         'Có anh. Link chính em hay dùng:',
         '📊 Dashboard: http://dashboard.bakudanramen.com',
-        '🧭 Workspace/project thì em scan trực tiếp trong E:/Project/Master; anh nêu tên project, em mở đúng nhánh cho anh.',
+        '🧭 Workspace/project thì em scan trực tiếp trong D:/Project/Master; anh nêu tên project, em mở đúng nhánh cho anh.',
       ].join('\n');
     }
     return `Em chưa chắc anh muốn link của *${lastTarget}* hay dashboard tổng. Nếu là dashboard thì đây: http://dashboard.bakudanramen.com`;

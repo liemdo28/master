@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const MASTER_ROOT = process.env.MASTER_ROOT || 'D:/Project/Master';
 
 export interface ProjectHealth {
   name: string;

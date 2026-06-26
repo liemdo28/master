@@ -1,0 +1,384 @@
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:31:23.225773+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:31:23.228739+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "register_source", "payload": {"source_id": "quickbooks", "source_name": "QuickBooks Desktop", "owner": "finance", "classification": "STALE", "health": "DEGRADED", "registered_at": "2026-06-26T04:31:23.240756+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "accounting_engine", "source_name": "Accounting Engine (port 8844)", "owner": "data_engineering", "classification": "LIVE", "health": "HEALTHY", "registered_at": "2026-06-26T04:31:23.262562+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "toast", "source_name": "Toast POS", "owner": "operations", "classification": "MISSING", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.271169+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "doordash", "source_name": "DoorDash Merchant", "owner": "operations", "classification": "MISSING", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.279615+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "payroll", "source_name": "Payroll System", "owner": "hr_finance", "classification": "MISSING", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.307760+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "ga4", "source_name": "Google Analytics 4", "owner": "marketing", "classification": "MISSING", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.339149+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "gsc", "source_name": "Google Search Console", "owner": "marketing", "classification": "MISSING", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.347347+00:00", "notes": ""}}
+{"event": "register_source", "payload": {"source_id": "gbp", "source_name": "Google Business Profile Reviews", "owner": "marketing", "classification": "BLOCKED", "health": "UNKNOWN", "registered_at": "2026-06-26T04:31:23.356130+00:00", "notes": ""}}
+{"event": "list_sources", "count": 8}
+{"event": "register_snapshot", "payload": {"source_id": "accounting_engine", "snapshot_id": "ae-2026-06-26-health", "snapshot_at": "2026-06-26T04:31:23.410805+00:00", "record_count": 1, "confidence": "MEDIUM", "notes": "Heartbeat snapshot from local probe"}}
+{"event": "register_snapshot", "payload": {"source_id": "quickbooks", "snapshot_id": "qb-2026-06-20-daily", "snapshot_at": "2026-06-26T04:31:23.432072+00:00", "record_count": 0, "confidence": "LOW", "notes": "Simulated \u2014 no real QB data connected yet"}}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:31:23.465090+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:46:07.656645+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:11.389532+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:31.587580+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.605762+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.612702+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:31.666982+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.669702+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.698783+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.705404+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:31.835697+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.838888+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:31.866161+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.869197+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:31.926621+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:31.929053+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:33.935134+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:33.966726+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:33.997643+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.036132+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.039221+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.047251+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.062676+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.132682+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.135763+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.157775+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.160164+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.187737+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.312098+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.327532+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.402878+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.420367+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.451945+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.469985+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.570078+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.572014+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T04:54:34.597571+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T04:54:34.599551+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:02:58.666960+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.690514+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.714445+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:02:58.777561+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.794017+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.827182+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.854709+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:02:58.964902+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:58.980864+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:02:59.027238+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:59.030230+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:02:59.138591+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:02:59.151555+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.183048+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.230313+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.261686+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.326604+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.328984+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.337119+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.360706+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.510148+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.525475+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.536954+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.540429+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.610120+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.755979+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.772791+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:01.828275+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.849584+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.880887+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:01.899176+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:02.005983+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:02.021833+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:02.053059+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:02.055754+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:02.180919+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:03:02.183344+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:03:02.212272+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:13:05.309686+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:13:05.325113+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:13:05.372840+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:13:05.404433+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:13:05.532117+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:13:05.546035+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "health", "payload": {"ok": true, "ts": "2026-06-26T05:13:05.592906+00:00", "service": "financial-warehouse-mvp"}}
+{"event": "runtime_proof", "payload": {"status": "FINANCIAL_WAREHOUSE_MVP_OPERATIONAL", "ts": "2026-06-26T05:13:05.607649+00:00", "sources": 8, "snapshots": 2, "evidence_log": "D:\\Project\\computer-operator-foundation\\financial-warehouse\\runtime-evidence\\warehouse.jsonl"}}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}
+{"event": "get_freshness", "count": 8}
+{"event": "list_sources", "count": 8}

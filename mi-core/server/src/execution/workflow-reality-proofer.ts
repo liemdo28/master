@@ -13,7 +13,7 @@ import path from 'path';
 import { getWorkflow, listWorkflows } from './workflow-creation-layer';
 import { getApproval, getPendingApprovals } from './approval-orchestrator';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 

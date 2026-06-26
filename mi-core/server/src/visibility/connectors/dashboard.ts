@@ -9,11 +9,11 @@ import path from 'path';
 const DASHBOARD_PATH_CANDIDATES = [
   process.env.DASHBOARD_PATH,
   process.env.DASHBOARD_ROOT,
-  'E:/Project/Master/Bakudan/dashboard.bakudanramen.com',
-  'E:/Project/Master/dashboard.bakudanramen.com',
+  'D:/Project/Master/Bakudan/dashboard.bakudanramen.com',
+  'D:/Project/Master/dashboard.bakudanramen.com',
 ].filter(Boolean) as string[];
 const DASHBOARD_PATH = DASHBOARD_PATH_CANDIDATES.find(p => fs.existsSync(p)) || DASHBOARD_PATH_CANDIDATES[0];
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'dashboard');
 
 export interface DashboardSnapshot {

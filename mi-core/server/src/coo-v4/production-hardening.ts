@@ -10,7 +10,7 @@
 import fs   from 'fs';
 import path from 'path';
 
-const GLOBAL = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 // ══════════════════════════════════════════════════════════════════════════
 // OpenTelemetry-compatible Trace Exporter
@@ -299,7 +299,7 @@ export function runBurnInCheck(): { score: number; checks: BurnInCheck[]; status
   // 5. QB agent DB
   checks.push((() => {
     try {
-      const p = 'E:/Project/Master/mi-core/data/qb-agent.db';
+      const p = 'D:/Project/Master/mi-core/data/qb-agent.db';
       if (!fs.existsSync(p)) return { name: 'qb_agent_db', ok: false, detail: 'qb-agent.db missing' };
       const db = require('better-sqlite3')(p, { readonly: true });
       const state = db.prepare('SELECT last_sync_status FROM dd_machine_state LIMIT 1').get() as any;

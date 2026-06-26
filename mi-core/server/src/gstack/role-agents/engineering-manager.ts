@@ -33,11 +33,11 @@ export interface EngManagerResult {
 }
 
 const PROJECT_ROOTS: Record<string, string> = {
-  'mi-core': 'E:/Project/Master/mi-core',
-  'dashboard': 'E:/Project/Master/Bakudan',
-  'whatsapp-ai-gateway': 'E:/Project/Master/whatsapp-ai-gateway',
-  'visibility': 'E:/Project/Master/mi-core/.local-agent-global/visibility',
-  'jarvis': 'E:/Project/Master/mi-core/server/src/jarvis',
+  'mi-core': 'D:/Project/Master/mi-core',
+  'dashboard': 'D:/Project/Master/Bakudan',
+  'whatsapp-ai-gateway': 'D:/Project/Master/whatsapp-ai-gateway',
+  'visibility': 'D:/Project/Master/mi-core/.local-agent-global/visibility',
+  'jarvis': 'D:/Project/Master/mi-core/server/src/jarvis',
 };
 
 export async function planTechnicalWork(wo: WorkOrder): Promise<EngManagerResult> {

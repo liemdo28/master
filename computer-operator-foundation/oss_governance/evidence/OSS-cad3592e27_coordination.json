@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-cad3592e27",
+  "task_name": "Advance Prometheus past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452122.8875053,
+  "created_iso": "2026-06-26T05:35:22.887507+00:00",
+  "updated_at": 1782452122.8875163,
+  "owner": "it_lead",
+  "priority": "MEDIUM",
+  "description": "Prometheus has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-d51b5b2030",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452122.8875172
+    }
+  ]
+}

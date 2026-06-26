@@ -8,7 +8,7 @@ import path from 'path';
 import Database from 'better-sqlite3';
 
 const DB_PATH = path.join(
-  process.env.DATA_ROOT || 'E:/Project/Master/.local-agent-global',
+  process.env.DATA_ROOT || 'D:/Project/Master/.local-agent-global',
   'company-os', 'evidence.db'
 );
 

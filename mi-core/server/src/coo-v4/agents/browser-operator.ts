@@ -118,7 +118,7 @@ export async function login(url: string, username: string, password: string): Pr
 export async function screenshot(url: string): Promise<AgentResult> {
   const t0 = Date.now();
   try {
-    const outPath = `E:/Project/Master/.local-agent-global/coo-v4/screenshots/ss_${Date.now()}.png`;
+    const outPath = `D:/Project/Master/.local-agent-global/coo-v4/screenshots/ss_${Date.now()}.png`;
     const { mkdirSync } = require('fs');
     mkdirSync(require('path').dirname(outPath), { recursive: true });
     const result = await withBrowser(async (_b, page) => {

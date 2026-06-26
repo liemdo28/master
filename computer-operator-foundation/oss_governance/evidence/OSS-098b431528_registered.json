@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-098b431528",
+  "name": "OpenObserve",
+  "github": "https://github.com/openobserve/openobserve",
+  "owner_division": "IT",
+  "category": "IT",
+  "description": "Cloud-native observability",
+  "license": "AGPL-3.0",
+  "license_risk": "HIGH",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.0587738,
+  "created_iso": "2026-06-26T05:31:38.058776+00:00",
+  "updated_at": 1782451898.0587738,
+  "updated_iso": "2026-06-26T05:31:38.058783+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0587738,
+      "iso": "2026-06-26T05:31:38.058784+00:00"
+    }
+  ]
+}

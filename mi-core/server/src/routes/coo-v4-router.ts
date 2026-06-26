@@ -210,7 +210,7 @@ cooV4Router.get('/burnin', (_req: Request, res: Response) => {
   try {
     const fs   = require('fs');
     const path = require('path');
-    const GLOBAL = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+    const GLOBAL = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
     const DB_PATH = path.join(GLOBAL, 'coo-v4', 'burn-in.db');
     const METRICS_DIR = path.join(GLOBAL, 'coo-v4', 'metrics');
 

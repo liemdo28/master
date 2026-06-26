@@ -240,5 +240,5 @@ P1:
   1. Implement M6-M10 in v4-burn-in-monitor.mjs
   2. Log raw CEO WhatsApp messages to ledger
 '@
-[System.IO.File]::AppendAllText("E:\Project\Master\mi-core\EVIDENCE_LOCKDOWN_AUDIT_REPORT.md", $content)
+[System.IO.File]::AppendAllText("D:\Project\Master\mi-core\EVIDENCE_LOCKDOWN_AUDIT_REPORT.md", $content)
 Write-Host "Appended successfully"

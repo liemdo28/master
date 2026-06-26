@@ -40,7 +40,7 @@ export interface EngineeringTask {
 
 // ── DB Init ───────────────────────────────────────────────────────────────────
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const ENG_DIR    = path.join(GLOBAL_DIR, 'engineering');
 if (!fs.existsSync(ENG_DIR)) fs.mkdirSync(ENG_DIR, { recursive: true });
 

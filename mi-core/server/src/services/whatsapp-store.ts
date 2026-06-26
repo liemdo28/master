@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 
 // ── Paths ───────────────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const WA_DIR = path.join(GLOBAL_DIR, 'connectors', 'whatsapp');
 
 const MESSAGES_PATH    = path.join(WA_DIR, 'messages.json');

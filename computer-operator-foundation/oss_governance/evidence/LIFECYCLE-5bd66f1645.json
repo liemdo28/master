@@ -1,0 +1,18 @@
+{
+  "event_id": "LIFECYCLE-5bd66f1645",
+  "project_id": "OSS-0304cb9249",
+  "project_name": "Qwen Coder",
+  "from_stage": "DISCOVERY",
+  "to_stage": "AUDIT",
+  "approver": "runtime_proof",
+  "notes": "proof runner",
+  "gate": {
+    "requires": [
+      "DISCOVERY"
+    ],
+    "description": "Code quality, dependencies, and licensing audit",
+    "next_action": "Scorecard ROI evaluation"
+  },
+  "ts": 1782452013.6814184,
+  "iso": "2026-06-26T05:33:33.681419+00:00"
+}

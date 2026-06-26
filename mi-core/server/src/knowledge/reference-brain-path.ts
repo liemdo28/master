@@ -25,7 +25,7 @@ export function getMiCoreRoot(): string {
   return path.resolve(__dirname, '..', '..', '..');
 }
 
-/** Parent workspace root (E:/Project/Master) */
+/** Parent workspace root (D:/Project/Master) */
 export function getWorkspaceRoot(): string {
   return process.env.MASTER_ROOT || path.resolve(getMiCoreRoot(), '..');
 }

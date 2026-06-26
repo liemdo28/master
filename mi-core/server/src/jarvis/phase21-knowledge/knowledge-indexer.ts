@@ -30,7 +30,7 @@ export interface KnowledgeCatalog {
 
 const CATALOG_PATH = path.join(process.env.APPDATA || 'C:/Users/liemdo/AppData/Roaming', '../Local/mi-core/knowledge-catalog.json');
 const DEFAULT_INDEX_ROOTS = [
-  'E:/Project/Master',
+  'D:/Project/Master',
   'D:/',
   'F:/',
   'G:/My Drive',

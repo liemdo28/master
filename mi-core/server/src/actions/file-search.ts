@@ -7,7 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const MASTER_ROOT = process.env.MASTER_ROOT || 'D:/Project/Master';
 
 const BLOCKED = [
   /\.env$/i, /\.env\./i, /private[_-]?key/i, /id_rsa/i, /\.pem$/i,

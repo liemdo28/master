@@ -7,7 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const GLOBAL_DIR   = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR   = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const EVIDENCE_DIR = path.join(GLOBAL_DIR, 'engineering', 'evidence');
 if (!fs.existsSync(EVIDENCE_DIR)) fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
 

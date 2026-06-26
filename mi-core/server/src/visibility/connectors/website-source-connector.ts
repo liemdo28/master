@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const VISIBILITY_WEBSITE_DIR = path.join(GLOBAL_DIR, 'visibility', 'websites');
 
 export interface WebsiteSourceConfig {
@@ -54,7 +54,7 @@ const WEBSITE_CONFIGS: WebsiteSourceConfig[] = [
     connector_id: 'website-bakudan',
     key: 'bakudan',
     website: 'bakudanramen.com',
-    local_source_path: process.env.BAKUDAN_WEBSITE_ROOT || 'E:/Project/Master/Bakudan/bakudanramen.com-current',
+    local_source_path: process.env.BAKUDAN_WEBSITE_ROOT || 'D:/Project/Master/Bakudan/bakudanramen.com-current',
     production_domain: 'https://bakudanramen.com',
     owner: 'Dev2 / Bakudan Web',
   },
@@ -62,7 +62,7 @@ const WEBSITE_CONFIGS: WebsiteSourceConfig[] = [
     connector_id: 'website-raw',
     key: 'raw',
     website: 'rawsushibar.com',
-    local_source_path: process.env.RAW_WEBSITE_ROOT || 'E:/Project/Master/RawSushi/RawWebsite',
+    local_source_path: process.env.RAW_WEBSITE_ROOT || 'D:/Project/Master/RawSushi/RawWebsite',
     production_domain: 'https://rawsushibar.com',
     owner: 'Dev2 / Raw Sushi Web',
   },

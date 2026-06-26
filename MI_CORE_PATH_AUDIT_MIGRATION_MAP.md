@@ -1,30 +1,42 @@
 # Mi-Core Path Audit & Migration Map
 
-Date: 2026-06-24
+Date: 2026-06-26
 
 ## Scope
 
-Checked whether these paths are misplaced parts of `E:\Project\Master\mi-core`:
+Checked and fixed the path confusion from the current Windows workspace:
 
-- `E:\Project\Mi`
-- `E:\Project\Master\Mi`
-- `E:\Project\Master\node_modules`
-- `E:\Project\Master\artifact-registry`
+- `D:\Project\Exports`
+- `D:\Project\computer-operator-foundation`
+- `D:\Project\Mi`
+- `D:\Project\node_modules`
+- `D:\Project\zip mi-core`
+- Root-level `D:\Project\package*.json`, `ECC-main.zip`, `COMPANY_OS_AUDIT_GAP_REPORT.md`, and `phase33-ga4-env-update.js`
 
 ## Result summary
 
-| Path | Physical child of mi-core? | Functional relationship | Recommendation |
-|---|---:|---|---|
-| `E:\Project\Mi` | No | Partial n8n runtime data only | Compare data before deleting |
-| `E:\Project\Master\Mi` | No | Strong Mi-Core relationship via `Mi\n8n` | Treat as externalized Mi-Core automation module |
-| `E:\Project\Master\node_modules` | No | Belongs to `E:\Project\Master\package.json` | Do not merge with `mi-core\node_modules` |
-| `E:\Project\Master\artifact-registry` | No | Runtime logs/pid; no direct Mi-Core reference found | Keep until owner process is identified |
+Canonical rules:
+
+- Mi-Core lives at `D:\Project\Master\mi-core`.
+- Mi manages projects under `D:\Project\Master`.
+- `D:\Project\Master\Mi\n8n` is the canonical externalized Mi automation fabric.
+- Laptop nodes are managed by Mi as external devices; `D:\Project\laptop1` remains a separate laptop repo, and laptop2 is a managed standby/setup target.
+
+| Original path | Action | Canonical/result path |
+|---|---|---|
+| `D:\Project\Mi` | Compared with canonical n8n; copied unique data files; archived duplicate | `D:\Project\Master\Mi\n8n`, archive copy at `_archive\root-path-fix-20260626\Mi-root-duplicate` |
+| `D:\Project\computer-operator-foundation` | Moved into Master so Mi can manage it | `D:\Project\Master\computer-operator-foundation` |
+| `D:\Project\Exports` | Archived under Master without tracking large exports | `D:\Project\Master\_archive\root-path-fix-20260626\Exports` |
+| `D:\Project\zip mi-core` | Archived under Master | `D:\Project\Master\_archive\root-path-fix-20260626\zip mi-core` |
+| `D:\Project\node_modules`, root `package*.json` | Archived as root npm misfire | `D:\Project\Master\_archive\root-path-fix-20260626\root-*` |
+| `D:\Project\COMPANY_OS_AUDIT_GAP_REPORT.md` | Moved into Mi-Core reports/source area | `D:\Project\Master\mi-core\COMPANY_OS_AUDIT_GAP_REPORT.md` |
+| `D:\Project\phase33-ga4-env-update.js` | Moved into Mi-Core scripts | `D:\Project\Master\mi-core\scripts\phase33-ga4-env-update.js` |
 
 ## Evidence
 
-PowerShell confirmed the four suspect paths exist, but none is physically under `E:\Project\Master\mi-core`. They are normal directories, not symlink or junction redirects.
+PowerShell confirmed the suspect root paths existed under `D:\Project`, causing the File Explorer confusion shown in the screenshot.
 
-`E:\Project\Master\Mi\n8n` is related to Mi-Core because it contains:
+`D:\Project\Master\Mi\n8n` is related to Mi-Core because it contains:
 
 - `N8N_MI_CORE_CONTRACT.md`
 - `N8N_ARCHITECTURE_AUDIT.md`
@@ -33,7 +45,7 @@ PowerShell confirmed the four suspect paths exist, but none is physically under 
 
 The old/internal Mi-Core n8n path still exists:
 
-- `E:\Project\Master\mi-core\services\n8n-execution-bus`
+- `D:\Project\Master\mi-core\services\n8n-execution-bus`
 
 That old path contains launcher/execution-bus files:
 
@@ -43,24 +55,18 @@ That old path contains launcher/execution-bus files:
 - `n8n-launch.log`
 - `workflows\workflow-registry.json`
 
-The architecture audit says the old scope was `E:\Project\Master\mi-core\services\n8n-execution-bus\` and the target upgraded path was `Project/Master/Mi/n8n/`. Therefore `E:\Project\Master\Mi\n8n` appears to be the newer/externalized n8n automation fabric for Mi-Core.
+The architecture audit says the old scope was `D:\Project\Master\mi-core\services\n8n-execution-bus\` and the target upgraded path was `Project/Master/Mi/n8n/`. Therefore `D:\Project\Master\Mi\n8n` is the newer externalized n8n automation fabric for Mi-Core.
 
-## Migration recommendation
+## Verification
 
-Do not move/delete automatically.
+- `D:\Project` now contains only `.pytest_cache`, `laptop1`, `Master`, and `Personal`.
+- `D:\Project\Mi\n8n\data` had only three files not present in canonical n8n: `approvals.jsonl`, `decisions.jsonl`, and `tasks.jsonl`. Those were copied into `D:\Project\Master\Mi\n8n\data`.
+- Runtime/source defaults that still pointed at `E:\Project\Master` were updated to `D:\Project\Master` in Mi-Core source/config files.
 
-Safe order if you want consolidation later:
+## Remaining policy
 
-1. Backup `E:\Project\Mi`, `E:\Project\Master\Mi`, `E:\Project\Master\artifact-registry`, and relevant Mi-Core service folders.
-2. Check PM2/runtime config for active `mi-core` and `mi-n8n` paths.
-3. Compare `E:\Project\Mi\n8n\data` with `E:\Project\Master\Mi\n8n\data`.
-4. Pick one canonical n8n data root.
-5. Update scripts/config/PM2 references.
-6. Verify Mi-Core port `4001` and n8n checks.
-7. Archive stale duplicate folders only after no active writes are detected.
+Do not create new project folders directly under `D:\Project` except external laptop repos such as `D:\Project\laptop1`. New Mi-managed projects should be created under `D:\Project\Master`, and large exports should go under ignored archive/export areas.
 
 ## Final conclusion
 
-Your suspicion is valid: `E:\Project\Master\Mi\n8n` is functionally tied to Mi-Core and likely came from or replaced the old `E:\Project\Master\mi-core\services\n8n-execution-bus` service.
-
-However, the original four paths are not physically inside `E:\Project\Master\mi-core` today. The safest interpretation is: keep `Master\Mi\n8n` as an externalized Mi-Core module, verify duplicate data under `E:\Project\Mi\n8n`, and avoid moving/deleting anything until active runtime paths are confirmed.
+Your suspicion was correct: several root-level paths were created at the wrong layer. The corrected model is now `D:\Project\Master\mi-core` for Mi-Core, `D:\Project\Master` for Mi-managed projects, and laptop1/laptop2 as managed external nodes.

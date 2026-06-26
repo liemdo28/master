@@ -1,0 +1,99 @@
+{
+  "run_id": "run-d31b365fad39",
+  "task_id": "task-719d91be13e7",
+  "objective_id": "obj-76e396e3",
+  "adapter": "playwright-chromium",
+  "mode": "sandbox",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+  "start_time": 1782449489.7312841,
+  "start_iso": "2026-06-26T04:51:29Z",
+  "end_time": 1782449490.5206687,
+  "end_iso": "2026-06-26T04:51:30Z",
+  "duration_ms": 789.4,
+  "action_count": 8,
+  "success": true,
+  "errors": [],
+  "screenshots": [
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo2_form_before.png",
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo2_form_after.png"
+  ],
+  "downloads": [],
+  "evidence_ids": [
+    "ev-28b0c214f2",
+    "ev-b80e1bd3a5",
+    "ev-4503b4037f"
+  ],
+  "policy_decision": {
+    "ok": true,
+    "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+    "classification": "SAFE",
+    "status": "APPROVED"
+  },
+  "status": "COMPLETED",
+  "actions": [
+    {
+      "seq": 1,
+      "type": "open_local_form",
+      "detail": "goto file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.2433562
+    },
+    {
+      "seq": 2,
+      "type": "capture_before_screenshot",
+      "detail": "save demo2_form_before.png",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.254464
+    },
+    {
+      "seq": 3,
+      "type": "fill_name",
+      "detail": "fill #name = 'Operator Demo User'",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.342664
+    },
+    {
+      "seq": 4,
+      "type": "fill_email",
+      "detail": "fill #email = 'demo@operator-runtime.local'",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.3563502
+    },
+    {
+      "seq": 5,
+      "type": "fill_message",
+      "detail": "fill #message",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.365014
+    },
+    {
+      "seq": 6,
+      "type": "submit_test_form",
+      "detail": "click #submitBtn",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.372135
+    },
+    {
+      "seq": 7,
+      "type": "capture_after_screenshot",
+      "detail": "save demo2_form_after.png",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.4209673
+    },
+    {
+      "seq": 8,
+      "type": "done",
+      "detail": "demo2 completed",
+      "success": true,
+      "error": null,
+      "timestamp": 1782449490.5206652
+    }
+  ]
+}

@@ -10,8 +10,8 @@ import { connectorRegistry } from '../visibility/connector-registry';
 import { buildSnapshot } from '../task-intelligence/task-data-collector';
 import { answerOperationalQuestion } from '../bigdata/ceo-query-service';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
-const MASTER_GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
+const MASTER_GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CORE_GLOBAL_DIR = path.join(MI_CORE_ROOT, '.local-agent-global');
 
 type Verdict = 'PASS' | 'FAIL';

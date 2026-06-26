@@ -1,0 +1,32 @@
+{
+  "project_id": "OSS-dcde61f7fa",
+  "name": "TEST_INTEGRATION",
+  "github": "https://github.com/test/integration",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Integration test project",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "AUDIT",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.0665514,
+  "created_iso": "2026-06-26T05:31:38.066553+00:00",
+  "updated_at": 1782451898.067345,
+  "updated_iso": "2026-06-26T05:31:38.067346+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0665514,
+      "iso": "2026-06-26T05:31:38.066556+00:00"
+    },
+    {
+      "stage": "AUDIT",
+      "timestamp": 1782451898.067345,
+      "iso": "2026-06-26T05:31:38.067353+00:00"
+    }
+  ]
+}

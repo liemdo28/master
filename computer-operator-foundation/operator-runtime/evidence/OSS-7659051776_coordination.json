@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-7659051776",
+  "task_name": "Advance Plausible past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452014.2942932,
+  "created_iso": "2026-06-26T05:33:34.294294+00:00",
+  "updated_at": 1782452014.2943017,
+  "owner": "marketing_lead",
+  "priority": "MEDIUM",
+  "description": "Plausible has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-d7e41942dd",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452014.2943025
+    }
+  ]
+}

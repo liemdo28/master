@@ -75,12 +75,12 @@ const BLOCKED_PATH_PATTERNS = [
 
 // Approved root directories for file search
 export const APPROVED_ROOTS = [
-  'E:/Project/Master',
+  'D:/Project/Master',
   'E:/Project',
   'F:/Projects',
   'F:/',
   'G:/My Drive',
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
 ];
 
 const APPROVED_ROOT_SET = new Set(APPROVED_ROOTS);

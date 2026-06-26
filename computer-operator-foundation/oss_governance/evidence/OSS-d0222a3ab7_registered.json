@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-d0222a3ab7",
+  "name": "Skyvern",
+  "github": "https://github.com/Skyvern-AI/skyvern",
+  "owner_division": "Operator",
+  "category": "Operator",
+  "description": "LLM-driven browser automation",
+  "license": "AGPL-3.0",
+  "license_risk": "HIGH",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8437436,
+  "created_iso": "2026-06-26T05:35:22.843748+00:00",
+  "updated_at": 1782452122.8437436,
+  "updated_iso": "2026-06-26T05:35:22.843759+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8437436,
+      "iso": "2026-06-26T05:35:22.843763+00:00"
+    }
+  ]
+}

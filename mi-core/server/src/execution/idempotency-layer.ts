@@ -25,7 +25,7 @@ export interface IdempotencyRecord {
 
 // ── Storage ────────────────────────────────────────────────────────────────
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const IDEMP_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'idempotency');
 const TIME_WINDOW_MS = 2 * 60 * 1000; // 2 minutes
 

@@ -8,7 +8,7 @@ import { getModelsForRole, ModelRole, updateModelHealth } from './model-registry
 import { appendFileSync, mkdirSync, existsSync } from 'fs';
 import path from 'path';
 
-const LOG_DIR = path.join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'models');
+const LOG_DIR = path.join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'models');
 const LOG_PATH = path.join(LOG_DIR, 'routing-log.jsonl');
 
 function logRouting(entry: Record<string, unknown>) {

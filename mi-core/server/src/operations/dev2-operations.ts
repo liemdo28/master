@@ -16,7 +16,7 @@ import { queueState } from '../chat/chat-queue';
 import { getModelStatus } from '../model-router/ollama-router';
 
 const MI_CORE_ROOT = process.env.MI_CORE_ROOT || path.resolve(__dirname, '../../..');
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const OPS_DIR = path.join(GLOBAL_DIR, 'operations');
 const REPORT_DIR = path.join(MI_CORE_ROOT, 'reports');
 const RUNTIME_HISTORY_PATH = path.join(OPS_DIR, 'runtime-history.json');

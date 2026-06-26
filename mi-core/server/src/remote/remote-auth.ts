@@ -10,7 +10,7 @@ import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 
 // ── Paths ───────────────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REMOTE_DIR = path.join(GLOBAL_DIR, 'remote-access');
 const CONFIG_PATH   = path.join(REMOTE_DIR, 'config.json');
 const DEVICES_PATH  = path.join(REMOTE_DIR, 'trusted_devices.json');

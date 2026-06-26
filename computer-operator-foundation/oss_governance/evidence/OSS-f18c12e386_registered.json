@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-f18c12e386",
+  "name": "Fooocus",
+  "github": "https://github.com/lllyasviel/Fooocus",
+  "owner_division": "Creative",
+  "category": "Creative",
+  "description": "Image generation UI",
+  "license": "GPL-3.0",
+  "license_risk": "MEDIUM",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6788168,
+  "created_iso": "2026-06-26T05:33:33.678819+00:00",
+  "updated_at": 1782452013.6788168,
+  "updated_iso": "2026-06-26T05:33:33.678825+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6788168,
+      "iso": "2026-06-26T05:33:33.678826+00:00"
+    }
+  ]
+}

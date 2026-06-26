@@ -1,0 +1,38 @@
+{
+  "coord_task_id": "coord-585089b3e1",
+  "task_name": "Demo3-SafeDownload",
+  "objective_id": "obj-da9f91b0",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/download-test.html",
+  "approval_level": "READ_ONLY",
+  "operator_type": "web",
+  "state": "DONE",
+  "created_at": 1782448816.9271832,
+  "updated_at": 1782448817.9606228,
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782448816.9271834
+    },
+    {
+      "state": "DISPATCHED",
+      "timestamp": 1782448816.927187
+    },
+    {
+      "state": "IN_PROGRESS",
+      "timestamp": 1782448816.9271889
+    },
+    {
+      "state": "DONE",
+      "timestamp": 1782448817.9606242
+    }
+  ],
+  "evidence_ids": [
+    "ev-beb349c1a6",
+    "ev-0740d5b8a5",
+    "ev-33e0976028"
+  ],
+  "run_ids": [
+    "run-342eb698c425"
+  ],
+  "error": null
+}

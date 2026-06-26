@@ -12,7 +12,7 @@ import {
 } from './burn-in-tracker';
 import { detectFlowGaps, runBurnInCheck } from './production-hardening';
 
-const GLOBAL      = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL      = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const METRICS_DIR = path.join(GLOBAL, 'coo-v4', 'metrics');
 
 export interface DailyMetricsSnapshot {

@@ -16,7 +16,7 @@ const STATE_DIR = path.join(ROOT, '.local-agent-global', 'knowledge-universe');
 const CATALOG_PATH = path.join(process.env.LOCALAPPDATA || 'C:/Users/liemdo/AppData/Local', 'mi-core', 'knowledge-catalog.json');
 const START = Date.now();
 
-const ROOTS = (process.env.KNOWLEDGE_SOURCE_ROOTS || 'E:/Project/Master;D:/;F:/;G:/My Drive')
+const ROOTS = (process.env.KNOWLEDGE_SOURCE_ROOTS || 'D:/Project/Master;D:/;F:/;G:/My Drive')
   .split(/[;,]/)
   .map(s => s.trim())
   .filter(Boolean);
@@ -75,7 +75,7 @@ function normPath(p) {
 
 function rootLabel(filePath) {
   const n = normPath(filePath).toLowerCase();
-  if (n.startsWith('e:/project/master')) return 'E:/Project/Master';
+  if (n.startsWith('e:/project/master')) return 'D:/Project/Master';
   if (n.startsWith('e:/')) return 'E:/';
   if (n.startsWith('d:/')) return 'D:/';
   if (n.startsWith('f:/')) return 'F:/';

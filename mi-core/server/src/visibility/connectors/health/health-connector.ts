@@ -4,7 +4,7 @@
  * Supports folder-based JSON/CSV/XML ingestion from:
  * - HUAWEI_HEALTH_EXPORT_PATH / HEALTH_EXPORT_PATH
  * - E:/Health/Huawei
- * - E:/Project/Master/.local-agent-global/visibility/health/export
+ * - D:/Project/Master/.local-agent-global/visibility/health/export
  * - iCloud HealthExports fallback
  *
  * No mock data. If no real export/cache exists, sync returns not_configured.
@@ -13,7 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CACHE_DIR = path.join(GLOBAL_DIR, 'visibility', 'health');
 const DEFAULT_EXPORT_DIR = 'E:/Health/Huawei';
 const DISCLAIMER = 'Mi chỉ tóm tắt dữ liệu sức khỏe. Không phải tư vấn y tế. Anh nên tham khảo bác sĩ cho mọi vấn đề sức khỏe.';

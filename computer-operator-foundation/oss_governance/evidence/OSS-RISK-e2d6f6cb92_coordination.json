@@ -1,0 +1,27 @@
+{
+  "coord_task_id": "OSS-RISK-e2d6f6cb92",
+  "task_name": "OSS RISK: HIGH_LICENSE_RISK",
+  "objective_id": "OBJ-OSS-RISK",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452014.3031666,
+  "created_iso": "2026-06-26T05:33:34.303167+00:00",
+  "updated_at": 1782452014.3031738,
+  "owner": "engineering_lead",
+  "priority": "P1",
+  "description": "Grafana uses AGPL-3.0 license (HIGH risk)",
+  "risk_type": "HIGH_LICENSE_RISK",
+  "evidence": {
+    "license": "AGPL-3.0",
+    "owner_division": "IT"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452014.3031747
+    }
+  ]
+}

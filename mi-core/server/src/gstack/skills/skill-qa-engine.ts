@@ -9,7 +9,7 @@ import path from 'path';
 import { getSkillHistory, getReliabilityScore } from './skill-reliability-tracker';
 import type { SkillExecutionRecord } from './agent-skill-schema';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const SKILLS_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/skills');
 const QA_FILE = path.join(SKILLS_DIR, 'qa-evaluations.json');
 

@@ -205,7 +205,7 @@ export async function approveVoiceNote(
   if (recipient) {
     // Find the audio file from evidence
     const evidenceDir = path.join(
-      process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+      process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
       'voice', 'evidence'
     );
     const evidenceFiles = fs.readdirSync(evidenceDir).filter(f => f.endsWith('.json'));

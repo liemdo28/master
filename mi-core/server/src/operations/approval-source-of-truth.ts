@@ -61,7 +61,7 @@ export interface ApprovalTruth {
 
 // ── Paths ──────────────────────────────────────────────────────────────────
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const AUDIT_LOG_PATH = path.join(GLOBAL_DIR, 'action-audit', 'action_log.json');
 
 // ── Public API ─────────────────────────────────────────────────────────────

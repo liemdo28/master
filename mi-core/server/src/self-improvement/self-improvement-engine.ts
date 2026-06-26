@@ -7,7 +7,7 @@
 import path from 'path';
 
 const MEM_DB = path.join(
-  process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core',
+  process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core',
   '.local-agent-global/operational-memory/memory.db'
 );
 

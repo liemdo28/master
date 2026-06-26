@@ -10,7 +10,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const LEDGER_FILE = path.join(MI_CORE_ROOT, '.local-agent-global', 'execution-ledger', 'ledger.jsonl');
 const TELEMETRY_FILE = path.join(MI_CORE_ROOT, '.local-agent-global', 'execution-ledger', 'telemetry.jsonl');
 

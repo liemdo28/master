@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-aac47ac598",
+  "name": "Kimi",
+  "github": "https://github.com/Anthropic/Kimi-K2",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Long-context LLM with strong coding benchmarks",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8365936,
+  "created_iso": "2026-06-26T05:35:22.836597+00:00",
+  "updated_at": 1782452122.8365936,
+  "updated_iso": "2026-06-26T05:35:22.836610+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8365936,
+      "iso": "2026-06-26T05:35:22.836613+00:00"
+    }
+  ]
+}

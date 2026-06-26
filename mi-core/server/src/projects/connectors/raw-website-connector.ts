@@ -1,14 +1,14 @@
 /**
  * Raw Sushi Website Connector (rawsushibar.com)
- * Astro.js site at E:/Project/Master/RawSushi/RawWebsite
+ * Astro.js site at D:/Project/Master/RawSushi/RawWebsite
  */
 
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-const RAW_ROOT  = process.env.RAW_WEBSITE_ROOT || 'E:/Project/Master/RawSushi/RawWebsite';
-const CACHE_DIR = path.join(process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'raw-website');
+const RAW_ROOT  = process.env.RAW_WEBSITE_ROOT || 'D:/Project/Master/RawSushi/RawWebsite';
+const CACHE_DIR = path.join(process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global', 'mi-core', 'connectors', 'raw-website');
 
 export interface PageInfo {
   slug: string;

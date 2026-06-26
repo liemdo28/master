@@ -12,7 +12,7 @@ import { getCachedWebsiteSource } from '../visibility/connectors/website-source-
 import { buildSnapshot as buildOperationalSnapshot, OperationalSnapshot } from '../task-intelligence/task-data-collector';
 import { getPending } from '../approval/gate';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 export type ExecutiveOwner = 'Dev1' | 'Dev2' | 'Dev3';
 export type ExecutiveIntentLabel =

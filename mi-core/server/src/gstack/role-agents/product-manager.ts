@@ -15,7 +15,7 @@ import { AuditResult } from './auditor-agent';
 import { logAction } from '../execution-ledger';
 
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const REPORTS_DIR = path.join(MI_CORE_ROOT, 'reports/gstack');
 
 export interface PmResult {

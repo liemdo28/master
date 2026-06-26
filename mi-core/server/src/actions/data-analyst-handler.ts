@@ -7,7 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const DATA_DIR = path.join(GLOBAL_DIR, 'data-analyst');
 const CATALOG_FILE = path.join(DATA_DIR, 'dataset_catalog.json');
 const LAST_ANALYSIS_FILE = path.join(DATA_DIR, 'last_analysis.json');
@@ -79,7 +79,7 @@ export function handleDataAnalystMessage(message: string): string | null {
 }
 
 function buildFileFindInstructions(): string {
-  const searchRoot = 'E:/Project/Master';
+  const searchRoot = 'D:/Project/Master';
   const common = [
     `${searchRoot}/Raw/sales/`,
     `${searchRoot}/Bakudan/revenue/`,

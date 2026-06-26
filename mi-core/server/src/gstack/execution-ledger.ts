@@ -9,7 +9,7 @@ import path from 'path';
 
 
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const LEDGER_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/execution-ledger');
 const LEDGER_FILE = path.join(LEDGER_DIR, 'ledger.jsonl');
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB rotate

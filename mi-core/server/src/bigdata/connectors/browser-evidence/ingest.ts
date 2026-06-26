@@ -7,7 +7,7 @@ import { ingestJson, ingestFile } from '../../ingestion-service';
 import fs from 'fs';
 import path from 'path';
 
-const EVIDENCE_DIR = process.env.BROWSER_EVIDENCE_DIR || 'E:/Project/Master/mi-core/.local-agent-global/browser-evidence';
+const EVIDENCE_DIR = process.env.BROWSER_EVIDENCE_DIR || 'D:/Project/Master/mi-core/.local-agent-global/browser-evidence';
 const SOURCE_NAME  = 'browser-evidence';
 
 export async function ingestBrowserSession(sessionDir: string): Promise<void> {

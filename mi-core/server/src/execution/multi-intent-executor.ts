@@ -59,7 +59,7 @@ export interface ExecuteMultiIntentOptions {
   parentTrackingId?: string;
 }
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const TRACE_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'workflows', 'multi-intent');
 
 function ensureTraceDir() {

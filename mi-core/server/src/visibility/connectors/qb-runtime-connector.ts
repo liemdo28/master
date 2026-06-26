@@ -3,8 +3,8 @@ import path from 'path';
 import crypto from 'crypto';
 import Database from 'better-sqlite3';
 
-const MI_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const MI_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const DD_DB_PATH = process.env.QB_DB_PATH || path.join(MI_ROOT, 'data', 'qb-agent.db');
 const AGENT_DB_PATH = process.env.MI_DATA_DIR
   ? path.join(process.env.MI_DATA_DIR, 'qb-agent.db')

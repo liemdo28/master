@@ -11,7 +11,7 @@ import { getReliabilityScore } from './skill-reliability-tracker';
 import { getCertification, certifySkill, type CertificationLevel } from './skill-certification';
 import { getFailureReport, analyzeSkillFailures } from './skill-failure-analysis';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
 const SKILLS_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/skills');
 const TRUST_FILE = path.join(SKILLS_DIR, 'trust-scores.json');
 

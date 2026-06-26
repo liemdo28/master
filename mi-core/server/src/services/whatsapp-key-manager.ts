@@ -11,7 +11,7 @@ import path from 'path';
 import crypto from 'crypto';
 
 // ── Paths ───────────────────────────────────────────────────────────────────
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CONFIG_DIR = path.join(GLOBAL_DIR, 'mi-core');
 const CONFIG_PATH = path.join(CONFIG_DIR, 'whatsapp-client.json');
 const AUDIT_LOG_PATH = path.join(GLOBAL_DIR, 'connectors', 'whatsapp', 'audit_log.json');

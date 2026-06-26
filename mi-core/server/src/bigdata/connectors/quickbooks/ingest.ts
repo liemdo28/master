@@ -8,8 +8,8 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const QB_DB_PATH  = process.env.QB_DB_PATH || 'E:/Project/Master/mi-core/data/qb-agent.db';
-const QB_LOG_DIR  = process.env.QB_LOG_DIR || 'E:/Project/Master/mi-core/data/qb-logs';
+const QB_DB_PATH  = process.env.QB_DB_PATH || 'D:/Project/Master/mi-core/data/qb-agent.db';
+const QB_LOG_DIR  = process.env.QB_LOG_DIR || 'D:/Project/Master/mi-core/data/qb-logs';
 const SOURCE_BAKUDAN = 'quickbooks-bakudan';
 const SOURCE_RAW     = 'quickbooks-raw';
 

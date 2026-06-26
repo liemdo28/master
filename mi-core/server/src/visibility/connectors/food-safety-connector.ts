@@ -8,10 +8,10 @@ import fs from 'fs';
 import path from 'path';
 
 const GATEWAY_ROOT = process.env.FOOD_SAFETY_ROOT ||
-  'E:/Project/Master/food-safety-gateway';
+  'D:/Project/Master/food-safety-gateway';
 
 const RECORD_FILE = path.join(GATEWAY_ROOT, 'data', 'records.json');
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 
 export interface FoodSafetyRecord {
   id: string;

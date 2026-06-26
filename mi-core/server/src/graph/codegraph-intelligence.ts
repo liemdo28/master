@@ -11,8 +11,8 @@ import crypto from 'crypto';
 import ts from 'typescript';
 import { getEntity, getInEdges, getOutEdges, upsertEdge, upsertEntity, type Entity } from './graph-db';
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core';
-const MASTER_ROOT = process.env.MASTER_ROOT || 'E:/Project/Master';
+const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
+const MASTER_ROOT = process.env.MASTER_ROOT || 'D:/Project/Master';
 const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || process.env.DASHBOARD_PATH || path.join(MASTER_ROOT, 'Bakudan', 'dashboard.bakudanramen.com');
 const CODEGRAPH_CACHE_DIR = path.join(MI_CORE_ROOT, '.local-agent-global', 'graph');
 const CODEGRAPH_CACHE_FILE = path.join(CODEGRAPH_CACHE_DIR, 'codegraph-summary.json');

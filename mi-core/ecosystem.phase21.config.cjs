@@ -16,7 +16,7 @@ module.exports = {
     {
       name: 'mi-core',
       script: 'server/dist/index.js',
-      cwd: 'E:/Project/Master/mi-core',
+      cwd: 'D:/Project/Master/mi-core',
       instances: 1,
       exec_mode: 'fork',
       kill_timeout: 10000,
@@ -50,11 +50,11 @@ module.exports = {
         REDIS_URL: 'redis://127.0.0.1:6379',
 
         // ── Evidence & Wiki Storage ──────────────────────────────────────────
-        EVIDENCE_ROOT: 'E:/Project/Master/mi-core/data/evidence',
-        WIKI_ROOT: 'E:/Project/Master/mi-core/data/wiki',
+        EVIDENCE_ROOT: 'D:/Project/Master/mi-core/data/evidence',
+        WIKI_ROOT: 'D:/Project/Master/mi-core/data/wiki',
       },
-      out_file: 'E:/Project/Master/mi-core/logs/pm2-out.log',
-      error_file: 'E:/Project/Master/mi-core/logs/pm2-err.log',
+      out_file: 'D:/Project/Master/mi-core/logs/pm2-out.log',
+      error_file: 'D:/Project/Master/mi-core/logs/pm2-err.log',
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },
@@ -63,7 +63,7 @@ module.exports = {
     {
       name: 'whatsapp-ai-gateway',
       script: 'src/index.js',
-      cwd: 'E:/Project/Master/whatsapp-ai-gateway',
+      cwd: 'D:/Project/Master/whatsapp-ai-gateway',
       instances: 1,
       exec_mode: 'fork',
       kill_timeout: 10000,
@@ -75,8 +75,8 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
       },
-      out_file: 'E:/Project/Master/whatsapp-ai-gateway/logs/pm2-out.log',
-      error_file: 'E:/Project/Master/whatsapp-ai-gateway/logs/pm2-err.log',
+      out_file: 'D:/Project/Master/whatsapp-ai-gateway/logs/pm2-out.log',
+      error_file: 'D:/Project/Master/whatsapp-ai-gateway/logs/pm2-err.log',
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },
@@ -85,7 +85,7 @@ module.exports = {
     {
       name: 'antigravity-gateway',
       script: 'src/index.js',
-      cwd: 'E:/Project/Master/Agent/antigravity-gateway',
+      cwd: 'D:/Project/Master/Agent/antigravity-gateway',
       instances: 1,
       exec_mode: 'fork',
       kill_timeout: 10000,
@@ -97,8 +97,8 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
       },
-      out_file: 'E:/Project/Master/Agent/antigravity-gateway/logs/pm2-out.log',
-      error_file: 'E:/Project/Master/Agent/antigravity-gateway/logs/pm2-err.log',
+      out_file: 'D:/Project/Master/Agent/antigravity-gateway/logs/pm2-out.log',
+      error_file: 'D:/Project/Master/Agent/antigravity-gateway/logs/pm2-err.log',
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },

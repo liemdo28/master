@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 const PREF_PATH = path.join(
-  process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global',
+  process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global',
   'jarvis', 'ceo-preferences.json'
 );
 

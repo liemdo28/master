@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-9ec3a36da8",
+  "name": "Playwright",
+  "github": "https://github.com/microsoft/playwright",
+  "owner_division": "Operator",
+  "category": "Operator",
+  "description": "Browser automation framework (chosen as core by Phase 2)",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.66374,
+  "created_iso": "2026-06-26T05:33:33.663742+00:00",
+  "updated_at": 1782452013.66374,
+  "updated_iso": "2026-06-26T05:33:33.663750+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.66374,
+      "iso": "2026-06-26T05:33:33.663751+00:00"
+    }
+  ]
+}

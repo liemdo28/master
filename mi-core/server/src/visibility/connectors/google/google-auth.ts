@@ -8,7 +8,7 @@ import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const TOKEN_PATH = path.join(GLOBAL_DIR, 'visibility', 'google-tokens.json');
 
 const SCOPES = [

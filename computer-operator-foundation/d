@@ -1,0 +1,116 @@
+# FINANCIAL_DATA_MAP
+
+Status: **FOUNDATION_DRAFT_COMPLETE**
+Date: 2026-06-26
+
+## Target Architecture
+
+```text
+QuickBooks Desktop
+Payroll / Labor
+DoorDash / Toast
+GA4 / GSC
+↓
+Financial Data Warehouse
+↓
+Revenue Engine
+↓
+Profit Engine
+↓
+CFO Dashboard
+↓
+Executive Coordination
+```
+
+## Mapping Rules
+
+Allowed statuses:
+- LIVE
+- PARTIAL
+- STALE
+- MISSING
+- BLOCKED
+- NOT_IMPLEMENTED
+
+Definitions used in this map:
+- **LIVE** = verified accessible or health-confirmed in current environment
+- **PARTIAL** = source is known/referenced but fields/endpoints are not fully mapped
+- **STALE** = source or design exists but appears outdated or not actively feeding current foundation
+- **MISSING** = no source implementation or evidence found in current workspace
+- **BLOCKED** = likely exists elsewhere but inaccessible from current workspace or phase constraints
+- **NOT_IMPLEMENTED** = intentionally planned but not built yet
+
+## Financial Source Map
+
+| source | system | owner | status | freshness | available fields | missing fields | risk | next action |
+|---|---|---|---|---|---|---|---|---|
+| QuickBooks Desktop company file | QuickBooks Desktop | Finance / Accounting / IT | PARTIAL | Unknown from this workspace | Existence of source-of-truth financial system is documented; desktop workflow assumed | Chart of accounts, sales receipts, invoices, bills, vendor payments, P&L fields, store tags, class/location mappings, AR/AP, account balances | High: native desktop app, credential-sensitive, production write risk | Inventory actual readable entities and confirm read-only extraction path |
+| QB Web Connector | QuickBooks Desktop integration layer | IT / Finance Systems | PARTIAL | Unknown | Reference that Mi may trigger QB Web Connector and verify sync | Connector config, schedule, log path, sync status schema, last run timestamp, failure modes | High: could impact sync behavior if mishandled | Locate connector config/logs and define heartbeat schema |
+| QB activity / sync log | QuickBooks logs | IT / Finance Systems | MISSING | None visible | None in current workspace | Last sync, error codes, queue depth, company file target, runtime health | Medium-High | Find log location outside workspace and expose read-only evidence collector |
+| Accounting Engine on port 8844 | Local Express service | Engineering / Finance Systems | LIVE | Live at probe time (`/health` OK at 2026-06-26T02:29:41.711Z) | Health status, timestamp | Revenue endpoints, profit endpoints, store metrics, source freshness, schema docs | Medium: healthy service but unknown business contract | Document endpoints and inspect read-only API surface |
+| Toast sales/orders | Toast portal or API | Operations / Store Systems / Engineering | PARTIAL | Unknown | Toast is documented as a sales/orders source candidate | Sales totals, order timestamps, store IDs, channel, refunds, discounts, taxes, item mix | Medium | Identify whether portal export or API is primary and define daily ingestion contract |
+| DoorDash merchant data | DoorDash Merchant Portal | Marketing / Operations / Engineering | PARTIAL | Unknown | Orders/campaign data source acknowledged in existing docs | Sales by store, campaign spend, order counts, fees, net payout, timestamps | Medium-High: portal automation fragility and WAF | Define read-only extraction fields and map to revenue channel model |
+| Payroll system | External payroll provider (unspecified) | HR / Finance | MISSING | None visible | None in workspace | Employee hours, wages, overtime, taxes, benefits, store allocation, payroll periods | High: payroll sensitivity | Identify payroll vendor and authorize read-only export inventory |
+| Labor tracking | Scheduling / timekeeping system (unspecified) | Operations / HR | MISSING | None visible | None in workspace | Clock-in/out, labor hours, role, store, schedule vs actual, labor standards | Medium-High | Identify source of truth for labor hours and store assignment |
+| Food cost / COGS source | Inventory / purchasing / accounting mapping | Operations / Finance | MISSING | None visible | None in workspace | Purchase orders, vendor bills, ingredient cost, usage, theoretical vs actual COGS | High: no cost engine possible without this mapping | Define whether COGS comes from QB, vendors, POS mix, or inventory system |
+| GA4 | Google Analytics 4 | Marketing / Engineering | NOT_IMPLEMENTED | None visible | Mentioned as target architecture source only | Sessions, traffic, landing pages, conversions by store/channel | Low-Medium | Decide if GA4 is needed for financial context or only supporting traffic signals |
+| GSC | Google Search Console | Marketing / Engineering | NOT_IMPLEMENTED | None visible | Mentioned as target architecture source only | Queries, clicks, impressions, store/location SEO trends | Low | Use for supporting traffic trend context, not core accounting |
+| Financial Data Warehouse | Planned warehouse layer | Engineering / Data | NOT_IMPLEMENTED | None | None | Canonical finance fact tables, dimensions, freshness metadata, evidence links | High: all CFO analytics depend on it | Design read-only bronze/silver/gold tables and source freshness table |
+| Revenue Engine | Planned analytics service | Engineering / Data / Finance | NOT_IMPLEMENTED | None | None | Daily/weekly/monthly revenue metrics, trend and store/channel breakdowns | High | Build after warehouse source ingestion is proven |
+| Profit Engine | Planned analytics service | Engineering / Data / Finance | NOT_IMPLEMENTED | None | None | Gross profit, net profit, store profitability, margin bridge | High | Build only after revenue + cost source mapping is complete |
+| CFO Dashboard | Planned dashboard | Finance / Executive / Engineering | NOT_IMPLEMENTED | None | None | Widgets, alerting, drilldown, owner workflows | Medium | Implement only after KPI registry and endpoint contracts are approved |
+| Executive Coordination integration | Phase 0 control plane | Executive Coordination / Engineering | PARTIAL | Current foundation docs are fresh | Registry and approval concepts exist in prior architecture docs | Finance-specific objective templates, evidence rules, alert routes | Medium | Extend existing governance model with finance task/event definitions |
+
+## Layered Data Flow Assessment
+
+### 1. Source Systems Layer
+Current assessment:
+- QuickBooks Desktop is the likely accounting source of truth
+- Toast and DoorDash are likely revenue/event sources
+- Payroll/labor source is not yet identified in this workspace
+- GA4/GSC are optional context signals, not accounting truth
+
+### 2. Warehouse Layer
+Current assessment:
+- No warehouse implementation or schema found
+- This is the biggest blocker to CFO-grade reporting consistency
+
+### 3. Revenue Engine Layer
+Current assessment:
+- Not implemented
+- Blocked by missing source ingestion contracts and store/channel mapping
+
+### 4. Profit Engine Layer
+Current assessment:
+- Not implemented
+- More blocked than revenue because costs, labor, payroll, and COGS are not mapped
+
+### 5. CFO Dashboard Layer
+Current assessment:
+- Designable now
+- Not supportable with high confidence until warehouse and KPI ownership exist
+
+### 6. Executive Coordination Layer
+Current assessment:
+- General governance exists conceptually from prior phases
+- Finance-specific event/alert/objective integration must still be defined
+
+## Immediate Architecture Priorities
+
+1. Confirm whether port 8844 is the intended Accounting Engine and enumerate read-only endpoints.
+2. Identify the real payroll and labor systems of record.
+3. Decide the canonical revenue truth hierarchy:
+   - Toast gross sales?
+   - DoorDash channel sales?
+   - QuickBooks posted revenue?
+4. Create warehouse dimensions:
+   - store
+   - date
+   - channel
+   - labor source
+   - accounting class/location
+5. Create source freshness registry for all finance inputs.
+
+## Conclusion
+
+The financial data map shows that Mi has **one confirmed live finance-adjacent runtime signal** (port 8844 health) and **multiple well-understood target sources**, but almost every CFO-grade metric remains blocked by missing source inventory, missing warehouse tables, and missing read-only contracts.

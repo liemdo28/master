@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const REGISTRY_PATH = path.join(GLOBAL_DIR, 'visibility', 'connector-registry.json');
 
 export type ConnectorType = 'local' | 'api' | 'scrape' | 'export';
@@ -56,7 +56,7 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: true,
     cache_path: 'dashboard/',
     health_status: 'unknown',
-    config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'E:/Project/Master/Bakudan/dashboard.bakudanramen.com' },
+    config: { base_url: 'http://dashboard.bakudanramen.com', local_path: 'D:/Project/Master/Bakudan/dashboard.bakudanramen.com' },
   },
   {
     connector_id: 'asana',
@@ -154,7 +154,7 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: true,
     cache_path: 'websites/raw/',
     health_status: 'unknown',
-    config: { local_path: 'E:/Project/Master/RawSushi' },
+    config: { local_path: 'D:/Project/Master/RawSushi' },
   },
   {
     connector_id: 'website-bakudan',
@@ -168,7 +168,7 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: true,
     cache_path: 'websites/bakudan/',
     health_status: 'unknown',
-    config: { local_path: 'E:/Project/Master/Bakudan' },
+    config: { local_path: 'D:/Project/Master/Bakudan' },
   },
   {
     connector_id: 'accounting',
@@ -182,8 +182,8 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: false,
     cache_path: 'accounting/',
     health_status: 'unknown',
-    setup_hint: 'Start: node E:/Project/Master/accounting-engine/api/server.js (port 8844)',
-    config: { api_url: 'http://127.0.0.1:8844', db_path: 'E:/Project/Master/accounting-engine/ledgers/accounting.db' },
+    setup_hint: 'Start: node D:/Project/Master/accounting-engine/api/server.js (port 8844)',
+    config: { api_url: 'http://127.0.0.1:8844', db_path: 'D:/Project/Master/accounting-engine/ledgers/accounting.db' },
   },
   {
     connector_id: 'quickbooks-runtime',
@@ -199,8 +199,8 @@ const DEFAULT_CONNECTORS: Connector[] = [
     health_status: 'unknown',
     setup_hint: 'QuickBooks runtime lives on laptop1 with Dev1. Dev1 must open QuickBooks Desktop/company file on laptop1, keep QB Web Connector running, then trigger force sync.',
     config: {
-      checksum_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
-      agent_db: 'E:/Project/Master/mi-core/data/qb-agent.db',
+      checksum_db: 'D:/Project/Master/mi-core/data/qb-agent.db',
+      agent_db: 'D:/Project/Master/mi-core/data/qb-agent.db',
     },
   },
   {
@@ -215,7 +215,7 @@ const DEFAULT_CONNECTORS: Connector[] = [
     approval_required: false,
     cache_path: 'food-safety/',
     health_status: 'unknown',
-    config: { root_path: 'E:/Project/Master/food-safety-gateway' },
+    config: { root_path: 'D:/Project/Master/food-safety-gateway' },
   },
 ];
 

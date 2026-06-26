@@ -11,7 +11,7 @@ import { listWorkflows } from './durable-workflow';
 
 const GLOBAL_DIR = process.env.MI_CORE_ROOT
   ? path.join(process.env.MI_CORE_ROOT, '.local-agent-global')
-  : 'E:/Project/Master/.local-agent-global';
+  : 'D:/Project/Master/.local-agent-global';
 const REPORT_DIR = path.join(GLOBAL_DIR, 'coo-v4', 'self-improvement');
 
 export interface ImprovementFinding {

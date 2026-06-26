@@ -16,7 +16,7 @@ import path from 'path';
 export const remoteRouter = Router();
 
 const PORT = parseInt(process.env.MI_PORT || '4001');
-const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const CONFIG_PATH = path.join(GLOBAL_DIR, 'remote-access', 'config.json');
 
 // ── GET /api/remote/health — public, shows server info ──────────────────────
