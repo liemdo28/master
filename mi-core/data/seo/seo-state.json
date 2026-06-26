@@ -6,8 +6,8 @@
       "port": 4011,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30369,
-      "last_sync_at": "2026-06-26T16:53:16.366Z",
+      "uptime_s": 30429,
+      "last_sync_at": "2026-06-26T16:54:16.147Z",
       "registered_at": "2026-06-19T11:02:40.343Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -19,8 +19,8 @@
       "port": 4014,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30370,
-      "last_sync_at": "2026-06-26T16:53:23.238Z",
+      "uptime_s": 30430,
+      "last_sync_at": "2026-06-26T16:54:23.242Z",
       "registered_at": "2026-06-19T11:04:10.370Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -32,8 +32,8 @@
       "port": 4017,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30370,
-      "last_sync_at": "2026-06-26T16:53:30.255Z",
+      "uptime_s": 30400,
+      "last_sync_at": "2026-06-26T16:54:00.257Z",
       "registered_at": "2026-06-19T11:04:10.391Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -449,8 +449,8 @@
       "port": 4015,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30369,
-      "last_sync_at": "2026-06-26T16:53:25.318Z",
+      "uptime_s": 30429,
+      "last_sync_at": "2026-06-26T16:54:25.332Z",
       "registered_at": "2026-06-19T11:04:10.392Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -462,8 +462,8 @@
       "port": 4013,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30369,
-      "last_sync_at": "2026-06-26T16:53:20.774Z",
+      "uptime_s": 30430,
+      "last_sync_at": "2026-06-26T16:54:20.795Z",
       "registered_at": "2026-06-19T11:04:10.394Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -475,8 +475,8 @@
       "port": 4012,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30369,
-      "last_sync_at": "2026-06-26T16:53:18.286Z",
+      "uptime_s": 30429,
+      "last_sync_at": "2026-06-26T16:54:18.309Z",
       "registered_at": "2026-06-19T11:04:10.395Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -488,8 +488,8 @@
       "port": 4016,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30369,
-      "last_sync_at": "2026-06-26T16:53:27.692Z",
+      "uptime_s": 30399,
+      "last_sync_at": "2026-06-26T16:53:57.926Z",
       "registered_at": "2026-06-19T11:04:10.459Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -497,66 +497,6 @@
     }
   },
   "syncLogs": [
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:17:54.777Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:17:57.063Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:17:59.589Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:15.432Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:17.718Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:20.243Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:22.576Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:24.699Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:27.067Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:29.602Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:45.315Z"
-    },
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:18:47.732Z"
-    },
     {
       "agent": "seo-technical-agent",
       "action": "status",
@@ -2996,6 +2936,66 @@
       "agent": "seo-analytics-agent",
       "action": "status",
       "ts": "2026-06-26T16:53:30.255Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:45.894Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:48.300Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:50.747Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:53.757Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:55.324Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:53:57.926Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:00.257Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:16.147Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:18.309Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:20.795Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:23.242Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:25.332Z"
     }
   ],
   "tasks": [],
