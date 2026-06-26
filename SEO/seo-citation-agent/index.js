@@ -8,7 +8,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-citation-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4006', 10);
+const PORT = parseInt(process.env.PORT || '4016', 10);
 
 async function runAudit({ db, logger, bus, saveReport }) {
   const locations = config.locations.locations;

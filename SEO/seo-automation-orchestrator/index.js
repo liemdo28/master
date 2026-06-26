@@ -26,11 +26,11 @@ const JOB_DEFINITIONS = {
   'daily-gsc-sync':                { schedule: 'daily',  agent_port: 4011, endpoint: '/run/connectors?connector=gsc',              method: 'GET'  },
   'daily-ga4-sync':                { schedule: 'daily',  agent_port: 4011, endpoint: '/run/connectors?connector=ga4',              method: 'GET'  },
   'daily-schema-validation':       { schedule: 'daily',  agent_port: 4014, endpoint: '/run/audit',                                method: 'POST' },
-  'daily-technical-audit':         { schedule: 'daily',  agent_port: 4012, endpoint: '/run/audit',                                method: 'POST' },
+  'daily-technical-audit':         { schedule: 'daily',  agent_port: 4013, endpoint: '/run/audit',                                method: 'POST' },
   'weekly-citation-scan':          { schedule: 'weekly', agent_port: 4011, endpoint: '/run/connectors?connector=citation_scan',   method: 'GET'  },
   'weekly-content-plan':           { schedule: 'weekly', agent_port: 4015, endpoint: '/run/audit',                                method: 'POST' },
   'weekly-executive-seo-report':   { schedule: 'weekly', agent_port: 4017, endpoint: '/run/audit',                                method: 'POST' },
-  'monthly-full-seo-audit':        { schedule: 'monthly',agent_port: 4012, endpoint: '/run/audit',                                method: 'POST' },
+  'monthly-full-seo-audit':        { schedule: 'monthly',agent_port: 4013, endpoint: '/run/audit',                                method: 'POST' },
 };
 
 let jobState = loadJobState();

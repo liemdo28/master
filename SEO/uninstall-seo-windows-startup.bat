@@ -13,5 +13,7 @@ schtasks /delete /tn "SEO-Agent-4016" /f >nul 2>&1
 schtasks /delete /tn "SEO-Agent-4017" /f >nul 2>&1
 schtasks /delete /tn "SEO-Orchestrator" /f >nul 2>&1
 
-echo All SEO startup tasks removed.
-pause
+set "STARTUP_VBS=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\start-seo-agents-hidden.vbs"
+if exist "%STARTUP_VBS%" del /f /q "%STARTUP_VBS%" >nul 2>&1
+
+echo All SEO startup tasks and Startup fallback removed.

@@ -5,7 +5,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-website-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4002', 10);
+const PORT = parseInt(process.env.PORT || '4012', 10);
 
 async function runAudit({ db, logger, bus, saveReport }) {
   const pages = config.pages.pages;

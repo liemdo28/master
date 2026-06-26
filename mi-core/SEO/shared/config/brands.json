@@ -12,8 +12,8 @@
       "created_at": "2026-06-19T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "configured", "credentials_configured": true, "gsc_site_url": "sc-domain:bakudanramen.com" },
-        "ga4": { "status": "configured", "credentials_configured": true, "ga4_property_id": "G-3GZ2RYDR6M", "measurement_id": "G-3GZ2RYDR6M" },
+        "gsc": { "status": "needs_authorization", "credentials_configured": false, "gsc_site_url": "sc-domain:bakudanramen.com", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
+        "ga4": { "status": "needs_authorization", "credentials_configured": false, "ga4_property_id": "G-3GZ2RYDR6M", "measurement_id": "G-3GZ2RYDR6M", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
         "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
@@ -35,8 +35,8 @@
       "created_at": "2026-06-24T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "configured", "credentials_configured": true, "gsc_site_url": "sc-domain:rawsushibar.com" },
-        "ga4": { "status": "configured", "credentials_configured": true, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "needs_numeric_id" },
+        "gsc": { "status": "needs_authorization", "credentials_configured": false, "gsc_site_url": "sc-domain:rawsushibar.com", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
+        "ga4": { "status": "needs_authorization", "credentials_configured": false, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "needs_numeric_id", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
         "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },

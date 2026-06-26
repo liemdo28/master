@@ -3,8 +3,8 @@ echo ================================================
 echo  SEO Database Backup
 echo ================================================
 
-set BACKUP_DIR=E:\Project\Master\SEO\backups
-set DB_FILE=E:\Project\Master\SEO\shared\database\seo-shared.db
+set "BACKUP_DIR=%~dp0backups"
+set "DB_FILE=%~dp0shared\database\seo-shared.db"
 set TIMESTAMP=%date:~-4%%date:~4,2%%date:~7,2%_%time:~0,2%%time:~3,2%
 
 if not exist "%BACKUP_DIR%" mkdir "%BACKUP_DIR%"

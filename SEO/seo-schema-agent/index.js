@@ -9,7 +9,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-schema-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4004', 10);
+const PORT = parseInt(process.env.PORT || '4014', 10);
 
 function buildLocalBusinessSchema(loc) {
   return {

@@ -12,13 +12,13 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..', '..');
 const AGENTS = [
-  { id: 'seo-local-maps-agent', port: 4001 },
-  { id: 'seo-website-agent', port: 4002 },
-  { id: 'seo-technical-agent', port: 4003 },
-  { id: 'seo-schema-agent', port: 4004 },
-  { id: 'seo-content-agent', port: 4005 },
-  { id: 'seo-citation-agent', port: 4006 },
-  { id: 'seo-analytics-agent', port: 4007 },
+  { id: 'seo-local-maps-agent', port: 4011 },
+  { id: 'seo-website-agent', port: 4012 },
+  { id: 'seo-technical-agent', port: 4013 },
+  { id: 'seo-schema-agent', port: 4014 },
+  { id: 'seo-content-agent', port: 4015 },
+  { id: 'seo-citation-agent', port: 4016 },
+  { id: 'seo-analytics-agent', port: 4017 },
 ];
 
 function get(port, p) {

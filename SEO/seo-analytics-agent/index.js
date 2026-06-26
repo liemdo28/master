@@ -9,7 +9,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-analytics-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4007', 10);
+const PORT = parseInt(process.env.PORT || '4017', 10);
 
 async function runAudit({ db, logger, bus, mi, saveReport }) {
   // Collect cross-agent state

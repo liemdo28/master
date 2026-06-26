@@ -9,7 +9,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-technical-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4003', 10);
+const PORT = parseInt(process.env.PORT || '4013', 10);
 
 const CHECKS = [
   'indexing', 'sitemap', 'robots_txt', 'canonical_tags', 'broken_links',

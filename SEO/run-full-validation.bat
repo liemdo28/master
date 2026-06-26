@@ -5,7 +5,7 @@ echo ================================================
 echo.
 
 echo [1] Running validate-system.js...
-cd /d E:\Project\Master
+cd /d "%~dp0.."
 node SEO\shared\base\validate-system.js
 echo.
 

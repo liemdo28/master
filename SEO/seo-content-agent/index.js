@@ -8,7 +8,7 @@ const config = require('../shared/config');
 
 const AGENT_ID = 'seo-content-agent';
 const VERSION = '1.0.0';
-const PORT = parseInt(process.env.PORT || '4005', 10);
+const PORT = parseInt(process.env.PORT || '4015', 10);
 
 const INITIAL_TOPICS = [
   { topic: 'Best Ramen in San Antonio', target_keyword: 'Best Ramen in San Antonio', intent: 'commercial' },
