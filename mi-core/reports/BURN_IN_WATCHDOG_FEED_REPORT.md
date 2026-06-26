@@ -1,10 +1,10 @@
 # BURN_IN_WATCHDOG_FEED_REPORT
 
-Generated: 2026-06-26T15:48:36.843Z
+Generated: 2026-06-26T16:48:36.557Z
 Target: BURN_IN_WATCHDOG_FEED_READY
 Burn-in score: 0
 Ollama timeouts: 0
-Mi-Core uptime %: 0
+Mi-Core uptime %: 33.33
 
 ## PM2 Restarts
 | Service | Restarts | Restarts Last Hour | Alert |
@@ -19,8 +19,8 @@ Mi-Core uptime %: 0
 | Source | Status | Age Min | Threshold Min |
 | --- | --- | --- | --- |
 | QuickBooks | degraded | 0 | 1440 |
-| Work Orders | stale | 15141 | 2880 |
-| Memory | stale | 2388 | 1440 |
+| Work Orders | stale | 15201 | 2880 |
+| Memory | stale | 2448 | 1440 |
 
 ## Flow Gaps
 | Severity | Source | Rule | Message |
@@ -32,7 +32,6 @@ Mi-Core uptime %: 0
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |
 | WARNING | Work Orders | connector_stale | Work Orders is stale |
 | WARNING | Memory | connector_stale | Memory is stale |
-| CRITICAL | Mi-Core | runtime_down | Mi-Core is down |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded |
 | WARNING | Gmail | runtime_not_green | Gmail is degraded |

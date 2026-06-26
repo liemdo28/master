@@ -1,6 +1,6 @@
 # CHAT_RELIABILITY_METRICS_REPORT
 
-Generated: 2026-06-26T15:48:36.798Z
+Generated: 2026-06-26T16:48:36.457Z
 Target: CHAT_RELIABILITY_METRICS_READY
 
 | Requests | Success | Timeout | Failed | Avg Latency MS | P95 Latency MS | Retry Count | Queue Depth | Queue Peak | Active |

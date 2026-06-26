@@ -1,5 +1,5 @@
 # QB Daily Runtime Report
-Generated: 2026-06-26T16:19:30.850Z
+Generated: 2026-06-26T16:49:27.105Z
 Status: needs_dev1_action
 Certified: no
 ## Runtime Signal
@@ -26,7 +26,7 @@ Certified: no
 - duplicate_payments: 0
 ## Sync Gaps
 - No QB heartbeat has been received
-- Last successful QB sync is stale (11990 minutes old)
+- Last successful QB sync is stale (12020 minutes old)
 - No real QB activity log rows found
 - Dev1 Laptop1 runtime result is NOT_STABLE
 - Scheduled task ToastPOSManager-Background still needs PowerShell Run as Administrator to point at the corrected desktop-app path

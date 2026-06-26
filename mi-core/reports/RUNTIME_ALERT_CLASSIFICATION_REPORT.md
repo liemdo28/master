@@ -1,11 +1,11 @@
 # RUNTIME_ALERT_CLASSIFICATION_REPORT
 
-Generated: 2026-06-26T15:48:36.843Z
+Generated: 2026-06-26T16:48:36.557Z
 Target: RUNTIME_ALERT_CLASSIFICATION_READY
 
 INFO: 0
 WARNING: 13
-CRITICAL: 1
+CRITICAL: 0
 
 | Severity | Source | Rule | Message | Evidence |
 | --- | --- | --- | --- | --- |
@@ -16,7 +16,6 @@ CRITICAL: 1
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | Work Orders | connector_stale | Work Orders is stale | D:\Project\Master\mi-core\.local-agent-global\work-orders |
 | WARNING | Memory | connector_stale | Memory is stale | D:\Project\Master\mi-core\.local-agent-global\operational-memory |
-| CRITICAL | Mi-Core | runtime_down | Mi-Core is down | This operation was aborted |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown | pm2_status=pm2_unavailable |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded | 2 connector(s) unhealthy |
 | WARNING | Gmail | runtime_not_green | Gmail is degraded | Connector is not fully healthy |
