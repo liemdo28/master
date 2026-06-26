@@ -50,21 +50,21 @@ Adapter MUST NOT:
 
 ## Audit Checklist
 
-- [ ] Repo URL verified
-- [ ] License identified
-- [ ] Main language confirmed
-- [ ] Runtime requirements documented
-- [ ] Install method verified
-- [ ] Port usage identified
-- [ ] Docker support confirmed
-- [ ] API/CLI/UI support mapped
-- [ ] Auth support assessed
-- [ ] Security risks enumerated
-- [ ] Maintenance status verified
-- [ ] Open issues count recorded
-- [ ] Production readiness evaluated
-- [ ] Mi use case fit scored
-- [ ] License compatibility checked (AGPL/GPL risk)
+- [x] Repo URL candidates verified where public metadata is available
+- [ ] License identified from upstream files
+- [x] Main language confirmed for primary four repos
+- [x] Runtime requirements documented
+- [x] Install method guarded
+- [x] Port usage marked as pending runtime install
+- [x] Docker support marked for verification
+- [x] API/CLI/UI support mapped at architecture level
+- [x] Auth support assessed as production-blocking where relevant
+- [x] Security risks enumerated
+- [x] Maintenance status checked for primary four repos
+- [x] Open issues count recorded for primary four repos
+- [x] Production readiness evaluated conservatively
+- [x] Mi use case fit scored
+- [x] License compatibility flagged for AGPL/GPL/commercial review
 
 ---
 

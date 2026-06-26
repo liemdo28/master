@@ -128,12 +128,12 @@ Evaluate 6 open-source AI tools for integration into Mi Company OS. Each project
 
 | Project | License | Risk | Mi Fit | Decision |
 |---------|---------|------|--------|----------|
-| Open Agent Builder | TBD | TBD | High | → PHASE_1_AUDIT_REPORT.md |
-| OpenMontage | TBD | TBD | High | → PHASE_1_AUDIT_REPORT.md |
-| TTS Audio Suite | TBD | TBD | High | → PHASE_1_AUDIT_REPORT.md |
-| WebLLM | TBD | TBD | Medium-High | → PHASE_1_AUDIT_REPORT.md |
-| Obscura Browser | TBD | High | Medium | → PHASE_1_AUDIT_REPORT.md |
-| Map3D | TBD | Low | Low | → PHASE_1_AUDIT_REPORT.md |
+| Open Agent Builder | UNKNOWN until upstream license file review | Medium | High | -> PHASE_1_AUDIT_REPORT.md |
+| OpenMontage | UNKNOWN until upstream license file review | High | High | -> PHASE_1_AUDIT_REPORT.md |
+| TTS Audio Suite | UNKNOWN until model/license review | High | High | -> PHASE_1_AUDIT_REPORT.md |
+| WebLLM | UNKNOWN until package/model license review | Medium | Medium-High | -> PHASE_1_AUDIT_REPORT.md |
+| Obscura Browser | UNKNOWN until repo verification | High | Medium | -> PHASE_1_AUDIT_REPORT.md |
+| Map3D | UNKNOWN until repo verification | Low-Medium | Low | -> PHASE_1_AUDIT_REPORT.md |
 
 ---
 

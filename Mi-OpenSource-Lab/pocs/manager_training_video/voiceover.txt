@@ -1,0 +1,8 @@
+Welcome to Manager Dashboard Training.
+In this walkthrough, managers learn how to review tasks, add comments, approve or reject submissions, check history, and escalate issues.
+Start by logging in, then open assigned tasks.
+Select a submitted task and review the attached evidence.
+Add a clear comment.
+Approve the task if it is correct, or reject it with a reason if it needs correction.
+Use the history panel to verify the audit trail.
+Escalate only when owner review is needed.

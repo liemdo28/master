@@ -1,0 +1,24 @@
+{
+  "store": "The Rim",
+  "zones": [
+    {
+      "name": "Kitchen",
+      "items": [
+        {
+          "id": "RIM-01",
+          "name": "Cold Holding 1",
+          "x": 10,
+          "y": 5,
+          "status": "safe"
+        },
+        {
+          "id": "RIM-02",
+          "name": "Freezer 1",
+          "x": 14,
+          "y": 5,
+          "status": "needs_review"
+        }
+      ]
+    }
+  ]
+}
