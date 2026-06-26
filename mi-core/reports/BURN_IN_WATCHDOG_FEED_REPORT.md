@@ -1,10 +1,10 @@
 # BURN_IN_WATCHDOG_FEED_REPORT
 
-Generated: 2026-06-26T13:45:09.724Z
+Generated: 2026-06-26T15:48:36.843Z
 Target: BURN_IN_WATCHDOG_FEED_READY
 Burn-in score: 0
 Ollama timeouts: 0
-Mi-Core uptime %: 33.33
+Mi-Core uptime %: 0
 
 ## PM2 Restarts
 | Service | Restarts | Restarts Last Hour | Alert |
@@ -19,8 +19,8 @@ Mi-Core uptime %: 33.33
 | Source | Status | Age Min | Threshold Min |
 | --- | --- | --- | --- |
 | QuickBooks | degraded | 0 | 1440 |
-| Work Orders | stale | 15018 | 2880 |
-| Memory | stale | 2264 | 1440 |
+| Work Orders | stale | 15141 | 2880 |
+| Memory | stale | 2388 | 1440 |
 
 ## Flow Gaps
 | Severity | Source | Rule | Message |

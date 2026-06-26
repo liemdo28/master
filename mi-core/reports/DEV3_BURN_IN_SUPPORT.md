@@ -1,9 +1,9 @@
 # DEV3_BURN_IN_SUPPORT
 
-Generated: 2026-06-26T13:45:09.739Z
+Generated: 2026-06-26T15:48:36.855Z
 Target: DEV3_BURN_IN_SUPPORT_READY
 
 Runtime services tracked: 10
 Connectors tracked: 13
 Freshness stale/missing/error: 2/0/0
-Incidents open/resolved/escalated: 10/0/3
+Incidents open/resolved/escalated: 10/1/3
