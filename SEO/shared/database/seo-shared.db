@@ -18,45 +18,45 @@
       "id": "status:seo-content-agent",
       "agent": "seo-content-agent",
       "version": "1.0.0",
-      "uptime_s": 30609,
+      "uptime_s": 30639,
       "port": 4015,
       "mi_enabled": true,
       "pid": 7144,
-      "last_seen": "2026-06-26T16:57:25.334Z",
-      "_ts": "2026-06-26T16:57:25.356Z"
+      "last_seen": "2026-06-26T16:57:55.336Z",
+      "_ts": "2026-06-26T16:57:55.361Z"
     },
     {
       "id": "status:seo-website-agent",
       "agent": "seo-website-agent",
       "version": "1.0.0",
-      "uptime_s": 30609,
+      "uptime_s": 30639,
       "port": 4012,
       "mi_enabled": true,
       "pid": 32328,
-      "last_seen": "2026-06-26T16:57:18.339Z",
-      "_ts": "2026-06-26T16:57:18.356Z"
+      "last_seen": "2026-06-26T16:57:48.340Z",
+      "_ts": "2026-06-26T16:57:48.357Z"
     },
     {
       "id": "status:seo-citation-agent",
       "agent": "seo-citation-agent",
       "version": "1.0.0",
-      "uptime_s": 30610,
+      "uptime_s": 30640,
       "port": 4016,
       "mi_enabled": true,
       "pid": 29472,
-      "last_seen": "2026-06-26T16:57:27.755Z",
-      "_ts": "2026-06-26T16:57:27.773Z"
+      "last_seen": "2026-06-26T16:57:57.765Z",
+      "_ts": "2026-06-26T16:57:57.783Z"
     },
     {
       "id": "status:seo-technical-agent",
       "agent": "seo-technical-agent",
       "version": "1.0.0",
-      "uptime_s": 30610,
+      "uptime_s": 30640,
       "port": 4013,
       "mi_enabled": true,
       "pid": 33092,
-      "last_seen": "2026-06-26T16:57:20.775Z",
-      "_ts": "2026-06-26T16:57:20.791Z"
+      "last_seen": "2026-06-26T16:57:50.786Z",
+      "_ts": "2026-06-26T16:57:50.804Z"
     },
     {
       "id": "status:seo-local-maps-agent",
@@ -73,23 +73,23 @@
       "id": "status:seo-schema-agent",
       "agent": "seo-schema-agent",
       "version": "1.0.0",
-      "uptime_s": 30610,
+      "uptime_s": 30640,
       "port": 4014,
       "mi_enabled": true,
       "pid": 29656,
-      "last_seen": "2026-06-26T16:57:23.276Z",
-      "_ts": "2026-06-26T16:57:23.287Z"
+      "last_seen": "2026-06-26T16:57:53.281Z",
+      "_ts": "2026-06-26T16:57:53.321Z"
     },
     {
       "id": "status:seo-analytics-agent",
       "agent": "seo-analytics-agent",
       "version": "1.0.0",
-      "uptime_s": 30610,
+      "uptime_s": 30640,
       "port": 4017,
       "mi_enabled": true,
       "pid": 32248,
-      "last_seen": "2026-06-26T16:57:30.284Z",
-      "_ts": "2026-06-26T16:57:30.303Z"
+      "last_seen": "2026-06-26T16:58:00.292Z",
+      "_ts": "2026-06-26T16:58:00.309Z"
     }
   ],
   "agent_tasks": [],
@@ -119225,6 +119225,78 @@
         "ok": true
       },
       "_ts": "2026-06-26T16:57:45.981Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493068392_z83wzr",
+      "agent": "seo-website-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-website-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:57:48.392Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493070839_s3e16p",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:57:50.839Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493073705_e7tudv",
+      "agent": "seo-schema-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-schema-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:57:53.705Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493075398_dwudr0",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:57:55.398Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493077849_192mra",
+      "agent": "seo-citation-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-citation-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:57:57.849Z"
+    },
+    {
+      "id": "mi_sync_logs_1782493080347_op75mj",
+      "agent": "seo-analytics-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-analytics-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:58:00.347Z"
     }
   ],
   "reports": []
