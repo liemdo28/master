@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:00:06,000
+Báo cáo hôm nay: Food Safety Bot đã nhận đủ 19 giá trị.
+
+2
+00:00:06,000 --> 00:00:12,000
+Có 14 giá trị an toàn và 5 giá trị cần kiểm tra.

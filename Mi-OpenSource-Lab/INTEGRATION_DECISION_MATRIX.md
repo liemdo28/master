@@ -4,6 +4,12 @@
 
 ---
 
+## Current Execution Note
+
+The initial scoring below is superseded by the conservative Phase 1 and Phase 11 reports where GitHub license metadata is unknown or incomplete. Treat every production recommendation as "adapter/lab only until license and dependency files are verified." No upstream source has been embedded into Mi-Core.
+
+---
+
 ## Decision Framework
 
 Each project is evaluated across 5 dimensions:
@@ -31,12 +37,12 @@ Each project is evaluated across 5 dimensions:
 | Dimension | Score | Max | Notes |
 |-----------|-------|-----|-------|
 | Technical Fit | 22 | 25 | Direct match for Mi Workflow Studio |
-| Security Posture | 20 | 25 | MIT license, no known RCE, sandboxed execution |
+| Security Posture | 18 | 25 | License metadata requires verification; workflow execution must stay sandboxed |
 | Production Readiness | 16 | 20 | Active repo, clear API |
 | Integration Complexity | 12 | 15 | Node.js adapter, well-defined inputs/outputs |
-| License Compatibility | 13 | 15 | MIT — safe for commercial use |
+| License Compatibility | 8 | 15 | UNKNOWN until license file is verified |
 
-**Total: 83/100 → Integrate**
+**Total: 78/100 -> Integrate concept with adapter guardrails**
 
 ---
 
@@ -45,12 +51,12 @@ Each project is evaluated across 5 dimensions:
 | Dimension | Score | Max | Notes |
 |-----------|-------|-----|-------|
 | Technical Fit | 20 | 25 | Strong video generation capability for Mi training |
-| Security Posture | 14 | 25 | FFmpeg dependency, model download risk, MIT license |
+| Security Posture | 12 | 25 | FFmpeg dependency, model download risk, license metadata requires verification |
 | Production Readiness | 12 | 20 | Early stage, limited docs, FFmpeg required |
 | Integration Complexity | 10 | 15 | Python adapter, external tool dependency |
-| License Compatibility | 13 | 15 | MIT — safe |
+| License Compatibility | 7 | 15 | UNKNOWN until license and dependency tree are verified |
 
-**Total: 69/100 → Integrate with Guardrails**
+**Total: 61/100 -> External service only with guardrails**
 - Guardrail: No auto model download, require FFmpeg pre-installed
 
 ---
@@ -75,12 +81,12 @@ Each project is evaluated across 5 dimensions:
 | Dimension | Score | Max | Notes |
 |-----------|-------|-----|-------|
 | Technical Fit | 18 | 25 | Browser-side LLM for offline/privacy assistant |
-| Security Posture | 22 | 25 | Fully client-side, no server calls, Apache 2.0 |
+| Security Posture | 20 | 25 | Client-side by design; model/package licenses still require verification |
 | Production Readiness | 16 | 20 | Stable npm package, active development |
 | Integration Complexity | 11 | 15 | Browser script tag, clear API |
-| License Compatibility | 13 | 15 | Apache 2.0 — safe |
+| License Compatibility | 8 | 15 | UNKNOWN until package/model licenses are verified |
 
-**Total: 80/100 → Integrate**
+**Total: 75/100 -> Optional local helper with no actions**
 
 ---
 
@@ -104,10 +110,10 @@ Each project is evaluated across 5 dimensions:
 | Dimension | Score | Max | Notes |
 |-----------|-------|-----|-------|
 | Technical Fit | 10 | 25 | 3D digital twin — future store map |
-| Security Posture | 18 | 25 | Pure rendering, no network calls, MIT/Apache likely |
+| Security Posture | 16 | 25 | Pure concept rendering in lab; upstream license still must be verified |
 | Production Readiness | 8 | 20 | Very early, 3D framework dependent |
 | Integration Complexity | 5 | 15 | High complexity, custom data model needed |
-| License Compatibility | 13 | 15 | Likely MIT/Apache — safe |
+| License Compatibility | 8 | 15 | UNKNOWN until upstream verified |
 
 **Total: 54/100 → Future Research**
 - Decision: Keep in lab for future consideration
@@ -118,9 +124,9 @@ Each project is evaluated across 5 dimensions:
 
 | Project | Total Score | Decision | Guardrails Required |
 |---------|-------------|----------|---------------------|
-| Open Agent Builder | 83/100 | **Integrate** | Dry-run mode, approval gate |
-| WebLLM | 80/100 | **Integrate** | WebGPU fallback message |
-| OpenMontage | 69/100 | **Integrate w/ Guardrails** | No auto model download, FFmpeg check |
+| Open Agent Builder | 78/100 | **Integrate concept via adapter** | Dry-run mode, approval gate, license verification |
+| WebLLM | 75/100 | **Optional browser helper** | WebGPU fallback, no action execution, model license check |
+| OpenMontage | 61/100 | **External service only** | No auto model download, FFmpeg check, media license review |
 | TTS Audio Suite | 68/100 | **Integrate w/ Guardrails** | No voice cloning, pre-approved voices only |
 | Map3D | 54/100 | **Future Research** | N/A |
 | Obscura Browser | 46/100 | **Lab Only** | No production use |

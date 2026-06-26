@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Map3D Store Concept</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; }
+    .map { position: relative; width: min(90vw, 720px); height: 360px; border: 1px solid #9ca3af; background: #f9fafb; }
+    .item { position: absolute; padding: 8px; border: 1px solid #374151; background: #fff; transform: translate(-50%, -50%); }
+    .safe { border-color: #15803d; }
+    .needs_review { border-color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <h1>The Rim Kitchen Map Concept</h1>
+  <div class="map" id="map"></div>
+  <script>
+    const data = {
+      store: 'The Rim',
+      zones: [{
+        name: 'Kitchen',
+        items: [
+          { id: 'RIM-01', name: 'Cold Holding 1', x: 10, y: 5, status: 'safe' },
+          { id: 'RIM-02', name: 'Freezer 1', x: 14, y: 5, status: 'needs_review' }
+        ]
+      }]
+    };
+    const map = document.getElementById('map');
+    data.zones[0].items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = `item ${item.status}`;
+      el.style.left = `${item.x * 4}%`;
+      el.style.top = `${item.y * 8}%`;
+      el.textContent = `${item.id}: ${item.name} (${item.status})`;
+      map.appendChild(el);
+    });
+  </script>
+</body>
+</html>

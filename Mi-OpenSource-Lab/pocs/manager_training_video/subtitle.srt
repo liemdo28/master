@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:06,000
+Welcome to Manager Dashboard Training.
+
+2
+00:00:06,000 --> 00:00:16,000
+Managers learn how to review tasks, add comments, approve or reject submissions, check history, and escalate issues.
+
+3
+00:00:16,000 --> 00:00:26,000
+Start by logging in, then open assigned tasks.
+
+4
+00:00:26,000 --> 00:00:40,000
+Select a submitted task, review evidence, and add a clear comment.
+
+5
+00:00:40,000 --> 00:01:00,000
+Approve if correct, or reject with a reason if correction is needed.
+
+6
+00:01:00,000 --> 00:01:15,000
+Use history to verify the audit trail and escalate only when owner review is needed.

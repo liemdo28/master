@@ -1,0 +1,19 @@
+{
+  "title": "Manager Dashboard Training",
+  "target_role": "Manager",
+  "language": "en",
+  "duration_seconds": 90,
+  "screenshots_folder": "screenshots/",
+  "voice_option": "approved-training-voice",
+  "subtitle_required": true,
+  "sections": [
+    "Login",
+    "View assigned tasks",
+    "Review submitted task",
+    "Add comment",
+    "Approve or reject",
+    "Check history",
+    "Escalate issue"
+  ],
+  "production_write_performed": false
+}
