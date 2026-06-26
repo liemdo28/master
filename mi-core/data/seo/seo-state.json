@@ -6,8 +6,8 @@
       "port": 4011,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30459,
-      "last_sync_at": "2026-06-26T16:54:45.908Z",
+      "uptime_s": 30489,
+      "last_sync_at": "2026-06-26T16:55:15.927Z",
       "registered_at": "2026-06-19T11:02:40.343Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -19,8 +19,8 @@
       "port": 4014,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30460,
-      "last_sync_at": "2026-06-26T16:54:53.447Z",
+      "uptime_s": 30490,
+      "last_sync_at": "2026-06-26T16:55:23.437Z",
       "registered_at": "2026-06-19T11:04:10.370Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -32,8 +32,8 @@
       "port": 4017,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30430,
-      "last_sync_at": "2026-06-26T16:54:30.264Z",
+      "uptime_s": 30460,
+      "last_sync_at": "2026-06-26T16:55:00.275Z",
       "registered_at": "2026-06-19T11:04:10.391Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -449,8 +449,8 @@
       "port": 4015,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30429,
-      "last_sync_at": "2026-06-26T16:54:25.332Z",
+      "uptime_s": 30459,
+      "last_sync_at": "2026-06-26T16:54:55.353Z",
       "registered_at": "2026-06-19T11:04:10.392Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -462,8 +462,8 @@
       "port": 4013,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30460,
-      "last_sync_at": "2026-06-26T16:54:50.773Z",
+      "uptime_s": 30490,
+      "last_sync_at": "2026-06-26T16:55:20.777Z",
       "registered_at": "2026-06-19T11:04:10.394Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -475,8 +475,8 @@
       "port": 4012,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30459,
-      "last_sync_at": "2026-06-26T16:54:48.316Z",
+      "uptime_s": 30489,
+      "last_sync_at": "2026-06-26T16:55:18.326Z",
       "registered_at": "2026-06-19T11:04:10.395Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -488,8 +488,8 @@
       "port": 4016,
       "status": "online",
       "health": "healthy",
-      "uptime_s": 30429,
-      "last_sync_at": "2026-06-26T16:54:27.702Z",
+      "uptime_s": 30459,
+      "last_sync_at": "2026-06-26T16:54:57.879Z",
       "registered_at": "2026-06-19T11:04:10.459Z",
       "error_state": null,
       "tasks_completed": 0,
@@ -497,41 +497,6 @@
     }
   },
   "syncLogs": [
-    {
-      "agent": "seo-website-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:17.741Z"
-    },
-    {
-      "agent": "seo-technical-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:20.953Z"
-    },
-    {
-      "agent": "seo-schema-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:22.610Z"
-    },
-    {
-      "agent": "seo-content-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:24.867Z"
-    },
-    {
-      "agent": "seo-citation-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:27.092Z"
-    },
-    {
-      "agent": "seo-analytics-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:29.618Z"
-    },
-    {
-      "agent": "seo-local-maps-agent",
-      "action": "status",
-      "ts": "2026-06-26T16:19:45.489Z"
-    },
     {
       "agent": "seo-website-agent",
       "action": "status",
@@ -2996,6 +2961,41 @@
       "agent": "seo-schema-agent",
       "action": "status",
       "ts": "2026-06-26T16:54:53.447Z"
+    },
+    {
+      "agent": "seo-content-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:55.353Z"
+    },
+    {
+      "agent": "seo-citation-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:54:57.879Z"
+    },
+    {
+      "agent": "seo-analytics-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:55:00.275Z"
+    },
+    {
+      "agent": "seo-local-maps-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:55:15.927Z"
+    },
+    {
+      "agent": "seo-website-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:55:18.326Z"
+    },
+    {
+      "agent": "seo-technical-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:55:20.777Z"
+    },
+    {
+      "agent": "seo-schema-agent",
+      "action": "status",
+      "ts": "2026-06-26T16:55:23.437Z"
     }
   ],
   "tasks": [],
