@@ -21,6 +21,7 @@ Canonical rules:
 - Mi manages projects under `D:\Project\Master`.
 - `D:\Project\Master\Mi\n8n` is the canonical externalized Mi automation fabric.
 - Laptop nodes are managed by Mi as external devices; `D:\Project\laptop1` remains a separate laptop repo, and laptop2 is a managed standby/setup target.
+- `D:\Project\Master\Mi-OpenSource-Lab` is the canonical Mi-managed open-source extension lab.
 
 | Original path | Action | Canonical/result path |
 |---|---|---|
@@ -31,6 +32,7 @@ Canonical rules:
 | `D:\Project\node_modules`, root `package*.json` | Archived as root npm misfire | `D:\Project\Master\_archive\root-path-fix-20260626\root-*` |
 | `D:\Project\COMPANY_OS_AUDIT_GAP_REPORT.md` | Moved into Mi-Core reports/source area | `D:\Project\Master\mi-core\COMPANY_OS_AUDIT_GAP_REPORT.md` |
 | `D:\Project\phase33-ga4-env-update.js` | Moved into Mi-Core scripts | `D:\Project\Master\mi-core\scripts\phase33-ga4-env-update.js` |
+| `E:\Project\Master` | Compared against canonical Master; files were already identical or empty, then archived as duplicate | `D:\Project\Master`, archive copy at `E:\Project\_migrated\Master-duplicate-20260626-212006` |
 
 ## Evidence
 
