@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "./dist/executive-coordination",
+    "rootDir": "./src/executive-coordination",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "types": ["node"]
+  },
+  "include": ["src/executive-coordination/**/*.ts"]
+}

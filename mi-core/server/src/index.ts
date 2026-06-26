@@ -126,7 +126,11 @@ import { engineeringRouter }  from './routes/engineering';
 import { aiPlatformRouter }   from './routes/ai-platform';
 import { connectorsRouter }   from './routes/connectors';
 import ceoObjectiveRouter from './ceo-command-center';
+<<<<<<< a471ef81
 import { coordinationRouter } from './routes/coordination';
+=======
+import { operatorRuntimeRouter } from './routes/operator-runtime';
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -261,8 +265,12 @@ app.use('/api/seo/gsc',             gscRouter);              // Phase 4: Google 
 app.use('/api/analytics',         ga4AnalyticsRouter);              // Phase 33: GA4 Revenue Intelligence
 app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B: Google Business Profile
 app.use('/api/engineering',       engineeringRouter);               // Phase 34: Engineering Division OS
+<<<<<<< a471ef81
 app.use('/api/ai',                aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
 app.use('/api/connectors',        connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
+=======
+app.use('/operator',             operatorRuntimeRouter);           // Phase 2A: Operator Runtime MVP
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
 app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
 app.use('/api/coordination',       requireAuth, coordinationRouter);   // Phase 0: Executive Coordination Division
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center

@@ -1,13 +1,13 @@
 {
   "client_id": "bakudan-food-safety",
-  "session_root": "E:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp",
-  "session_dir": "E:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp\\auth",
-  "cache_dir": "E:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp\\cache",
+  "session_root": "D:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp",
+  "session_dir": "D:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp\\auth",
+  "cache_dir": "D:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway\\data\\whatsapp\\cache",
   "state": "READY",
   "connection_status": "CONNECTED",
   "account_name": "Liem Do",
   "phone_number": "84584902302@c.us",
-  "session_started_at": "2026-06-25T12:09:35.582Z",
-  "last_connected_at": "2026-06-25T12:09:35.659Z",
-  "last_saved_at": "2026-06-25T12:09:35.659Z"
+  "session_started_at": "2026-06-26T00:55:51.755Z",
+  "last_connected_at": "2026-06-26T00:55:51.809Z",
+  "last_saved_at": "2026-06-26T00:55:51.809Z"
 }

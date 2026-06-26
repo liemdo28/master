@@ -1,5 +1,6 @@
 /**
  * Phase 0 — Executive Coordination Division (Main Entry)
+<<<<<<< a471ef81
  *
  * The missing management layer between CEO/Mi and all future divisions.
  *
@@ -101,6 +102,29 @@ import type { Task } from './types';
 /**
  * Full coordination pipeline — one call does everything.
  *
+=======
+ * 
+ * The missing management layer between CEO/Mi and all future divisions.
+ * 
+ * Pipeline: Objective → Tasks → Ownership → Duplicates → Dependencies → 
+ *           Priority → Conflicts → Approvals → Evidence → Dashboard
+ */
+
+export { createTask, updateTaskStatus, addEvidence, getTask, getAllTasks, getBlockedTasks, getPendingApprovals, getBlockingDependencies, getTasksByObjective, getTasksByDivision } from './task-registry';
+export { detectDuplicates, markDuplicate, getDuplicateSummary } from './duplicate-detector';
+export { buildEdges, topologicalOrder, getDownstream, getUpstream, findCycles, describeChain } from './dependency-graph';
+export { autoClassify, sortByPriority, prioritizeTask, priorityBreakdown } from './priority-engine';
+export { detectAllConflicts, hasActiveConflict, summarizeConflicts } from './conflict-engine';
+export { routeTask } from './division-router';
+export { createRegisteredObjective, getRegisteredObjectives } from './objective-registry';
+export { addEvidenceRecord, getEvidenceRecords, getAllEvidenceRecords } from './evidence-registry';
+export { buildDashboard, renderAsciiDashboard } from './executive-dashboard';
+export type { CoordinatedTask, Division, Priority, TaskStatus, DashboardSnapshot, DuplicateMatch, TaskConflict, EvidenceRef } from './types';
+
+/**
+ * Full coordination pipeline — one call does everything.
+ * 
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
  * CEO says: "Increase Raw Sushi Revenue 10%"
  * This function:
  *   1. Creates objective
@@ -113,6 +137,7 @@ import type { Task } from './types';
  */
 export function runCoordinationPipeline(
   objectiveTitle: string,
+<<<<<<< a471ef81
   tasks: Array<{
     title: string; description?: string;
     division?: string; owner?: string;
@@ -126,13 +151,30 @@ export function runCoordinationPipeline(
   dashboard: ReturnType<typeof buildDashboard>;
   dashboardAscii: string;
 } {
+=======
+  tasks: Array<{ title: string; description: string; division: import('./types').Division; owner: string; dependencies?: string[] }>
+): import('./types').DashboardSnapshot {
+  const { createRegisteredObjective } = require('./objective-registry');
+  const { createTask: createRegTask } = require('./task-registry');
+  const { detectDuplicates } = require('./duplicate-detector');
+  const { detectAllConflicts } = require('./conflict-engine');
+  const { autoClassify } = require('./priority-engine');
+  const { buildDashboard } = require('./executive-dashboard');
+
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
   // 1. Create objective
   const obj = createRegisteredObjective(objectiveTitle, 'ceo');
 
   // 2. Create tasks
+<<<<<<< a471ef81
   const allTasks: Task[] = [];
   for (const t of tasks) {
     const priority = autoClassify(t.title, t.description ?? '');
+=======
+  const allTasks: any[] = [];
+  for (const t of tasks) {
+    const priority = autoClassify(t.title, t.description);
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
     const created = createRegTask({
       objectiveId: obj.id,
       title: t.title,
@@ -140,10 +182,16 @@ export function runCoordinationPipeline(
       division: t.division,
       owner: t.owner,
       priority: priority.priority,
+<<<<<<< a471ef81
       dependencies: t.dependencies,
     });
     allTasks.push(created);
     linkTask(obj.id, created.id);
+=======
+      dependencies: t.dependencies || [],
+    });
+    allTasks.push(created);
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
   }
 
   // 3. Detect duplicates
@@ -153,6 +201,7 @@ export function runCoordinationPipeline(
   const conflicts = detectAllConflicts(allTasks);
 
   // 5. Build dashboard
+<<<<<<< a471ef81
   const dash = buildDashboard(allTasks, objectiveTitle);
   const dashboardAscii = renderAsciiDashboard(dash);
 
@@ -165,3 +214,7 @@ export function runCoordinationPipeline(
     dashboardAscii,
   };
 }
+=======
+  return buildDashboard(allTasks, objectiveTitle);
+}
+>>>>>>> origin/seo/phase-29-revenue-execution-loop
