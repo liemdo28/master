@@ -5,7 +5,10 @@ import * as path from 'path';
 
 export const ceoControlRouter = Router();
 
-const CEO_DB_DIR = path.join('E:/Project/Master/.local-agent-global/ceo-control');
+const CEO_DB_DIR = path.join(
+  process.env.GLOBAL_DIR || path.resolve(process.cwd(), '..', '.local-agent-global'),
+  'ceo-control',
+);
 const CEO_DB_PATH = path.join(CEO_DB_DIR, 'ceo-tasks.db');
 
 if (!fs.existsSync(CEO_DB_DIR)) fs.mkdirSync(CEO_DB_DIR, { recursive: true });

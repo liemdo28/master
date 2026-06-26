@@ -124,6 +124,7 @@ import { ga4AnalyticsRouter } from './routes/ga4-analytics';
 import { gbpAnalyticsRouter } from './routes/gbp-analytics';
 import { engineeringRouter }  from './routes/engineering';
 import ceoObjectiveRouter from './ceo-command-center';
+import { operatorRuntimeRouter } from './routes/operator-runtime';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -258,6 +259,7 @@ app.use('/api/seo/gsc',             gscRouter);              // Phase 4: Google 
 app.use('/api/analytics',         ga4AnalyticsRouter);              // Phase 33: GA4 Revenue Intelligence
 app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B: Google Business Profile
 app.use('/api/engineering',       engineeringRouter);               // Phase 34: Engineering Division OS
+app.use('/operator',             operatorRuntimeRouter);           // Phase 2A: Operator Runtime MVP
 app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
