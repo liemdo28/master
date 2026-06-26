@@ -1,33 +1,33 @@
 # DEV2_RUNTIME_RELIABILITY_SNAPSHOT
 
-Generated: 2026-06-25T13:06:04.208Z
+Generated: 2026-06-26T13:45:09.725Z
 Target: DAILY_RELIABILITY_SNAPSHOT_READY
-Burn-in score: 16
+Burn-in score: 0
 
 ## Uptime
 | Service | Status | Uptime % | Restarts | Crashes |
 | --- | --- | --- | --- | --- |
-| Mi-Core | down | 75.22 | 0 | 0 |
-| AI Service | up | 84.96 | 0 | 0 |
+| Mi-Core | down | 33.33 | 0 | 0 |
+| AI Service | up | 100 | 0 | 0 |
 | Ollama | up | 100 | 0 | 0 |
 | Agent Engine | unknown | 0 | 0 | 0 |
-| Visibility | degraded | 5.31 | 0 | 0 |
-| Gmail | up | 100 | 0 | 0 |
-| Calendar | up | 100 | 0 | 0 |
-| Drive | up | 100 | 0 | 0 |
-| QB Connector | degraded | 5.31 | 0 | 0 |
+| Visibility | degraded | 0 | 0 | 0 |
+| Gmail | degraded | 0 | 0 | 0 |
+| Calendar | degraded | 0 | 0 | 0 |
+| Drive | degraded | 0 | 0 | 0 |
+| QB Connector | degraded | 0 | 0 | 0 |
 | Health Connector | up | 100 | 0 | 0 |
 
 ## Ollama
 Reachable: true
 Model loaded: true
-Latency ms: 17
+Latency ms: 13
 Timeout count: 0
 
 ## Connector Freshness
 | Source | Status | Stale | Age Min |
 | --- | --- | --- | --- |
-| Gmail | stale | yes | 15782 |
+| Gmail | fresh | no | 30 |
 | Calendar | fresh | no | 29 |
 | Drive | fresh | no | 29 |
 | Sheets | fresh | no | 29 |
@@ -36,19 +36,23 @@ Timeout count: 0
 | Website bakudanramen.com | fresh | no | 29 |
 | Website rawsushibar.com | fresh | no | 29 |
 | QuickBooks | degraded | no | 0 |
-| Work Orders | fresh | no | 1718 |
-| Graph | fresh | no | 60 |
-| Memory | fresh | no | 785 |
+| Work Orders | stale | yes | 15018 |
+| Graph | fresh | no | 300 |
+| Memory | stale | yes | 2264 |
 
 ## Active Incidents
 | Type | Source | Summary | Escalation |
 | --- | --- | --- | --- |
-| runtime_failure | Mi-Core | Mi-Core down | escalated |
 | runtime_failure | Agent Engine | Agent Engine unknown | watch |
-| sync_failure | Gmail | Gmail freshness stale | escalated |
 | runtime_failure | Visibility | Visibility degraded | watch |
+| runtime_failure | Gmail | Gmail degraded | watch |
+| runtime_failure | Calendar | Calendar degraded | watch |
+| runtime_failure | Drive | Drive degraded | watch |
 | runtime_failure | QB Connector | QB Connector degraded | watch |
 | sync_failure | QuickBooks | QuickBooks freshness degraded | watch |
+| sync_failure | Work Orders | Work Orders freshness stale | escalated |
+| sync_failure | Memory | Memory freshness stale | escalated |
+| runtime_failure | Mi-Core | Mi-Core down | escalated |
 
 ## Action Required
 Dev1: No Dev1 action required from current monitoring snapshot.

@@ -7,7 +7,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const ROOT = path.resolve(__dirname, '../../../.mi-harness/coordination');
+const ROOT = process.env.MI_COORDINATION_DIR
+  ? path.resolve(process.env.MI_COORDINATION_DIR)
+  : path.resolve(process.cwd(), '.mi-harness/coordination');
 
 function ensureDir(dir: string): void {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });

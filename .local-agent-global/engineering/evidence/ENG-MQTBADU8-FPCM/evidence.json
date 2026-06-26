@@ -1,9 +1,0 @@
-[
-  {
-    "task_id": "ENG-MQTBADU8-FPCM",
-    "type": "log",
-    "source": "Mi CTO Orchestrator",
-    "content": "Task created. Model: Qwen Coder (99%). Rationale: Node/TS work; Standard bugfix; Low complexity — prefer fast/cheap models",
-    "timestamp": "2026-06-25T09:40:30.224Z"
-  }
-]
