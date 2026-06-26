@@ -12,9 +12,9 @@
       "created_at": "2026-06-19T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "needs_authorization", "credentials_configured": false, "gsc_site_url": "sc-domain:bakudanramen.com", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
-        "ga4": { "status": "needs_authorization", "credentials_configured": false, "ga4_property_id": "G-3GZ2RYDR6M", "measurement_id": "G-3GZ2RYDR6M", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
-        "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
+        "gsc": { "status": "ready", "credentials_configured": true, "gsc_site_url": "sc-domain:bakudanramen.com", "last_success_at": "2026-06-26T08:11:37.521Z" },
+        "ga4": { "status": "ready", "credentials_configured": true, "ga4_property_id": "properties/543110659", "measurement_id": "G-3GZ2RYDR6M", "last_success_at": "2026-06-26T08:11:42.217Z" },
+        "gbp": { "status": "quota_limited", "credentials_configured": true, "gbp_account_id": "needs_config", "last_error": "Google Business Profile API quota exceeded during live run on 2026-06-26." },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
       "platforms": {
@@ -35,9 +35,9 @@
       "created_at": "2026-06-24T00:00:00.000Z",
       "connectors": {
         "crawler": { "status": "ready", "credentials_configured": true },
-        "gsc": { "status": "needs_authorization", "credentials_configured": false, "gsc_site_url": "sc-domain:rawsushibar.com", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
-        "ga4": { "status": "needs_authorization", "credentials_configured": false, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "needs_numeric_id", "last_error": "Google OAuth token file missing. Authorize via /api/auth/google/start." },
-        "gbp": { "status": "missing_credentials", "credentials_configured": false, "gbp_account_id": "needs_config" },
+        "gsc": { "status": "ready", "credentials_configured": true, "gsc_site_url": "sc-domain:rawsushibar.com" },
+        "ga4": { "status": "ready", "credentials_configured": true, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "properties/532604616" },
+        "gbp": { "status": "quota_limited", "credentials_configured": true, "gbp_account_id": "needs_config", "last_error": "Google Business Profile API quota exceeded during live run on 2026-06-26." },
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
       "platforms": {

@@ -69,41 +69,41 @@ async function fetchGA4(opts = {}) {
 
   // Attempt real API call
   try {
-    const { BetaAnalyticsDataClient } = require('@google-analytics/data');
-    const propertyId = process.env.GA4_PROPERTY_ID;
-
-    let clientOpts = {};
-    const sa = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-    if (sa && fs.existsSync(sa)) {
-      clientOpts.keyFilename = sa;
-    }
-
-    const analyticsDataClient = new BetaAnalyticsDataClient(clientOpts);
+    const { google } = require('googleapis');
+    const auth = await getAuthClient();
+    if (auth && auth.error) throw new Error(auth.error);
+    const analyticsdata = google.analyticsdata({ version: 'v1beta', auth });
+    const rawPropertyId = process.env.GA4_PROPERTY_ID;
+    const propertyName = rawPropertyId.startsWith('properties/')
+      ? rawPropertyId
+      : `properties/${rawPropertyId}`;
 
     // Organic traffic report
-    const [organicResponse] = await analyticsDataClient.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
-      dimensions: [
-        { name: 'sessionDefaultChannelGroup' },
-        { name: 'landingPage' },
-        { name: 'sessionSourceMedium' },
-      ],
-      metrics: [
-        { name: 'sessions' },
-        { name: 'totalUsers' },
-        { name: 'conversions' },
-        { name: 'bounceRate' },
-      ],
-      dimensionFilter: {
-        filter: {
-          fieldName: 'sessionDefaultChannelGroup',
-          stringFilter: { value: 'Organic Search' },
+    const organicResponse = await analyticsdata.properties.runReport({
+      property: propertyName,
+      requestBody: {
+        dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
+        dimensions: [
+          { name: 'sessionDefaultChannelGroup' },
+          { name: 'landingPage' },
+          { name: 'sessionSourceMedium' },
+        ],
+        metrics: [
+          { name: 'sessions' },
+          { name: 'totalUsers' },
+          { name: 'conversions' },
+          { name: 'bounceRate' },
+        ],
+        dimensionFilter: {
+          filter: {
+            fieldName: 'sessionDefaultChannelGroup',
+            stringFilter: { value: 'Organic Search' },
+          },
         },
       },
     });
 
-    const rows = (organicResponse.rows || []).map(row => ({
+    const rows = (organicResponse.data.rows || []).map(row => ({
       channel: row.dimensionValues[0].value,
       landing_page: row.dimensionValues[1].value,
       source_medium: row.dimensionValues[2].value,
@@ -114,20 +114,22 @@ async function fetchGA4(opts = {}) {
     }));
 
     // UTM performance report
-    const [utmResponse] = await analyticsDataClient.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
-      dimensions: [
-        { name: 'sessionCampaignName' },
-        { name: 'sessionSourceMedium' },
-      ],
-      metrics: [
-        { name: 'sessions' },
-        { name: 'conversions' },
-      ],
+    const utmResponse = await analyticsdata.properties.runReport({
+      property: propertyName,
+      requestBody: {
+        dateRanges: [{ startDate: '28daysAgo', endDate: 'today' }],
+        dimensions: [
+          { name: 'sessionCampaignName' },
+          { name: 'sessionSourceMedium' },
+        ],
+        metrics: [
+          { name: 'sessions' },
+          { name: 'conversions' },
+        ],
+      },
     });
 
-    const utmRows = (utmResponse.rows || []).map(row => ({
+    const utmRows = (utmResponse.data.rows || []).map(row => ({
       campaign: row.dimensionValues[0].value,
       source_medium: row.dimensionValues[1].value,
       sessions: parseInt(row.metricValues[0].value),
@@ -140,7 +142,7 @@ async function fetchGA4(opts = {}) {
     fs.writeFileSync(reportPath, JSON.stringify({
       source: 'ga4',
       fetched_at: new Date().toISOString(),
-      property_id: propertyId,
+      property_id: propertyName,
       organic_traffic: rows,
       utm_performance: utmRows,
     }, null, 2));
@@ -175,10 +177,10 @@ async function fetchGA4(opts = {}) {
       credentials_configured: true,
       records: 0,
       error: isModuleError
-        ? 'GA4 SDK not installed. Run: npm install @google-analytics/data'
+        ? 'googleapis package not installed. Run: npm install googleapis'
         : `GA4 API error: ${e.message}`,
       setup_steps: isModuleError
-        ? ['Run: cd SEO/shared && npm install @google-analytics/data']
+        ? ['Run: cd SEO/shared && npm install googleapis']
         : ['Check Analytics Data API permissions and property ID'],
       data: [],
       fields_available: ['organic_traffic', 'landing_pages', 'conversions', 'source_medium', 'utm_performance'],
