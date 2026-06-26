@@ -1,6 +1,6 @@
 # Workflow Dependency Graph
 
-Status: PARTIAL
+Status: READY
 
 ```mermaid
 flowchart TD
@@ -25,5 +25,5 @@ flowchart TD
 | `mi-system-health-check` | PM2/Mi health endpoints | CEO status, engineering alerts | READ_ONLY |
 
 Dependency gaps:
-- Some documented workflows do not have machine registry IDs.
-- Workflow dependency graph is documented here but not yet enforced by a central API route.
+- Documented workflows now have machine registry IDs.
+- Workflow dependency graph is enforced at Phase 0.7 contract level; deeper per-step n8n edge enforcement can be added after runtime rollout.

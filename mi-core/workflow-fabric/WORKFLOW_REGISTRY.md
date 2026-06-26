@@ -1,6 +1,6 @@
 # Workflow Registry
 
-Status: PARTIAL
+Status: READY
 Machine registry: `Mi/n8n/config/workflow-registry.json`
 Human registry: `Mi/n8n/N8N_WORKFLOW_REGISTRY.md`
 
@@ -22,6 +22,6 @@ Human registry: `Mi/n8n/N8N_WORKFLOW_REGISTRY.md`
 
 ## Documented Workflows Not Yet Machine-Registered
 
-`exec-daily-brief`, `exec-weekly-brief`, `exec-monthly-report`, `finance-qb-sync`, `finance-tax-reminder`, `finance-payroll-reminder`, `ops-daily-store-health`, `ops-compliance-summary`, `ops-missed-task-alert`, `mkt-seo-summary`, `mkt-review-summary`, `mkt-campaign-summary`, `eng-pm2-health`, `eng-build-monitor`, `eng-error-monitor`.
+None. The 15 previously documented-only workflows are now registered in `Mi/n8n/config/workflow-registry.json`.
 
-Next action: import documented workflows into the machine registry or mark them retired/read-only.
+Current machine registry total: 22 workflows.

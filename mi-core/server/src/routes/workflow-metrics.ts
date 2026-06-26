@@ -4,6 +4,8 @@
  * GET /api/workflows/metrics          — authoritative workflow success metrics
  * GET /api/workflows/metrics/failures — failed workflow list with reasons
  * GET /api/workflows/ledger           — execution ledger entries
+ * POST /api/workflows/log             — Phase 0.7 workflow log + dedup + evidence
+ * GET /api/workflows/status           — Phase 0.7 workflow fabric dashboard
  * 
  * Source of truth: workflow_execution_ledger table.
  * No inferred scoring. No synthetic scoring.
@@ -16,6 +18,8 @@ import { getFailureSummary, getRecentFailures, getOpenFailures, recordFailure, r
 import { getApprovalSourceOfTruth } from '../operations/approval-source-of-truth';
 import { validateMemoryArchitecture } from '../operations/memory-architecture-validator';
 import { probeAllConnectors, getProbeSummary } from '../operations/connector-live-probes';
+import { buildWorkflowFabricStatus } from '../workflow-fabric/workflow-dashboard';
+import { logWorkflowExecution } from '../workflow-fabric/workflow-log-service';
 
 export const workflowMetricsRouter = Router();
 
@@ -103,6 +107,45 @@ workflowMetricsRouter.post('/ledger/backfill', (_req: Request, res: Response) =>
   try {
     const result = backfillFromWorkflowFiles();
     res.json({ ok: true, ...result });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// ── Phase 0.7: Workflow Automation Fabric APIs ────────────────────────────
+
+/**
+ * POST /api/workflows/log
+ * Logs workflow execution through Phase 0.7 dedup + evidence model.
+ */
+workflowMetricsRouter.post('/log', (req: Request, res: Response) => {
+  try {
+    const result = logWorkflowExecution(req.body);
+    if (!result.ok) return res.status(result.statusCode).json(result);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+/**
+ * GET /api/workflows/status
+ * Without workflow_id: returns Phase 0.7 fabric dashboard.
+ * With workflow_id: returns backward-compatible ledger status for that workflow.
+ */
+workflowMetricsRouter.get('/status', (req: Request, res: Response) => {
+  try {
+    const workflowId = req.query.workflow_id ? String(req.query.workflow_id) : '';
+    if (!workflowId) {
+      return res.json({ ok: true, status: buildWorkflowFabricStatus() });
+    }
+    const entries = getLedgerByWorkflow(workflowId);
+    return res.json({
+      ok: true,
+      workflow_id: workflowId,
+      status: entries.at(-1)?.status ?? 'unknown',
+      entries,
+    });
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e) });
   }

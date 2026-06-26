@@ -1,6 +1,6 @@
 # Workflow Governance
 
-Status: PARTIAL
+Status: READY
 Source: `mi-core/server/src/workflow-fabric/workflow-governance.ts`
 
 ## Risk Levels

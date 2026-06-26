@@ -13,7 +13,8 @@ This report does not certify the whole Company OS as READY or OPERATIONAL. It ce
 - GitHub remote: `https://github.com/liemdo28/master.git`.
 - Current verification branch: `codex/source-verification-phase-gap`.
 - Phase 1B Engineering Live Execution: directive audit says PR #3 exists.
-- Phase 0.7 workflow dedup source now exists under `mi-core/server/src/workflow-fabric/`.
+- Phase 0.7 workflow dedup, governance, evidence, status, and log APIs now exist under `mi-core/server/src/workflow-fabric/` and `mi-core/server/src/routes/workflow-fabric.ts`.
+- Phase 0.7 runtime test reports `READY` with 16 passed and 0 failed.
 - Phase 0.6 portfolio source now enforces at least 20 certified assets in runtime test.
 
 ## Local
@@ -25,7 +26,7 @@ This report does not certify the whole Company OS as READY or OPERATIONAL. It ce
 
 - `mi-core/server/src/financial-warehouse/` was not found, so Phase 3A cannot be marked complete.
 - Phase 2C Business Operators must not start until Phase 2B reaches `OPERATOR_RUNTIME_READY`.
-- Full workflow dashboard/API integration for Phase 0.7 is not promoted yet.
+- Full Company OS source verification is still not complete because other phases remain local, missing, or blocked.
 
 ## Blocked
 

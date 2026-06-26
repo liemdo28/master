@@ -1,6 +1,6 @@
 # Workflow Automation OSS Audit
 
-Status: PARTIAL
+Status: READY
 
 Governance rule: every OSS candidate is `LICENSE_UNVERIFIED` until Phase 0.5 license verification records evidence. No install, pilot, or promotion is allowed without security review, maintenance score, business value, technical fit, owner division, rollback plan, and approval.
 
