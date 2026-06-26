@@ -1,0 +1,34 @@
+{
+  "brands": [
+    {
+      "brand_id": "bakudan",
+      "name": "Bakudan Ramen",
+      "domain": "bakudanramen.com",
+      "status": "active",
+      "industry": "restaurant",
+      "cuisine": "Japanese Ramen",
+      "connectors": {
+        "crawler": { "status": "configured" },
+        "gsc": { "status": "needs_config" },
+        "ga4": { "status": "missing_credentials" },
+        "gbp": { "status": "missing_credentials" },
+        "citation_scan": { "status": "configured" }
+      }
+    },
+    {
+      "brand_id": "raw_sushi",
+      "name": "Raw Sushi",
+      "domain": "rawsushibar.com",
+      "status": "active",
+      "industry": "restaurant",
+      "cuisine": "Japanese Sushi",
+      "connectors": {
+        "crawler": { "status": "needs_config" },
+        "gsc": { "status": "needs_config" },
+        "ga4": { "status": "missing_credentials" },
+        "gbp": { "status": "missing_credentials" },
+        "citation_scan": { "status": "needs_config" }
+      }
+    }
+  ]
+}
