@@ -126,6 +126,7 @@ import { engineeringRouter }  from './routes/engineering';
 import { aiPlatformRouter }   from './routes/ai-platform';
 import { connectorsRouter }   from './routes/connectors';
 import ceoObjectiveRouter from './ceo-command-center';
+import { coordinationRouter } from './routes/coordination';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -263,6 +264,7 @@ app.use('/api/engineering',       engineeringRouter);               // Phase 34:
 app.use('/api/ai',                aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
 app.use('/api/connectors',        connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
 app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
+app.use('/api/coordination',       requireAuth, coordinationRouter);   // Phase 0: Executive Coordination Division
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
   res.json({
