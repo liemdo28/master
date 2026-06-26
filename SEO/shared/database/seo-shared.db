@@ -29,67 +29,67 @@
       "id": "status:seo-website-agent",
       "agent": "seo-website-agent",
       "version": "1.0.0",
-      "uptime_s": 30429,
+      "uptime_s": 30459,
       "port": 4012,
       "mi_enabled": true,
       "pid": 32328,
-      "last_seen": "2026-06-26T16:54:18.276Z",
-      "_ts": "2026-06-26T16:54:18.292Z"
+      "last_seen": "2026-06-26T16:54:48.279Z",
+      "_ts": "2026-06-26T16:54:48.299Z"
     },
     {
       "id": "status:seo-citation-agent",
       "agent": "seo-citation-agent",
       "version": "1.0.0",
-      "uptime_s": 30399,
+      "uptime_s": 30429,
       "port": 4016,
       "mi_enabled": true,
       "pid": 29472,
-      "last_seen": "2026-06-26T16:53:57.667Z",
-      "_ts": "2026-06-26T16:53:57.732Z"
+      "last_seen": "2026-06-26T16:54:27.667Z",
+      "_ts": "2026-06-26T16:54:27.687Z"
     },
     {
       "id": "status:seo-technical-agent",
       "agent": "seo-technical-agent",
       "version": "1.0.0",
-      "uptime_s": 30430,
+      "uptime_s": 30460,
       "port": 4013,
       "mi_enabled": true,
       "pid": 33092,
-      "last_seen": "2026-06-26T16:54:20.728Z",
-      "_ts": "2026-06-26T16:54:20.758Z"
+      "last_seen": "2026-06-26T16:54:50.740Z",
+      "_ts": "2026-06-26T16:54:50.755Z"
     },
     {
       "id": "status:seo-local-maps-agent",
       "agent": "seo-local-maps-agent",
       "version": "1.0.0",
-      "uptime_s": 30429,
+      "uptime_s": 30459,
       "port": 4011,
       "mi_enabled": true,
       "pid": 33304,
-      "last_seen": "2026-06-26T16:54:15.865Z",
-      "_ts": "2026-06-26T16:54:15.944Z"
+      "last_seen": "2026-06-26T16:54:45.872Z",
+      "_ts": "2026-06-26T16:54:45.891Z"
     },
     {
       "id": "status:seo-schema-agent",
       "agent": "seo-schema-agent",
       "version": "1.0.0",
-      "uptime_s": 30430,
+      "uptime_s": 30460,
       "port": 4014,
       "mi_enabled": true,
       "pid": 29656,
-      "last_seen": "2026-06-26T16:54:23.219Z",
-      "_ts": "2026-06-26T16:54:23.229Z"
+      "last_seen": "2026-06-26T16:54:53.236Z",
+      "_ts": "2026-06-26T16:54:53.305Z"
     },
     {
       "id": "status:seo-analytics-agent",
       "agent": "seo-analytics-agent",
       "version": "1.0.0",
-      "uptime_s": 30400,
+      "uptime_s": 30430,
       "port": 4017,
       "mi_enabled": true,
       "pid": 32248,
-      "last_seen": "2026-06-26T16:54:00.226Z",
-      "_ts": "2026-06-26T16:54:00.242Z"
+      "last_seen": "2026-06-26T16:54:30.229Z",
+      "_ts": "2026-06-26T16:54:30.247Z"
     }
   ],
   "agent_tasks": [],
@@ -118685,6 +118685,78 @@
         "ok": true
       },
       "_ts": "2026-06-26T16:54:25.352Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492867721_6ldpfa",
+      "agent": "seo-citation-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-citation-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:27.721Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492870283_dvcxye",
+      "agent": "seo-analytics-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-analytics-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:30.283Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492885927_3g67dc",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:45.927Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492888333_17f1fv",
+      "agent": "seo-website-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-website-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:48.333Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492890790_ba1wpw",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:50.790Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492893511_6mx5xk",
+      "agent": "seo-schema-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-schema-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:54:53.511Z"
     }
   ],
   "reports": []
