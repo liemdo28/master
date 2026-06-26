@@ -60,8 +60,13 @@ _archive/
 # Agent/runtime generated workspace data
 .local-agent/
 **/.local-agent/
+.local-agent-global/
+**/.local-agent-global/
 Agent/agent-coding/apps/agency/data/post_exports/
+Agent/agent-coding-api-keys/
 agent-os/local-agent/data/
+mi-core/services/qb-ops-agent/.machine_token
+**/.machine_token
 
 # Large files
 *.zip

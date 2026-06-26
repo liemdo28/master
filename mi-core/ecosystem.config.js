@@ -83,6 +83,10 @@ module.exports = {
         MI_PORT: '4001',
         HOST: '0.0.0.0',
         MI_NODE_ID: 'mi-core-primary',
+        MASTER_ROOT: 'D:/Project/Master',
+        MI_CORE_ROOT: 'D:/Project/Master/mi-core',
+        GLOBAL_DIR: 'D:/Project/Master/.local-agent-global',
+        MI_DATA_DIR: 'D:/Project/Master/.local-agent-global',
       },
       env_production: {
         NODE_ENV: 'production',
@@ -90,6 +94,10 @@ module.exports = {
         HOST: '0.0.0.0',
         MOBILE_ACCESS: '1',
         MI_NODE_ID: 'mi-core-primary',
+        MASTER_ROOT: 'D:/Project/Master',
+        MI_CORE_ROOT: 'D:/Project/Master/mi-core',
+        GLOBAL_DIR: 'D:/Project/Master/.local-agent-global',
+        MI_DATA_DIR: 'D:/Project/Master/.local-agent-global',
       },
       error_file: '.local-agent-global/logs/mi-core-error.log',
       out_file:   '.local-agent-global/logs/mi-core-out.log',
@@ -248,3 +256,4 @@ module.exports = {
     },
   ],
 };
+

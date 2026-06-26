@@ -42,7 +42,24 @@ export type ApprovalType =
   | 'financial'
   | 'payroll'
   | 'credentials'
+  | 'code_merge'
+  | 'production_deploy'
+  | 'credential_use'
+  | 'financial_action'
+  | 'payroll_action'
+  | 'marketing_publish'
+  | 'review_response'
+  | 'doordash_campaign_change'
+  | 'website_content_publish'
+  | 'data_export'
   | 'none';
+
+export type ApprovalStatus =
+  | 'REQUESTED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'EXPIRED'
+  | 'CANCELLED';
 
 // â”€â”€ Coordinated Task â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -62,6 +79,40 @@ export interface CoordinatedTask {
   createdAt: string;
   updatedAt: string;
   completedAt: string | null;
+}
+
+export type Task = CoordinatedTask;
+
+export interface ApprovalRecord {
+  id: string;
+  objectiveId: string | null;
+  taskId: string | null;
+  requestedBy: string;
+  approvalType: ApprovalType;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  status: ApprovalStatus;
+  approver: string | null;
+  reason: string;
+  evidenceIds: string[];
+  createdAt: string;
+  approvedAt: string | null;
+  rejectedAt: string | null;
+  expiresAt: string | null;
+}
+
+export interface OwnershipRule {
+  division: Division | 'executive' | string;
+  keywords: string[];
+  domains: string[];
+  description: string;
+}
+
+export interface OwnershipResolution {
+  taskText: string;
+  resolvedDivision: Division | 'executive' | string;
+  confidence: number;
+  matchedKeywords: string[];
+  fallback: boolean;
 }
 
 // â”€â”€ Evidence Reference â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
