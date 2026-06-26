@@ -18,78 +18,78 @@
       "id": "status:seo-content-agent",
       "agent": "seo-content-agent",
       "version": "1.0.0",
-      "uptime_s": 30339,
+      "uptime_s": 30369,
       "port": 4015,
       "mi_enabled": true,
       "pid": 7144,
-      "last_seen": "2026-06-26T16:52:55.267Z",
-      "_ts": "2026-06-26T16:52:55.361Z"
+      "last_seen": "2026-06-26T16:53:25.281Z",
+      "_ts": "2026-06-26T16:53:25.299Z"
     },
     {
       "id": "status:seo-website-agent",
       "agent": "seo-website-agent",
       "version": "1.0.0",
-      "uptime_s": 30339,
+      "uptime_s": 30369,
       "port": 4012,
       "mi_enabled": true,
       "pid": 32328,
-      "last_seen": "2026-06-26T16:52:48.248Z",
-      "_ts": "2026-06-26T16:52:48.264Z"
+      "last_seen": "2026-06-26T16:53:18.255Z",
+      "_ts": "2026-06-26T16:53:18.271Z"
     },
     {
       "id": "status:seo-citation-agent",
       "agent": "seo-citation-agent",
       "version": "1.0.0",
-      "uptime_s": 30339,
+      "uptime_s": 30369,
       "port": 4016,
       "mi_enabled": true,
       "pid": 29472,
-      "last_seen": "2026-06-26T16:52:57.650Z",
-      "_ts": "2026-06-26T16:52:57.665Z"
+      "last_seen": "2026-06-26T16:53:27.659Z",
+      "_ts": "2026-06-26T16:53:27.673Z"
     },
     {
       "id": "status:seo-technical-agent",
       "agent": "seo-technical-agent",
       "version": "1.0.0",
-      "uptime_s": 30339,
+      "uptime_s": 30369,
       "port": 4013,
       "mi_enabled": true,
       "pid": 33092,
-      "last_seen": "2026-06-26T16:52:50.690Z",
-      "_ts": "2026-06-26T16:52:50.777Z"
+      "last_seen": "2026-06-26T16:53:20.704Z",
+      "_ts": "2026-06-26T16:53:20.746Z"
     },
     {
       "id": "status:seo-local-maps-agent",
       "agent": "seo-local-maps-agent",
       "version": "1.0.0",
-      "uptime_s": 30339,
+      "uptime_s": 30369,
       "port": 4011,
       "mi_enabled": true,
       "pid": 33304,
-      "last_seen": "2026-06-26T16:52:45.847Z",
-      "_ts": "2026-06-26T16:52:45.863Z"
+      "last_seen": "2026-06-26T16:53:15.850Z",
+      "_ts": "2026-06-26T16:53:15.899Z"
     },
     {
       "id": "status:seo-schema-agent",
       "agent": "seo-schema-agent",
       "version": "1.0.0",
-      "uptime_s": 30340,
+      "uptime_s": 30370,
       "port": 4014,
       "mi_enabled": true,
       "pid": 29656,
-      "last_seen": "2026-06-26T16:52:53.189Z",
-      "_ts": "2026-06-26T16:52:53.208Z"
+      "last_seen": "2026-06-26T16:53:23.195Z",
+      "_ts": "2026-06-26T16:53:23.218Z"
     },
     {
       "id": "status:seo-analytics-agent",
       "agent": "seo-analytics-agent",
       "version": "1.0.0",
-      "uptime_s": 30340,
+      "uptime_s": 30370,
       "port": 4017,
       "mi_enabled": true,
       "pid": 32248,
-      "last_seen": "2026-06-26T16:53:00.210Z",
-      "_ts": "2026-06-26T16:53:00.225Z"
+      "last_seen": "2026-06-26T16:53:30.224Z",
+      "_ts": "2026-06-26T16:53:30.239Z"
     }
   ],
   "agent_tasks": [],
@@ -118457,6 +118457,90 @@
         "ok": true
       },
       "_ts": "2026-06-26T16:53:00.261Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492796415_f08z2a",
+      "agent": "seo-local-maps-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-local-maps-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:16.415Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492798306_hl0fi6",
+      "agent": "seo-website-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-website-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:18.306Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492800793_wbbete",
+      "agent": "seo-technical-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-technical-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:20.793Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492803256_z63jmc",
+      "agent": "seo-schema-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-schema-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:23.256Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492805339_u0a8zv",
+      "agent": "seo-content-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-content-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:25.339Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492807711_vb7zy2",
+      "agent": "seo-citation-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-citation-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:27.711Z"
+    },
+    {
+      "id": "mi_sync_logs_1782492810274_u7b7aj",
+      "agent": "seo-analytics-agent",
+      "method": "POST",
+      "path": "/api/seo/agents/seo-analytics-agent/status",
+      "ok": true,
+      "result": {
+        "status": 200,
+        "ok": true
+      },
+      "_ts": "2026-06-26T16:53:30.274Z"
     }
   ],
   "reports": []
