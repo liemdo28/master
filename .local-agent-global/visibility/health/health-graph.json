@@ -1,0 +1,106 @@
+{
+  "entities": [
+    {
+      "type": "HealthSource",
+      "name": "Huawei Health Export",
+      "attributes": {
+        "source_path": "C:\\Users\\liemdo\\iCloudDrive\\HealthExports\\mi-health-export.json",
+        "imported_at": "2026-06-25T13:36:54.110Z"
+      }
+    },
+    {
+      "type": "HealthMetric",
+      "name": "sleep",
+      "attributes": {
+        "avg_sleep_mins": 425,
+        "avg_sleep_text": "7h05"
+      }
+    },
+    {
+      "type": "HealthMetric",
+      "name": "hrv",
+      "attributes": {
+        "avg_hrv": "41.7",
+        "latest_hrv": 42.3
+      }
+    },
+    {
+      "type": "HealthMetric",
+      "name": "resting_heart_rate",
+      "attributes": {
+        "avg_resting_hr": "59.1",
+        "latest_resting_hr": 59
+      }
+    },
+    {
+      "type": "HealthMetric",
+      "name": "activity",
+      "attributes": {
+        "avg_steps": 8721,
+        "workouts": 3
+      }
+    },
+    {
+      "type": "HealthMetric",
+      "name": "recovery",
+      "attributes": {
+        "recovery_score": 80,
+        "health_score": 90
+      }
+    },
+    {
+      "type": "HealthTrend",
+      "name": "weekly_health",
+      "attributes": {
+        "week_start": "2026-06-07",
+        "week_end": "2026-06-13",
+        "days_with_data": 7,
+        "avg_steps": 8721,
+        "total_steps": 61047,
+        "avg_active_cals": 517,
+        "avg_resting_hr": "59.1",
+        "avg_hrv": "41.7",
+        "avg_sleep_mins": 425,
+        "avg_sleep_quality": "94",
+        "workouts": 3
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "HealthSource:Huawei Health Export",
+      "relation": "provides",
+      "to": "HealthMetric:sleep"
+    },
+    {
+      "from": "HealthSource:Huawei Health Export",
+      "relation": "provides",
+      "to": "HealthMetric:hrv"
+    },
+    {
+      "from": "HealthSource:Huawei Health Export",
+      "relation": "provides",
+      "to": "HealthMetric:resting_heart_rate"
+    },
+    {
+      "from": "HealthSource:Huawei Health Export",
+      "relation": "provides",
+      "to": "HealthMetric:activity"
+    },
+    {
+      "from": "HealthMetric:sleep",
+      "relation": "influences",
+      "to": "HealthMetric:recovery"
+    },
+    {
+      "from": "HealthMetric:hrv",
+      "relation": "influences",
+      "to": "HealthMetric:recovery"
+    },
+    {
+      "from": "HealthMetric:activity",
+      "relation": "contributes_to",
+      "to": "HealthTrend:weekly_health"
+    }
+  ]
+}

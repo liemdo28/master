@@ -1,0 +1,13 @@
+{
+  "status": "OPENHUMAN_READY",
+  "generated_at": "2026-06-14T15:33:21.317Z",
+  "source": "E:\\Project\\Master\\.local-agent-global\\visibility\\health\\data.json",
+  "records": 13,
+  "sleep_avg_hours": 7.1,
+  "avg_hrv": 41.7,
+  "avg_steps": 8721,
+  "workouts": 3,
+  "recovery_signal": "LOW",
+  "graph_engine": "enterprise-brain-graph",
+  "health_engine": "health-intelligence"
+}

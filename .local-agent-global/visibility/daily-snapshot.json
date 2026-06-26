@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-06-25T13:06:04.208Z",
+  "date": "Thứ Năm, 25 tháng 6, 2026",
+  "platforms": {
+    "connected": [
+      "Master Workspace",
+      "Dashboard",
+      "Gmail",
+      "Google Calendar",
+      "Google Drive",
+      "Asana",
+      "Huawei Health (export)",
+      "Accounting Engine"
+    ],
+    "not_configured": []
+  },
+  "projects": {
+    "total": 14,
+    "with_issues": 1,
+    "top_issues": [
+      {
+        "name": "mi-core",
+        "issues": [
+          "uncommitted changes"
+        ]
+      }
+    ],
+    "recent": [
+      "Agent",
+      "artifact-registry",
+      "Bakudan",
+      "Mi",
+      "mi-core"
+    ]
+  },
+  "dashboard": {
+    "status": "synced",
+    "modules_count": 30,
+    "reports_count": 20
+  },
+  "tasks": {
+    "asana_status": "synced (855 tasks, 76 overdue)",
+    "asana_overdue": 76,
+    "asana_my_tasks": 855,
+    "dashboard_status": "no_tasks_module"
+  },
+  "emails": {
+    "status": "synced (37 unread, 10 important)",
+    "unread": 37,
+    "important": 10
+  },
+  "calendar": {
+    "status": "synced (0 events today)",
+    "today_count": 0,
+    "events_today": []
+  },
+  "health": {
+    "status": "export_available",
+    "summary": "Sức khỏe 2026-06-13:\nBước chân: 7,842/10,000\nGiấc ngủ: 7.1h (good)\nHRV: 42.3ms\nResting HR: 59 bpm\nWorkouts tuần này: 3\nStress signal: LOW\nDisclaimer: Mi chỉ tóm tắt dữ liệu sức khỏe. Không phải tư vấn y tế. Anh nên tham khảo bác sĩ cho mọi vấn đề sức khỏe."
+  },
+  "accounting": {
+    "status": "live",
+    "summary": "📊 Accounting Engine\n  Ledger: ✓ verified"
+  },
+  "food_safety": {
+    "status": "no_data",
+    "total_records": 0,
+    "pending_sync": 0
+  },
+  "action_items": [
+    "1 project có uncommitted changes",
+    "37 emails chưa đọc",
+    "76 Asana tasks overdue"
+  ]
+}

@@ -1,42 +1,41 @@
 # EXECUTIVE_RUNTIME_SNAPSHOT
 
-Generated: 2026-06-26T05:58:16.064Z
+Generated: 2026-06-25T13:06:04.220Z
 Target: EXECUTIVE_SNAPSHOT_READY
-Burn-in score: 26
+Burn-in score: 16
 QB status: degraded
 Health status: fresh
 
 ## Connector Health
 | Connector | Auth | Health | Last Sync |
 | --- | --- | --- | --- |
-| Master Workspace (Local) | connected | healthy | 2026-06-26T05:58:07.793Z |
-| Dashboard bakudanramen.com | connected | healthy | 2026-06-26T05:58:07.794Z |
-| Asana | connected | healthy | 2026-06-26T05:29:04.755Z |
+| Master Workspace (Local) | connected | healthy | 2026-06-25T13:05:52.013Z |
+| Dashboard bakudanramen.com | connected | healthy | 2026-06-25T13:05:52.059Z |
+| Asana | connected | healthy | 2026-06-25T12:36:50.182Z |
 | Gmail | connected | healthy | 2026-06-14T14:03:57.278Z |
-| Google Calendar | connected | healthy | 2026-06-26T05:28:55.000Z |
-| Google Drive | connected | healthy | 2026-06-26T05:28:55.716Z |
-| Huawei Health Export | connected | healthy | 2026-06-26T05:29:04.760Z |
-| rawsushibar.com | connected | healthy | 2026-06-25T14:36:56.324Z |
-| bakudanramen.com | connected | healthy | 2026-06-25T14:36:56.324Z |
-| Accounting Engine | connected | healthy | 2026-06-26T05:29:04.764Z |
-| Food Safety Gateway | connected | healthy | 2026-06-26T05:29:04.771Z |
+| Google Calendar | connected | healthy | 2026-06-25T12:36:39.701Z |
+| Google Drive | connected | healthy | 2026-06-25T12:36:40.415Z |
+| Huawei Health Export | connected | healthy | 2026-06-25T12:36:50.190Z |
+| rawsushibar.com | connected | healthy | 2026-06-25T12:36:50.952Z |
+| bakudanramen.com | connected | healthy | 2026-06-25T12:36:50.951Z |
+| Accounting Engine | connected | healthy | 2026-06-25T12:36:50.400Z |
+| Food Safety Gateway | connected | healthy | 2026-06-25T12:36:50.410Z |
 | WhatsApp (Mi Gateway) | connected | healthy | 2026-06-13T14:44:12.122Z |
-| QuickBooks Runtime | connected | degraded | 2026-06-26T05:58:16.025Z |
-| Google Sheets | connected | healthy | 2026-06-26T05:28:58.288Z |
+| QuickBooks Runtime | connected | degraded | 2026-06-25T13:06:04.181Z |
+| Google Sheets | connected | healthy | 2026-06-25T12:36:42.903Z |
 
 ## Stale Sources
 | Source | Status | Age Min | Threshold Min | Escalation |
 | --- | --- | --- | --- | --- |
-| Gmail | stale | 16794 | 120 | escalated |
+| Gmail | stale | 15782 | 120 | escalated |
 | QuickBooks | degraded | 0 | 1440 | watch |
-| Memory | stale | 1797 | 1440 | escalated |
 
 ## Failed Workflows
 | Type | Source | Summary | First Seen | Recurrence |
 | --- | --- | --- | --- | --- |
-| runtime_failure | Agent Engine | Agent Engine unknown | 2026-06-14T15:48:58.502Z | 122 |
-| sync_failure | Gmail | Gmail freshness stale | 2026-06-14T16:05:16.431Z | 121 |
-| runtime_failure | Visibility | Visibility degraded | 2026-06-14T17:42:06.074Z | 118 |
-| runtime_failure | QB Connector | QB Connector degraded | 2026-06-14T17:42:06.075Z | 118 |
-| sync_failure | QuickBooks | QuickBooks freshness degraded | 2026-06-14T17:42:06.076Z | 117 |
-| sync_failure | Memory | Memory freshness stale | 2026-06-19T07:36:06.841Z | 41 |
+| runtime_failure | Mi-Core | Mi-Core down | 2026-06-14T15:47:19.780Z | 28 |
+| runtime_failure | Agent Engine | Agent Engine unknown | 2026-06-14T15:48:58.502Z | 111 |
+| sync_failure | Gmail | Gmail freshness stale | 2026-06-14T16:05:16.431Z | 110 |
+| runtime_failure | Visibility | Visibility degraded | 2026-06-14T17:42:06.074Z | 107 |
+| runtime_failure | QB Connector | QB Connector degraded | 2026-06-14T17:42:06.075Z | 107 |
+| sync_failure | QuickBooks | QuickBooks freshness degraded | 2026-06-14T17:42:06.076Z | 106 |

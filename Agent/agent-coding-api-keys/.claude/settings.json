@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm * keys.json)",
+      "Bash(rm * data/*)",
+      "Bash(kill * 3456*)",
+      "Bash(taskkill * node*)"
+    ]
+  }
+}

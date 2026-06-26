@@ -1,0 +1,373 @@
+[
+  {
+    "approval_id": "review-10061",
+    "review_id": 10061,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 2,
+    "reviewer_name": "Mi Approval Guest",
+    "review_text": "The wait was long and my order was wrong.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hi Mi Approval Guest, thank you for sharing your experience with us. We're sorry to hear that the wait was longer than expected and that your order was incorrect. Your feedback is important, and we will address these issues with our team to improve our service. We hope you'll consider giving us another chance in the future to provide you with a better experience. Thank you for your understanding!",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "posted",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 2 stars\nCustomer: Mi Approval Guest\n\nReview:\n\"The wait was long and my order was wrong.\"\n\nSuggested reply:\n\"Hi Mi Approval Guest, thank you for sharing your experience with us. We're sorry to hear that the wait was longer than expected and that your order was incorrect. Your feedback is important, and we will address these issues with our team to improve our service. We hope you'll consider giving us another chance in the future to provide you with a better experience. Thank you for your understanding!\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:17:34.970Z",
+    "updated_at": "2026-06-11T03:20:00.746Z",
+    "original_reply": "Hi Mi Approval Guest, thank you for sharing your experience with us. We're sorry to hear that the wait was longer than expected and that your order was incorrect. Your feedback is important, and we will address these issues with our team to improve our service. We hope you'll consider giving us another chance in the future to provide you with a better experience. Thank you for your understanding!",
+    "final_reply": "Thanks for letting us know. We are sorry the wait and order were not right at Bandera, and we appreciate the chance to review this with our team.",
+    "last_result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": 317,
+        "mode": "operator_assisted",
+        "review_id": 10061
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10061,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10062",
+    "review_id": 10062,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 2,
+    "reviewer_name": "Mi Approval Guest 2",
+    "review_text": "Food was late and the order was missing an item.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hi Mi Approval Guest 2, we truly appreciate your feedback. We’re sorry to hear that your food was late and that an item was missing from your order. This is not the experience we aim to provide, and we will address these issues with our team. Your satisfaction is important to us, and we hope you’ll consider giving us another chance to serve you better in the future. Thank you for bringing this to our attention.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "posted",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 2 stars\nCustomer: Mi Approval Guest 2\n\nReview:\n\"Food was late and the order was missing an item.\"\n\nSuggested reply:\n\"Hi Mi Approval Guest 2, we truly appreciate your feedback. We’re sorry to hear that your food was late and that an item was missing from your order. This is not the experience we aim to provide, and we will address these issues with our team. Your satisfaction is important to us, and we hope you’ll consider giving us another chance to serve you better in the future. Thank you for bringing this to our attention.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:21:50.879Z",
+    "updated_at": "2026-06-11T03:22:03.570Z",
+    "original_reply": "Hi Mi Approval Guest 2, we truly appreciate your feedback. We’re sorry to hear that your food was late and that an item was missing from your order. This is not the experience we aim to provide, and we will address these issues with our team. Your satisfaction is important to us, and we hope you’ll consider giving us another chance to serve you better in the future. Thank you for bringing this to our attention.",
+    "final_reply": "Thanks for telling us. We are sorry the order was late and missing an item at Bandera, and we appreciate the chance to review this with our team.",
+    "last_result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10062
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10062,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10063",
+    "review_id": 10063,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Mi Reject Guest",
+    "review_text": "I do not want a reply.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "rejected_by_ceo",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Mi Reject Guest\n\nReview:\n\"I do not want a reply.\"\n\nSuggested reply:\n\"We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:22:39.890Z",
+    "updated_at": "2026-06-11T03:22:52.685Z",
+    "original_reply": "We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.",
+    "final_reply": "We respect your wish for no response, but we genuinely appreciate your feedback. If you ever feel comfortable sharing more about your experience, we’re here to listen. Our goal is to provide a better experience for all our guests, and your insights can help us improve. Thank you for your understanding.",
+    "last_result": {
+      "status": "rejected_by_ceo",
+      "review_id": 10063,
+      "reason": "Rejected by CEO via WhatsApp"
+    }
+  },
+  {
+    "approval_id": "review-10064",
+    "review_id": 10064,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Mi Escalate Guest",
+    "review_text": "I need a manager to call me.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "escalated",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Mi Escalate Guest\n\nReview:\n\"I need a manager to call me.\"\n\nSuggested reply:\n\"Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:22:40.071Z",
+    "updated_at": "2026-06-11T03:22:52.717Z",
+    "original_reply": "Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.",
+    "final_reply": "Hello Mi Escalate Guest, we’re sorry to hear that you’re looking for a manager. Your feedback is important to us, and we want to ensure your concerns are addressed promptly. Please reach out to us directly at the restaurant, and we’ll make sure someone gets in touch with you as soon as possible. Thank you for your patience, and we hope to resolve this matter for you soon.",
+    "last_result": {
+      "status": "escalated",
+      "review_id": 10064,
+      "reason": "Escalated by CEO via WhatsApp",
+      "job_id": 318
+    }
+  },
+  {
+    "approval_id": "review-10065",
+    "review_id": 10065,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 2,
+    "reviewer_name": "Hardening Unauthorized",
+    "review_text": "Unauthorized proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "escalated",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 2 stars\nCustomer: Hardening Unauthorized\n\nReview:\n\"Unauthorized proof review.\"\n\nSuggested reply:\n\"Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:04.871Z",
+    "updated_at": "2026-06-11T03:30:13.752Z",
+    "original_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Hi Hardening Unauthorized, we appreciate your feedback, though it seems we may have missed the mark during your visit. We take all reviews seriously, and your insights are important for us to improve. If you have specific concerns you'd like to discuss, please feel free to reach out to us directly. We hope to have the opportunity to serve you better in the future.",
+    "last_result": {
+      "status": "escalated",
+      "review_id": 10065,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 319
+    }
+  },
+  {
+    "approval_id": "review-10066",
+    "review_id": 10066,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 2,
+    "reviewer_name": "Hardening Approve",
+    "review_text": "Approve duplicate proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "posted",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 2 stars\nCustomer: Hardening Approve\n\nReview:\n\"Approve duplicate proof review.\"\n\nSuggested reply:\n\"Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:05.056Z",
+    "updated_at": "2026-06-11T03:31:11.736Z",
+    "original_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "final_reply": "Hi Hardening Approve, thank you for taking the time to share your feedback. We strive to provide a great experience for all our guests, and it seems we fell short this time. Your input is valuable to us, and we would love to understand more about your experience. Please feel free to reach out to us directly. We hope to have the chance to improve your experience in the future.",
+    "last_result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10066
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10066,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10067",
+    "review_id": 10067,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 2,
+    "reviewer_name": "Hardening Edit",
+    "review_text": "Edit then approve proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "posted",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 2 stars\nCustomer: Hardening Edit\n\nReview:\n\"Edit then approve proof review.\"\n\nSuggested reply:\n\"Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:05.232Z",
+    "updated_at": "2026-06-11T03:31:11.794Z",
+    "original_reply": "Thank you for taking the time to share your feedback, Hardening Edit. We're sorry to hear that your experience didn't meet your expectations. We strive to provide a great dining experience for all our guests, and your input is invaluable in helping us improve. If you're open to it, we'd love to hear more about your visit so we can address any specific concerns. We hope to have the opportunity to welcome you back and make it right.",
+    "final_reply": "Thanks for telling us. We are sorry this missed the mark at Bandera, and we appreciate the chance to review it with our team.",
+    "last_result": {
+      "approve": {
+        "status": "approved_by_ceo",
+        "job_id": null,
+        "mode": "operator_assisted",
+        "review_id": 10067
+      },
+      "post": {
+        "status": "posted",
+        "review_id": 10067,
+        "mode": "dry_run",
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "approval_id": "review-10068",
+    "review_id": 10068,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Hardening Reject",
+    "review_text": "Reject duplicate proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "rejected_by_ceo",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Hardening Reject\n\nReview:\n\"Reject duplicate proof review.\"\n\nSuggested reply:\n\"Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:05.934Z",
+    "updated_at": "2026-06-11T03:31:11.812Z",
+    "original_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "final_reply": "Thank you for your feedback, Hardening Reject. We take all reviews seriously and are committed to improving our services. If you have specific concerns or suggestions, please feel free to reach out to us directly so we can address them. Your experience is important to us, and we hope to have the opportunity to serve you better in the future.",
+    "last_result": {
+      "status": "rejected_by_ceo",
+      "review_id": 10068,
+      "reason": "Rejected by CEO via WhatsApp"
+    }
+  },
+  {
+    "approval_id": "review-10069",
+    "review_id": 10069,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Hardening Escalate",
+    "review_text": "Escalate proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "escalated",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Hardening Escalate\n\nReview:\n\"Escalate proof review.\"\n\nSuggested reply:\n\"Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:06.573Z",
+    "updated_at": "2026-06-11T03:30:13.987Z",
+    "original_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "final_reply": "Dear Hardening Escalate, we’re truly sorry to hear that your experience at Bakudan Ramen did not meet your expectations. Your feedback is important to us, and we would love the opportunity to learn more about your visit. Please feel free to reach out to us directly so we can address your concerns and improve. Thank you for your input, and we hope to hear from you soon.",
+    "last_result": {
+      "status": "escalated",
+      "review_id": 10069,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 323
+    }
+  },
+  {
+    "approval_id": "review-10070",
+    "review_id": 10070,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Hardening Timeout",
+    "review_text": "Timeout proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "escalated",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Hardening Timeout\n\nReview:\n\"Timeout proof review.\"\n\nSuggested reply:\n\"Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:30:07.206Z",
+    "updated_at": "2026-06-11T03:30:14.002Z",
+    "original_reply": "Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.",
+    "final_reply": "Hi Hardening Timeout, we appreciate you taking the time to share your thoughts, even if they are brief. We strive to provide a great experience for our guests, and it seems we fell short this time. If you have specific concerns or feedback, we would love to hear more so we can improve. Please feel free to reach out to us directly. Thank you for your understanding, and we hope to have the chance to serve you better in the future.",
+    "last_result": {
+      "status": "escalated",
+      "review_id": 10070,
+      "reason": "Approval timed out after 0 minutes",
+      "job_id": 324
+    }
+  },
+  {
+    "approval_id": "review-10071",
+    "review_id": 10071,
+    "store": "Bakudan Ramen (Bandera)",
+    "platform": "Yelp",
+    "rating": 1,
+    "reviewer_name": "Hardening Manual Escalate",
+    "review_text": "Manual escalate proof review.",
+    "review_date": "2026-06-11",
+    "suggested_reply": "Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.",
+    "risk_level": "high",
+    "reason": "Manual import requires approval before posting.",
+    "actions": [
+      "approve",
+      "reject",
+      "edit",
+      "escalate"
+    ],
+    "status": "escalated",
+    "ceo_message": "Review needs approval\n\nStore: Bakudan Ramen (Bandera)\nPlatform: Yelp\nRating: 1 stars\nCustomer: Hardening Manual Escalate\n\nReview:\n\"Manual escalate proof review.\"\n\nSuggested reply:\n\"Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.\"\n\nReply options:\n1. Approve\n2. Reject\n3. Edit: <new reply>\n4. Escalate",
+    "created_at": "2026-06-11T03:32:05.901Z",
+    "updated_at": "2026-06-11T03:32:05.994Z",
+    "original_reply": "Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.",
+    "final_reply": "Hello Hardening Manual Escalate, we appreciate you taking the time to share your feedback. We're sorry to hear that your experience did not meet your expectations. Your insights are valuable to us, and we would love the opportunity to learn more about what went wrong. Please feel free to reach out to us directly so we can address your concerns and improve moving forward. Thank you for your understanding.",
+    "last_result": {
+      "status": "escalated",
+      "review_id": 10071,
+      "reason": "Escalated by CEO via WhatsApp",
+      "job_id": 325
+    }
+  }
+]

@@ -1,11 +1,11 @@
 # RUNTIME_ALERT_CLASSIFICATION_REPORT
 
-Generated: 2026-06-26T05:58:16.051Z
+Generated: 2026-06-25T13:06:04.207Z
 Target: RUNTIME_ALERT_CLASSIFICATION_READY
 
 INFO: 0
-WARNING: 10
-CRITICAL: 0
+WARNING: 9
+CRITICAL: 1
 
 | Severity | Source | Rule | Message | Evidence |
 | --- | --- | --- | --- | --- |
@@ -14,8 +14,8 @@ CRITICAL: 0
 | WARNING | Ollama | pm2_restart_increase | Ollama: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | Agent Engine | pm2_restart_increase | Agent Engine: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
 | WARNING | WhatsApp Gateway | pm2_restart_increase | WhatsApp Gateway: restarts_last_hour=0, restart_increased=false, port_matches_pm2=null |  |
-| WARNING | Gmail | connector_stale | Gmail is stale | D:\Project\Master\.local-agent-global\visibility\gmail\data.json |
-| WARNING | Memory | connector_stale | Memory is stale | D:\Project\Master\mi-core\.local-agent-global\operational-memory |
+| WARNING | Gmail | connector_stale | Gmail is stale | E:\Project\Master\.local-agent-global\visibility\gmail\data.json |
+| CRITICAL | Mi-Core | runtime_down | Mi-Core is down | This operation was aborted |
 | WARNING | Agent Engine | runtime_not_green | Agent Engine is unknown | pm2_status=pm2_unavailable |
 | WARNING | Visibility | runtime_not_green | Visibility is degraded | 1 connector(s) unhealthy |
 | WARNING | QB Connector | runtime_not_green | QB Connector is degraded | Connector is not fully healthy |

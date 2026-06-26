@@ -1,0 +1,78 @@
+[
+  {
+    "connector_id": "gmail",
+    "name": "Gmail",
+    "detected": [
+      "freshness=stale"
+    ],
+    "attempted": true,
+    "recovered": true,
+    "result": "{\"synced_at\":\"2026-06-25T13:06:04.169Z\",\"unread_count\":37,\"important_count\":10,\"emails\":[{\"id\":\"19efee1a0002ee4f\",\"thread_id\":\"19efee1a0002ee4f\",\"subject\":\"[QC] Chuyên Gia Phân tích dữ liệu và xây dựng mô hình phát hiện gian lận - Khối Quản trị rủi ro (2026TD453499) và 9 việc làm phù hợp nhất dành cho bạn\",\"from\":\"VietnamWorks <jobalerts@vietnamworks.com>\",\"date\":\"Thu, 25 Jun 2026 13:04:18 +0000\",\"snippet\":\"Vietnamworks Việc Làm Gợi Ý Cho Bạn Xin chào Liem, VietnamWorks mong muốn sẽ giúp bạn tìm",
+    "checked_at": "2026-06-25T13:06:04.172Z"
+  },
+  {
+    "connector_id": "google-calendar",
+    "name": "Google Calendar",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.173Z"
+  },
+  {
+    "connector_id": "google-drive",
+    "name": "Google Drive",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.173Z"
+  },
+  {
+    "connector_id": "asana",
+    "name": "Asana",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.174Z"
+  },
+  {
+    "connector_id": "quickbooks-runtime",
+    "name": "QuickBooks Runtime",
+    "detected": [
+      "freshness=degraded"
+    ],
+    "attempted": true,
+    "recovered": true,
+    "result": "{\"generated_at\":\"2026-06-25T13:06:04.177Z\",\"status\":\"degraded\",\"dashboard_status\":\"degraded\",\"certified\":false,\"db_paths\":{\"checksum_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\",\"agent_db\":\"E:\\\\Project\\\\Master\\\\mi-core\\\\data\\\\qb-agent.db\"},\"company_detected\":true,\"quickbooks_desktop_open\":true,\"last_successful_sync\":\"2026-06-18T08:29:36.703Z\",\"last_sync_timestamp\":\"2026-06-18T08:29:36.703Z\",\"last_sync_status\":\"ok\",\"checksum\":{\"expected\":null,\"got\":null,\"mismatch\":false},\"company_identit",
+    "checked_at": "2026-06-25T13:06:04.183Z"
+  },
+  {
+    "connector_id": "health-export",
+    "name": "Huawei Health Export",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.185Z"
+  },
+  {
+    "connector_id": "website-bakudan",
+    "name": "bakudanramen.com",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.186Z"
+  },
+  {
+    "connector_id": "website-raw",
+    "name": "rawsushibar.com",
+    "detected": [],
+    "attempted": false,
+    "recovered": true,
+    "result": "No recovery needed",
+    "checked_at": "2026-06-25T13:06:04.187Z"
+  }
+]

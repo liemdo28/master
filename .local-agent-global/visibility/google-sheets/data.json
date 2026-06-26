@@ -1,0 +1,32 @@
+{
+  "synced_at": "2026-06-25T13:36:45.214Z",
+  "status": "ready",
+  "has_required_scope": true,
+  "required_scope": "https://www.googleapis.com/auth/spreadsheets",
+  "spreadsheet_id": "1qpLvbnYC6I4E0fg0onlfzktL5oA68_Gi7I5iWPHVNlk",
+  "spreadsheet_url": "https://docs.google.com/spreadsheets/d/1qpLvbnYC6I4E0fg0onlfzktL5oA68_Gi7I5iWPHVNlk/edit",
+  "read_test": {
+    "ok": true,
+    "range": "certification!A1:D2",
+    "rows": 2,
+    "values": [
+      [
+        "source",
+        "status",
+        "synced_at",
+        "purpose"
+      ],
+      [
+        "mi-core",
+        "GOOGLE_SHEETS_READY",
+        "2026-06-25T13:36:45.214Z",
+        "Dev3 workspace production certification"
+      ]
+    ]
+  },
+  "update_test": {
+    "ok": true,
+    "range": "certification!A1:D2",
+    "updated_cells": 8
+  }
+}
