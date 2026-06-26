@@ -1,4 +1,4 @@
- * Phase 0 â€” Duplicate Detection Engine
+/** Phase 0 â€” Duplicate Detection Engine
  *
  * Detects semantically similar tasks across all divisions.
  * Compares **title only** (not description) â€” descriptions have too much
@@ -99,6 +99,10 @@ export function detectDuplicates(tasks: CoordinatedTask[]): DuplicateMatch[] {
           reason: shared.length > 0
             ? `Shared concepts: ${shared.join(', ')}`
             : 'Semantic overlap detected',
+        });
+      }
+    }
+  }
 
   return matches;
 }

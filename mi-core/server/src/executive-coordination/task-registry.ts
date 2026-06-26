@@ -1,4 +1,4 @@
- * Phase 0 â€” Task Registry
+/** Phase 0 â€” Task Registry
  * 
  * Single source of truth for ALL company tasks across all divisions.
  * Prevents orphan tasks. Every task must have: owner, division, status.

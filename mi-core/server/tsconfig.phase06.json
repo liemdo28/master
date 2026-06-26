@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "./dist/phase06",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "include": [
+    "src/technology-portfolio-office/**/*.ts",
+    "src/executive-coordination/objective-registry.ts",
+    "src/executive-coordination/task-registry.ts",
+    "src/executive-coordination/priority-engine.ts",
+    "src/executive-coordination/types.ts"
+  ]
+}

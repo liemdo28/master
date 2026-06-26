@@ -1,4 +1,4 @@
- * Phase 0 â€” Dependency Graph Engine
+/** Phase 0 â€” Dependency Graph Engine
  *
  * Builds dependency graph from task.dependencies arrays.
  * Provides: topological order, downstream/upstream impact, cycle detection.
@@ -167,3 +167,4 @@ export function describeChain(tasks: CoordinatedTask[], taskId: string): string 
 
   walk(taskId);
   return parts.reverse().join(' â†’ ');
+}

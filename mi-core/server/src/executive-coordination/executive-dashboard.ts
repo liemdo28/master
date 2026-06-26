@@ -1,4 +1,4 @@
- * Phase 0 â€” Executive Dashboard Engine
+/** Phase 0 â€” Executive Dashboard Engine
  * 
  * Generates unified dashboard snapshot from all coordination data.
  */

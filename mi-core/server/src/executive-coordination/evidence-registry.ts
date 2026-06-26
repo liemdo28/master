@@ -1,4 +1,4 @@
- * Phase 0 â€” Evidence Registry
+/** Phase 0 â€” Evidence Registry
  * 
  * Central registry of evidence linked to tasks.
  */
