@@ -1,4 +1,4 @@
- * Phase 0 â€” Objective Registry
+/** Phase 0 â€” Objective Registry
  * 
  * Unified registry of executive objectives.
  */

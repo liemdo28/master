@@ -1,4 +1,4 @@
- * Phase 0 â€” Conflict Detection Engine
+/** Phase 0 â€” Conflict Detection Engine
  *
  * Detects simultaneous work conflicts:
  *  1. Two tasks modifying the same target at the same time
@@ -34,6 +34,10 @@ function detectResourceContention(tasks: CoordinatedTask[]): TaskConflict[] {
             conflictType: 'resource-contention',
             description: `Owner "${owner}" has ${ownerTasks.length} tasks in-flight simultaneously`,
           });
+        }
+      }
+    }
+  }
   return conflicts;
 }
 
@@ -106,3 +110,4 @@ export function summarizeConflicts(conflicts: TaskConflict[]): Record<string, nu
   const summary: Record<string, number> = {};
   for (const c of conflicts) summary[c.conflictType] = (summary[c.conflictType] || 0) + 1;
   return summary;
+}

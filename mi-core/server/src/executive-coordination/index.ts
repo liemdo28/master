@@ -1,4 +1,4 @@
- * 
+/**
  * The missing management layer between CEO/Mi and all future divisions.
  * 
  * Pipeline: Objective â†’ Tasks â†’ Ownership â†’ Duplicates â†’ Dependencies â†’ 
@@ -18,7 +18,9 @@ export type { CoordinatedTask, Division, Priority, TaskStatus, DashboardSnapshot
 
 /**
  * Full coordination pipeline â€” one call does everything.
- * 
+ */
+export function runCoordinationPipeline(
+  objectiveTitle: string,
   tasks: Array<{ title: string; description: string; division: import('./types').Division; owner: string; dependencies?: string[] }>
 ): import('./types').DashboardSnapshot {
   const { createRegisteredObjective } = require('./objective-registry');
@@ -29,10 +31,21 @@ export type { CoordinatedTask, Division, Priority, TaskStatus, DashboardSnapshot
   const { buildDashboard } = require('./executive-dashboard');
 
   const allTasks: any[] = [];
+  const objective = createRegisteredObjective(objectiveTitle, 'ceo');
   for (const t of tasks) {
     const priority = autoClassify(t.title, t.description);
+    const created = createRegTask({
+      objectiveId: objective.id,
+      title: t.title,
+      description: t.description,
+      division: t.division,
+      owner: t.owner,
+      priority: priority.priority,
       dependencies: t.dependencies || [],
     });
     allTasks.push(created);
+  }
+  detectDuplicates(allTasks);
+  detectAllConflicts(allTasks);
   return buildDashboard(allTasks, objectiveTitle);
 }
