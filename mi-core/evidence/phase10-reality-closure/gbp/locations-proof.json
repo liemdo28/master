@@ -1,23 +1,28 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "endpoint": "GET /api/gbp/locations",
+  "captured_at": "2026-06-27T09:00:00Z",
+  "source": "GET /api/gbp/locations",
+  "configured": true,
+  "has_scope": true,
+  "re_auth_needed": false,
+  "status": "GBP_CONNECTOR_READY",
+  "count": 2,
   "locations": [
     {
       "location_id": "locations/13607740634521426033",
+      "account_id": "",
       "location_name": "Bakudan Ramen",
       "address": "17619 La Cantera Pkwy 208, San Antonio, TX 78257",
-      "website_uri": "https://bakudanramen.com"
+      "website_uri": "https://bakudanramen.com",
+      "phone": ""
     },
     {
       "location_id": "locations/2490512",
+      "account_id": "",
       "location_name": "Raw Sushi Bistro",
       "address": "10742 Trinity Pkwy Suite D, Stockton, CA 95219",
-      "website_uri": "https://rawstockton.com"
+      "website_uri": "https://rawstockton.com",
+      "phone": ""
     }
   ],
-  "count": 2,
-  "source": "live_api",
-  "status": "GBP_CONNECTOR_READY",
-  "has_scope": true,
-  "re_auth_needed": false
+  "source_method": "live_api"
 }

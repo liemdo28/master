@@ -1,35 +1,36 @@
 {
-  "captured_at": "2026-06-27T06:49:00.000Z",
-  "endpoint": "http://localhost:3460/accounts",
-  "method": "GET",
-  "result": "success",
+  "captured_at": "2026-06-27T08:54:30Z",
+  "source": "GET /api/doordash/accounts",
+  "count": 4,
   "accounts": [
     {
       "id": "bakudan-1",
       "brand": "Bakudan Ramen",
       "label": "B1",
-      "email": "bakudanramen210@gmail.com"
+      "email": "bakudanramen210@gmail.com",
+      "scrape_status": "blocked_playwright_chromium"
     },
     {
       "id": "bakudan-2",
       "brand": "Bakudan Ramen",
       "label": "B2",
-      "email": "info@bakudanramen.com"
+      "email": "info@bakudanramen.com",
+      "scrape_status": "blocked_playwright_chromium"
     },
     {
       "id": "bakudan-3",
       "brand": "Bakudan Ramen",
       "label": "B3",
-      "email": "gm@bakudanramen.com"
+      "email": "gm@bakudanramen.com",
+      "scrape_status": "blocked_playwright_chromium"
     },
     {
       "id": "raw-sushi",
       "brand": "Raw Sushi Bar",
       "label": "Raw",
-      "email": "h.oang.d.le@gmail.com"
+      "email": "h.oang.d.le@gmail.com",
+      "scrape_status": "blocked_playwright_chromium"
     }
   ],
-  "total_accounts": 4,
-  "scrape_status": "blocked_by_playwright_chromium",
-  "notes": "Account registry accessible. All 4 accounts confirmed. Portal scrape blocked by missing Playwright Chromium headless shell revision 1228."
+  "blocker": "Chromium r1228 not installed — scraper.js updated to use r1208, but DoorDash portal blocks headless browsers via bot detection"
 }

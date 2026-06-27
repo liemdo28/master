@@ -1,25 +1,21 @@
-Process: mi-whatsapp-gateway
+mi-whatsapp-gateway
 Status: online
 PID: 8752
 PM2 ID: 5
 Version: 1.0.0
-Mode: fork
-Uptime: 22h+
-Restarts: 0
-Script: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\src\index.js
-Error Log: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-err.log
-Out Log: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-out.log
+Uptime: 24h+
 Node.js: v24.14.1
-Node Env: development
 Memory: 81.7mb
-Heap Usage: 81.3%
-Event Loop Latency p95: 21.11ms
-Event Loop Latency: 10.97ms
-Active handles: 9
-Active requests: 0
-HTTP req/min: 0.01
-HTTP P95 Latency: 3ms
-HTTP Mean Latency: 1ms
+User: liemdo
+Watching: disabled
+Mode: fork
+Captured: 2026-06-27T08:56:00Z
 
-Captured: 2026-06-27T06:58:00Z
-Source: pm2 show mi-whatsapp-gateway
+All PM2 processes:
+mi-ai-service       online  PID 21892  24h  40.2mb
+mi-core             online  PID 6496   2h   280.2mb  restarts=4
+mi-doordash-agent   online  PID 26908  2h   59.0mb
+mi-whatsapp-gateway online  PID 8752   24h  80.7mb
+mi-n8n              online  PID 16288  24h  21.3mb
+mi-node-agent       online  PID 20924  24h  31.1mb
+qb-ops-agent        online  PID 4424   24h  66.7mb

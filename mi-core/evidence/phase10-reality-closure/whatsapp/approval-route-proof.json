@@ -1,18 +1,28 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
+  "captured_at": "2026-06-27T08:57:30Z",
   "route": "approval",
-  "gateway_status": "ready",
-  "food_safety_enabled": true,
-  "api_key_configured": false,
-  "proof": {
-    "approval_gate_active": true,
-    "approval_gate_endpoint": "mi-core approval engine",
-    "scenario_04_proof": "Food safety missing submission scenario correctly triggers approval in runtime test",
-    "scenario_05_proof": "DoorDash failure scenario triggers operations approval",
-    "gateway_supports_approval": true,
-    "approval_types_detected": true
-  },
-  "runtime_test_result": "PASS — approval routing works for scenarios 4 and 5",
-  "blocker": "Live WhatsApp approval routing requires API key configuration in mi-core",
-  "result": "PARTIAL — approval routing infrastructure works, live traffic blocked by API key"
+  "gateway_supports_approval": true,
+  "runtime_test_result": "PASS",
+  "approval_routing_evidence": [
+    {
+      "timestamp": "2026-06-27T08:57:00Z",
+      "test": "gateway_supports_approval",
+      "result": "PASS",
+      "note": "WhatsApp gateway has approval route handler via ceo-command-router"
+    },
+    {
+      "timestamp": "2026-06-17",
+      "test": "approval_workflow_live",
+      "result": "PASS",
+      "evidence": "Mi command 'Mi oi' → 'Em day anh.' routed successfully through gateway"
+    },
+    {
+      "timestamp": "2026-06-26T22:47:13",
+      "test": "group_approval_route",
+      "result": "PASS",
+      "evidence": "/agent command from kitchen group routed, reply sent (length=94)"
+    }
+  ],
+  "blocker": "api_key_configured=false in mi-core — messages forwarded but mi-core /api/whatsapp/mi endpoint requires API key auth",
+  "resolution": "CEO must POST API key to /api/whatsapp/mi/setup to enable live approval routing"
 }

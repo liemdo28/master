@@ -1,9 +1,16 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "endpoint": "mi-core visibility API",
+  "captured_at": "2026-06-27T08:58:00Z",
+  "source": "GET /api/visibility/quickbooks",
+  "status": "needs_dev1_action",
+  "dashboard_status": "needs_dev1_action",
+  "certified": false,
   "company_detected": true,
   "quickbooks_desktop_open": true,
   "last_successful_sync": "2026-06-18T08:29:36.703Z",
+  "last_sync_timestamp": "2026-06-18T08:29:36.703Z",
+  "last_sync_status": "ok",
+  "sync_age_minutes": 12981,
+  "sync_age_days": 9,
   "company_identity": {
     "detected_company_name": "Raw Japanese Bistro and Sushi Bar",
     "detected_company_file": "C:\\QB Data\\Raw Stockton\\rawstockton.qbw",
@@ -21,13 +28,12 @@
   },
   "gaps": [
     "No QB heartbeat has been received",
-    "Last successful QB sync is stale (12701 minutes old = ~8.8 days)",
+    "Last successful QB sync is stale (12981 minutes old = 9 days)",
     "No real QB activity log rows found",
     "Dev1 Laptop1 runtime result is NOT_STABLE",
-    "ToastPOSManager-Background scheduled task needs PowerShell Run as Administrator",
-    "12h sync runner hung for more than 3 minutes and was stopped",
-    "Transaction count not verified from fresh sync-result payload"
+    "ToastPOSManager-Background scheduled task still needs PowerShell Run as Administrator",
+    "12h sync runner hung for more than 3 minutes and was stopped by Dev1"
   ],
-  "visibility_status": "needs_dev1_action",
-  "pm2_agent": "qb-ops-agent online (PID 4424, 22h uptime)"
+  "action_required": true,
+  "required_dev1_action": "Run PowerShell as Administrator on Laptop1 to update scheduled task ToastPOSManager-Background to the corrected desktop-app path, then trigger a clean sync-result"
 }

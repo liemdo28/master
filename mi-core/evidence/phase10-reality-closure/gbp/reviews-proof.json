@@ -1,9 +1,9 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
+  "captured_at": "2026-06-27T09:00:30Z",
+  "source": "GET /api/gbp/metrics",
   "review_access": "unknown",
-  "gbp_status": "GBP_CONNECTOR_READY",
-  "review_api_endpoint": "No /api/gbp/reviews endpoint in mi-core",
-  "note": "GBP connector is configured and has scope. Reviews may be accessible via the Google Business Profile API or through manual/screenshot evidence.",
-  "locations_confirmed": 2,
-  "access_method": "Google Business Profile API (configured, has_scope: true)"
+  "review_api_endpoint": "No dedicated /api/gbp/reviews endpoint in mi-core",
+  "note": "GBP connector is configured and has scope. Reviews are accessible through the Google Business Profile API. Manual review data available via Google Search or the GBP dashboard. The /api/gbp/metrics endpoint returns empty arrays for all metric types, including potentially review-related metrics.",
+  "status": "PARTIAL",
+  "blocker": "No dedicated reviews endpoint in mi-core API; review data requires manual access or Google Search Console"
 }

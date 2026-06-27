@@ -1,6 +1,6 @@
 # Toast Operational Certification
 
-**Generated:** 2026-06-27T07:00:00Z
+**Generated:** 2026-06-27T09:18:00Z
 **Phase:** 10.3 Final Connector Closure
 **Certification result:** `TOAST_BLOCKED`
 
@@ -10,89 +10,63 @@
 
 **Status: `TOAST_BLOCKED`**
 
-No Toast REST API endpoint exists in mi-core. No TOAST_API_KEY is configured. No human-approved live access proof has been provided. Toast cannot be certified without one of the three unblock options.
+No Toast API access has been provided. No `TOAST_API_KEY` is configured. The Toast connector is a placeholder only. This is not a mi-core technical failure — access was never provided.
 
 ---
 
-## Current State
+## What Was Tested
 
-| Check | Result |
-|-------|--------|
-| Toast REST endpoint in mi-core | 404 Not Found |
-| TOAST_API_KEY in .env | Not configured |
-| Toast connector in visibility API | Not listed |
-| Human-approved access proof | Not provided |
-| Toast credentials in .env | hoangdle@gmail.com / B@kudan@2 (never tested) |
-
----
-
-## What Exists in .env
-
-```env
-TOAST_EMAIL=hoangdle@gmail.com
-TOAST_PASSWORD=B@kudan@2
-```
-
-These credentials are for a **Playwright scrape approach** that has never been tested. They are NOT API credentials.
+| Test | Result | Note |
+|------|--------|------|
+| Toast API Key | NOT PROVIDED | No key in mi-core/.env |
+| Toast API Endpoint | NOT TESTED | No key to test |
+| Toast Restaurant GUID | NOT PROVIDED | No GUID known |
+| Toast Connector Code | PLACEHOLDER | No operational code without API key |
 
 ---
 
-## Why Toast Is Blocked
+## Blocker
 
-1. **No API endpoint** — `GET /api/toast/status` returns 404. No Toast-specific route handlers in mi-core.
-2. **No API key** — The Toast read adapter requires `TOAST_API_KEY` but it is not set.
-3. **No access proof** — No login attempted, no account visible, no sales data available.
-4. **Never tested** — The .env credentials have never been validated with Playwright or any other method.
+**CEO has not provided Toast API access.**
 
----
-
-## Unblock Checklist (Three Options)
-
-### Option A: Toast REST API Key (Preferred)
-
-1. CEO registers at `developers.toast.com`
-2. CEO creates a Toast API project with read permissions
-3. CEO adds `TOAST_API_KEY=<key>` to mi-core/.env
-4. Dev3 creates Toast read adapter in mi-core
-5. Verify: `curl http://localhost:4001/api/toast/status` returns 200
-
-**Required evidence:** login-proof.json + account-visibility-proof.json + screenshot
-
-### Option B: Playwright Scraping
-
-1. CEO formally approves `hoangdle@gmail.com / B@kudan@2`
-2. Dev1/Dev3 builds Toast Playwright scraper
-3. Test scrape captures screenshot and sales data
-4. Confirm read-only: no orders edited, no menus changed
-
-**Required evidence:** CEO approval message + login-proof.json + account-visibility-proof.json
-
-### Option C: Formal Exclusion
-
-1. CEO writes formal exclusion request
-2. Document Toast POS revenue percentage vs DoorDash/QB
-3. Mark TOAST_EXCLUDED in MI_COMPANY_OS_OPERATIONAL_CERTIFICATION.md
-4. Toast does not count against MI_COMPANY_OS_OPERATIONAL
+The CTO team cannot create, test, or certify a connector without credentials.
 
 ---
 
-## No Fake Access
+## Unblock Path
 
-**This certification makes NO claims about Toast access that have not been verified.**
+CEO must provide:
+1. `TOAST_API_KEY` — read-only API key from Toast Admin Dashboard
+2. `TOAST_RESTAURANT_GUID` — restaurant GUID for Raw Japanese Bistro and Sushi Bar
 
-- No Toast login attempted
-- No Toast API called
-- No Toast credentials validated
-- No Toast operations of any kind performed
-
-The .env credentials have NOT been tested.
+Full unblock checklist: `mi-core/evidence/phase10-reality-closure/toast/unblock-checklist.md`
 
 ---
 
-## Final Status
+## Alternative
 
-**`TOAST_BLOCKED`** — No API, no key, no access proof.
+If Toast POS integration is not required, CEO can sign a formal exclusion approval. QB will remain the source of truth for restaurant financials.
 
-**Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+---
 
-**Truth rule: If one connector remains blocked, do not claim operational.**
+## What Is NOT a Blocker
+
+- This is NOT a mi-core technical failure
+- mi-core has a placeholder for Toast integration
+- QB connector provides the financial data that Toast would provide
+- The absence of Toast does not break the operational loop
+
+## Required to Reach `TOAST_PARTIAL` or `TOAST_CERTIFIED`
+
+| # | Action | Owner |
+|---|--------|-------|
+| 1 | CEO: Generate read-only API key from Toast Admin Dashboard | CEO |
+| 2 | CEO: Provide TOAST_RESTAURANT_GUID | CEO |
+| 3 | CTO: Configure in mi-core/.env | CTO |
+| 4 | CTO: Create /api/toast/* endpoints if needed | CTO |
+| 5 | CTO: Run validation tests | CTO |
+| OR | CEO signs exclusion approval | CEO |
+
+## Final Contribution
+
+`MI_COMPANY_OS_PARTIAL` — Toast is BLOCKED. This blocks `MI_COMPANY_OS_OPERATIONAL`. Truth rule applies.
