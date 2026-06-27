@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-06-27T10:52:38.006Z",
+  "sessions": [
+    {
+      "file": "bakudan-1.json",
+      "savedAt": "2026-06-27T10:47:08.229Z",
+      "cookieCount": 67
+    },
+    {
+      "file": "bakudan-2.json",
+      "savedAt": "2026-06-27T10:41:34.758Z",
+      "cookieCount": 63
+    },
+    {
+      "file": "bakudan-3.json",
+      "savedAt": "2026-06-27T10:39:19.045Z",
+      "cookieCount": 64
+    },
+    {
+      "file": "raw-sushi.json",
+      "savedAt": "2026-06-27T10:41:10.969Z",
+      "cookieCount": 64
+    }
+  ]
+}

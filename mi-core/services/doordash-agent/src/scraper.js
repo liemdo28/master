@@ -9,6 +9,7 @@ const { waitForDoorDashOTP } = require('./gmail-otp');
 const SESSION_DIR = path.join(__dirname, '../data/sessions');
 const PORTAL_URL = 'https://merchant-portal.doordash.com/';
 const LOGIN_URL = 'https://identity.doordash.com/auth/user/login?layout=merchant_web_v2&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback';
+const SESSION_MAX_AGE_MS = Number(process.env.DD_SESSION_MAX_AGE_HOURS || 168) * 60 * 60 * 1000;
 
 function findChromiumExecutable() {
   const candidates = [
@@ -42,16 +43,30 @@ function loadSession(accountId) {
     const p = sessionPath(accountId);
     if (!fs.existsSync(p)) return null;
     const data = JSON.parse(fs.readFileSync(p, 'utf-8'));
-    if (Date.now() - data.savedAt > 8 * 60 * 60 * 1000) return null;
+    if (!data.savedAt || Date.now() - data.savedAt > SESSION_MAX_AGE_MS) return null;
     return data;
   } catch { return null; }
+}
+
+function sanitizePortalText(value) {
+  return String(value || '')
+    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[REDACTED_EMAIL]')
+    .replace(/firstName:\s*'[^']*'/gi, "firstName: '[REDACTED]'")
+    .replace(/lastName:\s*'[^']*'/gi, "lastName: '[REDACTED]'")
+    .replace(/phone(Number)?:\s*'[^']*'/gi, "phone: '[REDACTED_PHONE]'");
 }
 
 async function login(page, account) {
   console.log(`[${account.id}] Navigating to merchant portal...`);
 
-  // Navigate to portal — it will redirect to identity login page
-  await page.goto(PORTAL_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  // Go directly to a known read-only merchant page; it redirects to login when
+  // the saved session is not valid.
+  try {
+    await page.goto(`${PORTAL_URL}merchant/home`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  } catch (err) {
+    console.log(`[${account.id}] Merchant home navigation failed: ${err.message}`);
+    await page.goto(PORTAL_URL, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  }
   await page.waitForTimeout(3000);
 
   const currentUrl = page.url();
@@ -234,20 +249,25 @@ async function scrapeMetrics(page, accountId) {
   };
 
   try {
-    // Navigate to analytics and wait for SPA to fully render
-    const analyticsUrls = [
-      `${PORTAL_URL}analytics`,
-      `${PORTAL_URL}home`,
-      `${PORTAL_URL}reports`,
+    const readOnlyUrls = [
+      { url: `${PORTAL_URL}merchant/marketing`, type: 'campaigns' },
+      { url: `${PORTAL_URL}merchant/menu`, type: 'menu' },
+      { url: `${PORTAL_URL}merchant/home`, type: 'home' },
     ];
 
     let loaded = false;
-    for (const url of analyticsUrls) {
+    let selectedRoute = null;
+    for (const candidate of readOnlyUrls) {
       try {
-        await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 });
+        const response = await page.goto(candidate.url, { waitUntil: 'domcontentloaded', timeout: 20000 });
         // Wait extra time for React SPA to hydrate and render data
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(3000);
+        const bodyText = await page.textContent('body').catch(() => '') || '';
+        if ((response && response.status() === 404) || /error code:\s*404|page you're looking for/i.test(bodyText)) {
+          continue;
+        }
         loaded = true;
+        selectedRoute = { ...candidate, status: response ? response.status() : null };
         const ss = path.join(SESSION_DIR, `${accountId}-analytics.png`);
         await page.screenshot({ path: ss, fullPage: true });
         break;
@@ -309,6 +329,8 @@ async function scrapeMetrics(page, accountId) {
     const store = {
       store_name: 'default',
       page_url: page.url(),
+      route_type: selectedRoute?.type || 'unknown',
+      route_status: selectedRoute?.status || null,
       orders_today: null,
       orders_week: null,
       revenue_today: null,
@@ -318,8 +340,8 @@ async function scrapeMetrics(page, accountId) {
     };
 
     // Parse from extracted data
-    const allText = pageData.bodyText;
-    const elements = pageData.allElements || [];
+    const allText = sanitizePortalText(pageData.bodyText);
+    const elements = (pageData.allElements || []).map(sanitizePortalText);
 
     // Find dollar amounts for revenue
     if (pageData.dollarAmounts.length > 0) {

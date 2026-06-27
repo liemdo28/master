@@ -43,6 +43,29 @@ function saveCache(data) {
   scrapeCache = data;
 }
 
+function hasUsefulAccountData(account) {
+  return !account.error && Array.isArray(account.stores) && account.stores.length > 0;
+}
+
+function mergeWithLastGood(results) {
+  const previousById = new Map((scrapeCache?.accounts || []).map(account => [account.account_id, account]));
+
+  return results.map(result => {
+    if (hasUsefulAccountData(result)) return result;
+    const previous = previousById.get(result.account_id);
+    if (!hasUsefulAccountData(previous)) return result;
+
+    return {
+      ...previous,
+      latest_attempt: {
+        scraped_at: result.scraped_at,
+        error: result.error || null,
+        preserved_previous_success: true,
+      },
+    };
+  });
+}
+
 async function runAllAccounts() {
   if (scrapeStatus.running) {
     log('Scrape already running, skipping');
@@ -65,7 +88,8 @@ async function runAllAccounts() {
     }
   }
 
-  const payload = { scraped_at: new Date().toISOString(), accounts: results };
+  const mergedResults = mergeWithLastGood(results);
+  const payload = { scraped_at: new Date().toISOString(), accounts: mergedResults };
   saveCache(payload);
   scrapeStatus.running = false;
   scrapeStatus.last_error = results.some(r => r.error) ? 'some accounts failed' : null;
