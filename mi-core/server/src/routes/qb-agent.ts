@@ -238,8 +238,16 @@ qbAgentRouter.post('/heartbeat', (req: Request, res: Response) => {
          b.qb_open ? 1 : 0, b.qb_company, b.app_version,
          b.uptime_seconds, ts, JSON.stringify(b.meta || {}));
 
-  db.prepare(`UPDATE machines SET status='online', last_heartbeat=?, last_seen_at=? WHERE machine_id=?`)
-    .run(ts, ts, machineId);
+  const existingMachine = db.prepare('SELECT machine_id FROM machines WHERE machine_id = ?').get(machineId);
+  if (existingMachine) {
+    db.prepare(`UPDATE machines SET status='online', last_heartbeat=?, last_seen_at=?,
+      store_code=COALESCE(?,store_code), app_version=COALESCE(?,app_version) WHERE machine_id=?`)
+      .run(ts, ts, b.store_code, b.app_version, machineId);
+  } else {
+    db.prepare(`INSERT INTO machines (machine_id, store_code, app_version, status, registered_at, last_heartbeat, last_seen_at)
+      VALUES (?,?,?,'online',?,?,?)`)
+      .run(machineId, b.store_code, b.app_version, ts, ts, ts);
+  }
 
   sheetSync.onHeartbeat({ ...b, machine_id: machineId, received_at: ts });
   res.json({ ok: true, received_at: ts });

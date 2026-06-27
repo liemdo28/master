@@ -159,7 +159,7 @@ export class PlaywrightRunner implements PlaywrightAdapter {
         }
         case 'extract_links': {
           const links = await page.evaluate(() => {
-            return Array.from(document.querySelectorAll('a')).map((a: HTMLAnchorElement) => ({ href: a.href, text: a.textContent?.trim() || '' }));
+            return Array.from((globalThis as any).document.querySelectorAll('a')).map((a: any) => ({ href: a.href, text: a.textContent?.trim() || '' }));
           });
           return { type: action.type, ok: true, result: { links } };
         }
