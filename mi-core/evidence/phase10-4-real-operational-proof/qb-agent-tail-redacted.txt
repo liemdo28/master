@@ -1,0 +1,123 @@
+[TAILING] Tailing last 120 lines for [qb-ops-agent] process (change the value with --lines option)
+D:\Project\Master\mi-core\services\qb-ops-agent\logs\pm2-error.log last 120 lines:
+D:\Project\Master\mi-core\services\qb-ops-agent\logs\pm2-out.log last 120 lines:
+2026-06-27 16:35:46: [2026-06-27 16:35:46] [33MWARN[39M: Dashboard machine status send failed {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"timeout of 10000ms exceeded"}
+2026-06-27 16:35:46: [2026-06-27 16:35:46] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:36:36: [2026-06-27 16:36:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:36:36: [2026-06-27 16:36:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:36:40: [2026-06-27 16:36:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:36:43: [2026-06-27 16:36:43] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:36:43: [2026-06-27 16:36:43] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:37:36: [2026-06-27 16:37:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:37:36: [2026-06-27 16:37:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:37:40: [2026-06-27 16:37:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:37:45: [2026-06-27 16:37:45] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:37:45: [2026-06-27 16:37:45] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:38:36: [2026-06-27 16:38:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:38:36: [2026-06-27 16:38:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:38:39: [2026-06-27 16:38:39] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:38:39: [2026-06-27 16:38:39] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:38:40: [2026-06-27 16:38:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:39:36: [2026-06-27 16:39:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:39:36: [2026-06-27 16:39:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:39:40: [2026-06-27 16:39:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:39:41: [2026-06-27 16:39:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:39:41: [2026-06-27 16:39:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:40:22: [2026-06-27 16:40:22] [33MWARN[39M: getCompanyFiles is async-backed and returns empty list in Phase 1 compatibility implementation
+2026-06-27 16:40:22: [2026-06-27 16:40:22] [32MINFO[39M: Configured company files synchronized {"machineId":"b85a596b-332b-52e5-9153-854c7f1b7100","count":0}
+2026-06-27 16:40:22: [2026-06-27 16:40:22] [33MWARN[39M: getCompanyFiles is async-backed and returns empty list in Phase 1 compatibility implementation
+2026-06-27 16:40:22: [2026-06-27 16:40:22] [32MINFO[39M: No company files configured — skipping workflow cycle
+2026-06-27 16:40:36: [2026-06-27 16:40:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:40:36: [2026-06-27 16:40:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:40:40: [2026-06-27 16:40:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:40:41: [2026-06-27 16:40:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:40:41: [2026-06-27 16:40:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:41:36: [2026-06-27 16:41:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:41:36: [2026-06-27 16:41:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:41:40: [2026-06-27 16:41:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:41:44: [2026-06-27 16:41:44] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:41:44: [2026-06-27 16:41:44] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:42:36: [2026-06-27 16:42:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:42:36: [2026-06-27 16:42:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:42:40: [2026-06-27 16:42:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:42:41: [2026-06-27 16:42:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:42:41: [2026-06-27 16:42:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:43:36: [2026-06-27 16:43:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:43:36: [2026-06-27 16:43:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:43:38: [2026-06-27 16:43:38] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:43:38: [2026-06-27 16:43:38] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:43:40: [2026-06-27 16:43:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:44:36: [2026-06-27 16:44:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:44:36: [2026-06-27 16:44:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:44:40: [2026-06-27 16:44:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:44:42: [2026-06-27 16:44:42] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:44:42: [2026-06-27 16:44:42] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:45:36: [2026-06-27 16:45:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:45:36: [2026-06-27 16:45:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:45:40: [2026-06-27 16:45:40] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:45:40: [2026-06-27 16:45:40] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:45:40: [2026-06-27 16:45:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:46:36: [2026-06-27 16:46:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:46:36: [2026-06-27 16:46:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:46:40: [2026-06-27 16:46:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:46:42: [2026-06-27 16:46:42] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:46:42: [2026-06-27 16:46:42] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:47:36: [2026-06-27 16:47:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:47:36: [2026-06-27 16:47:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:47:40: [2026-06-27 16:47:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:47:42: [2026-06-27 16:47:42] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:47:42: [2026-06-27 16:47:42] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:48:36: [2026-06-27 16:48:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:48:36: [2026-06-27 16:48:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:48:40: [2026-06-27 16:48:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:48:44: [2026-06-27 16:48:44] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:48:44: [2026-06-27 16:48:44] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:49:36: [2026-06-27 16:49:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:49:36: [2026-06-27 16:49:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:49:40: [2026-06-27 16:49:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:49:42: [2026-06-27 16:49:42] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:49:42: [2026-06-27 16:49:42] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:50:36: [2026-06-27 16:50:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:50:36: [2026-06-27 16:50:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:50:39: [2026-06-27 16:50:39] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:50:39: [2026-06-27 16:50:39] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:50:40: [2026-06-27 16:50:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:51:36: [2026-06-27 16:51:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:51:36: [2026-06-27 16:51:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:51:39: [2026-06-27 16:51:39] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:51:39: [2026-06-27 16:51:39] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:51:40: [2026-06-27 16:51:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:52:36: [2026-06-27 16:52:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:52:36: [2026-06-27 16:52:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:52:41: [2026-06-27 16:52:41] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:52:41: [2026-06-27 16:52:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:52:41: [2026-06-27 16:52:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:53:36: [2026-06-27 16:53:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:53:36: [2026-06-27 16:53:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:53:40: [2026-06-27 16:53:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:53:41: [2026-06-27 16:53:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:53:41: [2026-06-27 16:53:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:54:36: [2026-06-27 16:54:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:54:36: [2026-06-27 16:54:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:54:40: [2026-06-27 16:54:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:54:41: [2026-06-27 16:54:41] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:54:41: [2026-06-27 16:54:41] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:55:22: [2026-06-27 16:55:22] [33MWARN[39M: getCompanyFiles is async-backed and returns empty list in Phase 1 compatibility implementation
+2026-06-27 16:55:22: [2026-06-27 16:55:22] [32MINFO[39M: Configured company files synchronized {"machineId":"b85a596b-332b-52e5-9153-854c7f1b7100","count":0}
+2026-06-27 16:55:22: [2026-06-27 16:55:22] [33MWARN[39M: getCompanyFiles is async-backed and returns empty list in Phase 1 compatibility implementation
+2026-06-27 16:55:22: [2026-06-27 16:55:22] [32MINFO[39M: No company files configured — skipping workflow cycle
+2026-06-27 16:55:36: [2026-06-27 16:55:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:55:36: [2026-06-27 16:55:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:55:40: [2026-06-27 16:55:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:55:43: [2026-06-27 16:55:43] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:55:43: [2026-06-27 16:55:43] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:56:36: [2026-06-27 16:56:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:56:36: [2026-06-27 16:56:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:56:40: [2026-06-27 16:56:40] [33MWARN[39M: [CMD] Poll failed {"status":401}
+2026-06-27 16:56:43: [2026-06-27 16:56:43] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:56:43: [2026-06-27 16:56:43] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:57:36: [2026-06-27 16:57:36] [32MINFO[39M: QuickBooks status detected {"installed":true,"running":false,"version":"QuickBooks Enterprise Solutions 24.0"}
+2026-06-27 16:57:36: [2026-06-27 16:57:36] [33MWARN[39M: Failed to send heartbeat to Agent OS, queueing for retry {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","error":"Request failed with status code 404"}
+2026-06-27 16:57:38: [2026-06-27 16:57:38] [32MINFO[39M: Dashboard machine status prepared/sent {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","online":true}
+2026-06-27 16:57:38: [2026-06-27 16:57:38] [32MINFO[39M: Heartbeat cycle complete {"machine_id":"b85a596b-332b-52e5-9153-854c7f1b7100","queue_depth":0}
+2026-06-27 16:57:41: [2026-06-27 16:57:41] [33MWARN[39M: [CMD] Poll failed {"status":401}

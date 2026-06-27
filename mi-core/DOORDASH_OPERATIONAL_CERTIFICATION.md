@@ -1,7 +1,7 @@
 # DoorDash Operational Certification
 
-**Generated:** 2026-06-27T09:14:00Z
-**Phase:** 10.3 Final Connector Closure
+**Generated:** 2026-06-27T09:58:00Z
+**Phase:** 10.4 Real Operational Proof
 **Certification result:** `DOORDASH_PARTIAL`
 
 ---
@@ -10,35 +10,36 @@
 
 **Status: `DOORDASH_PARTIAL`**
 
-DoorDash agent is online, Chromium fix is applied (r1208), 4 accounts confirmed. Portal access blocked by bot detection (not technical failure).
+DoorDash agent is online and the Chromium runtime resolver is fixed. The scrape now reaches the authentication gate and returns `CREDENTIALS_REQUIRED` for all configured accounts because no live session or runtime credentials are configured. DoorDash is not certified.
 
 ---
 
 ## PM2 Process Status
 
-| Process | PID | Uptime | Status |
-|---------|-----|--------|--------|
-| mi-doordash-agent | 26908 | 2h | online |
+| Process | Status | Evidence |
+|---------|--------|----------|
+| mi-doordash-agent | online | `mi-core/evidence/phase10-4-real-operational-proof/doordash-pm2-describe.txt` |
 
-Source: `pm2 list` at 2026-06-27T08:51:00Z
-
----
-
-## Chromium Fix — Applied and Verified
-
-- **Fix applied:** `scraper.js` updated to use Chromium r1208
-- **Path:** `C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1208\chrome-headless-shell-win64\chrome-headless-shell.exe`
-- **Browser version:** 145.0.7632.6
-- **Status:** Chromium launches successfully
+Source: `pm2 describe mi-doordash-agent` at 2026-06-27T09:57:59Z
 
 ---
 
-## Portal Access — Blocked by Bot Detection
+## Chromium Runtime Fix — Applied and Verified
 
-- DoorDash merchant portal blocks headless Chrome via `navigator.webdriver` detection
-- All 4 accounts return the same bot detection error
-- This is a DoorDash platform policy, not a mi-core technical issue
-- No forbidden actions were attempted (approval gate: PASS)
+- **Fix applied:** `scraper.js` now resolves Chromium from environment variables, local Playwright installs, Puppeteer cache, Chrome, or Edge.
+- **Failure mode fixed:** missing/incorrect Playwright Chromium path.
+- **Runtime evidence:** `mi-core/evidence/phase10-4-real-operational-proof/doordash-agent-tail-redacted.log`
+- **Current status:** browser path blocker fixed; live account session remains blocked.
+
+---
+
+## Portal Access — Blocked by Missing Live Session
+
+- Last scrape: `2026-06-27T09:53:20.288Z`
+- Health endpoint: `status=ok`, `accounts=4`, `has_cache=true`
+- All 4 accounts returned `CREDENTIALS_REQUIRED`
+- No forbidden actions were attempted.
+- No spend, campaign edit, menu edit, or production mutation was attempted.
 
 ---
 
@@ -46,10 +47,10 @@ Source: `pm2 list` at 2026-06-27T08:51:00Z
 
 | ID | Brand | Label | Status |
 |----|-------|-------|--------|
-| bakudan-1 | Bakudan Ramen | B1 | blocked (bot detection) |
-| bakudan-2 | Bakudan Ramen | B2 | blocked (bot detection) |
-| bakudan-3 | Bakudan Ramen | B3 | blocked (bot detection) |
-| raw-sushi | Raw Sushi Bar | Raw | blocked (bot detection) |
+| bakudan-1 | Bakudan Ramen | B1 | blocked (`CREDENTIALS_REQUIRED`) |
+| bakudan-2 | Bakudan Ramen | B2 | blocked (`CREDENTIALS_REQUIRED`) |
+| bakudan-3 | Bakudan Ramen | B3 | blocked (`CREDENTIALS_REQUIRED`) |
+| raw-sushi | Raw Sushi Bar | Raw | blocked (`CREDENTIALS_REQUIRED`) |
 
 ---
 
@@ -64,25 +65,24 @@ Source: `pm2 list` at 2026-06-27T08:51:00Z
 ## What Is Working
 
 - DoorDash agent online and reachable at localhost:3460
-- Chromium r1208 launches correctly
+- Chromium runtime resolution works on this machine
 - 4 accounts registered in account registry
 - Approval gate prevents write operations
 - No budget changes, campaign edits, or spend actions attempted
 
 ## Remaining Blockers
 
-1. **DoorDash bot detection** — Portal blocks headless Chrome. Options:
-   - Use real browser session (requires 2FA OTP each time)
-   - Use DoorDash Developer API (requires OAuth, not free)
-   - Accept PARTIAL status and use manual data entry
+1. **Live DoorDash access** — provide a valid read-only session or approved runtime credentials.
+2. **Campaign visibility proof** — not proven because the scrape cannot reach authenticated merchant pages.
+3. **Campaign metadata** — not collected from a live account.
 
 ## Required to Reach `DOORDASH_CERTIFIED`
 
 | # | Action | Owner |
 |---|--------|-------|
-| 1 | Provide 2FA OTP access to all 4 accounts | CEO |
-| 2 | Set up DoorDash Developer API OAuth for programmatic access | CEO |
-| 3 | Configure `DD_API_KEY` in mi-core/.env | CTO |
+| 1 | Provide CEO-approved read-only DoorDash session or credentials | CEO |
+| 2 | Run scrape until campaign pages are visible | Operator |
+| 3 | Store runtime log, screenshot, and campaign metadata evidence | Operator |
 
 ## Final Contribution
 

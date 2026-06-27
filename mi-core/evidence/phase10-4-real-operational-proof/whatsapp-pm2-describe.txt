@@ -1,0 +1,57 @@
+ Describing process with id 5 - name mi-whatsapp-gateway
+┌───────────────────┬─────────────────────────────────────────────────────────────────────────┐
+│ status            │ online                                                                  │
+│ name              │ mi-whatsapp-gateway                                                     │
+│ namespace         │ default                                                                 │
+│ version           │ 1.0.0                                                                   │
+│ restarts          │ 0                                                                       │
+│ uptime            │ 25h                                                                     │
+│ script path       │ D:\Project\Master\mi-core\services\whatsapp-ai-gateway\src\index.js     │
+│ script args       │ N/A                                                                     │
+│ error log path    │ D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-err.log │
+│ out log path      │ D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-out.log │
+│ pid path          │ C:\Users\liemdo\.pm2\pids\mi-whatsapp-gateway-5.pid                     │
+│ interpreter       │ node                                                                    │
+│ interpreter args  │ N/A                                                                     │
+│ script id         │ 5                                                                       │
+│ exec cwd          │ D:\Project\Master\mi-core\services\whatsapp-ai-gateway                  │
+│ exec mode         │ fork_mode                                                               │
+│ node.js version   │ 24.14.1                                                                 │
+│ node env          │ development                                                             │
+│ watch & reload    │ ✘                                                                       │
+│ unstable restarts │ 0                                                                       │
+│ created at        │ 2026-06-25T15:55:06.150Z                                                │
+└───────────────────┴─────────────────────────────────────────────────────────────────────────┘
+ Actions available
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger mi-whatsapp-gateway <action_name>
+
+ Code metrics value
+┌────────────────────────┬──────────────┐
+│ Used Heap Size         │ 45.81 MiB    │
+│ Heap Usage             │ 90.32 %      │
+│ Heap Size              │ 50.72 MiB    │
+│ Event Loop Latency p95 │ 19.49 ms     │
+│ Event Loop Latency     │ 8.08 ms      │
+│ Active handles         │ 10           │
+│ Active requests        │ 0            │
+│ HTTP                   │ 0.02 req/min │
+│ HTTP P95 Latency       │ 3 ms         │
+│ HTTP Mean Latency      │ 1 ms         │
+└────────────────────────┴──────────────┘
+ Divergent env variables from local env
+┌─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ CODEX_THREAD_ID │ 019efece-2945-7233-809f-8e4372281432                                                                                                                                                                                                             │
+│ Path            │ C:\Program Files\PowerShell\7;C:\Users\liemdo\.codex\tmp\arg0\codex-arg08uyxFl;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Eclipse Adoptium\jdk-17.0.18. │
+└─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs mi-whatsapp-gateway [--lines 1000]` to display logs
+ Use `pm2 env 5` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage mi-whatsapp-gateway

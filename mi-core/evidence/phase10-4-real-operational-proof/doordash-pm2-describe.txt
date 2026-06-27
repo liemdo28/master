@@ -1,0 +1,54 @@
+ Describing process with id 11 - name mi-doordash-agent
+┌───────────────────┬────────────────────────────────────────────────────────────────┐
+│ status            │ online                                                         │
+│ name              │ mi-doordash-agent                                              │
+│ namespace         │ default                                                        │
+│ version           │ 1.0.0                                                          │
+│ restarts          │ 2                                                              │
+│ uptime            │ 5m                                                             │
+│ script path       │ D:\Project\Master\mi-core\services\doordash-agent\src\index.js │
+│ script args       │ N/A                                                            │
+│ error log path    │ C:\Users\liemdo\.pm2\logs\mi-doordash-agent-error.log          │
+│ out log path      │ C:\Users\liemdo\.pm2\logs\mi-doordash-agent-out.log            │
+│ pid path          │ C:\Users\liemdo\.pm2\pids\mi-doordash-agent-11.pid             │
+│ interpreter       │ node                                                           │
+│ interpreter args  │ N/A                                                            │
+│ script id         │ 11                                                             │
+│ exec cwd          │ D:\Project\Master\mi-core\services\doordash-agent              │
+│ exec mode         │ fork_mode                                                      │
+│ node.js version   │ 24.14.1                                                        │
+│ node env          │ N/A                                                            │
+│ watch & reload    │ ✘                                                              │
+│ unstable restarts │ 0                                                              │
+│ created at        │ 2026-06-27T09:52:15.762Z                                       │
+└───────────────────┴────────────────────────────────────────────────────────────────┘
+ Actions available
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger mi-doordash-agent <action_name>
+
+ Code metrics value
+┌────────────────────────┬──────────────┐
+│ Used Heap Size         │ 55.43 MiB    │
+│ Heap Usage             │ 96.7 %       │
+│ Heap Size              │ 57.32 MiB    │
+│ Event Loop Latency p95 │ 18.56 ms     │
+│ Event Loop Latency     │ 6.91 ms      │
+│ Active handles         │ 4            │
+│ Active requests        │ 0            │
+│ HTTP                   │ 0.01 req/min │
+│ HTTP P95 Latency       │ 4 ms         │
+│ HTTP Mean Latency      │ 1 ms         │
+└────────────────────────┴──────────────┘
+ Divergent env variables from local env
+
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs mi-doordash-agent [--lines 1000]` to display logs
+ Use `pm2 env 11` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage mi-doordash-agent

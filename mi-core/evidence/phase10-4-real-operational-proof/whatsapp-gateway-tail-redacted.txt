@@ -1,0 +1,123 @@
+[TAILING] Tailing last 120 lines for [mi-whatsapp-gateway] process (change the value with --lines option)
+D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-err.log last 120 lines:
+D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-out.log last 120 lines:
+2026-06-27 12:30:16: [2026-06-27 12:30:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 12:35:14: [2026-06-27 12:35:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 12:35:17: [2026-06-27 12:35:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 12:40:14: [2026-06-27 12:40:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 12:40:15: [2026-06-27 12:40:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 12:41:43: [2026-06-27 12:41:43] [32MINFO[39M: WhatsApp state changed {"state":"OPENING"}
+2026-06-27 12:41:46: [2026-06-27 12:41:46] [32MINFO[39M: WhatsApp state changed {"state":"PAIRING"}
+2026-06-27 12:41:46: [2026-06-27 12:41:46] [32MINFO[39M: WhatsApp state changed {"state":"CONNECTED"}
+2026-06-27 12:45:14: [2026-06-27 12:45:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 12:45:18: [2026-06-27 12:45:18] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 12:50:14: [2026-06-27 12:50:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 12:50:16: [2026-06-27 12:50:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 12:55:14: [2026-06-27 12:55:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 12:55:16: [2026-06-27 12:55:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:00:14: [2026-06-27 13:00:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:00:15: [2026-06-27 13:00:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:05:14: [2026-06-27 13:05:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:05:18: [2026-06-27 13:05:18] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:10:14: [2026-06-27 13:10:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:10:16: [2026-06-27 13:10:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:15:14: [2026-06-27 13:15:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:15:16: [2026-06-27 13:15:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:20:14: [2026-06-27 13:20:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:20:16: [2026-06-27 13:20:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:25:14: [2026-06-27 13:25:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:25:15: [2026-06-27 13:25:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:30:14: [2026-06-27 13:30:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:30:15: [2026-06-27 13:30:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:35:14: [2026-06-27 13:35:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:35:15: [2026-06-27 13:35:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:40:14: [2026-06-27 13:40:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:40:16: [2026-06-27 13:40:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:45:14: [2026-06-27 13:45:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:45:15: [2026-06-27 13:45:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:50:14: [2026-06-27 13:50:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:50:19: [2026-06-27 13:50:19] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 13:55:14: [2026-06-27 13:55:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 13:55:16: [2026-06-27 13:55:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:00:14: [2026-06-27 14:00:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:00:17: [2026-06-27 14:00:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:05:14: [2026-06-27 14:05:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:05:16: [2026-06-27 14:05:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:10:14: [2026-06-27 14:10:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:10:18: [2026-06-27 14:10:18] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:15:14: [2026-06-27 14:15:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:15:15: [2026-06-27 14:15:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:20:14: [2026-06-27 14:20:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:20:16: [2026-06-27 14:20:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:25:14: [2026-06-27 14:25:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:25:17: [2026-06-27 14:25:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:30:14: [2026-06-27 14:30:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:30:16: [2026-06-27 14:30:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:35:14: [2026-06-27 14:35:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:35:15: [2026-06-27 14:35:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:40:14: [2026-06-27 14:40:14] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:40:18: [2026-06-27 14:40:18] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:45:15: [2026-06-27 14:45:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:45:20: [2026-06-27 14:45:20] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:50:15: [2026-06-27 14:50:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:50:17: [2026-06-27 14:50:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 14:55:15: [2026-06-27 14:55:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 14:55:15: [2026-06-27 14:55:15] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:00:15: [2026-06-27 15:00:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:00:16: [2026-06-27 15:00:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:05:15: [2026-06-27 15:05:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:05:20: [2026-06-27 15:05:20] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:10:15: [2026-06-27 15:10:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:10:16: [2026-06-27 15:10:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:15:15: [2026-06-27 15:15:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:15:16: [2026-06-27 15:15:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:20:15: [2026-06-27 15:20:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:20:18: [2026-06-27 15:20:18] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:25:15: [2026-06-27 15:25:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:25:16: [2026-06-27 15:25:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:25:23: [2026-06-27 15:25:23] [32MINFO[39M: Auto-update check (scheduled)
+2026-06-27 15:30:15: [2026-06-27 15:30:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:30:16: [2026-06-27 15:30:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:35:15: [2026-06-27 15:35:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:35:16: [2026-06-27 15:35:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:40:15: [2026-06-27 15:40:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:40:16: [2026-06-27 15:40:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:45:15: [2026-06-27 15:45:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:45:16: [2026-06-27 15:45:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:50:15: [2026-06-27 15:50:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:50:16: [2026-06-27 15:50:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 15:55:15: [2026-06-27 15:55:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 15:55:16: [2026-06-27 15:55:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:00:15: [2026-06-27 16:00:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:00:16: [2026-06-27 16:00:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:05:15: [2026-06-27 16:05:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:05:20: [2026-06-27 16:05:20] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:10:15: [2026-06-27 16:10:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:10:17: [2026-06-27 16:10:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:15:15: [2026-06-27 16:15:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:15:16: [2026-06-27 16:15:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:16:37: [2026-06-27 16:16:37] [32MINFO[39M: WhatsApp state changed {"state":"OPENING"}
+2026-06-27 16:16:39: [2026-06-27 16:16:39] [32MINFO[39M: WhatsApp state changed {"state":"PAIRING"}
+2026-06-27 16:16:39: [2026-06-27 16:16:39] [32MINFO[39M: WhatsApp state changed {"state":"CONNECTED"}
+2026-06-27 16:20:15: [2026-06-27 16:20:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:20:21: [2026-06-27 16:20:21] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:21:48: [2026-06-27 16:21:48] [32MINFO[39M: WhatsApp state changed {"state":"OPENING"}
+2026-06-27 16:21:49: [2026-06-27 16:21:49] [32MINFO[39M: WhatsApp state changed {"state":"PAIRING"}
+2026-06-27 16:21:49: [2026-06-27 16:21:49] [32MINFO[39M: WhatsApp state changed {"state":"CONNECTED"}
+2026-06-27 16:25:15: [2026-06-27 16:25:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:25:20: [2026-06-27 16:25:20] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:30:15: [2026-06-27 16:30:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:30:16: [2026-06-27 16:30:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:35:15: [2026-06-27 16:35:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:35:22: [2026-06-27 16:35:22] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:37:43: [2026-06-27 16:37:43] [32MINFO[39M: WhatsApp state changed {"state":"OPENING"}
+2026-06-27 16:37:45: [2026-06-27 16:37:45] [32MINFO[39M: WhatsApp state changed {"state":"PAIRING"}
+2026-06-27 16:37:45: [2026-06-27 16:37:45] [32MINFO[39M: WhatsApp state changed {"state":"CONNECTED"}
+2026-06-27 16:40:15: [2026-06-27 16:40:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:40:16: [2026-06-27 16:40:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:45:15: [2026-06-27 16:45:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:45:21: [2026-06-27 16:45:21] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:50:15: [2026-06-27 16:50:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:50:17: [2026-06-27 16:50:17] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}
+2026-06-27 16:55:15: [2026-06-27 16:55:15] [32MINFO[39M: Daily entry template sync: fetching {"tab":"Daily_Entry_Template","range":"B11:D35","spreadsheetId":"configured"}
+2026-06-27 16:55:16: [2026-06-27 16:55:16] [33MWARN[39M: Template sync failed {"error":"Google auth failed HTTP 400: Invalid JWT Signature."}

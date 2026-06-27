@@ -10,6 +10,24 @@ const SESSION_DIR = path.join(__dirname, '../data/sessions');
 const PORTAL_URL = 'https://merchant-portal.doordash.com/';
 const LOGIN_URL = 'https://identity.doordash.com/auth/user/login?layout=merchant_web_v2&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback';
 
+function findChromiumExecutable() {
+  const candidates = [
+    process.env.DD_CHROMIUM_PATH,
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+    'C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1208\\chrome-headless-shell-win64\\chrome-headless-shell.exe',
+    'C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium-1208\\chrome-win64\\chrome.exe',
+    'C:\\Users\\liemdo\\.cache\\puppeteer\\chrome\\win64-146.0.7680.31\\chrome-win64\\chrome.exe',
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  ].filter(Boolean);
+
+  for (const executable of candidates) {
+    if (fs.existsSync(executable)) return executable;
+  }
+
+  return null;
+}
+
 function sessionPath(accountId) {
   return path.join(SESSION_DIR, `${accountId}.json`);
 }
@@ -48,6 +66,11 @@ async function login(page, account) {
   if (isAuthenticated) {
     console.log(`[${account.id}] Already authenticated`);
     return true;
+  }
+
+  if (!account.email || !account.password) {
+    console.log(`[${account.id}] Session not authenticated and credentials are not configured`);
+    return 'CREDENTIALS_REQUIRED';
   }
 
   try {
@@ -338,11 +361,18 @@ async function scrapeMetrics(page, accountId) {
 }
 
 async function runScrape(account, headless = true) {
-  // Use chromium_headless_shell-1208 (installed 2026-03-09)
-  // playwright 1.61.1 in this workspace expects 1228, but 1208 is available locally
-  const CHROMIUM_PATH = 'C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1208\\chrome-headless-shell-win64\\chrome-headless-shell.exe';
+  const chromiumPath = findChromiumExecutable();
+  if (!chromiumPath) {
+    return {
+      account_id: account.id,
+      error: 'CHROMIUM_RUNTIME_MISSING',
+      scraped_at: new Date().toISOString(),
+      stores: [],
+    };
+  }
+
   const browser = await chromium.launch({
-    executablePath: CHROMIUM_PATH,
+    executablePath: chromiumPath,
     headless,
     args: ['--no-sandbox', '--disable-blink-features=AutomationControlled'],
   });
@@ -363,6 +393,11 @@ async function runScrape(account, headless = true) {
 
   try {
     const loginResult = await login(page, account);
+
+    if (loginResult === 'CREDENTIALS_REQUIRED') {
+      await browser.close();
+      return { account_id: account.id, brand: account.brand, error: 'CREDENTIALS_REQUIRED', scraped_at: new Date().toISOString(), stores: [] };
+    }
 
     if (loginResult === '2FA_REQUIRED') {
       await browser.close();
