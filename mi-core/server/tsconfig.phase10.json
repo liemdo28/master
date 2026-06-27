@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "./dist/phase10",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "include": [
+    "src/company-os-operational/**/*.ts",
+    "src/executive-coordination/**/*.ts",
+    "src/objective-engine/**/*.ts",
+    "src/open-source-governance/**/*.ts",
+    "src/it-operations/**/*.ts",
+    "src/creative-division/**/*.ts",
+    "src/company-data-platform/**/*.ts",
+    "src/company-intelligence/**/*.ts"
+  ]
+}

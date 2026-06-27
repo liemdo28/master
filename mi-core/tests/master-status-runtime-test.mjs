@@ -45,7 +45,7 @@ assert('Phase 2B is OPERATIONAL with local live operator proof', phase2b.status 
 assert('Phase 3B remains PARTIAL while QB source is degraded', phase3b.status === 'PARTIAL');
 assert('Phase 4 remains PARTIAL while marketing connectors/publishing are not certified', phase4.status === 'PARTIAL');
 assert('Phase 4A remains PARTIAL while live marketing metrics/publishing are not certified', phase4a.status === 'PARTIAL');
-assert('Phase 10 remains FUTURE', phase10.status === 'FUTURE');
+assert('Phase 10 is PARTIAL with local operational loop proof', phase10.status === 'PARTIAL');
 
 console.log('\n=== TEST 3: Dashboard ===');
 const dashboard = master.buildMasterStatusDashboard();
