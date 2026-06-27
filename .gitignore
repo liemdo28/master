@@ -31,9 +31,11 @@ google-tokens.json
 **/service-account*.json
 
 # Embedded git repos (tracked separately)
+Agent/doordash-compaigns/
 Agent/agent-coding/
 Agent/ai-search-tool/
 Agent/shared-workspace/
+Bakudan/Agent-Coding/
 Bakudan/bakudanramen.com-current/
 Bakudan/dashboard.bakudanramen.com/
 Bakudan/growth-dashboard/
@@ -62,11 +64,31 @@ _archive/
 **/.local-agent/
 .local-agent-global/
 **/.local-agent-global/
+.mi-harness/
+**/.mi-harness/
 Agent/agent-coding/apps/agency/data/post_exports/
 Agent/agent-coding-api-keys/
 agent-os/local-agent/data/
 mi-core/services/qb-ops-agent/.machine_token
 **/.machine_token
+
+# Runtime databases and generated state
+SEO/shared/database/*.db
+SEO/shared/database/*.db-*
+mi-core/data/seo/*.json
+mi-core/services/qb-ops-agent/data/
+
+# Runtime-generated operational reports
+mi-core/QB_DAILY_RUNTIME_REPORT.md
+mi-core/reports/*RUNTIME*.md
+mi-core/reports/*CHAT_RELIABILITY*.md
+mi-core/reports/*WATCHDOG*.md
+mi-core/reports/*MONITOR*.md
+mi-core/reports/*FRESHNESS*.md
+mi-core/reports/*INCIDENT*.md
+mi-core/reports/*CONNECTOR_AUTO_HEAL*.md
+mi-core/reports/DEV2_OPERATIONS_CERTIFICATION.md
+mi-core/reports/DEV3_BURN_IN_SUPPORT.md
 
 # Large files
 *.zip
