@@ -1,1 +1,98 @@
-# Toast Operational Certification**Generated:** 2026-06-27T04:51:00Z**Phase:** 10.3 Final Connector Closure**Certification result:** `BLOCKED`---## 1. Toast Status Check`GET http://localhost:4001/api/toast/status` → **404 Not Found**No Toast-specific REST endpoint found in mi-core.---## 2. Available EvidenceEvidence folder `mi-core/evidence/phase10-reality-closure/` contains:- No Toast-specific evidence files- `TOAST_EVIDENCE_PROOF.md` exists — states "Toast evidence remains insufficient for `MI_COMPANY_OS_OPERATIONAL`"---## 3. Connector VisibilityFrom `GET http://localhost:4001/api/visibility/connectors`:No Toast-specific connector is listed. The visibility API does not show a Toast connector entry.---## 4. Toast Configuration in .env```envTOAST_EMAIL=hoangdle@gmail.comTOAST_PASSWORD=B@kudan@2```Credentials exist in `.env` but no Toast API key is configured. Toast read adapter (`toast-read-adapter.ts`) shows:```typescriptthis.apiKey = process.env.TOAST_API_KEY || '';```No `TOAST_API_KEY` is set in `.env`. Only email+password for a Playwright-based scrape are present.---## 5. Decision**Status: `TOAST_BLOCKED`**Toast access is blocked because:1. No Toast API endpoint exists in mi-core2. No `TOAST_API_KEY` is configured — only email/password for Playwright scrape3. No Toast connector entry in the visibility API4. No human-approved live access proof exists**CEO must provide one of:**- Toast API key (preferred — enables programmatic read-only access)- Human-approved login credentials and write-blocking confirmation- Formal exclusion approval (CEO signature on a document excluding Toast from MI_COMPANY_OS_OPERATIONAL scope)**Without one of these, Toast cannot contribute to `MI_COMPANY_OS_OPERATIONAL`.****No Toast operations have been attempted.****Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+# Toast Operational Certification
+
+**Generated:** 2026-06-27T07:00:00Z
+**Phase:** 10.3 Final Connector Closure
+**Certification result:** `TOAST_BLOCKED`
+
+---
+
+## Certification Result
+
+**Status: `TOAST_BLOCKED`**
+
+No Toast REST API endpoint exists in mi-core. No TOAST_API_KEY is configured. No human-approved live access proof has been provided. Toast cannot be certified without one of the three unblock options.
+
+---
+
+## Current State
+
+| Check | Result |
+|-------|--------|
+| Toast REST endpoint in mi-core | 404 Not Found |
+| TOAST_API_KEY in .env | Not configured |
+| Toast connector in visibility API | Not listed |
+| Human-approved access proof | Not provided |
+| Toast credentials in .env | hoangdle@gmail.com / B@kudan@2 (never tested) |
+
+---
+
+## What Exists in .env
+
+```env
+TOAST_EMAIL=hoangdle@gmail.com
+TOAST_PASSWORD=B@kudan@2
+```
+
+These credentials are for a **Playwright scrape approach** that has never been tested. They are NOT API credentials.
+
+---
+
+## Why Toast Is Blocked
+
+1. **No API endpoint** — `GET /api/toast/status` returns 404. No Toast-specific route handlers in mi-core.
+2. **No API key** — The Toast read adapter requires `TOAST_API_KEY` but it is not set.
+3. **No access proof** — No login attempted, no account visible, no sales data available.
+4. **Never tested** — The .env credentials have never been validated with Playwright or any other method.
+
+---
+
+## Unblock Checklist (Three Options)
+
+### Option A: Toast REST API Key (Preferred)
+
+1. CEO registers at `developers.toast.com`
+2. CEO creates a Toast API project with read permissions
+3. CEO adds `TOAST_API_KEY=<key>` to mi-core/.env
+4. Dev3 creates Toast read adapter in mi-core
+5. Verify: `curl http://localhost:4001/api/toast/status` returns 200
+
+**Required evidence:** login-proof.json + account-visibility-proof.json + screenshot
+
+### Option B: Playwright Scraping
+
+1. CEO formally approves `hoangdle@gmail.com / B@kudan@2`
+2. Dev1/Dev3 builds Toast Playwright scraper
+3. Test scrape captures screenshot and sales data
+4. Confirm read-only: no orders edited, no menus changed
+
+**Required evidence:** CEO approval message + login-proof.json + account-visibility-proof.json
+
+### Option C: Formal Exclusion
+
+1. CEO writes formal exclusion request
+2. Document Toast POS revenue percentage vs DoorDash/QB
+3. Mark TOAST_EXCLUDED in MI_COMPANY_OS_OPERATIONAL_CERTIFICATION.md
+4. Toast does not count against MI_COMPANY_OS_OPERATIONAL
+
+---
+
+## No Fake Access
+
+**This certification makes NO claims about Toast access that have not been verified.**
+
+- No Toast login attempted
+- No Toast API called
+- No Toast credentials validated
+- No Toast operations of any kind performed
+
+The .env credentials have NOT been tested.
+
+---
+
+## Final Status
+
+**`TOAST_BLOCKED`** — No API, no key, no access proof.
+
+**Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+
+**Truth rule: If one connector remains blocked, do not claim operational.**

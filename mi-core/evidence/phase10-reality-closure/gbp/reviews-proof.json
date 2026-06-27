@@ -1,15 +1,9 @@
 {
-  "captured_at": "2026-06-27T06:21:00.000Z",
-  "source": "curl -s http://localhost:4001/api/gbp/reviews (404 Not Found)",
-  "status": "REVIEWS_ENDPOINT_404",
-  "api_gbp_reviews_exists": false,
-  "api_gbp_reviews_note": "GET /api/gbp/reviews returns 404 Not Found in mi-core server",
-  "review_tracking_available_via": [
-    "BRAND_INTELLIGENCE_ENGINE.md — brand/review monitoring engine",
-    "CUSTOMER_SENTIMENT_ENGINE.md — customer sentiment tracking",
-    "REVIEW_REVENUE_LOOP.md — review-to-revenue correlation",
-    "scenario-03-review-spike.json — automated review spike detection"
-  ],
-  "note": "The dedicated /api/gbp/reviews endpoint does not exist in mi-core. Reviews are tracked through the brand intelligence and customer sentiment engines, which aggregate review data from Google Business Profile, Yelp, and other platforms. The review spike scenario (scenario-03) creates automated response workflows when review thresholds are exceeded.",
-  "status": "REVIEWS_TRACKED_VIA_BRAND_INTELLIGENCE_ENGINE"
+  "captured_at": "2026-06-27T07:00:00Z",
+  "review_access": "unknown",
+  "gbp_status": "GBP_CONNECTOR_READY",
+  "review_api_endpoint": "No /api/gbp/reviews endpoint in mi-core",
+  "note": "GBP connector is configured and has scope. Reviews may be accessible via the Google Business Profile API or through manual/screenshot evidence.",
+  "locations_confirmed": 2,
+  "access_method": "Google Business Profile API (configured, has_scope: true)"
 }

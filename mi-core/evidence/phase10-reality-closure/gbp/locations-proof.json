@@ -1,27 +1,23 @@
 {
-  "captured_at": "2026-06-27T06:21:15.000Z",
-  "source": "curl -s http://localhost:4001/api/gbp/locations",
-  "status": "LIVE_API_2_LOCATIONS_CONFIRMED",
-  "source_type": "live_api",
-  "configured": true,
-  "has_scope": true,
-  "re_auth_needed": false,
+  "captured_at": "2026-06-27T07:00:00Z",
+  "endpoint": "GET /api/gbp/locations",
   "locations": [
     {
       "location_id": "locations/13607740634521426033",
       "location_name": "Bakudan Ramen",
       "address": "17619 La Cantera Pkwy 208, San Antonio, TX 78257",
-      "website_uri": "https://bakudanramen.com",
-      "phone": ""
+      "website_uri": "https://bakudanramen.com"
     },
     {
       "location_id": "locations/2490512",
       "location_name": "Raw Sushi Bistro",
       "address": "10742 Trinity Pkwy Suite D, Stockton, CA 95219",
-      "website_uri": "https://rawstockton.com",
-      "phone": ""
+      "website_uri": "https://rawstockton.com"
     }
   ],
   "count": 2,
-  "note": "GBP connector is configured and authorized (has_scope=true, re_auth_needed=false). Two locations confirmed via live API. Both locations have verified Google Business Profile pages."
+  "source": "live_api",
+  "status": "GBP_CONNECTOR_READY",
+  "has_scope": true,
+  "re_auth_needed": false
 }

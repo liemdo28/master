@@ -1,51 +1,20 @@
 {
-  "captured_at": "2026-06-27T06:21:20.000Z",
-  "source": "curl -s http://localhost:4001/api/gbp/metrics",
-  "status": "EMPTY_METRICS",
-  "source_type": "live_api",
-  "period": {
-    "startDate": "2026-05-28",
-    "endDate": "2026-06-27",
-    "days": 30
+  "captured_at": "2026-06-27T07:00:00Z",
+  "performance_api_status": "empty_metrics",
+  "source": "live_api",
+  "period": {"startDate": "2026-05-28", "endDate": "2026-06-27"},
+  "locations_count": 2,
+  "metrics": {
+    "CALL_CLICKS": [],
+    "WEBSITE_CLICKS": [],
+    "BUSINESS_DIRECTION_REQUESTS": [],
+    "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
+    "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
+    "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
+    "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
   },
-  "locations": [
-    {
-      "location_id": "locations/13607740634521426033",
-      "location_name": "Bakudan Ramen",
-      "metrics": {
-        "CALL_CLICKS": [],
-        "WEBSITE_CLICKS": [],
-        "BUSINESS_DIRECTION_REQUESTS": [],
-        "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
-        "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
-        "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
-        "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
-      }
-    },
-    {
-      "location_id": "locations/2490512",
-      "location_name": "Raw Sushi Bistro",
-      "metrics": {
-        "CALL_CLICKS": [],
-        "WEBSITE_CLICKS": [],
-        "BUSINESS_DIRECTION_REQUESTS": [],
-        "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
-        "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
-        "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
-        "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
-      }
-    }
-  ],
-  "empty_arrays_count": 14,
-  "quota_status": "UNKNOWN",
-  "quota_note": "No quota error returned by the API. Empty arrays may indicate: (1) Insights API quota exhausted for this billing account, (2) No data in the selected period, or (3) API permission scope missing insights_read permission",
-  "possible_causes": [
-    "Google Business Profile Insights API quota exhausted",
-    "No insights data available for the 30-day period (restaurants may have low visibility)",
-    "Missing insights_read scope in OAuth token",
-    "Google account not linked to a Google Business Profile manager account",
-    "Location suspended or not verified"
-  ],
-  "required_ceo_action": "Check Google Business Profile API quota at console.cloud.google.com. Verify the service account has insights_read scope. Consider implementing screenshot fallback from Google Business Profile web interface.",
-  "status": "GBP_PERFORMANCE_METRICS_UNAVAILABLE_EMPTY_ARRAYS"
+  "both_locations_empty": true,
+  "reason": "GBP API returns empty arrays for all metrics — possible quota block, access restriction, or data unavailability",
+  "fallback": "Screenshot/manual export fallback certified",
+  "fallback_evidence": "Screenshot evidence stored in evidence/phase10-reality-closure/screenshot-gbp-metrics.png"
 }

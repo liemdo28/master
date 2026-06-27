@@ -1,28 +1,25 @@
-mi-whatsapp-gateway PM2 Status
-Captured: 2026-06-27T06:20:24Z
-Command: pm2 list
+Process: mi-whatsapp-gateway
+Status: online
+PID: 8752
+PM2 ID: 5
+Version: 1.0.0
+Mode: fork
+Uptime: 22h+
+Restarts: 0
+Script: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\src\index.js
+Error Log: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-err.log
+Out Log: D:\Project\Master\mi-core\services\whatsapp-ai-gateway\logs\pm2-out.log
+Node.js: v24.14.1
+Node Env: development
+Memory: 81.7mb
+Heap Usage: 81.3%
+Event Loop Latency p95: 21.11ms
+Event Loop Latency: 10.97ms
+Active handles: 9
+Active requests: 0
+HTTP req/min: 0.01
+HTTP P95 Latency: 3ms
+HTTP Mean Latency: 1ms
 
-┌────┬─────────────────────────┬──────────────┬─────────┬─────────┬──────────┬───────┬──────┬───────────┬───────────┬───────────┬───────────┬───────────┐
-│ id │ name                    │ namespace    │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu       │ mem       │ user      │ watching  │
-├────┼─────────────────────────┼──────────────┼─────────┼─────────┼──────────┼───────┼──────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-│ 5  │ mi-whatsapp-gateway     │ default      │ 1.0.0   │ fork    │ 8752     │ 21h    │ 0    │ online    │ 0%        │ 80.8mb    │ liemdo    │ disabled  │
-└────┴─────────────────────────┴──────────────┴─────────┴─────────┴──────────┴───────┴──────┴───────────┴───────────┴───────────┴───────────┴───────────┘
-
-Key facts:
-- mi-whatsapp-gateway is online (PID 8752, uptime 21h)
-- 0 restarts — stable runtime
-- whatsapp_status=ready (from gateway health endpoint)
-- whatsapp_ready=true
-- food_safety_enabled=true
-- business_hours_open=true
-- ai_paused=false
-
-Gateway version: v1.0.0 (commit: f13f3ae)
-Build: Admin Control Center v1
-Build time: 2026-06-26T08:25:09.892Z
-Node: v24.14.1
-
-Note: This is the same binary that successfully routed messages on 2026-06-17
-("Mi oi" → "Em đây anh."). The gateway infrastructure is fully operational.
-The only missing piece for live routing is the mi-core WhatsApp API key configuration
-(api_key_configured: false at port 4001).
+Captured: 2026-06-27T06:58:00Z
+Source: pm2 show mi-whatsapp-gateway

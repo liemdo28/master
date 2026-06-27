@@ -1,1 +1,104 @@
-# QuickBooks Operational Certification**Generated:** 2026-06-27T04:49:00Z**Phase:** 10.3 Final Connector Closure**Certification result:** `PARTIAL`---## 1. QB Visibility Status (Latest Snapshot)```json{  "generated_at": "2026-06-27T04:10:29.804Z",  "status": "needs_dev1_action",  "dashboard_status": "needs_dev1_action",  "certified": false,  "company_detected": true,  "quickbooks_desktop_open": true,  "last_successful_sync": "2026-06-18T08:29:36.703Z",  "last_sync_timestamp": "2026-06-18T08:29:36.703Z",  "last_sync_status": "ok",  "company_identity": {    "detected_company_name": "Raw Japanese Bistro and Sushi Bar",    "detected_company_file": "C:\\QB Data\\Raw Stockton\\rawstockton.qbw",    "identity_matched": true,    "machine_allowed": true  },  "activity": {    "today_transactions": 0,    "today_amount": 0,    "latest_activity_at": null  }}```Source: `mi-core/evidence/phase10-reality-closure/qb-visibility.json`---## 2. PM2 Process Status| Process | PID | Uptime | Status ||---------|-----|--------|--------|| qb-ops-agent | 4424 | 20h | online |Source: `pm2 list` at 2026-06-27T04:45:51Z---## 3. QB Gaps Identified| Issue | Detail ||-------|--------|| No QB heartbeat received | Heartbeat monitoring gap || Last successful sync stale | 2026-06-18T08:29:36Z — 9 days old || No real activity log rows | today_transactions: 0, latest_activity_at: null || Dev1 Laptop1 runtime NOT_STABLE | PowerShell scheduled task needs admin update || ToastPOSManager-Background task hung | Needs PowerShell Run as Administrator |---## 4. Read-Only Assessment| Requirement | Result | Evidence ||------------|--------|----------|| QB Desktop is open | PASS | quickbooks_desktop_open: true || Company detected | PASS | "Raw Japanese Bistro and Sushi Bar" detected || Heartbeat fresh | FAIL | No heartbeat received, last sync 9 days old || Sync fresh | FAIL | last_successful_sync = 2026-06-18 || Activity logs fresh | FAIL | today_transactions: 0, latest_activity_at: null || No production mutations | PASS | Read-only access confirmed |---## 5. Decision**Status: `QB_PARTIAL`**QuickBooks shows partial progress:- Company file IS detected- QB Desktop IS open- QB is NOT stale at the file levelHowever:- Sync heartbeat is stale (9 days old)- Activity logs show no transactions today- Dev1 must update PowerShell scheduled task with admin rights**Blockers:**1. QB heartbeat is stale (last sync 2026-06-18)2. Dev1 Laptop1 needs admin update to ToastPOSManager-Background task3. Activity logs show 0 transactions**Required to reach QB_CERTIFIED:**- Dev1 runs PowerShell as Administrator on Laptop1- Trigger clean sync-result after fixing scheduled task- Verify heartbeat, sync timestamp, and activity logs are fresh**No invoice edits, sales receipt edits, bank actions, or payroll actions have been attempted.****Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+# QuickBooks Operational Certification
+
+**Generated:** 2026-06-27T07:00:00Z
+**Phase:** 10.3 Final Connector Closure
+**Certification result:** `QB_PARTIAL`
+
+---
+
+## Certification Result
+
+**Status: `QB_PARTIAL`**
+
+QB Desktop is open and company file confirmed. QB is NOT stale at the file level. However, sync heartbeat is stale (9 days), activity logs show no transactions today, and Dev1 must fix the network path and run admin PowerShell on Laptop1.
+
+---
+
+## Company Identity
+
+Source: `qb-visibility.json` + `quickbooks/company-file-proof.json`
+
+| Field | Value |
+|-------|-------|
+| Company name | Raw Japanese Bistro and Sushi Bar |
+| Company file | C:\QB Data\Raw Stockton\rawstockton.qbw |
+| Company ID | raw-stockton |
+| Identity matched | true |
+| QB Desktop open | true |
+
+---
+
+## QB Sync Status
+
+| Metric | Value |
+|--------|-------|
+| Last successful sync | 2026-06-18T08:29:36Z |
+| Stale days | 9 days |
+| QB agent URL | http://100.111.97.25:3457 |
+| Agent reachable | false (EACCES) |
+| qb-ops-agent PID | 4424 |
+| qb-ops-agent status | online (21h uptime) |
+
+Source: `curl -s http://localhost:4001/api/qb/status`
+
+---
+
+## Heartbeat Freshness
+
+| Metric | Value |
+|--------|-------|
+| Last heartbeat | null (never received) |
+| Heartbeat stale | Yes |
+| Heartbeat after refresh | Still null (2026-06-27T06:44Z) |
+
+Source: `quickbooks/heartbeat-before.json` + `quickbooks/heartbeat-after.json`
+
+---
+
+## Activity Log
+
+| Metric | Value |
+|--------|-------|
+| Today transactions | 0 |
+| Today amount | 0 |
+| Latest activity | null |
+
+Source: `quickbooks/activity-log-proof.json`
+
+---
+
+## Gaps Identified
+
+1. No QB heartbeat received by mi-core visibility engine
+2. Last successful sync is 9 days stale
+3. No real QB activity log rows found
+4. Dev1 Laptop1 runtime result is NOT_STABLE
+5. ToastPOSManager-Background scheduled task needs PowerShell Run as Administrator fix
+
+---
+
+## Required Dev1 Action
+
+Run PowerShell as Administrator on Laptop1:
+1. Update ToastPOSManager-Background task path to corrected desktop-app path
+2. Trigger clean sync-result after 12h sync runner no longer hangs
+3. Verify sync-result delivers fresh heartbeat, activity log, and transactions
+
+---
+
+## To Reach QB_CERTIFIED
+
+1. Dev1 runs PowerShell as Administrator on Laptop1
+2. Fix ToastPOSManager-Background scheduled task
+3. Trigger clean QB sync-refresh
+4. Verify heartbeat, sync timestamp, and activity logs are fresh
+
+---
+
+## Final Status
+
+**`QB_PARTIAL`** — Company confirmed. Desktop open. Sync needs Dev1 admin action.
+
+**Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+
+**No invoice edits, sales receipt edits, bank actions, or payroll actions have been attempted.**

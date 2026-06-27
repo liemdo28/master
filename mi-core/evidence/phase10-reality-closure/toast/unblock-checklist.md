@@ -1,83 +1,56 @@
-# Toast Unblock Checklist
+# Toast Operational Unblock Checklist
 
-**Generated:** 2026-06-27T06:49:00Z
+**Generated:** 2026-06-27T07:00:00Z
 **Phase:** 10.3 Final Connector Closure
-**Owner:** CEO
 
-## Current Status: `TOAST_BLOCKED`
+## Current Status: BLOCKED
 
-## Why Toast Is Blocked
+No Toast REST endpoint exists in mi-core.
+No `TOAST_API_KEY` configured.
+No Toast connector entry in visibility API.
+No human-approved live access proof.
 
-| Issue | Evidence |
-|-------|----------|
-| No Toast REST endpoint in mi-core | `GET /api/toast/status` → 404 |
-| No TOAST_API_KEY in .env | .env checked — only email/password |
-| No Toast connector in visibility API | `/api/visibility/connectors` has no Toast |
-| No human-approved live access proof | Not provided by CEO |
+## Unblock Options (CEO must choose ONE)
 
-## Unblock Options
-
-### Option A: Toast REST API Key (Preferred) ⭐
+### Option A: Provide Toast API Key (Preferred)
+**Action:** CEO provides `TOAST_API_KEY` in mi-core/.env
 
 **Steps:**
-1. [ ] CEO registers for Toast Developer account at `developers.toast.com`
-2. [ ] CEO creates a Toast API project and generates a read-only API key
-3. [ ] CEO adds `TOAST_API_KEY=<key>` to mi-core/.env
-4. [ ] Dev3 creates `/api/toast/status` endpoint using Toast REST API
-5. [ ] Dev3 creates `/api/toast/sales` endpoint for sales data
-6. [ ] Dev3 creates `/api/toast/reports` endpoint for reporting
-7. [ ] Verify login: `curl http://localhost:4001/api/toast/status` returns 200
-8. [ ] Capture account visibility proof (JSON output)
-9. [ ] Capture sales/report availability proof
-10. [ ] Mark TOAST_CERTIFIED or TOAST_PARTIAL
+1. CEO obtains Toast API key from Toast Developer Portal
+2. CEO adds `TOAST_API_KEY=your_key_here` to `D:\Project\Master\mi-core\.env`
+3. Dev1 creates `GET /api/toast/status` endpoint in mi-core (if not exists)
+4. Verify: `curl http://localhost:4001/api/toast/status` returns 200
+5. Collect: login proof, account visibility proof, sales/report availability
 
-**Required evidence for certification:**
-- `login-proof.json` — successful API login
-- `account-visibility-proof.json` — account info visible
-- Screenshot of Toast dashboard
+**Evidence Required:**
+- `evidence/phase10-reality-closure/toast/login-proof.json`
+- `evidence/phase10-reality-closure/toast/account-visibility-proof.json`
+- `evidence/phase10-reality-closure/toast/access-approval-proof.md`
 
-### Option B: Playwright Scraping (If no API key available)
+### Option B: Formal Exclusion Approval
+**Action:** CEO signs this checklist as formal exclusion approval
 
-**Prerequisite:** CEO formally approves `hoangdle@gmail.com / B@kudan@2` for scraping
+**Evidence Required:**
+- CEO signature on this document
+- Statement: "Toast is formally excluded from MI_COMPANY_OS_OPERATIONAL scope"
 
-**Steps:**
-1. [ ] CEO approval email/ Slack message confirming credentials
-2. [ ] Dev1/Dev3 creates Toast Playwright scraper (similar to doordash-agent)
-3. [ ] Test scrape: capture screenshot of Toast dashboard
-4. [ ] Verify sales data visible: orders, revenue, tips
-5. [ ] Verify reports accessible: daily summary, sales by item
-6. [ ] Confirm no mutations — read-only only
-7. [ ] Mark TOAST_PARTIAL (scrape-based is PARTIAL, not CERTIFIED)
+### Option C: Human-Approved Playwright Login
+**Action:** CEO provides login credentials and write-blocking confirmation
 
-**Required evidence:**
-- CEO approval message
-- `login-proof.json` — successful login screenshot
-- `account-visibility-proof.json` — account visible
+**Constraints:**
+- No budget changes
+- No menu edits
+- No order edits
+- Only read-only screenshot capture
 
-### Option C: Formal Exclusion
+## Required Before TOAST_CERTIFIED
 
-If Toast POS is not relevant to the MI_COMPANY_OS_OPERATIONAL scope:
+1. Toast API key in .env OR formal exclusion approval
+2. GET /api/toast/status returns 200
+3. Login proof captured
+4. Account visibility proof captured
+5. Human approval documented
 
-1. [ ] CEO writes formal exclusion request
-2. [ ] Document what percentage of revenue comes from Toast POS vs DoorDash/ QB
-3. [ ] Mark TOAST_EXCLUDED in MI_COMPANY_OS_OPERATIONAL_CERTIFICATION.md
-4. [ ] Toast does not count against MI_COMPANY_OS_OPERATIONAL
+## Owner: CEO
 
-## No Fake Access
-
-**This checklist is the ONLY acceptable path to Toast certification.**
-Do NOT fabricate Toast access evidence.
-Do NOT claim TOAST_CERTIFIED without real proof.
-Do NOT use credentials without CEO's formal approval.
-
-## Current .env Credentials (Not Yet Approved)
-
-```
-TOAST_EMAIL=hoangdle@gmail.com
-TOAST_PASSWORD=B@kudan@2
-```
-
-These credentials exist in .env but have NOT been:
-- Tested with Playwright
-- Confirmed as valid by Toast
-- Formally approved by CEO for use in mi-core
+No automated path available. CEO action required.

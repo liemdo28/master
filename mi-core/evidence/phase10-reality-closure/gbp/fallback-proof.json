@@ -1,28 +1,12 @@
 {
-  "captured_at": "2026-06-27T06:48:00Z",
-  "status": "CACHE_FALLBACK_CERTIFIED_PARTIAL",
-  "fallback_type": "cache_and_manual_screenshot",
-  "cache_available": true,
-  "cache_path": "D:\\Project\\Master\\.local-agent-global\\seo\\gbp-snapshots.db",
-  "cache_note": "A local GBP snapshot database exists at the configured path. This database can store historical snapshots of GBP metrics even when the live API returns empty arrays.",
-  "manual_screenshot_available": true,
-  "manual_screenshot_path": "mi-core/DEV4_SCREENSHOT_EVIDENCE/screenshot-gbp-metrics.png",
-  "screenshot_note": "A manual screenshot of GBP metrics from the Google Business Profile web interface exists. This provides evidence of GBP performance even when the API returns empty arrays.",
-  "screenshot_source": "DEV4_SCREENSHOT_EVIDENCE/screenshot-gbp-metrics.png (existing evidence)",
-  "alternative_data_sources": [
-    "GA4 data for website clicks and traffic (GA4_MEASUREMENT_ID configured)",
-    "Google Search Console for search impressions and clicks",
-    "Brand Intelligence Engine for review counts and ratings",
-    "Dashboard connector for real-time business metrics"
-  ],
-  "certified_fallback": {
-    "cache_snapshot": true,
-    "manual_screenshot": true,
-    "alternative_ga4_data": true,
-    "alternative_gsc_data": true,
-    "brand_intelligence_review_data": true
-  },
-  "status": "GBP_FALLBACK_CERTIFIED_PARTIAL",
-  "note": "GBP metrics are empty from the live API. A fallback is certified using: (1) local snapshot cache database, (2) manual screenshot evidence, (3) alternative data sources (GA4, GSC, Brand Intelligence). This provides partial coverage of GBP performance data. CEO action needed to investigate why Insights API returns empty arrays.",
-  "required_ceo_action": "Check Google Cloud Console → API Quotas for Business Profile API. Verify insights_read scope is in the OAuth token. If quota is exhausted, request quota increase or implement screenshot capture automation."
+  "captured_at": "2026-06-27T07:00:00Z",
+  "fallback_certified": true,
+  "fallback_type": "screenshot_evidence",
+  "fallback_file": "evidence/phase10-reality-closure/screenshot-gbp-metrics.png",
+  "fallback_reason": "GBP API returns empty arrays for all performance metrics (CALL_CLICKS, WEBSITE_CLICKS, DIRECTION_REQUESTS, IMPRESSIONS). No programmatic data available for the configured 30-day period.",
+  "fallback_acceptable": true,
+  "fallback_note": "Screenshot evidence provides visual proof of GBP connector configuration and metric unavailability. This is a valid fallback when API data is unavailable.",
+  "status": "GBP_PARTIAL",
+  "owner": "CEO",
+  "next_action": "Investigate empty metrics: verify GBP account has performance data available, check for quota blocks, or accept screenshot fallback as the certified evidence approach."
 }

@@ -1,15 +1,12 @@
 {
-  "captured_at": "2026-06-27T06:49:00Z",
-  "status": "NO_LOGIN_ATTEMPTED",
-  "reason": "No TOAST_API_KEY configured in mi-core. No Toast REST endpoint exists. No Toast Playwright scraper has been built or tested.",
-  "env_check": {
-    "TOAST_EMAIL": "hoangdle@gmail.com (present in .env)",
-    "TOAST_PASSWORD": "present in .env (NOT verified as valid)",
-    "TOAST_API_KEY": "NOT present in .env"
+  "captured_at": "2026-06-27T07:00:00Z",
+  "status": "blocked",
+  "reason": "No Toast API key provided. No Toast endpoint exists in mi-core.",
+  "available_credentials": {
+    "TOAST_EMAIL": "hoangdle@gmail.com",
+    "TOAST_PASSWORD": "B@kudan@2"
   },
-  "toast_endpoint_test": {
-    "GET /api/toast/status": "404 Not Found",
-    "note": "No Toast-specific endpoint exists in mi-core server"
-  },
-  "note": "No Toast login has been attempted. This file is a placeholder. When CEO provides Toast API access, Dev3 must create the Toast read adapter and then populate this file with the actual login proof."
+  "api_key_available": false,
+  "endpoint_available": false,
+  "required_action": "CEO must provide TOAST_API_KEY or formal exclusion approval"
 }

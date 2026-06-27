@@ -1,40 +1,18 @@
 {
+  "captured_at": "2026-06-27T07:00:00Z",
   "route": "approval",
-  "purpose": "Prove WhatsApp can route approval-required messages",
-  "captured_at": "2026-06-27T06:42:00Z",
-  "evidence": {
-    "approval_orchestrator_exists": true,
-    "approval_gate_proof_exists": true,
-    "approval_policy_hardening_exists": true,
-    "approval_flow_report_exists": true,
-    "approval_persistence_proof_v2_exists": true,
-    "approval_session_isolation_proof_exists": true,
-    "whatsapp_approval_routing_documented": true,
-    "whatsapp_approval_routing_in_gateway": true,
-    "gateway_health_food_safety_enabled": true,
-    "gateway_health_business_hours_open": true
+  "gateway_status": "ready",
+  "food_safety_enabled": true,
+  "api_key_configured": false,
+  "proof": {
+    "approval_gate_active": true,
+    "approval_gate_endpoint": "mi-core approval engine",
+    "scenario_04_proof": "Food safety missing submission scenario correctly triggers approval in runtime test",
+    "scenario_05_proof": "DoorDash failure scenario triggers operations approval",
+    "gateway_supports_approval": true,
+    "approval_types_detected": true
   },
-  "routing_architecture": {
-    "step_1": "WhatsApp message received at whatsapp-ai-gateway (port 3211)",
-    "step_2": "Intent detection via language_engine v2",
-    "step_3": "If approval_required detected → POST /api/approval/submit to mi-core",
-    "step_4": "mi-core approval orchestrator evaluates against APPROVAL_POLICY",
-    "step_5": "If approval needed → await CEO response → execute if approved",
-    "step_6": "Response sent back through gateway → WhatsApp"
-  },
-  "proof_files": {
-    "APPROVAL_GATE_PROOF.md": "mi-core/APPROVAL_GATE_PROOF.md",
-    "APPROVAL_POLICY_HARDENING_REPORT.md": "mi-core/APPROVAL_POLICY_HARDENING_REPORT.md",
-    "APPROVAL_FLOW_REPORT.md": "mi-core/APPROVAL_FLOW_REPORT.md",
-    "APPROVAL_PERSISTENCE_PROOF_V2.md": "mi-core/APPROVAL_PERSISTENCE_PROOF_V2.md",
-    "APPROVAL_SESSION_ISOLATION_PROOF.md": "mi-core/APPROVAL_SESSION_ISOLATION_PROOF.md"
-  },
-  "approval_gate_enforcement": {
-    "no_task_lacks_owner": "PASS (125 runtime tests)",
-    "no_task_lacks_division": "PASS (125 runtime tests)",
-    "approval_types_detected": "PASS (125 runtime tests)",
-    "truth_warning_about_live_actions": "PASS (125 runtime tests)"
-  },
-  "status": "APPROVAL_ROUTING_ARCHITECTURE_PROVEN",
-  "note": "Approval routing architecture is fully documented and tested. The WhatsApp gateway routes approval-required messages through the approval orchestrator. The 125 runtime tests (phase10-company-os-operational-runtime-test.mjs) confirm no task lacks an owner and approval types are correctly detected. Approval routing is blocked at the live WhatsApp message layer only by the missing API key."
+  "runtime_test_result": "PASS — approval routing works for scenarios 4 and 5",
+  "blocker": "Live WhatsApp approval routing requires API key configuration in mi-core",
+  "result": "PARTIAL — approval routing infrastructure works, live traffic blocked by API key"
 }

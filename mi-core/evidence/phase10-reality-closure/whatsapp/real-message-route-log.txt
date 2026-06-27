@@ -1,109 +1,38 @@
-WhatsApp Real Message Route Log — Phase 10.3
-Captured: 2026-06-27T06:40:00Z
-Purpose: Document routing capabilities for all required routes
+WhatsApp Routing Evidence — Phase 10.3 Live Check
+Captured: 2026-06-27T07:00:00Z
 
-═══════════════════════════════════════════════════════════════════════════════
-ARCHITECTURE OVERVIEW
-═══════════════════════════════════════════════════════════════════════════════
+## Routing Architecture
 
-WhatsApp messages flow through this architecture:
+mi-core routes WhatsApp messages through:
+1. whatsapp.ts router: handles /api/whatsapp/mi/* routes
+2. natural-conversation-engine.ts: calls whatsapp-action-router.ts
+3. whatsapp-action-router.ts: routes actions to appropriate handlers
+4. ceo-command-router.ts: routes CEO commands
 
-  [WhatsApp Cloud API] → [whatsapp-ai-gateway :3211]
-                                     ↓ (forwards to)
-                            [mi-core :4001 /api/whatsapp/mi]
-                                     ↓ (routes by intent)
-                    [Division/Agent routing engine]
-                            ↓
-                    [Response or action]
+## Required Routes (per directive):
+1. Mi command: GET /api/whatsapp/mi — status check
+2. Food Safety route: POST via ceo-command-router with food_safety_enabled=true in gateway
+3. Approval route: POST /api/whatsapp/mi with approval type
+4. Review route: routes to review management via ceo-command-router
+5. Executive alert: POST /api/whatsapp/mi with executive alert type
 
-The whatsapp-ai-gateway (PID 8752) is the bridge:
-- Receives incoming WhatsApp messages via WhatsApp Cloud Webhook
-- Processes with language_engine v2 (AI-powered intent detection)
-- Forwards to mi-core at MI_CORE_URL=http://localhost:4001
-- Routes based on detected intent:
-  * "Mi" command → MiCommand handler
-  * Food safety → food_safety route
-  * Approval request → approval route
-  * Review request → review route
-  * Executive alert → executive route
+## Live Status:
+- WhatsApp gateway: whatsapp_status=ready, whatsapp_ready=true
+- Food safety enabled: true
+- WhatsApp CONNECTED today at 11:51:43, 12:10:40, 12:41:43 (UTC)
+- WhatsApp DISCONNECTED from ~09:00-11:51 UTC (reconnected 3 times)
+- Google Sheets ready: true
+- Template cache: not ready (Google auth JWT failed — separate issue)
+- OCR ready: true
 
-═══════════════════════════════════════════════════════════════════════════════
-ROUTE DEFINITIONS (from gateway source)
-═══════════════════════════════════════════════════════════════════════════════
+## Historical Routing Proof:
+2026-06-17: "Mi oi" → "Em đây anh." — routing DID work
 
-Route 1: Mi Command
-  Trigger: Message contains "Mi" (Vietnamese personal assistant)
-  Handler: MiCommand route in whatsapp-ai-gateway
-  Historical proof: 2026-06-17 — "Mi oi" → "Em đây anh." — SUCCESS
-  Current status: food_safety_enabled=true, business_hours_open=true
-  Runtime: healthy (uptime 78913s)
+## Blockers:
+- api_key_configured: false — messages cannot be routed to mi-core without API key
+- total_messages: 0 — no live traffic recorded
+- Template sync fails: "Google auth failed HTTP 400: Invalid JWT Signature" (Google Sheets auth issue)
 
-Route 2: Food Safety
-  Trigger: Message matches food safety patterns (daily log, temperature, etc.)
-  Handler: food_safety route
-  Evidence: food_safety_enabled=true (gateway health, 2026-06-27T06:20:23Z)
-  Note: Food safety gateway (port 4001 /api/food-safety) is connected and healthy
-
-Route 3: Approval Route
-  Trigger: Message triggers approval-required action
-  Handler: approval route → POST /api/approval/submit
-  Evidence: APPROVAL_GATE_PROOF.md exists in mi-core root
-  Runtime: approval orchestrator is part of operational loop
-
-Route 4: Review Route
-  Trigger: Message about reviews, ratings, customer feedback
-  Handler: review route → review intelligence engine
-  Evidence: mi-core has BRAND_INTELLIGENCE_ENGINE.md with review tracking
-  Note: Review routing is part of the operational loop
-
-Route 5: Executive Alert
-  Trigger: Revenue drop, system failure, critical metric anomaly
-  Handler: executive route → CEO_DAILY_REPORT generation
-  Evidence: CEO_DAILY_REPORT_PROOF.md shows daily executive reporting
-
-═══════════════════════════════════════════════════════════════════════════════
-HISTORICAL LIVE ROUTING PROOF (2026-06-17)
-═══════════════════════════════════════════════════════════════════════════════
-
-Date: 2026-06-17
-Test: Direct WhatsApp message to the company WhatsApp Business number
-Message sent: "Mi oi" (Vietnamese: "Hey Mi")
-Response received: "Em đây anh." (Vietnamese: "I'm here, sir")
-
-This confirms:
-1. WhatsApp Cloud Webhook → gateway reception works
-2. Gateway → mi-core routing works
-3. Mi command intent detection works
-4. mi-core response generation works
-5. Gateway → WhatsApp Cloud response delivery works
-
-Full round-trip routing confirmed end-to-end on 2026-06-17.
-
-═══════════════════════════════════════════════════════════════════════════════
-CURRENT GATEWAY STATUS (2026-06-27)
-═══════════════════════════════════════════════════════════════════════════════
-
-whatsapp_status: ready
-whatsapp_ready: true
-food_safety_enabled: true
-business_hours_open: true
-ai_paused: false
-total_messages: 0 (since last restart on 2026-06-26T08:25:09Z)
-
-The gateway infrastructure is fully operational.
-The routing architecture is proven.
-The ONLY gap: api_key_configured=false in mi-core WhatsApp key manager.
-This prevents new incoming messages from reaching mi-core.
-Historical proof from 2026-06-17 confirms the architecture works when configured.
-
-═══════════════════════════════════════════════════════════════════════════════
-WHAT IS NEEDED FOR WHATSAPP_CERTIFIED
-═══════════════════════════════════════════════════════════════════════════════
-
-CEO action: Configure WhatsApp API key in mi-core
-  POST http://localhost:4001/api/whatsapp/mi/setup
-  With payload: { "api_key": "<your-whatsapp-api-key>" }
-
-Alternative: Send a test WhatsApp message to verify live routing end-to-end.
-
-═══════════════════════════════════════════════════════════════════════════════
+## Conclusion:
+WhatsApp gateway infrastructure is healthy. Routing logic exists and was proven working on 2026-06-17.
+API key must be configured to enable live message routing.

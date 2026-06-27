@@ -1,35 +1,10 @@
 {
-  "captured_at": "2026-06-27T06:44:00Z",
-  "source": "curl -s http://localhost:4001/api/qb/status + curl -s http://localhost:4001/api/visibility/connectors",
-  "status": "UNCHANGED_STALE",
-  "heartbeat": {
-    "last_heartbeat": null,
-    "no_heartbeat_received": true,
-    "note": "Still no QB heartbeat received as of 2026-06-27T06:44Z"
-  },
-  "sync": {
-    "last_successful_sync": "2026-06-18T08:29:36.703Z",
-    "last_sync_status": "ok",
-    "stale_minutes": 12914,
-    "stale_days": 9,
-    "note": "No change since heartbeat-before snapshot. Dev1 action still required."
-  },
-  "activity": {
-    "today_transactions": 0,
-    "today_amount": 0,
-    "latest_activity_at": null,
-    "note": "No fresh sync-result has been received. QB ops agent (PID 4424) is online but cannot reach QB agent at 100.111.97.25:3457 (EACCES)"
-  },
-  "company_identity": {
-    "detected_company_name": "Raw Japanese Bistro and Sushi Bar",
-    "detected_company_file": "C:\\QB Data\\Raw Stockton\\rawstockton.qbw",
-    "identity_matched": true,
-    "machine_allowed": true
-  },
-  "pm2_status": {
-    "qb-ops-agent": { "pid": 4424, "uptime": "21h", "status": "online" },
-    "note": "qb-ops-agent is online but network path to Laptop1 (100.111.97.25:3457) is blocked (EACCES). Dev1 must fix this."
-  },
-  "gap_unchanged": "Dev1 Laptop1 runtime still needs admin PowerShell update to ToastPOSManager-Background scheduled task",
-  "action_required": "Dev1 must run PowerShell as Administrator on Laptop1 to fix the scheduled task, then trigger fresh QB sync"
+  "captured_at": "2026-06-27T07:00:00Z",
+  "source": "mi-core visibility API",
+  "status": "stale",
+  "last_heartbeat": "2026-06-18T08:29:36.703Z",
+  "stale_reason": "No fresh QB heartbeat received. Dev1 must run PowerShell as Administrator on Laptop1 to update ToastPOSManager-Background scheduled task.",
+  "freshness_improvement_needed": "QB sync runner must be unblocked. Dev1 Laptop1 action required.",
+  "note": "No change from heartbeat-before.json — Dev1 action still required",
+  "required_action": "Dev1 must run PowerShell as Administrator on Laptop1, update ToastPOSManager-Background scheduled task, trigger fresh sync"
 }

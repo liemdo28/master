@@ -1,7 +1,9 @@
 {
-  "captured_at": "2026-06-27T06:44:00Z",
-  "source": "mi-core/qb-visibility.json (generated 2026-06-27T04:10:29Z)",
-  "status": "COMPANY_DETECTED",
+  "captured_at": "2026-06-27T07:00:00Z",
+  "endpoint": "mi-core visibility API",
+  "company_detected": true,
+  "quickbooks_desktop_open": true,
+  "last_successful_sync": "2026-06-18T08:29:36.703Z",
   "company_identity": {
     "detected_company_name": "Raw Japanese Bistro and Sushi Bar",
     "detected_company_file": "C:\\QB Data\\Raw Stockton\\rawstockton.qbw",
@@ -9,23 +11,23 @@
     "expected_company_id": "raw-stockton",
     "expected_company_name": "Raw Japanese Bistro and Sushi Bar",
     "identity_matched": true,
-    "machine_allowed": true,
-    "allowed_machine_ids": ["qb-laptop-01", "laptop-01", "laptop1"],
-    "path_accepted": true,
-    "path_match_required": false,
-    "approved_paths": ["C:\\QB Data\\Raw Stockton\\rawstockton.qbw"],
-    "mismatch_reason": null
+    "path_accepted": true
   },
-  "quickbooks_desktop": {
-    "open": true,
-    "note": "QB Desktop is confirmed open on the Laptop1 machine"
+  "activity": {
+    "today_transactions": 0,
+    "today_amount": 0,
+    "latest_activity_at": null,
+    "latest_business_date": null
   },
-  "qb_agent": {
-    "reachable": false,
-    "url": "http://100.111.97.25:3457",
-    "error": "connect EACCES 100.111.97.25:3457",
-    "note": "QB agent on Laptop1 is not reachable from this host — EACCES"
-  },
-  "status": "QB_COMPANY_FILE_CONFIRMED",
-  "note": "QB Desktop is open and the company file 'Raw Japanese Bistro and Sushi Bar' (rawstockton.qbw) is confirmed. Identity matched. The QB ops agent is online (PID 4424) but cannot reach the QB agent on Laptop1 due to network restrictions. Dev1 must fix the network path."
+  "gaps": [
+    "No QB heartbeat has been received",
+    "Last successful QB sync is stale (12701 minutes old = ~8.8 days)",
+    "No real QB activity log rows found",
+    "Dev1 Laptop1 runtime result is NOT_STABLE",
+    "ToastPOSManager-Background scheduled task needs PowerShell Run as Administrator",
+    "12h sync runner hung for more than 3 minutes and was stopped",
+    "Transaction count not verified from fresh sync-result payload"
+  ],
+  "visibility_status": "needs_dev1_action",
+  "pm2_agent": "qb-ops-agent online (PID 4424, 22h uptime)"
 }
