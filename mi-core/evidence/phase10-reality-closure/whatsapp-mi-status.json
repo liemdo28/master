@@ -1,0 +1,1 @@
+{"ok":true,"connector":"whatsapp","client_id":"mi-core","key":{"configured":false,"status":"active","created_at":"","last_used_at":"","base_url":""},"rate_limit":{"per_minute":60,"per_hour":1000},"messages":{"total":0,"last_message_at":"","last_sync":null},"groups":{"total":0},"approvals":{"total":0,"pending":0},"errors":{"recent_24h":0},"timestamp":"2026-06-27T04:10:29.470Z"}

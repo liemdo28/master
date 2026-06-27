@@ -1,0 +1,29 @@
+{
+  "status": 200,
+  "accounts": [
+    {
+      "id": "bakudan-1",
+      "brand": "Bakudan Ramen",
+      "label": "B1",
+      "email_configured": true
+    },
+    {
+      "id": "bakudan-2",
+      "brand": "Bakudan Ramen",
+      "label": "B2",
+      "email_configured": true
+    },
+    {
+      "id": "bakudan-3",
+      "brand": "Bakudan Ramen",
+      "label": "B3",
+      "email_configured": true
+    },
+    {
+      "id": "raw-sushi",
+      "brand": "Raw Sushi Bar",
+      "label": "Raw",
+      "email_configured": true
+    }
+  ]
+}
