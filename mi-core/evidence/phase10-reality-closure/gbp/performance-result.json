@@ -1,20 +1,33 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "performance_api_status": "empty_metrics",
-  "source": "live_api",
-  "period": {"startDate": "2026-05-28", "endDate": "2026-06-27"},
-  "locations_count": 2,
-  "metrics": {
-    "CALL_CLICKS": [],
-    "WEBSITE_CLICKS": [],
-    "BUSINESS_DIRECTION_REQUESTS": [],
-    "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
-    "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
-    "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
-    "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
+  "captured_at": "2026-06-27T09:01:00Z",
+  "source": "GET /api/gbp/metrics",
+  "period": {
+    "startDate": "2026-05-28",
+    "endDate": "2026-06-27"
   },
-  "both_locations_empty": true,
-  "reason": "GBP API returns empty arrays for all metrics — possible quota block, access restriction, or data unavailability",
-  "fallback": "Screenshot/manual export fallback certified",
-  "fallback_evidence": "Screenshot evidence stored in evidence/phase10-reality-closure/screenshot-gbp-metrics.png"
+  "result": "EMPTY_ARRAYS",
+  "metrics_status": "all_empty",
+  "locations_tested": 2,
+  "metrics_returned": {
+    "locations/13607740634521426033": {
+      "CALL_CLICKS": [],
+      "WEBSITE_CLICKS": [],
+      "BUSINESS_DIRECTION_REQUESTS": [],
+      "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
+      "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
+      "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
+      "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
+    },
+    "locations/2490512": {
+      "CALL_CLICKS": [],
+      "WEBSITE_CLICKS": [],
+      "BUSINESS_DIRECTION_REQUESTS": [],
+      "BUSINESS_IMPRESSIONS_DESKTOP_MAPS": [],
+      "BUSINESS_IMPRESSIONS_MOBILE_MAPS": [],
+      "BUSINESS_IMPRESSIONS_DESKTOP_SEARCH": [],
+      "BUSINESS_IMPRESSIONS_MOBILE_SEARCH": []
+    }
+  },
+  "diagnosis": "Insights API returns empty arrays. Possible causes: (1) Quota exceeded on Google Cloud project, (2) location not verified, (3) insufficient permissions, (4) API request rate limit, (5) data retention policy.",
+  "note": "GBP connector is LIVE — it successfully reaches the Google Business Profile API. The issue is that Insights data (metrics) is not available in the response. This is a data availability problem, not a connector connectivity problem."
 }

@@ -1,56 +1,62 @@
-# Toast Operational Unblock Checklist
+# Toast Unblock Checklist
 
-**Generated:** 2026-06-27T07:00:00Z
-**Phase:** 10.3 Final Connector Closure
+**Generated:** 2026-06-27T09:03:00Z
+**Status:** TOAST_BLOCKED — unblock path documented
 
-## Current Status: BLOCKED
+## Current Blocker
 
-No Toast REST endpoint exists in mi-core.
-No `TOAST_API_KEY` configured.
-No Toast connector entry in visibility API.
-No human-approved live access proof.
+No Toast API access has been provided. No `TOAST_API_KEY` is configured. The Toast connector is a placeholder only.
 
-## Unblock Options (CEO must choose ONE)
+---
 
-### Option A: Provide Toast API Key (Preferred)
-**Action:** CEO provides `TOAST_API_KEY` in mi-core/.env
+## Unblock Checklist for CEO
 
-**Steps:**
-1. CEO obtains Toast API key from Toast Developer Portal
-2. CEO adds `TOAST_API_KEY=your_key_here` to `D:\Project\Master\mi-core\.env`
-3. Dev1 creates `GET /api/toast/status` endpoint in mi-core (if not exists)
-4. Verify: `curl http://localhost:4001/api/toast/status` returns 200
-5. Collect: login proof, account visibility proof, sales/report availability
+- [ ] 1. Log in to [Toast Admin Dashboard](https://toasttab.com/) as a restaurant admin
+- [ ] 2. Navigate to: Settings → Developer → API Keys
+- [ ] 3. Click "Create API Key"
+- [ ] 4. Set scope to: `READ ONLY` (no orders, no menu, no POS actions)
+- [ ] 5. Set permissions to: `restaurants.read` and `orders.read` only
+- [ ] 6. Copy the generated API key
+- [ ] 7. Identify the restaurant GUID for Raw Japanese Bistro and Sushi Bar
+      (from Toast dashboard URL: `/restaurants/{GUID}/overview`)
+- [ ] 8. Provide the following to CTO:
+      - `TOAST_API_KEY` = [key from step 6]
+      - `TOAST_RESTAURANT_GUID` = [GUID from step 7]
+- [ ] 9. CTO will configure in `mi-core/.env`:
+      ```
+      TOAST_API_KEY=your_key_here
+      TOAST_RESTAURANT_GUID=your_guid_here
+      ```
+- [ ] 10. CTO will test with: `curl -s http://localhost:4001/api/toast/health`
+- [ ] 11. Verify account visibility: `curl -s http://localhost:4001/api/toast/accounts`
 
-**Evidence Required:**
-- `evidence/phase10-reality-closure/toast/login-proof.json`
-- `evidence/phase10-reality-closure/toast/account-visibility-proof.json`
-- `evidence/phase10-reality-closure/toast/access-approval-proof.md`
+---
 
-### Option B: Formal Exclusion Approval
-**Action:** CEO signs this checklist as formal exclusion approval
+## CTO Checklist After CEO Provides Credentials
 
-**Evidence Required:**
-- CEO signature on this document
-- Statement: "Toast is formally excluded from MI_COMPANY_OS_OPERATIONAL scope"
+- [ ] 1. Add TOAST_API_KEY to mi-core/.env
+- [ ] 2. Add TOAST_RESTAURANT_GUID to mi-core/.env
+- [ ] 3. Create `/api/toast/health` endpoint in mi-core if not exists
+- [ ] 4. Create `/api/toast/accounts` endpoint in mi-core if not exists
+- [ ] 5. Run `node tests/phase10-company-os-operational-runtime-test.mjs`
+- [ ] 6. Verify: `GET /api/toast/health` returns 200
+- [ ] 7. Verify: `GET /api/toast/accounts` returns restaurant list
+- [ ] 8. Update `TOAST_OPERATIONAL_CERTIFICATION.md` to TOAST_PARTIAL or TOAST_CERTIFIED
+- [ ] 9. Run validation: `git add . && node tests/phase10-company-os-operational-runtime-test.mjs`
 
-### Option C: Human-Approved Playwright Login
-**Action:** CEO provides login credentials and write-blocking confirmation
+---
 
-**Constraints:**
-- No budget changes
-- No menu edits
-- No order edits
-- Only read-only screenshot capture
+## Alternative: Formal Exclusion
 
-## Required Before TOAST_CERTIFIED
+If Toast POS integration is not required:
+- [ ] CEO signs exclusion approval: `TOAST_EXCLUSION_APPROVAL.md`
+- [ ] Status set to `TOAST_EXCLUDED` (not BLOCKED)
+- [ ] QB remains the source of truth for restaurant financials
+- [ ] Toast connector removed from connector registry
 
-1. Toast API key in .env OR formal exclusion approval
-2. GET /api/toast/status returns 200
-3. Login proof captured
-4. Account visibility proof captured
-5. Human approval documented
+---
 
-## Owner: CEO
+## Estimated Time to Unblock
 
-No automated path available. CEO action required.
+- If CEO provides credentials: 15 minutes (CTO configuration + testing)
+- If exclusion is chosen: 5 minutes (CEO signs document)

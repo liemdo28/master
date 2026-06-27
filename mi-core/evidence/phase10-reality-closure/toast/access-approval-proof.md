@@ -1,49 +1,36 @@
 # Toast Access Approval Proof
 
-**Generated:** 2026-06-27T07:00:00Z
-**Phase:** 10.3 Final Connector Closure
+**Captured:** 2026-06-27T09:02:00Z
+**Phase:** 10.3 Connector Closure
 
-## Status: BLOCKED — CEO ACTION REQUIRED
+## Status: NOT PROVIDED
 
-## Current Evidence
+The CEO has not provided Toast POS API access credentials (TOAST_API_KEY) as of 2026-06-27T09:02:00Z.
 
-### Configuration (from mi-core/.env)
-```
-TOAST_EMAIL=hoangdle@gmail.com
-TOAST_PASSWORD=B@kudan@2
-```
+## What We Need From CEO
 
-No `TOAST_API_KEY` configured.
+1. **TOAST_API_KEY** — Toast REST API authentication key
+2. **Toast restaurant GUID** — the specific restaurant GUID for Raw Japanese Bistro and Sushi Bar
+3. **Approval to use read-only scope** — for sales/reports visibility without mutation capabilities
 
-### mi-core Endpoint
-`GET /api/toast/status` → **404 Not Found**
+## What's Available Without Toast Credentials
 
-No Toast-specific REST endpoint exists in mi-core.
+- Toast POS Manager Background scheduled task is referenced in QB sync runner
+- Toast connector framework exists in mi-core (TOAST_CONNECTOR placeholder)
+- No live Toast data is available
 
-### Visibility API
-No Toast connector entry in `GET /api/visibility/connectors`.
+## How to Provide Access
 
-### Toast Read Adapter
-`toast-read-adapter.ts` shows:
-```typescript
-this.apiKey = process.env.TOAST_API_KEY || '';
-```
-No `TOAST_API_KEY` set.
+CEO should:
+1. Log in to https://toasttab.com/ as an admin
+2. Navigate to Developer → API Keys
+3. Generate a read-only API key
+4. Provide the key plus the restaurant GUID to the CTO/CTO team
+5. CTO will configure it in mi-core/.env
 
-## Required Actions
+## Alternative
 
-CEO must provide ONE of:
-1. **Toast API key** (preferred)
-2. **Formal exclusion approval** (signed)
-3. **Human-approved Playwright credentials + write-blocking confirmation**
-
-## Forbidden Actions
-- No invoice edits
-- No sales receipt edits
-- No payroll edits
-- No banking actions
-- No tax actions
-
-## Result
-
-**TOAST_BLOCKED** — CEO action required to unblock.
+If CEO does not have Toast API access or prefers to exclude Toast:
+1. CEO should sign an exclusion approval document
+2. Toast will remain BLOCKED
+3. mi-core will continue to use QB as the source of truth for restaurant financials

@@ -1,13 +1,13 @@
 {
-  "captured_at": "2026-06-27T04:10:00Z",
-  "source": "mi-core visibility API",
-  "status": "stale",
-  "last_heartbeat": "2026-06-18T08:29:36.703Z",
-  "staleness_minutes": 12701,
-  "stale_reason": "No QB heartbeat received since 2026-06-18",
-  "activity": {
-    "today_transactions": 0,
-    "latest_activity_at": null
-  },
-  "note": "This is the stale state before Phase 10.3 actions"
+  "captured_at": "2026-06-27T08:58:30Z",
+  "source": "GET /api/visibility/quickbooks",
+  "heartbeat_status": "NOT_RECEIVED",
+  "qb_ops_agent_online": true,
+  "pm2_process": "qb-ops-agent",
+  "pm2_pid": 4424,
+  "pm2_uptime": "24h",
+  "pm2_status": "online",
+  "last_heartbeat_received": null,
+  "heartbeat_gap_hours": "unknown",
+  "note": "QB heartbeat endpoint /api/qb/heartbeat returns 404. qb-ops-agent is online but no heartbeat received by mi-core. QB sync is stale at 9 days."
 }

@@ -1,6 +1,6 @@
-# QuickBooks Operational Certification
+# QB Operational Certification
 
-**Generated:** 2026-06-27T07:00:00Z
+**Generated:** 2026-06-27T09:16:00Z
 **Phase:** 10.3 Final Connector Closure
 **Certification result:** `QB_PARTIAL`
 
@@ -10,95 +10,82 @@
 
 **Status: `QB_PARTIAL`**
 
-QB Desktop is open and company file confirmed. QB is NOT stale at the file level. However, sync heartbeat is stale (9 days), activity logs show no transactions today, and Dev1 must fix the network path and run admin PowerShell on Laptop1.
+QB Desktop is open with correct company file. Company identity confirmed. Sync is stale at 9 days. Heartbeat not received. Dev1 action required on Laptop1.
 
 ---
 
 ## Company Identity
 
-Source: `qb-visibility.json` + `quickbooks/company-file-proof.json`
+| Field | Value |
+|-------|-------|
+| Company Name | Raw Japanese Bistro and Sushi Bar |
+| Company File | C:\QB Data\Raw Stockton\rawstockton.qbw |
+| Company ID | raw-stockton |
+| Identity Matched | true |
+| QB Desktop Open | true |
+
+---
+
+## Sync Status
 
 | Field | Value |
 |-------|-------|
-| Company name | Raw Japanese Bistro and Sushi Bar |
-| Company file | C:\QB Data\Raw Stockton\rawstockton.qbw |
-| Company ID | raw-stockton |
-| Identity matched | true |
-| QB Desktop open | true |
+| Last Successful Sync | 2026-06-18T08:29:36.703Z |
+| Sync Age | 12,981 minutes (~9 days) |
+| Sync Status | ok (historical) |
+| Checksum Match | not verified |
+| Activity Today | 0 transactions, $0 |
 
 ---
 
-## QB Sync Status
+## Heartbeat Status
 
-| Metric | Value |
-|--------|-------|
-| Last successful sync | 2026-06-18T08:29:36Z |
-| Stale days | 9 days |
-| QB agent URL | http://100.111.97.25:3457 |
-| Agent reachable | false (EACCES) |
-| qb-ops-agent PID | 4424 |
-| qb-ops-agent status | online (21h uptime) |
-
-Source: `curl -s http://localhost:4001/api/qb/status`
+| Field | Value |
+|-------|-------|
+| Heartbeat Received | NO |
+| QB Ops Agent | online (PID 4424, 24h) |
+| Endpoint /api/qb/heartbeat | 404 |
+| Action Required | Dev1 must fix Laptop1 scheduled task |
 
 ---
 
-## Heartbeat Freshness
+## PM2 Process Status
 
-| Metric | Value |
-|--------|-------|
-| Last heartbeat | null (never received) |
-| Heartbeat stale | Yes |
-| Heartbeat after refresh | Still null (2026-06-27T06:44Z) |
-
-Source: `quickbooks/heartbeat-before.json` + `quickbooks/heartbeat-after.json`
-
----
-
-## Activity Log
-
-| Metric | Value |
-|--------|-------|
-| Today transactions | 0 |
-| Today amount | 0 |
-| Latest activity | null |
-
-Source: `quickbooks/activity-log-proof.json`
+| Process | PID | Uptime | Status |
+|---------|-----|--------|--------|
+| qb-ops-agent | 4424 | 24h | online |
 
 ---
 
 ## Gaps Identified
 
-1. No QB heartbeat received by mi-core visibility engine
-2. Last successful sync is 9 days stale
+1. No QB heartbeat has been received
+2. Last successful sync is 9 days old
 3. No real QB activity log rows found
-4. Dev1 Laptop1 runtime result is NOT_STABLE
-5. ToastPOSManager-Background scheduled task needs PowerShell Run as Administrator fix
+4. ToastPOSManager-Background scheduled task needs PowerShell Run as Administrator on Laptop1
+5. 12h sync runner hung and was stopped by Dev1
 
 ---
 
-## Required Dev1 Action
+## Required to Reach `QB_CERTIFIED`
 
-Run PowerShell as Administrator on Laptop1:
-1. Update ToastPOSManager-Background task path to corrected desktop-app path
-2. Trigger clean sync-result after 12h sync runner no longer hangs
-3. Verify sync-result delivers fresh heartbeat, activity log, and transactions
-
----
-
-## To Reach QB_CERTIFIED
-
-1. Dev1 runs PowerShell as Administrator on Laptop1
-2. Fix ToastPOSManager-Background scheduled task
-3. Trigger clean QB sync-refresh
-4. Verify heartbeat, sync timestamp, and activity logs are fresh
+| # | Action | Owner |
+|---|--------|-------|
+| 1 | Run PowerShell as Administrator on Laptop1 | Dev1 |
+| 2 | Update ToastPOSManager-Background scheduled task path | Dev1 |
+| 3 | Trigger fresh QB sync-result | Dev1 |
+| 4 | Verify: `/api/visibility/quickbooks` shows `sync_age_minutes` < 60 | CTO |
 
 ---
 
-## Final Status
+## What Is Working
 
-**`QB_PARTIAL`** — Company confirmed. Desktop open. Sync needs Dev1 admin action.
+- QB Desktop is open with correct company file
+- Company identity verified (Raw Japanese Bistro and Sushi Bar)
+- qb-ops-agent is online (24h uptime)
+- Failure detection is working (stale sync correctly flagged)
+- QB correctly contributes to PARTIAL status
 
-**Final status contribution:** `MI_COMPANY_OS_PARTIAL`
+## Final Contribution
 
-**No invoice edits, sales receipt edits, bank actions, or payroll actions have been attempted.**
+`MI_COMPANY_OS_PARTIAL` — QB is PARTIAL, contributing correctly to the partial operational state.

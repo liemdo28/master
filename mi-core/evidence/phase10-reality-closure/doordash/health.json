@@ -1,20 +1,22 @@
 {
-  "captured_at": "2026-06-27T06:49:00.000Z",
+  "captured_at": "2026-06-27T08:54:00Z",
+  "source": "GET /api/doordash/health",
   "connected": true,
   "lastReadAt": "2026-06-27T06:23:26.102Z",
   "lastError": "some accounts failed",
-  "latencyMs": 1,
+  "latencyMs": 2,
   "dataFreshness": "fresh",
-  "agent_reachable": true,
-  "agent_url": "http://127.0.0.1:3460",
-  "source": "mi-core /api/doordash/health",
-  "fix_applied": "DD_AGENT_URL changed from http://100.111.97.25:3460 to http://127.0.0.1:3460 in mi-core/.env, mi-core restarted",
-  "accounts_checked": 4,
-  "chromium_status": "MISSING — browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228",
-  "playwright_version": "1.44.0 (doordash-agent), 1.60.0 (workspace)",
-  "chromium_needed_revision": "1228",
-  "chromium_available_revision": "1208",
-  "cdn_download_status": "BLOCKED — network timeout to cdn.playwright.dev (181.9 MiB download times out after 30s)",
-  "blocker": "Playwright Chromium headless shell revision 1228 must be installed. CDN download blocked by network timeout. Alternative: download from https://storage.googleapis.com/chrome-for-testing-public/ manually.",
-  "improvement": "Agent reachable on localhost:3460 (latency 1ms) after DD_AGENT_URL fix. Previously unreachable due to wrong host 100.111.97.25:3460."
+  "pm2_status": {
+    "process": "mi-doordash-agent",
+    "pid": 26908,
+    "uptime": "2h",
+    "status": "online",
+    "memory": "59.0mb"
+  },
+  "chromium_fix": {
+    "applied": true,
+    "revision_used": 1208,
+    "path": "C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1208\\chrome-headless-shell-win64\\chrome-headless-shell.exe",
+    "browser_version": "145.0.7632.6"
+  }
 }

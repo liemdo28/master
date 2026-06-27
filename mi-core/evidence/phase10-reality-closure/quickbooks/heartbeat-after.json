@@ -1,10 +1,14 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "source": "mi-core visibility API",
-  "status": "stale",
-  "last_heartbeat": "2026-06-18T08:29:36.703Z",
-  "stale_reason": "No fresh QB heartbeat received. Dev1 must run PowerShell as Administrator on Laptop1 to update ToastPOSManager-Background scheduled task.",
-  "freshness_improvement_needed": "QB sync runner must be unblocked. Dev1 Laptop1 action required.",
-  "note": "No change from heartbeat-before.json — Dev1 action still required",
-  "required_action": "Dev1 must run PowerShell as Administrator on Laptop1, update ToastPOSManager-Background scheduled task, trigger fresh sync"
+  "captured_at": "2026-06-27T08:59:00Z",
+  "source": "GET /api/visibility/quickbooks",
+  "heartbeat_status": "NOT_RECEIVED",
+  "qb_ops_agent_online": true,
+  "pm2_process": "qb-ops-agent",
+  "pm2_pid": 4424,
+  "pm2_uptime": "24h",
+  "pm2_status": "online",
+  "last_heartbeat_received": null,
+  "heartbeat_gap_hours": "unknown",
+  "note": "No change from heartbeat-before. QB heartbeat still not received by mi-core. This is a Dev1 action item — the scheduled task ToastPOSManager-Background on Laptop1 needs to be updated to point to the corrected desktop-app path, then a clean sync-result needs to be triggered.",
+  "action_needed": "Dev1 must run PowerShell as Administrator on Laptop1"
 }

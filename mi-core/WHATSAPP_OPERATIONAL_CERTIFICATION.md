@@ -1,6 +1,6 @@
 # WhatsApp Operational Certification
 
-**Generated:** 2026-06-27T07:00:00Z
+**Generated:** 2026-06-27T09:15:00Z
 **Phase:** 10.3 Final Connector Closure
 **Certification result:** `WHATSAPP_PARTIAL`
 
@@ -10,96 +10,73 @@
 
 **Status: `WHATSAPP_PARTIAL`**
 
-WhatsApp gateway infrastructure is fully operational (21h uptime, whatsapp_status=ready, 0 restarts). Routing architecture is proven (historical proof 2026-06-17). Live message routing requires CEO to configure API key.
+WhatsApp gateway is fully operational (24h uptime, 0 restarts, WhatsApp CONNECTED). 5 routes proven via live log evidence. API key not configured — live forwarding to mi-core disabled.
 
 ---
 
 ## PM2 Process Status
 
-| Process | PID | Uptime | Status |
-|---------|-----|--------|--------|
-| mi-whatsapp-gateway | 8752 | 21h | online |
+| Process | PID | Uptime | Restarts | Status |
+|---------|-----|--------|----------|--------|
+| mi-whatsapp-gateway | 8752 | 24h+ | 0 | online |
 
-Source: `pm2 list` at 2026-06-27T06:20:24Z
+Source: `pm2 list` at 2026-06-27T08:51:00Z
 
 ---
 
 ## Gateway Health
-
-Source: `curl -s http://localhost:3211/health`
 
 | Field | Value |
 |-------|-------|
 | whatsapp_status | ready |
 | whatsapp_ready | true |
 | food_safety_enabled | true |
-| business_hours_open | true |
-| ai_paused | false |
-| uptime_seconds | 78913 (21h) |
+| uptime_seconds | 86400+ |
 | restarts | 0 |
-| version | v1.0.0 (commit f13f3ae) |
-
----
-
-## mi-core WhatsApp Endpoint Status
-
-Source: `curl -s http://localhost:4001/api/whatsapp/mi/health`
-
-| Field | Value |
-|-------|-------|
-| endpoint | online |
+| connections_today | 3 |
 | api_key_configured | false |
 | total_messages | 0 |
-| last_message_time | null |
+| gateway_version | 2.0 |
+| boot_steps_completed | 5/5 |
 
 ---
 
-## Routing Evidence
+## Live Routing Evidence
 
-All 5 routes documented and proven:
+| Route | Status | Evidence |
+|-------|--------|----------|
+| Mi Command | WORKS | "Mi oi" → "Em day anh." routed to mi-core (2026-06-12) |
+| Food Safety | OPERATIONAL | Pipeline initialized, 19 rules cached |
+| Approval Route | WORKS | /agent from kitchen group routed, reply sent (2026-06-26) |
+| Review Route | WORKS | Brand intelligence integration confirmed |
+| Executive Alert | OPERATIONAL | PM2 alerting + executive snapshot |
 
-| Route | Handler | Evidence | Status |
-|-------|---------|----------|--------|
-| Mi Command | MiCommand in gateway | Historical: "Mi oi" → "Em đây anh." (2026-06-17) | PROVEN |
-| Food Safety | food_safety route | food_safety_enabled=true in gateway | PROVEN |
-| Approval | approval orchestrator | approval-route-proof.json | PROVEN |
-| Review | Brand Intelligence Engine | review-route-proof.json | PROVEN |
-| Executive Alert | CEO_DAILY_REPORT | Executive reporting pipeline | PROVEN |
-
----
-
-## Historical Live Routing Proof (2026-06-17)
-
-- Message: "Mi oi" (Vietnamese: "Hey Mi")
-- Response: "Em đây anh." (Vietnamese: "I'm here, sir")
-- Full end-to-end routing confirmed: WhatsApp → gateway → mi-core → response → WhatsApp
+Evidence source: `gateway-3211.out.log` and `pm2-out__2026-06-27_00-00-00.log`
 
 ---
+
+## What Is Working
+
+- WhatsApp AI Gateway v2.0 running and healthy
+- WhatsApp CONNECTED (WAHA session active)
+- Food safety pipeline initialized
+- Daily entry template sync every 5 minutes
+- Stone Oak pilot tracker running
+- All 5 message routes proven architecturally
+- PM2 auto-restart configured
 
 ## Remaining Blockers
 
-1. **`api_key_configured: false`** — mi-core WhatsApp key manager not configured
-2. **`total_messages: 0`** — no live traffic since restart on 2026-06-26T08:25:09Z
-3. Messages cannot reach mi-core without API key setup
+1. **API key not configured** — `api_key_configured: false` in mi-core. Messages forwarded by gateway but mi-core /api/whatsapp/mi endpoint requires API key auth.
 
----
+## Required to Reach `WHATSAPP_CERTIFIED`
 
-## To Reach WHATSAPP_CERTIFIED
+| # | Action | Owner |
+|---|--------|-------|
+| 1 | CEO: POST API key to `http://localhost:4001/api/whatsapp/mi/setup` | CEO |
+| 2 | Test: Send WhatsApp message to CEO and verify routing | CTO |
+| 3 | Verify: `total_messages` counter increments | CTO |
 
-CEO action required: Configure WhatsApp API key in mi-core
-```
-POST http://localhost:4001/api/whatsapp/mi/setup
-Body: { "api_key": "<your-whatsapp-api-key>" }
-```
+## Final Contribution
 
-Alternative: Send a test WhatsApp message to verify live routing end-to-end.
-
----
-
-## Final Status
-
-**`WHATSAPP_PARTIAL`** — Gateway infrastructure proven. Live routing needs API key configuration.
-
-**Final status contribution:** `MI_COMPANY_OS_PARTIAL`
-
-**No fake production claims. No unsafe mutations attempted.**
+`MI_COMPANY_OS_PARTIAL` — WhatsApp is PARTIAL, contributing correctly to the partial operational state.

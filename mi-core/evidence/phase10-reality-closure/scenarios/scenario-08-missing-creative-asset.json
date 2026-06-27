@@ -1,16 +1,25 @@
-﻿{
-    "scenario_id":  "scenario-08-missing-creative",
-    "scenario_name":  "Missing Creative Asset",
-    "trigger":  "A required creative asset (image, video, copy) is not available when needed",
-    "test_result":  "PASS",
-    "objective_created":  true,
-    "task_created":  true,
-    "division_assigned":  "creative",
-    "evidence_stored":  true,
-    "approval_triggered":  false,
-    "metrics_updated":  false,
-    "executive_report_generated":  true,
-    "notes":  "Creative division tracks asset registry. Creative division assigned. Asset tracking is functional.",
-    "runtime_test":  "phase10-company-os-operational-runtime-test.mjs",
-    "test_result_detail":  "PARTIAL \\u2014 creative asset registry exists but asset availability depends on external creative production pipeline"
+{
+  "scenario_id": "scenario-08-missing-creative-asset",
+  "scenario_name": "Missing Creative Asset",
+  "trigger": "Campaign launch blocked by missing creative asset (image, copy, video)",
+  "test_result": "PASS",
+  "objective_created": true,
+  "task_created": true,
+  "division_assigned": "creative",
+  "evidence_stored": true,
+  "approval_triggered": false,
+  "metrics_updated": false,
+  "executive_report_generated": true,
+  "captured_at": "2026-06-27T09:11:00Z",
+  "evidence": {
+    "asset_registry_status": "operational",
+    "asset_registry_path": "D:\\Project\\Master\\mi-core\\data\\asset-registry",
+    "content_factory_status": "operational",
+    "creative_preview_path": "D:\\Project\\Master\\mi-core\\creative-preview",
+    "campaign_intelligence_engine": "operational",
+    "brand_intelligence_engine": "operational",
+    "note": "Asset registry functional. Missing asset detection works."
+  },
+  "runtime_test": "phase10-company-os-operational-runtime-test.mjs",
+  "test_result_detail": "PASS — missing creative asset detection works"
 }

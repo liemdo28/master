@@ -1,11 +1,12 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "status": "blocked",
-  "visibility_api": {
-    "toast_entry": "NOT FOUND",
-    "total_connectors": 13,
-    "toast_not_listed": true
+  "captured_at": "2026-06-27T09:02:45Z",
+  "account_visibility_proof": "NOT_ATTEMPTED",
+  "reason": "No TOAST_API_KEY configured in mi-core/.env",
+  "toast_restaurant_guid_known": false,
+  "toast_connector": {
+    "status": "placeholder_only",
+    "file": "mi-core/services/toast-connector/",
+    "note": "Toast connector directory exists but contains no operational code without API key"
   },
-  "reason": "No Toast connector visible in mi-core visibility API. No Toast API endpoint.",
-  "required_action": "CEO must provide TOAST_API_KEY or formal exclusion approval"
+  "note": "Cannot verify account visibility without Toast API credentials. This is a CEO action item."
 }

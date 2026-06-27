@@ -1,12 +1,9 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "status": "blocked",
-  "reason": "No Toast API key provided. No Toast endpoint exists in mi-core.",
-  "available_credentials": {
-    "TOAST_EMAIL": "hoangdle@gmail.com",
-    "TOAST_PASSWORD": "B@kudan@2"
-  },
-  "api_key_available": false,
-  "endpoint_available": false,
-  "required_action": "CEO must provide TOAST_API_KEY or formal exclusion approval"
+  "captured_at": "2026-06-27T09:02:30Z",
+  "login_proof": "NOT_ATTEMPTED",
+  "reason": "No TOAST_API_KEY configured in mi-core/.env",
+  "toast_api_endpoint_tested": "none",
+  "toast_api_key_configured": false,
+  "toast_connector_status": "placeholder_only",
+  "note": "Cannot test Toast login without TOAST_API_KEY. This is a CEO action item."
 }

@@ -1,10 +1,14 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "activity_log_status": "stale",
+  "captured_at": "2026-06-27T08:59:45Z",
+  "source": "GET /api/visibility/quickbooks",
+  "activity_log_status": "EMPTY",
   "today_transactions": 0,
   "today_amount": 0,
   "latest_activity_at": null,
   "latest_business_date": null,
-  "reason": "QB Desktop is open and company file detected, but no transactions have been logged since the last sync on 2026-06-18",
-  "required_action": "Dev1 must run PowerShell as Administrator on Laptop1 to trigger fresh activity log"
+  "note": "No real QB activity log rows found. This is because the last successful QB sync was 9 days ago. Once Dev1 fixes the scheduled task on Laptop1 and triggers a fresh sync-result, the activity log should populate.",
+  "stale": true,
+  "stale_since": "2026-06-18T08:29:36.703Z",
+  "stale_days": 9,
+  "required_action": "Dev1 must run PowerShell as Administrator on Laptop1 to update scheduled task and trigger fresh sync"
 }

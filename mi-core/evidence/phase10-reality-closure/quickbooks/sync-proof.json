@@ -1,12 +1,14 @@
 {
-  "captured_at": "2026-06-27T07:00:00Z",
-  "sync_status": "stale",
-  "last_successful_sync": "2026-06-18T08:29:36.703Z",
+  "captured_at": "2026-06-27T08:59:30Z",
+  "source": "GET /api/visibility/quickbooks",
+  "sync_status": "STALE",
+  "last_sync": "2026-06-18T08:29:36.703Z",
+  "sync_age_minutes": 12981,
   "sync_age_days": 9,
-  "pm2_agent": "qb-ops-agent online (PID 4424, 22h uptime)",
-  "visibility_status": "needs_dev1_action",
-  "required_dev1_action": "Run PowerShell as Administrator on Laptop1 to update ToastPOSManager-Background scheduled task, then trigger clean sync-result",
-  "qb_ops_agent_status": "online",
-  "qb_ops_agent_uptime": "22h",
-  "note": "Sync remains stale. Dev1 action required to refresh."
+  "sync_result": "ok (historical)",
+  "checksum_expected": null,
+  "checksum_got": null,
+  "checksum_mismatch": false,
+  "note": "Last successful sync was 9 days ago. No fresh sync-result since then. QB Desktop is open with correct company file, but the sync pipeline (QBWC → qb-ops-agent → mi-core) is broken at the scheduled task level on Laptop1.",
+  "required_fix": "Dev1 must run PowerShell as Administrator on Laptop1 to update ToastPOSManager-Background scheduled task path"
 }
