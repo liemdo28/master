@@ -1,0 +1,21 @@
+{
+  "captured_at": "2026-06-27T06:49:00.000Z",
+  "approval_gate_status": "NOT_TRIGGERED",
+  "reason": "No write operations attempted. DoorDash agent is read-only. No campaign edits, no menu changes, no budget changes, no promotions were triggered.",
+  "gate_policy": "DOORDASH_OPERATIONAL_CERTIFICATION.md requires no forbidden actions",
+  "forbidden": [
+    "No budget changes attempted",
+    "No campaign edits attempted",
+    "No promotion launch attempted",
+    "No menu edits attempted",
+    "No spend actions attempted"
+  ],
+  "read_only_proof": "scrape endpoint only, no POST actions to doordash.com",
+  "health_check": {
+    "connected": true,
+    "latencyMs": 1,
+    "dataFreshness": "fresh",
+    "lastError": "some accounts failed (chromium missing)"
+  },
+  "result": "PASS — approval gate is clean. Read-only scrape attempted. No mutations."
+}

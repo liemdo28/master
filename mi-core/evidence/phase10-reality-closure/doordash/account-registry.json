@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-06-27T06:49:00.000Z",
+  "endpoint": "http://localhost:3460/accounts",
+  "method": "GET",
+  "result": "success",
+  "accounts": [
+    {
+      "id": "bakudan-1",
+      "brand": "Bakudan Ramen",
+      "label": "B1",
+      "email": "bakudanramen210@gmail.com"
+    },
+    {
+      "id": "bakudan-2",
+      "brand": "Bakudan Ramen",
+      "label": "B2",
+      "email": "info@bakudanramen.com"
+    },
+    {
+      "id": "bakudan-3",
+      "brand": "Bakudan Ramen",
+      "label": "B3",
+      "email": "gm@bakudanramen.com"
+    },
+    {
+      "id": "raw-sushi",
+      "brand": "Raw Sushi Bar",
+      "label": "Raw",
+      "email": "h.oang.d.le@gmail.com"
+    }
+  ],
+  "total_accounts": 4,
+  "scrape_status": "blocked_by_playwright_chromium",
+  "notes": "Account registry accessible. All 4 accounts confirmed. Portal scrape blocked by missing Playwright Chromium headless shell revision 1228."
+}

@@ -1,121 +1,33 @@
 {
-  "scraped_at": "2026-06-24T15:04:13.796Z",
+  "scraped_at": "2026-06-27T06:23:26.128Z",
   "accounts": [
     {
       "account_id": "bakudan-1",
-      "scraped_at": "2026-06-24T15:03:39.354Z",
-      "stores": [
-        {
-          "store_name": "default",
-          "page_url": "https://merchant-portal.doordash.com/analytics",
-          "orders_today": null,
-          "orders_week": null,
-          "revenue_today": null,
-          "revenue_week": null,
-          "avg_rating": null,
-          "total_reviews": null,
-          "raw_elements_count": 5,
-          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9ed93f62f924",
-          "raw_elements": [
-            "DoorDash",
-            "We're having trouble loading the page you requested. Try again\n            later.",
-            "Error Details",
-            "Client IP: 171.235.33.28",
-            "Ray ID: a10c9ed93f62f924"
-          ],
-          "dollar_amounts": []
-        }
-      ],
-      "error": null,
       "brand": "Bakudan Ramen",
-      "label": "B1"
+      "label": "B1",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": []
     },
     {
       "account_id": "bakudan-2",
-      "scraped_at": "2026-06-24T15:03:49.072Z",
-      "stores": [
-        {
-          "store_name": "default",
-          "page_url": "https://merchant-portal.doordash.com/analytics",
-          "orders_today": null,
-          "orders_week": null,
-          "revenue_today": null,
-          "revenue_week": null,
-          "avg_rating": null,
-          "total_reviews": null,
-          "raw_elements_count": 5,
-          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f15e93ddb51",
-          "raw_elements": [
-            "DoorDash",
-            "We're having trouble loading the page you requested. Try again\n            later.",
-            "Error Details",
-            "Client IP: 171.235.33.28",
-            "Ray ID: a10c9f15e93ddb51"
-          ],
-          "dollar_amounts": []
-        }
-      ],
-      "error": null,
       "brand": "Bakudan Ramen",
-      "label": "B2"
+      "label": "B2",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": []
     },
     {
       "account_id": "bakudan-3",
-      "scraped_at": "2026-06-24T15:03:58.394Z",
-      "stores": [
-        {
-          "store_name": "default",
-          "page_url": "https://merchant-portal.doordash.com/analytics",
-          "orders_today": null,
-          "orders_week": null,
-          "revenue_today": null,
-          "revenue_week": null,
-          "avg_rating": null,
-          "total_reviews": null,
-          "raw_elements_count": 5,
-          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f502edbfdba",
-          "raw_elements": [
-            "DoorDash",
-            "We're having trouble loading the page you requested. Try again\n            later.",
-            "Error Details",
-            "Client IP: 171.235.33.28",
-            "Ray ID: a10c9f502edbfdba"
-          ],
-          "dollar_amounts": []
-        }
-      ],
-      "error": null,
       "brand": "Bakudan Ramen",
-      "label": "B3"
+      "label": "B3",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": []
     },
     {
       "account_id": "raw-sushi",
-      "scraped_at": "2026-06-24T15:04:07.939Z",
-      "stores": [
-        {
-          "store_name": "default",
-          "page_url": "https://merchant-portal.doordash.com/analytics",
-          "orders_today": null,
-          "orders_week": null,
-          "revenue_today": null,
-          "revenue_week": null,
-          "avg_rating": null,
-          "total_reviews": null,
-          "raw_elements_count": 5,
-          "raw_text_snippet": "DoorDash\nWe're having trouble loading the page you requested. Try again later.\n\nError Details\n\nClient IP: 171.235.33.28\nRay ID: a10c9f8bd86afcf6",
-          "raw_elements": [
-            "DoorDash",
-            "We're having trouble loading the page you requested. Try again\n            later.",
-            "Error Details",
-            "Client IP: 171.235.33.28",
-            "Ray ID: a10c9f8bd86afcf6"
-          ],
-          "dollar_amounts": []
-        }
-      ],
-      "error": null,
       "brand": "Raw Sushi Bar",
-      "label": "Raw"
+      "label": "Raw",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": []
     }
   ]
 }

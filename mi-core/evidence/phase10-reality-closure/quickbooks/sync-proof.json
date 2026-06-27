@@ -1,0 +1,39 @@
+{
+  "captured_at": "2026-06-27T06:44:00Z",
+  "source": "mi-core visibility API + qb-ops-agent status",
+  "connector_status": "degraded",
+  "connector_health": "degraded",
+  "last_sync": "2026-06-18T08:29:36.703Z",
+  "stale_hours": 218,
+  "qb_agent_url": "http://100.111.97.25:3457",
+  "qb_agent_reachable": false,
+  "qb_agent_error": "connect EACCES 100.111.97.25:3457",
+  "pm2_qb_ops_agent": {
+    "pid": 4424,
+    "uptime": "21h",
+    "status": "online"
+  },
+  "company_file": {
+    "name": "Raw Japanese Bistro and Sushi Bar",
+    "path": "C:\\QB Data\\Raw Stockton\\rawstockton.qbw",
+    "quickbooks_desktop_open": true,
+    "detected": true
+  },
+  "sync_status": {
+    "last_sync_timestamp": "2026-06-18T08:29:36.703Z",
+    "last_sync_status": "ok",
+    "checksum_expected": null,
+    "checksum_got": null,
+    "checksum_mismatch": false,
+    "note": "Sync was OK when it last ran (2026-06-18), but it has not been refreshed since"
+  },
+  "visibility_connector": {
+    "id": "quickbooks-runtime",
+    "name": "QuickBooks Runtime",
+    "auth": "connected",
+    "health": "degraded",
+    "setup_hint": "QuickBooks runtime lives on laptop1 with Dev1. Dev1 must open QuickBooks Desktop/company file on laptop1, keep QB Web Connector running, then trigger force sync."
+  },
+  "status": "QB_SYNC_STALE_NEEDS_DEV1_ACTION",
+  "note": "QB sync is stale (9+ days). The qb-ops-agent (PID 4424) is online but cannot reach the QB agent on Laptop1 at 100.111.97.25:3457 (EACCES). Dev1 must fix the network path and trigger a fresh sync. No production mutations have been attempted."
+}

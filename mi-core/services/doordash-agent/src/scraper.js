@@ -338,7 +338,11 @@ async function scrapeMetrics(page, accountId) {
 }
 
 async function runScrape(account, headless = true) {
+  // Use chromium_headless_shell-1208 (installed 2026-03-09)
+  // playwright 1.61.1 in this workspace expects 1228, but 1208 is available locally
+  const CHROMIUM_PATH = 'C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1208\\chrome-headless-shell-win64\\chrome-headless-shell.exe';
   const browser = await chromium.launch({
+    executablePath: CHROMIUM_PATH,
     headless,
     args: ['--no-sandbox', '--disable-blink-features=AutomationControlled'],
   });

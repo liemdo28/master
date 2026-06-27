@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-06-27T06:44:00Z",
+  "source": "mi-core/qb-visibility.json + qb-ops-agent",
+  "status": "NO_FRESH_ACTIVITY",
+  "activity": {
+    "today_transactions": 0,
+    "today_amount": 0,
+    "latest_activity_at": null,
+    "latest_business_date": null,
+    "note": "QB activity log shows no transactions for today (2026-06-27). This is either because QB Desktop has not been synced today, or because the sync-result payload has not been delivered to mi-core."
+  },
+  "root_cause": "qb-ops-agent (PID 4424) cannot reach QB agent at 100.111.97.25:3457 (EACCES). QB agent runs on Laptop1 with Dev1. Network path is blocked from the current host.",
+  "duplicate_bills": [],
+  "duplicate_payments": [],
+  "checksum": {
+    "expected": null,
+    "got": null,
+    "mismatch": false,
+    "note": "Checksum verification not available — no fresh sync-result payload received"
+  },
+  "machines": [],
+  "errors": [],
+  "gaps": [
+    "No fresh activity log rows since 2026-06-18",
+    "QB ops agent network path to Laptop1 is blocked (EACCES)",
+    "ToastPOSManager-Background scheduled task needs admin PowerShell fix on Laptop1"
+  ],
+  "required_dev1_action": "Run PowerShell as Administrator on Laptop1, update ToastPOSManager-Background task path, trigger QB sync force-refresh, verify sync-result delivers fresh activity log",
+  "status": "QB_ACTIVITY_STALE_NEEDS_DEV1_ACTION",
+  "no_mutations_attempted": true
+}

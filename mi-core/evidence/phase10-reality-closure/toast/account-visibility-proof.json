@@ -1,0 +1,12 @@
+{
+  "captured_at": "2026-06-27T06:49:00Z",
+  "status": "NOT_VISIBLE",
+  "reason": "No Toast API endpoint exists in mi-core. No Toast connector in visibility API. No TOAST_API_KEY configured.",
+  "visibility_api_check": {
+    "total_connectors": 13,
+    "toast_connector_present": false,
+    "toast_in_list": false,
+    "note": "Toast is not in the /api/visibility/connectors list"
+  },
+  "note": "No Toast account visibility proof available. When CEO provides Toast API access, Dev3 must create the Toast read adapter and populate this file with the actual account visibility data (restaurant name, location, open hours, menu data, sales summary)."
+}
