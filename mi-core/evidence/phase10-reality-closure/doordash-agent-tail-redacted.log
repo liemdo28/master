@@ -1,0 +1,80 @@
+[2026-06-24T10:58:36.641Z] Scraping bakudan-1 ([redacted-email])
+[2026-06-24T10:59:05.827Z] bakudan-1: 0 stores, error=LOGIN_FAILED
+[2026-06-24T10:59:05.827Z] Scraping bakudan-2 ([redacted-email])
+[2026-06-24T10:59:35.494Z] bakudan-2: 0 stores, error=LOGIN_FAILED
+[2026-06-24T10:59:35.494Z] Scraping bakudan-3 ([redacted-email])
+[2026-06-24T11:00:05.255Z] bakudan-3: 0 stores, error=LOGIN_FAILED
+[2026-06-24T11:00:05.255Z] Scraping raw-sushi ([redacted-email])
+[2026-06-24T11:00:34.547Z] raw-sushi: 0 stores, error=LOGIN_FAILED
+[2026-06-24T11:00:34.548Z] Scrape complete
+[2026-06-24T14:56:06.176Z] DoorDash Agent listening on port 3460
+[2026-06-24T14:56:06.177Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+[2026-06-24T14:56:16.192Z] Auto-scrape on startup...
+[2026-06-24T14:56:16.195Z] Starting scrape for 4 accounts
+[2026-06-24T14:56:16.196Z] Scraping bakudan-1 ([redacted-email])
+[2026-06-24T14:56:27.857Z] bakudan-1: 1 stores, error=none
+[2026-06-24T14:56:27.857Z] Scraping bakudan-2 ([redacted-email])
+[2026-06-24T14:56:35.835Z] bakudan-2: 1 stores, error=none
+[2026-06-24T14:56:35.836Z] Scraping bakudan-3 ([redacted-email])
+[2026-06-24T14:56:44.331Z] bakudan-3: 1 stores, error=none
+[2026-06-24T14:56:44.332Z] Scraping raw-sushi ([redacted-email])
+[2026-06-24T14:56:52.400Z] raw-sushi: 1 stores, error=none
+[2026-06-24T14:56:52.401Z] Scrape complete
+[2026-06-24T15:03:24.672Z] DoorDash Agent listening on port 3460
+[2026-06-24T15:03:24.674Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+[2026-06-24T15:03:34.683Z] Auto-scrape on startup...
+[2026-06-24T15:03:34.685Z] Starting scrape for 4 accounts
+[2026-06-24T15:03:34.686Z] Scraping bakudan-1 ([redacted-email])
+[2026-06-24T15:03:45.498Z] bakudan-1: 1 stores, error=none
+[2026-06-24T15:03:45.498Z] Scraping bakudan-2 ([redacted-email])
+[2026-06-24T15:03:54.885Z] bakudan-2: 1 stores, error=none
+[2026-06-24T15:03:54.886Z] Scraping bakudan-3 ([redacted-email])
+[2026-06-24T15:04:04.337Z] bakudan-3: 1 stores, error=none
+[2026-06-24T15:04:04.338Z] Scraping raw-sushi ([redacted-email])
+[2026-06-24T15:04:13.796Z] raw-sushi: 1 stores, error=none
+[2026-06-24T15:04:13.796Z] Scrape complete
+[2026-06-27T03:48:21.670Z] DoorDash Agent listening on port 3460
+[2026-06-27T03:48:21.672Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+[2026-06-27T03:48:31.697Z] Auto-scrape on startup...
+[2026-06-27T03:48:31.698Z] Starting scrape for 4 accounts
+[2026-06-27T03:48:31.698Z] Scraping bakudan-1 ([redacted-email])
+[2026-06-27T03:48:31.787Z] bakudan-1: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[2026-06-27T03:48:31.787Z] Scraping bakudan-2 ([redacted-email])
+[2026-06-27T03:48:31.807Z] bakudan-2: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[2026-06-27T03:48:31.807Z] Scraping bakudan-3 ([redacted-email])
+[2026-06-27T03:48:31.866Z] bakudan-3: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[2026-06-27T03:48:31.867Z] Scraping raw-sushi ([redacted-email])
+[2026-06-27T03:48:31.892Z] raw-sushi: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+[2026-06-27T03:48:31.893Z] Scrape complete

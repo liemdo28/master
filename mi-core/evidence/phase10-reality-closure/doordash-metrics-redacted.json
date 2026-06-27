@@ -1,0 +1,39 @@
+{
+  "status": 200,
+  "scraped_at": "2026-06-27T03:48:31.892Z",
+  "account_count": 4,
+  "accounts": [
+    {
+      "id": "bakudan-1",
+      "brand": "Bakudan Ramen",
+      "label": "B1",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": 0,
+      "stores_summary": []
+    },
+    {
+      "id": "bakudan-2",
+      "brand": "Bakudan Ramen",
+      "label": "B2",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": 0,
+      "stores_summary": []
+    },
+    {
+      "id": "bakudan-3",
+      "brand": "Bakudan Ramen",
+      "label": "B3",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": 0,
+      "stores_summary": []
+    },
+    {
+      "id": "raw-sushi",
+      "brand": "Raw Sushi Bar",
+      "label": "Raw",
+      "error": "browserType.launch: Executable doesn't exist at C:\\Users\\liemdo\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+      "stores": 0,
+      "stores_summary": []
+    }
+  ]
+}
