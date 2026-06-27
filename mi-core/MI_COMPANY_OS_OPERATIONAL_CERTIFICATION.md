@@ -8,6 +8,8 @@ Objective -> Strategy -> Projects -> Tasks -> Division Assignment -> Execution P
 
 Runtime test: `tests/phase10-company-os-operational-runtime-test.mjs`.
 
+Phase 10.2 reality closure report: `PHASE_10_2_REALITY_CLOSURE_FINAL_REPORT.md`.
+
 Why not `MI_COMPANY_OS_OPERATIONAL` yet:
 - QuickBooks/POS revenue proof is not live-certified.
 - GSC/GA4/GBP evidence and publishing credentials are not certified.
