@@ -1,39 +1,47 @@
-# Reality Closure Certification — 10/10 Scenarios
+# Reality Closure Certification — Local Loop Only
 
-**Generated:** 2026-06-27T09:20:00Z
-**Phase:** 10.3 Final Connector Closure
-**Certification result:** `SCENARIOS_CERTIFIED_10_OF_10`
+**Generated:** 2026-06-27T09:58:00Z
+**Phase:** 10.4 Real Operational Proof
+**Certification result:** `SCENARIOS_NOT_LIVE_CERTIFIED`
 
 ---
 
 ## Certification Result
 
-**Status: `SCENARIOS_CERTIFIED_10_OF_10`**
+**Status: `SCENARIOS_LOCAL_LOOP_PASS_LIVE_BLOCKED`**
 
-All 10 reality scenarios verified PASS. Each scenario creates objectives, tasks, assigns divisions, stores evidence, triggers approvals, updates metrics, and generates executive reports.
+The local Phase 10 runtime loop passes, but the 10 required reality scenarios are not live-certified because live connector blockers remain. This file must not be used to claim `MI_COMPANY_OS_OPERATIONAL`.
+
+Latest runtime evidence:
+
+- `mi-core/evidence/phase10-4-real-operational-proof/phase10-runtime-test-output.txt`
+- Result: `125 passed, 0 failed`
+- Final allowed status: `MI_COMPANY_OS_PARTIAL`
 
 ---
 
 ## 10 Reality Scenarios — Summary
 
-| # | Scenario | Division | Test Result | Key Evidence |
+| # | Scenario | Division | Local Loop Result | Live Certification |
 |---|----------|---------|-------------|--------------|
-| 1 | QB Offline | finance | PASS | QB PARTIAL — failure detection works |
-| 2 | Traffic Drop | marketing | PASS | GBP PARTIAL — partial connector data |
-| 3 | Review Spike | marketing | PASS | Review routing via WhatsApp + Brand Intelligence |
-| 4 | Food Safety Missing | operations | PASS | Food safety pipeline initialized, alert routes work |
-| 5 | DoorDash Access Failure | operations | PASS | DoorDash PARTIAL — failure detection works |
-| 6 | WhatsApp Routing | engineering | PASS | WhatsApp PARTIAL — routing proven architecturally |
-| 7 | Service Down | engineering | PASS | PM2 monitoring functional, auto-restart configured |
-| 8 | Missing Creative Asset | creative | PASS | Asset registry functional |
-| 9 | Stale Dataset | engineering | PASS | QB correctly flagged stale (9 days) |
-| 10 | Increase Revenue Objective | multiple | PASS | Revenue system works with partial connector data |
+| 1 | QB Offline | finance | PASS | BLOCKED — QB heartbeat and sync remain stale |
+| 2 | Traffic Drop | marketing | PASS | BLOCKED — GBP metrics endpoint timed out |
+| 3 | Review Spike | marketing | PASS | BLOCKED — live review-routing evidence incomplete |
+| 4 | Food Safety Missing | operations | PASS | BLOCKED — MI-CERTIFICATION live group proof missing |
+| 5 | DoorDash Access Failure | operations | PASS | BLOCKED — DoorDash session/credentials required |
+| 6 | WhatsApp Routing | engineering | PASS | BLOCKED — live MI-CERTIFICATION routing proof missing |
+| 7 | Service Down | engineering | PASS | PARTIAL — PM2 evidence exists, full live scenario packet not complete |
+| 8 | Missing Creative Asset | creative | PASS | PARTIAL — local asset routing exists, live evidence packet not complete |
+| 9 | Stale Dataset | engineering | PASS | BLOCKED — QB live freshness not restored |
+| 10 | Increase Revenue Objective | multiple | PASS | BLOCKED — live finance/marketing connector proof incomplete |
 
 ---
 
 ## Evidence Files
 
-All scenario evidence stored in: `mi-core/evidence/phase10-reality-closure/scenarios/`
+Previous local-loop scenario evidence remains stored in: `mi-core/evidence/phase10-reality-closure/scenarios/`
+
+Current 10.4 runtime evidence is stored in: `mi-core/evidence/phase10-4-real-operational-proof/`
 
 | Scenario | Evidence File | Status |
 |----------|--------------|--------|
@@ -52,7 +60,7 @@ All scenario evidence stored in: `mi-core/evidence/phase10-reality-closure/scena
 
 ## Per-Scenario Checklist
 
-Each scenario proves:
+The local runtime test proves:
 - [x] Objective created
 - [x] Task created
 - [x] Division assigned
@@ -61,22 +69,28 @@ Each scenario proves:
 - [x] Metrics updated (where applicable)
 - [x] Executive report generated
 
+The live reality gate still needs:
+- [ ] Real connector event for each scenario
+- [ ] Real timestamped routing log for each scenario
+- [ ] Real approval/evidence object from live systems
+- [ ] Executive report generated from live connector evidence
+
 ---
 
 ## Connector Status Impact
 
 | Connector | Status | Scenarios Affected |
 |-----------|--------|---------------------|
-| DoorDash | PARTIAL | Scenarios 5 |
-| WhatsApp | PARTIAL | Scenarios 4, 6 |
-| QB | PARTIAL | Scenarios 1, 9 |
-| GBP | PARTIAL | Scenarios 2, 3 |
+| DoorDash | PARTIAL / BLOCKED | Scenarios 5 |
+| WhatsApp | PARTIAL / BLOCKED | Scenarios 4, 6 |
+| QB | PARTIAL / BLOCKED | Scenarios 1, 9 |
+| GBP | PARTIAL / BLOCKED | Scenarios 2, 3 |
 | Toast | BLOCKED | None |
 
-Partial connectors do NOT break scenario execution — the failure detection and routing paths work correctly even with partial data.
+Partial connectors do not break local scenario execution, but they do block live operational certification.
 
 ---
 
 ## Final Contribution
 
-`SCENARIOS_CERTIFIED_10_OF_10` — All 10 scenarios verified PASS.
+`MI_COMPANY_OS_PARTIAL` — local scenario loops pass, but live scenarios are not certified.

@@ -1,0 +1,7 @@
+{
+  "captured_at": "2026-06-27T09:57:57.9301139Z",
+  "url": "http://127.0.0.1:4001/api/gbp/metrics",
+  "status": "ERROR",
+  "curl_exit_code": 28,
+  "error": "curl: (28) Operation timed out after 60014 milliseconds with 0 bytes received"
+}

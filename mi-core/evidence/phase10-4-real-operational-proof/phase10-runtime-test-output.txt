@@ -1,0 +1,145 @@
+
+=== TEST 1: Objective Engine and Routing ===
+  PASS: Objective id created
+  PASS: Strategy created
+  PASS: Finance routed
+  PASS: Marketing routed
+  PASS: SEO routed
+  PASS: Operations routed
+  PASS: Engineering routed
+  PASS: Creative routed
+  PASS: At least six tasks generated
+  PASS: Revenue baseline metric tracked
+  PASS: Website conversion metric tracked
+  PASS: Approval types detected
+  PASS: Truth warning about live actions
+  PASS: No task lacks owner
+  PASS: No task lacks division
+  PASS: Routing objective id created
+  PASS: Task ids created
+  PASS: Routing evidence stored
+  PASS: Routing has no orphan tasks
+  PASS: Routing requested approvals
+  PASS: Routing includes finance
+  PASS: Routing includes seo
+  PASS: Routing includes operations
+  PASS: Routing metrics tracked
+  PASS: Routing task ids are unique
+
+=== TEST 2: Command Center ===
+  PASS: Command status is honest partial
+  PASS: Finance panel exists
+  PASS: Marketing panel exists
+  PASS: Operations panel exists
+  PASS: IT panel exists
+  PASS: Creative panel exists
+  PASS: Truth blockers present
+  PASS: QuickBooks blocker present
+  PASS: GSC/GBP blocker present
+  PASS: No fake live QB claim
+  PASS: DoorDash mutation gated
+  PASS: Creative assets counted
+  PASS: API proof endpoint named
+  PASS: API proof has five panels
+  PASS: API proof status matches
+
+=== TEST 3: Cross-Division Coordination ===
+  PASS: Coordination timestamp exists
+  PASS: Coordination tracks duplicates
+  PASS: Coordination tracks orphan tasks
+  PASS: Coordination tracks owners
+  PASS: Coordination has no orphan tasks
+  PASS: Coordination tracks approvals
+  PASS: Coordination dependency chains tracked
+  PASS: Coordination healthy despite live blockers
+  PASS: Dependency proof has task count
+  PASS: Dependency graph has no cycle
+  PASS: Dependency proof valid
+  PASS: Topological order generated
+  PASS: Dedup proof has task count
+  PASS: Dedup proof labels review state
+  PASS: Dedup duplicatePairs numeric
+
+=== TEST 4: Executive Reporting ===
+  PASS: Report id created
+  PASS: Report status is partial
+  PASS: Report says what happened
+  PASS: Report lists blockers
+  PASS: Report lists late projects
+  PASS: Report lists revenue risks
+  PASS: Report lists unhealthy systems
+  PASS: Report gives CEO focus
+  PASS: Today question answered
+  PASS: Today answer has evidence
+  PASS: Today confidence sane
+  PASS: Blocked question answered
+  PASS: Blocked confidence sane
+  PASS: Revenue question answered
+  PASS: Revenue warning present
+  PASS: CEO focus answered
+  PASS: Question proof covers six questions
+  PASS: All questions answered
+  PASS: Question confidence positive
+
+=== TEST 5: OSS Global Governance ===
+  PASS: OSS registry has projects
+  PASS: OSS registry has seven categories
+  PASS: Engineering category present
+  PASS: Operator category present
+  PASS: Workflow category present
+  PASS: Data category present
+  PASS: Marketing category present
+  PASS: Creative category present
+  PASS: IT category present
+  PASS: All OSS projects have owners
+  PASS: All OSS projects have lifecycle
+  PASS: Playwright registered
+  PASS: n8n registered
+  PASS: DuckDB registered
+  PASS: Lifecycle dashboard counts all projects
+  PASS: Lifecycle rule mentions approval
+  PASS: Lifecycle has candidates
+  PASS: Scorecard average positive
+  PASS: Scorecard has top projects
+  PASS: Scorecard warns about live reviews
+  PASS: Dependency map has edges
+  PASS: Dependency map has owners
+
+=== TEST 6: Operational Certification ===
+  PASS: Scenario 1 objective created
+  PASS: Scenario 1 tasks created
+  PASS: Scenario 1 division routed
+  PASS: Scenario 1 evidence stored
+  PASS: Scenario 1 approval required
+  PASS: Scenario 1 metrics updated
+  PASS: Scenario 1 report generated
+  PASS: Scenario 1 passed local proof
+  PASS: Scenario 1 blockers remain honest
+  PASS: Certification has five scenarios
+  PASS: Certification scenarios returned
+  PASS: All scenarios pass local loop proof
+  PASS: Certification remains partial
+  PASS: Certification lists blockers
+  PASS: Every scenario created objective
+  PASS: Every scenario created tasks
+  PASS: Every scenario routed division
+  PASS: Every scenario stored evidence
+  PASS: Every scenario generated report
+
+=== TEST 7: Full Bootstrap ===
+  PASS: Bootstrap objective id created
+  PASS: Bootstrap task id created
+  PASS: Bootstrap status partial
+  PASS: Bootstrap command center attached
+  PASS: Bootstrap coordination attached
+  PASS: Bootstrap report attached
+  PASS: Bootstrap OSS count attached
+  PASS: Bootstrap certification attached
+  PASS: Bootstrap blockers attached
+  PASS: Getter returns runtime status
+
+============================================================
+  RESULTS: 125 passed, 0 failed
+  PHASE 10 COMPANY OS OPERATIONAL: PARTIAL
+  FINAL_ALLOWED_STATUS: MI_COMPANY_OS_PARTIAL
+============================================================

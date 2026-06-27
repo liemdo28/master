@@ -1,0 +1,57 @@
+ Describing process with id 7 - name qb-ops-agent
+┌───────────────────┬────────────────────────────────────────────────────────────────────┐
+│ status            │ online                                                             │
+│ name              │ qb-ops-agent                                                       │
+│ namespace         │ default                                                            │
+│ version           │ 1.0.0                                                              │
+│ restarts          │ 0                                                                  │
+│ uptime            │ 25h                                                                │
+│ script path       │ D:\Project\Master\mi-core\services\qb-ops-agent\dist\index.js      │
+│ script args       │ N/A                                                                │
+│ error log path    │ D:\Project\Master\mi-core\services\qb-ops-agent\logs\pm2-error.log │
+│ out log path      │ D:\Project\Master\mi-core\services\qb-ops-agent\logs\pm2-out.log   │
+│ pid path          │ C:\Users\liemdo\.pm2\pids\qb-ops-agent-7.pid                       │
+│ interpreter       │ node                                                               │
+│ interpreter args  │ N/A                                                                │
+│ script id         │ 7                                                                  │
+│ exec cwd          │ D:\Project\Master\mi-core\services\qb-ops-agent                    │
+│ exec mode         │ fork_mode                                                          │
+│ node.js version   │ 24.14.1                                                            │
+│ node env          │ development                                                        │
+│ watch & reload    │ ✘                                                                  │
+│ unstable restarts │ 0                                                                  │
+│ created at        │ 2026-06-25T15:55:06.191Z                                           │
+└───────────────────┴────────────────────────────────────────────────────────────────────┘
+ Actions available
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger qb-ops-agent <action_name>
+
+ Code metrics value
+┌────────────────────────┬───────────┐
+│ Used Heap Size         │ 24.77 MiB │
+│ Heap Usage             │ 81.53 %   │
+│ Heap Size              │ 30.38 MiB │
+│ Event Loop Latency p95 │ 21.06 ms  │
+│ Event Loop Latency     │ 7.76 ms   │
+│ Active handles         │ 4         │
+│ Active requests        │ 0         │
+│ HTTP                   │ 0 req/min │
+│ HTTP P95 Latency       │ 4 ms      │
+│ HTTP Mean Latency      │ 2.5 ms    │
+└────────────────────────┴───────────┘
+ Divergent env variables from local env
+┌─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ CODEX_THREAD_ID │ 019efece-2945-7233-809f-8e4372281432                                                                                                                                                                                                             │
+│ Path            │ C:\Program Files\PowerShell\7;C:\Users\liemdo\.codex\tmp\arg0\codex-arg08uyxFl;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Eclipse Adoptium\jdk-17.0.18. │
+└─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs qb-ops-agent [--lines 1000]` to display logs
+ Use `pm2 env 7` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage qb-ops-agent

@@ -1,0 +1,83 @@
+[TAILING] Tailing last 80 lines for [mi-doordash-agent] process (change the value with --lines option)
+C:\Users\liemdo\.pm2\logs\mi-doordash-agent-error.log last 80 lines:
+C:\Users\liemdo\.pm2\logs\mi-doordash-agent-out.log last 80 lines:
+2026-06-27T10:48:31: [2026-06-27T03:48:31.892Z] raw-sushi: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+2026-06-27T10:48:31: ╔════════════════════════════════════════════════════════════╗
+2026-06-27T10:48:31: ║ Looks like Playwright was just installed or updated.       ║
+2026-06-27T10:48:31: ║ Please run the following command to download new browsers: ║
+2026-06-27T10:48:31: ║                                                            ║
+2026-06-27T10:48:31: ║     npx playwright install                                 ║
+2026-06-27T10:48:31: ║                                                            ║
+2026-06-27T10:48:31: ║ <3 Playwright Team                                         ║
+2026-06-27T10:48:31: ╚════════════════════════════════════════════════════════════╝
+2026-06-27T10:48:31: [2026-06-27T03:48:31.893Z] Scrape complete
+2026-06-27T13:23:16: [2026-06-27T06:23:16.092Z] DoorDash Agent listening on port 3460
+2026-06-27T13:23:16: [2026-06-27T06:23:16.093Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+2026-06-27T13:23:26: [2026-06-27T06:23:26.101Z] Auto-scrape on startup...
+2026-06-27T13:23:26: [2026-06-27T06:23:26.102Z] Starting scrape for 4 accounts
+2026-06-27T13:23:26: [2026-06-27T06:23:26.103Z] Scraping bakudan-1 ([REDACTED_EMAIL])
+2026-06-27T13:23:26: [2026-06-27T06:23:26.117Z] bakudan-1: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+2026-06-27T13:23:26: ╔════════════════════════════════════════════════════════════╗
+2026-06-27T13:23:26: ║ Looks like Playwright was just installed or updated.       ║
+2026-06-27T13:23:26: ║ Please run the following command to download new browsers: ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║     npx playwright install                                 ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║ <3 Playwright Team                                         ║
+2026-06-27T13:23:26: ╚════════════════════════════════════════════════════════════╝
+2026-06-27T13:23:26: [2026-06-27T06:23:26.118Z] Scraping bakudan-2 ([REDACTED_EMAIL])
+2026-06-27T13:23:26: [2026-06-27T06:23:26.120Z] bakudan-2: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+2026-06-27T13:23:26: ╔════════════════════════════════════════════════════════════╗
+2026-06-27T13:23:26: ║ Looks like Playwright was just installed or updated.       ║
+2026-06-27T13:23:26: ║ Please run the following command to download new browsers: ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║     npx playwright install                                 ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║ <3 Playwright Team                                         ║
+2026-06-27T13:23:26: ╚════════════════════════════════════════════════════════════╝
+2026-06-27T13:23:26: [2026-06-27T06:23:26.121Z] Scraping bakudan-3 ([REDACTED_EMAIL])
+2026-06-27T13:23:26: [2026-06-27T06:23:26.124Z] bakudan-3: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+2026-06-27T13:23:26: ╔════════════════════════════════════════════════════════════╗
+2026-06-27T13:23:26: ║ Looks like Playwright was just installed or updated.       ║
+2026-06-27T13:23:26: ║ Please run the following command to download new browsers: ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║     npx playwright install                                 ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║ <3 Playwright Team                                         ║
+2026-06-27T13:23:26: ╚════════════════════════════════════════════════════════════╝
+2026-06-27T13:23:26: [2026-06-27T06:23:26.124Z] Scraping raw-sushi ([REDACTED_EMAIL])
+2026-06-27T13:23:26: [2026-06-27T06:23:26.128Z] raw-sushi: FATAL browserType.launch: Executable doesn't exist at C:\Users\liemdo\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe
+2026-06-27T13:23:26: ╔════════════════════════════════════════════════════════════╗
+2026-06-27T13:23:26: ║ Looks like Playwright was just installed or updated.       ║
+2026-06-27T13:23:26: ║ Please run the following command to download new browsers: ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║     npx playwright install                                 ║
+2026-06-27T13:23:26: ║                                                            ║
+2026-06-27T13:23:26: ║ <3 Playwright Team                                         ║
+2026-06-27T13:23:26: ╚════════════════════════════════════════════════════════════╝
+2026-06-27T13:23:26: [2026-06-27T06:23:26.129Z] Scrape complete
+2026-06-27T16:52:17: [2026-06-27T09:52:17.211Z] DoorDash Agent listening on port 3460
+2026-06-27T16:52:17: [2026-06-27T09:52:17.212Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+2026-06-27T16:52:27: [2026-06-27T09:52:27.214Z] Auto-scrape on startup...
+2026-06-27T16:52:27: [2026-06-27T09:52:27.215Z] Starting scrape for 4 accounts
+2026-06-27T16:52:27: [2026-06-27T09:52:27.215Z] Scraping bakudan-1 ()
+2026-06-27T16:52:27: [bakudan-1] Navigating to merchant portal...
+2026-06-27T16:52:44: [bakudan-1] URL after nav: https://identity.doordash.com/auth?client_id=1643580605860775164&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback&scope=*&prompt=none&response_type=code&layout=merchant_web_v2&state=5f8cc923-fad1-46c5-aae7-dfe7c299c072&allowRedirect=true&failureRedirect=%2Fmerchant%2Flogin
+2026-06-27T16:52:44: [bakudan-1] Session not authenticated and credentials are not configured
+2026-06-27T16:52:45: [2026-06-27T09:52:45.738Z] bakudan-1: 0 stores, error=CREDENTIALS_REQUIRED
+2026-06-27T16:52:45: [2026-06-27T09:52:45.738Z] Scraping bakudan-2 ()
+2026-06-27T16:52:45: [bakudan-2] Navigating to merchant portal...
+2026-06-27T16:52:56: [bakudan-2] URL after nav: https://identity.doordash.com/auth?client_id=1643580605860775164&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback&scope=*&prompt=none&response_type=code&layout=merchant_web_v2&state=3a84a7c9-f980-4e84-a590-5cc08666d2a2&allowRedirect=true&failureRedirect=%2Fmerchant%2Flogin
+2026-06-27T16:52:56: [bakudan-2] Session not authenticated and credentials are not configured
+2026-06-27T16:52:56: [2026-06-27T09:52:56.373Z] bakudan-2: 0 stores, error=CREDENTIALS_REQUIRED
+2026-06-27T16:52:56: [2026-06-27T09:52:56.373Z] Scraping bakudan-3 ()
+2026-06-27T16:52:56: [bakudan-3] Navigating to merchant portal...
+2026-06-27T16:53:05: [bakudan-3] URL after nav: https://identity.doordash.com/auth?client_id=1643580605860775164&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback&scope=*&prompt=none&response_type=code&layout=merchant_web_v2&state=e9c5ec48-a832-4cd9-aac5-34769a8752c1&allowRedirect=true&failureRedirect=%2Fmerchant%2Flogin
+2026-06-27T16:53:05: [bakudan-3] Session not authenticated and credentials are not configured
+2026-06-27T16:53:06: [2026-06-27T09:53:06.116Z] bakudan-3: 0 stores, error=CREDENTIALS_REQUIRED
+2026-06-27T16:53:06: [2026-06-27T09:53:06.116Z] Scraping raw-sushi ()
+2026-06-27T16:53:06: [raw-sushi] Navigating to merchant portal...
+2026-06-27T16:53:19: [raw-sushi] URL after nav: https://identity.doordash.com/auth?client_id=1643580605860775164&redirect_uri=https%3A%2F%2Fmerchant-portal.doordash.com%2Fauth_callback&scope=*&prompt=none&response_type=code&layout=merchant_web_v2&state=[REDACTED_PHONE]-2633-4a7f-9038-c172de88f5c6&allowRedirect=true&failureRedirect=%2Fmerchant%2Flogin
+2026-06-27T16:53:19: [raw-sushi] Session not authenticated and credentials are not configured
+2026-06-27T16:53:20: [2026-06-27T09:53:20.288Z] raw-sushi: 0 stores, error=CREDENTIALS_REQUIRED
+2026-06-27T16:53:20: [2026-06-27T09:53:20.288Z] Scrape complete
