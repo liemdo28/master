@@ -148,11 +148,11 @@ export const MASTER_PHASES: MasterPhase[] = [
   {
     phase: '10',
     name: 'MI_COMPANY_OS_OPERATIONAL',
-    status: 'FUTURE',
-    deliverables: ['Coordinate', 'Execute', 'Observe', 'Reason', 'Report', 'Improve'],
-    evidence: [],
-    blockers: ['Phases 1C through 9 are not all operational.'],
-    nextActions: ['Promote only when every preceding phase has runtime evidence.'],
+    status: 'PARTIAL',
+    deliverables: ['Objective Engine', 'Command Center', 'Cross-Division Coordination', 'Executive Reporting', 'OSS Global Governance', 'Operational Certification'],
+    evidence: ['tests/phase10-company-os-operational-runtime-test.mjs', 'MI_COMPANY_OS_OPERATIONAL_CERTIFICATION.md'],
+    blockers: ['QuickBooks/POS revenue proof is not live-certified.', 'GSC/GA4/GBP evidence and publishing credentials are not certified.', 'Toast and DoorDash production mutation remains approval-gated.', 'Preceding partial phases still block MI_COMPANY_OS_OPERATIONAL promotion.'],
+    nextActions: ['Restore live connector evidence, collect CEO approvals, rerun Phase 10 certification, then promote only if blockers are zero.'],
   },
 ];
 
