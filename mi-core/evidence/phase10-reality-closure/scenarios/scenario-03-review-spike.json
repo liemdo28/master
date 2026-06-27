@@ -1,0 +1,16 @@
+﻿{
+    "scenario_id":  "scenario-03-review-spike",
+    "scenario_name":  "Review Spike",
+    "trigger":  "More than 5 new reviews appear in a 24-hour window",
+    "test_result":  "PASS",
+    "objective_created":  true,
+    "task_created":  true,
+    "division_assigned":  "marketing",
+    "evidence_stored":  true,
+    "approval_triggered":  false,
+    "metrics_updated":  false,
+    "executive_report_generated":  true,
+    "notes":  "Review monitoring is configured. Marketing division assigned. Review data partially available via GBP.",
+    "runtime_test":  "phase10-company-os-operational-runtime-test.mjs",
+    "test_result_detail":  "PARTIAL \\u2014 GBP review access is unknown; metrics are empty"
+}

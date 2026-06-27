@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "runtime": {
+    "ok": true,
+    "name": "whatsapp-ai-gateway",
+    "version": "v1.0.0",
+    "commit": "f13f3ae",
+    "pid": 8752,
+    "started_at": "2026-06-26T08:25:09.892Z",
+    "uptime_seconds": 72758,
+    "dashboard_ready": true,
+    "whatsapp_ready": true,
+    "whatsapp_status": "ready",
+    "google_sheets_ready": true,
+    "ocr_ready": true,
+    "ai_paused": false,
+    "business_hours_open": true,
+    "food_safety_enabled": true
+  },
+  "whatsapp": "ready",
+  "pm2": {
+    "name": "mi-whatsapp-gateway",
+    "pid": 8752,
+    "uptime": "20h",
+    "status": "online"
+  },
+  "captured_at": "2026-06-27T04:37:48.258Z"
+}

@@ -1,0 +1,6 @@
+{
+  "pm2_list": [
+    { "id": 11, "name": "mi-doordash-agent", "status": "online", "pid": 29068, "uptime": "57m", "port_target": "100.111.97.25:3460" }
+  ],
+  "note": "mi-doordash-agent PM2 process is online (PID 29068, uptime 57m), but cannot reach target host 100.111.97.25:3460 (EACCES: connection refused/permission denied). The agent process is running but the DoorDash portal scrape is blocked at the network layer. This is the same state as Phase 10.2 — agent is alive, but portal access from this host is blocked."
+}

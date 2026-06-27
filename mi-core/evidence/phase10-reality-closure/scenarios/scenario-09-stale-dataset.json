@@ -1,0 +1,16 @@
+﻿{
+    "scenario_id":  "scenario-09-stale-dataset",
+    "scenario_name":  "Stale Dataset",
+    "trigger":  "A dataset has not been updated in more than 24 hours",
+    "test_result":  "PASS",
+    "objective_created":  true,
+    "task_created":  true,
+    "division_assigned":  "engineering",
+    "evidence_stored":  true,
+    "approval_triggered":  false,
+    "metrics_updated":  false,
+    "executive_report_generated":  true,
+    "notes":  "Data freshness engine monitors dataset staleness. Engineering division assigned. QB is stale (9 days).",
+    "runtime_test":  "phase10-company-os-operational-runtime-test.mjs",
+    "test_result_detail":  "PASS \\u2014 stale dataset detection works. QB is correctly flagged as stale (last sync 2026-06-18)."
+}

@@ -1,0 +1,7 @@
+{
+  "connected": false,
+  "lastReadAt": "2026-06-27T04:44:59.000Z",
+  "lastError": "doordash-agent unreachable: connect EACCES 100.111.97.25:3460",
+  "latencyMs": null,
+  "dataFreshness": "unknown"
+}

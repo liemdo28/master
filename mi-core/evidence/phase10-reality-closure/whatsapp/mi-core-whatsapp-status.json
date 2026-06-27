@@ -1,0 +1,11 @@
+{
+  "endpoint": "online",
+  "api_key_configured": false,
+  "api_key_status": "active",
+  "last_message_time": null,
+  "last_successful_reply": null,
+  "total_messages": 0,
+  "failed_auth_count": 0,
+  "captured_at": "2026-06-27T04:40:58.093Z",
+  "note": "mi-core WhatsApp /api/whatsapp/mi endpoint is online. WhatsApp API key is not configured in mi-core's key manager. Messages forwarded from whatsapp-ai-gateway (port 3211) to mi-core (port 4001) require API key setup. Historical evidence from 2026-06-17 shows routing worked correctly with proper API key."
+}

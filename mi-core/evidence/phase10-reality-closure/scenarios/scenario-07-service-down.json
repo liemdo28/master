@@ -1,0 +1,16 @@
+﻿{
+    "scenario_id":  "scenario-07-service-down",
+    "scenario_name":  "Service Down",
+    "trigger":  "A critical service (n8n, QB, DoorDash agent) goes offline",
+    "test_result":  "PASS",
+    "objective_created":  true,
+    "task_created":  true,
+    "division_assigned":  "engineering",
+    "evidence_stored":  true,
+    "approval_triggered":  false,
+    "metrics_updated":  false,
+    "executive_report_generated":  true,
+    "notes":  "Self-healing monitor detects service outages. Engineering division assigned. PM2 processes monitored.",
+    "runtime_test":  "phase10-company-os-operational-runtime-test.mjs",
+    "test_result_detail":  "PASS \\u2014 service monitoring works correctly. DoorDash agent is online but unreachable, correctly identified."
+}

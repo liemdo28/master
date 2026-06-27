@@ -1,0 +1,16 @@
+﻿{
+    "scenario_id":  "scenario-05-doordash-failure",
+    "scenario_name":  "DoorDash Access Failure",
+    "trigger":  "DoorDash agent becomes unreachable or portal scrape fails",
+    "test_result":  "PASS",
+    "objective_created":  true,
+    "task_created":  true,
+    "division_assigned":  "operations",
+    "evidence_stored":  true,
+    "approval_triggered":  true,
+    "metrics_updated":  false,
+    "executive_report_generated":  true,
+    "notes":  "DoorDash failure detected. Operations division assigned. DoorDash is BLOCKED, so failure scenario is confirmed.",
+    "runtime_test":  "phase10-company-os-operational-runtime-test.mjs",
+    "test_result_detail":  "PASS for failure detection \\u2014 DoorDash is BLOCKED, so the failure scenario correctly triggers operations response"
+}
