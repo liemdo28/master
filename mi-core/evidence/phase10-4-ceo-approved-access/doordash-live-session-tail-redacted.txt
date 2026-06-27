@@ -1,0 +1,163 @@
+[TAILING] Tailing last 160 lines for [mi-doordash-agent] process (change the value with --lines option)
+C:\Users\liemdo\.pm2\logs\mi-doordash-agent-error.log last 160 lines:
+C:\Users\liemdo\.pm2\logs\mi-doordash-agent-out.log last 160 lines:
+2026-06-27T17:25:14: Call log:
+2026-06-27T17:25:14: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:25:14:
+2026-06-27T17:25:14: [2026-06-27T10:25:14.735Z] Scrape complete
+2026-06-27T17:27:37: [2026-06-27T10:27:37.771Z] DoorDash Agent listening on port 3460
+2026-06-27T17:27:37: [2026-06-27T10:27:37.772Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+2026-06-27T17:27:42: [2026-06-27T10:27:42.845Z] Starting scrape for 4 accounts
+2026-06-27T17:27:42: [2026-06-27T10:27:42.845Z] Scraping bakudan-1 ()
+2026-06-27T17:27:43: [bakudan-1] Restored 64 cookies
+2026-06-27T17:27:43: [bakudan-1] Navigating to merchant portal...
+2026-06-27T17:27:47: [2026-06-27T10:27:47.789Z] Auto-scrape on startup...
+2026-06-27T17:27:47: [2026-06-27T10:27:47.790Z] Scrape already running, skipping
+2026-06-27T17:28:13: [bakudan-1] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:28:13: Call log:
+2026-06-27T17:28:13: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:28:13:
+2026-06-27T17:28:43: [2026-06-27T10:28:43.195Z] bakudan-1: 0 stores, error=page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:28:43: Call log:
+2026-06-27T17:28:43: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:28:43:
+2026-06-27T17:28:43: [2026-06-27T10:28:43.195Z] Scraping bakudan-2 ()
+2026-06-27T17:28:43: [bakudan-2] Restored 69 cookies
+2026-06-27T17:28:43: [bakudan-2] Navigating to merchant portal...
+2026-06-27T17:29:13: [bakudan-2] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:29:13: Call log:
+2026-06-27T17:29:13: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:29:13:
+2026-06-27T17:29:44: [2026-06-27T10:29:44.167Z] bakudan-2: 0 stores, error=page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:29:44: Call log:
+2026-06-27T17:29:44: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:29:44:
+2026-06-27T17:29:44: [2026-06-27T10:29:44.167Z] Scraping bakudan-3 ()
+2026-06-27T17:29:44: [bakudan-3] Restored 64 cookies
+2026-06-27T17:29:44: [bakudan-3] Navigating to merchant portal...
+2026-06-27T17:30:14: [bakudan-3] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:30:14: Call log:
+2026-06-27T17:30:14: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:30:14:
+2026-06-27T17:30:44: [2026-06-27T10:30:44.451Z] bakudan-3: 0 stores, error=page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:30:44: Call log:
+2026-06-27T17:30:44: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:30:44:
+2026-06-27T17:30:44: [2026-06-27T10:30:44.452Z] Scraping raw-sushi ()
+2026-06-27T17:30:44: [raw-sushi] Restored 64 cookies
+2026-06-27T17:30:44: [raw-sushi] Navigating to merchant portal...
+2026-06-27T17:31:14: [raw-sushi] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:31:14: Call log:
+2026-06-27T17:31:14: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:31:14:
+2026-06-27T17:31:44: [2026-06-27T10:31:44.790Z] raw-sushi: 0 stores, error=page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:31:44: Call log:
+2026-06-27T17:31:44: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:31:44:
+2026-06-27T17:31:44: [2026-06-27T10:31:44.791Z] Scrape complete
+2026-06-27T17:36:33: [2026-06-27T10:36:33.948Z] DoorDash Agent listening on port 3460
+2026-06-27T17:36:33: [2026-06-27T10:36:33.949Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+2026-06-27T17:36:38: [bakudan-1] Restored 64 cookies
+2026-06-27T17:36:39: [bakudan-1] Navigating to merchant portal...
+2026-06-27T17:36:43: [2026-06-27T10:36:43.954Z] Auto-scrape on startup...
+2026-06-27T17:36:43: [2026-06-27T10:36:43.954Z] Starting scrape for 4 accounts
+2026-06-27T17:36:43: [2026-06-27T10:36:43.955Z] Scraping bakudan-1 ()
+2026-06-27T17:36:44: [bakudan-1] Restored 64 cookies
+2026-06-27T17:36:44: [bakudan-1] Navigating to merchant portal...
+2026-06-27T17:37:05: [bakudan-1] URL after nav: https://merchant-portal.doordash.com/merchant/
+2026-06-27T17:37:05: [bakudan-1] Already authenticated
+2026-06-27T17:37:14: [bakudan-1] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:37:14: Call log:
+2026-06-27T17:37:14: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:37:14:
+2026-06-27T17:37:36: [bakudan-1] URL after nav: https://merchant-portal.doordash.com/merchant/home
+2026-06-27T17:37:36: [bakudan-1] Already authenticated
+2026-06-27T17:38:39: [bakudan-3] Restored 64 cookies
+2026-06-27T17:38:39: [bakudan-3] Navigating to merchant portal...
+2026-06-27T17:39:09: [bakudan-3] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:39:09: Call log:
+2026-06-27T17:39:09: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:39:09:
+2026-06-27T17:39:19: [bakudan-3] URL after nav: https://merchant-portal.doordash.com/merchant/home
+2026-06-27T17:39:19: [bakudan-3] Already authenticated
+2026-06-27T17:40:39: [raw-sushi] Restored 64 cookies
+2026-06-27T17:40:39: [raw-sushi] Navigating to merchant portal...
+2026-06-27T17:40:52: [2026-06-27T10:40:52.925Z] bakudan-1: 1 stores, error=none
+2026-06-27T17:40:52: [2026-06-27T10:40:52.926Z] Scraping bakudan-2 ()
+2026-06-27T17:40:53: [bakudan-2] Restored 69 cookies
+2026-06-27T17:40:53: [bakudan-2] Navigating to merchant portal...
+2026-06-27T17:41:10: [raw-sushi] URL after nav: https://merchant-portal.doordash.com/merchant/
+2026-06-27T17:41:10: [raw-sushi] Already authenticated
+2026-06-27T17:41:23: [bakudan-2] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:41:23: Call log:
+2026-06-27T17:41:23: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:41:23:
+2026-06-27T17:41:34: [bakudan-2] URL after nav: https://merchant-portal.doordash.com/merchant/home
+2026-06-27T17:41:34: [bakudan-2] Already authenticated
+2026-06-27T17:44:37: [2026-06-27T10:44:37.107Z] bakudan-2: 1 stores, error=none
+2026-06-27T17:44:37: [2026-06-27T10:44:37.107Z] Scraping bakudan-3 ()
+2026-06-27T17:44:37: [bakudan-3] Restored 64 cookies
+2026-06-27T17:44:37: [bakudan-3] Navigating to merchant portal...
+2026-06-27T17:45:07: [bakudan-3] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:45:07: Call log:
+2026-06-27T17:45:07: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:45:07:
+2026-06-27T17:45:37: [2026-06-27T10:45:37.414Z] bakudan-3: 0 stores, error=page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:45:37: Call log:
+2026-06-27T17:45:37: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:45:37:
+2026-06-27T17:45:37: [2026-06-27T10:45:37.414Z] Scraping raw-sushi ()
+2026-06-27T17:45:37: [raw-sushi] Restored 64 cookies
+2026-06-27T17:45:37: [raw-sushi] Navigating to merchant portal...
+2026-06-27T17:46:07: [raw-sushi] Portal root navigation failed: page.goto: Timeout 30000ms exceeded.
+2026-06-27T17:46:07: Call log:
+2026-06-27T17:46:07: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:46:07:
+2026-06-27T17:46:22: [2026-06-27T10:46:22.913Z] DoorDash Agent listening on port 3460
+2026-06-27T17:46:22: [2026-06-27T10:46:22.914Z] Accounts: bakudan-1, bakudan-2, bakudan-3, raw-sushi
+2026-06-27T17:46:32: [2026-06-27T10:46:32.932Z] Auto-scrape on startup...
+2026-06-27T17:46:32: [2026-06-27T10:46:32.933Z] Starting scrape for 4 accounts
+2026-06-27T17:46:32: [2026-06-27T10:46:32.933Z] Scraping bakudan-1 ()
+2026-06-27T17:46:33: [bakudan-1] Restored 67 cookies
+2026-06-27T17:46:33: [bakudan-1] Navigating to merchant portal...
+2026-06-27T17:46:53: [bakudan-1] Merchant home navigation failed: page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:46:53: Call log:
+2026-06-27T17:46:53: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:46:53:
+2026-06-27T17:47:08: [bakudan-1] URL after nav: https://merchant-portal.doordash.com/merchant/
+2026-06-27T17:47:08: [bakudan-1] Already authenticated
+2026-06-27T17:48:53: [2026-06-27T10:48:53.745Z] bakudan-1: 1 stores, error=none
+2026-06-27T17:48:53: [2026-06-27T10:48:53.745Z] Scraping bakudan-2 ()
+2026-06-27T17:48:53: [bakudan-2] Restored 63 cookies
+2026-06-27T17:48:53: [bakudan-2] Navigating to merchant portal...
+2026-06-27T17:49:13: [bakudan-2] Merchant home navigation failed: page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:49:13: Call log:
+2026-06-27T17:49:13: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:49:13:
+2026-06-27T17:49:35: [2026-06-27T10:49:35.099Z] bakudan-2: 0 stores, error=page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:49:35: Call log:
+2026-06-27T17:49:35: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:49:35:
+2026-06-27T17:49:35: [2026-06-27T10:49:35.099Z] Scraping bakudan-3 ()
+2026-06-27T17:49:35: [bakudan-3] Restored 64 cookies
+2026-06-27T17:49:35: [bakudan-3] Navigating to merchant portal...
+2026-06-27T17:49:55: [bakudan-3] Merchant home navigation failed: page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:49:55: Call log:
+2026-06-27T17:49:55: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:49:55:
+2026-06-27T17:50:15: [2026-06-27T10:50:15.393Z] bakudan-3: 0 stores, error=page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:50:15: Call log:
+2026-06-27T17:50:15: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:50:15:
+2026-06-27T17:50:15: [2026-06-27T10:50:15.393Z] Scraping raw-sushi ()
+2026-06-27T17:50:17: [raw-sushi] Restored 64 cookies
+2026-06-27T17:50:17: [raw-sushi] Navigating to merchant portal...
+2026-06-27T17:50:37: [raw-sushi] Merchant home navigation failed: page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:50:37: Call log:
+2026-06-27T17:50:37: [2m  - navigating to "https://merchant-portal.doordash.com/merchant/home", waiting until "domcontentloaded"[22m
+2026-06-27T17:50:37:
+2026-06-27T17:50:57: [2026-06-27T10:50:57.293Z] raw-sushi: 0 stores, error=page.goto: Timeout 20000ms exceeded.
+2026-06-27T17:50:57: Call log:
+2026-06-27T17:50:57: [2m  - navigating to "https://merchant-portal.doordash.com/", waiting until "domcontentloaded"[22m
+2026-06-27T17:50:57:
+2026-06-27T17:50:57: [2026-06-27T10:50:57.294Z] Scrape complete
