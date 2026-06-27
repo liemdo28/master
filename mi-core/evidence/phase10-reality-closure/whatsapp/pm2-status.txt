@@ -1,0 +1,28 @@
+mi-whatsapp-gateway PM2 Status
+Captured: 2026-06-27T06:20:24Z
+Command: pm2 list
+
+┌────┬─────────────────────────┬──────────────┬─────────┬─────────┬──────────┬───────┬──────┬───────────┬───────────┬───────────┬───────────┬───────────┐
+│ id │ name                    │ namespace    │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu       │ mem       │ user      │ watching  │
+├────┼─────────────────────────┼──────────────┼─────────┼─────────┼──────────┼───────┼──────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+│ 5  │ mi-whatsapp-gateway     │ default      │ 1.0.0   │ fork    │ 8752     │ 21h    │ 0    │ online    │ 0%        │ 80.8mb    │ liemdo    │ disabled  │
+└────┴─────────────────────────┴──────────────┴─────────┴─────────┴──────────┴───────┴──────┴───────────┴───────────┴───────────┴───────────┴───────────┘
+
+Key facts:
+- mi-whatsapp-gateway is online (PID 8752, uptime 21h)
+- 0 restarts — stable runtime
+- whatsapp_status=ready (from gateway health endpoint)
+- whatsapp_ready=true
+- food_safety_enabled=true
+- business_hours_open=true
+- ai_paused=false
+
+Gateway version: v1.0.0 (commit: f13f3ae)
+Build: Admin Control Center v1
+Build time: 2026-06-26T08:25:09.892Z
+Node: v24.14.1
+
+Note: This is the same binary that successfully routed messages on 2026-06-17
+("Mi oi" → "Em đây anh."). The gateway infrastructure is fully operational.
+The only missing piece for live routing is the mi-core WhatsApp API key configuration
+(api_key_configured: false at port 4001).

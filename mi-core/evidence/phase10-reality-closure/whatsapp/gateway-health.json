@@ -1,28 +1,40 @@
 {
+  "captured_at": "2026-06-27T06:20:23.000Z",
+  "source": "curl -s http://localhost:3211/health",
   "ok": true,
   "runtime": {
     "ok": true,
     "name": "whatsapp-ai-gateway",
     "version": "v1.0.0",
     "commit": "f13f3ae",
+    "build": "Admin Control Center v1",
+    "build_id": "202606260825-f13f3ae",
+    "build_time": "2026-06-26T08:25:09.892Z",
+    "language_engine": "v2",
     "pid": 8752,
+    "cwd": "D:\\Project\\Master\\mi-core\\services\\whatsapp-ai-gateway",
+    "node": "v24.14.1",
     "started_at": "2026-06-26T08:25:09.892Z",
-    "uptime_seconds": 72758,
+    "uptime_seconds": 78913,
     "dashboard_ready": true,
+    "admin_control_ready": false,
+    "template_cache_ready": false,
+    "template_item_count": 0,
     "whatsapp_ready": true,
     "whatsapp_status": "ready",
     "google_sheets_ready": true,
     "ocr_ready": true,
-    "ai_paused": false,
+    "ocr_missing": [],
+    "yolink_ready": false,
+    "yolink_configured": false,
     "business_hours_open": true,
-    "food_safety_enabled": true
+    "ai_paused": false,
+    "time": "2026-06-27T06:20:23.000Z"
   },
   "whatsapp": "ready",
-  "pm2": {
-    "name": "mi-whatsapp-gateway",
-    "pid": 8752,
-    "uptime": "20h",
-    "status": "online"
-  },
-  "captured_at": "2026-06-27T04:37:48.258Z"
+  "telegram": false,
+  "ai_paused": false,
+  "business_hours_open": true,
+  "food_safety_enabled": true,
+  "note": "WhatsApp gateway is healthy and ready. whatsapp_status=ready, whatsapp_ready=true, food_safety_enabled=true. Gateway has been running continuously for 21+ hours with 0 restarts. The gateway forwards messages to mi-core at http://localhost:4001."
 }
