@@ -52,18 +52,15 @@ console.log('\n=== Agent OS Router Runtime Test (Phase 12–20) ===');
 
 try {
   console.log('\n--- Overview: all phases load ---');
-  const EXPECTED_IDS = [
-    12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-    53, 56, 60, 62, 67, 74, 81, 99,
-  ];
+  // Contiguous coverage: every phase 12 through 100.
+  const EXPECTED_IDS = Array.from({ length: 100 - 12 + 1 }, (_, i) => i + 12);
   const overview = await get(server, '/api/agent-os/');
   assert('GET /api/agent-os returns 200', overview.status === 200);
   assert('overview reports all phases', overview.body.count === EXPECTED_IDS.length);
   assert('ALL phases loaded from ESM', overview.body.loaded === EXPECTED_IDS.length);
   assert('every phase exposes an orchestrator class name', overview.body.phases.every(p => p.loaded && typeof p.orchestrator === 'string' && p.orchestrator.length > 0));
   assert('every phase reports its public API surface', overview.body.phases.every(p => Array.isArray(p.api) && p.api.length > 0));
-  assert('phase ids span 12–50 + ROI phases (53/56/60/62/67/74/81/99)', JSON.stringify(overview.body.phases.map(p => p.phase)) === JSON.stringify(EXPECTED_IDS));
+  assert('phase ids span 12–100 contiguously', JSON.stringify([...overview.body.phases.map(p => p.phase)].sort((a, b) => a - b)) === JSON.stringify(EXPECTED_IDS));
 
   console.log('\n--- Per-phase live summaries ---');
   const expectSummary = { 12: 'scorecard', 13: 'scorecard', 14: 'pending', 16: 'fleetReport', 17: 'crossCompanyReport', 18: 'stats', 20: 'dashboard', 53: 'dashboard' };
