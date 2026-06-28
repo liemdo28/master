@@ -1,0 +1,14 @@
+{
+  "name": "mi-phase-14-hitl-autonomy",
+  "version": "1.0.0",
+  "description": "Phase 14 — Human-in-the-Loop Autonomy. Real executable: risk-tier model, approval policy engine, approval inbox, action draft engine, rejection learning, rollback plan engine, audit trail.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": {
+    "test": "node test/runtime-proof.mjs",
+    "smoke": "node src/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

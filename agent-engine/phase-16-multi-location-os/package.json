@@ -1,0 +1,14 @@
+{
+  "name": "mi-phase-16-multi-location-os",
+  "version": "1.0.0",
+  "description": "Phase 16 — Multi-Location OS. Real executable: location registry, brand registry, permission engine, KPI layer, risk engine, cross-location reporting.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": {
+    "test": "node test/runtime-proof.mjs",
+    "smoke": "node src/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
