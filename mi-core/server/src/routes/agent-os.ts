@@ -19,6 +19,7 @@
  *   Phase 18 Knowledge Graph               /api/company-os/18  -> stats
  *   Phase 19 Executive Simulation          /api/company-os/19  -> (surface)
  *   Phase 20 Autonomous Executive OS       /api/company-os/20  -> dashboard
+ *   Phase 53 CFO AI                        /api/company-os/53  -> dashboard
  */
 
 import { Router, Request, Response } from 'express';
@@ -56,6 +57,7 @@ const PHASES: PhaseDef[] = [
   { id: 18, slug: '18', name: 'Knowledge Graph', dir: 'phase-18-knowledge-graph', summary: 'stats' },
   { id: 19, slug: '19', name: 'Executive Simulation', dir: 'phase-19-executive-simulation' },
   { id: 20, slug: '20', name: 'Autonomous Executive OS', dir: 'phase-20-autonomous-executive-os', summary: 'dashboard' },
+  { id: 53, slug: '53', name: 'CFO AI', dir: 'phase-53-cfo-ai', summary: 'dashboard' },
 ];
 
 const bySlug = new Map(PHASES.map((p) => [p.slug, p]));

@@ -1,0 +1,14 @@
+{
+  "name": "mi-phase-53-cfo-ai",
+  "version": "1.0.0",
+  "description": "Phase 53 — CFO AI. Real executable: revenue forecasting (linear regression), cash-flow projection + runway, budget variance analysis, best/base/worst scenarios, and a deterministic CFO question engine. No LLM — pure arithmetic, portable JSON persistence.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": {
+    "test": "node test/runtime-proof.mjs",
+    "smoke": "node src/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

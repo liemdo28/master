@@ -49,17 +49,18 @@ console.log('\n=== Agent OS Router Runtime Test (Phase 12–20) ===');
 
 try {
   console.log('\n--- Overview: all 9 phases load ---');
+  const EXPECTED_IDS = [12, 13, 14, 15, 16, 17, 18, 19, 20, 53];
   const overview = await get(server, '/api/agent-os/');
   assert('GET /api/agent-os returns 200', overview.status === 200);
-  assert('overview reports 9 phases', overview.body.count === 9);
-  assert('ALL 9 phases loaded from ESM', overview.body.loaded === 9);
+  assert('overview reports all phases', overview.body.count === EXPECTED_IDS.length);
+  assert('ALL phases loaded from ESM', overview.body.loaded === EXPECTED_IDS.length);
   assert('every phase exposes an orchestrator class name', overview.body.phases.every(p => p.loaded && typeof p.orchestrator === 'string' && p.orchestrator.length > 0));
   assert('every phase reports its public API surface', overview.body.phases.every(p => Array.isArray(p.api) && p.api.length > 0));
-  assert('phase ids span 12–20', JSON.stringify(overview.body.phases.map(p => p.phase)) === JSON.stringify([12, 13, 14, 15, 16, 17, 18, 19, 20]));
+  assert('phase ids span 12–20 + 53 (CFO AI)', JSON.stringify(overview.body.phases.map(p => p.phase)) === JSON.stringify(EXPECTED_IDS));
 
   console.log('\n--- Per-phase live summaries ---');
-  const expectSummary = { 12: 'scorecard', 13: 'scorecard', 14: 'pending', 16: 'fleetReport', 17: 'crossCompanyReport', 18: 'stats', 20: 'dashboard' };
-  for (const id of [12, 13, 14, 15, 16, 17, 18, 19, 20]) {
+  const expectSummary = { 12: 'scorecard', 13: 'scorecard', 14: 'pending', 16: 'fleetReport', 17: 'crossCompanyReport', 18: 'stats', 20: 'dashboard', 53: 'dashboard' };
+  for (const id of EXPECTED_IDS) {
     const r = await get(server, `/api/agent-os/${id}`);
     assert(`GET /api/agent-os/${id} returns 200`, r.status === 200);
     assert(`phase ${id} loaded`, r.body.loaded === true);
@@ -77,7 +78,7 @@ try {
   console.log('\n--- Unknown phase is rejected ---');
   const unknown = await get(server, '/api/agent-os/99');
   assert('unknown phase returns 404', unknown.status === 404);
-  assert('404 lists available phases', Array.isArray(unknown.body.available) && unknown.body.available.length === 9);
+  assert('404 lists available phases', Array.isArray(unknown.body.available) && unknown.body.available.length === EXPECTED_IDS.length);
 } finally {
   server.close();
 }
