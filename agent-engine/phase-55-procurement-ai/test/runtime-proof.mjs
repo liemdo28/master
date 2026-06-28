@@ -1,31 +1,39 @@
-// Phase 55 runtime proof - phase-55-procurement-ai
+// Phase 55 runtime proof - phase-55-procurement-ai (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 55 -- ProcurementAIOS :: RUNTIME PROOF');
-const {ProcurementAIOS}=await import(`../src/orchestrator.js`);
-const os=new ProcurementAIOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('ProcurementAIOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,55));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { ProcurementAIOS } = await import(`../src/orchestrator.js`);
+const { ReorderEngine } = await import(`../src/engines.js`);
+
+const eng = new ReorderEngine();
+// demand 10/day, lead 5, safety 2 -> reorderPoint = 10*7 = 70
+const low = eng.plan({ sku: 'A', demandPerDay: 10, leadTimeDays: 5, safetyStockDays: 2, onHand: 30, reviewPeriodDays: 7 });
+check('reorder point computed', () => assert.strictEqual(low.reorderPoint, 70));
+check('low stock needs reorder', () => assert.strictEqual(low.needsReorder, true));
+// target = 10*(5+2+7)=140; suggested = 140-30 = 110
+check('suggested qty computed', () => assert.strictEqual(low.suggestedQty, 110));
+check('days of cover computed', () => assert.strictEqual(low.daysOfCover, 3));
+check('stockout risk HIGH when cover < lead time', () => assert.strictEqual(low.stockoutRisk, 'HIGH'));
+
+const ok = eng.plan({ sku: 'B', demandPerDay: 10, leadTimeDays: 5, safetyStockDays: 2, onHand: 200 });
+check('well-stocked needs no reorder', () => assert.strictEqual(ok.needsReorder, false));
+check('well-stocked suggested qty is 0', () => assert.strictEqual(ok.suggestedQty, 0));
+check('well-stocked risk is LOW', () => assert.strictEqual(ok.stockoutRisk, 'LOW'));
+
+const os = new ProcurementAIOS();
+const snap = os.plan({ items: [
+  { sku: 'A', demandPerDay: 10, leadTimeDays: 5, safetyStockDays: 2, onHand: 30 },
+  { sku: 'B', demandPerDay: 10, leadTimeDays: 5, safetyStockDays: 2, onHand: 200 },
+] });
+check('reorder count correct', () => assert.strictEqual(snap.reorderCount, 1));
+check('high-risk count correct', () => assert.strictEqual(snap.highRisk, 1));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 55));
+check('dashboard() status CRITICAL on high risk', () => assert.strictEqual(dash.status, 'CRITICAL'));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);

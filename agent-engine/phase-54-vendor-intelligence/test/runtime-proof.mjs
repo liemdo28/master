@@ -1,31 +1,37 @@
-// Phase 54 runtime proof - phase-54-vendor-intelligence
+// Phase 54 runtime proof - phase-54-vendor-intelligence (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 54 -- VendorIntelligenceOS :: RUNTIME PROOF');
-const {VendorIntelligenceOS}=await import(`../src/orchestrator.js`);
-const os=new VendorIntelligenceOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('VendorIntelligenceOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,54));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { VendorIntelligenceOS } = await import(`../src/orchestrator.js`);
+const { VendorScorecardEngine } = await import(`../src/engines.js`);
+
+const eng = new VendorScorecardEngine();
+const top = eng.score({ onTimeRate: 1, qualityRate: 1, priceIndex: 0.8, reliabilityRate: 1 });
+check('excellent vendor scores 100', () => assert.strictEqual(top.score, 100));
+check('excellent vendor is PREFERRED', () => assert.strictEqual(top.tier, 'PREFERRED'));
+const mid = eng.score({ onTimeRate: 0.7, qualityRate: 0.7, priceIndex: 1.0, reliabilityRate: 0.7 });
+// onTime70*.3 + q70*.3 + price80*.2 + rel70*.2 = 21+21+16+14 = 72
+check('mid vendor score computed exactly', () => assert.strictEqual(mid.score, 72));
+check('mid vendor is APPROVED', () => assert.strictEqual(mid.tier, 'APPROVED'));
+const poor = eng.score({ onTimeRate: 0.3, qualityRate: 0.3, priceIndex: 1.2, reliabilityRate: 0.3 });
+check('poor vendor is PROBATION', () => assert.strictEqual(poor.tier, 'PROBATION'));
+
+const os = new VendorIntelligenceOS();
+const snap = os.assess({ vendors: [
+  { name: 'Alpha', onTimeRate: 1, qualityRate: 1, priceIndex: 0.8, reliabilityRate: 1 },
+  { name: 'Beta', onTimeRate: 0.7, qualityRate: 0.7, priceIndex: 1.0, reliabilityRate: 0.7 },
+  { name: 'Gamma', onTimeRate: 0.3, qualityRate: 0.3, priceIndex: 1.2, reliabilityRate: 0.3 },
+] });
+check('vendors ranked by score', () => assert.strictEqual(snap.vendors[0].name, 'Alpha'));
+check('top vendor recorded', () => assert.strictEqual(snap.topVendor, 'Alpha'));
+check('probation count correct', () => assert.strictEqual(snap.probation, 1));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 54));
+check('dashboard() reports vendor count', () => assert.strictEqual(dash.vendors, 3));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);

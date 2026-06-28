@@ -1,31 +1,34 @@
-// Phase 77 runtime proof - phase-77-investment-evaluation
+// Phase 77 runtime proof - phase-77-investment-evaluation (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 77 -- InvestmentEvaluationOS :: RUNTIME PROOF');
-const {InvestmentEvaluationOS}=await import(`../src/orchestrator.js`);
-const os=new InvestmentEvaluationOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('InvestmentEvaluationOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,77));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { InvestmentEvaluationOS } = await import(`../src/orchestrator.js`);
+const { NPVEngine } = await import(`../src/engines.js`);
+
+const eng = new NPVEngine();
+const good = eng.evaluate({ initial: 1000, cashflows: [400, 400, 400, 400], discountRate: 0.1 });
+check('NPV computed (positive)', () => assert.strictEqual(good.npv, 267.95));
+check('ROI computed', () => assert.strictEqual(good.roi, 60)); // (1600-1000)/1000*100
+check('fractional payback computed', () => assert.strictEqual(good.paybackPeriod, 2.5)); // 800 after 2y, +200/400
+check('positive NPV + fast payback -> INVEST', () => assert.strictEqual(good.decision, 'INVEST'));
+
+const bad = eng.evaluate({ initial: 1000, cashflows: [100, 100, 100], discountRate: 0.1 });
+check('negative NPV -> REJECT', () => assert.strictEqual(bad.decision, 'REJECT'));
+check('never-recovered payback is Infinity', () => assert.strictEqual(bad.paybackPeriod, Infinity));
+
+const slow = eng.evaluate({ initial: 1000, cashflows: [200, 200, 200, 200, 200, 300], discountRate: 0.05, maxPaybackYears: 4 });
+check('positive NPV but slow payback -> REVIEW', () => assert.strictEqual(slow.decision, 'REVIEW'));
+
+const os = new InvestmentEvaluationOS();
+const snap = os.evaluate({ name: 'Project-X', initial: 1000, cashflows: [400, 400, 400, 400], discountRate: 0.1 });
+check('evaluate records name', () => assert.strictEqual(snap.name, 'Project-X'));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 77));
+check('dashboard() reports npv', () => assert.ok(typeof dash.npv === 'number'));
+check('dashboard() status is decision', () => assert.strictEqual(dash.status, 'INVEST'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);
