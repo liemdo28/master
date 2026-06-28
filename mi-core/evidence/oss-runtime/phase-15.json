@@ -1,0 +1,15 @@
+{
+  "phase": 15,
+  "worker": "Open Policy Agent",
+  "workerId": "opa",
+  "businessRole": "guardrail policy decisions",
+  "ownerDivision": "it",
+  "license": "Apache-2.0",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine GuardrailEngine + whitelist",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.555Z"
+}

@@ -1,0 +1,15 @@
+{
+  "phase": 16,
+  "worker": "DuckDB",
+  "workerId": "duckdb",
+  "businessRole": "multi-location KPI analytics",
+  "ownerDivision": "operations",
+  "license": "MIT",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine LocationKPILayer rollups",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.556Z"
+}

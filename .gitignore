@@ -102,3 +102,32 @@ n.pm2/dump.pm2nn*.env.localn
 vault/secrets/
 *.env.local
 node_modules
+# ── PR #26 repo cleanliness closure (runtime artifacts must never be tracked) ──
+*.db
+*.sqlite
+*.sqlite3
+*.db.backup-*
+*.log
+*.session
+*cookies*
+*token*.json
+*.env
+!*.env.example
+.mi-harness/
+runtime-evidence/
+generated-reports/
+
+# Runtime-mutating service data (untracked PR #26; local copies retained)
+mi-core/services/doordash-agent/data/
+mi-core/reports/evidence/**/runtime-*.jsonl
+
+# SEO runtime-generated reports (daily crawler outputs)
+SEO/shared/reports/connectors/crawler-*.json
+SEO/shared/reports/connectors/ga4-*.json
+SEO/shared/reports/connectors/gsc-*.json
+SEO/shared/reports/seo-schema-agent/schema-audit-*.json
+SEO/shared/reports/seo-technical-agent/technical-seo-audit-*.json
+SEO/shared/reports/seo-website-agent/website-seo-audit-*.json
+
+# SEO job runtime state
+SEO/seo-automation-orchestrator/job-state.json

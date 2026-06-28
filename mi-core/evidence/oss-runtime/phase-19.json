@@ -1,0 +1,15 @@
+{
+  "phase": 19,
+  "worker": "StatsForecast",
+  "workerId": "statsforecast",
+  "businessRole": "time-series forecasting",
+  "ownerDivision": "finance",
+  "license": "Apache-2.0",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine linear/growth ForecastEngine",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.557Z"
+}

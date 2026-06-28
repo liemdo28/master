@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-27-security-risk-os",
+  "version": "1.0.0",
+  "description": "Phase 27 — Security / Compliance / Risk OS. Access control, secret scanning, audit log, policy violations, risk register, compliance scorecard.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

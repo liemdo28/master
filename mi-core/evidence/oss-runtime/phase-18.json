@@ -1,0 +1,15 @@
+{
+  "phase": 18,
+  "worker": "Graphology (NetworkX-equiv)",
+  "workerId": "graphology",
+  "businessRole": "knowledge graph traversal",
+  "ownerDivision": "data-platform",
+  "license": "MIT",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine adjacency BFS impact/path",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.557Z"
+}

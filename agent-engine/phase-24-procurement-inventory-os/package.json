@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-24-procurement-inventory-os",
+  "version": "1.0.0",
+  "description": "Phase 24 — Procurement & Inventory Intelligence. Vendor registry, ingredient cost, inventory signals, waste risk, COGS impact, CFO alert.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

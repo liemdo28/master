@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-29-data-governance-os",
+  "version": "1.0.0",
+  "description": "Phase 29 — Data Quality & Governance OS. Data catalog, freshness engine, lineage, schema drift, quality scorecard, trusted metric registry.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

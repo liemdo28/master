@@ -1,0 +1,15 @@
+{
+  "phase": 20,
+  "worker": "OpenObserve",
+  "workerId": "openobserve",
+  "businessRole": "continuous monitoring + autonomy log",
+  "ownerDivision": "executive",
+  "license": "AGPL-3.0",
+  "licenseRisk": "medium",
+  "licenseAllowed": true,
+  "licenseFlagged": true,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine AutonomyLog + Uptime-Kuma rollback",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.557Z"
+}

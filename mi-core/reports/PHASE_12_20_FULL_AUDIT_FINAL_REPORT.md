@@ -2,8 +2,18 @@
 
 Date: 2026-06-28 · Scope: PR #24 source audit & operational hardening · Author: Dev (CTO truth rule enforced)
 
-> **Binding status: `PHASE_12_20_ADVANCED_PARTIAL`**
+> **Binding status: `PHASE_12_20_ADVANCED_PARTIAL`** (upgraded in PR #26 — see update below)
 > Source-audited and QA-proven on code (217/217 + 207/207 runtime). **Not** `QA_CERTIFIED` because 3 of the 7 CEO checks are honestly PARTIAL (OSS integration, workflow autonomy, repo cleanliness). Nothing is BLOCKED.
+
+## PR #26 update — blockers re-evaluated (2026-06-28)
+
+| Blocker | Before (PR #25) | After (PR #26) | Verdict |
+|---|---|---|---|
+| #1 OSS runtime integration | governed/mapped only, 0 adapters | Real `oss-runtime/` layer: 1 adapter per phase, license gate, health probe, fallback, per-phase evidence (`oss-runtime-integration-test.mjs` 60/60). **But no OSS server/binary installed → `CONFIGURED_NOT_INSTALLED`, 0 running.** | ⚠️ **PARTIAL** — integration layer real & tested; OSS not actually running |
+| #2 Semantic routing + OSS-worker select | pending | Real `workflow-intelligence/` layer; "Raw Sushi +10%" routed semantically with per-step OSS-worker selection (`semantic-workflow-routing-test.mjs` 21/21) | ✅ **CLOSED** |
+| #3 Repo cleanliness | tracked `qb-agent.db` + artifacts | 37 runtime files untracked (local kept), `.gitignore` hardened, stray `d` removed, 0 tracked DBs | ✅ **CLOSED** |
+
+**Honest result:** 2 of 3 blockers fully closed; blocker #1's *integration layer* is real and tested, but the strict bar — OSS actually **running** (`INTEGRATED_RUNNING`) — is not met because no OSS binary/server is installed in this environment. Per the CTO truth rule ("OSS documented/not runtime-integrated → PARTIAL"), Phase 12–20 **remains `PHASE_12_20_ADVANCED_PARTIAL`** — materially upgraded, but not faked to certified. Setting `INTEGRATED_RUNNING` requires only installing the OSS (e.g. `npm i graphology @opentelemetry/api`, run OPA/Temporal); the probe flips with zero code change.
 
 ## The 7 CEO questions — answered directly
 

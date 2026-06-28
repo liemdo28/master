@@ -1,0 +1,138 @@
+{
+  "objective": "Increase Raw Sushi online revenue 10%",
+  "classification": {
+    "primaryDomain": "revenue",
+    "confidence": 1,
+    "ranked": [
+      {
+        "domain": "revenue",
+        "score": 2
+      }
+    ],
+    "matchedConcepts": [
+      "revenue",
+      "online"
+    ]
+  },
+  "intent": {
+    "raw": "Increase Raw Sushi online revenue 10%",
+    "action": "increase",
+    "entity": "raw sushi",
+    "metric": "revenue",
+    "magnitude": {
+      "value": 10,
+      "unit": "%"
+    },
+    "direction": "increase",
+    "intentType": "growth"
+  },
+  "steps": [
+    {
+      "title": "Analyze Raw Sushi revenue baseline",
+      "domain": "revenue",
+      "division": "finance",
+      "routeConfidence": 1,
+      "ossWorker": "DuckDB",
+      "ossStatus": "CONFIGURED_NOT_INSTALLED",
+      "owner": "cfo-agent",
+      "approvalGate": "auto",
+      "requiresHuman": false
+    },
+    {
+      "title": "Analyze Raw Sushi marketing traffic",
+      "domain": "marketing",
+      "division": "marketing",
+      "routeConfidence": 1,
+      "ossWorker": "DuckDB",
+      "ossStatus": "CONFIGURED_NOT_INSTALLED",
+      "owner": "marketing-lead",
+      "approvalGate": "auto",
+      "requiresHuman": false
+    },
+    {
+      "title": "Review Raw Sushi DoorDash campaign performance",
+      "domain": "marketing",
+      "division": "marketing",
+      "routeConfidence": 0.333,
+      "ossWorker": "DuckDB",
+      "ossStatus": "CONFIGURED_NOT_INSTALLED",
+      "owner": "marketing-lead",
+      "approvalGate": "auto",
+      "requiresHuman": false
+    },
+    {
+      "title": "Create Raw Sushi promotional creative assets",
+      "domain": "creative",
+      "division": "creative",
+      "routeConfidence": 0.667,
+      "ossWorker": "ComfyUI",
+      "ossStatus": "CONFIGURED_NOT_INSTALLED",
+      "owner": "creative-lead",
+      "approvalGate": "standard",
+      "requiresHuman": true
+    },
+    {
+      "title": "Launch Raw Sushi growth campaign",
+      "domain": "revenue",
+      "division": "finance",
+      "routeConfidence": 0.667,
+      "ossWorker": "DuckDB",
+      "ossStatus": "CONFIGURED_NOT_INSTALLED",
+      "owner": "cfo-agent",
+      "approvalGate": "production_token",
+      "requiresHuman": true
+    }
+  ],
+  "dependencyOrder": [
+    "WF-01",
+    "WF-02",
+    "WF-03",
+    "WF-04"
+  ],
+  "dependencyCycle": false,
+  "duplicatesAvoided": 3,
+  "evidencePlan": [
+    {
+      "step": "Analyze Raw Sushi revenue baseline",
+      "division": "finance",
+      "evidenceType": "dataset",
+      "description": "Analyze Raw Sushi revenue baseline must produce dataset evidence before completion"
+    },
+    {
+      "step": "Analyze Raw Sushi marketing traffic",
+      "division": "marketing",
+      "evidenceType": "api-output",
+      "description": "Analyze Raw Sushi marketing traffic must produce api-output evidence before completion"
+    },
+    {
+      "step": "Review Raw Sushi DoorDash campaign performance",
+      "division": "marketing",
+      "evidenceType": "api-output",
+      "description": "Review Raw Sushi DoorDash campaign performance must produce api-output evidence before completion"
+    },
+    {
+      "step": "Create Raw Sushi promotional creative assets",
+      "division": "creative",
+      "evidenceType": "screenshot",
+      "description": "Create Raw Sushi promotional creative assets must produce screenshot evidence before completion"
+    },
+    {
+      "step": "Launch Raw Sushi growth campaign",
+      "division": "finance",
+      "evidenceType": "approval-token",
+      "description": "Launch Raw Sushi growth campaign must produce approval-token evidence before completion"
+    }
+  ],
+  "executiveReport": {
+    "objective": "Increase Raw Sushi online revenue 10%",
+    "stepCount": 5,
+    "humanApprovals": 2,
+    "ossWorkersSelected": 5,
+    "topDomain": "revenue"
+  },
+  "learningHook": {
+    "recordOutcome": true,
+    "phase12": "agent-os/12",
+    "note": "workflow outcome feeds Phase 12 self-improving memory"
+  }
+}
