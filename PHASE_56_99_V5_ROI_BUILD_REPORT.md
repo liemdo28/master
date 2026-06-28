@@ -29,10 +29,22 @@ already done. This change builds the remaining ROI priorities #2–#8.
 | 7 | 81 | Self-Healing Infrastructure OS | Temporal + Uptime Kuma |
 | 8 | 99 | Corporate Guardian OS | Falco + Open Policy Agent |
 
-Each phase follows the established agent-engine template: portable ES-module
-orchestrator backed by `JsonStore`, with the standard signal lifecycle
-(`register → approve / reject / escalate`), alerting, and a `dashboard()`
-summary. Approval-required signals are never auto-approved.
+Each phase ships a real domain engine (pure arithmetic, no LLM), modelled on
+the Phase 53 CFO AI pattern (`engines.js` + orchestrator + snapshot), not a
+generic CRUD stub:
+
+| Phase | Domain logic |
+|---|---|
+| 56 | capacity utilization + 0–100 retention-risk scoring with explained drivers |
+| 60 | weighted org-health index across team/project/finance/ops + weakest domain |
+| 62 | least-squares demand trend + 0–100 opportunity score (HOT/WARM/COLD) |
+| 67 | review sentiment (avg, distribution, NPS, negative ratio) + trend → posture |
+| 74 | risk register (exposure = prob × impact) + trend-based exposure forecast |
+| 81 | self-healing decision (auto-heal vs escalate-for-approval) + MTTR / auto-heal rate |
+| 99 | guardian protection across data/revenue/reputation/operations + defence posture |
+
+Tests assert **computed values** (exact arithmetic, band thresholds, postures),
+not just "returns an object".
 
 ## Wiring & Governance
 
@@ -47,7 +59,8 @@ summary. Approval-required signals are never auto-approved.
 
 | Check | Result |
 |---|---|
-| Phase runtime proofs (all) | **47/47 PASS** (40 existing + 7 new × 13 checks) |
-| Server `tsc --noEmit` | **0 errors** |
-| Route-load + `dashboard()` on new phases | **7/7 OK** |
+| Phase runtime proofs (all, run twice) | **47/47 PASS** — idempotent |
+| Deepened-phase domain checks | 56:17 · 60:12 · 62:14 · 67:13 · 74:13 · 81:14 · 99:13 |
+| Server `tsc` build | **0 errors** |
+| Agent-os router live HTTP test | **113/0** |
 | Runtime data leakage into git | none (writes land in gitignored data dir) |

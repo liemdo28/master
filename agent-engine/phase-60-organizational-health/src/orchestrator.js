@@ -1,26 +1,48 @@
-// phase-60-organizational-health - Phase 60. Modules: Organizational health - team + project + company health monitoring
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+/**
+ * orchestrator.js — Phase 60 Organizational Health OS.
+ *
+ * Computes a weighted org-health index from team / project / finance / ops
+ * domain scores, flags the weakest domain, persists a snapshot, and exposes a
+ * dashboard. Pure arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { HealthIndexEngine } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class OrganizationalHealthOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph60-reg',opts);
-    this.signals=new JsonStore('ph60-sig',opts);
-    this.alerts=new JsonStore('ph60-alr',opts);
+  constructor(opts = {}) {
+    this.engine = new HealthIndexEngine();
+    this.snapshots = new JsonStore('ph60-snap', opts);
   }
-  register(s){
-    const r={id:makeId('S60'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} input { team, project, finance, ops, weights? } */
+  assess(input) {
+    const result = this.engine.compute(
+      { team: input.team, project: input.project, finance: input.finance, ops: input.ops },
+      input.weights,
+    );
+    const warnings = [];
+    if (result.band !== 'HEALTHY') warnings.push(`Org health is ${result.band} (index ${result.index}).`);
+    if (result.weakest) warnings.push(`Weakest domain: ${result.weakest}.`);
+    const snapshot = { id: makeId('ORG'), timestamp: Date.now(), ...result, warnings };
+    this.snapshots.insert(snapshot);
+    return snapshot;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:60,cls:'OrganizationalHealthOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const snap = this.snapshots.all()[0];
+    if (!snap) return { phase: 60, status: 'NO_DATA', snapshots: 0 };
+    return {
+      phase: 60,
+      status: snap.band,
+      snapshots: this.snapshots.all().length,
+      index: snap.index,
+      weakest: snap.weakest,
+      warnings: snap.warnings,
+    };
+  }
 }
 
-export class OrganizationalHealthOSOrchestrator{constructor(opts={}){this.os=new OrganizationalHealthOS(opts);}dashboard(){return this.os.dashboard();}}
+export class OrganizationalHealthOSOrchestrator { constructor(opts = {}) { this.os = new OrganizationalHealthOS(opts); } assess(i) { return this.os.assess(i); } dashboard() { return this.os.dashboard(); } }
 export default OrganizationalHealthOSOrchestrator;

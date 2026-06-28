@@ -1,26 +1,52 @@
-// phase-81-self-healing-infrastructure - Phase 81. Modules: Self-healing infrastructure - stability + auto-recovery + rollback
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+/**
+ * orchestrator.js — Phase 81 Self-Healing Infrastructure OS.
+ *
+ * handle(incident) routes each incident through the healing decision engine:
+ * non-critical incidents with a known remediation auto-heal (and record an MTTR);
+ * critical / unremediable ones escalate for human approval. Tracks the auto-heal
+ * rate and mean time to recovery. Pure arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { HealingDecisionEngine, MTTREngine, DEFAULT_MTTR_MS } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class SelfHealingInfrastructureOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph81-reg',opts);
-    this.signals=new JsonStore('ph81-sig',opts);
-    this.alerts=new JsonStore('ph81-alr',opts);
+  constructor(opts = {}) {
+    this.decision = new HealingDecisionEngine();
+    this.mttr = new MTTREngine();
+    this.incidents = new JsonStore('ph81-inc', opts);
   }
-  register(s){
-    const r={id:makeId('S81'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} incident { service, severity, knownRemediation, mttrMs? } */
+  handle(incident) {
+    const decision = this.decision.decide(incident);
+    const rec = {
+      id: makeId('INC'),
+      timestamp: Date.now(),
+      service: incident.service,
+      severity: incident.severity,
+      action: decision.action,
+      requiresApproval: decision.requiresApproval,
+      status: decision.action === 'auto-heal' ? 'resolved' : 'escalated',
+      mttrMs: decision.action === 'auto-heal' ? (incident.mttrMs ?? DEFAULT_MTTR_MS[incident.severity] ?? 5000) : null,
+      reason: decision.reason || null,
+    };
+    this.incidents.insert(rec);
+    return rec;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:81,cls:'SelfHealingInfrastructureOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const all = this.incidents.all();
+    if (!all.length) return { phase: 81, status: 'NO_DATA', incidents: 0 };
+    const autoHealed = all.filter((i) => i.action === 'auto-heal');
+    const escalated = all.filter((i) => i.action === 'escalate');
+    const autoHealRate = Number((autoHealed.length / all.length).toFixed(2));
+    const { avgMTTRms } = this.mttr.rollup(autoHealed);
+    const status = escalated.length > all.length / 2 ? 'DEGRADED' : escalated.length > 0 ? 'RECOVERING' : 'STABLE';
+    return { phase: 81, status, incidents: all.length, autoHealed: autoHealed.length, escalated: escalated.length, autoHealRate, avgMTTRms };
+  }
 }
 
-export class SelfHealingInfrastructureOSOrchestrator{constructor(opts={}){this.os=new SelfHealingInfrastructureOS(opts);}dashboard(){return this.os.dashboard();}}
+export class SelfHealingInfrastructureOSOrchestrator { constructor(opts = {}) { this.os = new SelfHealingInfrastructureOS(opts); } handle(i) { return this.os.handle(i); } dashboard() { return this.os.dashboard(); } }
 export default SelfHealingInfrastructureOSOrchestrator;

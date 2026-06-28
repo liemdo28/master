@@ -1,31 +1,39 @@
-// Phase 74 runtime proof - phase-74-corporate-risk-forecasting
+// Phase 74 runtime proof - phase-74-corporate-risk-forecasting (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 74 -- CorporateRiskForecastingOS :: RUNTIME PROOF');
-const {CorporateRiskForecastingOS}=await import(`../src/orchestrator.js`);
-const os=new CorporateRiskForecastingOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('CorporateRiskForecastingOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,74));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { CorporateRiskForecastingOS } = await import(`../src/orchestrator.js`);
+const { RiskRegisterEngine, RiskForecastEngine } = await import(`../src/engines.js`);
+
+const reg = new RiskRegisterEngine();
+const a = reg.assess([
+  { name: 'data-breach', category: 'security', probability: 0.8, impact: 90 },
+  { name: 'staff-churn', category: 'people', probability: 0.3, impact: 40 },
+]);
+check('exposure = probability*impact', () => assert.strictEqual(a.rows[0].exposure, 72));
+check('high exposure -> CRITICAL severity', () => assert.strictEqual(a.rows[0].severity, 'CRITICAL'));
+check('top risk identified', () => assert.strictEqual(a.topRisk, 'data-breach'));
+check('total exposure summed', () => assert.strictEqual(a.totalExposure, 84));
+check('critical count correct', () => assert.strictEqual(a.criticalCount, 1));
+
+const fc = new RiskForecastEngine();
+const p = fc.project([{ name: 'data-breach', probability: 0.5, impact: 80, trend: 'up' }]);
+check('rising trend increases probability', () => assert.strictEqual(p.rows[0].projectedProbability, 0.6));
+check('projected exposure recomputed', () => assert.strictEqual(p.rows[0].projectedExposure, 48));
+const pd = fc.project([{ name: 'x', probability: 0.5, impact: 80, trend: 'down' }]);
+check('falling trend decreases probability', () => assert.strictEqual(pd.rows[0].projectedProbability, 0.4));
+
+const os = new CorporateRiskForecastingOS();
+const snap = os.analyze({ risks: [{ name: 'data-breach', category: 'security', probability: 0.8, impact: 90, trend: 'up' }] });
+check('analyze flags CRITICAL posture', () => assert.strictEqual(snap.posture, 'CRITICAL'));
+check('analyze detects rising exposure', () => assert.strictEqual(snap.rising, true));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 74));
+check('dashboard() reports totalExposure', () => assert.ok(typeof dash.totalExposure === 'number'));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);

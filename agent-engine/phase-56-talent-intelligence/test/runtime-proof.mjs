@@ -1,31 +1,43 @@
-// Phase 56 runtime proof - phase-56-talent-intelligence
+// Phase 56 runtime proof - phase-56-talent-intelligence (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 56 -- TalentIntelligenceOS :: RUNTIME PROOF');
-const {TalentIntelligenceOS}=await import(`../src/orchestrator.js`);
-const os=new TalentIntelligenceOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('TalentIntelligenceOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,56));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { TalentIntelligenceOS } = await import(`../src/orchestrator.js`);
+const { CapacityEngine, RetentionRiskEngine } = await import(`../src/engines.js`);
+
+const cap = new CapacityEngine();
+check('utilization computed correctly', () => assert.strictEqual(cap.utilization({ capacityHrs: 40, allocatedHrs: 50 }).utilization, 1.25));
+check('overload classified', () => assert.strictEqual(cap.utilization({ capacityHrs: 40, allocatedHrs: 50 }).status, 'OVERLOADED'));
+check('underutilized classified', () => assert.strictEqual(cap.utilization({ capacityHrs: 40, allocatedHrs: 10 }).status, 'UNDERUTILIZED'));
+check('balanced classified', () => assert.strictEqual(cap.utilization({ capacityHrs: 40, allocatedHrs: 30 }).status, 'BALANCED'));
+
+const ret = new RetentionRiskEngine();
+const high = ret.score({ performance: 45, capacityHrs: 40, allocatedHrs: 60, tenureMonths: 18, lastReviewDays: 240 });
+check('high-risk person scores HIGH band', () => assert.strictEqual(high.band, 'HIGH'));
+check('risk score is 0..100', () => assert.ok(high.score >= 0 && high.score <= 100));
+check('risk drivers are explained', () => assert.ok(high.drivers.length >= 3));
+const low = ret.score({ performance: 90, capacityHrs: 40, allocatedHrs: 28, tenureMonths: 48, lastReviewDays: 30 });
+check('healthy person scores LOW band', () => assert.strictEqual(low.band, 'LOW'));
+
+const os = new TalentIntelligenceOS();
+const snap = os.assess({ people: [
+  { name: 'A', role: 'dev', performance: 45, capacityHrs: 40, allocatedHrs: 60, tenureMonths: 18, lastReviewDays: 240 },
+  { name: 'B', role: 'dev', performance: 92, capacityHrs: 40, allocatedHrs: 30, tenureMonths: 50, lastReviewDays: 20 },
+  { name: 'C', role: 'ops', performance: 70, capacityHrs: 40, allocatedHrs: 8, tenureMonths: 6, lastReviewDays: 60 },
+] });
+check('assess returns per-person rows', () => assert.strictEqual(snap.people.length, 3));
+check('headcount correct', () => assert.strictEqual(snap.headcount, 3));
+check('overloaded count correct', () => assert.strictEqual(snap.overloaded, 1));
+check('underutilized count correct', () => assert.strictEqual(snap.underutilized, 1));
+check('at-least-one at risk', () => assert.ok(snap.atRisk >= 1));
+check('status is CRITICAL with a HIGH-risk person', () => assert.strictEqual(snap.status, 'CRITICAL'));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 56));
+check('dashboard() reports headcount', () => assert.strictEqual(dash.headcount, 3));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);
