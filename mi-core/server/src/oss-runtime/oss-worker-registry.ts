@@ -1,8 +1,9 @@
 /**
  * oss-worker-registry.ts — the governed OSS worker selected for each phase.
  *
- * One primary worker per phase 12–30 (Part A1 requires ≥1 per phase 12–20; the
- * registry extends through Phase 30 so the new phases share the same runtime).
+ * One primary worker per phase (Part A1 requires ≥1 per phase 12–20; the
+ * registry extends through Phase 50 contiguously, plus the ROI-priority phases
+ * 53/56/60/62/67/74/81/99 built ahead of numeric order per MI_PROGRAM_V5).
  * Specs mirror the OSS governance manifest; the registry is the runtime view.
  */
 import type { OssWorkerSpec } from './oss-execution-contract';
@@ -53,6 +54,16 @@ export const OSS_WORKERS: OssWorkerSpec[] = [
   { id: 'km-core', name: 'BookStack / WikiJS', phase: 48, businessRole: 'Internal knowledge base + SOP + training library', ownerDivision: 'knowledge-management', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_48_URL' }, fallback: 'in-engine knowledge-management signals' },
   { id: 'ir-core', name: 'PostgreSQL + Superset', phase: 49, businessRole: 'Investor reporting + cap table + stakeholder updates', ownerDivision: 'investor-relations', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_49_URL' }, fallback: 'in-engine investor-relations signals' },
   { id: 'strategy-core', name: 'Metabase + n8n', phase: 50, businessRole: 'Long-term strategy + roadmap + market analysis', ownerDivision: 'strategic-planning', license: 'AGPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_50_URL' }, fallback: 'in-engine strategic-planning signals' },
+
+  // Phase 53 + V5 ROI-priority phases (built ahead of numeric order per MI_PROGRAM_V5 ROI table).
+  { id: 'cfo-ai-core', name: 'PostgreSQL + StatsForecast', phase: 53, businessRole: 'CFO AI — revenue + margin + labor + cash flow', ownerDivision: 'finance', license: 'PostgreSQL', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_53_URL' }, fallback: 'in-engine CFO forecasting + financial-risk signals' },
+  { id: 'talent-core', name: 'OrangeHRM + Metabase', phase: 56, businessRole: 'Talent intelligence — skills + performance + capacity + retention risk', ownerDivision: 'talent-intelligence', license: 'GPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_56_URL' }, fallback: 'in-engine talent-intelligence signals' },
+  { id: 'org-health-core', name: 'Grafana + PostgreSQL', phase: 60, businessRole: 'Organizational health — team + project + company health monitoring', ownerDivision: 'org-health', license: 'AGPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_60_URL' }, fallback: 'in-engine organizational-health signals' },
+  { id: 'market-intel-core', name: 'Apache Superset + SerpAPI', phase: 62, businessRole: 'Market intelligence — external demand + opportunity signal', ownerDivision: 'market-intelligence', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_62_URL' }, fallback: 'in-engine market-intelligence signals' },
+  { id: 'sentiment-core', name: 'Chatwoot + NLP sentiment', phase: 67, businessRole: 'Customer sentiment — review/customer risk + growth signal', ownerDivision: 'customer-sentiment', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_67_URL' }, fallback: 'in-engine customer-sentiment signals' },
+  { id: 'risk-forecast-core', name: 'StatsForecast', phase: 74, businessRole: 'Corporate risk forecasting — future operational + financial risk', ownerDivision: 'risk-forecasting', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_74_URL' }, fallback: 'in-engine corporate-risk-forecasting signals' },
+  { id: 'self-healing-core', name: 'Temporal + Uptime Kuma', phase: 81, businessRole: 'Self-healing infrastructure — stability + auto-recovery + rollback', ownerDivision: 'self-healing', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_81_URL' }, fallback: 'in-engine self-healing-infrastructure signals' },
+  { id: 'guardian-core', name: 'Falco + Open Policy Agent', phase: 99, businessRole: 'Corporate guardian — protect data + revenue + reputation + operations', ownerDivision: 'corporate-guardian', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_99_URL' }, fallback: 'in-engine corporate-guardian signals' },
 ];
 
 

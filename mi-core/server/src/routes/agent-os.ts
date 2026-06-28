@@ -88,6 +88,14 @@ const PHASES: PhaseDef[] = [
   { id: 49, slug: '49', name: 'Investor Relations OS', dir: 'phase-49-investor-relations', summary: 'dashboard' },
   { id: 50, slug: '50', name: 'Strategic Planning OS', dir: 'phase-50-strategic-planning', summary: 'dashboard' },
   { id: 53, slug: '53', name: 'CFO AI', dir: 'phase-53-cfo-ai', summary: 'dashboard' },
+  // V5 ROI-priority phases (built ahead of numeric order per MI_PROGRAM_V5 ROI table).
+  { id: 56, slug: '56', name: 'Talent Intelligence OS', dir: 'phase-56-talent-intelligence', summary: 'dashboard' },
+  { id: 60, slug: '60', name: 'Organizational Health OS', dir: 'phase-60-organizational-health', summary: 'dashboard' },
+  { id: 62, slug: '62', name: 'Market Intelligence OS', dir: 'phase-62-market-intelligence', summary: 'dashboard' },
+  { id: 67, slug: '67', name: 'Customer Sentiment OS', dir: 'phase-67-customer-sentiment', summary: 'dashboard' },
+  { id: 74, slug: '74', name: 'Corporate Risk Forecasting OS', dir: 'phase-74-corporate-risk-forecasting', summary: 'dashboard' },
+  { id: 81, slug: '81', name: 'Self-Healing Infrastructure OS', dir: 'phase-81-self-healing-infrastructure', summary: 'dashboard' },
+  { id: 99, slug: '99', name: 'Corporate Guardian OS', dir: 'phase-99-corporate-guardian', summary: 'dashboard' },
 ];
 
 const bySlug = new Map(PHASES.map((p) => [p.slug, p]));
