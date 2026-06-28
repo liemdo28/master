@@ -1,0 +1,54 @@
+{
+  "manifest": "PHASE_12_20_OSS_GOVERNANCE",
+  "generatedAt": "2026-06-28",
+  "governanceModel": "Phase 11 — OSS as Strategic Asset (evaluate before install, own, license-check, lifecycle, rollback)",
+  "integrationReality": "EVALUATED_SELECTED_NOT_INTEGRATED",
+  "integrationRealityNote": "Phase 12-20 engines are self-contained (Node builtins + local JsonStore only; every package.json dependencies={}). The OSS below is the GOVERNED + MAPPED production substrate each phase is designed to adopt — it is NOT yet wired into the engine source. Honest status per CTO truth rule.",
+  "oss": [
+    {
+      "name": "Langfuse", "phase": 12, "businessRole": "LLM/agent observability + outcome/approval trace memory", "ownerDivision": "intelligence", "license": "MIT (core)", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "Self-Improving Intelligence outcome/failure/approval memory", "rejectedAlternative": "OpenTelemetry-only", "reason": "Langfuse adds eval + prompt/trace memory on top of OTel; OTel kept as the export backend"
+    },
+    {
+      "name": "Qdrant", "phase": 12, "businessRole": "vector store for decision-replay similarity", "ownerDivision": "intelligence", "license": "Apache-2.0", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "DecisionReplayEngine (currently token/Jaccard match in-engine)", "rejectedAlternative": "pgvector / Chroma / LanceDB", "reason": "Qdrant: standalone, horizontal scale; pgvector chosen only if Postgres already mandatory"
+    },
+    {
+      "name": "LangGraph", "phase": 13, "businessRole": "multi-agent orchestration + handoff graph", "ownerDivision": "engineering", "license": "MIT", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "MultiAgentWorkforce dispatch/handoff/review", "rejectedAlternative": "AutoGen / CrewAI / Dify / Flowise", "reason": "LangGraph: deterministic, code-first, state-machine handoffs; CrewAI rejected as too opinionated"
+    },
+    {
+      "name": "Temporal", "phase": 14, "businessRole": "durable approval workflow + audit trail", "ownerDivision": "operations", "license": "MIT", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "HITLAutonomy propose/approve/reject lifecycle", "rejectedAlternative": "n8n / Windmill / Activepieces", "reason": "Temporal: durable long-running human-in-loop signals; n8n kept for low-code connector glue (Phase 0.7)"
+    },
+    {
+      "name": "Keycloak", "phase": 14, "businessRole": "approver identity + role-scoped authz", "ownerDivision": "it", "license": "Apache-2.0", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "ApprovalPolicy approver authorization", "rejectedAlternative": "Ory / Casdoor", "reason": "Keycloak: mature realms/RBAC; Ory rejected as more assembly-required"
+    },
+    {
+      "name": "OPA", "phase": 15, "businessRole": "guardrail / policy decision engine", "ownerDivision": "it", "license": "Apache-2.0", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "GuardrailEngine + AutonomousActionRegistry whitelist", "rejectedAlternative": "Cerbos / OpenFGA", "reason": "OPA/Rego: general policy; Cerbos rejected (less expressive for arbitrary guardrails)"
+    },
+    {
+      "name": "Vault", "phase": 15, "businessRole": "secrets for autonomous action handlers", "ownerDivision": "it", "license": "BUSL-1.1 (HashiCorp)", "licenseRisk": "medium", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "SafeActionExecutor run-handler credential injection", "rejectedAlternative": "Infisical", "reason": "Infisical (MIT) is the rollback if Vault BUSL terms become a blocker — license risk flagged"
+    },
+    {
+      "name": "OpenObserve", "phase": 15, "businessRole": "autonomy log + uptime telemetry", "ownerDivision": "it", "license": "AGPL-3.0", "licenseRisk": "medium", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "AutonomyLog sink", "rejectedAlternative": "Uptime Kuma", "reason": "OpenObserve: logs+metrics; AGPL flagged — Uptime Kuma is the lighter rollback for pure uptime"
+    },
+    {
+      "name": "Metabase", "phase": 16, "businessRole": "multi-location KPI dashboards", "ownerDivision": "operations", "license": "AGPL-3.0 (OSS edition)", "licenseRisk": "medium", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "LocationKPILayer rollups", "rejectedAlternative": "Superset / dbt+DuckDB", "reason": "Metabase fastest to value; AGPL flagged; Superset is the Apache-2.0 rollback"
+    },
+    {
+      "name": "Postgres RLS", "phase": 17, "businessRole": "tenant isolation (row-level security)", "ownerDivision": "it", "license": "PostgreSQL License", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "TenantIsolation guard (currently in-engine predicate)", "rejectedAlternative": "Hasura / Directus / OpenFGA", "reason": "Postgres RLS: isolation at the data layer; OpenFGA kept for relationship authz, not row isolation"
+    },
+    {
+      "name": "KuzuDB", "phase": 18, "businessRole": "embedded property graph + impact traversal", "ownerDivision": "data-platform", "license": "MIT", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "KnowledgeGraph impact/path BFS (currently in-engine adjacency)", "rejectedAlternative": "Neo4j / Apache AGE / NetworkX", "reason": "KuzuDB: embedded, no server, Cypher; Neo4j rejected (server + license tiers) for an embedded use case"
+    },
+    {
+      "name": "StatsForecast", "phase": 19, "businessRole": "time-series forecasting", "ownerDivision": "finance", "license": "Apache-2.0", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "ForecastEngine (currently linear/growth model in-engine)", "rejectedAlternative": "Prophet / Darts / sktime", "reason": "StatsForecast: fast, well-licensed; Prophet rejected (heavier deps, slower) as default"
+    },
+    {
+      "name": "DuckDB", "phase": 19, "businessRole": "in-process analytics for simulation inputs", "ownerDivision": "finance", "license": "MIT", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "ScenarioEngine data prep", "rejectedAlternative": "Polars / Pandas", "reason": "DuckDB: SQL + zero-copy parquet; Polars is the dataframe rollback"
+    },
+    {
+      "name": "Temporal", "phase": 20, "businessRole": "continuous monitoring + autonomous planning orchestration", "ownerDivision": "executive", "license": "MIT", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "CEOControlPanel runCycle + ContinuousMonitoring", "rejectedAlternative": "n8n", "reason": "Temporal: durable cross-division schedules; n8n kept for connector-level automation"
+    },
+    {
+      "name": "OpenFGA", "phase": 20, "businessRole": "cross-division authorization for executive actions", "ownerDivision": "executive", "license": "Apache-2.0", "licenseRisk": "low", "lifecycleStage": "evaluation", "status": "SELECTED", "integrationStatus": "NOT_INTEGRATED", "usedBy": "ExecutiveRiskEngine + kill-switch authority", "rejectedAlternative": "OPA", "reason": "OpenFGA: relationship-based (who-can-halt-what); OPA kept for stateless guardrails"
+    }
+  ]
+}
