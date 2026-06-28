@@ -1,26 +1,54 @@
-// phase-67-customer-sentiment - Phase 67. Modules: Customer sentiment intelligence - review/customer risk + growth signal
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+/**
+ * orchestrator.js — Phase 67 Customer Sentiment OS.
+ *
+ * From a set of 1–5★ reviews (in chronological order) it computes sentiment
+ * (average, distribution, NPS, negative ratio), detects the trend, derives a
+ * combined risk/growth posture, persists a snapshot, and exposes a dashboard.
+ * Pure arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { SentimentEngine, TrendEngine } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class CustomerSentimentOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph67-reg',opts);
-    this.signals=new JsonStore('ph67-sig',opts);
-    this.alerts=new JsonStore('ph67-alr',opts);
+  constructor(opts = {}) {
+    this.sentiment = new SentimentEngine();
+    this.trend = new TrendEngine();
+    this.snapshots = new JsonStore('ph67-snap', opts);
   }
-  register(s){
-    const r={id:makeId('S67'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} input { reviews: [{ rating }] }  // chronological, oldest first */
+  analyze(input) {
+    const reviews = input.reviews || [];
+    const sentiment = this.sentiment.analyze(reviews);
+    const trend = this.trend.detect(reviews.map((r) => r.rating));
+
+    // Posture: negative sentiment OR declining trend with high negative ratio = at risk.
+    let posture = 'STABLE';
+    if (sentiment.band === 'NEGATIVE' || (trend.direction === 'declining' && sentiment.negativeRatio >= 0.3)) posture = 'AT_RISK';
+    else if (sentiment.band === 'POSITIVE' && trend.direction === 'improving') posture = 'GROWTH';
+
+    const snapshot = { id: makeId('SEN'), timestamp: Date.now(), sentiment, trend, posture };
+    this.snapshots.insert(snapshot);
+    return snapshot;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:67,cls:'CustomerSentimentOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const snap = this.snapshots.all()[0];
+    if (!snap) return { phase: 67, status: 'NO_DATA', snapshots: 0 };
+    return {
+      phase: 67,
+      status: snap.posture,
+      snapshots: this.snapshots.all().length,
+      avgRating: snap.sentiment.avg,
+      nps: snap.sentiment.nps,
+      negativeRatio: snap.sentiment.negativeRatio,
+      sentimentBand: snap.sentiment.band,
+      trend: snap.trend.direction,
+    };
+  }
 }
 
-export class CustomerSentimentOSOrchestrator{constructor(opts={}){this.os=new CustomerSentimentOS(opts);}dashboard(){return this.os.dashboard();}}
+export class CustomerSentimentOSOrchestrator { constructor(opts = {}) { this.os = new CustomerSentimentOS(opts); } analyze(i) { return this.os.analyze(i); } dashboard() { return this.os.dashboard(); } }
 export default CustomerSentimentOSOrchestrator;

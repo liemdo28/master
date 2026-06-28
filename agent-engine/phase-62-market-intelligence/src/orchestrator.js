@@ -1,26 +1,48 @@
-// phase-62-market-intelligence - Phase 62. Modules: Market intelligence - external demand + opportunity signal
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+/**
+ * orchestrator.js — Phase 62 Market Intelligence OS.
+ *
+ * From a demand history plus market-growth / competitor-gap inputs it computes a
+ * demand trend and a 0–100 opportunity score, persists a snapshot, and exposes a
+ * dashboard. Pure arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { DemandTrendEngine, OpportunityEngine } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class MarketIntelligenceOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph62-reg',opts);
-    this.signals=new JsonStore('ph62-sig',opts);
-    this.alerts=new JsonStore('ph62-alr',opts);
+  constructor(opts = {}) {
+    this.demand = new DemandTrendEngine();
+    this.opportunity = new OpportunityEngine();
+    this.snapshots = new JsonStore('ph62-snap', opts);
   }
-  register(s){
-    const r={id:makeId('S62'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} input { demandHistory: number[], marketGrowth, competitorGap } */
+  analyze(input) {
+    const trend = this.demand.analyze(input.demandHistory || []);
+    const opp = this.opportunity.score({
+      demandTrendRate: trend.normRate,
+      marketGrowth: input.marketGrowth || 0,
+      competitorGap: input.competitorGap || 0,
+    });
+    const snapshot = { id: makeId('MKT'), timestamp: Date.now(), trend, opportunity: opp };
+    this.snapshots.insert(snapshot);
+    return snapshot;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:62,cls:'MarketIntelligenceOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const snap = this.snapshots.all()[0];
+    if (!snap) return { phase: 62, status: 'NO_DATA', snapshots: 0 };
+    return {
+      phase: 62,
+      status: snap.opportunity.band,
+      snapshots: this.snapshots.all().length,
+      demandTrend: snap.trend.trend,
+      demandRate: snap.trend.normRate,
+      opportunityScore: snap.opportunity.score,
+    };
+  }
 }
 
-export class MarketIntelligenceOSOrchestrator{constructor(opts={}){this.os=new MarketIntelligenceOS(opts);}dashboard(){return this.os.dashboard();}}
+export class MarketIntelligenceOSOrchestrator { constructor(opts = {}) { this.os = new MarketIntelligenceOS(opts); } analyze(i) { return this.os.analyze(i); } dashboard() { return this.os.dashboard(); } }
 export default MarketIntelligenceOSOrchestrator;

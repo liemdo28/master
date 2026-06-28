@@ -1,31 +1,36 @@
-// Phase 60 runtime proof - phase-60-organizational-health
+// Phase 60 runtime proof - phase-60-organizational-health (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 60 -- OrganizationalHealthOS :: RUNTIME PROOF');
-const {OrganizationalHealthOS}=await import(`../src/orchestrator.js`);
-const os=new OrganizationalHealthOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('OrganizationalHealthOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,60));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { OrganizationalHealthOS } = await import(`../src/orchestrator.js`);
+const { HealthIndexEngine } = await import(`../src/engines.js`);
+
+const eng = new HealthIndexEngine();
+const all100 = eng.compute({ team: 100, project: 100, finance: 100, ops: 100 });
+check('all-100 yields index 100', () => assert.strictEqual(all100.index, 100));
+check('all-100 is HEALTHY', () => assert.strictEqual(all100.band, 'HEALTHY'));
+
+const mixed = eng.compute({ team: 80, project: 60, finance: 40, ops: 90 });
+// 80*.3 + 60*.25 + 40*.3 + 90*.15 = 24 + 15 + 12 + 13.5 = 64.5
+check('weighted index computed exactly', () => assert.strictEqual(mixed.index, 64.5));
+check('weakest domain identified', () => assert.strictEqual(mixed.weakest, 'finance'));
+check('mid index is WATCH', () => assert.strictEqual(mixed.band, 'WATCH'));
+
+const poor = eng.compute({ team: 30, project: 40, finance: 20, ops: 50 });
+check('low index is CRITICAL', () => assert.strictEqual(poor.band, 'CRITICAL'));
+
+const os = new OrganizationalHealthOS();
+const snap = os.assess({ team: 80, project: 60, finance: 40, ops: 90 });
+check('assess persists index', () => assert.strictEqual(snap.index, 64.5));
+check('assess flags weakest domain', () => assert.ok(snap.warnings.some((w) => w.includes('finance'))));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 60));
+check('dashboard() reports index', () => assert.strictEqual(dash.index, 64.5));
+check('dashboard() reports weakest', () => assert.strictEqual(dash.weakest, 'finance'));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);

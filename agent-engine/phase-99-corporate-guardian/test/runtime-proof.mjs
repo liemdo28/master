@@ -1,31 +1,41 @@
-// Phase 99 runtime proof - phase-99-corporate-guardian
+// Phase 99 runtime proof - phase-99-corporate-guardian (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 99 -- CorporateGuardianOS :: RUNTIME PROOF');
-const {CorporateGuardianOS}=await import(`../src/orchestrator.js`);
-const os=new CorporateGuardianOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('CorporateGuardianOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,99));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { CorporateGuardianOS } = await import(`../src/orchestrator.js`);
+const { GuardianEngine, PILLARS } = await import(`../src/engines.js`);
+
+check('four protected pillars defined', () => assert.deepStrictEqual(PILLARS, ['data', 'revenue', 'reputation', 'operations']));
+
+const eng = new GuardianEngine();
+const clean = eng.assess([]);
+check('no threats -> overall protection 100', () => assert.strictEqual(clean.overall, 100));
+check('no threats -> SECURE posture', () => assert.strictEqual(clean.posture, 'SECURE'));
+
+const mixed = eng.assess([
+  { pillar: 'data', severity: 'high' },     // load 50 -> protection 50
+  { pillar: 'revenue', severity: 'medium' }, // load 25 -> protection 75
+]);
+check('per-pillar protection computed', () => assert.strictEqual(mixed.pillars.find((p) => p.pillar === 'data').protection, 50));
+// overall = (50 + 75 + 100 + 100) / 4 = 81.25
+check('overall protection averaged', () => assert.strictEqual(mixed.overall, 81.25));
+check('weakest pillar identified', () => assert.strictEqual(mixed.weakest, 'data'));
+
+const crit = eng.assess([{ pillar: 'operations', severity: 'critical' }]);
+check('critical threat -> DEFCON_CRITICAL', () => assert.strictEqual(crit.posture, 'DEFCON_CRITICAL'));
+check('critical threat flagged', () => assert.strictEqual(crit.anyCritical, true));
+
+const os = new CorporateGuardianOS();
+const snap = os.guard({ threats: [{ pillar: 'data', severity: 'high' }, { pillar: 'revenue', severity: 'medium' }] });
+check('guard persists overall', () => assert.strictEqual(snap.overall, 81.25));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 99));
+check('dashboard() reports overall', () => assert.strictEqual(dash.overall, 81.25));
+check('dashboard() reports per-pillar protection', () => assert.strictEqual(dash.protection.data, 50));
+check('dashboard() has status string', () => assert.ok(typeof dash.status === 'string'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);
