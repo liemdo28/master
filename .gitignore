@@ -131,3 +131,6 @@ SEO/shared/reports/seo-website-agent/website-seo-audit-*.json
 
 # SEO job runtime state
 SEO/seo-automation-orchestrator/job-state.json
+
+# Agent-engine runtime data (JsonStore-generated per-phase data)
+agent-engine/phase-12-self-improving-intelligence/data/
