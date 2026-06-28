@@ -1,31 +1,31 @@
-// Phase 65 runtime proof - phase-65-store-growth-predictor
+// Phase 65 runtime proof - phase-65-store-growth-predictor (real domain logic)
 import * as assert from 'assert';
-let passed=0,failed=0;
-const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+let passed = 0, failed = 0;
+const check = (n, f) => { try { f(); passed++; console.log('  PASS: ' + n); } catch (e) { failed++; console.error('  FAIL: ' + n + ' -- ' + e.message); } };
 console.log('PHASE 65 -- StoreGrowthPredictorOS :: RUNTIME PROOF');
-const {StoreGrowthPredictorOS}=await import(`../src/orchestrator.js`);
-const os=new StoreGrowthPredictorOS();
-const s1=os.register({signal:'test-signal',requiresApproval:false});
-check('StoreGrowthPredictorOS registers signal',()=>assert.ok(s1&&s1.id));
-check('signal status is open',()=>assert.strictEqual(s1.status,'open'));
-const s2=os.register({signal:'approval-required-action',requiresApproval:true});
-check('approval-required signal created',()=>assert.ok(s2&&s2.id));
-check('approval-required is not auto-approved',()=>assert.strictEqual(s2.status,'open'));
-const approved=os.approve(s1.id);
-check('approve() sets status to approved',()=>assert.strictEqual(approved.status,'approved'));
-check('approvedAt timestamp set',()=>assert.ok(approved&&approved.approvedAt));
-const rejected=os.reject(s2.id);
-check('reject() sets status to rejected',()=>assert.strictEqual(rejected.status,'rejected'));
-const s3=os.register({signal:'esc-test'});
-const escalated=os.escalate(s3.id,'threshold exceeded');
-check('escalate() works',()=>assert.strictEqual(escalated.status,'escalated'));
-check('pending() returns array',()=>assert.ok(Array.isArray(os.pending())));
-const dash=os.dashboard();
-check('dashboard() phase correct',()=>assert.strictEqual(dash.phase,65));
-check('dashboard() has status string',()=>assert.ok(typeof dash.status==='string'));
-const al=os.alert('warning','threshold',s1.id);
-check('alert() creates alert',()=>assert.ok(al&&al.id));
-const ack=os.acknowledgeAlert(al.id);
-check('acknowledgeAlert() works',()=>assert.ok(ack&&ack.acknowledged));
-console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
-process.exit(failed===0?0:1);
+
+const { StoreGrowthPredictorOS } = await import(`../src/orchestrator.js`);
+const { GrowthForecastEngine } = await import(`../src/engines.js`);
+
+const eng = new GrowthForecastEngine();
+const up = eng.forecast({ history: [100, 110, 120, 130], months: 2 });
+check('linear slope computed exactly', () => assert.strictEqual(up.slope, 10));
+check('next month projected', () => assert.strictEqual(up.projection[0], 140));
+check('rising store classified GROWING', () => assert.strictEqual(up.classification, 'GROWING'));
+const down = eng.forecast({ history: [130, 120, 110, 100], months: 1 });
+check('falling store classified DECLINING', () => assert.strictEqual(down.classification, 'DECLINING'));
+const flat = eng.forecast({ history: [100, 100, 100], months: 1 });
+check('flat store classified FLAT', () => assert.strictEqual(flat.classification, 'FLAT'));
+
+const os = new StoreGrowthPredictorOS();
+const snap = os.predict({ store: 'Bakudan-1', history: [100, 110, 120, 130], months: 3 });
+check('predict records store', () => assert.strictEqual(snap.store, 'Bakudan-1'));
+check('predict projects 3 months', () => assert.strictEqual(snap.projection.length, 3));
+
+const dash = os.dashboard();
+check('dashboard() phase correct', () => assert.strictEqual(dash.phase, 65));
+check('dashboard() reports growthRate', () => assert.ok(typeof dash.growthRate === 'number'));
+check('dashboard() status is classification', () => assert.strictEqual(dash.status, 'GROWING'));
+
+console.log('\n  RESULT: ' + passed + ' passed, ' + failed + ' failed');
+process.exit(failed === 0 ? 0 : 1);

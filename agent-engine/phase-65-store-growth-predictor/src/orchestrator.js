@@ -1,28 +1,42 @@
-// phase-65-store-growth-predictor - Phase 65. Modules: Store growth predictor
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
-// NOTE: breadth scaffold — signal-lifecycle baseline; deepen with domain engines
-// per MI_PROGRAM_V5 ROI priority before production use.
+/**
+ * orchestrator.js — Phase 65 Store Growth Predictor OS.
+ *
+ * predict({ store, history, months }) fits a revenue trend, projects forward,
+ * classifies growth, persists a snapshot, and exposes a dashboard. Pure
+ * arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { GrowthForecastEngine } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class StoreGrowthPredictorOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph65-reg',opts);
-    this.signals=new JsonStore('ph65-sig',opts);
-    this.alerts=new JsonStore('ph65-alr',opts);
+  constructor(opts = {}) {
+    this.engine = new GrowthForecastEngine();
+    this.snapshots = new JsonStore('ph65-snap', opts);
   }
-  register(s){
-    const r={id:makeId('S65'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} input { store, history: number[], months? } */
+  predict(input) {
+    const result = this.engine.forecast({ history: input.history || [], months: input.months });
+    const snapshot = { id: makeId('STG'), timestamp: Date.now(), store: input.store ?? null, ...result };
+    this.snapshots.insert(snapshot);
+    return snapshot;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:65,cls:'StoreGrowthPredictorOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const snap = this.snapshots.all()[0];
+    if (!snap) return { phase: 65, status: 'NO_DATA', snapshots: 0 };
+    return {
+      phase: 65,
+      status: snap.classification,
+      snapshots: this.snapshots.all().length,
+      store: snap.store,
+      growthRate: snap.growthRate,
+      nextMonth: snap.projection[0] ?? null,
+    };
+  }
 }
 
-export class StoreGrowthPredictorOSOrchestrator{constructor(opts={}){this.os=new StoreGrowthPredictorOS(opts);}dashboard(){return this.os.dashboard();}}
+export class StoreGrowthPredictorOSOrchestrator { constructor(opts = {}) { this.os = new StoreGrowthPredictorOS(opts); } predict(i) { return this.os.predict(i); } dashboard() { return this.os.dashboard(); } }
 export default StoreGrowthPredictorOSOrchestrator;
