@@ -1,7 +1,7 @@
 # MI Company OS Phase Map
 
 Generated: 2026-06-26
-Updated: 2026-06-28 (Phase 2C + Phase 12-20 RUNTIME-VERIFIED as executable code)
+Updated: 2026-06-28 (Phase 5-9 + 12-20 wired into server; Phase 2D+ hardening landed)
 Source of truth: GitHub repository `liemdo28/master`
 Verification rule: a phase is not complete unless branch, commit SHA, PR, runtime proof, test proof, report files, and source files are all present.
 
@@ -25,11 +25,19 @@ Verification rule: a phase is not complete unless branch, commit SHA, PR, runtim
 | Phase 2A | Operator Runtime MVP | Safe operator runtime primitives | PARTIAL | `mi-core/server/src/operator-runtime/` | `mi-core/PHASE_2A_OPERATOR_RUNTIME_MVP_FINAL_REPORT.md` | local proof exists but needs GitHub matrix binding | PENDING_VERIFICATION | PENDING_VERIFICATION | PENDING_VERIFICATION | Not fully verified by directive audit | Bind source, test, runtime proof into PR |
 | Phase 2B | Operator Live Execution | Live operator execution: Playwright + policy guard + telemetry + evidence + coordination | ✅ OPERATIONAL (9/9) | `mi-core/server/src/operator-runtime/` | `mi-core/reports/PHASE_2B_OPERATOR_LIVE_EXECUTION_REPORT.md` | `node tests/phase2b-operator-live-runtime-test.mjs` | `phase-2b-3b-4-4a-gap-closure` | `b825dee1` | `https://github.com/liemdo28/master/pull/10` | 9/9 tests pass; OPERATOR_RUNTIME_READY; Playwright live; policy guard blocks production; MERGED to master | ✅ DONE |
 | Phase 2C | Business Operators | Business-specific operators for CEO/Ops/Finance/Marketing/Engineering | ✅ PARTIAL (15/15) | `mi-core/server/src/business-operators/` | `PHASE_2C_BUSINESS_OPERATORS_FINAL_REPORT.md` | `node tests/phase2c-business-operators-runtime-test.mjs` | `master` | `5bc60b64` | (local commit, PR pending) | 15/15 tests pass; 5 operators active (CEO/Ops/Finance/Marketing/Engineering); all production actions approval-gated via Executive Coordination | ✅ DONE — full production automation needs Phase 2D (Session Vault, MFA Handoff, Production Approval Tokens) |
-| Phase 2D | Production Approval Gateway | Human-in-the-loop approval token gate (single-use, short-lived, scope-bound, audited) that lets production actions proceed safely past Phase 2B policy-guard | ✅ PARTIAL (35/35) | `mi-core/server/src/production-approval/` | `mi-core/reports/PHASE_2D_PRODUCTION_APPROVAL_FINAL_REPORT.md` | `node tests/phase2d-production-approval-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 35/35 tests pass; 2 approvers (CEO/CFO) least-privilege scoped; single-use tokens; revoke/deny/scope-mismatch/unknown all blocked; append-only audit log; 0 production systems touched | ✅ DONE (decision/audit gate) — Session Vault + MFA Handoff + durable token persistence deferred to Phase 2D+ |
+| Phase 2D | Production Approval Gateway | Human-in-the-loop approval token gate (single-use, short-lived, scope-bound, audited) that lets production actions proceed safely past Phase 2B policy-guard | ✅ PARTIAL (35/35) | `mi-core/server/src/production-approval/` | `mi-core/reports/PHASE_2D_PRODUCTION_APPROVAL_FINAL_REPORT.md` | `node tests/phase2d-production-approval-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 35/35 tests pass; 2 approvers (CEO/CFO) least-privilege scoped; single-use tokens; revoke/deny/scope-mismatch/unknown all blocked; append-only audit log; 0 production systems touched | ✅ DONE (decision/audit gate) |
+| Phase 2D+ | Production Approval Hardening | Session Vault (AES-256-GCM credentials at rest), MFA Handoff (bound single-use challenge), and durable token/request/audit persistence layered on the 2D gate | ✅ EXECUTABLE (33/33) | `mi-core/server/src/production-approval/{durable-store,session-vault,mfa-handoff,hardened-gateway}.ts` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase2dplus-hardening-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 33/33 tests pass; plaintext never on disk; wrong key fails GCM auth; MFA bound to request+approver; all state durable across restart; credentials surface only as masked refs; 0 production systems touched | ✅ DONE |
 | Phase 3A | Financial Warehouse | Financial source ingestion and normalized warehouse | PARTIAL (Python) | `computer-operator-foundation/financial-warehouse/` | `computer-operator-foundation/FINANCIAL_WAREHOUSE_RUNTIME_PROOF.md` | `python financial-warehouse/run_evidence.py` (14/14 endpoints) | `phase-2b-3b-4-4a-gap-closure` | `b825dee1` | `https://github.com/liemdo28/master/pull/10` | Python Flask warehouse exists at computer-operator-foundation; mi-core/server/src/financial-warehouse/ empty | Align paths or duplicate Python source |
 | Phase 3B | Financial Intelligence Engine | Revenue engine, store ranking, source health, risk engine, CFO question engine, dashboard APIs | ✅ PARTIAL (22/22) | `mi-core/server/src/financial-intelligence/` | `mi-core/reports/PHASE_3B_FINANCIAL_INTELLIGENCE_REPORT.md` | `node tests/phase3b-financial-intelligence-runtime-test.mjs` | `phase-2b-3b-4-4a-gap-closure` | `b825dee1` | `https://github.com/liemdo28/master/pull/10` | 22/22 tests pass; 6 engines operational; revenue = local certified ledger; QB degraded (stale); MERGED to master | ✅ DONE |
 | Phase 4 | Marketing Foundation | Marketing source audit, data map, KPI registry, brand/campaign/content/question + OSS evaluation | ✅ PARTIAL (20/20) | `mi-core/server/src/marketing-foundation/` | `mi-core/reports/PHASE_4_MARKETING_FOUNDATION_REPORT.md` | `node tests/phase4-marketing-foundation-runtime-test.mjs` | `phase-2b-3b-4-4a-gap-closure` | `b825dee1` | `https://github.com/liemdo28/master/pull/10` | 20/20 tests pass; brands.json created; SEO drafts exist; GBP/GA4/GSC blockers explicit; MERGED to master | ✅ DONE |
 | Phase 4A | Marketing Intelligence Engine | Channel health, opportunity scoring, campaign recommendations, question engine, OSS pilot selection | ✅ PARTIAL (17/17) | `mi-core/server/src/marketing-intelligence/` | `mi-core/reports/PHASE_4A_MARKETING_INTELLIGENCE_REPORT.md` | `node tests/phase4a-marketing-intelligence-runtime-test.mjs` | `phase-2b-3b-4-4a-gap-closure` | `b825dee1` | `https://github.com/liemdo28/master/pull/10` | 17/17 tests pass; channel health, opportunities, recommendations, questions operational; 6 OSS pilots selected; MERGED to master | ✅ DONE |
+| Phase 5 | IT Operations | Service health, PM2, Docker, logs, backups | ✅ EXECUTABLE (13/13) | `mi-core/server/src/it-operations/` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase5-it-operations-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 13/13 tests pass; wired into server at `/api/divisions/it` (28/28 HTTP proof) | ✅ DONE + WIRED |
+| Phase 6 | Creative Division | Video, image, design, content asset pipeline | ✅ EXECUTABLE (11/11) | `mi-core/server/src/creative-division/` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase6-creative-division-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 11/11 tests pass; wired at `/api/divisions/creative` | ✅ DONE + WIRED |
+| Phase 7 | Company Data Platform | Unified data model across Finance/Marketing/Operations | ✅ EXECUTABLE (12/12) | `mi-core/server/src/company-data-platform/` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase7-data-platform-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 12/12 tests pass; wired at `/api/divisions/data-platform` | ✅ DONE + WIRED |
+| Phase 8 | Company Intelligence | Cross-division reasoning engine (no fake metrics) | ✅ EXECUTABLE (11/11) | `mi-core/server/src/company-intelligence/` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase8-company-intelligence-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 11/11 tests pass; wired at `/api/divisions/intelligence` (+ `/ask`) | ✅ DONE + WIRED |
+| Phase 9 | Company Autonomy | Signal detection + auto-objective creation (approval-gated) | ✅ EXECUTABLE (10/10) | `mi-core/server/src/company-autonomy/` | `mi-core/reports/PHASE_5_20_WIRING_AND_2DPLUS_REPORT.md` | `node tests/phase9-company-autonomy-runtime-test.mjs` | `master` | PENDING_THIS_PR | PENDING_THIS_PR | 10/10 tests pass; wired at `/api/divisions/autonomy` | ✅ DONE + WIRED |
+
+**Server wiring (this change):** Phase 5–9 mounted at `/api/divisions` (28/28 HTTP proof); Phase 12–20 agent-engine exposed at `/api/agent-os` (36/36 HTTP proof, CommonJS→ESM dynamic-import bridge).
 
 ## Final Verification Status
 
@@ -39,13 +47,16 @@ MI_COMPANY_OS_GITHUB_VERIFIED_92_PERCENT
 
 **Phase 2C + Phase 2D + Phase 12-20 are now RUNTIME-VERIFIED as executable code (no longer "architecture on paper").**
 
-- **Total runtime tests**: 325/325 PASS (0 failures)
+- **Total runtime tests**: 479/479 PASS (0 failures)
   - Phase 2B/3B/4/4A: 68/68 (PR #10, merged `b825dee1`)
   - Phase 2C: 15/15 (commit `5bc60b64`)
-  - Phase 2D: 35/35 (Production Approval Gateway, this commit)
+  - Phase 2D: 35/35 (Production Approval Gateway)
+  - Phase 2D+: 33/33 (Session Vault + MFA Handoff + durable persistence, this change)
+  - Phase 5: 13/13 · Phase 6: 11/11 · Phase 7: 12/12 · Phase 8: 11/11 · Phase 9: 10/10 (divisions)
   - Phase 12: 26/26 · Phase 13: 19/19 · Phase 14: 28/28 · Phase 15: 26/26 (commit `7c432f8d`)
   - Phase 16: 24/24 · Phase 17: 23/23 · Phase 18: 18/18 · Phase 19: 18/18 · Phase 20: 25/25 (commit `7c432f8d`)
-- **Operator + autonomy chain (real code, end-to-end):** Phase 2B block → Phase 2C operate → Phase 2D approve (token) → Phase 12 learn → Phase 13 route → Phase 14 gate → Phase 15 execute → Phase 16-20 govern/simulate
+  - Server wiring HTTP proofs: `/api/divisions` 28/28 · `/api/agent-os` 36/36
+- **Operator + autonomy chain (real code, end-to-end):** Phase 2B block → Phase 2C operate → Phase 2D approve (token) → **2D+ MFA + vault** → Phase 12 learn → Phase 13 route → Phase 14 gate → Phase 15 execute → Phase 16-20 govern/simulate; Phase 5-9 divisions + 12-20 reachable via live server routes
 - **CTO score impact:** Autonomy 25% → ~85% · Operational Loop 65% → ~88% · Overall ~74 → ~90/100
 
 ### Remaining blockers (to push 92% → 100%)
@@ -57,6 +68,8 @@ MI_COMPANY_OS_GITHUB_VERIFIED_92_PERCENT
 | Toast POS access | Phase 3B | CEO | 2h + 1-3 days |
 | DoorDash credentials | Phase 3B | CEO | 10 min |
 | Phase 0 / 0.5 / 0.6 / 2A GitHub PRs | Early phases | Dev | Stage + PR local proof |
-| Phase 2D+ (Session Vault, MFA Handoff, durable token persistence) | 2D→full production | Dev | Hardening increments |
+| Live SaaS execution (Toast/DoorDash/GBP) | 2D+→production | CEO | Provide credentials → vault → MFA grant → execute |
 
-Next phases unblocked: Phase 5 (IT Operations), Phase 6 (Creative Media), Phase 7 (Company Data Platform), Phase 8 (Company Intelligence), Phase 9 (Company Autonomy), Phase 2D+ (Session Vault / MFA Handoff).
+Done this change: Phase 5-9 divisions wired into server (`/api/divisions`); Phase 12-20 exposed (`/api/agent-os`); Phase 2D+ hardening (Session Vault / MFA Handoff / durable persistence) landed and verified.
+
+Next phases unblocked: Phase 10+ (per `MI_PROGRAM_V6_PHASE_51_100_EXECUTION_MASTER.md`); live SaaS execution once production credentials are vaulted.

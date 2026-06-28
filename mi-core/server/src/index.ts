@@ -56,6 +56,8 @@ import { knowledgeRouter } from './routes/knowledge';
 import { memoryRouter } from './routes/memory';
 import { brainRouter } from './routes/brain';
 import { agentEngineRouter } from './routes/agent-engine';
+import { companyDivisionsRouter } from './routes/company-divisions';
+import { agentOsRouter } from './routes/agent-os';
 import { qbAgentRouter } from './routes/qb-agent';
 import { qbFinancialRouter } from './routes/qb-financial';
 import { integrationAgentReleasesRouter } from './routes/integrationAgentReleases';
@@ -226,6 +228,8 @@ app.use('/api/nodes',       requireAuth, nodesRouter);        // Node registrati
 app.use('/api/whatsapp',    whatsappRouter);     // Has API key auth middleware
 app.use('/api/models',      modelsRouter);
 app.use('/api/agent-engine',agentEngineRouter);
+app.use('/api/divisions',   requireAuth, companyDivisionsRouter); // Phase 5–9 Company OS divisions
+app.use('/api/agent-os',    requireAuth, agentOsRouter);          // Phase 12–20 agent-engine
 app.use('/api/integration-agent', integrationAgentReleasesRouter);
 app.use('/api',             operationalKnowledgeRouter);
 app.use('/api/data-analyst',    dataAnalystRouter);
