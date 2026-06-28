@@ -1,0 +1,15 @@
+{
+  "phase": 12,
+  "worker": "OpenTelemetry",
+  "workerId": "otel",
+  "businessRole": "trace/outcome memory export",
+  "ownerDivision": "intelligence",
+  "license": "Apache-2.0",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine JsonStore failure/outcome memory",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.554Z"
+}

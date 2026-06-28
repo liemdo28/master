@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Company OS Route — exposes the Phase 12–20 agent-engine orchestrators.
  *
  * The Phase 12–20 engines live at repo-root `agent-engine/` as ES modules
@@ -57,6 +57,16 @@ const PHASES: PhaseDef[] = [
   { id: 18, slug: '18', name: 'Knowledge Graph', dir: 'phase-18-knowledge-graph', summary: 'stats' },
   { id: 19, slug: '19', name: 'Executive Simulation', dir: 'phase-19-executive-simulation' },
   { id: 20, slug: '20', name: 'Autonomous Executive OS', dir: 'phase-20-autonomous-executive-os', summary: 'dashboard' },
+  { id: 21, slug: '21', name: 'Customer Experience OS', dir: 'phase-21-customer-experience-os', summary: 'dashboard' },
+  { id: 22, slug: '22', name: 'Sales & Revenue Growth OS', dir: 'phase-22-revenue-growth-os', summary: 'dashboard' },
+  { id: 23, slug: '23', name: 'Operations Control Tower', dir: 'phase-23-operations-control-tower', summary: 'dashboard' },
+  { id: 24, slug: '24', name: 'Procurement & Inventory Intelligence', dir: 'phase-24-procurement-inventory-os', summary: 'dashboard' },
+  { id: 25, slug: '25', name: 'HR / Staffing / Labor OS', dir: 'phase-25-hr-labor-os', summary: 'dashboard' },
+  { id: 26, slug: '26', name: 'Asset & Creative Production OS', dir: 'phase-26-asset-creative-os', summary: 'dashboard' },
+  { id: 27, slug: '27', name: 'Security / Compliance / Risk OS', dir: 'phase-27-security-risk-os', summary: 'dashboard' },
+  { id: 28, slug: '28', name: 'Workflow Fabric 2.0', dir: 'phase-28-workflow-fabric-os', summary: 'dashboard' },
+  { id: 29, slug: '29', name: 'Data Quality & Governance OS', dir: 'phase-29-data-governance-os', summary: 'dashboard' },
+  { id: 30, slug: '30', name: 'CEO Command Center 2.0', dir: 'phase-30-ceo-command-center-os', summary: 'generateBriefing' },
   { id: 53, slug: '53', name: 'CFO AI', dir: 'phase-53-cfo-ai', summary: 'dashboard' },
 ];
 

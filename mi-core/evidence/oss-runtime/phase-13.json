@@ -1,0 +1,15 @@
+{
+  "phase": 13,
+  "worker": "LangGraph",
+  "workerId": "langgraph",
+  "businessRole": "multi-agent handoff orchestration",
+  "ownerDivision": "engineering",
+  "license": "MIT",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine dispatch/handoff/review",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.555Z"
+}

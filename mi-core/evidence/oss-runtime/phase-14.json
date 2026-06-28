@@ -1,0 +1,15 @@
+{
+  "phase": 14,
+  "worker": "Temporal",
+  "workerId": "temporal",
+  "businessRole": "durable approval workflow",
+  "ownerDivision": "operations",
+  "license": "MIT",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine propose/approve/reject lifecycle",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.555Z"
+}

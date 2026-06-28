@@ -1,0 +1,15 @@
+{
+  "phase": 17,
+  "worker": "OpenFGA",
+  "workerId": "openfga",
+  "businessRole": "tenant/relationship authorization",
+  "ownerDivision": "it",
+  "license": "Apache-2.0",
+  "licenseRisk": "low",
+  "licenseAllowed": true,
+  "licenseFlagged": false,
+  "health": "CONFIGURED_NOT_INSTALLED",
+  "fallbackTo": "in-engine TenantIsolation guard",
+  "integration": "CONFIGURED_NOT_INSTALLED",
+  "capturedAt": "2026-06-28T09:39:39.556Z"
+}

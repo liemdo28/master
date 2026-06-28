@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-30-ceo-command-center-os",
+  "version": "1.0.0",
+  "description": "Phase 30 — CEO Command Center 2.0. Executive control surface: objectives, blockers, approvals, risks, KPIs, workforce, OSS health, autonomous actions.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}
