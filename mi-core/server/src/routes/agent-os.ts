@@ -77,6 +77,16 @@ const PHASES: PhaseDef[] = [
   { id: 38, slug: '38', name: 'Finance Accounting OS', dir: 'phase-38-finance-accounting-os', summary: 'dashboard' },
   { id: 39, slug: '39', name: 'Data Warehouse OS', dir: 'phase-39-data-warehouse-os', summary: 'dashboard' },
   { id: 40, slug: '40', name: 'Autonomous Ops OS', dir: 'phase-40-autonomous-ops-os', summary: 'dashboard' },
+  { id: 41, slug: '41', name: 'AI Customer Support OS', dir: 'phase-41-ai-customer-support', summary: 'dashboard' },
+  { id: 42, slug: '42', name: 'Tax Compliance OS', dir: 'phase-42-tax-compliance', summary: 'dashboard' },
+  { id: 43, slug: '43', name: 'Marketing Automation OS', dir: 'phase-43-marketing-automation', summary: 'dashboard' },
+  { id: 44, slug: '44', name: 'Supplier Management OS', dir: 'phase-44-supplier-management', summary: 'dashboard' },
+  { id: 45, slug: '45', name: 'Store Experience OS', dir: 'phase-45-store-experience', summary: 'dashboard' },
+  { id: 46, slug: '46', name: 'Quality Assurance OS', dir: 'phase-46-quality-assurance', summary: 'dashboard' },
+  { id: 47, slug: '47', name: 'Disaster Recovery OS', dir: 'phase-47-disaster-recovery', summary: 'dashboard' },
+  { id: 48, slug: '48', name: 'Knowledge Management OS', dir: 'phase-48-knowledge-management', summary: 'dashboard' },
+  { id: 49, slug: '49', name: 'Investor Relations OS', dir: 'phase-49-investor-relations', summary: 'dashboard' },
+  { id: 50, slug: '50', name: 'Strategic Planning OS', dir: 'phase-50-strategic-planning', summary: 'dashboard' },
   { id: 53, slug: '53', name: 'CFO AI', dir: 'phase-53-cfo-ai', summary: 'dashboard' },
 ];
 

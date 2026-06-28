@@ -1,0 +1,28 @@
+'use strict';
+import * as assert from 'assert';
+import * as p41 from '../../agent-engine/phase-41-ai-customer-support/src/orchestrator.js';
+import * as p42 from '../../agent-engine/phase-42-tax-compliance/src/orchestrator.js';
+import * as p43 from '../../agent-engine/phase-43-marketing-automation/src/orchestrator.js';
+import * as p44 from '../../agent-engine/phase-44-supplier-management/src/orchestrator.js';
+import * as p45 from '../../agent-engine/phase-45-store-experience/src/orchestrator.js';
+import * as p46 from '../../agent-engine/phase-46-quality-assurance/src/orchestrator.js';
+import * as p47 from '../../agent-engine/phase-47-disaster-recovery/src/orchestrator.js';
+import * as p48 from '../../agent-engine/phase-48-knowledge-management/src/orchestrator.js';
+import * as p49 from '../../agent-engine/phase-49-investor-relations/src/orchestrator.js';
+import * as p50 from '../../agent-engine/phase-50-strategic-planning/src/orchestrator.js';
+let passed=0,failed=0;
+const check=(n,f)=>{try{f();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+console.log('PHASE 41-50 FUNCTIONAL PROOF TEST\n');
+const o41=p41.default;check('Phase 41 default export is a function',()=>assert.strictEqual(typeof o41,'function'));const i41=new o41();check('Phase 41 has dashboard',()=>assert.strictEqual(typeof i41.dashboard,'function'));const d41=i41.dashboard();check('Phase 41 dashboard returns object',()=>assert.ok(typeof d41==='object'));check('Phase 41 dashboard.phase=41',()=>assert.strictEqual(d41.phase,41));
+const o42=p42.default;check('Phase 42 default export is a function',()=>assert.strictEqual(typeof o42,'function'));const i42=new o42();check('Phase 42 has dashboard',()=>assert.strictEqual(typeof i42.dashboard,'function'));const d42=i42.dashboard();check('Phase 42 dashboard returns object',()=>assert.ok(typeof d42==='object'));check('Phase 42 dashboard.phase=42',()=>assert.strictEqual(d42.phase,42));
+const o43=p43.default;check('Phase 43 default export is a function',()=>assert.strictEqual(typeof o43,'function'));const i43=new o43();check('Phase 43 has dashboard',()=>assert.strictEqual(typeof i43.dashboard,'function'));const d43=i43.dashboard();check('Phase 43 dashboard returns object',()=>assert.ok(typeof d43==='object'));check('Phase 43 dashboard.phase=43',()=>assert.strictEqual(d43.phase,43));
+const o44=p44.default;check('Phase 44 default export is a function',()=>assert.strictEqual(typeof o44,'function'));const i44=new o44();check('Phase 44 has dashboard',()=>assert.strictEqual(typeof i44.dashboard,'function'));const d44=i44.dashboard();check('Phase 44 dashboard returns object',()=>assert.ok(typeof d44==='object'));check('Phase 44 dashboard.phase=44',()=>assert.strictEqual(d44.phase,44));
+const o45=p45.default;check('Phase 45 default export is a function',()=>assert.strictEqual(typeof o45,'function'));const i45=new o45();check('Phase 45 has dashboard',()=>assert.strictEqual(typeof i45.dashboard,'function'));const d45=i45.dashboard();check('Phase 45 dashboard returns object',()=>assert.ok(typeof d45==='object'));check('Phase 45 dashboard.phase=45',()=>assert.strictEqual(d45.phase,45));
+const o46=p46.default;check('Phase 46 default export is a function',()=>assert.strictEqual(typeof o46,'function'));const i46=new o46();check('Phase 46 has dashboard',()=>assert.strictEqual(typeof i46.dashboard,'function'));const d46=i46.dashboard();check('Phase 46 dashboard returns object',()=>assert.ok(typeof d46==='object'));check('Phase 46 dashboard.phase=46',()=>assert.strictEqual(d46.phase,46));
+const o47=p47.default;check('Phase 47 default export is a function',()=>assert.strictEqual(typeof o47,'function'));const i47=new o47();check('Phase 47 has dashboard',()=>assert.strictEqual(typeof i47.dashboard,'function'));const d47=i47.dashboard();check('Phase 47 dashboard returns object',()=>assert.ok(typeof d47==='object'));check('Phase 47 dashboard.phase=47',()=>assert.strictEqual(d47.phase,47));
+const o48=p48.default;check('Phase 48 default export is a function',()=>assert.strictEqual(typeof o48,'function'));const i48=new o48();check('Phase 48 has dashboard',()=>assert.strictEqual(typeof i48.dashboard,'function'));const d48=i48.dashboard();check('Phase 48 dashboard returns object',()=>assert.ok(typeof d48==='object'));check('Phase 48 dashboard.phase=48',()=>assert.strictEqual(d48.phase,48));
+const o49=p49.default;check('Phase 49 default export is a function',()=>assert.strictEqual(typeof o49,'function'));const i49=new o49();check('Phase 49 has dashboard',()=>assert.strictEqual(typeof i49.dashboard,'function'));const d49=i49.dashboard();check('Phase 49 dashboard returns object',()=>assert.ok(typeof d49==='object'));check('Phase 49 dashboard.phase=49',()=>assert.strictEqual(d49.phase,49));
+const o50=p50.default;check('Phase 50 default export is a function',()=>assert.strictEqual(typeof o50,'function'));const i50=new o50();check('Phase 50 has dashboard',()=>assert.strictEqual(typeof i50.dashboard,'function'));const d50=i50.dashboard();check('Phase 50 dashboard returns object',()=>assert.ok(typeof d50==='object'));check('Phase 50 dashboard.phase=50',()=>assert.strictEqual(d50.phase,50));
+
+console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
+process.exit(failed===0?0:1);

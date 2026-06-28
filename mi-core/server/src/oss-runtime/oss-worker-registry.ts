@@ -41,7 +41,20 @@ export const OSS_WORKERS: OssWorkerSpec[] = [
   { id: 'sql-ledger', name: 'SQL-Ledger', phase: 38, businessRole: 'GL + AP/AR + reconciliation + tax', ownerDivision: 'finance-accounting', license: 'GPL-2.0', licenseRisk: 'low', probe: { kind: 'module', module: 'better-sqlite3' }, fallback: 'in-engine finance-accounting + GL signals' },
   { id: 'airbyte', name: 'Airbyte', phase: 39, businessRole: 'ETL pipeline + data warehouse + BI reporting', ownerDivision: 'data-warehouse', license: 'MIT', licenseRisk: 'low', probe: { kind: 'module', module: 'airbyte-sdk' }, fallback: 'in-engine data-warehouse + ETL signals' },
   { id: 'autonomy-core', name: 'Temporal / n8n Autonomy Core', phase: 40, businessRole: 'self-healing + autonomous orchestration + rollback', ownerDivision: 'autonomous-ops', license: 'MIT', licenseRisk: 'low', probe: { kind: 'module', module: '@temporalio/client' }, fallback: 'in-engine autonomous-ops + self-healing signals' },
+
+  // Phase 41-50 primary workers
+  { id: 'ai-support-core', name: 'Rasa OSS', phase: 41, businessRole: 'AI-powered customer support + ticket triage', ownerDivision: 'ai-customer-support', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_41_URL' }, fallback: 'in-engine ai-customer-support signals' },
+  { id: 'tax-hub', name: 'TaxJar / OpenTaxJar', phase: 42, businessRole: 'Tax preparation + filing + audit defense', ownerDivision: 'tax-compliance', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_42_URL' }, fallback: 'in-engine tax-compliance signals' },
+  { id: 'mkt-automation', name: 'Mautic', phase: 43, businessRole: 'Multi-channel marketing + campaign orchestration', ownerDivision: 'marketing-automation', license: 'GPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_43_URL' }, fallback: 'in-engine marketing-automation signals' },
+  { id: 'supplier-registry', name: 'ERPNext Community', phase: 44, businessRole: 'Supplier onboarding + scoring + relationship mgmt', ownerDivision: 'supplier-management', license: 'GPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_44_URL' }, fallback: 'in-engine supplier-management signals' },
+  { id: 'store-exp-core', name: 'PostHog + Appsmith', phase: 45, businessRole: 'In-store experience + queue management + ambience', ownerDivision: 'store-experience', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_45_URL' }, fallback: 'in-engine store-experience signals' },
+  { id: 'qa-core', name: 'Great Expectations', phase: 46, businessRole: 'Food quality + service quality + compliance audits', ownerDivision: 'quality-assurance', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_46_URL' }, fallback: 'in-engine quality-assurance signals' },
+  { id: 'dr-core', name: 'Velero + Restic', phase: 47, businessRole: 'Business continuity + disaster recovery + backup', ownerDivision: 'disaster-recovery', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_47_URL' }, fallback: 'in-engine disaster-recovery signals' },
+  { id: 'km-core', name: 'BookStack / WikiJS', phase: 48, businessRole: 'Internal knowledge base + SOP + training library', ownerDivision: 'knowledge-management', license: 'MIT', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_48_URL' }, fallback: 'in-engine knowledge-management signals' },
+  { id: 'ir-core', name: 'PostgreSQL + Superset', phase: 49, businessRole: 'Investor reporting + cap table + stakeholder updates', ownerDivision: 'investor-relations', license: 'Apache-2.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_49_URL' }, fallback: 'in-engine investor-relations signals' },
+  { id: 'strategy-core', name: 'Metabase + n8n', phase: 50, businessRole: 'Long-term strategy + roadmap + market analysis', ownerDivision: 'strategic-planning', license: 'AGPL-3.0', licenseRisk: 'low', probe: { kind: 'env', env: 'PHASE_50_URL' }, fallback: 'in-engine strategic-planning signals' },
 ];
+
 
 export function workersForPhase(phase: number): OssWorkerSpec[] {
   return OSS_WORKERS.filter((w) => w.phase === phase);
