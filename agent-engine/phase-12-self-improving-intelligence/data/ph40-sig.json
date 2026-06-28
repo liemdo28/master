@@ -1,0 +1,46 @@
+[
+  {
+    "id": "S40_1782644997576_bpq173",
+    "timestamp": 1782644997576,
+    "signal": "test",
+    "status": "open",
+    "approvalRequired": true,
+    "assignedTo": null
+  },
+  {
+    "id": "S40_1782644693340_9x4dkp",
+    "timestamp": 1782644693340,
+    "signal": "test",
+    "status": "open",
+    "approvalRequired": true,
+    "assignedTo": null
+  },
+  {
+    "id": "S40_1782644418436_3aaea9",
+    "timestamp": 1782644418436,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782644418436,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S40_1782644418435_yfxmou",
+    "timestamp": 1782644418435,
+    "signal": "approval-required",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782644418436
+  },
+  {
+    "id": "S40_1782644418434_11juyx",
+    "timestamp": 1782644418434,
+    "signal": "test",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782644418435
+  }
+]

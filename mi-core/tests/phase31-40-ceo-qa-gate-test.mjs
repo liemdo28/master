@@ -1,0 +1,32 @@
+'use strict';
+import * as assert from 'assert';
+import * as p31 from '../../agent-engine/phase-31-supply-chain-os/src/orchestrator.js';
+import * as p32 from '../../agent-engine/phase-32-legal-compliance-os/src/orchestrator.js';
+import * as p33 from '../../agent-engine/phase-33-product-innovation-os/src/orchestrator.js';
+import * as p34 from '../../agent-engine/phase-34-fleet-transport-os/src/orchestrator.js';
+import * as p35 from '../../agent-engine/phase-35-fraud-risk-os/src/orchestrator.js';
+import * as p36 from '../../agent-engine/phase-36-customer-loyalty-os/src/orchestrator.js';
+import * as p37 from '../../agent-engine/phase-37-partner-channel-os/src/orchestrator.js';
+import * as p38 from '../../agent-engine/phase-38-finance-accounting-os/src/orchestrator.js';
+import * as p39 from '../../agent-engine/phase-39-data-warehouse-os/src/orchestrator.js';
+import * as p40 from '../../agent-engine/phase-40-autonomous-ops-os/src/orchestrator.js';
+let passed=0,failed=0;
+const check=(n,fn)=>{try{fn();passed++;console.log('  PASS: '+n);}catch(e){failed++;console.error('  FAIL: '+n+' -- '+e.message);}};
+console.log('PHASE 31-40 CEO QA GATE TEST\n');
+const tests=[[31,p31,'SupplyChainOS'],[32,p32,'LegalComplianceOS'],[33,p33,'ProductInnovationOS'],[34,p34,'FleetTransportOS'],[35,p35,'FraudRiskOS'],[36,p36,'CustomerLoyaltyOS'],[37,p37,'PartnerChannelOS'],[38,p38,'FinanceAccountingOS'],[39,p39,'DataWarehouseOS'],[40,p40,'AutonomousOpsOS']];
+for(const [num,mod,cls] of tests){
+  console.log(`  Phase ${num} (${cls})`);
+  const o=mod.default||mod[cls+'Orchestrator']||mod[cls];
+  check(`Phase ${num} orchestrator exists`,()=>assert.strictEqual(typeof o,'function'));
+  const inst=new o();
+  const sig=inst.os.register({signal:'test',requiresApproval:true});
+  check(`Phase ${num} approval-gated = true`,()=>assert.strictEqual(sig.approvalRequired,true));
+  check(`Phase ${num} dashboard is function`,()=>assert.strictEqual(typeof inst.dashboard,'function'));
+  const d=inst.dashboard();
+  check(`Phase ${num} dashboard.phase=${num}`,()=>assert.strictEqual(d.phase,num));
+  check(`Phase ${num} dashboard has status string`,()=>assert.ok(typeof d.status==='string'));
+  check(`Phase ${num} dashboard has total count`,()=>assert.ok(typeof d.total==='number'));
+  check(`Phase ${num} dashboard has criticalAlerts`,()=>assert.ok(typeof d.criticalAlerts==='number'));
+}
+console.log('\n  RESULT: '+passed+' passed, '+failed+' failed');
+process.exit(failed===0?0:1);

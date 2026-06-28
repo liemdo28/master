@@ -1,0 +1,102 @@
+[
+  {
+    "id": "S31_1782644997564_9xj1xx",
+    "timestamp": 1782644997564,
+    "signal": "test",
+    "status": "open",
+    "approvalRequired": true,
+    "assignedTo": null
+  },
+  {
+    "id": "S31_1782644693322_gu5gou",
+    "timestamp": 1782644693322,
+    "signal": "test",
+    "status": "open",
+    "approvalRequired": true,
+    "assignedTo": null
+  },
+  {
+    "id": "S31_1782644404706_kg73sv",
+    "timestamp": 1782644404706,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782644404707,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S31_1782644404704_upeas2",
+    "timestamp": 1782644404704,
+    "signal": "approval-required",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782644404706
+  },
+  {
+    "id": "S31_1782644404695_4xum3t",
+    "timestamp": 1782644404695,
+    "signal": "test",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782644404705
+  },
+  {
+    "id": "S31_1782644345128_s13sw2",
+    "timestamp": 1782644345128,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782644345128,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S31_1782644345122_a8h1dh",
+    "timestamp": 1782644345122,
+    "signal": "approval-required",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782644345127
+  },
+  {
+    "id": "S31_1782644345122_stlc1q",
+    "timestamp": 1782644345122,
+    "signal": "test",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782644345123
+  },
+  {
+    "id": "S31_1782644294243_zbtx5i",
+    "timestamp": 1782644294243,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782644294243,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S31_1782644294234_owz787",
+    "timestamp": 1782644294234,
+    "signal": "approval-required",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782644294242
+  },
+  {
+    "id": "S31_1782644294233_4vi8n4",
+    "timestamp": 1782644294233,
+    "signal": "test",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782644294234
+  }
+]

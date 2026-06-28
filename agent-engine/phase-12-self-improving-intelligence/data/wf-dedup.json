@@ -1,0 +1,18 @@
+[
+  {
+    "id": "DEDUP_1782644997692_3tajjf",
+    "timestamp": 1782644997692,
+    "workflowId": "dedup-test",
+    "trigger": "cron:daily",
+    "status": "superseded",
+    "supersededAt": 1782644997693
+  },
+  {
+    "id": "DEDUP_1782644693350_dttix6",
+    "timestamp": 1782644693350,
+    "workflowId": "dedup-test",
+    "trigger": "cron:daily",
+    "status": "superseded",
+    "supersededAt": 1782644693352
+  }
+]

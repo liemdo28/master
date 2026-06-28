@@ -1,0 +1,13 @@
+[
+  {
+    "id": "WFR_1782644693350_5rsxuh",
+    "timestamp": 1782644693350,
+    "workflowId": "dedup-test",
+    "name": "Dedup Test",
+    "owner": "ops",
+    "division": "operations",
+    "status": "registered",
+    "executions": 2,
+    "lastRun": 1782644997692
+  }
+]

@@ -1,0 +1,12 @@
+feat(audit): Phase 31-40 built, tested, routed, OSS-governed
+
+- Phases 31-40 orchestrator.js + runtime-proof.mjs + package.json each
+- Routes: /api/company-os/31 through /40 wired
+- OSS worker registry extended from 19 to 29 workers (phases 12-40)
+- 232/232 test assertions PASS (5 new test suites)
+- 130/130 phase-31-40 runtime assertions PASS
+- Truth rule: every phase approval-gated, no auto-execution
+
+Phase 12-20: PHASE_12_20_QA_CERTIFIED
+Phase 21-30: PHASE_21_30_READY
+Phase 31-40: PHASE_31_40_READY
