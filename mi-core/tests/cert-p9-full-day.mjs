@@ -107,7 +107,7 @@ await ceoCommand(3, 'Create SEO Article for Bakudan Ramen', async (intent, plan,
 // ── CMD 4: Update Google Sheet ─────────────────────────────────────────────
 await ceoCommand(4, 'Update Google Sheet with today\'s summary', async (intent, plan, gov, council) => {
   // Use real Google tokens to write to Drive (proxy since no specific sheet ID)
-  const tokenPath = 'E:/Project/Master/.local-agent-global/visibility/google-tokens.json';
+  const tokenPath = 'D:/Project/Master/.local-agent-global/visibility/google-tokens.json';
   const token = JSON.parse(fs.readFileSync(tokenPath, 'utf8')).access_token;
 
   // Write a summary file to Drive as evidence

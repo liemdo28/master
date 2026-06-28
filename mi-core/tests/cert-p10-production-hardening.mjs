@@ -69,7 +69,7 @@ await check('Trace has correct structure (trace_id, spans, timing)', () => {
 });
 
 await check('Trace persisted to traces.json', () => {
-  const p = 'E:/Project/Master/.local-agent-global/coo-v4/traces.json';
+  const p = 'D:/Project/Master/.local-agent-global/coo-v4/traces.json';
   if (!fs.existsSync(p)) return false;
   const traces = JSON.parse(fs.readFileSync(p, 'utf8'));
   return traces.some(t => t.trace_id === traceResult.trace_id);
@@ -256,8 +256,8 @@ const evidence = {
   burn_in:     burnIn,
   flow_gaps:   gaps,
   dashboard:   dash,
-  traces_total: JSON.parse(fs.existsSync('E:/Project/Master/.local-agent-global/coo-v4/traces.json')
-    ? fs.readFileSync('E:/Project/Master/.local-agent-global/coo-v4/traces.json', 'utf8')
+  traces_total: JSON.parse(fs.existsSync('D:/Project/Master/.local-agent-global/coo-v4/traces.json')
+    ? fs.readFileSync('D:/Project/Master/.local-agent-global/coo-v4/traces.json', 'utf8')
     : '[]').length,
   generated_at: new Date().toISOString(),
 };

@@ -196,7 +196,7 @@ await check('Reset script exists', () => {
 await check('QB root cause verified: stale expected hash', () => {
   // Verify the actual DB has the exact checksums described in the investigation
   const Database = require('better-sqlite3');
-  const db = new Database('E:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
+  const db = new Database('D:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
   const state = db.prepare('SELECT * FROM dd_machine_state').get();
   db.close();
   const err = state?.last_error || '';
@@ -205,7 +205,7 @@ await check('QB root cause verified: stale expected hash', () => {
 
 await check('QB failure count verified (15+ consecutive)', () => {
   const Database = require('better-sqlite3');
-  const db = new Database('E:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
+  const db = new Database('D:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
   const count = db.prepare("SELECT COUNT(*) as n FROM dd_machine_syncs WHERE event_type='SYNC_FAILED'").get().n;
   db.close();
   return count >= 15;
@@ -213,7 +213,7 @@ await check('QB failure count verified (15+ consecutive)', () => {
 
 await check('QB all tables identified (15 tables)', () => {
   const Database = require('better-sqlite3');
-  const db = new Database('E:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
+  const db = new Database('D:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
   const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all();
   db.close();
   return tables.length >= 14;

@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 const require   = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST      = path.resolve(__dirname, '../server/dist');
-const ARTIFACTS = 'E:/Project/Master/.local-agent-global/coo-v4/artifacts';
+const ARTIFACTS = 'D:/Project/Master/.local-agent-global/coo-v4/artifacts';
 const EVIDENCE  = path.resolve(__dirname, '../reports/evidence/p5-p7-marketing');
 fs.mkdirSync(EVIDENCE, { recursive: true });
 fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -19,7 +19,7 @@ fs.mkdirSync(ARTIFACTS, { recursive: true });
 const { writeSeoArticle, createFlyer, createVideo, generateVoiceover, publishPost, updatePage, seoOptimize, postToFacebook, postToInstagram, postToTikTok, schedulePosts } = require(`${DIST}/coo-v4/agents/creative-agents.js`);
 
 // Load real business context
-const businessMemoryPath = 'E:/Project/Master/.local-agent-global/executive-memory-v2/business_memory.json';
+const businessMemoryPath = 'D:/Project/Master/.local-agent-global/executive-memory-v2/business_memory.json';
 const bizMem = fs.existsSync(businessMemoryPath) ? JSON.parse(fs.readFileSync(businessMemoryPath, 'utf8')) : {};
 const bakudan = bizMem.businesses?.bakudan_ramen || {};
 const sushi   = bizMem.businesses?.raw_sushi || {};

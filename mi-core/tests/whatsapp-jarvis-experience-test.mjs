@@ -34,7 +34,7 @@ const path    = require('path');
 const fs      = require('fs');
 const http    = require('http');
 
-const ROOT  = path.resolve('E:/Project/Master/mi-core');
+const ROOT  = path.resolve('D:/Project/Master/mi-core');
 const DIST  = path.join(ROOT, 'server/dist');
 const REPORTS = path.join(ROOT, 'reports');
 if (!fs.existsSync(REPORTS)) fs.mkdirSync(REPORTS, { recursive: true });

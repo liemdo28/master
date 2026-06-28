@@ -9,7 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MI_CORE_ROOT = 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = 'D:/Project/Master/mi-core';
 const SKILLS_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/skills');
 
 // ── Minimal re-implementation of modules for test isolation ───────────────────

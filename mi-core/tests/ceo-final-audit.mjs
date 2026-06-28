@@ -9,7 +9,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = 'D:/Project/Master/mi-core';
 const GLOBAL_DIR   = path.join(MI_CORE_ROOT, '.local-agent-global');
 const SERVER_DIST  = path.join(MI_CORE_ROOT, 'server/dist');
 const WO_DIR       = path.join(GLOBAL_DIR, 'work-orders');
@@ -447,7 +447,7 @@ const gDriveOk = fs.existsSync('G:/My Drive') || fs.existsSync('G:/');
 check(6, 'G:\\My Drive (Google Drive stream)', gDriveOk, gDriveOk ? 'accessible' : 'not mounted / not streaming');
 
 // Mi project root
-check(6, 'E:\\Project\\Master (project root)', fs.existsSync('E:/Project/Master'), 'readable');
+check(6, 'D:\\Project\\Master (project root)', fs.existsSync('D:/Project/Master'), 'readable');
 
 // Key directories
 for (const [label, p] of [

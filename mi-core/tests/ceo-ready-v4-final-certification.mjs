@@ -232,7 +232,7 @@ async function main() {
     message: 'Dashboard + QB',
     session_id: memorySession,
   }, auth);
-  const memoryDbPath = 'E:/Project/Master/.local-agent-global/conversations.db';
+  const memoryDbPath = 'D:/Project/Master/.local-agent-global/conversations.db';
   let memoryRows = 0;
   try {
     const Database = (await import('better-sqlite3')).default;
