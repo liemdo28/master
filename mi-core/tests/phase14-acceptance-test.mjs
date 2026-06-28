@@ -8,7 +8,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 
-const MI_CORE_ROOT = 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = 'D:/Project/Master/mi-core';
 const GRAPH_DIR = path.join(MI_CORE_ROOT, '.local-agent-global/graph');
 const GRAPH_DB = path.join(GRAPH_DIR, 'graph.db');
 
@@ -68,7 +68,7 @@ upsertEntity('service:whatsapp-client', 'WhatsApp Client', 'service', 'WhatsApp 
 upsertEntity('store:sqlite-knowledge', 'Knowledge SQLite DB', 'store', 'FTS5 knowledge base');
 upsertEntity('store:skills-registry', 'Skills Registry JSON', 'store', 'AgentSkill registry');
 upsertEntity('store:evidence-dir', 'Evidence Directory', 'store', 'Per-WO evidence files');
-upsertEntity('repo:master', 'E:/Project/Master', 'repository', 'Mono-repo');
+upsertEntity('repo:master', 'D:/Project/Master', 'repository', 'Mono-repo');
 
 // Ownership
 upsertEdge('owner:hoang', 'project:dashboard', 'owner_of', 10);

@@ -12,18 +12,18 @@ const require = createRequire(import.meta.url);
 const path    = require('path');
 const fs      = require('fs');
 
-const ROOT   = path.resolve('E:/Project/Master/mi-core');
+const ROOT   = path.resolve('D:/Project/Master/mi-core');
 const DIST   = path.join(ROOT, 'server/dist');
 // Global dir may be at project root OR mi-core root — detect which exists
 const GLOBAL_CANDIDATES = [
   path.join(ROOT, '.local-agent-global'),
-  path.resolve('E:/Project/Master/.local-agent-global'),
+  path.resolve('D:/Project/Master/.local-agent-global'),
 ];
 const GLOBAL = GLOBAL_CANDIDATES.find(p => fs.existsSync(path.join(p, 'graph/graph.db'))) || GLOBAL_CANDIDATES[0];
 // Visibility dir may be at project root (separate from mi-core global dir)
 const VISIBILITY_CANDIDATES = [
   path.join(GLOBAL, 'visibility'),
-  path.resolve('E:/Project/Master/.local-agent-global/visibility'),
+  path.resolve('D:/Project/Master/.local-agent-global/visibility'),
 ];
 const VISIBILITY_DIR = VISIBILITY_CANDIDATES.find(p => fs.existsSync(path.join(p, 'connector-registry.json'))) || VISIBILITY_CANDIDATES[0];
 
@@ -77,7 +77,7 @@ try {
 
 const WA_CANDIDATES = [
   path.join(GLOBAL, 'mi-core/whatsapp-client.json'),
-  path.resolve('E:/Project/Master/.local-agent-global/mi-core/whatsapp-client.json'),
+  path.resolve('D:/Project/Master/.local-agent-global/mi-core/whatsapp-client.json'),
   path.join(GLOBAL, 'whatsapp-client.json'),
 ];
 const whatsappKey = WA_CANDIDATES.find(p => fs.existsSync(p)) || WA_CANDIDATES[0];

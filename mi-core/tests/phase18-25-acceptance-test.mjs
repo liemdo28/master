@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 const path = require('path');
 const fs = require('fs');
 
-const ROOT = path.resolve('E:/Project/Master/mi-core');
+const ROOT = path.resolve('D:/Project/Master/mi-core');
 const DIST = path.join(ROOT, 'server/dist');
 
 // ── helpers ─────────────────────────────────────────────────────────────────

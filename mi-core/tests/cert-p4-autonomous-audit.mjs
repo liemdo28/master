@@ -23,7 +23,7 @@ const { classify }         = require(`${DIST}/coo-v4/production-governor.js`);
 const { runCouncilV4 }     = require(`${DIST}/coo-v4/agent-council-v4.js`);
 const { createWorkflow, checkpointStep } = require(`${DIST}/coo-v4/durable-workflow.js`);
 
-const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'E:/Project/Master/dashboard.bakudanramen.com';
+const DASHBOARD_ROOT = process.env.DASHBOARD_ROOT || 'D:/Project/Master/dashboard.bakudanramen.com';
 const MI_ROOT        = path.resolve(__dirname, '..');
 const startTime      = Date.now();
 let   stage          = 0;

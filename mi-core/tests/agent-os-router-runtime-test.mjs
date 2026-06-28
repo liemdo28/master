@@ -1,10 +1,13 @@
 /**
- * Agent OS Router Runtime Test (Phase 12–20 wiring).
+ * Agent OS Router Runtime Test (full agent-engine wiring).
  *
  * Mounts the compiled /api/agent-os router on an ephemeral Express app and
- * proves the server can actually load and summarize all nine Phase 12–20
- * agent-engine orchestrators (ESM) over real HTTP — the CommonJS→ESM bridge
- * works end-to-end, not just in unit isolation.
+ * proves the server can actually load and summarize every wired agent-engine
+ * orchestrator (ESM) over real HTTP — the CommonJS→ESM bridge works
+ * end-to-end, not just in unit isolation.
+ *
+ * Phases: 12–50 contiguous, plus the V5 ROI-priority phases 53/56/60/62/67/
+ * 74/81/99 built ahead of numeric order per MI_PROGRAM_V5.
  */
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
@@ -48,15 +51,19 @@ const server = app.listen(0);
 console.log('\n=== Agent OS Router Runtime Test (Phase 12–20) ===');
 
 try {
-  console.log('\n--- Overview: all 9 phases load ---');
-  const EXPECTED_IDS = [12, 13, 14, 15, 16, 17, 18, 19, 20, 53];
+  console.log('\n--- Overview: all phases load ---');
+  const EXPECTED_IDS = [
+    12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+    53, 56, 60, 62, 67, 74, 81, 99,
+  ];
   const overview = await get(server, '/api/agent-os/');
   assert('GET /api/agent-os returns 200', overview.status === 200);
   assert('overview reports all phases', overview.body.count === EXPECTED_IDS.length);
   assert('ALL phases loaded from ESM', overview.body.loaded === EXPECTED_IDS.length);
   assert('every phase exposes an orchestrator class name', overview.body.phases.every(p => p.loaded && typeof p.orchestrator === 'string' && p.orchestrator.length > 0));
   assert('every phase reports its public API surface', overview.body.phases.every(p => Array.isArray(p.api) && p.api.length > 0));
-  assert('phase ids span 12–20 + 53 (CFO AI)', JSON.stringify(overview.body.phases.map(p => p.phase)) === JSON.stringify(EXPECTED_IDS));
+  assert('phase ids span 12–50 + ROI phases (53/56/60/62/67/74/81/99)', JSON.stringify(overview.body.phases.map(p => p.phase)) === JSON.stringify(EXPECTED_IDS));
 
   console.log('\n--- Per-phase live summaries ---');
   const expectSummary = { 12: 'scorecard', 13: 'scorecard', 14: 'pending', 16: 'fleetReport', 17: 'crossCompanyReport', 18: 'stats', 20: 'dashboard', 53: 'dashboard' };
@@ -76,7 +83,7 @@ try {
   assert('phase 20 dashboard reports killSwitch state', typeof p20.body.summary.killSwitchTripped === 'boolean');
 
   console.log('\n--- Unknown phase is rejected ---');
-  const unknown = await get(server, '/api/agent-os/99');
+  const unknown = await get(server, '/api/agent-os/1234');
   assert('unknown phase returns 404', unknown.status === 404);
   assert('404 lists available phases', Array.isArray(unknown.body.available) && unknown.body.available.length === EXPECTED_IDS.length);
 } finally {

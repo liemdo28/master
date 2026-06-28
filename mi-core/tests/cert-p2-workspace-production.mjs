@@ -16,7 +16,7 @@ const EVIDENCE  = path.resolve(__dirname, '../reports/evidence/p2-workspace');
 fs.mkdirSync(EVIDENCE, { recursive: true });
 
 // Load real token
-const TOKEN_FILE = 'E:/Project/Master/.local-agent-global/visibility/google-tokens.json';
+const TOKEN_FILE = 'D:/Project/Master/.local-agent-global/visibility/google-tokens.json';
 const tokens = JSON.parse(fs.readFileSync(TOKEN_FILE, 'utf8'));
 const ACCESS_TOKEN = tokens.access_token;
 

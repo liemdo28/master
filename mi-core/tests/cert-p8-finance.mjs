@@ -43,7 +43,7 @@ async function step(name, fn) {
 function loadQbStatus() {
   try {
     const Database = require('better-sqlite3');
-    const db = new Database('E:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
+    const db = new Database('D:/Project/Master/mi-core/data/qb-agent.db', { readonly: true });
     const state = db.prepare('SELECT * FROM dd_machine_state').get();
     const syncs = db.prepare('SELECT * FROM dd_machine_syncs ORDER BY created_at DESC LIMIT 10').all();
     db.close();

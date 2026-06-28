@@ -18,7 +18,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const MI_CORE_ROOT = 'E:/Project/Master/mi-core';
+const MI_CORE_ROOT = 'D:/Project/Master/mi-core';
 const GLOBAL_DIR = path.join(MI_CORE_ROOT, '.local-agent-global');
 const BRIEFING_CACHE = path.join(GLOBAL_DIR, 'executive-briefing', 'last-briefing.json');
 const WO_DIR = path.join(GLOBAL_DIR, 'work-orders');
