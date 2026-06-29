@@ -89,6 +89,7 @@ import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-ro
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
+import { autonomousQaRouter } from './routes/autonomous-qa-router';
 import { ceoTelemetryRouter } from './telemetry/ceo-telemetry-router';
 import { councilRouter } from './council/council-router';
 import { selfImprovementRouter } from './self-improvement/self-improvement-router';
