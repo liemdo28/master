@@ -18,6 +18,7 @@ import { getCachedAsana, getOverdueTasks, getTasksForPerson, syncAsana, isAsanaC
 import { getHealthSummaryText, parseHealthExport, hasHealthExport, syncHealthExport } from './connectors/health/health-connector';
 import { syncAccounting, getCachedAccounting, getAccountingSummaryText } from './connectors/accounting-connector';
 import { syncFoodSafety, getCachedFoodSafety, getFoodSafetySummaryText } from './connectors/food-safety-connector';
+import { getCachedRevenue } from './connectors/revenue-connector';
 import { syncSlack, getCachedSlack } from './connectors/slack-connector';
 import { syncGitHub, getCachedGitHub } from './connectors/github-connector';
 import { syncWebsiteSource, syncWebsiteSources } from './connectors/website-source-connector';
@@ -44,6 +45,14 @@ export interface DailySnapshot {
   health: { status: string; summary?: string };
   accounting: { status: string; summary?: string };
   food_safety: { status: string; total_records?: number; pending_sync?: number };
+  revenue: {
+    status: 'ok' | 'no_data';
+    toast_net_sales?: number;
+    doordash_net_payout?: number;
+    total_estimate?: number | null;
+    summary?: string;
+    updated_at?: string;
+  };
   action_items: string[];
 }
 
@@ -120,6 +129,10 @@ export async function getDailySnapshot(): Promise<DailySnapshot> {
   if (foodSafety?.status === 'ok' && foodSafety.total_records > 0) connected.push('Food Safety Gateway');
   if (foodSafety?.pending_sync && foodSafety.pending_sync > 0) actionItems.push(`${foodSafety.pending_sync} food safety records pending sync`);
 
+  // Revenue (Toast + DoorDash)
+  const revenue = getCachedRevenue();
+  if (revenue?.toast || revenue?.doordash) connected.push('Revenue (Toast/DoorDash)');
+
   const snapshot: DailySnapshot = {
     generated_at: now.toISOString(),
     date: now.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
@@ -159,6 +172,16 @@ export async function getDailySnapshot(): Promise<DailySnapshot> {
       total_records: foodSafety?.total_records,
       pending_sync: foodSafety?.pending_sync,
     },
+    revenue: revenue
+      ? {
+          status: 'ok' as const,
+          toast_net_sales: revenue.toast?.net_sales,
+          doordash_net_payout: revenue.doordash?.net_payout,
+          total_estimate: revenue.total_revenue_estimate,
+          summary: revenue.summary_text,
+          updated_at: revenue.updated_at,
+        }
+      : { status: 'no_data' as const },
     action_items: actionItems,
   };
 

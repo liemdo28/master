@@ -45,6 +45,7 @@ export async function loadSnapshotContext(): Promise<SnapshotContext> {
   const platforms = snap?.platforms || {};
   const accounting = snap?.accounting || {};
   const foodSafety = snap?.food_safety || {};
+  const revenue = snap?.revenue || {};
   const connectedCount = Array.isArray(platforms.connected) ? platforms.connected.length : 0;
 
   const facts: string[] = [
@@ -55,9 +56,17 @@ export async function loadSnapshotContext(): Promise<SnapshotContext> {
     `${connectedCount} connector dang ket noi`,
   ];
 
+  if (revenue.status === 'ok') {
+    const parts: string[] = [];
+    if (revenue.toast_net_sales) parts.push(`Toast $${Number(revenue.toast_net_sales).toLocaleString()}`);
+    if (revenue.doordash_net_payout) parts.push(`DoorDash $${Number(revenue.doordash_net_payout).toLocaleString()}`);
+    if (parts.length) facts.push(`doanh thu: ${parts.join(' + ')}`);
+  }
+
   const gaps: string[] = [];
-  if (accounting.status && accounting.status !== 'synced') gaps.push('ke toan chua dong bo (Toast/DoorDash/QuickBooks offline)');
+  if (accounting.status && accounting.status !== 'synced') gaps.push('ke toan chua dong bo (QuickBooks Web Connector offline)');
   if (n(foodSafety.total_records) === 0) gaps.push('food-safety chua co du lieu');
+  if (revenue.status !== 'ok') gaps.push('doanh thu Toast/DoorDash (chay tools/upload-revenue.mjs tren laptop1 sau khi export CSV)');
 
   const summary =
     `Nguon su that (live): ${facts.join(', ')}.` +
@@ -76,6 +85,11 @@ export async function loadSnapshotContext(): Promise<SnapshotContext> {
     lines.push(`- Action items: ${snap.action_items.slice(0, 5).join('; ')}.`);
   }
   if (snap?.health?.summary) lines.push(`- Health: ${String(snap.health.summary).replace(/\n/g, ' ').slice(0, 120)}.`);
+  if (revenue.status === 'ok') {
+    if (revenue.toast_net_sales) lines.push(`- Toast POS net sales: $${Number(revenue.toast_net_sales).toLocaleString()} (period ending ~${String(revenue.updated_at || '').slice(0, 10)}).`);
+    if (revenue.doordash_net_payout) lines.push(`- DoorDash net payout: $${Number(revenue.doordash_net_payout).toLocaleString()}.`);
+    if (revenue.total_estimate) lines.push(`- Total revenue estimate (Toast+DoorDash): $${Number(revenue.total_estimate).toLocaleString()}.`);
+  }
   if (gaps.length) lines.push(`- NOT AVAILABLE (say so honestly, do not fabricate): ${gaps.join('; ')}.`);
 
   return { summary, contextText: lines.join('\n'), snapshot: snap };
