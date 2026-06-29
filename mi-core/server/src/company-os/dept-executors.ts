@@ -8,6 +8,7 @@
 
 import type { DeptExecutor } from './execution-pipeline';
 import { executeAccountingRequest } from './accounting-department';
+import { executeLibraryRequest, loadSnapshotContext } from './library-department';
 import { executeExecutiveAssistant } from './executive-assistant-department';
 import { executeReportingRequest } from './reporting-department';
 import { executeEngineeringRequest } from './engineering-department';
@@ -15,10 +16,14 @@ import { executeQaDepartment } from './qa-department';
 import { runDepartment } from './department-runtime';
 import type { DeptReport } from './report-center';
 
-// Generic dept executor — uses department-runtime with correct brain + tools
+// Generic dept executor — uses department-runtime with correct brain + tools,
+// injecting the live business snapshot so the department answers from real data
+// instead of hallucinating "data unavailable".
 function makeGenericExecutor(deptId: string): DeptExecutor {
   return async (pipelineId, _deptId, intent, command) => {
-    const result = await runDepartment({ pipeline_id: pipelineId, dept_id: deptId, intent, command });
+    let extra_context: string | undefined;
+    try { extra_context = (await loadSnapshotContext()).contextText; } catch { /* fall back to no context */ }
+    const result = await runDepartment({ pipeline_id: pipelineId, dept_id: deptId, intent, command, extra_context });
     return result as DeptReport;
   };
 }
@@ -26,6 +31,11 @@ function makeGenericExecutor(deptId: string): DeptExecutor {
 export function getDeptExecutors(): Partial<Record<string, DeptExecutor>> {
   return {
     // Phase 1 — ACTIVE
+    // Library (Step 6 source-truth) — loads the live business snapshot so every
+    // command runs against real data instead of "no active connector".
+    'library': async (pid, _did, intent, cmd) => {
+      return executeLibraryRequest({ pipeline_id: pid, intent, command: cmd });
+    },
     'executive-assistant': async (pid, _did, intent, cmd) => {
       return executeExecutiveAssistant({ pipeline_id: pid, intent, command: cmd });
     },

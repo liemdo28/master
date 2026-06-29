@@ -1,28 +1,40 @@
-// phase-82-self-healing-projects - Phase 82. Modules: Self-healing projects
-// OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
-// NOTE: breadth scaffold — signal-lifecycle baseline; deepen with domain engines
-// per MI_PROGRAM_V5 ROI priority before production use.
+/**
+ * orchestrator.js — Phase 82 Self-Healing Projects OS.
+ *
+ * handle({ projects }) routes each at-risk/blocked/overdue project through the
+ * recovery engine: reschedulable slips auto-heal; critical/owner-less/no-slack
+ * ones escalate. Tracks recovery rate. Pure arithmetic, no LLM.
+ *
+ * OSS: governed per mi-core/server/src/oss-runtime/oss-worker-registry.ts
+ */
+import { ProjectRecoveryEngine } from './engines.js';
 import { JsonStore, makeId } from '../../phase-12-self-improving-intelligence/src/store.js';
 
 export class SelfHealingProjectsOS {
-  constructor(opts={}) {
-    this.registry=new JsonStore('ph82-reg',opts);
-    this.signals=new JsonStore('ph82-sig',opts);
-    this.alerts=new JsonStore('ph82-alr',opts);
+  constructor(opts = {}) {
+    this.engine = new ProjectRecoveryEngine();
+    this.snapshots = new JsonStore('ph82-snap', opts);
   }
-  register(s){
-    const r={id:makeId('S82'),timestamp:Date.now(),signal:s.signal||s,status:'open',approvalRequired:!!(s.requiresApproval),assignedTo:s.assignedTo||null};
-    this.signals.insert(r);return r;
+
+  /** @param {object} input { projects: [{ name, status, slackDays, severity, hasOwner }] } */
+  handle(input) {
+    const projects = (input.projects || []).map((p) => ({ name: p.name, status: p.status, ...this.engine.decide(p) }));
+    const actionable = projects.filter((p) => p.action !== 'none');
+    const autoRecovered = projects.filter((p) => p.action === 'auto-reschedule').length;
+    const escalated = projects.filter((p) => p.action === 'escalate').length;
+    const recoveryRate = actionable.length ? Number((autoRecovered / actionable.length).toFixed(2)) : 1;
+    const snapshot = { id: makeId('PRJ'), timestamp: Date.now(), projects, total: projects.length, autoRecovered, escalated, recoveryRate };
+    this.snapshots.insert(snapshot);
+    return snapshot;
   }
-  approve(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'approved',approvedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  reject(id){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'rejected',rejectedAt:Date.now()});return this.signals.find(x=>x.id===id);}return r;}
-  escalate(id,reason){const r=this.signals.find(x=>x.id===id);if(r){this.signals.update(r.id,{status:'escalated',escalatedAt:Date.now(),reason});return this.signals.find(x=>x.id===id);}return r;}
-  pending(){return this.signals.filter(x=>x.status==='open');}
-  escalated(){return this.signals.filter(x=>x.status==='escalated');}
-  alert(level,msg,ref){return this.alerts.insert({id:makeId('ALR'),timestamp:Date.now(),level,message:msg,ref:ref||null,acknowledged:false});}
-  acknowledgeAlert(id){const a=this.alerts.find(x=>x.id===id);if(a){this.alerts.update(a.id,{acknowledged:true,acknowledgedAt:Date.now()});return this.alerts.find(x=>x.id===id);}return a;}
-  dashboard(){const s=this.signals.all();const a=this.alerts.all();const open=s.filter(x=>x.status==='open').length;const esc=s.filter(x=>x.status==='escalated').length;const crit=a.filter(x=>x.level==='critical'&&!x.acknowledged).length;return{phase:82,cls:'SelfHealingProjectsOS',total:s.length,open,escalated:esc,criticalAlerts:crit,status:crit>0?'CRITICAL':esc>3?'BUSY':open>5?'ACTIVE':'NORMAL'};}
+
+  dashboard() {
+    const snap = this.snapshots.all()[0];
+    if (!snap) return { phase: 82, status: 'NO_DATA', snapshots: 0 };
+    const status = snap.escalated > snap.autoRecovered ? 'DEGRADED' : snap.escalated > 0 ? 'RECOVERING' : 'STABLE';
+    return { phase: 82, status, snapshots: this.snapshots.all().length, projects: snap.total, autoRecovered: snap.autoRecovered, escalated: snap.escalated, recoveryRate: snap.recoveryRate };
+  }
 }
 
-export class SelfHealingProjectsOSOrchestrator{constructor(opts={}){this.os=new SelfHealingProjectsOS(opts);}dashboard(){return this.os.dashboard();}}
+export class SelfHealingProjectsOSOrchestrator { constructor(opts = {}) { this.os = new SelfHealingProjectsOS(opts); } handle(i) { return this.os.handle(i); } dashboard() { return this.os.dashboard(); } }
 export default SelfHealingProjectsOSOrchestrator;

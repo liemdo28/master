@@ -218,3 +218,33 @@ agentEngineRouter.get('/patches', async (_req: Request, res: Response) => {
     res.status(503).json({ error: (e as Error).message });
   }
 });
+
+// ── Sprint 5.3: Autonomous Execution (Cline Bridge wiring) ──────────────────
+agentEngineRouter.post('/autonomous/execute', async (req: Request, res: Response) => {
+  try {
+    const { objective, projectPath } = req.body as { objective?: string; projectPath?: string };
+    if (!objective) return res.status(400).json({ error: 'objective required' });
+    const result = await bridgeRequest('POST', '/autonomous/execute', { objective, projectPath });
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.get('/autonomous/objectives', async (_req: Request, res: Response) => {
+  try {
+    const result = await bridgeRequest('GET', '/autonomous/objectives');
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
+
+agentEngineRouter.get('/autonomous/health', async (_req: Request, res: Response) => {
+  try {
+    const result = await bridgeRequest('GET', '/autonomous/health');
+    res.status(result.status as number).json(result.data);
+  } catch (e: unknown) {
+    res.status(503).json({ error: (e as Error).message });
+  }
+});
