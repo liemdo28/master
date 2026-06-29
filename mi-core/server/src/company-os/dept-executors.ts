@@ -8,6 +8,7 @@
 
 import type { DeptExecutor } from './execution-pipeline';
 import { executeAccountingRequest } from './accounting-department';
+import { executeLibraryRequest } from './library-department';
 import { executeExecutiveAssistant } from './executive-assistant-department';
 import { executeReportingRequest } from './reporting-department';
 import { executeEngineeringRequest } from './engineering-department';
@@ -26,6 +27,11 @@ function makeGenericExecutor(deptId: string): DeptExecutor {
 export function getDeptExecutors(): Partial<Record<string, DeptExecutor>> {
   return {
     // Phase 1 — ACTIVE
+    // Library (Step 6 source-truth) — loads the live business snapshot so every
+    // command runs against real data instead of "no active connector".
+    'library': async (pid, _did, intent, cmd) => {
+      return executeLibraryRequest({ pipeline_id: pid, intent, command: cmd });
+    },
     'executive-assistant': async (pid, _did, intent, cmd) => {
       return executeExecutiveAssistant({ pipeline_id: pid, intent, command: cmd });
     },
