@@ -166,16 +166,31 @@ export async function getDailySnapshot(): Promise<DailySnapshot> {
   return snapshot;
 }
 
+function _alertSeverity(connectorId: string): ConnectorAlert['severity'] {
+  if (connectorId === 'accounting' || connectorId === 'quickbooks-runtime') return 'critical';
+  if (connectorId === 'local-projects' || connectorId === 'website-bakudan') return 'warning';
+  return 'error';
+}
+
 export async function syncAll(): Promise<Record<string, string>> {
   const results: Record<string, string> = {};
   const errors: string[] = [];
 
   // Always sync local
   try { await syncLocalProjects(); results['local-projects'] = 'ok'; connectorRegistry.markSynced('local-projects'); }
-  catch (e) { results['local-projects'] = `error: ${e}`; errors.push(`local-projects: ${e}`); }
+  catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    results['local-projects'] = `error: ${msg}`;
+    errors.push(`local-projects: ${msg}`);
+    emitConnectorAlert('local-projects', 'Master Workspace', _alertSeverity('local-projects'), `Sync failed: ${msg}`);
+  }
 
   try { await syncDashboard(); results['dashboard'] = 'ok'; connectorRegistry.markSynced('dashboard-bakudan'); }
-  catch (e) { results['dashboard'] = `error: ${e}`; }
+  catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    results['dashboard'] = `error: ${msg}`;
+    emitConnectorAlert('dashboard-bakudan', 'Dashboard bakudanramen.com', _alertSeverity('dashboard-bakudan'), `Sync failed: ${msg}`);
+  }
 
   // Google (if configured)
   const gAuth = googleAuthStatus();
@@ -374,6 +389,72 @@ export function getImportantEmailsAll(limit = 10) {
 export function getTodayEventsAll() {
   return { calendar: getTodayEvents() };
 }
+// ── Connector Alert Registry (for WebSocket push on sync failures) ─────────────
+type ConnectorAlertCallback = (alert: ConnectorAlert) => void;
+export interface ConnectorAlert {
+  connector_id: string;
+  connector_name: string;
+  severity: 'warning' | 'error' | 'critical';
+  message: string;
+  timestamp: string;
+  detail?: string;
+}
+
+const _alertListeners: ConnectorAlertCallback[] = [];
+export function onConnectorAlert(cb: ConnectorAlertCallback) { _alertListeners.push(cb); }
+function _emitAlert(alert: ConnectorAlert) { _alertListeners.forEach(cb => cb(alert)); }
+
+/**
+ * Called by syncAll() when a connector fails.
+ * Emits a WebSocket alert and persists to sync_log.json.
+ */
+export function emitConnectorAlert(
+  connectorId: string,
+  connectorName: string,
+  severity: ConnectorAlert['severity'],
+  message: string,
+  detail?: string
+) {
+  const alert: ConnectorAlert = {
+    connector_id: connectorId,
+    connector_name: connectorName,
+    severity,
+    message,
+    timestamp: new Date().toISOString(),
+    detail,
+  };
+  _emitAlert(alert);
+}
+
+/**
+ * Returns all alerts from the last sync_log.json.
+ * Used by GET /api/visibility/alerts endpoint.
+ */
+export function getSyncAlerts(): { alerts: ConnectorAlert[]; synced_at: string | null } {
+  const logPath = path.join(GLOBAL_DIR, 'visibility', 'sync_log.json');
+  try {
+    const raw = JSON.parse(fs.readFileSync(logPath, 'utf-8'));
+    // Re-parse errors array as ConnectorAlert objects (errors stored as "connector: msg")
+    const alerts: ConnectorAlert[] = (raw.errors || []).map((e: string) => {
+      const colonIdx = e.indexOf(':');
+      const id = colonIdx > 0 ? e.slice(0, colonIdx) : e;
+      const msg = colonIdx > 0 ? e.slice(colonIdx + 1).trim() : e;
+      const all = connectorRegistry.getAll();
+      const def = all.find(c => c.connector_id === id);
+      return {
+        connector_id: id,
+        connector_name: def?.name || id,
+        severity: 'error' as ConnectorAlert['severity'],
+        message: msg,
+        timestamp: raw.synced_at || new Date().toISOString(),
+      };
+    });
+    return { alerts, synced_at: raw.synced_at || null };
+  } catch {
+    return { alerts: [], synced_at: null };
+  }
+}
+
 export function searchDrive(query: string) {
   return { drive: searchDriveFiles(query) };
 }

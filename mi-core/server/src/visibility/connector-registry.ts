@@ -302,12 +302,23 @@ export const connectorRegistry = {
       healthy: all.filter(c => effectiveHealth(c) === 'healthy').length,
       connectors: all.map(c => {
         const health = effectiveHealth(c);
+        // Freshness: how old is the last sync? (null = never synced)
+        let age_min: number | null = null;
+        if (c.last_sync) {
+          age_min = Math.round((Date.now() - new Date(c.last_sync).getTime()) / 60_000);
+        }
         return {
           id: c.connector_id,
           name: c.name,
           auth: c.auth_status,
           health,
           last_sync: c.last_sync,
+          age_min,
+          freshness:
+            age_min === null ? 'never' :
+            age_min < 5 ? 'fresh' :
+            age_min < 30 ? 'stale' :
+            age_min < 120 ? 'old' : 'stale-old',
           setup_hint: c.auth_status !== 'connected' || health !== 'healthy' ? c.setup_hint : undefined,
         };
       }),

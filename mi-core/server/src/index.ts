@@ -105,6 +105,7 @@ import { chatMetrics } from './chat/chat-metrics';
 import { queueState } from './chat/chat-queue';
 import { claimLeadershipOnBoot, startLeaderHeartbeat } from './nodes/leader-lock-persistent';
 import { startProactiveMonitor, onAlert } from './jarvis/proactive-monitor';
+import { onConnectorAlert } from './visibility/visibility-hub';
 import { startDailyBriefingScheduler } from './jarvis/daily-briefing-scheduler';
 import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
@@ -471,6 +472,9 @@ function onListenSuccess() {
 
     // Jarvis proactive monitor — broadcast alerts via WebSocket
     onAlert((alert) => broadcast({ type: 'jarvis_alert', alert }));
+
+    // Connector sync failure alerts — broadcast via WebSocket + persist to sync_log.json
+    onConnectorAlert((alert) => broadcast({ type: 'connector_alert', alert }));
     const MONITOR_INTERVAL = parseInt(process.env.JARVIS_MONITOR_INTERVAL_MIN || '15');
     startProactiveMonitor(MONITOR_INTERVAL);
     console.log(`[Mi] ✓ Jarvis Proactive Monitor started (interval: ${MONITOR_INTERVAL}m)`);
