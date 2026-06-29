@@ -22,11 +22,17 @@ export type ProjectTarget =
   | 'dashboard'
   | 'integration-system'
   | 'whatsapp-api'
+  | 'slack'        // Sprint 2.1
+  | 'github'       // Sprint 2.1
   | 'all'
   | 'unknown';
 
 export function detectProjectTarget(message: string): ProjectTarget {
   const m = message.toLowerCase();
+  // Sprint 2.2: Extended NLP patterns for new connectors
+  if (/slack|message.*slack|slack.*channel|slack.*message|post.*slack/.test(m)) return 'slack';
+  if (/github|github.*action|github.*workflow|workflow.*github|ci.*cd|github.*run/.test(m)) return 'github';
+  if (/visibility|connector.*health|health.*board|all.*connector|connector.*status/.test(m)) return 'all';
   if (/raw.*sushi|rawsushi|rawwebsite|raw.*web|raw.*site/.test(m))          return 'raw-website';
   if (/bakudan.*web|bakudan.*site|bakudanramen\.com/.test(m))               return 'bakudan-website';
   if (/dashboard|bakudan.*dashboard|task.*maria|create.*task/.test(m))      return 'dashboard';
@@ -178,6 +184,42 @@ export async function routeCommand(message: string, options: { approvalId?: stri
     const cached = getCachedRemote('integration-system');
     const status = cached || await syncRemoteProject('integration-system');
     return { target, action: 'status', data: status, summary: status.summary_text, sources };
+  }
+
+  // ── SLACK (Sprint 2.1) ──
+  if (target === 'slack') {
+    const { syncSlack, getCachedSlack } = await import('../visibility/connectors/slack-connector');
+    sources.push('slack-connector');
+    if (action === 'pull') {
+      const snap = await syncSlack();
+      return { target, action, data: snap, summary: `Slack: ${snap.status}. ${snap.channels.length} channels, ${snap.recent_messages.length} recent messages.`, sources };
+    }
+    // default: status
+    const cached = getCachedSlack();
+    if (!cached) {
+      const snap = await syncSlack();
+      return { target, action: 'status', data: snap, summary: `Slack: ${snap.status === 'not_configured' ? 'not configured (set SLACK_BOT_TOKEN)' : snap.status}`, sources };
+    }
+    return { target, action: 'status', data: cached, summary: `Slack: ${cached.status}. ${cached.channels.length} channels, ${cached.recent_messages.length} recent messages.`, sources };
+  }
+
+  // ── GITHUB ACTIONS (Sprint 2.1) ──
+  if (target === 'github') {
+    const { syncGitHub, getCachedGitHub } = await import('../visibility/connectors/github-connector');
+    sources.push('github-connector');
+    if (action === 'pull') {
+      const snap = await syncGitHub();
+      const failed = snap.failed_runs?.length || 0;
+      return { target, action, data: snap, summary: `GitHub: ${snap.status}. ${snap.repos.length} repos, ${snap.recent_runs.length} runs${failed > 0 ? `, ⚠ ${failed} failed` : ''}.`, sources };
+    }
+    // default: status
+    const cached = getCachedGitHub();
+    if (!cached) {
+      const snap = await syncGitHub();
+      return { target, action: 'status', data: snap, summary: `GitHub: ${snap.status === 'not_configured' ? 'not configured (set GITHUB_TOKEN)' : snap.status}`, sources };
+    }
+    const failed = cached.failed_runs?.length || 0;
+    return { target, action: 'status', data: cached, summary: `GitHub: ${cached.status}. ${cached.repos.length} repos, ${cached.recent_runs.length} runs${failed > 0 ? `, ⚠ ${failed} failed` : ''}.`, sources };
   }
 
   // ── REMOTE: WHATSAPP-API ──
