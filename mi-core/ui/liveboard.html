@@ -66,17 +66,29 @@
   .pc-btn { font-size: 11px; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
   .pc-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Connector health */
-  .connector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-  .conn-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
-  .conn-name { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-  .conn-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-  .conn-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .conn-dot.live    { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .conn-dot.offline { background: var(--red); }
-  .conn-dot.unknown { background: var(--muted); }
-  .conn-dot.partial { background: var(--yellow); }
-  .conn-host { font-size: 11px; color: var(--muted); margin-top: 4px; }
+/* Connector health */
+.connector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.conn-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.conn-card.degraded { border-color: #f59e0b; }
+.conn-card.critical { border-color: #ef4444; }
+.conn-name { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+.conn-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.conn-dot { width: 8px; height: 8px; border-radius: 50%; }
+.conn-dot.live    { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.conn-dot.offline { background: var(--red); }
+.conn-dot.unknown { background: var(--muted); }
+.conn-dot.partial { background: var(--yellow); }
+.conn-host { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.freshness-badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-top: 4px; }
+.freshness-fresh  { background: #10b98130; color: #10b981; }
+.freshness-stale  { background: #f59e0b30; color: #f59e0b; }
+.freshness-old    { background: #ef444430; color: #ef4444; }
+.freshness-never  { background: #6b728030; color: #9ca3af; }
+.freshness-stale-old { background: #ef444430; color: #ef4444; }
+.conn-age { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.conn-setup-hint { font-size: 10px; color: #f59e0b; margin-top: 4px; }
+.alert-banner { background: #ef444420; border: 1px solid #ef4444; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; font-size: 12px; color: #ef4444; }
+.alert-severity { font-weight: 700; text-transform: uppercase; font-size: 10px; }
 
   /* Approvals */
   .approval-list { display: flex; flex-direction: column; gap: 8px; }
@@ -227,12 +239,19 @@ function connectWS() {
     const msg = JSON.parse(e.data);
     if (msg.type === 'approval_new') loadApprovals();
     if (msg.type === 'approval_resolved') loadApprovals();
+    // Sprint 1.1/1.2: Connector alerts + sync + file change push
+    if (msg.type === 'connector_alert') showConnectorAlert(msg.alert);
+    if (msg.type === 'sync_complete') loadConnectors();
+    if (msg.type === 'file_change') onFileChange(msg);
   };
 }
 
 // ── Load everything ────────────────────────────────────────────────────────
+let _cachedVisConnectors = [];
+
 async function load() {
-  await Promise.all([loadProjects(), loadConnectors(), loadApprovals()]);
+  await loadConnectors();
+  await Promise.all([loadProjects(), loadApprovals()]);
 }
 
 async function loadProjects() {
@@ -248,12 +267,20 @@ async function loadProjects() {
 
 async function loadConnectors() {
   try {
-    const res = await fetch(`${API}/api/projects/health`);
-    const data = await res.json();
-    renderConnectors(data.remotes || []);
-    const live = (data.remotes || []).filter(r => r.reachable).length;
-    document.getElementById('statConnected').textContent = live + ' / ' + (data.remotes || []).length;
-    document.getElementById('statRemote').textContent = (data.remotes || []).length;
+    const [visRes, healthRes] = await Promise.all([
+      fetch(`${API}/api/visibility/connectors`),
+      fetch(`${API}/api/projects/health`),
+    ]);
+    const vis = await visRes.json();
+    const health = await healthRes.json();
+    _cachedVisConnectors = vis.connectors || [];
+
+    // Sprint 1.3: render with freshness + health from visibility API
+    renderConnectors(_cachedVisConnectors, health.remotes || []);
+    const connected = (vis.connectors || []).filter(c => c.auth === 'connected' && c.health !== 'offline').length;
+    const total = (vis.connectors || []).length;
+    document.getElementById('statConnected').textContent = connected + ' / ' + total;
+    document.getElementById('statRemote').textContent = (health.remotes || []).length;
   } catch { document.getElementById('connectorGrid').innerHTML = '<div class="empty">Failed to load connectors</div>'; }
 }
 
@@ -296,28 +323,66 @@ function renderProjects(projects) {
   }).join('');
 }
 
-function renderConnectors(remotes) {
-  // Add local connectors
-  const localConns = [
-    { name: 'Raw Website', id: 'raw-website', type: 'local' },
-    { name: 'Bakudan Website', id: 'bakudan-website', type: 'local' },
-    { name: 'Dashboard', id: 'dashboard', type: 'local' },
-    { name: 'Accounting Engine', id: 'accounting', type: 'local' },
-    { name: 'Food Safety', id: 'food-safety', type: 'local' },
-  ];
+function healthDot(health) {
+  if (health === 'healthy') return 'live';
+  if (health === 'degraded') return 'partial';
+  if (health === 'offline') return 'offline';
+  return 'unknown';
+}
+function healthLabel(health) {
+  if (health === 'healthy') return '✓ Healthy';
+  if (health === 'degraded') return '⚠ Degraded';
+  if (health === 'offline') return '✗ Offline';
+  return '? Unknown';
+}
 
-  const allConns = [
-    ...localConns.map(c => ({ ...c, reachable: true, status: 'local', host: 'localhost' })),
-    ...remotes.map(r => ({ name: r.name, id: r.agent_id, type: 'remote', reachable: r.reachable, status: r.status, host: r.host || r.error || 'not configured' })),
-  ];
+function freshnessLabel(freshness, age_min) {
+  if (freshness === 'fresh')     return `<span class="freshness-badge freshness-fresh">fresh</span>`;
+  if (freshness === 'stale')      return `<span class="freshness-badge freshness-stale">stale</span>`;
+  if (freshness === 'old')        return `<span class="freshness-badge freshness-old">old</span>`;
+  if (freshness === 'stale-old')  return `<span class="freshness-badge freshness-stale-old">stale</span>`;
+  if (freshness === 'never')      return `<span class="freshness-badge freshness-never">never synced</span>`;
+  return '';
+}
+
+function renderConnectors(visConnectors, remoteAgents) {
+  // Build visibility connector map: id → vis data
+  const visMap = {};
+  (visConnectors || []).forEach(v => { visMap[v.id] = v; });
+
+  // Remote agents
+  const remoteConns = (remoteAgents || []).map(r => ({
+    name: r.name,
+    id: r.agent_id,
+    type: 'remote',
+    reachable: r.reachable,
+    health: r.reachable ? 'healthy' : 'offline',
+    freshness: null,
+    age_min: null,
+    host: r.host || r.error || 'not configured',
+  }));
+
+  const allConns = [...(visConnectors || []), ...remoteConns];
+
+  if (!allConns.length) {
+    document.getElementById('connectorGrid').innerHTML = '<div class="empty">No connectors found</div>';
+    return;
+  }
 
   document.getElementById('connectorGrid').innerHTML = allConns.map(c => {
-    const dotClass = c.type === 'local' ? 'partial' : (c.reachable ? 'live' : 'offline');
-    const statusLabel = c.type === 'local' ? '✓ Local' : (c.reachable ? '✓ Online' : '✗ Offline');
-    return `<div class="conn-card">
+    const dot = c.health || (c.type === 'remote' && c.reachable ? 'healthy' : c.type === 'remote' ? 'offline' : 'unknown');
+    const cardClass = dot === 'degraded' ? 'degraded' : dot === 'offline' || c.health === 'offline' ? 'critical' : '';
+    const freshBadge = freshnessLabel(c.freshness, c.age_min);
+    const ageStr = (c.age_min != null) ? `${c.age_min}m ago` : '';
+    const hint = c.setup_hint ? `<div class="conn-setup-hint">${c.setup_hint}</div>` : '';
+    return `<div class="conn-card ${cardClass}">
       <div class="conn-name">${c.name}</div>
-      <div class="conn-status"><div class="conn-dot ${dotClass}"></div><span>${statusLabel}</span></div>
-      <div class="conn-host">${c.host || ''}</div>
+      <div class="conn-status">
+        <div class="conn-dot ${healthDot(dot)}"></div>
+        <span>${healthLabel(dot)}</span>
+      </div>
+      ${freshBadge ? `<div class="freshness-badge-row">${freshBadge} ${ageStr ? `<span class="conn-age">${ageStr}</span>` : ''}</div>` : ''}
+      ${hint}
     </div>`;
   }).join('');
 }
@@ -412,6 +477,31 @@ function addChat(role, text) {
   div.textContent = text;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
+}
+
+// ── Sprint 1.1/1.2: Real-time helpers ───────────────────────────────────────
+function showConnectorAlert(alert) {
+  // Flash the affected connector card briefly
+  const badge = document.createElement('div');
+  badge.className = `alert-banner alert-severity-${alert.severity}`;
+  badge.innerHTML = `<span class="alert-severity">[${alert.severity}]</span> <strong>${alert.connector_name}</strong>: ${alert.message}`;
+  const section = document.querySelector('.section-title');
+  if (section && section.parentElement) {
+    section.parentElement.insertBefore(badge, section.nextSibling);
+    setTimeout(() => badge.remove(), 8000);
+  }
+  addChat('mi', `[${alert.severity.toUpperCase()}] ${alert.connector_name}: ${alert.message}`);
+  loadConnectors(); // refresh connector grid
+}
+
+function onFileChange(msg) {
+  // Brief toast notification for file changes (non-intrusive)
+  const conn = _cachedVisConnectors.find(c => c.id === msg.connector_id);
+  const name = conn ? conn.name : msg.connector_id;
+  // Only show if it's a significant connector
+  if (['dashboard-bakudan', 'local-projects', 'asana', 'gmail'].includes(msg.connector_id)) {
+    addChat('mi', `📁 ${name} updated (${msg.event})`);
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────

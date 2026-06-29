@@ -270,8 +270,25 @@ export async function syncAll(): Promise<Record<string, string>> {
 
   // Write sync log
   const logPath = path.join(GLOBAL_DIR, 'visibility', 'sync_log.json');
-  const log = { synced_at: new Date().toISOString(), results, errors };
+  const syncedAt = new Date().toISOString();
+  const log = { synced_at: syncedAt, results, errors };
   fs.writeFileSync(logPath, JSON.stringify(log, null, 2));
+
+  // Sprint 1.2: Broadcast sync_complete so all WebSocket clients can refresh their data
+  const { broadcast } = require('../ws-broadcast') as typeof import('../ws-broadcast');
+  broadcast({
+    type: 'sync_complete',
+    synced_at: syncedAt,
+    connectors_synced: Object.keys(results).length,
+    errors_count: errors.length,
+    connectors: connectorRegistry.getSummary().connectors.map(c => ({
+      id: c.id,
+      name: c.name,
+      health: c.health,
+      freshness: c.freshness,
+      age_min: c.age_min,
+    })),
+  });
 
   return results;
 }
