@@ -18,6 +18,8 @@ import { getCachedAsana, getOverdueTasks, getTasksForPerson, syncAsana, isAsanaC
 import { getHealthSummaryText, parseHealthExport, hasHealthExport, syncHealthExport } from './connectors/health/health-connector';
 import { syncAccounting, getCachedAccounting, getAccountingSummaryText } from './connectors/accounting-connector';
 import { syncFoodSafety, getCachedFoodSafety, getFoodSafetySummaryText } from './connectors/food-safety-connector';
+import { syncSlack, getCachedSlack } from './connectors/slack-connector';
+import { syncGitHub, getCachedGitHub } from './connectors/github-connector';
 import { syncWebsiteSource, syncWebsiteSources } from './connectors/website-source-connector';
 import { getQuickBooksRuntimeSnapshot, writeQuickBooksCache } from './connectors/qb-runtime-connector';
 
@@ -266,6 +268,35 @@ export async function syncAll(): Promise<Record<string, string>> {
     connectorRegistry.markSynced('website-raw');
   } catch (e) {
     results['websites'] = `error: ${e}`;
+  }
+
+  // Slack (Sprint 2.1 — no credentials needed, graceful fallback)
+  try {
+    const slackResult = await syncSlack();
+    results['slack'] = slackResult.status;
+    connectorRegistry.update('slack', {
+      auth_status: slackResult.status === 'not_configured' ? 'not_configured' : 'connected',
+      status: slackResult.status === 'synced' ? 'active' : 'pending',
+    });
+    connectorRegistry.markSynced('slack', slackResult.status === 'synced' ? 'healthy' : 'degraded');
+  } catch (e) {
+    results['slack'] = `error: ${e}`;
+    connectorRegistry.markSynced('slack', 'degraded');
+  }
+
+  // GitHub Actions (Sprint 2.1 — no credentials needed, graceful fallback)
+  try {
+    const ghResult = await syncGitHub();
+    results['github'] = ghResult.status;
+    connectorRegistry.update('github', {
+      auth_status: ghResult.status === 'not_configured' ? 'not_configured' : 'connected',
+      status: ghResult.status === 'synced' ? 'active' : 'pending',
+    });
+    const hasFailed = ghResult.failed_runs && ghResult.failed_runs.length > 0;
+    connectorRegistry.markSynced('github', hasFailed ? 'degraded' : (ghResult.status === 'synced' ? 'healthy' : 'degraded'));
+  } catch (e) {
+    results['github'] = `error: ${e}`;
+    connectorRegistry.markSynced('github', 'degraded');
   }
 
   // Write sync log

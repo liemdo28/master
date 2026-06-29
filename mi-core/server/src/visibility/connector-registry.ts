@@ -217,6 +217,38 @@ const DEFAULT_CONNECTORS: Connector[] = [
     health_status: 'unknown',
     config: { root_path: 'D:/Project/Master/food-safety-gateway' },
   },
+  // Sprint 2.1: Slack connector
+  {
+    connector_id: 'slack',
+    name: 'Slack',
+    type: 'api',
+    status: 'active',
+    auth_status: 'not_configured',
+    last_sync: null,
+    read_capability: ['channels', 'messages', 'members'],
+    write_capability: [],
+    approval_required: false,
+    cache_path: 'slack/',
+    health_status: 'unknown',
+    config: { token_env: 'SLACK_BOT_TOKEN' },
+    setup_hint: 'Set SLACK_BOT_TOKEN and SLACK_TEAM_ID in .env to connect Slack',
+  },
+  // Sprint 2.1: GitHub connector
+  {
+    connector_id: 'github',
+    name: 'GitHub Actions',
+    type: 'api',
+    status: 'active',
+    auth_status: 'not_configured',
+    last_sync: null,
+    read_capability: ['workflows', 'runs', 'repos'],
+    write_capability: [],
+    approval_required: false,
+    cache_path: 'github/',
+    health_status: 'unknown',
+    config: { token_env: 'GITHUB_TOKEN' },
+    setup_hint: 'Set GITHUB_TOKEN in .env to connect GitHub Actions',
+  },
 ];
 
 function ensureDir(p: string) {
