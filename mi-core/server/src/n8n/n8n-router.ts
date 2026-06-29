@@ -166,6 +166,53 @@ n8nRouter.get('/failures', (_req: Request, res: Response) => {
   res.json({ ok: true, count: failureLog.length, failures: failureLog.slice(0, 50) });
 });
 
+// ── Dead Letter Queue ────────────────────────────────────────────────────────
+interface DeadLetterEntry {
+  workflow_id: string;
+  execution_id: string;
+  error: string;
+  retries: number;
+  failed_at: string;
+  department: string;
+  owner: string;
+  priority: string;
+  task_id: string;
+  status: string;
+  evidence_path: string;
+}
+
+const deadLetterQueue: DeadLetterEntry[] = [];
+
+// POST /api/n8n/dead-letter — called by n8n when workflow exhausts retries
+n8nRouter.post('/dead-letter', (req: Request, res: Response) => {
+  const entry = req.body as Partial<DeadLetterEntry>;
+  if (!entry.workflow_id || !entry.error) {
+    return res.status(400).json({ error: 'workflow_id and error required' });
+  }
+  const dl: DeadLetterEntry = {
+    workflow_id: entry.workflow_id,
+    execution_id: entry.execution_id || '',
+    error: entry.error,
+    retries: entry.retries || 3,
+    failed_at: entry.failed_at || new Date().toISOString(),
+    department: entry.department || 'unknown',
+    owner: entry.owner || 'unknown',
+    priority: entry.priority || 'P3',
+    task_id: `tsk_deadletter_${Date.now()}`,
+    status: 'pending',
+    evidence_path: entry.evidence_path || `Mi/n8n/evidence/dead-letter/${entry.workflow_id}.json`,
+  };
+  deadLetterQueue.unshift(dl);
+  if (deadLetterQueue.length > 200) deadLetterQueue.splice(200);
+  console.error(`[n8n][DEAD-LETTER] workflow=${dl.workflow_id} error=${dl.error} retries=${dl.retries} task=${dl.task_id}`);
+  return res.json({ ok: true, dead_letter_created: true, entry: dl });
+});
+
+// GET /api/n8n/dead-letter — read dead letter queue
+n8nRouter.get('/dead-letter', (_req: Request, res: Response) => {
+  res.json({ ok: true, count: deadLetterQueue.length, dead_letters: deadLetterQueue.slice(0, 50) });
+});
+
 // ── Workflow health summary ──────────────────────────────────────────────────
 n8nRouter.get('/workflow-health', async (_req: Request, res: Response) => {
   try {

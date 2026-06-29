@@ -1,81 +1,138 @@
-# N8N Workflow Registry
+# N8N Workflow Registry v3.0
 
 **Version:** 3.0.0
-**Date:** 2026-06-28
-**Purpose:** Single source of truth for all n8n workflows in the Mi ecosystem
+**Date:** 2026-06-29
+**Purpose:** Single source of truth for all n8n automation workflows
 
 ---
 
-## Registry Overview
+## Registry Contract
 
-| Metric | Count |
-|--------|-------|
-| Total workflows | 22 |
-| Approval-gated | 8 |
-| Auto-run (no approval) | 14 |
-| Department coverage | 11 |
-
----
-
-## All Workflows
-
-| # | Workflow ID | Department | Domain | Trigger | Schedule | Approval | Owner | Mi-Core Endpoint | Status | Evidence Path |
-|---|------------|-----------|--------|---------|---------|---------|-------|----------------|--------|---------------|
-| 1 | mi-system-health-check | IT | system | schedule | */5 * * * * | No | IT | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/system/mi-system-health-check.json` |
-| 2 | seo-daily-audit | Marketing | seo | schedule | 0 7 * * * | Yes | Marketing | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/seo/seo-daily-audit.json` |
-| 3 | seo-weekly-executive-report | Executive | seo | schedule | 0 9 * * 1 | No | Executive | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/seo/seo-weekly-executive-report.json` |
-| 4 | review-monitoring | Marketing | reviews | schedule | 0 * * * * | Yes | Marketing | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/reviews/review-monitoring.json` |
-| 5 | review-spike-alert | Marketing | reviews | schedule | 0 * * * * | Yes | Marketing | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/reviews/review-monitoring.json` (extended) |
-| 6 | food-safety-daily-reminder | Operations | food-safety | schedule | 0 6 * * * | Yes | Operations | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/food-safety/food-safety-daily-reminder.json` |
-| 7 | food-safety-missing-submission-alert | Operations | food-safety | schedule | 0 8 * * * | Yes | Operations | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/food-safety/food-safety-daily-reminder.json` (extended) |
-| 8 | quickbooks-daily-sync | Finance | finance | schedule | 0 5 * * * | No | Finance | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/quickbooks/quickbooks-daily-sync.json` |
-| 9 | quickbooks-freshness-check | Finance | finance | schedule | 0 8 * * * | No | Finance | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/quickbooks/quickbooks-daily-sync.json` (extended) |
-| 10 | doordash-weekly-campaign-review | Operations | doordash | schedule | 0 10 * * 1 | Yes | Operations | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/doordash/doordash-weekly-campaign-review.json` |
-| 11 | doordash-health-check | Operations | doordash | schedule | 0 6 * * * | No | Operations | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/doordash/doordash-weekly-campaign-review.json` (extended) |
-| 12 | gbp-performance-check | Marketing | reviews | schedule | 0 9 * * * | Yes | Marketing | /api/mi/approval/request | ACTIVE | `Mi/n8n/workflows/reviews/review-monitoring.json` (extended) |
-| 13 | daily-ceo-brief | Executive | executive | schedule | 0 7 * * * | No | Executive | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/system/mi-system-health-check.json` (extended) |
-| 14 | oss-health-check | IT | system | schedule | 0 */2 * * * | No | IT | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/system/mi-system-health-check.json` (extended) |
-| 15 | duplicate-task-check | IT | system | schedule | 0 */30 * * * | No | IT | /api/mi/workflows/log | ACTIVE | `Mi/n8n/workflows/system/mi-system-health-check.json` (extended) |
-| 16 | exec-daily-brief | Executive | executive | schedule | 0 7 * * * | No | Executive | /api/mi/workflows/log | ACTIVE | Pre-existing |
-| 17 | exec-weekly-brief | Executive | executive | schedule | 0 8 * * 1 | No | Executive | /api/mi/workflows/log | ACTIVE | Pre-existing |
-| 18 | exec-monthly-report | Executive | executive | schedule | 0 9 1 * * | Yes | Executive | /api/mi/approval/request | ACTIVE | Pre-existing |
-| 19 | finance-qb-sync | Finance | finance | schedule | 0 */6 * * * | No | Finance | /api/mi/workflows/log | ACTIVE | Pre-existing |
-| 20 | finance-tax-reminder | Finance | finance | schedule | 0 9 1,15 * * | No | Finance | /api/mi/workflows/log | ACTIVE | Pre-existing |
-| 21 | finance-payroll-reminder | Finance | finance | schedule | 0 9 25 * * | Yes | Finance | /api/mi/approval/request | ACTIVE | Pre-existing |
-| 22 | ops-daily-store-health | Operations | ops | schedule | 0 6 * * * | No | Operations | /api/mi/workflows/log | ACTIVE | Pre-existing |
-
----
-
-## Workflow Contract (Mandatory)
-
-Every n8n workflow JSON MUST include:
+Every workflow entry MUST include:
 
 ```json
 {
-  "workflow_id": "unique-id",
-  "name": "Human readable name",
-  "domain": "domain-name",
-  "trigger_type": "schedule|webhook|manual",
-  "source": "n8n",
-  "mi_required": true,
-  "approval_required": true|false,
-  "brand_id": "brand-id|all",
-  "location_id": "location-id|all",
-  "schedule": "cron-expression",
-  "schedule_tz": "Asia/Ho_Chi_Minh",
-  "owner_department": "DepartmentName",
-  "mi_core_endpoint": "/api/mi/workflows/log",
-  "evidence_path": "Mi/n8n/evidence/<workflow-id>/"
+  "workflow_id": "",
+  "workflow_name": "",
+  "owner_department": "",
+  "business_purpose": "",
+  "trigger_type": "cron|webhook|http|manual",
+  "schedule": "cron expression",
+  "input_schema": {},
+  "output_schema": {},
+  "Mi-Core_endpoint": "",
+  "retry_policy": { "max_retries": 3, "retry_delay_ms": 5000 },
+  "dead_letter_policy": true,
+  "approval_policy": true,
+  "evidence_path": "",
+  "status": "ACTIVE|BLOCKED|DISABLED",
+  "last_success": "",
+  "last_failure": ""
 }
 ```
 
-**Required Mi-Core endpoints:**
-- `POST /api/mi/workflows/log` — log workflow execution
-- `POST /api/mi/workflows/evidence` — store workflow evidence
-- `POST /api/mi/workflows/heartbeat` — heartbeat ping
-- `GET /api/mi/workflows/status` — read workflow status
+---
 
-**Approval-gated workflows:**
-- Must call `POST /api/mi/approval/request` before execution
-- Must not auto-write to production connectors
-- Evidence stored in `Mi/n8n/evidence/<workflow-id>/`
+## Required Workflows (11)
+
+These 11 workflows are required by the CEO/CTO directive.
+
+| # | workflow_id | owner_dept | business_purpose | trigger_type | schedule | Mi-Core endpoint | retry | dead_letter | approval | status |
+|---|------------|-----------|-----------------|-------------|----------|-----------------|-------|-------------|---------|--------|
+| 1 | mi-system-health-check | IT | Check Mi-Core, n8n, agent health every 5min | cron | `*/5 * * * *` | POST /api/mi/workflows/log | 3x/5s | YES | NO | ACTIVE |
+| 2 | seo-daily-audit | Marketing | Daily SEO audit via Playwright | cron | `0 7 * * *` | POST /api/mi/tasks/dispatch | 3x/10s | YES | YES | ACTIVE |
+| 3 | seo-weekly-executive-report | Executive | Weekly SEO executive brief via DuckDB | cron | `0 9 * * 1` | POST /api/mi/tasks/dispatch | 3x/30s | YES | NO | ACTIVE |
+| 4 | doordash-health-check | Operations | DoorDash API + store health via Uptime Kuma | cron | `0 6 * * *` | POST /api/mi/workflows/log | 3x/5s | YES | NO | ACTIVE |
+| 5 | quickbooks-freshness-check | Finance | QB data timestamp freshness via DuckDB | cron | `0 8 * * *` | POST /api/mi/workflows/log | 3x/5s | YES | NO | ACTIVE |
+| 6 | food-safety-missing-submission-alert | Operations | Alert when food safety submission is missing | cron | `0 8 * * *` | POST /api/mi/tasks/dispatch | 3x/10s | YES | YES | ACTIVE |
+| 7 | review-spike-alert | Marketing | Alert when review velocity spikes | cron | `0 * * * *` | POST /api/mi/tasks/dispatch | 3x/10s | YES | YES | ACTIVE |
+| 8 | gbp-performance-check | Marketing | Google Business Profile score check | cron | `0 9 * * *` | POST /api/mi/workflows/log | 3x/5s | YES | YES | ACTIVE |
+| 9 | daily-ceo-brief | Executive | Daily CEO operating brief via DuckDB | cron | `0 7 * * *` | GET /api/executive/daily-brief | 3x/30s | YES | NO | ACTIVE |
+| 10 | oss-health-check | IT | OSS registry health check | cron | `0 */2 * * *` | POST /api/mi/workflows/log | 3x/5s | YES | NO | ACTIVE |
+| 11 | duplicate-task-check | IT | Fingerprint-based task dedup via DuckDB | cron | `0 */30 * * *` | POST /api/mi/tasks/dispatch | 3x/5s | YES | NO | ACTIVE |
+
+---
+
+## Owner Mapping
+
+```
+seo-daily-audit                   -> Marketing
+seo-weekly-executive-report        -> Executive / Marketing
+doordash-health-check              -> Operations / Marketing
+quickbooks-freshness-check         -> Finance
+food-safety-missing-submission-alert -> Operations
+review-spike-alert                 -> Customer Experience / Marketing
+gbp-performance-check               -> Marketing
+daily-ceo-brief                    -> Executive
+oss-health-check                   -> IT
+duplicate-task-check                -> Executive Coordination / IT
+mi-system-health-check              -> IT
+```
+
+---
+
+## Department Ownership
+
+| Department | Owns | Can Support |
+|-----------|------|------------|
+| Executive | daily-ceo-brief, seo-weekly-executive-report | finance-tax-reminder, ops-daily-store-health |
+| Finance | quickbooks-freshness-check | |
+| Operations | doordash-health-check, food-safety-missing-submission-alert | |
+| Marketing | seo-daily-audit, review-spike-alert, gbp-performance-check | |
+| IT | mi-system-health-check, oss-health-check, duplicate-task-check | |
+
+---
+
+## Trigger Type Rules
+
+```
+Allowed in n8n (trigger layer):
+- Cron trigger (schedule)
+- Webhook trigger (manual/API)
+- HTTP Request (GET/POST to Mi-Core)
+- Set / Rename fields
+- Basic IF for transport failure routing
+
+NOT allowed in n8n (business logic — must be in Mi-Core):
+- business scoring
+- revenue logic
+- approval decision
+- campaign optimization
+- finance calculation
+- duplicate detection
+- department routing
+- ranking/sorting beyond simple field mapping
+```
+
+---
+
+## Status Definitions
+
+```
+ACTIVE     : Workflow imported into n8n, schedule set, retry configured, dead-letter configured
+BLOCKED   : Workflow defined but cannot run (missing credential, missing endpoint, missing key)
+DISABLED  : Intentionally deactivated (replace with MI_CORE_* blocking)
+ARCHIVED  : Superseded by new version
+```
+
+---
+
+## Evidence Storage
+
+Evidence per workflow: `Mi/n8n/evidence/<workflow-id>/`
+
+Each run must produce:
+- `run-<timestamp>.json` — execution log
+- `payload.json` — input payload
+- `response.json` — Mi-Core response
+- `status.json` — final status
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2026-06-24 | Initial registry |
+| 2.0.0 | 2026-06-28 | Added all 11 required workflows |
+| 3.0.0 | 2026-06-29 | Added retry_policy, dead_letter_policy, full contract fields |

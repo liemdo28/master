@@ -75,7 +75,7 @@ import { enterpriseRouter } from './routes/enterprise';
 import { voiceRouter } from './routes/voice';
 import { actionsRouter } from './routes/actions';
 import { jarvisRouter } from './routes/jarvis';
-import { workflowMetricsRouter } from './routes/workflow-metrics';
+import { workflowMetricsRouter, miWorkflowsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
 import { nodesRouter } from './routes/nodes';
 import { modelsRegistryRouter } from './routes/models-registry';
@@ -128,6 +128,11 @@ import { engineeringRouter }  from './routes/engineering';
 import { aiPlatformRouter }   from './routes/ai-platform';
 import { connectorsRouter }   from './routes/connectors';
 import ceoObjectiveRouter from './ceo-command-center';
+import { productionLoopRouter } from './production-loop/production-loop-router';
+import { knowledgeGraphRouter } from './business-knowledge-graph/knowledge-graph-router';
+import crossAgentRouter from './cross-agent-intelligence/cross-agent-router';
+import selfImprovingMemoryRouter from './self-improving-memory/self-improving-memory-router';
+import executiveDailyBriefRouter from './executive-daily-brief/executive-daily-brief-router';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -202,7 +207,9 @@ app.use('/api/approval',    requireAuth, approvalRouter);
 app.use('/api/actions',     requireAuth, actionsRouter);
 
 // P1 — Sensitive read (executive data, memory, briefing)
+app.use('/api/executive',   requireAuth, executiveDailyBriefRouter); // Executive OS: Daily Executive Operating Proof
 app.use('/api/executive',   requireAuth, executiveRouter);
+app.use('/api/memory',      requireAuth, selfImprovingMemoryRouter); // Executive OS: Self-Improving Memory Loop
 app.use('/api/memory',      requireAuth, memoryRouter);
 app.use('/api/briefing',    requireAuth, briefingRouter);
 app.use('/api/graph',       requireAuth, graphRouter);
@@ -257,6 +264,7 @@ app.use('/api/health-intel',    healthIntelligenceRouter); // Phase 23: Health I
 app.use('/api/digital-twin',    digitalTwinRouter);        // Phase 24: Digital Twin
 app.use('/api/operations',      requireAuth, operationsRouter);  // DEV3: Operations & Reliability Layer
 app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: Workflow Execution Ledger & Metrics
+app.use('/api/mi/workflows',    miWorkflowsRouter);                   // n8n Workflow Fabric — evidence, heartbeat, dead-letter, retry
 app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
 app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
@@ -266,7 +274,10 @@ app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B
 app.use('/api/engineering',       engineeringRouter);               // Phase 34: Engineering Division OS
 app.use('/api/ai',                aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
 app.use('/api/connectors',        connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
-app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
+app.use('/api/production-loop',   productionLoopRouter);           // Executive OS: Continuous Production Connector Loop
+app.use('/api/knowledge-graph',   requireAuth, knowledgeGraphRouter); // Executive OS: Business Knowledge Graph
+app.use('/api/cross-agent',       requireAuth, crossAgentRouter);     // Executive OS: Cross-Agent Intelligence
+app.use('/api/ceo',               requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
   res.json({
