@@ -5,6 +5,7 @@ import {
   getBusinessSnapshot, getTasksSnapshot, getHealthSnapshot,
   getTasksForPerson_, getOverdueTasksAll, getImportantEmailsAll,
   getTodayEventsAll, searchDrive, getSheetsSnapshot, getQuickBooksSnapshot,
+  getSyncAlerts,
 } from '../visibility/visibility-hub';
 import { connectorRegistry } from '../visibility/connector-registry';
 import { syncLocalProjects } from '../visibility/connectors/local-projects';
@@ -55,6 +56,7 @@ visibilityRouter.get('/health-data', (_req: Request, res: Response) => res.json(
 visibilityRouter.get('/sheets', (_req: Request, res: Response) => res.json(getSheetsSnapshot()));
 visibilityRouter.get('/quickbooks', (_req: Request, res: Response) => res.json(getQuickBooksSnapshot()));
 visibilityRouter.get('/freshness', (_req: Request, res: Response) => res.json(generateDataFreshnessReport()));
+visibilityRouter.get('/alerts', (_req: Request, res: Response) => res.json(getSyncAlerts()));
 visibilityRouter.get('/operations', (_req: Request, res: Response) => res.json(getDev2OperationsStatus()));
 visibilityRouter.get('/operations/incidents', (_req: Request, res: Response) => res.json({ incidents: getDev2IncidentRegistry() }));
 visibilityRouter.post('/operations/run', async (_req: Request, res: Response) => res.json(await generateDev2OperationsPackage()));

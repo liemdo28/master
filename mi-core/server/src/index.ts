@@ -75,11 +75,12 @@ import { enterpriseRouter } from './routes/enterprise';
 import { voiceRouter } from './routes/voice';
 import { actionsRouter } from './routes/actions';
 import { jarvisRouter } from './routes/jarvis';
-import { workflowMetricsRouter } from './routes/workflow-metrics';
+import { workflowMetricsRouter, miWorkflowsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
 import { nodesRouter } from './routes/nodes';
 import { modelsRegistryRouter } from './routes/models-registry';
 import { miReviewApprovalsRouter } from './routes/mi-review-approvals';
+import { miFabricRouter } from './routes/mi-fabric-router';
 import { operationalKnowledgeRouter } from './routes/operational-knowledge';
 import { graphRouter } from './graph/graph-router';
 import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
@@ -105,6 +106,9 @@ import { chatMetrics } from './chat/chat-metrics';
 import { queueState } from './chat/chat-queue';
 import { claimLeadershipOnBoot, startLeaderHeartbeat } from './nodes/leader-lock-persistent';
 import { startProactiveMonitor, onAlert } from './jarvis/proactive-monitor';
+import { onConnectorAlert } from './visibility/visibility-hub';
+import { registerWss } from './ws-broadcast';
+import { startFileWatcher } from './visibility/file-watcher';
 import { startDailyBriefingScheduler } from './jarvis/daily-briefing-scheduler';
 import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
@@ -128,6 +132,11 @@ import { engineeringRouter }  from './routes/engineering';
 import { aiPlatformRouter }   from './routes/ai-platform';
 import { connectorsRouter }   from './routes/connectors';
 import ceoObjectiveRouter from './ceo-command-center';
+import { productionLoopRouter } from './production-loop/production-loop-router';
+import { knowledgeGraphRouter } from './business-knowledge-graph/knowledge-graph-router';
+import crossAgentRouter from './cross-agent-intelligence/cross-agent-router';
+import selfImprovingMemoryRouter from './self-improving-memory/self-improving-memory-router';
+import executiveDailyBriefRouter from './executive-daily-brief/executive-daily-brief-router';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -202,7 +211,9 @@ app.use('/api/approval',    requireAuth, approvalRouter);
 app.use('/api/actions',     requireAuth, actionsRouter);
 
 // P1 — Sensitive read (executive data, memory, briefing)
+app.use('/api/executive',   requireAuth, executiveDailyBriefRouter); // Executive OS: Daily Executive Operating Proof
 app.use('/api/executive',   requireAuth, executiveRouter);
+app.use('/api/memory',      requireAuth, selfImprovingMemoryRouter); // Executive OS: Self-Improving Memory Loop
 app.use('/api/memory',      requireAuth, memoryRouter);
 app.use('/api/briefing',    requireAuth, briefingRouter);
 app.use('/api/graph',       requireAuth, graphRouter);
@@ -243,6 +254,7 @@ app.use('/api/voice',           voiceRouter);
 app.use('/api/gstack',          gstackRouter);
 app.use('/api/models',          modelsRegistryRouter);
 app.use('/api/mi',              miReviewApprovalsRouter);
+app.use('/api/mi',              miFabricRouter);                      // n8n Workflow Fabric — intake, dispatch, approval, decision
 app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
 app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
 app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
@@ -257,6 +269,7 @@ app.use('/api/health-intel',    healthIntelligenceRouter); // Phase 23: Health I
 app.use('/api/digital-twin',    digitalTwinRouter);        // Phase 24: Digital Twin
 app.use('/api/operations',      requireAuth, operationsRouter);  // DEV3: Operations & Reliability Layer
 app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: Workflow Execution Ledger & Metrics
+app.use('/api/mi/workflows',    miWorkflowsRouter);                   // n8n Workflow Fabric — evidence, heartbeat, dead-letter, retry
 app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
 app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
@@ -266,7 +279,10 @@ app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B
 app.use('/api/engineering',       engineeringRouter);               // Phase 34: Engineering Division OS
 app.use('/api/ai',                aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
 app.use('/api/connectors',        connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
-app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
+app.use('/api/production-loop',   productionLoopRouter);           // Executive OS: Continuous Production Connector Loop
+app.use('/api/knowledge-graph',   requireAuth, knowledgeGraphRouter); // Executive OS: Business Knowledge Graph
+app.use('/api/cross-agent',       requireAuth, crossAgentRouter);     // Executive OS: Cross-Agent Intelligence
+app.use('/api/ceo',               requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
 app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
   res.json({
@@ -307,6 +323,8 @@ app.get('/api/metrics/chat', (_req, res) => {
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);
 const wss = new WebSocketServer({ server, path: '/ws' });
+// Register WebSocket server with shared broadcast hub (Sprint 1.2)
+registerWss(wss);
 
 // ── EADDRINUSE self-recovery ─────────────────────────────────────────────────
 // Wait before binding instead of repeatedly calling listen() on the same server.
@@ -425,6 +443,9 @@ function onListenSuccess() {
   console.log('[Mi] ✓ Connector Registry initialized');
   console.log('[Mi] ✓ Executive Memory initialized');
 
+  // Sprint 1.2: Real-time file watcher — broadcast WebSocket events when connectors sync
+  startFileWatcher();
+
   setTimeout(() => {
     if (process.env.MI_BOOT_KNOWLEDGE_INGEST === '1') {
       try {
@@ -460,6 +481,9 @@ function onListenSuccess() {
 
     // Jarvis proactive monitor — broadcast alerts via WebSocket
     onAlert((alert) => broadcast({ type: 'jarvis_alert', alert }));
+
+    // Connector sync failure alerts — broadcast via WebSocket + persist to sync_log.json
+    onConnectorAlert((alert) => broadcast({ type: 'connector_alert', alert }));
     const MONITOR_INTERVAL = parseInt(process.env.JARVIS_MONITOR_INTERVAL_MIN || '15');
     startProactiveMonitor(MONITOR_INTERVAL);
     console.log(`[Mi] ✓ Jarvis Proactive Monitor started (interval: ${MONITOR_INTERVAL}m)`);

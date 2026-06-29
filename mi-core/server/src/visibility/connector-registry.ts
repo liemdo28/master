@@ -217,6 +217,56 @@ const DEFAULT_CONNECTORS: Connector[] = [
     health_status: 'unknown',
     config: { root_path: 'D:/Project/Master/food-safety-gateway' },
   },
+  // Sprint 2.1: Slack connector
+  {
+    connector_id: 'slack',
+    name: 'Slack',
+    type: 'api',
+    status: 'active',
+    auth_status: 'not_configured',
+    last_sync: null,
+    read_capability: ['channels', 'messages', 'members'],
+    write_capability: [],
+    approval_required: false,
+    cache_path: 'slack/',
+    health_status: 'unknown',
+    config: { token_env: 'SLACK_BOT_TOKEN' },
+    setup_hint: 'Set SLACK_BOT_TOKEN and SLACK_TEAM_ID in .env to connect Slack',
+  },
+  // Sprint 2.1: GitHub connector
+  {
+    connector_id: 'github',
+    name: 'GitHub Actions',
+    type: 'api',
+    status: 'active',
+    auth_status: 'not_configured',
+    last_sync: null,
+    read_capability: ['workflows', 'runs', 'repos'],
+    write_capability: [],
+    approval_required: false,
+    cache_path: 'github/',
+    health_status: 'unknown',
+    config: { token_env: 'GITHUB_TOKEN' },
+    setup_hint: 'Set GITHUB_TOKEN in .env to connect GitHub Actions',
+  },
+  // WhatsApp — CEO's primary command channel (whatsapp-ai-gateway on :3211)
+  {
+    connector_id: 'whatsapp',
+    name: 'WhatsApp Gateway (CEO Channel)',
+    type: 'local',
+    status: 'active',
+    auth_status: 'connected',
+    last_sync: null,
+    read_capability: ['messages', 'commands', 'media'],
+    write_capability: ['messages', 'replies'],
+    approval_required: false,
+    cache_path: 'whatsapp/',
+    health_status: 'healthy',
+    config: {
+      gateway_url: 'http://127.0.0.1:3211',
+      client_state: 'D:/Project/Master/.local-agent-global/mi-core/whatsapp-client.json',
+    },
+  },
 ];
 
 function ensureDir(p: string) {
@@ -302,12 +352,23 @@ export const connectorRegistry = {
       healthy: all.filter(c => effectiveHealth(c) === 'healthy').length,
       connectors: all.map(c => {
         const health = effectiveHealth(c);
+        // Freshness: how old is the last sync? (null = never synced)
+        let age_min: number | null = null;
+        if (c.last_sync) {
+          age_min = Math.round((Date.now() - new Date(c.last_sync).getTime()) / 60_000);
+        }
         return {
           id: c.connector_id,
           name: c.name,
           auth: c.auth_status,
           health,
           last_sync: c.last_sync,
+          age_min,
+          freshness:
+            age_min === null ? 'never' :
+            age_min < 5 ? 'fresh' :
+            age_min < 30 ? 'stale' :
+            age_min < 120 ? 'old' : 'stale-old',
           setup_hint: c.auth_status !== 'connected' || health !== 'healthy' ? c.setup_hint : undefined,
         };
       }),

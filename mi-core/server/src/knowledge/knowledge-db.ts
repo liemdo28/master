@@ -263,7 +263,15 @@ export function fullIngest(): { ingested: number; skipped: number } {
     totalSkipped += cacheResult.skipped;
   }
 
-  // Ingest executive memory
+  // Sprint 3.1: Ingest Knowledge Packs (business, health, technology, restaurant, finance)
+  const KNOWLEDGE_PACKS_DIR = path.join(MI_CORE_ROOT, 'knowledge', 'packs');
+  if (fs.existsSync(KNOWLEDGE_PACKS_DIR)) {
+    const packsResult = ingestDirectory(KNOWLEDGE_PACKS_DIR, 'knowledge-packs');
+    log.push({ source: 'knowledge-packs', ...packsResult, at: new Date().toISOString() });
+    totalIngested += packsResult.ingested;
+    totalSkipped += packsResult.skipped;
+  }
+
   const memDir = path.join(GLOBAL_DIR, 'executive-memory-v2');
   if (fs.existsSync(memDir)) {
     const memResult = ingestDirectory(memDir, 'executive-memory');

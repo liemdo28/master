@@ -18,6 +18,8 @@ import { getCachedAsana, getOverdueTasks, getTasksForPerson, syncAsana, isAsanaC
 import { getHealthSummaryText, parseHealthExport, hasHealthExport, syncHealthExport } from './connectors/health/health-connector';
 import { syncAccounting, getCachedAccounting, getAccountingSummaryText } from './connectors/accounting-connector';
 import { syncFoodSafety, getCachedFoodSafety, getFoodSafetySummaryText } from './connectors/food-safety-connector';
+import { syncSlack, getCachedSlack } from './connectors/slack-connector';
+import { syncGitHub, getCachedGitHub } from './connectors/github-connector';
 import { syncWebsiteSource, syncWebsiteSources } from './connectors/website-source-connector';
 import { getQuickBooksRuntimeSnapshot, writeQuickBooksCache } from './connectors/qb-runtime-connector';
 
@@ -166,16 +168,31 @@ export async function getDailySnapshot(): Promise<DailySnapshot> {
   return snapshot;
 }
 
+function _alertSeverity(connectorId: string): ConnectorAlert['severity'] {
+  if (connectorId === 'accounting' || connectorId === 'quickbooks-runtime') return 'critical';
+  if (connectorId === 'local-projects' || connectorId === 'website-bakudan') return 'warning';
+  return 'error';
+}
+
 export async function syncAll(): Promise<Record<string, string>> {
   const results: Record<string, string> = {};
   const errors: string[] = [];
 
   // Always sync local
   try { await syncLocalProjects(); results['local-projects'] = 'ok'; connectorRegistry.markSynced('local-projects'); }
-  catch (e) { results['local-projects'] = `error: ${e}`; errors.push(`local-projects: ${e}`); }
+  catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    results['local-projects'] = `error: ${msg}`;
+    errors.push(`local-projects: ${msg}`);
+    emitConnectorAlert('local-projects', 'Master Workspace', _alertSeverity('local-projects'), `Sync failed: ${msg}`);
+  }
 
   try { await syncDashboard(); results['dashboard'] = 'ok'; connectorRegistry.markSynced('dashboard-bakudan'); }
-  catch (e) { results['dashboard'] = `error: ${e}`; }
+  catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    results['dashboard'] = `error: ${msg}`;
+    emitConnectorAlert('dashboard-bakudan', 'Dashboard bakudanramen.com', _alertSeverity('dashboard-bakudan'), `Sync failed: ${msg}`);
+  }
 
   // Google (if configured)
   const gAuth = googleAuthStatus();
@@ -253,10 +270,56 @@ export async function syncAll(): Promise<Record<string, string>> {
     results['websites'] = `error: ${e}`;
   }
 
+  // Slack (Sprint 2.1 — no credentials needed, graceful fallback)
+  try {
+    const slackResult = await syncSlack();
+    results['slack'] = slackResult.status;
+    connectorRegistry.update('slack', {
+      auth_status: slackResult.status === 'not_configured' ? 'not_configured' : 'connected',
+      status: slackResult.status === 'synced' ? 'active' : 'pending',
+    });
+    connectorRegistry.markSynced('slack', slackResult.status === 'synced' ? 'healthy' : 'degraded');
+  } catch (e) {
+    results['slack'] = `error: ${e}`;
+    connectorRegistry.markSynced('slack', 'degraded');
+  }
+
+  // GitHub Actions (Sprint 2.1 — no credentials needed, graceful fallback)
+  try {
+    const ghResult = await syncGitHub();
+    results['github'] = ghResult.status;
+    connectorRegistry.update('github', {
+      auth_status: ghResult.status === 'not_configured' ? 'not_configured' : 'connected',
+      status: ghResult.status === 'synced' ? 'active' : 'pending',
+    });
+    const hasFailed = ghResult.failed_runs && ghResult.failed_runs.length > 0;
+    connectorRegistry.markSynced('github', hasFailed ? 'degraded' : (ghResult.status === 'synced' ? 'healthy' : 'degraded'));
+  } catch (e) {
+    results['github'] = `error: ${e}`;
+    connectorRegistry.markSynced('github', 'degraded');
+  }
+
   // Write sync log
   const logPath = path.join(GLOBAL_DIR, 'visibility', 'sync_log.json');
-  const log = { synced_at: new Date().toISOString(), results, errors };
+  const syncedAt = new Date().toISOString();
+  const log = { synced_at: syncedAt, results, errors };
   fs.writeFileSync(logPath, JSON.stringify(log, null, 2));
+
+  // Sprint 1.2: Broadcast sync_complete so all WebSocket clients can refresh their data
+  const { broadcast } = require('../ws-broadcast') as typeof import('../ws-broadcast');
+  broadcast({
+    type: 'sync_complete',
+    synced_at: syncedAt,
+    connectors_synced: Object.keys(results).length,
+    errors_count: errors.length,
+    connectors: connectorRegistry.getSummary().connectors.map(c => ({
+      id: c.id,
+      name: c.name,
+      health: c.health,
+      freshness: c.freshness,
+      age_min: c.age_min,
+    })),
+  });
 
   return results;
 }
@@ -374,6 +437,72 @@ export function getImportantEmailsAll(limit = 10) {
 export function getTodayEventsAll() {
   return { calendar: getTodayEvents() };
 }
+// ── Connector Alert Registry (for WebSocket push on sync failures) ─────────────
+type ConnectorAlertCallback = (alert: ConnectorAlert) => void;
+export interface ConnectorAlert {
+  connector_id: string;
+  connector_name: string;
+  severity: 'warning' | 'error' | 'critical';
+  message: string;
+  timestamp: string;
+  detail?: string;
+}
+
+const _alertListeners: ConnectorAlertCallback[] = [];
+export function onConnectorAlert(cb: ConnectorAlertCallback) { _alertListeners.push(cb); }
+function _emitAlert(alert: ConnectorAlert) { _alertListeners.forEach(cb => cb(alert)); }
+
+/**
+ * Called by syncAll() when a connector fails.
+ * Emits a WebSocket alert and persists to sync_log.json.
+ */
+export function emitConnectorAlert(
+  connectorId: string,
+  connectorName: string,
+  severity: ConnectorAlert['severity'],
+  message: string,
+  detail?: string
+) {
+  const alert: ConnectorAlert = {
+    connector_id: connectorId,
+    connector_name: connectorName,
+    severity,
+    message,
+    timestamp: new Date().toISOString(),
+    detail,
+  };
+  _emitAlert(alert);
+}
+
+/**
+ * Returns all alerts from the last sync_log.json.
+ * Used by GET /api/visibility/alerts endpoint.
+ */
+export function getSyncAlerts(): { alerts: ConnectorAlert[]; synced_at: string | null } {
+  const logPath = path.join(GLOBAL_DIR, 'visibility', 'sync_log.json');
+  try {
+    const raw = JSON.parse(fs.readFileSync(logPath, 'utf-8'));
+    // Re-parse errors array as ConnectorAlert objects (errors stored as "connector: msg")
+    const alerts: ConnectorAlert[] = (raw.errors || []).map((e: string) => {
+      const colonIdx = e.indexOf(':');
+      const id = colonIdx > 0 ? e.slice(0, colonIdx) : e;
+      const msg = colonIdx > 0 ? e.slice(colonIdx + 1).trim() : e;
+      const all = connectorRegistry.getAll();
+      const def = all.find(c => c.connector_id === id);
+      return {
+        connector_id: id,
+        connector_name: def?.name || id,
+        severity: 'error' as ConnectorAlert['severity'],
+        message: msg,
+        timestamp: raw.synced_at || new Date().toISOString(),
+      };
+    });
+    return { alerts, synced_at: raw.synced_at || null };
+  } catch {
+    return { alerts: [], synced_at: null };
+  }
+}
+
 export function searchDrive(query: string) {
   return { drive: searchDriveFiles(query) };
 }

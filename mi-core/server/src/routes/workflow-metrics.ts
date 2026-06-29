@@ -1,14 +1,13 @@
 /**
  * DEV5 — Workflow Metrics API
- * 
+ *
  * GET /api/workflows/metrics          — authoritative workflow success metrics
  * GET /api/workflows/metrics/failures — failed workflow list with reasons
  * GET /api/workflows/ledger           — execution ledger entries
  * POST /api/workflows/log             — Phase 0.7 workflow log + dedup + evidence
- * GET /api/workflows/status           — Phase 0.7 workflow fabric dashboard
- * 
+ * GET /api/workflows/status           — Phase 0.7 fabric dashboard
+ *
  * Source of truth: workflow_execution_ledger table.
- * No inferred scoring. No synthetic scoring.
  */
 
 import { Router, Request, Response } from 'express';
@@ -21,67 +20,41 @@ import { probeAllConnectors, getProbeSummary } from '../operations/connector-liv
 import { buildWorkflowFabricStatus } from '../workflow-fabric/workflow-dashboard';
 import { logWorkflowExecution } from '../workflow-fabric/workflow-log-service';
 
+// ── In-memory stores for n8n fabric ────────────────────────────────────────
+const evidenceLog: Array<{
+  received_at: string; workflow_id: string; status: string; evidence: unknown[]; duration_ms: number
+}> = [];
+
+const deadLetterLog: Array<{
+  workflow_id: string; execution_id: string; error: string; retries: number;
+  failed_at: string; department: string; owner: string; priority: string;
+  task_id: string; status: string; created_at: string;
+}> = [];
+
+// ── /api/workflows/* router (existing) ─────────────────────────────────────
 export const workflowMetricsRouter = Router();
 
-/**
- * GET /api/workflows/metrics
- * 
- * Returns authoritative workflow success metrics.
- * Query params:
- *   hours — lookback window (default: 24)
- */
 workflowMetricsRouter.get('/metrics', (req: Request, res: Response) => {
   try {
     const hours = parseInt(String(req.query.hours || '24'), 10);
     const metrics = computeWorkflowMetrics(hours);
     res.json({ ok: true, metrics });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * GET /api/workflows/metrics/failures
- * 
- * Returns actual failed workflow list with reasons.
- * Query params:
- *   hours — lookback window (default: 24)
- */
 workflowMetricsRouter.get('/metrics/failures', (req: Request, res: Response) => {
   try {
     const hours = parseInt(String(req.query.hours || '24'), 10);
     const failures = getFailedEntries(hours);
-    res.json({
-      ok: true,
-      count: failures.length,
-      failures: failures.map(f => ({
-        workflow_id: f.workflow_id,
-        status: f.status,
-        failure_reason: f.failure_reason,
-        domain: f.domain,
-        category: f.category,
-        target_entity: f.target_entity,
-        owner: f.owner,
-        start_time: f.start_time,
-        finish_time: f.finish_time,
-        duration_ms: f.duration_ms,
-        created_at: f.created_at,
-      })),
-    });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+    res.json({ ok: true, count: failures.length, failures: failures.map(f => ({
+      workflow_id: f.workflow_id, status: f.status, failure_reason: f.failure_reason,
+      domain: f.domain, category: f.category, target_entity: f.target_entity,
+      owner: f.owner, start_time: f.start_time, finish_time: f.finish_time,
+      duration_ms: f.duration_ms, created_at: f.created_at,
+    }))});
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * GET /api/workflows/ledger
- * 
- * Returns execution ledger entries.
- * Query params:
- *   hours — lookback window (default: 24)
- *   limit — max entries (default: 100)
- *   workflow_id — filter by specific workflow
- */
 workflowMetricsRouter.get('/ledger', (req: Request, res: Response) => {
   try {
     const workflow_id = req.query.workflow_id ? String(req.query.workflow_id) : undefined;
@@ -90,171 +63,199 @@ workflowMetricsRouter.get('/ledger', (req: Request, res: Response) => {
       res.json({ ok: true, count: entries.length, entries });
     } else {
       const hours = parseInt(String(req.query.hours || '24'), 10);
-      const entries = getEntriesSince(hours);
-      res.json({ ok: true, count: entries.length, entries });
+      res.json({ ok: true, count: getEntriesSince(hours).length, entries: getEntriesSince(hours) });
     }
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * POST /api/workflows/ledger/backfill
- * 
- * Trigger backfill of existing workflow files into the ledger.
- */
 workflowMetricsRouter.post('/ledger/backfill', (_req: Request, res: Response) => {
-  try {
-    const result = backfillFromWorkflowFiles();
-    res.json({ ok: true, ...result });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  try { res.json({ ok: true, ...backfillFromWorkflowFiles() }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-// ── Phase 0.7: Workflow Automation Fabric APIs ────────────────────────────
-
-/**
- * POST /api/workflows/log
- * Logs workflow execution through Phase 0.7 dedup + evidence model.
- */
 workflowMetricsRouter.post('/log', (req: Request, res: Response) => {
   try {
     const result = logWorkflowExecution(req.body);
     if (!result.ok) return res.status(result.statusCode).json(result);
     res.json(result);
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * GET /api/workflows/status
- * Without workflow_id: returns Phase 0.7 fabric dashboard.
- * With workflow_id: returns backward-compatible ledger status for that workflow.
- */
 workflowMetricsRouter.get('/status', (req: Request, res: Response) => {
   try {
     const workflowId = req.query.workflow_id ? String(req.query.workflow_id) : '';
-    if (!workflowId) {
-      return res.json({ ok: true, status: buildWorkflowFabricStatus() });
-    }
+    if (!workflowId) return res.json({ ok: true, status: buildWorkflowFabricStatus() });
     const entries = getLedgerByWorkflow(workflowId);
-    return res.json({
-      ok: true,
-      workflow_id: workflowId,
-      status: entries.at(-1)?.status ?? 'unknown',
-      entries,
-    });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+    return res.json({ ok: true, workflow_id: workflowId, status: entries.at(-1)?.status ?? 'unknown', entries });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-// ── V2.1: Failure Evidence API ────────────────────────────────────────────
-
-/**
- * GET /api/workflows/failures
- * Returns failure evidence summary (V2.1).
- */
 workflowMetricsRouter.get('/failures', (req: Request, res: Response) => {
-  try {
-    const hours = parseInt(String(req.query.hours || '24'), 10);
-    const summary = getFailureSummary(hours);
-    res.json({ ok: true, summary });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  try { res.json({ ok: true, summary: getFailureSummary(parseInt(String(req.query.hours || '24'), 10)) }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * GET /api/workflows/failures/open
- * Returns open (unresolved) failures.
- */
 workflowMetricsRouter.get('/failures/open', (_req: Request, res: Response) => {
-  try {
-    const open = getOpenFailures();
-    res.json({ ok: true, count: open.length, failures: open });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  try { res.json({ ok: true, count: getOpenFailures().length, failures: getOpenFailures() }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * POST /api/workflows/failures
- * Record a new failure evidence entry.
- */
 workflowMetricsRouter.post('/failures', (req: Request, res: Response) => {
   try {
     const { workflow_id, failure_type, failure_reason, severity, category, source, detail, stack_trace } = req.body;
-    if (!workflow_id || !failure_type || !failure_reason) {
-      return res.status(400).json({ ok: false, error: 'workflow_id, failure_type, failure_reason required' });
-    }
-    const evidence = recordFailure({ workflow_id, failure_type, failure_reason, severity, category, source, detail, stack_trace });
-    res.json({ ok: true, evidence });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+    if (!workflow_id || !failure_type || !failure_reason) return res.status(400).json({ ok: false, error: 'workflow_id, failure_type, failure_reason required' });
+    res.json({ ok: true, evidence: recordFailure({ workflow_id, failure_type, failure_reason, severity, category, source, detail, stack_trace }) });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-/**
- * PATCH /api/workflows/failures/:id/remediate
- * Update remediation status of a failure.
- */
 workflowMetricsRouter.patch('/failures/:id/remediate', (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id, 10);
     const { status, note } = req.body;
-    if (!status) return res.status(400).json({ ok: false, error: 'status required (open|in_progress|resolved|wont_fix)' });
+    if (!status) return res.status(400).json({ ok: false, error: 'status required' });
     const updated = remediateFailure(id, status, note);
     if (!updated) return res.status(404).json({ ok: false, error: 'not found' });
     res.json({ ok: true, evidence: updated });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-// ── V2.1: Approval Source of Truth ────────────────────────────────────────
-
-/**
- * GET /api/workflows/approval-truth
- * Returns unified approval state across all stores.
- */
 workflowMetricsRouter.get('/approval-truth', (_req: Request, res: Response) => {
-  try {
-    const truth = getApprovalSourceOfTruth();
-    res.json({ ok: true, truth });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  try { res.json({ ok: true, truth: getApprovalSourceOfTruth() }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-// ── V2.1: Memory Architecture Validation ──────────────────────────────────
-
-/**
- * GET /api/workflows/memory-arch
- * Returns memory architecture validation report.
- */
 workflowMetricsRouter.get('/memory-arch', (_req: Request, res: Response) => {
-  try {
-    const report = validateMemoryArchitecture();
-    res.json({ ok: true, report });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+  try { res.json({ ok: true, report: validateMemoryArchitecture() }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });
 
-// ── V2.1: Connector Live Probes ───────────────────────────────────────────
-
-/**
- * GET /api/workflows/connector-probes
- * Returns live connector probe results.
- */
 workflowMetricsRouter.get('/connector-probes', (_req: Request, res: Response) => {
+  try { res.json({ ok: true, summary: getProbeSummary() }); }
+  catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// ── /api/workflows/evidence (n8n fabric — mirrors /api/mi/workflows/evidence) ─
+workflowMetricsRouter.get('/evidence', (req: Request, res: Response) => {
   try {
-    const summary = getProbeSummary();
-    res.json({ ok: true, summary });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
+    const limit = parseInt(String(req.query.limit || '50'), 10);
+    res.json({ ok: true, count: evidenceLog.length, records: evidenceLog.slice(0, limit) });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+workflowMetricsRouter.post('/evidence', (req: Request, res: Response) => {
+  try {
+    const { workflow_id, status, evidence = [], duration_ms } = req.body;
+    if (!workflow_id) return res.status(400).json({ ok: false, error: 'workflow_id required' });
+    evidenceLog.push({ received_at: new Date().toISOString(), workflow_id, status: status || 'unknown', evidence, duration_ms: duration_ms || 0 });
+    if (evidenceLog.length > 500) evidenceLog.splice(500);
+    res.json({ ok: true, logged: true, workflow_id });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// ── /api/mi/workflows/* router — n8n fabric endpoints ────────────────────────
+export const miWorkflowsRouter = Router();
+
+// GET /api/mi/workflows/status
+miWorkflowsRouter.get('/status', (req: Request, res: Response) => {
+  try {
+    const workflowId = req.query.workflow_id ? String(req.query.workflow_id) : '';
+    if (!workflowId) return res.json({ ok: true, status: buildWorkflowFabricStatus() });
+    const entries = getLedgerByWorkflow(workflowId);
+    return res.json({ ok: true, workflow_id: workflowId, status: entries.at(-1)?.status ?? 'unknown', entries });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// POST /api/mi/workflows/log
+// n8n workflows send a lighter payload ({workflow_id, domain, source, brand_id,
+// status, started_at, completed_at}). Derive the canonical contract fields
+// (project/entity/action/time_window) when absent so n8n conforms to the Mi
+// log contract without re-authoring every workflow. Explicit fields win.
+function normalizeWorkflowLogPayload(body: any): any {
+  const b = body || {};
+  return {
+    ...b,
+    project: b.project || b.domain || 'general',
+    entity: b.entity || b.workflow_id || b.brand_id || 'all',
+    action: b.action || 'workflow_run',
+    // Full timestamp (not date) so hourly workflows are not deduped away.
+    time_window: b.time_window || b.started_at || b.completed_at || new Date().toISOString(),
+  };
+}
+
+miWorkflowsRouter.post('/log', (req: Request, res: Response) => {
+  try {
+    const result = logWorkflowExecution(normalizeWorkflowLogPayload(req.body));
+    if (!result.ok) return res.status(result.statusCode).json(result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// POST /api/mi/workflows/evidence
+miWorkflowsRouter.post('/evidence', (req: Request, res: Response) => {
+  try {
+    const { workflow_id, status, evidence = [], duration_ms } = req.body;
+    if (!workflow_id) return res.status(400).json({ ok: false, error: 'workflow_id required' });
+    evidenceLog.push({ received_at: new Date().toISOString(), workflow_id, status: status || 'unknown', evidence, duration_ms: duration_ms || 0 });
+    if (evidenceLog.length > 500) evidenceLog.splice(500);
+    res.json({ ok: true, logged: true, workflow_id });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// GET /api/mi/workflows/evidence
+miWorkflowsRouter.get('/evidence', (req: Request, res: Response) => {
+  try {
+    const limit = parseInt(String(req.query.limit || '50'), 10);
+    res.json({ ok: true, count: evidenceLog.length, records: evidenceLog.slice(0, limit) });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// POST /api/mi/workflows/heartbeat
+miWorkflowsRouter.post('/heartbeat', (req: Request, res: Response) => {
+  try {
+    const { workflow_id, status } = req.body;
+    if (!workflow_id) return res.status(400).json({ ok: false, error: 'workflow_id required' });
+    console.log(`[n8n][HEARTBEAT] workflow=${workflow_id} status=${status || 'running'} ts=${new Date().toISOString()}`);
+    res.json({ ok: true, heartbeat: true, workflow_id, status: status || 'running' });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// POST /api/mi/workflows/dead-letter
+miWorkflowsRouter.post('/dead-letter', (req: Request, res: Response) => {
+  try {
+    const { workflow_id, execution_id, error, retries, failed_at, department, owner, priority } = req.body;
+    if (!workflow_id || !error) return res.status(400).json({ ok: false, error: 'workflow_id and error required' });
+    const task_id = `tsk_deadletter_${Date.now()}`;
+    const entry = {
+      workflow_id, execution_id: execution_id || '', error, retries: retries || 3,
+      failed_at: failed_at || new Date().toISOString(),
+      department: department || 'unknown', owner: owner || 'unknown', priority: priority || 'P3',
+      task_id, status: 'pending', created_at: new Date().toISOString(),
+    };
+    deadLetterLog.unshift(entry);
+    if (deadLetterLog.length > 200) deadLetterLog.splice(200);
+    console.error(`[n8n][DEAD-LETTER] workflow=${workflow_id} error=${error} retries=${retries} task=${task_id}`);
+    res.json({ ok: true, dead_letter_created: true, entry });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// GET /api/mi/workflows/dead-letter
+miWorkflowsRouter.get('/dead-letter', (req: Request, res: Response) => {
+  try {
+    const limit = parseInt(String(req.query.limit || '50'), 10);
+    res.json({ ok: true, count: deadLetterLog.length, dead_letters: deadLetterLog.slice(0, limit) });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
+});
+
+// POST /api/mi/workflows/retry
+miWorkflowsRouter.post('/retry', (req: Request, res: Response) => {
+  try {
+    const { workflow_id, attempt, max_retries, retry_delay_ms } = req.body;
+    if (!workflow_id) return res.status(400).json({ ok: false, error: 'workflow_id required' });
+    const nextAttempt = (attempt || 1) + 1;
+    const max = max_retries || 3;
+    const delay = retry_delay_ms || 5000;
+    const shouldRetry = nextAttempt <= max;
+    console.log(`[n8n][RETRY] workflow=${workflow_id} attempt=${nextAttempt}/${max} retry=${shouldRetry} delay=${delay}ms`);
+    res.json({ ok: true, retry_scheduled: shouldRetry, next_attempt: shouldRetry ? nextAttempt : null, scheduled_delay_ms: shouldRetry ? delay : null });
+  } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }
 });

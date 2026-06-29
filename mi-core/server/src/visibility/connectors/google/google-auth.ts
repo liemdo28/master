@@ -85,9 +85,11 @@ export async function getAuthedClient() {
   const client = createOAuthClient();
   client.setCredentials(tokens);
 
-  // Auto-refresh if expired
-  if (tokens.expiry_date && Date.now() > tokens.expiry_date - 60_000) {
+  // Auto-refresh if expired or about to expire (within 60s buffer)
+  const needsRefresh = !tokens.expiry_date || Date.now() > tokens.expiry_date - 60_000;
+  if (needsRefresh) {
     const { credentials } = await client.refreshAccessToken();
+    // credentials contains the NEW expiry_date — save it so next call uses fresh token
     saveTokens(credentials as GoogleTokens);
     client.setCredentials(credentials);
   }

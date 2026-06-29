@@ -1,0 +1,91 @@
+{
+  "scenario": "CEO asks: What needs my attention today, and how can we increase Raw Sushi online revenue 10%?",
+  "generated_at": "2026-06-28T21:30:00.000Z",
+  "objective": "Increase Raw Sushi online revenue 10%",
+  "owner": "Executive",
+  "supporters": ["Finance", "Marketing", "Operations", "IT", "Creative"],
+
+  "daily_executive_brief": {
+    "workflow": "daily-ceo-brief",
+    "schedule": "0 7 * * *",
+    "owner": "Executive",
+    "approval_required": false,
+    "status": "ACTIVE"
+  },
+
+  "connector_freshness": {
+    "doordash": {"status": "MONITORED", "workflow": "doordash-health-check"},
+    "quickbooks": {"status": "MONITORED", "workflow": "quickbooks-freshness-check"},
+    "seo": {"status": "ACTIVE", "workflow": "seo-daily-audit", "approval_required": true}
+  },
+
+  "top_blockers": [
+    {"id": 1, "blocker": "DoorDash campaign visibility", "owner": "Operations"},
+    {"id": 2, "blocker": "GBP performance decline", "owner": "Marketing"},
+    {"id": 3, "blocker": "Food safety submission compliance", "owner": "Operations"}
+  ],
+
+  "top_approvals": [
+    {"id": 1, "approval": "seo-daily-audit", "risk": "SAFE_WRITE"},
+    {"id": 2, "approval": "doordash-weekly-campaign-review", "risk": "FINANCIAL"},
+    {"id": 3, "approval": "finance-payroll-reminder", "risk": "FINANCIAL"}
+  ],
+
+  "top_opportunities": [
+    {"id": 1, "opportunity": "Increase DoorDash campaign visibility", "owner": "Operations", "impact": "HIGH"},
+    {"id": 2, "opportunity": "Improve GBP score", "owner": "Marketing", "impact": "MEDIUM"},
+    {"id": 3, "opportunity": "Optimize SEO for online ordering keywords", "owner": "Marketing", "impact": "HIGH"}
+  ],
+
+  "tasks_by_department": {
+    "Executive": {"task": "Own revenue objective", "approval": "All campaign reviews"},
+    "Finance": {"task": "Baseline revenue analysis", "workflow": "quickbooks-daily-sync"},
+    "Marketing": {"task": "SEO audit + traffic analysis", "workflow": "seo-daily-audit"},
+    "Operations": {"task": "DoorDash campaign management", "workflow": "doordash-weekly-campaign-review"},
+    "Creative": {"task": "Creative asset production on request"},
+    "IT": {"task": "Connector health monitoring", "workflow": "doordash-health-check"}
+  },
+
+  "oss_worker_selection": [
+    {"capability": "Data analytics", "oss": "DuckDB", "status": "LIVE_INSTALLED"},
+    {"capability": "Browser automation", "oss": "Playwright", "status": "LIVE_INSTALLED"},
+    {"capability": "System monitoring", "oss": "Uptime Kuma", "status": "LIVE_INSTALLED"},
+    {"capability": "Workflow fabric", "oss": "n8n", "status": "LIVE_INSTALLED"}
+  ],
+
+  "n8n_workflow_selection": [
+    "daily-ceo-brief",
+    "doordash-health-check",
+    "doordash-weekly-campaign-review",
+    "quickbooks-freshness-check",
+    "seo-daily-audit",
+    "review-monitoring"
+  ],
+
+  "duplicate_check": {
+    "status": "CLEAN",
+    "checks_passed": [
+      "objective_uniqueness",
+      "task_uniqueness",
+      "workflow_uniqueness",
+      "connector_event_idempotency"
+    ]
+  },
+
+  "approval_gate": {
+    "seo-daily-audit": "REQUIRES_APPROVAL",
+    "doordash-weekly-campaign-review": "REQUIRES_APPROVAL",
+    "finance-payroll-reminder": "REQUIRES_APPROVAL"
+  },
+
+  "evidence_plan": {
+    "path": "mi-core/evidence/live-now/raw-sushi-revenue-10/",
+    "files": ["live-now-scenario.json", "executive-brief.md", "task-assignment.json"]
+  },
+
+  "executive_report": {
+    "summary": "Raw Sushi revenue 10% objective: 3 top opportunities, 3 blockers, 3 approvals pending",
+    "recommended_actions": [
+      "Approve DoorDash campaign review (Operations)",
+      "Approve SEO daily audit (Marketing)",
+      "Review finance
