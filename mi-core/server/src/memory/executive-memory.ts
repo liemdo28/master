@@ -6,6 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { readEncryptedJSON, writeEncryptedJSON } from '../security/encryption';
 import crypto from 'crypto';
 
 const MI_CORE_ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -26,25 +27,35 @@ type MemoryKey = keyof typeof FILES;
 
 function ensureDir() { fs.mkdirSync(MEM_DIR, { recursive: true }); }
 
+// Sprint 6.1: Use encrypted read/write for consent_log and personal (sensitive)
+const SENSITIVE: Set<MemoryKey> = new Set(['consent_log', 'personal']);
+
 function read(key: MemoryKey): Record<string, unknown> {
-  try { return JSON.parse(fs.readFileSync(FILES[key], 'utf-8')); }
-  catch { return {}; }
+  try {
+    if (SENSITIVE.has(key)) {
+      return readEncryptedJSON<Record<string, unknown>>(FILES[key], {});
+    }
+    return JSON.parse(fs.readFileSync(FILES[key], 'utf-8'));
+  } catch { return {}; }
 }
 
 function write(key: MemoryKey, data: Record<string, unknown>) {
   ensureDir();
-  fs.writeFileSync(FILES[key], JSON.stringify(data, null, 2));
+  if (SENSITIVE.has(key)) {
+    writeEncryptedJSON(FILES[key], data);
+  } else {
+    fs.writeFileSync(FILES[key], JSON.stringify(data, null, 2));
+  }
 }
 
 function logConsent(action: 'save' | 'delete' | 'view', category: string, field?: string, note?: string) {
   ensureDir();
-  let log: unknown[] = [];
-  try { log = JSON.parse(fs.readFileSync(FILES.consent_log, 'utf-8')); } catch { /* init */ }
-  (log as object[]).push({
+  const log = readEncryptedJSON<object[]>(FILES.consent_log, []);
+  log.push({
     timestamp: new Date().toISOString(),
     action, category, field: field || null, note: note || null,
   });
-  fs.writeFileSync(FILES.consent_log, JSON.stringify(log, null, 2));
+  writeEncryptedJSON(FILES.consent_log, log);
 }
 
 function categoryToKey(category: string): MemoryKey {
@@ -97,7 +108,7 @@ function initDefaults() {
     }
   }
   if (!fs.existsSync(FILES.consent_log)) {
-    fs.writeFileSync(FILES.consent_log, JSON.stringify([], null, 2));
+    writeEncryptedJSON(FILES.consent_log, []);
   }
 }
 

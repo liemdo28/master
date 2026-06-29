@@ -89,6 +89,7 @@ import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-ro
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
+import { autonomousQaRouter } from './routes/autonomous-qa-router';
 import { ceoTelemetryRouter } from './telemetry/ceo-telemetry-router';
 import { councilRouter } from './council/council-router';
 import { selfImprovementRouter } from './self-improvement/self-improvement-router';
@@ -161,7 +162,27 @@ function validateReviewApprovalStartup() {
 }
 
 // ── Security headers ────────────────────────────────────────────────────────
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'", 'http://127.0.0.1:4001', 'http://localhost:4001'],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      frameAncestors: ["'none'"],
+      formAction: ["'self'"],
+      baseUri: ["'self'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false,
+}));
 
 // ── CORS — allow LAN + Tailscale origins ────────────────────────────────────
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS

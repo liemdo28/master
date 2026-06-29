@@ -10,8 +10,8 @@ revenueRouter.post('/intake', (req, res) => {
   try {
     const { source, csv, json } = req.body || {};
 
-    if (!source || !['toast', 'doordash'].includes(source)) {
-      return res.status(400).json({ ok: false, error: 'source must be "toast" or "doordash"' });
+    if (!source || !['toast', 'doordash', 'quickbooks'].includes(source)) {
+      return res.status(400).json({ ok: false, error: 'source must be "toast", "doordash", or "quickbooks"' });
     }
 
     let parsed;

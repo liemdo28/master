@@ -11,7 +11,7 @@ const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-glo
 const CACHE_DIR = path.join(GLOBAL_DIR, 'revenue');
 const CACHE_FILE = path.join(CACHE_DIR, 'cache.json');
 
-export type RevenueSource = 'toast' | 'doordash';
+export type RevenueSource = 'toast' | 'doordash' | 'quickbooks';
 
 export interface ToastRevenue {
   source: 'toast';
@@ -40,10 +40,24 @@ export interface DoordashRevenue {
   raw_rows: number;
 }
 
+export interface QuickBooksRevenue {
+  source: 'quickbooks';
+  period_start: string;
+  period_end: string;
+  total_income: number;
+  total_cogs: number;
+  gross_profit: number;
+  total_expenses: number;
+  net_income: number;
+  imported_at: string;
+  raw_rows: number;
+}
+
 export interface RevenueCache {
   updated_at: string;
   toast?: ToastRevenue;
   doordash?: DoordashRevenue;
+  quickbooks?: QuickBooksRevenue;
   summary_text: string;
   total_revenue_estimate: number | null;
 }
@@ -169,15 +183,58 @@ function parseDoordashCSV(rows: Record<string, string>[]): DoordashRevenue | nul
   };
 }
 
-export function parseRevenueCSV(source: RevenueSource, csvText: string): ToastRevenue | DoordashRevenue | null {
+// QB P&L CSV: rows with "Total Income", "Total Cost of Goods Sold", "Net Income" etc.
+function parseQuickBooksCSV(rows: Record<string, string>[]): QuickBooksRevenue | null {
+  // QB P&L exports as: row[0]=label, row[1]=amount — look for key labels
+  const labelKey = Object.keys(rows[0] || {})[0];
+  const amountKey = Object.keys(rows[0] || {})[1];
+  if (!labelKey || !amountKey) return null;
+
+  const get = (label: string): number => {
+    const row = rows.find(r => {
+      const v = (r[labelKey] || '').toLowerCase();
+      return v.includes(label.toLowerCase());
+    });
+    return row ? parseMoney(row[amountKey]) : 0;
+  };
+
+  const total_income = get('total income') || get('total revenue') || get('gross sales');
+  const total_cogs = get('total cost of goods') || get('total cogs');
+  const gross_profit = get('gross profit') || (total_income - total_cogs);
+  const total_expenses = get('total expense') || get('total operating');
+  const net_income = get('net income') || get('net profit') || (gross_profit - total_expenses);
+
+  if (!total_income && !net_income) return null;
+
+  // Try to extract date range from first rows
+  const dateRow = rows.find(r => (r[labelKey] || '').match(/\d{1,2}\/\d{1,2}\/\d{2,4}/));
+  const dateMatch = dateRow ? (dateRow[labelKey] || '').match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/) : null;
+  const periodDate = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
+
+  return {
+    source: 'quickbooks',
+    period_start: periodDate,
+    period_end: periodDate,
+    total_income: Math.round(total_income * 100) / 100,
+    total_cogs: Math.round(total_cogs * 100) / 100,
+    gross_profit: Math.round(gross_profit * 100) / 100,
+    total_expenses: Math.round(total_expenses * 100) / 100,
+    net_income: Math.round(net_income * 100) / 100,
+    imported_at: new Date().toISOString(),
+    raw_rows: rows.length,
+  };
+}
+
+export function parseRevenueCSV(source: RevenueSource, csvText: string): ToastRevenue | DoordashRevenue | QuickBooksRevenue | null {
   const rows = parseCSVRows(csvText);
   if (rows.length === 0) return null;
   if (source === 'toast') return parseToastCSV(rows);
   if (source === 'doordash') return parseDoordashCSV(rows);
+  if (source === 'quickbooks') return parseQuickBooksCSV(rows);
   return parseToastCSV(rows) ?? parseDoordashCSV(rows);
 }
 
-function buildSummary(toast?: ToastRevenue, doordash?: DoordashRevenue): { summary_text: string; total_revenue_estimate: number | null } {
+function buildSummary(toast?: ToastRevenue, doordash?: DoordashRevenue, quickbooks?: QuickBooksRevenue): { summary_text: string; total_revenue_estimate: number | null } {
   const lines: string[] = ['Revenue (real data):'];
   let total: number | null = null;
 
@@ -197,12 +254,17 @@ function buildSummary(toast?: ToastRevenue, doordash?: DoordashRevenue): { summa
     lines.push('  DoorDash: No data yet — export CSV from Merchant Portal > Reports, then run upload-revenue.mjs');
   }
 
-  if (total !== null) lines.push(`  Total estimate: $${total.toLocaleString()}`);
+  if (quickbooks) {
+    lines.push(`  QuickBooks: $${quickbooks.total_income.toLocaleString()} income | $${quickbooks.net_income.toLocaleString()} net`);
+    lines.push(`    COGS: $${quickbooks.total_cogs.toLocaleString()} | Expenses: $${quickbooks.total_expenses.toLocaleString()}`);
+  }
+
+  if (total !== null) lines.push(`  Total estimate (Toast+DoorDash): $${total.toLocaleString()}`);
 
   return { summary_text: lines.join('\n'), total_revenue_estimate: total };
 }
 
-export function saveRevenueData(source: RevenueSource, parsed: ToastRevenue | DoordashRevenue): RevenueCache {
+export function saveRevenueData(source: RevenueSource, parsed: ToastRevenue | DoordashRevenue | QuickBooksRevenue): RevenueCache {
   fs.mkdirSync(CACHE_DIR, { recursive: true });
 
   let existing: Partial<RevenueCache> = {};
@@ -210,12 +272,14 @@ export function saveRevenueData(source: RevenueSource, parsed: ToastRevenue | Do
 
   const toast = source === 'toast' ? parsed as ToastRevenue : existing.toast;
   const doordash = source === 'doordash' ? parsed as DoordashRevenue : existing.doordash;
+  const quickbooks = source === 'quickbooks' ? parsed as QuickBooksRevenue : existing.quickbooks;
 
-  const { summary_text, total_revenue_estimate } = buildSummary(toast, doordash);
+  const { summary_text, total_revenue_estimate } = buildSummary(toast, doordash, quickbooks);
   const cache: RevenueCache = {
     updated_at: new Date().toISOString(),
     toast,
     doordash,
+    quickbooks,
     summary_text,
     total_revenue_estimate,
   };

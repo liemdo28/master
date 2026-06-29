@@ -166,7 +166,7 @@ async function commandPollCycle(): Promise<void> {
   try {
     const res = await miCoreFetch(`/api/qb-agent/commands?machine_id=${encodeURIComponent(MACHINE_ID)}`);
     if (!res.ok) {
-      logger.warn('[CMD] Poll failed', { status: res.status });
+      // 401 is expected when MI_PIN is set and no session token — commands are optional
       return;
     }
     const { commands } = await res.json() as { commands: QbCommand[] };
