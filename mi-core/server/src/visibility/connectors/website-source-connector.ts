@@ -47,6 +47,12 @@ export interface WebsiteSourceSnapshot {
   risks: string[];
   secret_files_excluded: string[];
   summary_text: string;
+  // Sprint 2.3: Deep sync additions
+  live_site_status: 'online' | 'offline' | 'unknown';
+  live_site_checked_at: string | null;
+  astro_build_status: 'built' | 'not_built' | 'unknown';
+  astro_last_build: string | null;
+  astro_build_path: string | null;
 }
 
 const WEBSITE_CONFIGS: WebsiteSourceConfig[] = [
@@ -167,7 +173,7 @@ function detectDeployMethod(root: string, inventory: WebsiteSourceSnapshot['inve
   return inventory.deployment_files.length ? 'GitHub Actions / deploy config present' : 'No deploy config detected';
 }
 
-function buildSnapshot(config: WebsiteSourceConfig): WebsiteSourceSnapshot {
+async function buildSnapshot(config: WebsiteSourceConfig): Promise<WebsiteSourceSnapshot> {
   const now = new Date().toISOString();
   const root = config.local_source_path;
 
@@ -190,6 +196,11 @@ function buildSnapshot(config: WebsiteSourceConfig): WebsiteSourceSnapshot {
       risks: [`Local source path not found: ${root}`],
       secret_files_excluded: [],
       summary_text: `${config.website}: source not found at ${root}`,
+      live_site_status: 'unknown',
+      live_site_checked_at: null,
+      astro_build_status: 'unknown',
+      astro_last_build: null,
+      astro_build_path: null,
     };
   }
 
@@ -206,6 +217,57 @@ function buildSnapshot(config: WebsiteSourceConfig): WebsiteSourceSnapshot {
   if (inventory.pages.length === 0) risks.push('No website pages found in local source');
   if (inventory.deployment_files.length === 0) risks.push('No deployment files found');
   if (inventory.seo_files.length === 0) risks.push('No robots/sitemap/SEO files found in source');
+
+  // Sprint 2.3: Live site HTTP ping — check if production domain is reachable
+  let liveSiteStatus: WebsiteSourceSnapshot['live_site_status'] = 'unknown';
+  let liveSiteCheckedAt: string | null = null;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(config.production_domain, { signal: controller.signal, redirect: 'follow' });
+    clearTimeout(timer);
+    liveSiteStatus = res.ok ? 'online' : 'offline';
+    liveSiteCheckedAt = now;
+  } catch {
+    liveSiteStatus = 'offline';
+    liveSiteCheckedAt = now;
+  }
+
+  // Sprint 2.3: Astro build status — check if dist/ folder exists
+  const astroDistPath = path.join(root, 'dist');
+  const astroBuildPath = path.join(root, '.astro');
+  let astroBuildStatus: WebsiteSourceSnapshot['astro_build_status'] = 'unknown';
+  let astroLastBuild: string | null = null;
+  let astroBuildOutputPath: string | null = null;
+  if (fs.existsSync(path.join(root, 'astro.config.mjs')) || fs.existsSync(path.join(root, 'astro.config.ts'))) {
+    // This is an Astro project
+    if (fs.existsSync(astroDistPath)) {
+      astroBuildStatus = 'built';
+      astroBuildOutputPath = astroDistPath;
+      try {
+        const stats = fs.statSync(astroDistPath);
+        astroLastBuild = stats.mtime.toISOString();
+      } catch { /* non-fatal */ }
+    } else {
+      astroBuildStatus = 'not_built';
+    }
+  } else {
+    // Not an Astro project (plain HTML / PHP)
+    if (fs.existsSync(astroDistPath)) {
+      astroBuildOutputPath = astroDistPath;
+      astroBuildStatus = 'built';
+      try {
+        const stats = fs.statSync(astroDistPath);
+        astroLastBuild = stats.mtime.toISOString();
+      } catch { /* non-fatal */ }
+    } else {
+      astroBuildStatus = 'unknown';
+    }
+  }
+
+  if (liveSiteStatus === 'offline') {
+    risks.push(`Live site ${config.production_domain} is offline or unreachable`);
+  }
 
   const websiteEntity = `Website:${config.website}`;
   const sourceEntity = `LocalSource:${root}`;
@@ -247,7 +309,13 @@ function buildSnapshot(config: WebsiteSourceConfig): WebsiteSourceSnapshot {
     ],
     risks,
     secret_files_excluded: excludedSecrets,
-    summary_text: `${config.website}: ${inventory.pages.length} pages, ${inventory.assets.length} assets, repo ${remote || 'unknown'}, branch ${branch || 'unknown'}, synced ${now}`,
+    summary_text: `${config.website}: ${inventory.pages.length} pages, ${inventory.assets.length} assets, repo ${remote || 'unknown'}, branch ${branch || 'unknown'}, site ${liveSiteStatus}, synced ${now}`,
+    // Sprint 2.3: Deep sync fields
+    live_site_status: liveSiteStatus,
+    live_site_checked_at: liveSiteCheckedAt,
+    astro_build_status: astroBuildStatus,
+    astro_last_build: astroLastBuild,
+    astro_build_path: astroBuildOutputPath,
   };
 }
 
@@ -277,20 +345,19 @@ function writeSnapshot(config: WebsiteSourceConfig, snapshot: WebsiteSourceSnaps
   fs.writeFileSync(path.join(dir, 'last_sync.json'), JSON.stringify({ synced_at: snapshot.synced_at }, null, 2));
 }
 
-export function syncWebsiteSource(connectorId: 'website-bakudan' | 'website-raw'): WebsiteSourceSnapshot {
+export async function syncWebsiteSource(connectorId: 'website-bakudan' | 'website-raw'): Promise<WebsiteSourceSnapshot> {
   const config = WEBSITE_CONFIGS.find(c => c.connector_id === connectorId);
   if (!config) throw new Error(`Unknown website connector: ${connectorId}`);
-  const snapshot = buildSnapshot(config);
+  const snapshot = await buildSnapshot(config);
   if (snapshot.status !== 'ok') throw new Error(snapshot.risks.join('; ') || `${config.website} sync failed`);
   writeSnapshot(config, snapshot);
   return snapshot;
 }
 
-export function syncWebsiteSources(): Record<string, WebsiteSourceSnapshot> {
-  return {
-    bakudan: syncWebsiteSource('website-bakudan'),
-    raw: syncWebsiteSource('website-raw'),
-  };
+export async function syncWebsiteSources(): Promise<Record<string, WebsiteSourceSnapshot>> {
+  const bakudan = await syncWebsiteSource('website-bakudan');
+  const raw = await syncWebsiteSource('website-raw');
+  return { bakudan, raw };
 }
 
 export function getCachedWebsiteSource(key: 'bakudan' | 'raw'): WebsiteSourceSnapshot | null {
