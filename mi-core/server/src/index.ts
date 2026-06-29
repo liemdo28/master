@@ -106,6 +106,8 @@ import { queueState } from './chat/chat-queue';
 import { claimLeadershipOnBoot, startLeaderHeartbeat } from './nodes/leader-lock-persistent';
 import { startProactiveMonitor, onAlert } from './jarvis/proactive-monitor';
 import { onConnectorAlert } from './visibility/visibility-hub';
+import { registerWss } from './ws-broadcast';
+import { startFileWatcher } from './visibility/file-watcher';
 import { startDailyBriefingScheduler } from './jarvis/daily-briefing-scheduler';
 import { listQueueJobs, queueStats } from './queue/job-queue';
 import { reminderEvents } from './reminders/reminder-store';
@@ -319,6 +321,8 @@ app.get('/api/metrics/chat', (_req, res) => {
 // ── HTTP + WS server ────────────────────────────────────────────────────────
 const server = createServer(app);
 const wss = new WebSocketServer({ server, path: '/ws' });
+// Register WebSocket server with shared broadcast hub (Sprint 1.2)
+registerWss(wss);
 
 // ── EADDRINUSE self-recovery ─────────────────────────────────────────────────
 // Wait before binding instead of repeatedly calling listen() on the same server.
@@ -436,6 +440,9 @@ function onListenSuccess() {
   executiveMemory.init();
   console.log('[Mi] ✓ Connector Registry initialized');
   console.log('[Mi] ✓ Executive Memory initialized');
+
+  // Sprint 1.2: Real-time file watcher — broadcast WebSocket events when connectors sync
+  startFileWatcher();
 
   setTimeout(() => {
     if (process.env.MI_BOOT_KNOWLEDGE_INGEST === '1') {
