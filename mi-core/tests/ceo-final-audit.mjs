@@ -461,13 +461,21 @@ for (const [label, p] of [
 
 // Services — check connector registry
 const connReg = path.join(GLOBAL_DIR, 'visibility/connector-registry.json');
-let connectors = {};
-try { connectors = JSON.parse(fs.readFileSync(connReg,'utf8')); } catch {}
-const gmailOk = connectors?.gmail?.status === 'active' || connectors?.gmail?.connected;
-const driveOk = connectors?.drive?.status === 'active' || connectors?.drive?.connected;
-check(6, 'Gmail connector', !!connectors?.gmail, connectors?.gmail?.status || 'not in registry');
-check(6, 'Google Drive connector', !!connectors?.drive, connectors?.drive?.status || 'not in registry');
-check(6, 'WhatsApp connector', !!connectors?.whatsapp, connectors?.whatsapp?.status || 'not in registry');
+let connRaw = [];
+try { connRaw = JSON.parse(fs.readFileSync(connReg,'utf8')); } catch {}
+// Registry is an array of {connector_id, ...} — index it by id for lookup.
+const connList = Array.isArray(connRaw) ? connRaw : (connRaw.connectors || []);
+const connById = {};
+for (const c of connList) { const id = c.connector_id || c.id; if (id) connById[id] = c; }
+const findConn = (...ids) => ids.map(i => connById[i]).find(Boolean);
+const gmailC = findConn('gmail');
+const driveC = findConn('google-drive', 'drive');
+const whatsappC = findConn('whatsapp');
+const gmailOk = gmailC?.status === 'active' || gmailC?.connected;
+const driveOk = driveC?.status === 'active' || driveC?.connected;
+check(6, 'Gmail connector', !!gmailC, gmailC?.status || 'not in registry');
+check(6, 'Google Drive connector', !!driveC, driveC?.status || 'not in registry');
+check(6, 'WhatsApp connector', !!whatsappC, whatsappC?.status || 'not in registry');
 
 const s6rate = Math.round(SCORE[6].pass/SCORE[6].total*100);
 SCORE[6].verdict = s6rate >= 70 ? 'ACCESS_PASS' : 'ACCESS_FAIL';

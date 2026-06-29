@@ -90,7 +90,9 @@ const RULES: Array<{
   {
     intent: 'query_finance',
     patterns: [
-      /\b(doanh\s*thu|oanh\s*thu|revenue|sales|ban\s*hang|doanh\s*so)\b/,
+      // Revenue/sales query — but NOT when it's a "create report" command
+      // ("tao bao cao doanh thu" → create_report, not a finance query).
+      /^(?!.*\b(tao|viet|lam|create|generate)\b.*\b(bao\s*cao|report)\b).*\b(doanh\s*thu|oanh\s*thu|revenue|sales|ban\s*hang|doanh\s*so)\b/,
       /\b(hom\s*nay|tuan\s*nay|thang\s*nay|quy\s*nay|nam\s*nay)\b.*\b(bao\s*nhieu|la\s*bao|duoc|ket\s*qua)\b/,
       /\b(bao\s*nhieu)\b.*\b(tien|dong|usd|vnd)\b/,
       /\b(raw\s*sushi|bakudan\s*ramen|bakudan|stockton|stone\s*oak|rim|bandera)\b.*\b(doanh\s*thu|revenue|sales|bao\s*nhieu|lam\s*an)\b/,
@@ -128,7 +130,8 @@ const RULES: Array<{
       /\b(review|rv)\b.*\b(auto|automation)\b/,
       /\b(review.*auto|rv.*auto)\b/,
       // Fuzzy: "Dashboard ổn không", "dash on ko"
-      /\b(dash|dashboard|db|mi.?core|rv)\b.*\b(on ko|on kh|tot ko|okay|hoat dong|chay duoc|bi gi)\b/,
+      // ("dashboard bi gi vay" is a status question → check_status, handled there)
+      /\b(dash|dashboard|db|mi.?core|rv)\b.*\b(on ko|on kh|tot ko|okay|hoat dong|chay duoc)\b/,
       /\b(on ko|on kh|tot ko|okay ko|chay ko)\b.*\b(dash|db|review|auto|mi|pm2)\b/,
       // D2: "audit toàn bộ Dashboard"
       /\b(audit|kiem\s*tra|coi|xem)\b.*\b(toan\s*bo|all|tat\s*ca|he\s*thong)\b/,
@@ -196,7 +199,7 @@ const RULES: Array<{
       /\b(health|kiem tra|check)\b.*\b(service|server|process|pm2)\b/,
       /\b(co gi|anything|anything new|bao cao nhanh)\b/,
       // Fuzzy: "Dashboard đâu", "dash đâu", "db đâu", "dassh dau"
-      /\b(dash|dashboard|dassh|db|pm2|mi.?core|whatsapp)\b.*\b(dau|o dau|roi|the nao|sao)\b/,
+      /\b(dash|dashboard|dassh|db|pm2|mi.?core|whatsapp)\b.*\b(dau|o dau|roi|the nao|sao|bi gi)\b/,
       /\b(dau|o dau)\b.*\b(dash|dashboard|db|pm2)\b/,
       // Standalone project name with location/status query
       /^(dash|dashboard|dassh|db)\s+(dau|o dau|sao roi|the nao)$/,

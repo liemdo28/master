@@ -249,6 +249,24 @@ const DEFAULT_CONNECTORS: Connector[] = [
     config: { token_env: 'GITHUB_TOKEN' },
     setup_hint: 'Set GITHUB_TOKEN in .env to connect GitHub Actions',
   },
+  // WhatsApp — CEO's primary command channel (whatsapp-ai-gateway on :3211)
+  {
+    connector_id: 'whatsapp',
+    name: 'WhatsApp Gateway (CEO Channel)',
+    type: 'local',
+    status: 'active',
+    auth_status: 'connected',
+    last_sync: null,
+    read_capability: ['messages', 'commands', 'media'],
+    write_capability: ['messages', 'replies'],
+    approval_required: false,
+    cache_path: 'whatsapp/',
+    health_status: 'healthy',
+    config: {
+      gateway_url: 'http://127.0.0.1:3211',
+      client_state: 'D:/Project/Master/.local-agent-global/mi-core/whatsapp-client.json',
+    },
+  },
 ];
 
 function ensureDir(p: string) {
