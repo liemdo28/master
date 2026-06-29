@@ -19,16 +19,17 @@ import { fileURLToPath } from 'url';
 const [, , source, csvPath] = process.argv;
 
 if (!source || !csvPath) {
-  console.error('Usage: node upload-revenue.mjs <toast|doordash> <path-to-csv>');
+  console.error('Usage: node upload-revenue.mjs <toast|doordash|quickbooks> <path-to-csv>');
   console.error('');
   console.error('Export steps:');
-  console.error('  Toast:    https://pos.toasttab.com → Reports → Sales Summary → Export CSV');
-  console.error('  DoorDash: Merchant Portal → Financials → Payouts → Export');
+  console.error('  Toast:      https://pos.toasttab.com -> Reports -> Sales Summary -> Export CSV');
+  console.error('  DoorDash:   Merchant Portal -> Financials -> Payouts -> Export');
+  console.error('  QuickBooks: QB Desktop -> Reports -> Company & Financial -> Profit & Loss -> Excel/CSV');
   process.exit(1);
 }
 
-if (!['toast', 'doordash'].includes(source)) {
-  console.error(`Unknown source "${source}" — must be "toast" or "doordash"`);
+if (!['toast', 'doordash', 'quickbooks'].includes(source)) {
+  console.error(`Unknown source "${source}" — must be "toast", "doordash", or "quickbooks"`);
   process.exit(1);
 }
 

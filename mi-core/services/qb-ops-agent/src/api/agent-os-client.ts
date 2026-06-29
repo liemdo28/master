@@ -56,13 +56,10 @@ export class AgentOsClient {
     try {
       await this.http.post('/agents/heartbeat', payload);
       logger.info('Heartbeat sent to Agent OS', { machine_id: payload.machine_id, status: payload.status });
-    } catch (error) {
-      logger.warn('Failed to send heartbeat to Agent OS, queueing for retry', {
-        machine_id: payload.machine_id,
-        error: error instanceof Error ? error.message : String(error),
-      });
+    } catch {
+      // Agent OS is an optional upstream — silence to debug; data path is local qb-agent.db
       enqueueOutbound(payload, '/agents/heartbeat');
-      throw error;
+      throw new Error('agent-os-unavailable');
     }
   }
 
@@ -74,14 +71,10 @@ export class AgentOsClient {
         workflow: payload.workflow,
         status: payload.status,
       });
-    } catch (error) {
-      logger.warn('Failed to send workflow result to Agent OS, queueing for retry', {
-        machine_id: payload.machine_id,
-        workflow: payload.workflow,
-        error: error instanceof Error ? error.message : String(error),
-      });
+    } catch {
+      // Agent OS is optional — data is already written to local qb-agent.db
       enqueueOutbound(payload, '/agents/workflow-result');
-      throw error;
+      throw new Error('agent-os-unavailable');
     }
   }
 
