@@ -22,6 +22,15 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
+// Sprint 5.1: Request timeout middleware (30s per request)
+app.use((req, _res, next) => {
+  const timer = setTimeout(() => {
+    console.warn(`[AgentEngine] Request timeout: ${req.method} ${req.path} — killing after 30s`);
+  }, 30_000);
+  req.on('close', () => clearTimeout(timer));
+  next();
+});
+
 app.use(express.json({ limit: '5mb' }));
 
 const PORT = process.env.AGENT_ENGINE_PORT || 4003;
@@ -278,35 +287,6 @@ app.get('/patches', (_req, res) => {
 });
 
 // ── Phase 20: Autonomous Execution Engine ─────────────────────────────────
-
-app.get('/capabilities', (_req, res) => {
-  res.json({
-    capabilities: [
-      'patch/plan',
-      'patch/apply',
-      'patch/validate',
-      'git/diff',
-      'git/status',
-      'qa/run',
-      'memory/get',
-      'memory/set',
-      'harness/catalog',
-      'harness/plan',
-      'harness/brief',
-      'harness/materialize',
-      'harness/context',
-      // Phase 20 additions
-      'autonomous/execute',
-      'autonomous/brief/morning',
-      'autonomous/brief/evening',
-      'autonomous/incidents',
-      'autonomous/health',
-      'autonomous/objectives',
-    ],
-    version: '2.0.0',
-    phase: 20,
-  });
-});
 
 // Execute a CEO objective — full autonomous pipeline
 app.post('/autonomous/execute', (req, res) => {
