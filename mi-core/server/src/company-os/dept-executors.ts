@@ -8,7 +8,7 @@
 
 import type { DeptExecutor } from './execution-pipeline';
 import { executeAccountingRequest } from './accounting-department';
-import { executeLibraryRequest } from './library-department';
+import { executeLibraryRequest, loadSnapshotContext } from './library-department';
 import { executeExecutiveAssistant } from './executive-assistant-department';
 import { executeReportingRequest } from './reporting-department';
 import { executeEngineeringRequest } from './engineering-department';
@@ -16,10 +16,14 @@ import { executeQaDepartment } from './qa-department';
 import { runDepartment } from './department-runtime';
 import type { DeptReport } from './report-center';
 
-// Generic dept executor — uses department-runtime with correct brain + tools
+// Generic dept executor — uses department-runtime with correct brain + tools,
+// injecting the live business snapshot so the department answers from real data
+// instead of hallucinating "data unavailable".
 function makeGenericExecutor(deptId: string): DeptExecutor {
   return async (pipelineId, _deptId, intent, command) => {
-    const result = await runDepartment({ pipeline_id: pipelineId, dept_id: deptId, intent, command });
+    let extra_context: string | undefined;
+    try { extra_context = (await loadSnapshotContext()).contextText; } catch { /* fall back to no context */ }
+    const result = await runDepartment({ pipeline_id: pipelineId, dept_id: deptId, intent, command, extra_context });
     return result as DeptReport;
   };
 }
