@@ -80,6 +80,7 @@ import { gstackRouter } from './routes/gstack';
 import { nodesRouter } from './routes/nodes';
 import { modelsRegistryRouter } from './routes/models-registry';
 import { miReviewApprovalsRouter } from './routes/mi-review-approvals';
+import { miFabricRouter } from './routes/mi-fabric-router';
 import { operationalKnowledgeRouter } from './routes/operational-knowledge';
 import { graphRouter } from './graph/graph-router';
 import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
@@ -253,6 +254,7 @@ app.use('/api/voice',           voiceRouter);
 app.use('/api/gstack',          gstackRouter);
 app.use('/api/models',          modelsRegistryRouter);
 app.use('/api/mi',              miReviewApprovalsRouter);
+app.use('/api/mi',              miFabricRouter);                      // n8n Workflow Fabric — intake, dispatch, approval, decision
 app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
 app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
 app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory

@@ -166,9 +166,25 @@ miWorkflowsRouter.get('/status', (req: Request, res: Response) => {
 });
 
 // POST /api/mi/workflows/log
+// n8n workflows send a lighter payload ({workflow_id, domain, source, brand_id,
+// status, started_at, completed_at}). Derive the canonical contract fields
+// (project/entity/action/time_window) when absent so n8n conforms to the Mi
+// log contract without re-authoring every workflow. Explicit fields win.
+function normalizeWorkflowLogPayload(body: any): any {
+  const b = body || {};
+  return {
+    ...b,
+    project: b.project || b.domain || 'general',
+    entity: b.entity || b.workflow_id || b.brand_id || 'all',
+    action: b.action || 'workflow_run',
+    // Full timestamp (not date) so hourly workflows are not deduped away.
+    time_window: b.time_window || b.started_at || b.completed_at || new Date().toISOString(),
+  };
+}
+
 miWorkflowsRouter.post('/log', (req: Request, res: Response) => {
   try {
-    const result = logWorkflowExecution(req.body);
+    const result = logWorkflowExecution(normalizeWorkflowLogPayload(req.body));
     if (!result.ok) return res.status(result.statusCode).json(result);
     res.json(result);
   } catch (e) { res.status(500).json({ ok: false, error: String(e) }); }

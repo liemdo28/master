@@ -1,7 +1,18 @@
 # N8N Mi-Core Endpoint Verification — Phase N8N-3
 
-**Date:** 2026-06-29
+**Date:** 2026-06-29 (corrected)
 **Purpose:** Verify every required Mi-Core endpoint exists and responds correctly
+
+> **2026-06-29 CORRECTION:** A prior version of this report marked the four
+> n8n fabric entry endpoints (`/api/mi/intake/event`, `/api/mi/tasks/dispatch`,
+> `/api/mi/approval/request`, `/api/mi/decision/request`) as "✅ YES / PASS"
+> while they did **not** exist in the server source — every n8n workflow 404'd
+> on its first node. They have now been implemented in
+> `server/src/routes/mi-fabric-router.ts` (mounted at `/api/mi`) and wired into
+> real subsystems (company-os dispatch pipeline, QuickBooks ingest, approval
+> gate). The n8n-facing `/api/mi/workflows/log` route now also derives the
+> canonical contract fields from the lighter n8n payload. All four workflows
+> verified green end-to-end against the live server on port 4001.
 
 ---
 
@@ -32,27 +43,30 @@
 
 ---
 
-## Additional Contract Endpoints
+## n8n Workflow Fabric Entry Endpoints (implemented 2026-06-29)
 
-| # | endpoint | method | auth | exists | status |
-|---|----------|--------|------|--------|--------|
-| 1 | `/api/mi/intake/event` | POST | no | ✅ YES | PASS |
-| 2 | `/api/mi/decision/request` | POST | yes | ✅ YES | PASS |
-| 3 | `/api/mi/approval/request` | POST | yes | ✅ YES | PASS |
-| 4 | `/api/mi/tasks/dispatch` | POST | yes | ✅ YES | PASS |
-| 5 | `/api/mi/tasks/complete` | POST | yes | ✅ YES | PASS |
+Source: `server/src/routes/mi-fabric-router.ts`, mounted at `/api/mi`.
+
+| # | endpoint | method | auth | wired into | live status |
+|---|----------|--------|------|-----------|-------------|
+| 1 | `/api/mi/intake/event` | POST | no | company-os `dispatch()` pipeline (tracked run + evidence) | ✅ 200 |
+| 2 | `/api/mi/tasks/dispatch` | POST | no | `quickbooks`→`ingestQuickBooks()`; other domains→pipeline | ✅ 200 |
+| 3 | `/api/mi/approval/request` | POST | no | approval gate (autonomous auto-approve for read/report/notify) | ✅ 200 |
+| 4 | `/api/mi/decision/request` | POST | no | company-os `dispatch()` pipeline (decision routing) | ✅ 200 |
 
 ---
 
-## Missing Endpoints (Found & Fixed)
+## Live End-to-End Verification (port 4001)
 
-**None.** All required endpoints exist in the current codebase:
+| Workflow | Node sequence | Result |
+|----------|---------------|--------|
+| quickbooks-daily-sync | intake → dispatch → log | ✅ 200 · 200 · 200 |
+| doordash-weekly-campaign-review | intake → dispatch → approval → log | ✅ 200 · 200 · 200 · 200 |
+| food-safety-daily-reminder | intake → dispatch → approval → log | ✅ 200 · 200 · 200 · 200 |
+| review-monitoring | intake → dispatch → approval → log | ✅ 200 · 200 · 200 · 200 |
 
-- `/api/mi/workflows/*` → implemented in `workflow-metrics.ts` (lines 33–152)
-- `/api/mi/intake/event` → implemented in `mi-review-approvals.ts` (aliased at `/api/mi`)
-- `/api/n8n/*` → implemented in `n8n-router.ts` (lines 40–189)
-- `/api/production-loop/*` → implemented in `production-loop-router.ts` (lines 19–128)
-- `/api/executive/daily-brief` → implemented in `executive-daily-brief-router.ts`
+Dedup confirmed: re-running an identical `/workflows/log` payload returns
+`duplicate:true` (`SKIP_DUPLICATE`).
 
 ---
 
@@ -60,9 +74,10 @@
 
 | Category | Count | Status |
 |----------|-------|--------|
-| All required Mi-Core endpoints | 9 | ✅ ALL PASS |
-| n8n Health Gate endpoints | 4 | ✅ ALL PASS |
-| Additional contract endpoints | 5 | ✅ ALL PASS |
-| Missing endpoints | 0 | — |
+| Mi-Core workflow telemetry endpoints | 9 | ✅ PASS |
+| n8n Health Gate endpoints | 4 | ✅ PASS |
+| n8n fabric entry endpoints (intake/dispatch/approval/decision) | 4 | ✅ IMPLEMENTED + LIVE 200 |
+| Workflows verified green end-to-end | 4 | ✅ PASS |
 
-**Verification Result:** ✅ ALL ENDPOINTS VERIFIED — No missing endpoints found.
+**Verification Result:** ✅ All four n8n workflows pass end-to-end against the
+live server. The previously-claimed (but absent) endpoints are now real.
