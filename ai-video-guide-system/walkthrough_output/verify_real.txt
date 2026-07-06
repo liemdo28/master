@@ -1,0 +1,15 @@
+[STREAM]
+codec_name=h264
+codec_type=video
+width=1920
+height=1080
+[/STREAM]
+[STREAM]
+codec_name=aac
+codec_type=audio
+[/STREAM]
+[FORMAT]
+nb_streams=2
+duration=105.020000
+size=3157818
+[/FORMAT]

@@ -1,0 +1,35 @@
+{
+  "name": "ai-video-guide-system",
+  "version": "1.0.0-mvp",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:dashboard\" \"npm run dev:runner\" \"npm run dev:remotion\" \"npm run dev:narration\" \"npm run dev:tts\"",
+    "dev:api": "npm run dev -w apps/api-server",
+    "dev:dashboard": "npm run dev -w apps/admin-dashboard",
+    "dev:runner": "npm run dev -w apps/playwright-runner",
+    "dev:remotion": "npm run dev -w apps/remotion-renderer",
+    "dev:narration": "npm run dev -w apps/narration-service",
+    "dev:tts": "npm run dev -w apps/tts-service",
+    "dev:voiceover": "npm run dev -w apps/voiceover-service",
+    "dev:all": "concurrently \"npm run dev:api\" \"npm run dev:dashboard\" \"npm run dev:runner\" \"npm run dev:remotion\" \"npm run dev:narration\" \"npm run dev:tts\" \"npm run dev:voiceover\"",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:migrate": "npm run db:migrate -w apps/api-server",
+    "db:seed": "npm run db:seed -w apps/api-server",
+    "render:mvp": "npm run render:mvp -w apps/remotion-renderer",
+    "install:deps": "npm install && cd apps/api-server && npm install && cd ../playwright-runner && npm install && cd ../remotion-renderer && npm install && cd ../narration-service && npm install && cd ../tts-service && npm install && cd ../../packages/shared-types && npm install && cd ../timeline-recorder && npm install && cd ../privacy-masker && npm install && cd ../media-utils && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

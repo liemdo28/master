@@ -1,0 +1,83 @@
+1
+00:00:00,000 --> 00:00:04,000
+Welcome to Bakudan Ramen Links Hub Admin. Manage everything customers see from one place. No coding required.
+
+2
+00:00:04,000 --> 00:00:08,000
+Dashboard: a quick overview. Action Required alerts real issues. KPI tiles show live button counts and clicks. Quick Actions give one-click access.
+
+3
+00:00:08,000 --> 00:00:12,000
+Pages: control center for every page. Green badge means public Customer Link Hub. Purple badge means private Staff Training. Click Edit to open.
+
+4
+00:00:12,000 --> 00:00:16,000
+Buttons tab: manage every button. Save as Template to reuse a page structure. Drag and drop to reorder. Each button has Visible, Enabled, Featured toggles.
+
+5
+00:00:16,000 --> 00:00:20,000
+Destination Types: External Website, Phone, Email, Maps. Toast Online Ordering. Call This Location auto-fills from your Locations data.
+
+6
+00:00:20,000 --> 00:00:24,000
+Sections: group buttons like Order Online or Rewards headers. Every button belongs to one section. Create, rename, reorder, hide, schedule, or delete.
+
+7
+00:00:24,000 --> 00:00:28,000
+Page Settings: title, URL slug, visibility, SEO. Google preview updates live as you type. Character counters for SEO title and meta description.
+
+8
+00:00:28,000 --> 00:00:32,000
+Templates: save a page as Template once, reuse for new stores. Create Page from Template in one click with title and slug.
+
+9
+00:00:32,000 --> 00:00:36,000
+Campaigns: track marketing initiatives across shortlinks. Clicks roll up from all shortlinks. Delete a campaign and its shortlinks still work.
+
+10
+00:00:36,000 --> 00:00:40,000
+UTM Builder: track which channel drives clicks. Preview URL updates live. Copy URL or create Shortlink plus QR code. Changing destination does not change QR image.
+
+11
+00:00:40,000 --> 00:00:44,000
+QR and Shortlinks: library of all shortlinks. Each has QR image, click count, and active status. Download QR as PNG.
+
+12
+00:00:44,000 --> 00:00:48,000
+Locations: single source of truth for The Rim, Stone Oak, Bandera. Phone, address, Toast links, hours. Call This Location reads from here.
+
+13
+00:00:48,000 --> 00:00:52,000
+Staff Training: private page. Works like Customer Link Hub but is unlisted, no index, and never appears on public pages. Internal Use Only.
+
+14
+00:00:52,000 --> 00:00:56,000
+Scheduling: combined calendar view of everything with start or end dates. See which pages are about to go live or expire.
+
+15
+00:00:56,000 --> 00:01:00,000
+Blog Composer: write posts with ready-made templates. Rich text editor with emoji. Social caption and hashtags. Schedule auto-publish.
+
+16
+00:01:00,000 --> 00:01:04,000
+SEO Manager: overview of every page SEO. Red alerts for missing title or description. One-click Edit to fix.
+
+17
+00:01:04,000 --> 00:01:08,000
+Analytics: real page view and click numbers. Total buttons, live versus hidden, views and clicks in 24 hours.
+
+18
+00:01:08,000 --> 00:01:12,000
+Settings: global Instagram and Facebook links, headline text, marketing copy. Users: Super Admin, Marketing Manager, Store Manager, Viewer.
+
+19
+00:01:12,000 --> 00:01:16,000
+Customer Service: post temporary Service Notices as banners. Set type, scope, start and end dates. Note: Admin create and edit currently saves locally in the browser.
+
+20
+00:01:16,000 --> 00:01:20,000
+Audit Log: every change is recorded with who did what and when. If something looks wrong, check here first.
+
+21
+00:01:20,000 --> 00:01:24,000
+That completes the tour. Core modules are live today. Forms, Automations, and Media Library are partially functional. Thank you for watching.

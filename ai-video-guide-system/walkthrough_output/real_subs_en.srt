@@ -1,0 +1,83 @@
+1
+00:00:00,000 --> 00:00:05,000
+Welcome to Bakudan Ramen Links Hub Admin. Sign in with your admin credentials.
+
+2
+00:00:05,000 --> 00:00:10,000
+Dashboard: Action Required alerts, KPI tiles, Quick Actions, and Pages Overview.
+
+3
+00:00:10,000 --> 00:00:15,000
+Pages: control center. Green badge = public Customer Link Hub. Purple = private Staff Training.
+
+4
+00:00:15,000 --> 00:00:20,000
+Buttons tab: manage every button. Save as Template, drag to reorder, toggle Visible, Enabled, Featured.
+
+5
+00:00:20,000 --> 00:00:25,000
+Sections tab: group buttons under headers like Order Online or Rewards.
+
+6
+00:00:25,000 --> 00:00:30,000
+Page Settings: title, URL slug, visibility, SEO. Google preview updates live.
+
+7
+00:00:30,000 --> 00:00:35,000
+Templates: save a page as Template once, reuse for new stores in one click.
+
+8
+00:00:35,000 --> 00:00:40,000
+Campaigns: track marketing initiatives. Clicks roll up from all shortlinks.
+
+9
+00:00:40,000 --> 00:00:45,000
+UTM Builder: track which channel drives clicks. Copy URL or create Shortlink plus QR.
+
+10
+00:00:45,000 --> 00:00:50,000
+QR and Shortlinks: library of all shortlinks with QR images and click counts.
+
+11
+00:00:50,000 --> 00:00:55,000
+Customer Service: post temporary Service Notices as banners on the public Link Hub.
+
+12
+00:00:55,000 --> 00:01:00,000
+Staff Training: private page, unlisted, no index. Internal Use Only.
+
+13
+00:01:00,000 --> 00:01:05,000
+Scheduling: combined calendar view of everything with start or end dates.
+
+14
+00:01:05,000 --> 00:01:10,000
+Blog: write posts with ready-made templates. Rich text editor with emoji.
+
+15
+00:01:10,000 --> 00:01:15,000
+Locations: single source of truth for phone, address, Toast links, and hours.
+
+16
+00:01:15,000 --> 00:01:20,000
+SEO Manager: overview of every page SEO. Red alerts for missing fields.
+
+17
+00:01:20,000 --> 00:01:25,000
+Link Health: checks links periodically for broken, redirected, or timed out URLs.
+
+18
+00:01:25,000 --> 00:01:30,000
+Analytics: real page view and click numbers. Views and clicks in 24 hours.
+
+19
+00:01:30,000 --> 00:01:35,000
+Audit Log: every change recorded with who did what and when.
+
+20
+00:01:35,000 --> 00:01:40,000
+Settings: Instagram and Facebook links, headline text, marketing copy.
+
+21
+00:01:40,000 --> 00:01:45,000
+That completes the tour. Core modules are live today. Thank you for watching.

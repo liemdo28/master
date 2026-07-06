@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  api-server:
+    build:
+      context: ./apps/api-server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./storage:/app/storage
+      - ./data:/app/data
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  playwright-runner:
+    build:
+      context: ./apps/playwright-runner
+      dockerfile: Dockerfile
+    volumes:
+      - ./storage:/app/storage
+      - ./workflows:/app/workflows
+    env_file:
+      - .env
+    depends_on:
+      - api-server
+    restart: unless-stopped
+
+  remotion-renderer:
+    build:
+      context: ./apps/remotion-renderer
+      dockerfile: Dockerfile
+    volumes:
+      - ./storage:/app/storage
+    env_file:
+      - .env
+    depends_on:
+      - api-server
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:

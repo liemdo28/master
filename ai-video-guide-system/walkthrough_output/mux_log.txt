@@ -1,0 +1,27 @@
+RC:0
+STDOUT:
+STDERR:ed=0:00:09.81    
+frame= 2134 fps=207 q=26.0 size=    7168KiB time=00:01:11.06 bitrate= 826.3kbits/s speed=6.89x elapsed=0:00:10.32    
+frame= 2287 fps=211 q=26.0 size=    7936KiB time=00:01:18.50 bitrate= 828.1kbits/s speed=7.24x elapsed=0:00:10.83    
+frame= 2511 fps=221 q=-1.0 size=    8448KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:11.36    
+[out#0/mp4 @ 000001ca7c1c4d00] video:7630KiB audio:960KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.773326%
+frame= 2520 fps=221 q=-1.0 Lsize=    8656KiB time=00:01:23.93 bitrate= 844.8kbits/s speed=7.37x elapsed=0:00:11.38    
+[libx264 @ 000001ca7e334040] frame I:19    Avg QP: 4.83  size: 45155
+[libx264 @ 000001ca7e334040] frame P:746   Avg QP:17.38  size:  8152
+[libx264 @ 000001ca7e334040] frame B:1755  Avg QP:12.38  size:   497
+[libx264 @ 000001ca7e334040] consecutive B-frames:  4.3%  7.9%  2.1% 85.7%
+[libx264 @ 000001ca7e334040] mb I  I16..4: 90.7%  1.1%  8.1%
+[libx264 @ 000001ca7e334040] mb P  I16..4:  4.9%  8.5%  1.0%  P16..4:  4.7%  0.6%  0.6%  0.0%  0.0%    skip:79.6%
+[libx264 @ 000001ca7e334040] mb B  I16..4:  0.5%  0.2%  0.0%  B16..8:  2.4%  0.0%  0.0%  direct: 2.6%  skip:94.3%  L0:47.8% L1:48.7% BI: 3.5%
+[libx264 @ 000001ca7e334040] 8x8 transform intra:48.1% inter:62.4%
+[libx264 @ 000001ca7e334040] coded y,uvDC,uvAC intra: 7.8% 7.6% 4.2% inter: 1.0% 2.8% 0.2%
+[libx264 @ 000001ca7e334040] i16 v,h,dc,p: 65% 31%  4%  0%
+[libx264 @ 000001ca7e334040] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 57% 13% 28%  0%  0%  0%  0%  0%  1%
+[libx264 @ 000001ca7e334040] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 41% 21% 12%  4%  5%  5%  5%  4%  3%
+[libx264 @ 000001ca7e334040] i8c dc,h,v,p: 75% 19%  6%  0%
+[libx264 @ 000001ca7e334040] Weighted P-Frames: Y:13.7% UV:13.5%
+[libx264 @ 000001ca7e334040] ref P L0: 64.6% 18.1% 14.0%  2.8%  0.4%
+[libx264 @ 000001ca7e334040] ref B L0: 53.2% 45.0%  1.8%
+[libx264 @ 000001ca7e334040] ref B L1: 97.2%  2.8%
+[libx264 @ 000001ca7e334040] kb/s:744.03
+[aac @ 000001ca7e3febc0] Qavg: 64805.902
