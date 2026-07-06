@@ -48,18 +48,26 @@ export async function runJob(ctx: JobContext): Promise<void> {
     let enScript = job.enScript ?? job.originalScript;
     let viScript = job.viScript ?? "";
 
-    // If source is VI → translate to EN
-    if (job.sourceLanguage === "vi") {
+    // If source is VI AND EN is in output set → translate to EN
+    if (job.sourceLanguage === "vi" && job.outputLanguages.includes("en")) {
+   
       onProgress(10, "Translating to English...");
       enScript = await translateToEnglish(job.originalScript);
       insertAudit({ id: uuid(), jobId, segmentId: null, event: "translate", detail: "VI→EN", engine: null, timestamp: new Date().toISOString() });
       updateJob(jobId, { enScript, enTranslation: { machine: enScript, edited: null, approved: null } });
     }
 
-    // If VI is requested and not yet available → translate EN → VI
-    if (job.outputLanguages.includes("vi") && !viScript) {
+    // If VI is requested, source is EN, and no VI script yet → translate EN → VI
+    if (job.outputLanguages.includes("vi") && job.sourceLanguage === "en" && !viScript) {
       onProgress(15, "Translating to Vietnamese...");
       viScript = await translateToVietnamese(enScript);
+      insertAudit({ id: uuid(), jobId, segmentId: null, event: "translate", detail: "EN→VI", engine: null, timestamp: new Date().toISOString() });
+      updateJob(jobId, { viScript, viTranslation: { machine: viScript, edited: null, approved: null } });
+    } else if (job.outputLanguages.includes("vi") && !viScript && job.sourceLanguage === "vi") {
+      // Source is VI and VI is requested but no script — use the source as VI script
+      viScript = job.originalScript;
+      updateJob(jobId, { viScript });
+
       insertAudit({ id: uuid(), jobId, segmentId: null, event: "translate", detail: "EN→VI", engine: null, timestamp: new Date().toISOString() });
       updateJob(jobId, { viScript, viTranslation: { machine: viScript, edited: null, approved: null } });
     }
@@ -75,9 +83,12 @@ export async function runJob(ctx: JobContext): Promise<void> {
     setState(jobId, "generating_en");
     onStateChange("generating_en");
 
-    // ── Phase 2: Generate EN narration ───────────────────────────────────────
-    await generateLanguage(ctx, jobId, "en", enScript, job.speakingSpeed);
+    // ── Phase 2: Generate requested language narrations ─────────────────────
+    if (job.outputLanguages.includes("en")) {
+      await generateLanguage(ctx, jobId, "en", enScript, job.speakingSpeed);
+    }
     if (job.outputLanguages.includes("vi")) {
+      
       setState(jobId, "generating_vi");
       onStateChange("generating_vi");
       await generateLanguage(ctx, jobId, "vi", viScript, job.speakingSpeed);

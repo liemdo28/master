@@ -21,6 +21,7 @@
     "test": "npm run test --workspaces --if-present",
     "db:migrate": "npm run db:migrate -w apps/api-server",
     "db:seed": "npm run db:seed -w apps/api-server",
+    "db:migrate:voiceover": "npm run db:migrate -w apps/voiceover-service",
     "render:mvp": "npm run render:mvp -w apps/remotion-renderer",
     "install:deps": "npm install && cd apps/api-server && npm install && cd ../playwright-runner && npm install && cd ../remotion-renderer && npm install && cd ../narration-service && npm install && cd ../tts-service && npm install && cd ../../packages/shared-types && npm install && cd ../timeline-recorder && npm install && cd ../privacy-masker && npm install && cd ../media-utils && npm install"
   },

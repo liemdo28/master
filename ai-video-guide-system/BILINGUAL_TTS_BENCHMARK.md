@@ -65,7 +65,6 @@ async def synthesize(voice: str, text: str, filename: str):
         await communicate.save(str(output_path))
         duration = time.time() - start
         file_size = output_path.stat().st_size
-        print(f"[OK] {filename}: {duration:.2f}.XXf s, {file_size} bytes")
         print(f"[OK] {filename}: {duration:.2f}s, {file_size} bytes")
         return {"file": filename, "time": duration, "size": file_size, "error": None}
     except Exception as e:
@@ -92,8 +91,7 @@ async def main():
     with open(OUTPUT_DIR / "benchmark_results.json", "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
 
-    print(f"
-Benchmark complete. Results saved to {OUTPUT_DIR / 'benchmark_results.json'}")
+    print(f"\\nBenchmark complete. Results saved to {OUTPUT_DIR / 'benchmark_results.json'}")
 
 if __name__ == "__main__":
     asyncio.run(main())

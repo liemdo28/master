@@ -1,357 +1,167 @@
-// src/db.ts — database access layer
-import Database from "better-sqlite3";
+// src/storage.ts
+// JSON file-backed storage (no native dependencies).
+// Same interface as db.ts but uses atomic JSON writes.
+// Section 5 (storage structure) + Section 19 (APIs) + Section 21 (no duplicate model instances).
+import fs from "fs";
+import path from "path";
 import { DB_PATH } from "./config.js";
 import type { VoiceoverJob, Segment, VoiceProfile, Pronunciation, QACheck, AuditEvent } from "@ai-video-guide/voiceover-core";
 
-let _db: Database.Database | null = null;
+// JSON DB stored in data/voiceover.json (not voiceover.db).
+const DATA_FILE = DB_PATH.replace(/\.db$/, ".json");
+export const VOICEOVER_DATA_FILE = DATA_FILE;
 
-export function getDb(): Database.Database {
-  if (!_db) {
-    _db = new Database(DB_PATH);
-    _db.pragma("journal_mode = WAL");
-    _db.pragma("foreign_keys = ON");
+function ensureDataDir(): void {
+  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+}
+
+interface DBState {
+  jobs: VoiceoverJob[];
+  segments: Segment[];
+  voiceProfiles: VoiceProfile[];
+  pronunciations: Pronunciation[];
+  qaChecks: QACheck[];
+  auditEvents: AuditEvent[];
+}
+
+const EMPTY: DBState = { jobs: [], segments: [], voiceProfiles: [], pronunciations: [], qaChecks: [], auditEvents: [] };
+
+function load(): DBState {
+  ensureDataDir();
+  if (!fs.existsSync(DATA_FILE)) {
+    return { ...EMPTY };
   }
-  return _db;
+  try {
+    const raw = fs.readFileSync(DATA_FILE, "utf-8");
+    const parsed = JSON.parse(raw);
+    return { ...EMPTY, ...parsed };
+  } catch {
+    return { ...EMPTY };
+  }
 }
 
-export function closeDb(): void {
-  if (_db) { _db.close(); _db = null; }
+function save(state: DBState): void {
+  ensureDataDir();
+  const tmp = DATA_FILE + ".tmp";
+  fs.writeFileSync(tmp, JSON.stringify(state, null, 2), "utf-8");
+  fs.renameSync(tmp, DATA_FILE);
 }
 
-// ── Jobs ───────────────────────────────────────────────────────────────────
+function mutate<T>(fn: (s: DBState) => T): T {
+  const s = load();
+  const result = fn(s);
+  save(s);
+  return result;
+}
+
+// ── Jobs ────────────────────────────────────────────────────────────────────
 export function createJob(job: VoiceoverJob): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO voiceover_jobs (id, project_name, source_language, output_languages,
-      original_script, en_script, vi_script, voice_profile_id, speaking_speed, emotion,
-      pronunciation_set_id, output_format, subtitle_toggle, source_video_path,
-      background_volume, voice_volume, en_translation, vi_translation,
-      state, progress_percent, current_stage, active_engine, current_segment_id,
-      eta_seconds, error_message, qa_score, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    job.id, job.projectName, job.sourceLanguage, JSON.stringify(job.outputLanguages),
-    job.originalScript, job.enScript, job.viScript, job.voiceProfileId,
-    job.speakingSpeed, job.emotion, job.pronunciationSetId, job.outputFormat,
-    job.subtitleToggle ? 1 : 0, job.sourceVideoPath, job.backgroundVolume,
-    job.voiceVolume, JSON.stringify(job.enTranslation), JSON.stringify(job.viTranslation),
-    job.state, job.progressPercent, job.currentStage, job.activeEngine,
-    job.currentSegmentId, job.etaSeconds, job.errorMessage, job.qaScore,
-    job.createdAt, job.updatedAt
-  );
+  mutate((s) => { s.jobs.push(job); });
 }
-
 export function getJob(id: string): VoiceoverJob | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM voiceover_jobs WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return rowToJob(row);
+  return load().jobs.find((j) => j.id === id) ?? null;
 }
-
 export function listJobs(limit = 50): VoiceoverJob[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM voiceover_jobs ORDER BY created_at DESC LIMIT ?").all(limit) as Record<string, unknown>[];
-  return rows.map(rowToJob);
+  return load().jobs.slice(-limit).reverse();
 }
-
 export function updateJob(id: string, updates: Partial<VoiceoverJob>): void {
-  const db = getDb();
-  const fields = Object.entries(updates)
-    .filter(([, v]) => v !== undefined)
-    .map(([k]) => `${snakeCase(k)} = ?`);
-  const vals = Object.entries(updates).filter(([, v]) => v !== undefined).map(([, v]) => {
-    if (Array.isArray(v) || typeof v === "object") return JSON.stringify(v);
-    return v;
+  mutate((s) => {
+    const idx = s.jobs.findIndex((j) => j.id === id);
+    if (idx >= 0) {
+      s.jobs[idx] = { ...s.jobs[idx], ...updates, updatedAt: new Date().toISOString() };
+    }
   });
-  if (!fields.length) return;
-  db.prepare(`UPDATE voiceover_jobs SET ${fields.join(", ")}, updated_at = datetime('now') WHERE id = ?`).run(...vals, id);
 }
 
-function rowToJob(r: Record<string, unknown>): VoiceoverJob {
-  return {
-    id: String(r.id),
-    projectName: String(r.project_name),
-    sourceLanguage: String(r.source_language) as VoiceoverJob["sourceLanguage"],
-    outputLanguages: JSON.parse(String(r.output_languages)),
-    originalScript: String(r.original_script ?? ""),
-    enScript: r.en_script ? String(r.en_script) : null,
-    viScript: r.vi_script ? String(r.vi_script) : null,
-    voiceProfileId: r.voice_profile_id ? String(r.voice_profile_id) : null,
-    speakingSpeed: Number(r.speaking_speed ?? 1),
-    emotion: r.emotion ? String(r.emotion) : null,
-    pronunciationSetId: r.pronunciation_set_id ? String(r.pronunciation_set_id) : null,
-    outputFormat: String(r.output_format ?? "both") as VoiceoverJob["outputFormat"],
-    subtitleToggle: Boolean(r.subtitle_toggle),
-    sourceVideoPath: r.source_video_path ? String(r.source_video_path) : null,
-    backgroundVolume: Number(r.background_volume ?? 0.3),
-    voiceVolume: Number(r.voice_volume ?? 1),
-    enTranslation: JSON.parse(String(r.en_translation)),
-    viTranslation: JSON.parse(String(r.vi_translation)),
-    state: String(r.state) as VoiceoverJob["state"],
-    progressPercent: Number(r.progress_percent ?? 0),
-    currentStage: r.current_stage ? String(r.current_stage) : null,
-    activeEngine: r.active_engine ? String(r.active_engine) as VoiceoverJob["activeEngine"] : null,
-    currentSegmentId: r.current_segment_id ? String(r.current_segment_id) : null,
-    etaSeconds: r.eta_seconds ? Number(r.eta_seconds) : null,
-    errorMessage: r.error_message ? String(r.error_message) : null,
-    qaScore: r.qa_score ? Number(r.qa_score) : null,
-    createdAt: String(r.created_at),
-    updatedAt: String(r.updated_at),
-  };
-}
-
-// ── Segments ────────────────────────────────────────────────────────────────
+// ── Segments ─────────────────────────────────────────────────────────────────
 export function upsertSegment(seg: Segment): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO voiceover_segments (id, job_id, language, seg_index, source_text,
-      normalized_text, voice_id, engine, duration, output_file, status,
-      quality_score, retry_count, start_offset, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ON CONFLICT(id) DO UPDATE SET
-      normalized_text = excluded.normalized_text,
-      voice_id = excluded.voice_id,
-      engine = excluded.engine,
-      duration = excluded.duration,
-      output_file = excluded.output_file,
-      status = excluded.status,
-      quality_score = excluded.quality_score,
-      retry_count = excluded.retry_count,
-      start_offset = excluded.start_offset,
-      updated_at = datetime('now')
-  `).run(
-    seg.segmentId, seg.jobId, seg.language, seg.index, seg.sourceText,
-    seg.normalizedText, seg.voiceId, seg.engine, seg.duration,
-    seg.outputFile, seg.status, seg.qualityScore, seg.retryCount,
-    seg.startOffset, seg.createdAt, seg.updatedAt
-  );
+  mutate((s) => {
+    const idx = s.segments.findIndex((x) => x.segmentId === seg.segmentId);
+    if (idx >= 0) s.segments[idx] = seg;
+    else s.segments.push(seg);
+  });
 }
-
 export function getSegmentsByJob(jobId: string): Segment[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM voiceover_segments WHERE job_id = ? ORDER BY seg_index").all(jobId) as Record<string, unknown>[];
-  return rows.map(rowToSegment);
+  return load().segments.filter((s) => s.jobId === jobId).sort((a, b) => a.index - b.index);
 }
-
 export function getSegment(id: string): Segment | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM voiceover_segments WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  return row ? rowToSegment(row) : null;
+  return load().segments.find((s) => s.segmentId === id) ?? null;
 }
-
 export function updateSegment(id: string, updates: Partial<Segment>): void {
-  const db = getDb();
-  const fields = Object.entries(updates)
-    .filter(([, v]) => v !== undefined)
-    .map(([k]) => `${snakeCase(k)} = ?`);
-  const vals = Object.entries(updates).filter(([, v]) => v !== undefined).map(([, v]) => v);
-  if (!fields.length) return;
-  db.prepare(`UPDATE voiceover_segments SET ${fields.join(", ")}, updated_at = datetime('now') WHERE id = ?`).run(...vals, id);
-}
-
-function rowToSegment(r: Record<string, unknown>): Segment {
-  return {
-    segmentId: String(r.id),
-    jobId: String(r.job_id),
-    language: String(r.language) as Segment["language"],
-    index: Number(r.seg_index),
-    sourceText: String(r.source_text),
-    normalizedText: String(r.normalized_text),
-    voiceId: r.voice_id ? String(r.voice_id) : null,
-    engine: r.engine ? String(r.engine) as Segment["engine"] : null,
-    duration: r.duration ? Number(r.duration) : null,
-    outputFile: r.output_file ? String(r.output_file) : null,
-    status: String(r.status) as Segment["status"],
-    qualityScore: r.quality_score ? Number(r.quality_score) : null,
-    retryCount: Number(r.retry_count ?? 0),
-    startOffset: r.start_offset ? Number(r.start_offset) : null,
-    createdAt: String(r.created_at),
-    updatedAt: String(r.updated_at),
-  };
+  mutate((s) => {
+    const idx = s.segments.findIndex((x) => x.segmentId === id);
+    if (idx >= 0) s.segments[idx] = { ...s.segments[idx], ...updates, updatedAt: new Date().toISOString() };
+  });
 }
 
 // ── Voice Profiles ──────────────────────────────────────────────────────────
 export function upsertVoiceProfile(vp: VoiceProfile): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO voice_profiles (id, name, languages, gender, style, engine,
-      reference_audio, clone_status, default_speed, default_emotion, default_pitch,
-      default_pause_style, approved_usage, consent, created_by, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ON CONFLICT(id) DO UPDATE SET
-      name = excluded.name, languages = excluded.languages, gender = excluded.gender,
-      style = excluded.style, engine = excluded.engine, reference_audio = excluded.reference_audio,
-      clone_status = excluded.clone_status, default_speed = excluded.default_speed,
-      default_emotion = excluded.default_emotion, default_pitch = excluded.default_pitch,
-      default_pause_style = excluded.default_pause_style, approved_usage = excluded.approved_usage,
-      consent = excluded.consent, updated_at = datetime('now')
-  `).run(
-    vp.id, vp.name, JSON.stringify(vp.languages), vp.gender, vp.style, vp.engine,
-    vp.referenceAudio, vp.cloneStatus, vp.defaultSpeed, vp.defaultEmotion, vp.defaultPitch,
-    vp.defaultPauseStyle, vp.approvedUsage ? 1 : 0, JSON.stringify(vp.consent),
-    vp.createdBy, vp.updatedAt
-  );
+  mutate((s) => {
+    const idx = s.voiceProfiles.findIndex((x) => x.id === vp.id);
+    if (idx >= 0) s.voiceProfiles[idx] = vp;
+    else s.voiceProfiles.push(vp);
+  });
 }
-
 export function listVoiceProfiles(): VoiceProfile[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM voice_profiles ORDER BY name").all() as Record<string, unknown>[];
-  return rows.map((r) => ({
-    id: String(r.id), name: String(r.name),
-    languages: JSON.parse(String(r.languages)),
-    gender: r.gender ? String(r.gender) : null,
-    style: r.style ? String(r.style) : null,
-    engine: String(r.engine) as VoiceProfile["engine"],
-    referenceAudio: r.reference_audio ? String(r.reference_audio) : null,
-    cloneStatus: String(r.clone_status) as VoiceProfile["cloneStatus"],
-    defaultSpeed: Number(r.default_speed ?? 1),
-    defaultEmotion: r.default_emotion ? String(r.default_emotion) : null,
-    defaultPitch: Number(r.default_pitch ?? 0),
-    defaultPauseStyle: r.default_pause_style ? String(r.default_pause_style) : null,
-    approvedUsage: Boolean(r.approved_usage),
-    consent: JSON.parse(String(r.consent)),
-    createdBy: String(r.created_by),
-    updatedAt: String(r.updated_at),
-  }));
+  return load().voiceProfiles;
 }
-
 export function getVoiceProfile(id: string): VoiceProfile | null {
-  const db = getDb();
-  const r = db.prepare("SELECT * FROM voice_profiles WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!r) return null;
-  return {
-    id: String(r.id), name: String(r.name),
-    languages: JSON.parse(String(r.languages)),
-    gender: r.gender ? String(r.gender) : null,
-    style: r.style ? String(r.style) : null,
-    engine: String(r.engine) as VoiceProfile["engine"],
-    referenceAudio: r.reference_audio ? String(r.reference_audio) : null,
-    cloneStatus: String(r.clone_status) as VoiceProfile["cloneStatus"],
-    defaultSpeed: Number(r.default_speed ?? 1),
-    defaultEmotion: r.default_emotion ? String(r.default_emotion) : null,
-    defaultPitch: Number(r.default_pitch ?? 0),
-    defaultPauseStyle: r.default_pause_style ? String(r.default_pause_style) : null,
-    approvedUsage: Boolean(r.approved_usage),
-    consent: JSON.parse(String(r.consent)),
-    createdBy: String(r.created_by),
-    updatedAt: String(r.updated_at),
-  };
+  return load().voiceProfiles.find((v) => v.id === id) ?? null;
 }
-
 export function deleteVoiceProfile(id: string): void {
-  getDb().prepare("DELETE FROM voice_profiles WHERE id = ?").run(id);
+  mutate((s) => { s.voiceProfiles = s.voiceProfiles.filter((v) => v.id !== id); });
 }
 
 // ── Pronunciation Dictionary ────────────────────────────────────────────────
 export function upsertPronunciation(p: Pronunciation): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO pronunciation_dict (id, term, en_pronunciation, vi_pronunciation,
-      language, active, project_override, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ON CONFLICT(term) DO UPDATE SET
-      en_pronunciation = excluded.en_pronunciation,
-      vi_pronunciation = excluded.vi_pronunciation,
-      language = excluded.language,
-      active = excluded.active,
-      project_override = excluded.project_override
-  `).run(p.id, p.term, p.en, p.vi, p.language, p.active ? 1 : 0, p.projectOverride, p.createdAt);
+  mutate((s) => {
+    const idx = s.pronunciations.findIndex((x) => x.term.toLowerCase() === p.term.toLowerCase());
+    if (idx >= 0) s.pronunciations[idx] = p;
+    else s.pronunciations.push(p);
+  });
 }
-
 export function listPronunciations(): Pronunciation[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM pronunciation_dict WHERE active = 1 ORDER BY term").all() as Record<string, unknown>[];
-  return rows.map((r) => ({
-    id: String(r.id), term: String(r.term),
-    en: r.en_pronunciation ? String(r.en_pronunciation) : null,
-    vi: r.vi_pronunciation ? String(r.vi_pronunciation) : null,
-    language: String(r.language) as Pronunciation["language"],
-    active: Boolean(r.active),
-    projectOverride: r.project_override ? String(r.project_override) : null,
-    createdAt: String(r.created_at),
-  }));
+  return load().pronunciations.filter((p) => p.active);
 }
-
 export function deletePronunciation(id: string): void {
-  getDb().prepare("DELETE FROM pronunciation_dict WHERE id = ?").run(id);
+  mutate((s) => { s.pronunciations = s.pronunciations.filter((p) => p.id !== id); });
 }
 
 // ── QA Checks ──────────────────────────────────────────────────────────────
 export function insertQACheck(qa: QACheck): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO qa_checks (id, segment_id, language, passed, similarity_percent,
-      checks, notes, engine_used, attempt, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    qa.id, qa.segmentId, qa.language, qa.passed ? 1 : 0, qa.similarityPercent,
-    JSON.stringify(qa.checks), qa.notes, qa.engineUsed, qa.attempt, qa.timestamp
-  );
+  mutate((s) => {
+    // Omit the id field, which the Zod QA schema doesn't define
+    const { id: _ignored, ...rest } = qa as unknown as QACheck & { id?: string };
+    s.qaChecks.push({ ...rest, id: qa.id } as QACheck);
+  });
 }
-
 export function listQAChecksByJob(jobId: string): QACheck[] {
-  const db = getDb();
-  const rows = db.prepare(`
-    SELECT q.* FROM qa_checks q
-    JOIN voiceover_segments s ON q.segment_id = s.id
-    WHERE s.job_id = ? ORDER BY q.timestamp DESC
-  `).all(jobId) as Record<string, unknown>[];
-  return rows.map((r) => ({
-    id: String(r.id), segmentId: String(r.segment_id),
-    language: String(r.language) as QACheck["language"],
-    passed: Boolean(r.passed), similarityPercent: Number(r.similarity_percent),
-    checks: JSON.parse(String(r.checks)),
-    notes: r.notes ? String(r.notes) : null,
-    engineUsed: String(r.engine_used) as QACheck["engineUsed"],
-    attempt: Number(r.attempt), timestamp: String(r.timestamp),
-  }));
+  const segIds = new Set(load().segments.filter((s) => s.jobId === jobId).map((s) => s.segmentId));
+  return load().qaChecks.filter((q) => segIds.has(q.segmentId)).sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 }
 
-// ── Audit Log ─────────────────────────────────────────────────────────────
+// ── Audit Log ──────────────────────────────────────────────────────────────
 export function insertAudit(event: AuditEvent): void {
-  const db = getDb();
-  db.prepare(`
-    INSERT INTO audit_log (id, job_id, segment_id, event, detail, engine, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `).run(event.id, event.jobId, event.segmentId, event.event, event.detail, event.engine, event.timestamp);
+  mutate((s) => { s.auditEvents.push(event); });
 }
-
 export function listAuditByJob(jobId: string): AuditEvent[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM audit_log WHERE job_id = ? ORDER BY timestamp ASC").all(jobId) as Record<string, unknown>[];
-  return rows.map((r) => ({
-    id: String(r.id), jobId: String(r.job_id),
-    segmentId: r.segment_id ? String(r.segment_id) : null,
-    event: String(r.event), detail: r.detail ? String(r.detail) : null,
-    engine: r.engine ? String(r.engine) as AuditEvent["engine"] : null,
-    timestamp: String(r.timestamp),
-  }));
+  return load().auditEvents.filter((a) => a.jobId === jobId).sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 }
 
-// ── Utility ────────────────────────────────────────────────────────────────
-function snakeCase(s: string): string {
-  return s.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
-}
-
+// ── Storage paths ──────────────────────────────────────────────────────────
+import { VOICEOVER_STORAGE } from "./config.js";
 export function jobSegmentsDir(jobId: string): string {
   return path.join(VOICEOVER_STORAGE, "projects", jobId, "segments");
 }
-
 export function jobOutputsDir(jobId: string): string {
   return path.join(VOICEOVER_STORAGE, "projects", jobId, "outputs");
 }
-
 export function jobSubtitlesDir(jobId: string): string {
   return path.join(VOICEOVER_STORAGE, "projects", jobId, "subtitles");
 }
-
 export function jobReportsDir(jobId: string): string {
   return path.join(VOICEOVER_STORAGE, "projects", jobId, "reports");
 }
-
 export function jobPreviewsDir(jobId: string): string {
   return path.join(VOICEOVER_STORAGE, "projects", jobId, "previews");
 }
-
-import path from "path";
-import { VOICEOVER_STORAGE } from "./config.js";

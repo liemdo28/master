@@ -1,5 +1,6 @@
 // src/engines/edge-tts-engine.ts
 // Edge TTS — always available, baseline engine for both EN and VI.
+// Note: edge-tts v6 uses --write-media (not --output).
 import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
@@ -37,7 +38,7 @@ export class EdgeTTSEngine implements TTSEngine {
       execSync("edge-tts --version", { stdio: "pipe" });
       return { available: true, gpuUsed: false };
     } catch {
-      return { available: false, reason: "edge-tts not installed or not on PATH", gpuUsed: false };
+      return { available: false, reason: "edge-tts not installed", gpuUsed: false };
     }
   }
 
@@ -45,10 +46,10 @@ export class EdgeTTSEngine implements TTSEngine {
     const voice = EDGE_VOICES[req.language]?.female ?? EDGE_VOICES.en.female;
     const rate = `+${String(Math.round((req.speed ?? 1) * 100 - 100))}%`;
     const ext = req.format === "wav" ? "wav" : "mp3";
-    const outFile = req.outputPath.endsWith(`.${ext}`) ? req.outputPath : `${req.outputPath}.${ext}`;
+    let outFile = req.outputPath.endsWith(`.${ext}`) ? req.outputPath : `${req.outputPath}.${ext}`;
 
-    const dir = path.dirname(outFile);
-    fs.mkdirSync(dir, { recursive: true });
+    fs.mkdirSync(path.dirname(outFile), { recursive: true });
+    if (!fs.existsSync(outFile)) fs.writeFileSync(outFile, "");
 
     const start = Date.now();
     await this._runEdgeTTS(req.text, voice, rate, outFile);
@@ -64,7 +65,9 @@ export class EdgeTTSEngine implements TTSEngine {
 
   private _runEdgeTTS(text: string, voice: string, rate: string, output: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const args = ["--text", text, "--voice", voice, "--rate", rate, "--output", output];
+      // edge-tts v6.x: positional TEXT, then optional flags; output via --write-media <FILE>
+      const args = ["--text", text, "--voice", voice, "--rate", rate, "--write-media", output];
+
       const proc = spawn("edge-tts", args, { stdio: "pipe" });
       let stderr = "";
       proc.stderr?.on("data", (d) => { stderr += d.toString(); });
@@ -79,11 +82,10 @@ export class EdgeTTSEngine implements TTSEngine {
   private async _probeDuration(file: string): Promise<number> {
     try {
       const { execSync } = await import("child_process");
-      const out = execSync(`ffprobe -v quiet -print_format json -show_format "${file}" 2>nul`, { encoding: "utf-8" });
+      const out = execSync(`ffprobe -v quiet -print_format json -show_format "${file}"`, { encoding: "utf-8" });
       const data = JSON.parse(out);
       return parseFloat(data.format?.duration ?? "0") || 0;
     } catch {
-      // Fallback: estimate from text length (~14 chars/sec)
       return 0;
     }
   }
