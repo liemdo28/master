@@ -38,7 +38,8 @@ const BRAND_PROPERTY_IDS: Record<string, string> = {
 };
 
 export function getPropertyIdForBrand(brandId: string): string {
-  return BRAND_PROPERTY_IDS[brandId] || GA4_PROPERTY_ID;
+  const normalized = brandId === 'rawsushi' ? 'raw_sushi' : brandId;
+  return BRAND_PROPERTY_IDS[normalized] || GA4_PROPERTIES[brandId] || GA4_PROPERTY_ID;
 }
 
 // ── Snapshot DB ─────────────────────────────────────────────────────────────
@@ -220,7 +221,7 @@ function dateRange(days: number): { startDate: string; endDate: string } {
 /**
  * Get traffic overview: users, sessions, pageviews, engagement rate
  */
-export async function getTrafficOverview(days: number = 30): Promise<any> {
+export async function getTrafficOverview(days: number = 30, propertyId?: string): Promise<any> {
   const range = dateRange(days);
   
   const response = await runReport(
@@ -237,7 +238,8 @@ export async function getTrafficOverview(days: number = 30): Promise<any> {
     ],
     undefined,
     1000,
-    [{ dimension: { dimensionName: 'date' }, desc: true }]
+    [{ dimension: { dimensionName: 'date' }, desc: true }],
+    propertyId
   );
   
   const rows = parseRows(response.rows || []);

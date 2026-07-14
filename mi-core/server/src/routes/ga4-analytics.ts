@@ -153,7 +153,7 @@ ga4AnalyticsRouter.get('/:brand/traffic', async (req: Request, res: Response) =>
     return;
   }
   try {
-    const data = await ga4.getTrafficOverview(days);
+    const data = await ga4.getTrafficOverview(days, propertyId);
     res.json({ ok: true, brand: req.params.brand, property: propertyId, ...data });
   } catch (e: any) {
     res.status(500).json({ ok: false, error: e.message });
