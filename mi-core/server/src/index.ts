@@ -105,6 +105,7 @@ import { seoEvidenceRouteRouter } from './routes/seo-evidence-route';
 import { seoCalendarRouter } from './routes/seo-calendar';
 import { seoRateLimiter, requireSeoAccess } from './seo/seo-security';
 import { startSeoScheduler } from './seo/scheduler/seo-scheduler';
+import { getSeoWriteFlags } from './seo/seo-write-guards';
 import { cooV4Router } from './routes/coo-v4-router';
 import companyOsRouter from './company-os/company-os-router';
 import { operationsRouter } from './routes/operations';
@@ -175,6 +176,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https:'],
       connectSrc: ["'self'", 'http://127.0.0.1:4001', 'http://localhost:4001'],
@@ -185,9 +187,10 @@ app.use(helmet({
       frameAncestors: ["'none'"],
       formAction: ["'self'"],
       baseUri: ["'self'"],
-      upgradeInsecureRequests: [],
+      upgradeInsecureRequests: null,
     },
   },
+  strictTransportSecurity: false,
   crossOriginEmbedderPolicy: false,
   crossOriginOpenerPolicy: false,
 }));
@@ -357,6 +360,22 @@ app.get('/api/jobs', async (req, res) => {
 // ── Chat runtime metrics ─────────────────────────────────────────────────────
 app.get('/api/metrics/chat', (_req, res) => {
   res.json({ ...chatMetrics.snapshot(), queue: queueState() });
+});
+
+app.get('/api/seo-public/status', (_req, res) => {
+  const flags = getSeoWriteFlags();
+  res.json({
+    ok: true,
+    dashboard_url: process.env.MI_DASHBOARD_URL || '/seo-control-center.html',
+    runtime_sha: process.env.RUNTIME_SHA || process.env.GIT_SHA || null,
+    runtime_source: process.env.MI_CORE_ROOT || null,
+    bind_host: HOST,
+    live_write_status: Object.values(flags).some(f => f.enabled) ? 'PARTIALLY_ENABLED' : 'DISABLED',
+    flags,
+    auth_configured: Boolean(process.env.MI_PIN || process.env.MI_PIN_HASH),
+    trusted_mapping_configured: Boolean(process.env.MI_AUTH_DEFAULT_USER && process.env.MI_AUTH_USER_MAP_JSON),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // ── HTTP + WS server ────────────────────────────────────────────────────────

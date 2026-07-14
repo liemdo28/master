@@ -111,6 +111,12 @@
 
   .refresh-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 4px 10px; font-size: 11px; }
   .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .auth-panel { background: #0d0d16; border-bottom: 1px solid var(--border); padding: 12px 24px; display: none; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .auth-panel.show { display: flex; }
+  .auth-panel input { max-width: 220px; }
+  .auth-panel .auth-msg { font-size: 12px; color: var(--muted); }
+  .auth-state { font-size: 11px; color: var(--muted); }
+  .auth-state strong { color: var(--text); }
 
   pre.report-json { white-space: pre-wrap; font-size: 11px; line-height: 1.5; color: #c4cad6; max-height: 320px; overflow-y: auto; background: #0d0d14; padding: 10px; border-radius: 6px; }
 
@@ -158,8 +164,21 @@
   <h1>SEO Control Center</h1>
   <select id="brand-select"><option value="">Loading brands…</option></select>
   <select id="location-select"><option value="">All locations</option></select>
-  <div class="header-meta"><span id="header-ts">Loading…</span></div>
+  <div class="header-meta">
+    <span class="badge badge-green" id="readonly-badge">READ_ONLY</span>
+    <span class="auth-state" id="auth-state">Not signed in</span>
+    <button class="btn btn-sm btn-ghost" id="login-toggle" onclick="toggleLoginPanel()">Sign in</button>
+    <span id="header-ts">Loading…</span>
+  </div>
 </header>
+
+<div class="auth-panel" id="auth-panel">
+  <label class="field-label" style="margin:0">Mi PIN</label>
+  <input type="password" id="pin-input" autocomplete="current-password" placeholder="Enter PIN">
+  <button class="btn btn-sm" onclick="loginWithPin()">Sign in</button>
+  <button class="btn btn-sm btn-ghost" onclick="logoutSeo()">Clear session</button>
+  <span class="auth-msg" id="auth-msg">SEO data requires a bearer session. Static dashboard shell is visible without login.</span>
+</div>
 
 <div class="layout">
   <nav class="sidebar" id="sidebar-nav">
@@ -383,8 +402,9 @@ let currentBrand = '';    // '' = All
 let currentLocation = ''; // '' = all locations
 let activeBrands = [];    // [{brand_id, name}]
 const urlAuth = new URLSearchParams(location.search);
-const SEO_AUTH_TOKEN = urlAuth.get('token') || sessionStorage.getItem('mi_auth_token') || localStorage.getItem('mi_auth_token') || '';
-const SEO_CSRF_TOKEN = urlAuth.get('csrf') || sessionStorage.getItem('mi_csrf_token') || localStorage.getItem('mi_csrf_token') || '';
+let SEO_AUTH_TOKEN = urlAuth.get('token') || sessionStorage.getItem('mi_auth_token') || localStorage.getItem('mi_auth_token') || '';
+let SEO_CSRF_TOKEN = urlAuth.get('csrf') || sessionStorage.getItem('mi_csrf_token') || localStorage.getItem('mi_csrf_token') || '';
+let SEO_AUTH_ROLE = sessionStorage.getItem('mi_auth_role') || localStorage.getItem('mi_auth_role') || '';
 
 // ── Fetch helpers ────────────────────────────────────────────────────────
 
@@ -397,6 +417,9 @@ async function api(path, opts) {
   const r = await fetch(BASE + path, { ...(opts || {}), headers });
   const body = await r.json().catch(() => ({}));
   if (!r.ok || body.ok === false) {
+    if (r.status === 401) {
+      showLoginPanel(body.error || 'seo_bearer_auth_required');
+    }
     throw new Error(body.error || `${r.status} ${r.statusText}`);
   }
   return body;
@@ -410,6 +433,75 @@ function fmtDate(s) {
   if (!s) return '—';
   try { return new Date(s).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
   catch { return s; }
+}
+
+function updateAuthUi() {
+  const state = document.getElementById('auth-state');
+  const btn = document.getElementById('login-toggle');
+  if (SEO_AUTH_TOKEN) {
+    state.innerHTML = `Signed in${SEO_AUTH_ROLE ? ` as <strong>${esc(SEO_AUTH_ROLE)}</strong>` : ''}`;
+    btn.textContent = 'Session';
+  } else {
+    state.textContent = 'Not signed in';
+    btn.textContent = 'Sign in';
+  }
+}
+
+function showLoginPanel(message) {
+  document.getElementById('auth-panel').classList.add('show');
+  if (message) document.getElementById('auth-msg').textContent = message;
+  updateAuthUi();
+}
+
+function toggleLoginPanel() {
+  document.getElementById('auth-panel').classList.toggle('show');
+  updateAuthUi();
+}
+
+async function loginWithPin() {
+  const input = document.getElementById('pin-input');
+  const msg = document.getElementById('auth-msg');
+  const pin = input.value;
+  if (!pin) {
+    msg.textContent = 'Enter the Mi PIN.';
+    return;
+  }
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok || !body.token) throw new Error(body.error || `${r.status} ${r.statusText}`);
+    SEO_AUTH_TOKEN = body.token;
+    SEO_CSRF_TOKEN = body.csrf_token || '';
+    SEO_AUTH_ROLE = body.role || '';
+    sessionStorage.setItem('mi_auth_token', SEO_AUTH_TOKEN);
+    sessionStorage.setItem('mi_csrf_token', SEO_CSRF_TOKEN);
+    sessionStorage.setItem('mi_auth_role', SEO_AUTH_ROLE);
+    input.value = '';
+    msg.textContent = 'Signed in. Loading live read-only SEO data...';
+    document.getElementById('auth-panel').classList.remove('show');
+    updateAuthUi();
+    await boot();
+  } catch (e) {
+    msg.textContent = 'Login failed: ' + e.message;
+  }
+}
+
+function logoutSeo() {
+  SEO_AUTH_TOKEN = '';
+  SEO_CSRF_TOKEN = '';
+  SEO_AUTH_ROLE = '';
+  sessionStorage.removeItem('mi_auth_token');
+  sessionStorage.removeItem('mi_csrf_token');
+  sessionStorage.removeItem('mi_auth_role');
+  localStorage.removeItem('mi_auth_token');
+  localStorage.removeItem('mi_csrf_token');
+  localStorage.removeItem('mi_auth_role');
+  updateAuthUi();
+  showLoginPanel('Session cleared.');
 }
 
 // ── Navigation ───────────────────────────────────────────────────────────
@@ -1340,7 +1432,16 @@ async function loadWriteFlags() {
   const body = document.getElementById('write-flags-body');
   if (!body) return;
   try {
-    const d = await api('/api/seo/write-flags');
+    let d;
+    try {
+      d = await api('/api/seo/write-flags');
+    } catch (e) {
+      if (!SEO_AUTH_TOKEN && String(e.message || '').includes('seo_bearer_auth_required')) {
+        d = await api('/api/seo-public/status');
+      } else {
+        throw e;
+      }
+    }
     const flags = d.flags || {};
     const rows = Object.values(flags).map(f => `
       <div class="row">

@@ -15,6 +15,10 @@ healthRouter.get('/', async (_req: Request, res: Response) => {
     server: 'ok',
     python_ai_service: checks[0].status === 'fulfilled' && checks[0].value ? 'ok' : 'down',
     ollama: checks[1].status === 'fulfilled' && checks[1].value ? 'ok' : 'down',
+    runtime_sha: process.env.RUNTIME_SHA || process.env.GIT_SHA || null,
+    runtime_source: process.env.MI_CORE_ROOT || null,
+    access_url: process.env.MI_DASHBOARD_URL || null,
+    bind_host: process.env.HOST || process.env.MI_CORE_HOST || null,
     timestamp: new Date().toISOString(),
   });
 });
