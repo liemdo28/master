@@ -67,13 +67,67 @@ export interface ConnectorRunRecord {
 }
 
 // ── Config paths ───────────────────────────────────────────────────────────
+//
+// IMPORTANT: There are TWO copies of brands.json/locations.json on disk:
+//   canonical (this module reads):  ${MI_CORE_ROOT}/SEO/shared/config/
+//   legacy mirror (do not read):    D:/Project/Master/SEO/shared/config/
+// The legacy copy belongs to a separate, older standalone multi-agent SEO
+// orchestrator (a different codebase at repo root, not this Express server)
+// and is kept in sync FROM the canonical copy by
+// SEO/shared/config/sync-from-canonical.js — never the other way around.
+// See docs/seo-control-center/SEO_PATH_CONSOLIDATION.md for the full story.
 
-const MI_CORE_ROOT = process.env.MI_CORE_ROOT || 'D:/Project/Master/mi-core';
+const MI_CORE_ROOT_ENV = process.env.MI_CORE_ROOT;
+const MI_CORE_ROOT = MI_CORE_ROOT_ENV || 'D:/Project/Master/mi-core';
+
+// One-time diagnostic: production (ecosystem.config.js) always sets
+// MI_CORE_ROOT explicitly. If it's unset here, some ad-hoc/test/dev entry
+// point is running without it and silently falling back to the hardcoded
+// default below. That default happens to match production today, but any
+// future divergence (different machine, different drive letter, a second
+// mi-core checkout) would make this module silently read the wrong
+// brands.json/locations.json. Warn once so that failure mode is visible
+// instead of silent.
+if (!MI_CORE_ROOT_ENV) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `[SEO-Config] WARNING: MI_CORE_ROOT env var is not set. Falling back to ` +
+    `hardcoded default "${MI_CORE_ROOT}" for brand/location config. ` +
+    `Production sets MI_CORE_ROOT explicitly in ecosystem.config.js — set it ` +
+    `explicitly here too (ad-hoc scripts, tests, or a second checkout on a ` +
+    `different path/drive would otherwise silently read the wrong config).`
+  );
+}
+
 const SEO_SHARED = path.join(MI_CORE_ROOT, 'SEO', 'shared', 'config');
 const BRANDS_FILE = path.join(SEO_SHARED, 'brands.json');
 const LOCATIONS_FILE = path.join(SEO_SHARED, 'locations.json');
 const PERSIST_DIR = path.join(MI_CORE_ROOT, 'data', 'seo');
 const PERSIST_FILE = path.join(PERSIST_DIR, 'seo-state.json');
+
+// Documented legacy fallback ONLY — the primary path above (${MI_CORE_ROOT}/
+// SEO/shared/config/) is never overridden by this. It exists purely so that
+// if the canonical file is ever missing (e.g. a fresh checkout that hasn't
+// been fully set up yet), this module doesn't hard-fail — it degrades to the
+// mirror instead of returning zero brands/locations. In steady state the
+// mirror is kept identical to canonical by sync-from-canonical.js, so this
+// fallback should rarely, if ever, actually trigger.
+const LEGACY_ROOT_SEO_SHARED = 'D:/Project/Master/SEO/shared/config';
+const LEGACY_BRANDS_FILE = path.join(LEGACY_ROOT_SEO_SHARED, 'brands.json');
+const LEGACY_LOCATIONS_FILE = path.join(LEGACY_ROOT_SEO_SHARED, 'locations.json');
+
+function resolveConfigFile(primary: string, legacy: string): string {
+  if (fs.existsSync(primary)) return primary;
+  if (fs.existsSync(legacy)) {
+    console.warn(
+      `[SEO-Config] WARNING: canonical file missing (${primary}). ` +
+      `Falling back to legacy mirror (${legacy}). This should self-correct ` +
+      `once the canonical file exists — see docs/seo-control-center/SEO_PATH_CONSOLIDATION.md.`
+    );
+    return legacy;
+  }
+  return primary; // neither exists — return primary so the existsSync check below reports it missing as usual
+}
 
 // ── In-memory stores (file-backed) ─────────────────────────────────────────
 
@@ -85,9 +139,12 @@ let connectorRuns: ConnectorRunRecord[] = [];
 // ── Load from files ────────────────────────────────────────────────────────
 
 export function loadBrandConfig(): void {
+  const brandsFile = resolveConfigFile(BRANDS_FILE, LEGACY_BRANDS_FILE);
+  const locationsFile = resolveConfigFile(LOCATIONS_FILE, LEGACY_LOCATIONS_FILE);
+
   try {
-    if (fs.existsSync(BRANDS_FILE)) {
-      const data = JSON.parse(fs.readFileSync(BRANDS_FILE, 'utf8'));
+    if (fs.existsSync(brandsFile)) {
+      const data = JSON.parse(fs.readFileSync(brandsFile, 'utf8'));
       brandsMap.clear();
       for (const b of (data.brands || []) as BrandRecord[]) {
         brandsMap.set(b.brand_id, b);
@@ -98,8 +155,8 @@ export function loadBrandConfig(): void {
   }
 
   try {
-    if (fs.existsSync(LOCATIONS_FILE)) {
-      const data = JSON.parse(fs.readFileSync(LOCATIONS_FILE, 'utf8'));
+    if (fs.existsSync(locationsFile)) {
+      const data = JSON.parse(fs.readFileSync(locationsFile, 'utf8'));
       locationsMap.clear();
       allLocations = [];
       for (const loc of (data.locations || []) as LocationRecord[]) {

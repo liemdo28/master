@@ -1,0 +1,77 @@
+# SEO Control Center — Automation Policy
+# Precedence (highest wins): BLOCKED > REQUIRES_APPROVAL > AUTO_WITH_NOTIFICATION > SAFE_AUTO
+# No confidence score, AI provider, or automation run may override BLOCKED.
+#
+# category strings here are matched against the `category` field passed to
+# mi-core/server/src/seo/seo-policy-engine.ts:evaluatePolicy(). Unknown categories
+# default to REQUIRES_APPROVAL (fail safe, never fail open).
+
+version: 1
+
+SAFE_AUTO:
+  - run_technical_audit
+  - collect_analytics
+  - collect_gbp_snapshot
+  - detect_issue
+  - create_draft_recommendation
+  - create_article_brief
+  - generate_article_draft
+  - generate_metadata_draft
+  - detect_broken_link
+  - detect_missing_alt_text
+  - take_screenshot
+  - verify_indexing_status
+  - generate_report
+  - create_preview_build
+  - update_internal_seo_database
+  - keyword_discovery
+  - keyword_clustering
+  - cannibalization_scan
+  - backlink_evaluation_scan
+
+AUTO_WITH_NOTIFICATION:
+  - apply_low_risk_alt_text_fix
+  - fix_broken_internal_link_from_approved_mapping
+  - regenerate_sitemap_preview
+  - update_seo_cache
+  - refresh_analytics_data
+  - schedule_approved_content
+  - reschedule_content
+
+REQUIRES_APPROVAL:
+  - article_publish
+  - article_update
+  - meta_change_live
+  - schema_change_live
+  - redirect_change
+  - backlink_approval
+  - gbp_post_publish
+  - internal_link_bulk_change
+  - production_deploy
+  - rollback
+  - policy_change
+  - heading_change_live
+  - public_content_change
+  - external_link_add
+  - verify_business_fact       # UNVERIFIED -> VERIFIED promotion; wrong facts are high-risk to publish
+
+BLOCKED:
+  - delete_production_data
+  - change_credentials
+  - expose_secrets
+  - modify_gbp_ownership
+  - modify_gbp_core_info      # address, phone, hours, categories, website URL, manager access
+  - modify_user_access
+  - change_payment_settings
+  - purchase_backlink
+  - create_fake_review
+  - create_fake_business_fact
+  - post_review_response_without_approval
+  - bypass_authentication
+  - bypass_captcha
+  - bypass_mfa
+  - bypass_google_restriction
+  - bypass_chatgpt_restriction
+  - publish_unverifiable_claim
+  - publish_duplicate_content
+  - publish_spun_content

@@ -88,10 +88,7 @@ export async function readLocalFile(filePath: string): Promise<{ content: string
       type = 'pdf';
     } catch { content = '[PDF — install pdf-parse for text extraction]'; }
   } else if (['.xlsx', '.xls'].includes(ext)) {
-    const xlsx = require('xlsx');
-    const wb = xlsx.readFile(filePath);
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    content = xlsx.utils.sheet_to_csv(ws).slice(0, 5000);
+    content = '[Excel parsing disabled: xlsx dependency removed due unresolved high-severity advisories. Export to CSV for local-file reads.]';
     type = 'excel';
   } else if (['.docx'].includes(ext)) {
     try {

@@ -6,6 +6,7 @@
 
 import path from 'path';
 import fs from 'fs';
+import { assertGoogleConnectorWriteEnabled } from '../visibility/connectors/google/google-auth';
 
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const TOKEN_PATH = path.join(GLOBAL_DIR, 'visibility', 'google-tokens.json');
@@ -77,6 +78,7 @@ export async function readGmail(messageId: string): Promise<{ subject: string; f
 export interface DraftParams { to: string; subject: string; body: string }
 
 export async function draftEmail(params: DraftParams): Promise<{ draft_id: string }> {
+  assertGoogleConnectorWriteEnabled();
   const gmail = await getGmailClient();
   const raw = Buffer.from(
     `To: ${params.to}\r\nSubject: ${params.subject}\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${params.body}`
@@ -87,6 +89,7 @@ export async function draftEmail(params: DraftParams): Promise<{ draft_id: strin
 
 // sendEmail requires Level 3 approval — called only after approval gate clears
 export async function sendEmail(draftId: string): Promise<{ ok: boolean }> {
+  assertGoogleConnectorWriteEnabled();
   const gmail = await getGmailClient();
   await gmail.users.drafts.send({ userId: 'me', requestBody: { id: draftId } });
   return { ok: true };

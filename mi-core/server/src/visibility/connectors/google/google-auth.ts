@@ -39,6 +39,18 @@ export interface GoogleTokens {
   token_type: string;
 }
 
+export const GOOGLE_WRITE_DISABLED_ERROR = 'google_write_disabled';
+
+export function isGoogleConnectorWriteEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return String(env.GOOGLE_CONNECTOR_WRITE_ENABLED || '').trim().toLowerCase() === 'true';
+}
+
+export function assertGoogleConnectorWriteEnabled(): void {
+  if (!isGoogleConnectorWriteEnabled()) {
+    throw new Error(GOOGLE_WRITE_DISABLED_ERROR);
+  }
+}
+
 export function createOAuthClient() {
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
@@ -74,7 +86,12 @@ export function loadTokens(): GoogleTokens | null {
 
 export function saveTokens(tokens: GoogleTokens) {
   fs.mkdirSync(path.dirname(TOKEN_PATH), { recursive: true });
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
+  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2), { mode: 0o600 });
+  try {
+    fs.chmodSync(TOKEN_PATH, 0o600);
+  } catch {
+    // Best-effort only on Windows; the path remains outside git and ignored.
+  }
 }
 
 export async function getAuthedClient() {

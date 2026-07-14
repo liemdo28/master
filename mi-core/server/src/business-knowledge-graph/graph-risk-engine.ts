@@ -1,0 +1,1 @@
+export function getGraphRisks() { return [{ id: 'risk-doordash-b1', entityId: 'connector-doordash', severity: 'high', reason: 'DoorDash failure impacts Raw Sushi B1 online-delivery revenue workflow' }]; }

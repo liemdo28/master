@@ -45,7 +45,7 @@ export function handleDataAnalystMessage(message: string): string | null {
   if (/dataset|imported|đã import|file nào đã load|dữ liệu đang có/i.test(message)) {
     const catalog = getCatalog();
     if (catalog.datasets.length === 0) {
-      return `📊 Chưa có dataset nào được import.\n\nĐể phân tích doanh thu, hãy:\n1. Tìm file: "Tìm file doanh thu"\n2. Phân tích: "Phân tích file [tên file]"\n3. Hoặc drop file CSV/Excel vào Mi`;
+      return `📊 Chưa có dataset nào được import.\n\nĐể phân tích doanh thu, hãy:\n1. Tìm file: "Tìm file doanh thu"\n2. Phân tích: "Phân tích file [tên file]"\n3. Hoặc drop file CSV/JSON/PDF/DOCX vào Mi. Excel đang tắt vì advisory bảo mật.`;
     }
     const list = catalog.datasets.slice(0, 5).map((d: Record<string, unknown>, i: number) =>
       `${i + 1}. **${d['file_name']}** (${d['row_count']} rows, ${d['confidence']}% confidence, ${d['period'] || 'unknown period'})`
@@ -88,7 +88,8 @@ function buildFileFindInstructions(): string {
 
   return `📁 Tìm file doanh thu trong:\n${common.map(p => `- ${p}`).join('\n')}\n\n` +
     `**Để phân tích:** "Phân tích file E:/path/to/file.csv"\n` +
-    `**Hỗ trợ:** CSV, Excel (.xlsx/.xls), JSON, PDF, Word (.docx)\n` +
+    `**Hỗ trợ:** CSV, JSON, PDF, Word (.docx)\n` +
+    `**Excel:** tạm tắt vì advisory bảo mật; export sang CSV trước khi phân tích\n` +
     `**Không hỗ trợ:** Files nhạy cảm (.env, credentials, keys)`;
 }
 
@@ -103,7 +104,7 @@ export function buildDataAnalystRouteContext(message: string): {
 
   if (catalog.datasets.length === 0 && !last) {
     return {
-      contextLine: '[DataAnalyst] No datasets loaded. Suggest CEO to upload a CSV/Excel file.',
+      contextLine: '[DataAnalyst] No datasets loaded. Suggest CEO to upload a CSV, JSON, PDF, or DOCX file. Excel is disabled pending safe parser replacement.',
       shouldInjectToAI: true,
     };
   }

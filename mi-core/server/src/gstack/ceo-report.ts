@@ -128,9 +128,12 @@ function s5_evidence(evidence: EvidenceBundle): string {
 }
 
 function s6_risks(risks: string[], cert: CertificationResult): string {
+  const gateRisks = cert.gates
+    .filter(g => g.status === 'FAIL' || g.status === 'WARN')
+    .map(g => `${g.name}: ${g.details}`);
   const allRisks = [
     ...risks,
-    ...cert.non_blocking_failures.slice(0, 3),
+    ...gateRisks.slice(0, 3),
   ].filter(Boolean);
 
   if (allRisks.length === 0) return `*6️⃣ Rủi ro còn lại*\nKhông có rủi ro tồn đọng ✅`;
@@ -153,8 +156,7 @@ function s8_confidence(cert: CertificationResult): string {
   else label = '❌ Dưới ngưỡng tối thiểu — cần kiểm tra lại';
 
   const gatesSummary = cert.gates
-    .filter(g => g.status !== 'SKIP')
-    .map(g => `${g.status === 'PASS' ? '✅' : g.status === 'FAIL' ? '❌' : '⚠️'} G${g.gate_id.slice(1)}: ${g.name}`)
+    .map((g, index) => `${g.status === 'PASS' ? '✅' : g.status === 'FAIL' ? '❌' : '⚠️'} G${index + 1}: ${g.name}`)
     .join('\n');
 
   return `*8️⃣ Confidence Score*\n${bar} ${score}%\n${label}\n\n${gatesSummary}`;
@@ -218,7 +220,9 @@ export function quickCeoReport(
 
   const risks = [
     ...evidence.errors_found.filter((e: any) => e.severity !== 'info').map((e: any) => e.title || e.summary),
-    ...certification.blocking_failures,
+    ...certification.gates
+      .filter(g => g.status === 'FAIL')
+      .map(g => `${g.name}: ${g.details}`),
   ].slice(0, 5);
 
   const approvals = result.needs_approval || [];

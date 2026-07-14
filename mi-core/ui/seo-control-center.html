@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Control Center — Mi CEO Dashboard</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --card: #12121a; --border: #1e1e2e; --accent: #7c3aed;
+    --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+    --text: #e2e8f0; --muted: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  header h1 { font-size: 18px; font-weight: 700; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .header-meta { margin-left: auto; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+
+  select { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 12px; }
+  select:focus { outline: 1px solid var(--accent); }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-green  { background: #064e3b; color: var(--green); }
+  .badge-red    { background: #450a0a; color: var(--red); }
+  .badge-yellow { background: #451a03; color: var(--yellow); }
+  .badge-blue   { background: #1e3a5f; color: var(--blue); }
+  .badge-muted  { background: #1e1e2e; color: var(--muted); }
+
+  .layout { display: flex; min-height: calc(100vh - 57px); }
+
+  /* Sidebar nav */
+  nav.sidebar { width: 210px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); padding: 12px 0; }
+  nav.sidebar button { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--muted); padding: 10px 20px; font-size: 13px; cursor: pointer; border-left: 3px solid transparent; }
+  nav.sidebar button:hover { background: #16162a; color: var(--text); }
+  nav.sidebar button.active { color: var(--text); border-left-color: var(--accent); background: #16162a; font-weight: 600; }
+
+  .main { flex: 1; padding: 20px 24px; max-width: 1400px; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .view h2 { font-size: 16px; margin-bottom: 16px; }
+
+  /* Stat bar */
+  .stat-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .stat-value { font-size: 26px; font-weight: 700; }
+  .stat-sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media(max-width:900px) { .grid { grid-template-columns:1fr; } }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+  .card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .card-body { padding: 14px 16px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; }
+  td { padding: 8px 8px; border-bottom: 1px solid #1a1a28; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #16162a; }
+
+  /* Rows */
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a28; font-size: 13px; gap: 8px; }
+  .row:last-child { border: none; }
+  .row-label { color: var(--muted); font-size: 12px; }
+
+  /* Buttons */
+  .btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; cursor: pointer; padding: 6px 14px; font-size: 12px; font-weight: 600; }
+  .btn:hover { opacity: .85; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+  .btn-green { background: var(--green); }
+  .btn-red { background: var(--red); }
+  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  input[type=text], textarea { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: 13px; width: 100%; font-family: inherit; }
+  textarea { resize: vertical; min-height: 60px; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
+  .form-row > * { flex: 1; min-width: 140px; }
+  label.field-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 4px; }
+
+  /* Empty / error state */
+  .empty-state { color: var(--muted); text-align: center; padding: 24px 12px; font-size: 13px; line-height: 1.6; }
+  .error-msg { color: var(--red); font-size: 12px; padding: 10px; background: #1a0808; border-radius: 6px; }
+  .note { color: var(--muted); font-size: 11px; margin-top: 6px; font-style: italic; }
+
+  /* Cluster tree */
+  .cluster-block { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .cluster-name { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+  .cluster-nodes { list-style: none; padding-left: 14px; }
+  .cluster-nodes li { font-size: 12px; color: var(--muted); padding: 3px 0; border-left: 2px solid var(--border); padding-left: 10px; }
+
+  /* Policy columns */
+  .policy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; }
+  .policy-col { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .policy-col h3 { font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+  .policy-col ul { list-style: none; }
+  .policy-col li { font-size: 12px; color: var(--muted); padding: 3px 0; font-family: monospace; }
+
+  /* Loading skeleton */
+  .skeleton { background: linear-gradient(90deg,#1a1a28 25%,#22223a 50%,#1a1a28 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; height: 14px; margin: 6px 0; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  .refresh-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 4px 10px; font-size: 11px; }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  pre.report-json { white-space: pre-wrap; font-size: 11px; line-height: 1.5; color: #c4cad6; max-height: 320px; overflow-y: auto; background: #0d0d14; padding: 10px; border-radius: 6px; }
+
+  /* Content Calendar */
+  .cal-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+  .cal-nav-btns { display: flex; gap: 6px; align-items: center; }
+  .cal-view-toggle { display: flex; gap: 4px; }
+  .cal-view-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; }
+  .cal-view-btn.active { border-color: var(--accent); color: var(--accent); background: #1b1030; }
+  .cal-range-label { font-size: 13px; font-weight: 600; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+  .cal-week-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+  .cal-daycell { border: 1px solid var(--border); border-radius: 8px; min-height: 92px; padding: 6px; background: #0d0d16; display: flex; flex-direction: column; gap: 4px; }
+  .cal-week-daycell { border: 1px solid var(--border); border-radius: 8px; min-height: 240px; padding: 6px; background: #0d0d16; display: flex; flex-direction: column; gap: 4px; }
+  .cal-daycell.cal-outside { opacity: .35; }
+  .cal-daycell.cal-today, .cal-week-daycell.cal-today { border-color: var(--accent); }
+  .cal-daycell.cal-dragover, .cal-week-daycell.cal-dragover, .cal-unscheduled-dropzone.cal-dragover { border-color: var(--green); background: #0e1c16; }
+  .cal-daynum { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .cal-item-chip { background: #1b1030; border: 1px solid var(--accent); border-radius: 5px; padding: 3px 6px; font-size: 11px; cursor: grab; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cal-item-chip:active { cursor: grabbing; }
+  .cal-item-chip.status-PAUSED { border-color: var(--yellow); opacity: .75; }
+  .cal-item-chip.status-REJECTED, .cal-item-chip.status-BLOCKED, .cal-item-chip.status-FAILED { border-color: var(--red); opacity: .75; }
+  .cal-list-row { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px solid #1a1a28; font-size: 12px; cursor: pointer; }
+  .cal-list-row:hover { background: #16162a; }
+  .cal-unscheduled-block { margin-top: 16px; }
+  .cal-unscheduled-dropzone { display: flex; flex-wrap: wrap; gap: 6px; border: 1px dashed var(--border); border-radius: 8px; padding: 10px; min-height: 44px; }
+  .cal-add-form { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 14px; background: #0d0d16; }
+
+  /* Topic Cluster graph */
+  .cluster-graph-wrap { display: flex; gap: 16px; flex-wrap: wrap; }
+  .cluster-graph-svg-wrap { flex: 2; min-width: 320px; background: #0d0d16; border: 1px solid var(--border); border-radius: 8px; overflow: auto; }
+  .cluster-detail-panel { flex: 1; min-width: 220px; border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: #0d0d16; font-size: 12px; }
+  .cg-node { cursor: pointer; }
+  .cg-node:hover { filter: brightness(1.3); }
+  .cg-label { font-size: 9px; fill: var(--text); pointer-events: none; }
+  .cg-sublabel { font-size: 8px; fill: var(--muted); pointer-events: none; }
+  .cg-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--muted); margin-bottom: 8px; align-items: center; }
+  .cg-legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="status-dot"></div>
+  <h1>SEO Control Center</h1>
+  <select id="brand-select"><option value="">Loading brands…</option></select>
+  <select id="location-select"><option value="">All locations</option></select>
+  <div class="header-meta"><span id="header-ts">Loading…</span></div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar-nav">
+    <button data-view="overview" class="active">Overview</button>
+    <button data-view="calendar">Content Calendar</button>
+    <button data-view="keywords">Search Terms</button>
+    <button data-view="clusters">Topic Clusters</button>
+    <button data-view="local">Local SEO</button>
+    <button data-view="gbp">Google Business Profile</button>
+    <button data-view="backlinks">Backlinks</button>
+    <button data-view="approvals">Approvals</button>
+    <button data-view="evidence">Evidence</button>
+    <button data-view="reports">Reports</button>
+    <button data-view="policies">Policies</button>
+  </nav>
+
+  <div class="main">
+
+    <!-- ── Overview ─────────────────────────────────────────────── -->
+    <div class="view active" id="view-overview">
+      <h2>Overview</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Live Write Safety</span></div>
+        <div class="card-body" id="write-flags-body"><div class="skeleton"></div></div>
+      </div>
+      <div class="stat-bar">
+        <div class="stat"><div class="stat-label">Open Issues</div><div class="stat-value" id="ov-issues">—</div></div>
+        <div class="stat"><div class="stat-label">Pending Approvals</div><div class="stat-value" id="ov-approvals">—</div></div>
+        <div class="stat"><div class="stat-label">Keywords Tracked</div><div class="stat-value" id="ov-keywords">—</div></div>
+        <div class="stat"><div class="stat-label">Recent Actions</div><div class="stat-value" id="ov-actions">—</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Keywords by Status</span></div>
+          <div class="card-body" id="ov-keyword-status"><div class="skeleton"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Evidence / Actions</span></div>
+          <div class="card-body" id="ov-evidence"><div class="skeleton"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Content Calendar ─────────────────────────────────────── -->
+    <div class="view" id="view-calendar">
+      <h2>Content Calendar</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Calendar</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <div class="cal-view-toggle" id="cal-view-toggle">
+              <button class="cal-view-btn active" data-cal-view="month">Month</button>
+              <button class="cal-view-btn" data-cal-view="week">Week</button>
+              <button class="cal-view-btn" data-cal-view="list">List</button>
+            </div>
+            <button class="btn btn-sm" onclick="toggleAddCalendarForm()">+ Add Item</button>
+            <button class="refresh-btn" onclick="loadCalendarTab()">↻</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="cal-add-form" class="cal-add-form" style="display:none"></div>
+          <div id="cal-error"></div>
+          <div class="cal-toolbar" id="cal-toolbar" style="display:none">
+            <div class="cal-nav-btns">
+              <button class="btn btn-sm btn-ghost" onclick="calNav(-1)">‹ Prev</button>
+              <button class="btn btn-sm btn-ghost" onclick="calNavToday()">Today</button>
+              <button class="btn btn-sm btn-ghost" onclick="calNav(1)">Next ›</button>
+            </div>
+            <div class="cal-range-label" id="cal-range-label"></div>
+          </div>
+          <div id="cal-body"><div class="skeleton"></div></div>
+          <div id="cal-unscheduled" class="cal-unscheduled-block"></div>
+        </div>
+      </div>
+      <div class="card" id="cal-detail-card" style="display:none">
+        <div class="card-header"><span class="card-title">Item Detail</span><button class="btn btn-sm btn-ghost" onclick="closeCalendarDetail()">Close</button></div>
+        <div class="card-body" id="cal-detail-body"></div>
+      </div>
+    </div>
+
+    <!-- ── Search Terms ─────────────────────────────────────────── -->
+    <div class="view" id="view-keywords">
+      <h2>Search Terms</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Keywords</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm" onclick="discoverKeywords()">Discover Keywords</button>
+            <button class="btn btn-sm btn-ghost" onclick="clusterKeywords()">Cluster Keywords</button>
+            <button class="refresh-btn" onclick="loadKeywords()">↻</button>
+          </div>
+        </div>
+        <div class="card-body" id="kw-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Topic Clusters ───────────────────────────────────────── -->
+    <div class="view" id="view-clusters">
+      <h2>Topic Clusters</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Cluster Graph</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm" onclick="generateClusters()">Generate Clusters</button>
+            <button class="refresh-btn" onclick="loadClusters()">↻</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="cluster-error"></div>
+          <div id="cg-legend" class="cg-legend"></div>
+          <div class="cluster-graph-wrap" id="cluster-graph-wrap"><div class="skeleton"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Local SEO ─────────────────────────────────────────────── -->
+    <div class="view" id="view-local">
+      <h2>Local SEO</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Locations</span><button class="refresh-btn" onclick="loadLocal()">↻</button></div>
+        <div class="card-body" id="local-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Google Business Profile ──────────────────────────────── -->
+    <div class="view" id="view-gbp">
+      <h2>Google Business Profile</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Generate GBP Post</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div>
+              <label class="field-label">Location</label>
+              <select id="gbp-location-select"><option value="">Select a location…</option></select>
+            </div>
+            <div style="flex:2">
+              <label class="field-label">Topic</label>
+              <input type="text" id="gbp-topic-input" placeholder="e.g. weekend ramen special">
+            </div>
+          </div>
+          <button class="btn" onclick="generateGbpPost()">Generate Draft</button>
+          <div id="gbp-generate-result" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">GBP Posts</span><button class="refresh-btn" onclick="loadGbpPosts()">↻</button></div>
+        <div class="card-body" id="gbp-posts-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Backlinks ─────────────────────────────────────────────── -->
+    <div class="view" id="view-backlinks">
+      <h2>Backlinks</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Backlinks</span><button class="refresh-btn" onclick="loadBacklinks()">↻</button></div>
+        <div class="card-body" id="backlinks-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Approvals ─────────────────────────────────────────────── -->
+    <div class="view" id="view-approvals">
+      <h2>Approvals</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Pending SEO Approvals</span><button class="refresh-btn" onclick="loadApprovals()">↻</button></div>
+        <div class="card-body" id="approvals-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Evidence ──────────────────────────────────────────────── -->
+    <div class="view" id="view-evidence">
+      <h2>Evidence</h2>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent Evidence</span><button class="refresh-btn" onclick="loadEvidence()">↻</button></div>
+        <div class="card-body" id="evidence-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Reports ───────────────────────────────────────────────── -->
+    <div class="view" id="view-reports">
+      <h2>Reports</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Generate Report</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div>
+              <label class="field-label">Type</label>
+              <select id="report-type-select">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn" onclick="generateReport()">Generate Now</button>
+          <div id="report-generate-result" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent Reports</span><button class="refresh-btn" onclick="loadReports()">↻</button></div>
+        <div class="card-body" id="reports-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Policies ──────────────────────────────────────────────── -->
+    <div class="view" id="view-policies">
+      <h2>Policies</h2>
+      <div class="note" style="margin-bottom:10px">Read-only in this pass — policy editing UI is a deliberate scope cut.</div>
+      <div class="card">
+        <div class="card-body" id="policy-body"><div class="skeleton"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BASE = '';
+let currentBrand = '';    // '' = All
+let currentLocation = ''; // '' = all locations
+let activeBrands = [];    // [{brand_id, name}]
+const urlAuth = new URLSearchParams(location.search);
+const SEO_AUTH_TOKEN = urlAuth.get('token') || sessionStorage.getItem('mi_auth_token') || localStorage.getItem('mi_auth_token') || '';
+const SEO_CSRF_TOKEN = urlAuth.get('csrf') || sessionStorage.getItem('mi_csrf_token') || localStorage.getItem('mi_csrf_token') || '';
+
+// ── Fetch helpers ────────────────────────────────────────────────────────
+
+async function api(path, opts) {
+  const headers = new Headers((opts && opts.headers) || {});
+  if (SEO_AUTH_TOKEN && !headers.has('Authorization')) headers.set('Authorization', `Bearer ${SEO_AUTH_TOKEN}`);
+  if (SEO_CSRF_TOKEN && opts && opts.method && opts.method.toUpperCase() !== 'GET' && !headers.has('x-csrf-token')) {
+    headers.set('x-csrf-token', SEO_CSRF_TOKEN);
+  }
+  const r = await fetch(BASE + path, { ...(opts || {}), headers });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok || body.ok === false) {
+    throw new Error(body.error || `${r.status} ${r.statusText}`);
+  }
+  return body;
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function fmtDate(s) {
+  if (!s) return '—';
+  try { return new Date(s).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch { return s; }
+}
+
+// ── Navigation ───────────────────────────────────────────────────────────
+
+const VIEW_LOADERS = {
+  overview: loadOverview,
+  calendar: loadCalendarTab,
+  keywords: loadKeywords,
+  clusters: loadClusters,
+  local: loadLocal,
+  gbp: loadGbpTab,
+  backlinks: loadBacklinks,
+  approvals: loadApprovals,
+  evidence: loadEvidence,
+  reports: loadReports,
+  policies: loadPolicies,
+};
+
+document.getElementById('sidebar-nav').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-view]');
+  if (!btn) return;
+  document.querySelectorAll('nav.sidebar button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + btn.dataset.view).classList.add('active');
+  const loader = VIEW_LOADERS[btn.dataset.view];
+  if (loader) loader();
+});
+
+// ── Brand / location selectors ──────────────────────────────────────────
+
+async function loadBrandSelector() {
+  const sel = document.getElementById('brand-select');
+  try {
+    const d = await api('/api/seo/brands');
+    activeBrands = (d.brands || []).filter(b => b.status === 'active');
+    sel.innerHTML = '<option value="">All Brands</option>' +
+      activeBrands.map(b => `<option value="${esc(b.brand_id)}">${esc(b.name)}</option>`).join('');
+  } catch (e) {
+    sel.innerHTML = '<option value="">(brands unavailable)</option>';
+    console.error('brand load failed', e);
+  }
+}
+
+async function loadLocationSelector() {
+  const sel = document.getElementById('location-select');
+  const gbpSel = document.getElementById('gbp-location-select');
+  if (!currentBrand) {
+    sel.innerHTML = '<option value="">All locations</option>';
+    gbpSel.innerHTML = '<option value="">Select a brand first…</option>';
+    return;
+  }
+  try {
+    const d = await api(`/api/seo/brands/${encodeURIComponent(currentBrand)}/locations`);
+    const locs = d.locations || [];
+    sel.innerHTML = '<option value="">All locations</option>' +
+      locs.map(l => `<option value="${esc(l.location_id)}">${esc(l.name)}</option>`).join('');
+    gbpSel.innerHTML = (locs.length ? '' : '<option value="">No locations</option>') +
+      locs.map(l => `<option value="${esc(l.location_id)}">${esc(l.name)}</option>`).join('');
+  } catch (e) {
+    sel.innerHTML = '<option value="">(locations unavailable)</option>';
+    console.error('location load failed', e);
+  }
+}
+
+document.getElementById('brand-select').addEventListener('change', async (e) => {
+  currentBrand = e.target.value;
+  currentLocation = '';
+  await loadLocationSelector();
+  const activeView = document.querySelector('nav.sidebar button.active');
+  if (activeView) {
+    const loader = VIEW_LOADERS[activeView.dataset.view];
+    if (loader) loader();
+  }
+});
+
+document.getElementById('location-select').addEventListener('change', (e) => {
+  currentLocation = e.target.value;
+});
+
+function brandScopedNotice(sectionName) {
+  return `<div class="empty-state">Select a specific brand above to view ${esc(sectionName)}.</div>`;
+}
+
+// ── Overview ─────────────────────────────────────────────────────────────
+
+async function loadOverview() {
+  document.getElementById('header-ts').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+
+  // Open issues
+  try {
+    const path = currentBrand ? `/api/seo/issues?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/issues';
+    const d = await api(path);
+    document.getElementById('ov-issues').textContent = d.total ?? (d.issues || []).length ?? 0;
+  } catch (e) {
+    document.getElementById('ov-issues').textContent = 'ERR';
+    console.error(e);
+  }
+
+  // Pending approvals (seo_* only)
+  try {
+    const pending = await api('/api/approval/pending');
+    const seoOnly = (Array.isArray(pending) ? pending : []).filter(a => (a.category || '').startsWith('seo_'));
+    document.getElementById('ov-approvals').textContent = seoOnly.length;
+  } catch (e) {
+    document.getElementById('ov-approvals').textContent = 'ERR';
+    console.error(e);
+  }
+
+  // Keyword count by status (brand_id required per-brand — loop if "All")
+  try {
+    const brandIds = currentBrand ? [currentBrand] : activeBrands.map(b => b.brand_id);
+    if (brandIds.length === 0) {
+      document.getElementById('ov-keywords').textContent = '0';
+      document.getElementById('ov-keyword-status').innerHTML = '<div class="empty-state">No active brands.</div>';
+    } else {
+      const results = await Promise.all(brandIds.map(id => api(`/api/seo/keywords?brand_id=${encodeURIComponent(id)}`).catch(() => ({ keywords: [] }))));
+      const all = results.flatMap(r => r.keywords || []);
+      document.getElementById('ov-keywords').textContent = all.length;
+      const byStatus = {};
+      for (const k of all) byStatus[k.status] = (byStatus[k.status] || 0) + 1;
+      const entries = Object.entries(byStatus);
+      document.getElementById('ov-keyword-status').innerHTML = entries.length
+        ? entries.map(([s, c]) => `<div class="row"><span class="row-label">${esc(s)}</span><span class="badge badge-blue">${c}</span></div>`).join('')
+        : '<div class="empty-state">No keywords discovered yet.</div>';
+    }
+  } catch (e) {
+    document.getElementById('ov-keywords').textContent = 'ERR';
+    document.getElementById('ov-keyword-status').innerHTML = `<div class="error-msg">Couldn't load keywords: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+
+  // Recent evidence
+  try {
+    const path = currentBrand ? `/api/seo/evidence?brand_id=${encodeURIComponent(currentBrand)}&limit=10` : '/api/seo/evidence?limit=10';
+    const d = await api(path);
+    const ev = d.evidence || [];
+    document.getElementById('ov-actions').textContent = ev.length;
+    document.getElementById('ov-evidence').innerHTML = ev.length
+      ? ev.map(e => `<div class="row"><span style="font-size:12px">${esc(e.summary || e.category)}</span><span class="row-label">${fmtDate(e.created_at)}</span></div>`).join('')
+      : '<div class="empty-state">No evidence recorded yet.</div>';
+  } catch (e) {
+    document.getElementById('ov-actions').textContent = 'ERR';
+    document.getElementById('ov-evidence').innerHTML = `<div class="error-msg">Couldn't load evidence: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+// ── Content Calendar ─────────────────────────────────────────────────────
+
+let calView = 'month';          // month | week | list
+let calAnchor = new Date();     // controls which month/week is displayed
+let calLastData = null;         // last GET /api/seo/calendar response
+let calDragId = null;           // id currently being dragged (HTML5 DnD)
+
+function pad2(n) { return String(n).padStart(2, '0'); }
+function toDateKey(d) { return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+function dateKeyFromIso(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return null;
+  return toDateKey(d);
+}
+function startOfWeek(d) {
+  const x = new Date(d);
+  x.setDate(x.getDate() - x.getDay());
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+
+document.getElementById('cal-view-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-cal-view]');
+  if (!btn) return;
+  document.querySelectorAll('.cal-view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  calView = btn.dataset.calView;
+  document.getElementById('cal-toolbar').style.display = calView === 'list' ? 'none' : 'flex';
+  loadCalendarTab();
+});
+
+function calRangeBounds() {
+  if (calView === 'month') {
+    const y = calAnchor.getFullYear(), m = calAnchor.getMonth();
+    const monthStart = new Date(y, m, 1);
+    const gridStart = new Date(y, m, 1 - monthStart.getDay());
+    const gridEnd = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + 41);
+    return { from: toDateKey(gridStart), to: toDateKey(gridEnd) };
+  }
+  if (calView === 'week') {
+    const start = startOfWeek(calAnchor);
+    const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
+    return { from: toDateKey(start), to: toDateKey(end) };
+  }
+  return { from: undefined, to: undefined }; // list: no bound — show everything
+}
+
+function calRangeLabel() {
+  if (calView === 'month') return calAnchor.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  if (calView === 'week') {
+    const start = startOfWeek(calAnchor);
+    const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
+    return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  }
+  return 'All items';
+}
+
+function calNav(delta) {
+  if (calView === 'month') calAnchor = new Date(calAnchor.getFullYear(), calAnchor.getMonth() + delta, 1);
+  else if (calView === 'week') { const d = new Date(calAnchor); d.setDate(d.getDate() + delta * 7); calAnchor = d; }
+  else return;
+  loadCalendarTab();
+}
+function calNavToday() { calAnchor = new Date(); loadCalendarTab(); }
+
+async function loadCalendarTab() {
+  document.getElementById('cal-error').innerHTML = '';
+  const body = document.getElementById('cal-body');
+  const unschedEl = document.getElementById('cal-unscheduled');
+  const toolbar = document.getElementById('cal-toolbar');
+
+  if (!currentBrand) {
+    toolbar.style.display = 'none';
+    body.innerHTML = brandScopedNotice('the content calendar');
+    unschedEl.innerHTML = '';
+    return;
+  }
+
+  toolbar.style.display = calView === 'list' ? 'none' : 'flex';
+  document.getElementById('cal-range-label').textContent = calRangeLabel();
+  body.innerHTML = '<div class="skeleton"></div>';
+
+  try {
+    const { from, to } = calRangeBounds();
+    const params = new URLSearchParams({ brand_id: currentBrand, view: calView });
+    if (currentLocation) params.set('location_id', currentLocation);
+    if (from) params.set('from', from);
+    if (to) params.set('to', to);
+    calLastData = await api(`/api/seo/calendar?${params.toString()}`);
+    renderCalendar();
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load calendar: ${esc(e.message)}</div>`;
+    unschedEl.innerHTML = '';
+    console.error(e);
+  }
+}
+
+function renderCalendar() {
+  if (!calLastData) return;
+  if (calView === 'month') renderCalMonth();
+  else if (calView === 'week') renderCalWeek();
+  else renderCalList();
+}
+
+function calItemChipHtml(it) {
+  return `<div class="cal-item-chip status-${esc(it.status)}" draggable="true" data-id="${esc(it.id)}"
+    ondragstart="calDragStart(event,'${esc(it.id)}')" onclick="openCalendarDetail('${esc(it.id)}')"
+    title="${esc(it.title || '(untitled)')} — ${esc(it.status)}">${esc(it.title || '(untitled)')}</div>`;
+}
+
+function renderCalMonth() {
+  const body = document.getElementById('cal-body');
+  const byDay = {};
+  for (const it of (calLastData.scheduled || [])) {
+    const key = dateKeyFromIso(it.scheduled_publish_at);
+    if (!key) continue;
+    (byDay[key] = byDay[key] || []).push(it);
+  }
+  const y = calAnchor.getFullYear(), m = calAnchor.getMonth();
+  const monthStart = new Date(y, m, 1);
+  const gridStart = new Date(y, m, 1 - monthStart.getDay());
+  const todayKey = toDateKey(new Date());
+
+  let cells = '';
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + i);
+    const key = toDateKey(d);
+    const outside = d.getMonth() !== m;
+    const dayItems = byDay[key] || [];
+    cells += `<div class="cal-daycell ${outside ? 'cal-outside' : ''} ${key === todayKey ? 'cal-today' : ''}"
+      ondragover="calDragOver(event)" ondragleave="calDragLeave(event)" ondrop="calDrop(event,'${key}')">
+      <div class="cal-daynum">${d.getDate()}</div>
+      ${dayItems.map(calItemChipHtml).join('')}
+    </div>`;
+  }
+  body.innerHTML = `<div class="cal-grid">${cells}</div>`;
+  renderCalUnscheduled();
+}
+
+function renderCalWeek() {
+  const body = document.getElementById('cal-body');
+  const byDay = {};
+  for (const it of (calLastData.scheduled || [])) {
+    const key = dateKeyFromIso(it.scheduled_publish_at);
+    if (!key) continue;
+    (byDay[key] = byDay[key] || []).push(it);
+  }
+  const start = startOfWeek(calAnchor);
+  const todayKey = toDateKey(new Date());
+  let cells = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    const key = toDateKey(d);
+    const dayItems = byDay[key] || [];
+    cells += `<div class="cal-week-daycell ${key === todayKey ? 'cal-today' : ''}"
+      ondragover="calDragOver(event)" ondragleave="calDragLeave(event)" ondrop="calDrop(event,'${key}')">
+      <div class="cal-daynum">${d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+      ${dayItems.map(calItemChipHtml).join('')}
+    </div>`;
+  }
+  body.innerHTML = `<div class="cal-week-grid">${cells}</div>`;
+  renderCalUnscheduled();
+}
+
+function renderCalList() {
+  const body = document.getElementById('cal-body');
+  const items = [...(calLastData.scheduled || [])].sort((a, b) => (a.effective_date || '').localeCompare(b.effective_date || ''));
+  if (!items.length) {
+    body.innerHTML = '<div class="empty-state">No scheduled content items for this brand yet.</div>';
+  } else {
+    body.innerHTML = items.map(it => `
+      <div class="cal-list-row" draggable="true" data-id="${esc(it.id)}" ondragstart="calDragStart(event,'${esc(it.id)}')" onclick="openCalendarDetail('${esc(it.id)}')">
+        <span class="badge badge-blue" style="min-width:90px;text-align:center">${fmtDate(it.scheduled_publish_at)}</span>
+        <span style="flex:1">${esc(it.title || '(untitled)')}</span>
+        <span class="row-label">${esc(it.primary_keyword || '—')}</span>
+        <span class="badge badge-muted">${esc(it.status)}</span>
+      </div>`).join('');
+  }
+  renderCalUnscheduled();
+}
+
+function renderCalUnscheduled() {
+  const el = document.getElementById('cal-unscheduled');
+  const items = calLastData.unscheduled || [];
+  if (!items.length) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="card-title" style="margin:10px 0 6px">Unscheduled (${items.length})</div>
+    <div class="cal-unscheduled-dropzone" ondragover="calDragOver(event)" ondragleave="calDragLeave(event)" ondrop="calDropUnscheduled(event)">
+      ${items.map(calItemChipHtml).join('')}
+    </div>
+    <div class="note">Drag an item here to clear its schedule date.</div>`;
+}
+
+// ── Drag and drop (native HTML5 DnD — no library) ──────────────────────────
+
+function calDragStart(e, id) {
+  calDragId = id;
+  e.dataTransfer.setData('text/plain', id);
+  e.dataTransfer.effectAllowed = 'move';
+}
+function calDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('cal-dragover'); }
+function calDragLeave(e) { e.currentTarget.classList.remove('cal-dragover'); }
+
+async function calDrop(e, dateKey) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('cal-dragover');
+  const id = e.dataTransfer.getData('text/plain') || calDragId;
+  calDragId = null;
+  if (!id) return;
+  await rescheduleItem(id, dateKey);
+}
+
+async function calDropUnscheduled(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('cal-dragover');
+  const id = e.dataTransfer.getData('text/plain') || calDragId;
+  calDragId = null;
+  if (!id) return;
+  await rescheduleItem(id, null);
+}
+
+// PATCHes the server, then re-fetches the whole calendar from the server —
+// the drop never trusts an optimistic DOM move; the re-render only shows
+// what the server actually persisted (and surfaces an error state if not).
+async function rescheduleItem(id, dateKey) {
+  document.getElementById('cal-error').innerHTML = '';
+  try {
+    const iso = dateKey ? `${dateKey}T12:00:00.000Z` : null;
+    const d = await api(`/api/seo/calendar/items/${encodeURIComponent(id)}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scheduled_publish_at: iso }),
+    });
+    const action = (d.actions || []).find(a => a.type === 'reschedule');
+    if (action && action.outcome && !['auto_executed', 'auto_executed_with_notification'].includes(action.outcome.outcome)) {
+      document.getElementById('cal-error').innerHTML =
+        `<div class="error-msg">Reschedule not applied — outcome: ${esc(action.outcome.outcome)}${action.outcome.reason ? ': ' + esc(action.outcome.reason) : ''}</div>`;
+    }
+    await loadCalendarTab();
+  } catch (e) {
+    document.getElementById('cal-error').innerHTML = `<div class="error-msg">Reschedule failed: ${esc(e.message)}</div>`;
+    await loadCalendarTab();
+  }
+}
+
+// ── Add item form ───────────────────────────────────────────────────────
+
+function toggleAddCalendarForm() {
+  const el = document.getElementById('cal-add-form');
+  if (el.style.display === 'none') {
+    if (!currentBrand) return alert('Select a specific brand first.');
+    renderAddCalendarForm();
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+    el.innerHTML = '';
+  }
+}
+
+async function renderAddCalendarForm() {
+  const el = document.getElementById('cal-add-form');
+  el.innerHTML = '<div class="skeleton"></div>';
+  let locs = [];
+  try {
+    const d = await api(`/api/seo/brands/${encodeURIComponent(currentBrand)}/locations`);
+    locs = d.locations || [];
+  } catch (e) { console.error('location load for add-form failed', e); }
+  el.innerHTML = `
+    <div class="form-row">
+      <div><label class="field-label">Title</label><input type="text" id="cal-form-title" placeholder="Article title"></div>
+      <div><label class="field-label">Keyword</label><input type="text" id="cal-form-keyword" placeholder="Target keyword (optional)"></div>
+    </div>
+    <div class="form-row">
+      <div><label class="field-label">Location</label>
+        <select id="cal-form-location"><option value="">No specific location</option>${locs.map(l => `<option value="${esc(l.location_id)}">${esc(l.name)}</option>`).join('')}</select>
+      </div>
+      <div><label class="field-label">Date</label><input type="date" id="cal-form-date"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sm" onclick="submitCalendarForm()">Create</button>
+      <button class="btn btn-sm btn-ghost" onclick="toggleAddCalendarForm()">Cancel</button>
+    </div>
+    <div id="cal-form-result" style="margin-top:8px"></div>`;
+}
+
+async function submitCalendarForm() {
+  const title = document.getElementById('cal-form-title').value.trim();
+  const keyword = document.getElementById('cal-form-keyword').value.trim();
+  const locationId = document.getElementById('cal-form-location').value;
+  const date = document.getElementById('cal-form-date').value;
+  const resultEl = document.getElementById('cal-form-result');
+  if (!title) { resultEl.innerHTML = '<div class="error-msg">Title is required.</div>'; return; }
+  resultEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    await api('/api/seo/calendar/items', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        brand_id: currentBrand,
+        location_id: locationId || undefined,
+        title,
+        keyword: keyword || undefined,
+        date: date ? `${date}T12:00:00.000Z` : undefined,
+      }),
+    });
+    toggleAddCalendarForm();
+    await loadCalendarTab();
+  } catch (e) {
+    resultEl.innerHTML = `<div class="error-msg">Create failed: ${esc(e.message)}</div>`;
+  }
+}
+
+// ── Item detail panel ────────────────────────────────────────────────────
+
+function findCalItemById(id) {
+  if (!calLastData) return null;
+  return (calLastData.scheduled || []).find(i => i.id === id) || (calLastData.unscheduled || []).find(i => i.id === id) || null;
+}
+
+function openCalendarDetail(id) {
+  const it = findCalItemById(id);
+  if (!it) return;
+  document.getElementById('cal-detail-card').style.display = 'block';
+  const body = document.getElementById('cal-detail-body');
+  const previewLine = (it.preview && it.preview.exists)
+    ? `<div class="row"><span class="row-label">Preview</span><span class="badge badge-blue">${esc(it.preview.target)} · ${esc(it.preview.status)}</span></div>`
+    : `<div class="row"><span class="row-label">Preview</span><span class="row-label">no preview yet</span></div>`;
+  const approvalLine = it.approval
+    ? `<div class="row"><span class="row-label">Approval</span><span class="badge badge-yellow">${esc(it.approval.status)} — ${esc(it.approval.category)}</span></div>`
+    : `<div class="row"><span class="row-label">Approval</span><span class="row-label">none pending</span></div>`;
+  body.innerHTML = `
+    <div class="row"><span class="row-label">Title</span><span>${esc(it.title || '(untitled)')}</span></div>
+    <div class="row"><span class="row-label">Keyword</span><span>${esc(it.primary_keyword || '—')}</span></div>
+    <div class="row"><span class="row-label">Brand / Location</span><span>${esc(it.brand_id)} / ${esc(it.location_id || 'all locations')}</span></div>
+    <div class="row"><span class="row-label">Status</span><span class="badge badge-blue">${esc(it.status)}</span></div>
+    <div class="row"><span class="row-label">Quality Score</span><span>${it.quality_score ?? '—'}</span></div>
+    <div class="row"><span class="row-label">AI Provider</span><span>${esc(it.ai_provider || '—')}</span></div>
+    <div class="row"><span class="row-label">Indexing</span><span class="badge badge-muted">${esc(it.indexing_state)}</span></div>
+    ${approvalLine}
+    ${previewLine}
+    <div class="form-row" style="margin-top:10px">
+      <div><label class="field-label">Reschedule</label><input type="date" id="cal-detail-date" value="${it.scheduled_publish_at ? dateKeyFromIso(it.scheduled_publish_at) : ''}"></div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn btn-sm" onclick="applyDetailReschedule('${esc(it.id)}')">Save Date</button>
+      <button class="btn btn-sm btn-ghost" onclick="setCalendarItemStatus('${esc(it.id)}','PAUSED')">Pause</button>
+      <button class="btn btn-sm btn-red" onclick="setCalendarItemStatus('${esc(it.id)}','REJECTED')">Reject</button>
+      ${it.approval ? `<button class="btn btn-sm btn-green" onclick="approveCalendarItem('${esc(it.id)}')">Approve</button>` : ''}
+      <button class="btn btn-sm btn-ghost" onclick="previewCalendarItem('${esc(it.id)}')">Preview</button>
+    </div>
+    <div id="cal-detail-result" style="margin-top:8px"></div>`;
+}
+
+function closeCalendarDetail() { document.getElementById('cal-detail-card').style.display = 'none'; }
+
+async function applyDetailReschedule(id) {
+  const val = document.getElementById('cal-detail-date').value;
+  await rescheduleItem(id, val || null);
+  if (findCalItemById(id)) openCalendarDetail(id);
+}
+
+async function setCalendarItemStatus(id, status) {
+  const resultEl = document.getElementById('cal-detail-result');
+  resultEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api(`/api/seo/calendar/items/${encodeURIComponent(id)}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }),
+    });
+    const action = (d.actions || []).find(a => a.type === 'status');
+    const outcome = action && action.outcome && action.outcome.outcome;
+    resultEl.innerHTML = outcome
+      ? `<div class="row-label">Outcome: ${esc(outcome)}${outcome === 'pending_approval' ? ' — awaiting approval, status unchanged until approved' : ''}</div>`
+      : '';
+    await loadCalendarTab();
+    if (findCalItemById(id)) openCalendarDetail(id);
+  } catch (e) {
+    resultEl.innerHTML = `<div class="error-msg">Failed: ${esc(e.message)}</div>`;
+  }
+}
+
+async function approveCalendarItem(id) {
+  const it = findCalItemById(id);
+  if (!it || !it.approval) return;
+  try {
+    await api(`/api/approval/${encodeURIComponent(it.approval.id)}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    await loadCalendarTab();
+    if (findCalItemById(id)) openCalendarDetail(id);
+  } catch (e) { alert('Approve failed: ' + e.message); }
+}
+
+function previewCalendarItem(id) {
+  const it = findCalItemById(id);
+  if (!it) return;
+  if (it.preview && it.preview.exists) {
+    alert(`Preview snapshot — target: ${it.preview.target}, status: ${it.preview.status}, created: ${fmtDate(it.preview.created_at)}`);
+  } else {
+    alert('No preview yet for this item.');
+  }
+}
+
+// ── Search Terms (Keywords) ─────────────────────────────────────────────
+
+async function loadKeywords() {
+  const body = document.getElementById('kw-body');
+  if (!currentBrand) { body.innerHTML = brandScopedNotice('search terms'); return; }
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api(`/api/seo/keywords?brand_id=${encodeURIComponent(currentBrand)}`);
+    const kws = d.keywords || [];
+    if (!kws.length) { body.innerHTML = '<div class="empty-state">No keywords yet for this brand — click "Discover Keywords" to start.</div>'; return; }
+    body.innerHTML = `<table>
+      <thead><tr><th>Keyword</th><th>Status</th><th>Intent</th><th>Target URL</th></tr></thead>
+      <tbody>${kws.map(k => `<tr>
+        <td>${esc(k.keyword)}</td>
+        <td><span class="badge badge-blue">${esc(k.status)}</span></td>
+        <td>${esc(k.search_intent || '—')}</td>
+        <td style="font-size:11px;color:var(--muted)">${esc(k.target_url || '—')}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load keywords: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function discoverKeywords() {
+  if (!currentBrand) return alert('Select a specific brand first.');
+  try {
+    await api('/api/seo/keywords/discover', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ brand_id: currentBrand }) });
+    await loadKeywords();
+  } catch (e) { alert('Discovery failed: ' + e.message); }
+}
+
+async function clusterKeywords() {
+  if (!currentBrand) return alert('Select a specific brand first.');
+  try {
+    await api('/api/seo/keywords/cluster', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ brand_id: currentBrand }) });
+    alert('Clustering ran — check Topic Clusters tab (use "Generate Clusters" there to persist).');
+  } catch (e) { alert('Clustering failed: ' + e.message); }
+}
+
+// ── Topic Clusters (visual graph, inline SVG, no external library) ───────
+//
+// Brand isolation: this tab always fetches /api/seo/clusters?brand_id=<one
+// specific brand> — it never combines multiple brands' clusters into one
+// graph. When "All Brands" is selected we show a prompt instead of a merged
+// graph (same pattern the rest of this file already uses for brand-scoped
+// tabs via brandScopedNotice()).
+
+let clusterNodeLookup = {}; // node id -> { node, cluster } for the click-to-detail panel
+
+async function loadClusters() {
+  const wrap = document.getElementById('cluster-graph-wrap');
+  const legend = document.getElementById('cg-legend');
+  document.getElementById('cluster-error').innerHTML = '';
+  if (!currentBrand) {
+    wrap.innerHTML = brandScopedNotice('the topic cluster graph') +
+      '<div class="note" style="margin-top:8px">Clusters are always rendered for one selected brand at a time — "All Brands" never merges multiple brands into a single graph.</div>';
+    legend.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = '<div class="skeleton"></div>';
+  legend.innerHTML = '';
+  try {
+    const d = await api(`/api/seo/clusters?brand_id=${encodeURIComponent(currentBrand)}`);
+    const clusters = d.clusters || [];
+    if (!clusters.length) {
+      wrap.innerHTML = `<div class="empty-state">No topic clusters yet for this brand.<br><button class="btn btn-sm" style="margin-top:10px" onclick="generateClusters()">Generate Clusters</button></div>`;
+      return;
+    }
+    legend.innerHTML = clusterLegendHtml();
+    wrap.innerHTML = `<div class="cluster-graph-svg-wrap">${buildClusterSvg(clusters, currentBrand)}</div><div class="cluster-detail-panel" id="cg-detail">Click a node to see its details.</div>`;
+  } catch (e) {
+    wrap.innerHTML = `<div class="error-msg">Couldn't load clusters: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function generateClusters() {
+  if (!currentBrand) return alert('Select a specific brand first.');
+  try {
+    await api('/api/seo/clusters/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ brand_id: currentBrand }) });
+    await loadClusters();
+  } catch (e) { alert('Cluster generation failed: ' + e.message); }
+}
+
+function clusterLegendHtml() {
+  const dots = [['#10b981', 'linked / healthy'], ['#f59e0b', 'seed / placeholder'], ['#ef4444', 'missing']];
+  const dotsHtml = dots.map(([c, l]) => `<span><span class="cg-legend-dot" style="background:${c}"></span>${esc(l)}</span>`).join('');
+  return `${dotsHtml}<span>shape — ● pillar &nbsp; ■ article &nbsp; ◆ location &nbsp; ▲ menu</span>
+    <span>outer ring — dashed blue: has internal link &nbsp; dotted amber: has ranking data</span>`;
+}
+
+function nodeColor(node, cluster) {
+  if (cluster.health_status === 'seed') return '#f59e0b';
+  if (node.status === 'MISSING') return '#ef4444';
+  if (node.status === 'LINKED' || node.status === 'PRODUCTION_READY' || node.status === 'PREVIEW_VERIFIED' || node.status === 'PREVIEW_PUBLISHED') return '#10b981';
+  return '#f59e0b';
+}
+
+function truncLabel(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+
+function nodeShapeSvg(cx, cy, r, type, fill, id) {
+  const attrs = `data-node-id="${esc(id)}" class="cg-node" onclick="showClusterNodeDetail('${esc(id)}')"`;
+  if (type === 'location') {
+    const pts = [[cx, cy - r], [cx + r, cy], [cx, cy + r], [cx - r, cy]].map(p => p.join(',')).join(' ');
+    return `<polygon points="${pts}" fill="${fill}" stroke="#0a0a0f" stroke-width="1.5" ${attrs}/>`;
+  }
+  if (type === 'menu_category') {
+    const pts = [[cx, cy - r], [cx + r, cy + r], [cx - r, cy + r]].map(p => p.join(',')).join(' ');
+    return `<polygon points="${pts}" fill="${fill}" stroke="#0a0a0f" stroke-width="1.5" ${attrs}/>`;
+  }
+  if (type === 'supporting_article') {
+    return `<rect x="${cx - r}" y="${cy - r}" width="${r * 2}" height="${r * 2}" rx="3" fill="${fill}" stroke="#0a0a0f" stroke-width="1.5" ${attrs}/>`;
+  }
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="#0a0a0f" stroke-width="1.5" ${attrs}/>`;
+}
+
+function buildClusterSvg(clusters, brandId) {
+  clusterNodeLookup = {};
+  const W = 1100;
+  const clusterCount = clusters.length;
+  const colWidth = Math.max(160, Math.floor((W - 80) / Math.max(clusterCount, 1)));
+  const brandX = W / 2, brandY = 34;
+  const pillarY = 130;
+
+  let maxRows = 1;
+  const layouts = clusters.map((cluster, ci) => {
+    const pillarNode = cluster.nodes.find(n => n.node_type === 'pillar') || cluster.nodes[0] || null;
+    const children = pillarNode ? cluster.nodes.filter(n => n !== pillarNode) : cluster.nodes;
+    const colX = 40 + colWidth * ci + colWidth / 2;
+    const perRow = Math.max(1, Math.min(3, Math.floor(colWidth / 70)));
+    const rows = children.length ? Math.ceil(children.length / perRow) : 0;
+    maxRows = Math.max(maxRows, rows);
+    return { cluster, pillarNode, children, colX, perRow };
+  });
+
+  const H = 210 + maxRows * 80 + 40;
+  let body = '';
+
+  body += `<circle cx="${brandX}" cy="${brandY}" r="20" fill="#7c3aed" stroke="#0a0a0f" stroke-width="2"/>`;
+  body += `<text x="${brandX}" y="${brandY + 34}" text-anchor="middle" class="cg-label" font-weight="700">${esc(brandId)}</text>`;
+
+  for (const layout of layouts) {
+    const { cluster, pillarNode, children, colX, perRow } = layout;
+    if (!pillarNode) continue;
+    const pillarFill = nodeColor(pillarNode, cluster);
+    body += `<line x1="${brandX}" y1="${brandY + 20}" x2="${colX}" y2="${pillarY - 16}" stroke="#2a2a3e" stroke-width="1.5"/>`;
+    body += nodeShapeSvg(colX, pillarY, 16, 'pillar', pillarFill, pillarNode.id);
+    body += `<text x="${colX}" y="${pillarY + 32}" text-anchor="middle" class="cg-label">${esc(truncLabel(cluster.name, 18))}</text>`;
+    clusterNodeLookup[pillarNode.id] = { node: pillarNode, cluster };
+
+    children.forEach((child, idx) => {
+      const row = Math.floor(idx / perRow);
+      const col = idx % perRow;
+      const rowItems = Math.min(perRow, children.length - row * perRow);
+      const rowStartX = colX - ((rowItems - 1) * 68) / 2;
+      const cx = rowStartX + col * 68;
+      const cy = pillarY + 90 + row * 78;
+      const fill = nodeColor(child, cluster);
+      body += `<line x1="${colX}" y1="${pillarY + 16}" x2="${cx}" y2="${cy - 10}" stroke="#22223a" stroke-width="1"/>`;
+
+      // Distinct-stroke indicators (never emoji): dashed blue ring = has a
+      // real link_status, dotted amber ring = has real ranking_status. Both
+      // are rendered only when the backend actually returns a non-'unknown'
+      // value — cluster-builder.ts does not populate these yet for freshly
+      // generated clusters, so on a brand-new cluster map neither ring will
+      // show, which is the honest state (no fabricated link/ranking data).
+      let ringR = 10 + 5;
+      if (child.link_status && child.link_status !== 'unknown') {
+        body += `<circle cx="${cx}" cy="${cy}" r="${ringR}" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="2,2"/>`;
+        ringR += 4;
+      }
+      if (child.ranking_status && child.ranking_status !== 'unknown') {
+        body += `<circle cx="${cx}" cy="${cy}" r="${ringR}" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="1,3"/>`;
+      }
+
+      body += nodeShapeSvg(cx, cy, 10, child.node_type, fill, child.id);
+      body += `<text x="${cx}" y="${cy + 24}" text-anchor="middle" class="cg-sublabel">${esc(truncLabel(child.label, 12))}</text>`;
+      clusterNodeLookup[child.id] = { node: child, cluster };
+    });
+  }
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${Math.max(H, 300)}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+}
+
+function showClusterNodeDetail(id) {
+  const entry = clusterNodeLookup[id];
+  const panel = document.getElementById('cg-detail');
+  if (!panel) return;
+  if (!entry) { panel.innerHTML = 'Node not found.'; return; }
+  const { node, cluster } = entry;
+  panel.innerHTML = `
+    <div class="row"><span class="row-label">Cluster</span><span>${esc(cluster.name)} <span class="badge badge-muted">${esc(cluster.health_status || 'unknown')}</span></span></div>
+    <div class="row"><span class="row-label">Label</span><span>${esc(node.label)}</span></div>
+    <div class="row"><span class="row-label">Type</span><span>${esc(node.node_type)}</span></div>
+    <div class="row"><span class="row-label">Ref ID</span><span style="font-size:11px">${esc(node.ref_id || '—')}</span></div>
+    <div class="row"><span class="row-label">Status</span><span class="badge badge-blue">${esc(node.status)}</span></div>
+    <div class="row"><span class="row-label">Link Status</span><span>${esc(node.link_status || 'unknown')}</span></div>
+    <div class="row"><span class="row-label">Ranking Status</span><span>${esc(node.ranking_status || 'unknown')}</span></div>`;
+}
+
+// ── Local SEO ────────────────────────────────────────────────────────────
+
+async function loadLocal() {
+  const body = document.getElementById('local-body');
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const path = currentBrand ? `/api/seo/local?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/local';
+    const d = await api(path);
+    const locs = d.locations || [];
+    if (!locs.length) { body.innerHTML = '<div class="empty-state">No locations found.</div>'; return; }
+    body.innerHTML = `<div class="grid">` + locs.map(l => {
+      const nap = l.nap || {};
+      const consistent = nap.consistent === true;
+      return `<div class="card" style="margin-bottom:0">
+        <div class="card-header"><span class="card-title">${esc(l.name)}</span>
+          <span class="badge ${consistent ? 'badge-green' : 'badge-yellow'}">${consistent ? 'NAP consistent' : (nap.consistent === false ? 'NAP issues' : 'unknown')}</span>
+        </div>
+        <div class="card-body">
+          <div class="row"><span class="row-label">Brand</span><span>${esc(l.brand_id)}</span></div>
+          <button class="btn btn-sm" onclick="runLocalAudit('${esc(l.brand_id)}','${esc(l.location_id)}')">Run Audit</button>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load local SEO data: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function runLocalAudit(brandId, locationId) {
+  try {
+    await api(`/api/seo/local/${encodeURIComponent(locationId)}/audit`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ brand_id: brandId }) });
+    await loadLocal();
+  } catch (e) { alert('Audit failed: ' + e.message); }
+}
+
+// ── GBP ──────────────────────────────────────────────────────────────────
+
+function loadGbpTab() { loadGbpPosts(); }
+
+async function loadGbpPosts() {
+  const body = document.getElementById('gbp-posts-body');
+  if (!currentBrand) { body.innerHTML = brandScopedNotice('GBP posts'); return; }
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api(`/api/seo/gbp/posts?brand_id=${encodeURIComponent(currentBrand)}`);
+    const posts = d.posts || [];
+    if (!posts.length) { body.innerHTML = '<div class="empty-state">No GBP posts yet — generate a draft above.</div>'; return; }
+    body.innerHTML = `<table>
+      <thead><tr><th>Description</th><th>Status</th><th>Created</th></tr></thead>
+      <tbody>${posts.map(p => `<tr>
+        <td>${esc(p.description || '—')}</td>
+        <td><span class="badge badge-blue">${esc(p.status)}</span></td>
+        <td style="font-size:11px;color:var(--muted)">${fmtDate(p.created_at)}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load GBP posts: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function generateGbpPost() {
+  const resultEl = document.getElementById('gbp-generate-result');
+  const locationId = document.getElementById('gbp-location-select').value;
+  const topic = document.getElementById('gbp-topic-input').value.trim();
+  if (!currentBrand) return alert('Select a specific brand first.');
+  if (!locationId || !topic) return alert('Location and topic are required.');
+  resultEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api('/api/seo/gbp/posts/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brand_id: currentBrand, location_id: locationId, topic }),
+    });
+    resultEl.innerHTML = `<div class="row-label">Draft generated — outcome: ${esc(d.outcome || (d.action && d.action.outcome) || 'submitted')}</div>`;
+    await loadGbpPosts();
+  } catch (e) {
+    resultEl.innerHTML = `<div class="error-msg">Generation failed: ${esc(e.message)}</div>`;
+  }
+}
+
+// ── Backlinks ────────────────────────────────────────────────────────────
+
+async function loadBacklinks() {
+  const body = document.getElementById('backlinks-body');
+  if (!currentBrand) { body.innerHTML = brandScopedNotice('backlinks'); return; }
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api(`/api/seo/backlinks?brand_id=${encodeURIComponent(currentBrand)}`);
+    const links = d.backlinks || [];
+    if (!links.length) { body.innerHTML = '<div class="empty-state">No backlinks recorded yet.</div>'; return; }
+    const statusColor = s => ({ APPROVED: 'badge-green', REJECTED: 'badge-red', PENDING: 'badge-yellow' }[s] || 'badge-muted');
+    body.innerHTML = `<table>
+      <thead><tr><th>Source</th><th>Destination</th><th>Status</th><th>DA</th><th>Actions</th></tr></thead>
+      <tbody>${links.map(b => `<tr>
+        <td style="font-size:12px">${esc(b.source_domain)}</td>
+        <td style="font-size:12px;color:var(--muted)">${esc(b.destination_url)}</td>
+        <td><span class="badge ${statusColor(b.status)}">${esc(b.status)}</span></td>
+        <td>${b.domain_authority ?? '—'}</td>
+        <td>${b.status === 'PENDING' ? `
+          <button class="btn btn-sm btn-green" onclick="approveBacklink('${esc(b.id)}')">Approve</button>
+          <button class="btn btn-sm btn-red" onclick="rejectBacklink('${esc(b.id)}')">Reject</button>
+        ` : '—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load backlinks: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function approveBacklink(id) {
+  try { await api(`/api/seo/backlinks/${encodeURIComponent(id)}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); await loadBacklinks(); }
+  catch (e) { alert('Approve failed: ' + e.message); }
+}
+async function rejectBacklink(id) {
+  try { await api(`/api/seo/backlinks/${encodeURIComponent(id)}/reject`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); await loadBacklinks(); }
+  catch (e) { alert('Reject failed: ' + e.message); }
+}
+
+// ── Approvals ────────────────────────────────────────────────────────────
+
+async function loadApprovals() {
+  const body = document.getElementById('approvals-body');
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const pending = await api('/api/approval/pending');
+    const seoOnly = (Array.isArray(pending) ? pending : []).filter(a => (a.category || '').startsWith('seo_'));
+    if (!seoOnly.length) { body.innerHTML = '<div class="empty-state">✅ Nothing pending.</div>'; return; }
+    body.innerHTML = seoOnly.map(a => `
+      <div class="row">
+        <span style="font-size:12px">${esc(a.description)} <span class="badge badge-muted">${esc(a.category)}</span></span>
+        <span style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-green" onclick="approveAction('${esc(a.id)}')">Approve</button>
+          <button class="btn btn-sm btn-red" onclick="rejectAction('${esc(a.id)}')">Reject</button>
+        </span>
+      </div>`).join('');
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load approvals: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function approveAction(id) {
+  try { await api(`/api/approval/${encodeURIComponent(id)}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); await loadApprovals(); }
+  catch (e) { alert('Approve failed: ' + e.message); }
+}
+async function rejectAction(id) {
+  try { await api(`/api/approval/${encodeURIComponent(id)}/reject`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); await loadApprovals(); }
+  catch (e) { alert('Reject failed: ' + e.message); }
+}
+
+// ── Evidence ─────────────────────────────────────────────────────────────
+
+async function loadEvidence() {
+  const body = document.getElementById('evidence-body');
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const path = currentBrand ? `/api/seo/evidence?brand_id=${encodeURIComponent(currentBrand)}&limit=50` : '/api/seo/evidence?limit=50';
+    const d = await api(path);
+    const ev = d.evidence || [];
+    if (!ev.length) { body.innerHTML = '<div class="empty-state">No evidence recorded yet.</div>'; return; }
+    body.innerHTML = `<table>
+      <thead><tr><th>Category</th><th>Summary</th><th>When</th></tr></thead>
+      <tbody>${ev.map(e => `<tr>
+        <td><span class="badge badge-blue">${esc(e.category)}</span></td>
+        <td style="font-size:12px">${esc(e.summary || '—')}</td>
+        <td style="font-size:11px;color:var(--muted)">${fmtDate(e.created_at)}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load evidence: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+// ── Reports ──────────────────────────────────────────────────────────────
+
+async function loadWriteFlags() {
+  const body = document.getElementById('write-flags-body');
+  if (!body) return;
+  try {
+    const d = await api('/api/seo/write-flags');
+    const flags = d.flags || {};
+    const rows = Object.values(flags).map(f => `
+      <div class="row">
+        <span class="row-label">${esc(f.name)}</span>
+        <span class="badge ${f.enabled ? 'badge-red' : 'badge-green'}">${f.enabled ? 'enabled' : 'disabled'}</span>
+      </div>`).join('');
+    body.innerHTML = `<div class="row"><span class="row-label">Live write status</span><span class="badge ${d.live_write_status === 'DISABLED' ? 'badge-green' : 'badge-red'}">${esc(d.live_write_status)}</span></div>${rows}`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load write safety flags: ${esc(e.message)}</div>`;
+  }
+}
+
+async function loadReports() {
+  const body = document.getElementById('reports-body');
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const path = currentBrand ? `/api/seo/reports?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/reports';
+    const d = await api(path);
+    const reports = d.reports || [];
+    if (!reports.length) { body.innerHTML = '<div class="empty-state">No reports generated yet — click "Generate Now" above.</div>'; return; }
+    body.innerHTML = reports.map(r => `
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-header">
+          <span class="card-title">${esc(r.report_type)} — ${esc(r.brand_id || 'all brands')}</span>
+          <span class="row-label">${fmtDate(r.created_at)}</span>
+        </div>
+        <div class="card-body"><pre class="report-json">${esc(JSON.stringify(r.content, null, 2))}</pre></div>
+      </div>`).join('');
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load reports: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+async function generateReport() {
+  const resultEl = document.getElementById('report-generate-result');
+  const reportType = document.getElementById('report-type-select').value;
+  resultEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api('/api/seo/reports/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brand_id: currentBrand || undefined, report_type: reportType }),
+    });
+    resultEl.innerHTML = `<div class="row-label">✅ Generated report ${esc(d.report_id)}</div>`;
+    await loadReports();
+  } catch (e) {
+    resultEl.innerHTML = `<div class="error-msg">Generation failed: ${esc(e.message)}</div>`;
+  }
+}
+
+// ── Policies ─────────────────────────────────────────────────────────────
+
+async function loadPolicies() {
+  const body = document.getElementById('policy-body');
+  body.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const d = await api('/api/seo/policy');
+    const p = d.policy || {};
+    const tiers = [
+      ['SAFE_AUTO', 'badge-green'],
+      ['AUTO_WITH_NOTIFICATION', 'badge-blue'],
+      ['REQUIRES_APPROVAL', 'badge-yellow'],
+      ['BLOCKED', 'badge-red'],
+    ];
+    body.innerHTML = `<div class="policy-grid">` + tiers.map(([tier, cls]) => `
+      <div class="policy-col">
+        <h3><span class="badge ${cls}">${tier}</span></h3>
+        <ul>${(p[tier] || []).map(c => `<li>${esc(c)}</li>`).join('') || '<li style="font-style:italic">(none)</li>'}</ul>
+      </div>`).join('') + `</div>
+      <div class="note" style="margin-top:10px">Policy version ${esc(p.version ?? '—')} · precedence: BLOCKED &gt; REQUIRES_APPROVAL &gt; AUTO_WITH_NOTIFICATION &gt; SAFE_AUTO</div>`;
+  } catch (e) {
+    body.innerHTML = `<div class="error-msg">Couldn't load policy: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────
+
+async function boot() {
+  await loadBrandSelector();
+  await loadLocationSelector();
+  await loadWriteFlags();
+  await loadOverview();
+  setInterval(loadWriteFlags, 60_000);
+  setInterval(loadOverview, 60_000);
+}
+
+boot();
+</script>
+</body>
+</html>

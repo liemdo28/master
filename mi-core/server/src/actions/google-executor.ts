@@ -8,7 +8,7 @@
 import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
-import { getAuthedClient, isConfigured, hasTokens } from '../visibility/connectors/google/google-auth';
+import { assertGoogleConnectorWriteEnabled, getAuthedClient, isConfigured, hasTokens, GOOGLE_WRITE_DISABLED_ERROR } from '../visibility/connectors/google/google-auth';
 
 export type ExecutionResult = {
   success: boolean;
@@ -29,6 +29,7 @@ export interface EmailPayload {
 }
 
 export async function executeGmailSend(payload: EmailPayload): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'gmail_send', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'gmail_send', error: 'Google not authorized. Visit /api/auth/google/start' };
   }
@@ -69,6 +70,7 @@ export async function executeGmailSend(payload: EmailPayload): Promise<Execution
 }
 
 export async function executeGmailDraft(payload: EmailPayload): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'gmail_draft', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'gmail_draft', error: 'Google not authorized' };
   }
@@ -121,6 +123,7 @@ export interface CalendarEventPayload {
 }
 
 export async function executeCalendarCreate(payload: CalendarEventPayload): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'calendar_create', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'calendar_create', error: 'Google not authorized. Visit /api/auth/google/start' };
   }
@@ -158,6 +161,7 @@ export async function executeCalendarCreate(payload: CalendarEventPayload): Prom
 }
 
 export async function executeCalendarUpdate(eventId: string, updates: Partial<CalendarEventPayload>): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'calendar_update', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'calendar_update', error: 'Google not authorized' };
   }
@@ -194,6 +198,7 @@ export interface DriveUploadPayload {
 }
 
 export async function executeDriveUpload(payload: DriveUploadPayload): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'drive_upload', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'drive_upload', error: 'Google not authorized. Visit /api/auth/google/start' };
   }
@@ -242,6 +247,7 @@ export async function executeDriveUpload(payload: DriveUploadPayload): Promise<E
 }
 
 export async function executeDriveShare(fileId: string, email: string, role: 'reader' | 'writer' = 'reader'): Promise<ExecutionResult> {
+  try { assertGoogleConnectorWriteEnabled(); } catch { return { success: false, action_type: 'drive_share', error: GOOGLE_WRITE_DISABLED_ERROR }; }
   if (!isConfigured() || !hasTokens()) {
     return { success: false, action_type: 'drive_share', error: 'Google not authorized' };
   }

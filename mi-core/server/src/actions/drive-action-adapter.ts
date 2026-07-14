@@ -4,6 +4,7 @@
 
 import path from 'path';
 import fs from 'fs';
+import { assertGoogleConnectorWriteEnabled } from '../visibility/connectors/google/google-auth';
 
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const TOKEN_PATH = path.join(GLOBAL_DIR, 'visibility', 'google-tokens.json');
@@ -67,6 +68,7 @@ export async function uploadToDrive(params: {
   mimeType: string;
   folderId?: string;
 }): Promise<{ file_id: string; webViewLink: string }> {
+  assertGoogleConnectorWriteEnabled();
   const drive = await getDriveClient();
   const { Readable } = await import('stream');
   const body = typeof params.content === 'string' ? Readable.from([params.content]) : Readable.from([params.content]);

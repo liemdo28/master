@@ -72,7 +72,7 @@ export async function ingestFile(filePath: string): Promise<IngestionResult> {
 
     if (ext === '.xlsx' || ext === '.xls') {
       const result = readExcelFile(filePath);
-      if (!result.success || !result.rows || !result.headers) return { success: false, error: result.error };
+      if (!result.success || !result.rows || !result.headers) return { success: false, error: result.error, reason: result.status };
       const mapResult = mapColumns(result.headers);
       const quality = checkDataQuality(result.rows, mapResult.mapping);
       const entry = addDataset({
@@ -114,7 +114,7 @@ export async function ingestFile(filePath: string): Promise<IngestionResult> {
       return { success: true, file: name, file_type: 'json', text_preview: text.slice(0, 500) };
     }
 
-    return { success: false, error: `Unsupported file type: ${ext}. Supported: .csv, .xlsx, .xls, .json, .pdf, .docx` };
+    return { success: false, error: `Unsupported file type: ${ext}. Supported: .csv, .json, .pdf, .docx. Excel is disabled until a safe parser is approved.` };
   } catch (e) {
     return { success: false, error: String(e) };
   }
