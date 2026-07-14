@@ -185,7 +185,7 @@ section('CSRF and scope isolation');
     path: '/api/seo/keywords',
     token: manager.token,
     csrf: manager.csrf_token,
-    body: { brand_id: 'bakudan', location_id: 'modesto' },
+    body: { brand_id: 'bakudan', location_id: 'outside_scope' },
   }));
   check('cross-location mutation is blocked', crossLocation.statusCode === 403 && crossLocation.payload?.error === 'seo_scope_violation');
 }

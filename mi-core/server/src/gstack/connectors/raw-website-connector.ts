@@ -28,7 +28,7 @@ export interface ArticlePayload {
   cta_url?: string;
   post_type?: string;
   target_audience?: string;
-  location?: 'raw_stockton' | 'raw_modesto';
+  location?: 'raw_stockton';
 }
 
 export interface PublishResult {

@@ -122,8 +122,8 @@ try {
   // Second independent scenario for the same keyword/no-target-page case —
   // doubles as the QA-repair-loop fallback's second confirmation (see GAP note).
   const dupeBrand = 'test-brand-cannibalization-dupe-inpipeline';
-  const inPipelineKw = insertKeyword({ brand_id: dupeBrand, keyword: 'sushi delivery modesto' });
-  const dupeResult = detectCannibalization({ brand_id: dupeBrand, keyword: 'sushi delivery modesto' });
+  const inPipelineKw = insertKeyword({ brand_id: dupeBrand, keyword: 'sushi delivery stockton' });
+  const dupeResult = detectCannibalization({ brand_id: dupeBrand, keyword: 'sushi delivery stockton' });
   check('identical keyword already in pipeline with NO target page yet returns REJECT',
     dupeResult.decision === 'REJECT', `got ${dupeResult.decision}: ${dupeResult.reason}`);
   check('REJECT result references the in-pipeline keyword id', dupeResult.conflicting_keyword_id === inPipelineKw.id);

@@ -47,23 +47,6 @@
         "instagram": "needs_config",
         "yelp": "needs_config"
       }
-    },
-    {
-      "brand_id": "test_brand_3",
-      "name": "Test Brand 3",
-      "domain": "https://example.com",
-      "status": "inactive",
-      "industry": "restaurant",
-      "cuisine": "unknown",
-      "created_at": "2026-06-24T02:00:00.000Z",
-      "connectors": {
-        "gsc": { "status": "not_applicable", "credentials_configured": false },
-        "ga4": { "status": "not_applicable", "credentials_configured": false },
-        "gbp": { "status": "not_applicable", "credentials_configured": false }
-      },
-      "platforms": {
-        "website": "https://example.com"
-      }
     }
   ]
 }

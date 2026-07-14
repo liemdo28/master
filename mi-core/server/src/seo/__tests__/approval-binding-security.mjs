@@ -68,7 +68,7 @@ section('Exact approval binding');
   check('approval for Bakudan cannot authorize Raw Sushi',
     validateSeoApproval(id, { ...base, brand_id: 'raw_sushi' }).reason === 'approval_brand_mismatch');
   check('approval for location A cannot authorize location B',
-    validateSeoApproval(id, { ...base, location_id: 'modesto' }).reason === 'approval_location_mismatch');
+    validateSeoApproval(id, { ...base, location_id: 'outside_scope' }).reason === 'approval_location_mismatch');
   check('mismatched action rejected',
     validateSeoApproval(id, { ...base, action: 'publish_gbp_post' }).reason === 'approval_action_mismatch');
   check('payload-hash mismatch rejected where configured',
