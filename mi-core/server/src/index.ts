@@ -97,6 +97,14 @@ import { healthIntelligenceRouter } from './health-intelligence/health-router';
 import { digitalTwinRouter } from './digital-twin/digital-twin-router';
 import { agenviewRouter } from './agenview/agenview-router';
 import { seoRouter } from './routes/seo';
+import { seoResearchRouter } from './routes/seo-research';
+import { seoLinksRouter } from './routes/seo-links';
+import { seoLocalRouter } from './routes/seo-local';
+import { seoReportsRouter } from './routes/seo-reports';
+import { seoEvidenceRouteRouter } from './routes/seo-evidence-route';
+import { seoCalendarRouter } from './routes/seo-calendar';
+import { seoRateLimiter, requireSeoAccess } from './seo/seo-security';
+import { startSeoScheduler } from './seo/scheduler/seo-scheduler';
 import { cooV4Router } from './routes/coo-v4-router';
 import companyOsRouter from './company-os/company-os-router';
 import { operationsRouter } from './routes/operations';
@@ -221,6 +229,7 @@ app.get('/liveboard', (_req, res) => res.redirect('/liveboard.html'));
 app.get('/mobile',    (_req, res) => res.redirect('/mobile.html'));
 app.get('/voice',     (_req, res) => res.redirect('/voice.html'));
 app.get('/agenview',  (_req, res) => res.redirect('/agenview.html'));
+app.get('/seo',       (_req, res) => res.redirect('/seo-control-center.html'));
 
 // ── API routes ──────────────────────────────────────────────────────────────
 // Auth strategy: requireAuth checks PIN-based token sessions.
@@ -282,7 +291,14 @@ app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operation
 app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
 app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
 app.use('/api/agenview',        agenviewRouter);           // Phase 19: AgenView Dashboard
+app.use('/api/seo',             seoRateLimiter, requireSeoAccess); // strict SEO auth/RBAC/CSRF/scope gate
 app.use('/api/seo',             seoRouter);                // SEO Phase 2: 7 SEO Agent Integration
+app.use('/api/seo',             seoResearchRouter);         // SEO Control Center: keywords, clusters, facts, cannibalization
+app.use('/api/seo',             seoLinksRouter);            // SEO Control Center: internal links, CTA, backlinks
+app.use('/api/seo',             seoLocalRouter);            // SEO Control Center: local SEO, GBP posts, publish preview/rollback
+app.use('/api/seo',             seoReportsRouter);          // SEO Control Center: daily/weekly/monthly reports
+app.use('/api/seo',             seoEvidenceRouteRouter);    // SEO Control Center: evidence viewer + read-only policy
+app.use('/api/seo',             seoCalendarRouter);         // SEO Control Center: content calendar
 app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
 app.use('/api/company-os',      companyOsRouter);          // Mi Company OS: 19-dept pipeline
 app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution
@@ -486,6 +502,9 @@ function onListenSuccess() {
 
     startScheduler();
     console.log('[Mi] ✓ Scheduler started');
+
+    startSeoScheduler();
+    console.log('[Mi] ✓ SEO Control Center scheduler started');
 
     startBurnInScheduler();
     startSelfHealingScheduler(5);

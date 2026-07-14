@@ -26,7 +26,7 @@ const upload = multer({
   dest: UPLOAD_DIR,
   limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    const allowed = ['.csv', '.xlsx', '.xls', '.json', '.pdf', '.docx', '.doc'];
+    const allowed = ['.csv', '.json', '.pdf', '.docx', '.doc'];
     const ext = path.extname(file.originalname).toLowerCase();
     cb(null, allowed.includes(ext));
   },
@@ -40,7 +40,11 @@ dataAnalystRouter.get('/health', (_req: Request, res: Response) => {
     status: 'ok',
     module: 'data-analyst',
     engine: 'DataAnalystEngine (TypeScript native)',
-    supported_formats: ['csv', 'xlsx', 'xls', 'json', 'pdf', 'docx'],
+    supported_formats: ['csv', 'json', 'pdf', 'docx'],
+    disabled_formats: {
+      xlsx: 'disabled_security_advisory',
+      xls: 'disabled_security_advisory',
+    },
     endpoints: [
       'GET  /health',
       'GET  /datasets',

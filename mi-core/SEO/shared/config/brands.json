@@ -28,7 +28,7 @@
     {
       "brand_id": "raw_sushi",
       "name": "Raw Sushi",
-      "domain": "https://rawsushibar.com",
+      "domain": "https://www.rawsushibar.com",
       "status": "active",
       "industry": "restaurant",
       "cuisine": "japanese_sushi",
@@ -41,7 +41,7 @@
         "citation_scan": { "status": "ready", "credentials_configured": true }
       },
       "platforms": {
-        "website": "https://rawsushibar.com",
+        "website": "https://www.rawsushibar.com",
         "order_online": "needs_config",
         "facebook": "needs_config",
         "instagram": "needs_config",

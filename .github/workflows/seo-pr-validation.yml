@@ -1,0 +1,87 @@
+name: SEO PR Validation
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  seo-security:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: mi-core/server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: mi-core/server/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+      - name: Dependency audit policy
+        run: npm audit --audit-level=high
+
+      - name: Auth security
+        run: npx tsx src/seo/__tests__/auth-hardening.mjs
+
+      - name: Approval lifecycle and concurrency
+        run: |
+          npx tsx src/seo/__tests__/approval-binding-security.mjs
+          npx tsx src/seo/__tests__/approval-claim-concurrency.mjs
+          npx tsx src/seo/__tests__/approval-operation-concurrency.mjs
+
+      - name: Route policy coverage
+        run: npx tsx src/seo/__tests__/route-policy-coverage.mjs
+
+      - name: Route and scope security
+        run: |
+          npx tsx src/seo/__tests__/route-security.mjs
+          npx tsx src/seo/__tests__/resource-scope-security.mjs
+
+      - name: Migrations
+        run: |
+          node --import tsx src/seo/db/__migration_tests__/upgrade-from-empty.mjs
+          node --import tsx src/seo/db/__migration_tests__/duplicate-run-safety.mjs
+          node --import tsx src/seo/db/__migration_tests__/upgrade-from-partial.mjs
+
+      - name: Disabled writes and security scan
+        run: |
+          npx tsx src/seo/__tests__/disabled-write-flags.mjs
+          npx tsx src/seo/__tests__/security.mjs
+
+      - name: Article preview E2E
+        run: npx tsx src/seo/__tests__/article-pipeline-e2e-preview.mjs
+
+      - name: Git diff check
+        working-directory: .
+        run: git diff --check
+
+      - name: Remove generated test evidence
+        working-directory: .
+        run: |
+          Remove-Item -LiteralPath "mi-core/reports/evidence/seo-security" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath "mi-core/reports/evidence/seo-ui-e2e" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -LiteralPath "mi-core/reports/evidence/auth-audit.jsonl" -Force -ErrorAction SilentlyContinue
+
+      - name: Artifact-free verification
+        working-directory: .
+        run: |
+          $forbidden = git ls-files --others --exclude-standard | Select-String -Pattern '\.(db|sqlite|sqlite3|png|jpg|jpeg|gif|webp|log|jsonl)$|chatgpt-browser-profile|reports/evidence|node_modules|\.env'
+          if ($forbidden) {
+            $forbidden | ForEach-Object { Write-Error $_ }
+            exit 1
+          }

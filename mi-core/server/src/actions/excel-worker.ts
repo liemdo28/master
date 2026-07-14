@@ -1,5 +1,6 @@
 /**
- * Excel Worker — create, read, and export Excel files using xlsx.
+ * Excel Worker — Excel generation/reading disabled until a safe parser/writer
+ * replacement is selected.
  * Output saved to approved workspace output folder.
  */
 
@@ -33,40 +34,15 @@ export interface ExcelResult {
 }
 
 export async function createExcel(params: ExcelCreateParams): Promise<ExcelResult> {
+  void params;
   ensureDir();
-  const xlsx = require('xlsx');
-  const wb = xlsx.utils.book_new();
-  let totalRows = 0;
-
-  for (const sheet of params.sheets) {
-    const data = [sheet.headers, ...sheet.rows];
-    const ws = xlsx.utils.aoa_to_sheet(data);
-
-    // Auto column widths
-    const colWidths = sheet.headers.map((h, i) => ({
-      wch: Math.max(h.length, ...sheet.rows.map(r => String(r[i] ?? '').length), 10),
-    }));
-    ws['!cols'] = colWidths;
-
-    xlsx.utils.book_append_sheet(wb, ws, sheet.name.slice(0, 31));
-    totalRows += sheet.rows.length;
-  }
-
-  const safe = params.filename.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
-  const filename = safe.endsWith('.xlsx') ? safe : safe + '.xlsx';
-  const filePath = path.join(OUTPUT_DIR, filename);
-  xlsx.writeFile(wb, filePath);
-
-  return { path: filePath, filename, sheets: params.sheets.length, rows_total: totalRows };
+  throw new Error('Excel generation is disabled because the previous xlsx dependency has unresolved high-severity advisories. Generate CSV instead until a safe writer replacement is approved.');
 }
 
 export async function readExcelSummary(filePath: string): Promise<{ sheets: string[]; preview: string }> {
-  const xlsx = require('xlsx');
-  const wb = xlsx.readFile(filePath);
-  const preview: string[] = [];
-  for (const name of wb.SheetNames.slice(0, 3)) {
-    const csv = xlsx.utils.sheet_to_csv(wb.Sheets[name]).slice(0, 500);
-    preview.push(`--- ${name} ---\n${csv}`);
-  }
-  return { sheets: wb.SheetNames, preview: preview.join('\n') };
+  void filePath;
+  return {
+    sheets: [],
+    preview: 'Excel reading is disabled because the previous xlsx dependency has unresolved high-severity advisories. Export to CSV for preview.',
+  };
 }

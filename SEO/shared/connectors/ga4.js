@@ -14,7 +14,7 @@ function checkCredentials() {
   const secret = process.env.GOOGLE_CLIENT_SECRET;
   const refresh = process.env.GOOGLE_REFRESH_TOKEN;
   const propertyId = process.env.GA4_PROPERTY_ID;
-  const hasCreds = (sa && fs.existsSync(sa)) || (clientId && secret && refresh);
+  const hasCreds = !!((sa && fs.existsSync(sa)) || (clientId && secret && refresh));
   return { configured: hasCreds && !!propertyId, has_credentials: hasCreds, has_property_id: !!propertyId };
 }
 

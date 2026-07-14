@@ -1,0 +1,1 @@
+export { getLearningScorecard } from './index';
