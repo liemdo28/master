@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { providerRouter, type ChatMessage } from '../../providers/provider-router';
-import { PROFILE_DIR, checkLoginStatus } from './chatgpt-browser-provider';
+import { PROFILE_DIR, checkLoginStatus, chatGptBrowserProvider } from './chatgpt-browser-provider';
 import type { AIProviderHealthStatus } from './ai-provider';
 
 export type SeoProviderName = 'cloud_api' | 'chatgpt_browser' | 'local_model' | 'policy_template';
@@ -44,6 +44,7 @@ function checksum(text: string): string {
 function categorizeError(error: unknown): AIProviderHealthStatus {
   const msg = error instanceof Error ? `${error.name}: ${error.message}` : String(error || '');
   if (/not configured|api_key|credential/i.test(msg)) return 'BLOCKED_CREDENTIALS';
+  if (/401|unauthorized|license key is not active|inactive/i.test(msg)) return 'BLOCKED_CREDENTIALS';
   if (/not authenticated|login|captcha|mfa/i.test(msg)) return 'BLOCKED_LOGIN';
   if (/timeout|aborted|AbortError|TimeoutError/i.test(msg)) return 'FAILED_TIMEOUT';
   if (/schema|json|parse/i.test(msg)) return 'FAILED_SCHEMA';
@@ -52,7 +53,13 @@ function categorizeError(error: unknown): AIProviderHealthStatus {
 }
 
 function configuredCloudProvider(): boolean {
-  return Boolean(process.env.OPENAI_API_KEY || process.env.OPENAI_COMPATIBLE_API_KEY || process.env.ANTHROPIC_API_KEY || process.env.GEMINI_API_KEY);
+  return Boolean(
+    process.env.OPENAI_API_KEY ||
+    process.env.OPENAI_COMPATIBLE_API_KEY ||
+    process.env.ANTHROPIC_API_KEY ||
+    process.env.ANTHROPIC_AUTH_TOKEN ||
+    process.env.GEMINI_API_KEY,
+  );
 }
 
 function localModel(): string {
@@ -99,6 +106,77 @@ async function localText(messages: ChatMessage[], timeoutMs: number, jsonMode = 
     jsonMode,
   });
   return { text: result.text, model: result.model };
+}
+
+function messagePrompt(messages: ChatMessage[]): string {
+  return messages.map(m => `${m.role.toUpperCase()}:\n${m.content}`).join('\n\n');
+}
+
+async function cloudText(messages: ChatMessage[], timeoutMs: number, jsonMode = false): Promise<{ text: string; model: string; provider: string }> {
+  const providers = (process.env.SEO_CLOUD_PROVIDER_ORDER || process.env.MI_TEXT_PROVIDER_ORDER || 'anthropic,openai-compatible,openai,gemini')
+    .split(',')
+    .map(p => p.trim())
+    .filter(provider => {
+      if (!provider) return false;
+      if (provider === 'anthropic') return Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+      if (provider === 'openai-compatible') return Boolean(process.env.OPENAI_COMPATIBLE_API_KEY || process.env.OPENAI_API_KEY);
+      if (provider === 'openai') return Boolean(process.env.OPENAI_API_KEY);
+      if (provider === 'gemini') return Boolean(process.env.GEMINI_API_KEY);
+      return false;
+    });
+
+  let lastError = '';
+  if (providers.length === 0) throw new Error('No cloud/API provider credentials configured.');
+  for (const provider of providers) {
+    try {
+      if (provider === 'anthropic') {
+        const apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN;
+        if (!apiKey) throw new Error('ANTHROPIC_API_KEY not configured');
+        const model = process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest';
+        const baseUrl = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
+        const system = messages.find(m => m.role === 'system')?.content;
+        const chatMessages = messages.filter(m => m.role !== 'system');
+        const res = await fetch(`${baseUrl}/v1/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({ model, max_tokens: 4096, system, messages: chatMessages }),
+          signal: AbortSignal.timeout(timeoutMs),
+        });
+        if (!res.ok) throw new Error(`anthropic text error: ${res.status} ${await res.text()}`);
+        const data = await res.json() as { content?: Array<{ text?: string }> };
+        return { text: data.content?.map(c => c.text || '').join('\n') || '', model, provider };
+      }
+
+      const result = await providerRouter.generateText(messages, {
+        providers: [provider as any],
+        timeoutMs,
+        jsonMode,
+      });
+      return { text: result.text, model: result.model, provider: result.provider };
+    } catch (e) {
+      lastError = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new Error(lastError || 'cloud provider failed');
+}
+
+async function browserText(messages: ChatMessage[]): Promise<{ text: string; model: string }> {
+  const prompt = messagePrompt(messages);
+  const result = await chatGptBrowserProvider.submit({
+    task_id: `seo-provider-${Date.now()}`,
+    brand_id: 'system',
+    template: 'provider-gateway',
+    prompt,
+    idempotency_key: checksum(prompt),
+  });
+  if (result.status !== 'completed' || !result.raw_response) {
+    throw new Error(result.error || result.status);
+  }
+  return { text: result.raw_response, model: 'chatgpt-browser' };
 }
 
 let localTextOverride: ((messages: ChatMessage[], timeoutMs: number) => Promise<{ text: string; model: string }>) | null = null;
@@ -165,17 +243,40 @@ export async function checkChatGptBrowserProvider(): Promise<ProviderStatus> {
   }
 }
 
-export function checkCloudProvider(): ProviderStatus {
-  return {
-    provider: 'cloud_api',
-    status: configuredCloudProvider() ? 'DEGRADED' : 'BLOCKED_CREDENTIALS',
-    configured: configuredCloudProvider(),
-    error: configuredCloudProvider() ? 'Cloud provider configured but active generation probe has not run.' : 'No cloud/API provider credentials configured.',
-  };
+export async function checkCloudProvider(): Promise<ProviderStatus> {
+  const started = Date.now();
+  if (!configuredCloudProvider()) {
+    return {
+      provider: 'cloud_api',
+      status: 'BLOCKED_CREDENTIALS',
+      configured: false,
+      latency_ms: Date.now() - started,
+      error: 'No cloud/API provider credentials configured.',
+    };
+  }
+
+  try {
+    const result = await cloudText([{ role: 'user', content: 'Return exactly: SEO_CLOUD_HEALTHY' }], Number(process.env.SEO_PROVIDER_PROBE_TIMEOUT_MS || 30_000));
+    return {
+      provider: 'cloud_api',
+      status: 'HEALTHY',
+      configured: true,
+      model: result.model,
+      latency_ms: Date.now() - started,
+    };
+  } catch (e) {
+    return {
+      provider: 'cloud_api',
+      status: categorizeError(e),
+      configured: true,
+      latency_ms: Date.now() - started,
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
 }
 
 export async function getSeoProviderStatus(options: { includeBrowser?: boolean } = {}): Promise<{ providers: ProviderStatus[]; active_provider: SeoProviderName; overall: AIProviderHealthStatus }> {
-  const cloud = checkCloudProvider();
+  const cloud = await checkCloudProvider();
   const local = await checkLocalProvider();
   const browser = options.includeBrowser ? await checkChatGptBrowserProvider() : {
     provider: 'chatgpt_browser',
@@ -199,6 +300,47 @@ export async function generateText(
   const timeoutMs = options.timeoutMs || Number(process.env.SEO_PROVIDER_TIMEOUT_MS || 120_000);
   const promptVersion = options.promptVersion || DEFAULT_PROMPT_VERSION;
   const started = Date.now();
+
+  try {
+    const cloud = await checkCloudProvider();
+    if (cloud.status === 'HEALTHY') {
+      const result = await cloudText(messages, timeoutMs, options.jsonMode === true);
+      return {
+        ok: true,
+        text: result.text,
+        provider: 'cloud_api',
+        provider_status: 'HEALTHY',
+        model: result.model,
+        latency_ms: Date.now() - started,
+        checksum: checksum(result.text),
+        prompt_version: promptVersion,
+        fallback_used: false,
+      };
+    }
+  } catch {
+    // Fall through to browser/local/fallback.
+  }
+
+  try {
+    const browser = await checkChatGptBrowserProvider();
+    if (browser.status === 'HEALTHY') {
+      const result = await browserText(messages);
+      return {
+        ok: true,
+        text: result.text,
+        provider: 'chatgpt_browser',
+        provider_status: 'HEALTHY',
+        model: result.model,
+        latency_ms: Date.now() - started,
+        checksum: checksum(result.text),
+        prompt_version: promptVersion,
+        fallback_used: false,
+      };
+    }
+  } catch {
+    // Fall through to local/fallback.
+  }
+
   try {
     const result = await localText(messages, timeoutMs, options.jsonMode === true);
     return {
