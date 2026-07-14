@@ -103,6 +103,7 @@ import { seoLocalRouter } from './routes/seo-local';
 import { seoReportsRouter } from './routes/seo-reports';
 import { seoEvidenceRouteRouter } from './routes/seo-evidence-route';
 import { seoCalendarRouter } from './routes/seo-calendar';
+import { seoAutomationPreviewRouter } from './routes/seo-automation-preview';
 import { seoRateLimiter, requireSeoAccess } from './seo/seo-security';
 import { startSeoScheduler } from './seo/scheduler/seo-scheduler';
 import { getSeoWriteFlags } from './seo/seo-write-guards';
@@ -302,6 +303,7 @@ app.use('/api/seo',             seoLocalRouter);            // SEO Control Cente
 app.use('/api/seo',             seoReportsRouter);          // SEO Control Center: daily/weekly/monthly reports
 app.use('/api/seo',             seoEvidenceRouteRouter);    // SEO Control Center: evidence viewer + read-only policy
 app.use('/api/seo',             seoCalendarRouter);         // SEO Control Center: content calendar
+app.use('/api/seo',             seoAutomationPreviewRouter);// SEO Control Center: preview automation certification
 app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
 app.use('/api/company-os',      companyOsRouter);          // Mi Company OS: 19-dept pipeline
 app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution
@@ -364,13 +366,19 @@ app.get('/api/metrics/chat', (_req, res) => {
 
 app.get('/api/seo-public/status', (_req, res) => {
   const flags = getSeoWriteFlags();
+  const publicWriteEnabled =
+    flags.SEO_PRODUCTION_PUBLISH_ENABLED.enabled ||
+    flags.SEO_GBP_WRITE_ENABLED.enabled ||
+    flags.SEO_WEBSITE_WRITE_ENABLED.enabled ||
+    flags.SEO_BACKLINK_WRITE_ENABLED.enabled;
   res.json({
     ok: true,
     dashboard_url: process.env.MI_DASHBOARD_URL || '/seo-control-center.html',
     runtime_sha: process.env.RUNTIME_SHA || process.env.GIT_SHA || null,
     runtime_source: process.env.MI_CORE_ROOT || null,
     bind_host: HOST,
-    live_write_status: Object.values(flags).some(f => f.enabled) ? 'PARTIALLY_ENABLED' : 'DISABLED',
+    automation_status: flags.SEO_AUTOMATION_ENABLED.enabled ? 'ENABLED' : 'DISABLED',
+    live_write_status: publicWriteEnabled ? 'PARTIALLY_ENABLED' : 'DISABLED',
     flags,
     auth_configured: Boolean(process.env.MI_PIN || process.env.MI_PIN_HASH),
     trusted_mapping_configured: Boolean(process.env.MI_AUTH_DEFAULT_USER && process.env.MI_AUTH_USER_MAP_JSON),

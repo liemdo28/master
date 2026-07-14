@@ -190,6 +190,7 @@
     <button data-view="gbp">Google Business Profile</button>
     <button data-view="backlinks">Backlinks</button>
     <button data-view="approvals">Approvals</button>
+    <button data-view="automation">Automation</button>
     <button data-view="evidence">Evidence</button>
     <button data-view="reports">Reports</button>
     <button data-view="policies">Policies</button>
@@ -219,6 +220,32 @@
           <div class="card-header"><span class="card-title">Recent Evidence / Actions</span></div>
           <div class="card-body" id="ov-evidence"><div class="skeleton"></div></div>
         </div>
+      </div>
+    </div>
+
+    <!-- ── Automation ───────────────────────────────────────────── -->
+    <div class="view" id="view-automation">
+      <h2>Automation</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Preview Automation Certification</span>
+          <button class="btn btn-sm" onclick="runPreviewAutomation()">Run Preview Cycle</button>
+        </div>
+        <div class="card-body" id="automation-status"><div class="skeleton"></div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Analysis / Strategy</span></div>
+          <div class="card-body" id="automation-analysis"><div class="skeleton"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Content Previews</span></div>
+          <div class="card-body" id="automation-previews"><div class="skeleton"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Next Scheduled Preview Items</span></div>
+        <div class="card-body" id="automation-calendar"><div class="skeleton"></div></div>
       </div>
     </div>
 
@@ -515,6 +542,7 @@ const VIEW_LOADERS = {
   gbp: loadGbpTab,
   backlinks: loadBacklinks,
   approvals: loadApprovals,
+  automation: loadAutomation,
   evidence: loadEvidence,
   reports: loadReports,
   policies: loadPolicies,
@@ -1402,6 +1430,76 @@ async function rejectAction(id) {
   catch (e) { alert('Reject failed: ' + e.message); }
 }
 
+// ── Automation ───────────────────────────────────────────────────────────
+
+function jsonCell(value, max = 260) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  return esc((text || '').slice(0, max)) + ((text || '').length > max ? '…' : '');
+}
+
+async function loadAutomation() {
+  const statusEl = document.getElementById('automation-status');
+  const analysisEl = document.getElementById('automation-analysis');
+  const previewsEl = document.getElementById('automation-previews');
+  const calEl = document.getElementById('automation-calendar');
+  statusEl.innerHTML = '<div class="skeleton"></div>';
+  analysisEl.innerHTML = '<div class="skeleton"></div>';
+  previewsEl.innerHTML = '<div class="skeleton"></div>';
+  calEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const status = await api('/api/seo/automation/status');
+    let run = null;
+    try { run = await api('/api/seo/automation/runs/latest'); } catch { run = null; }
+    const counts = status.counts || {};
+    const flags = status.flags || {};
+    statusEl.innerHTML = `
+      <div class="row"><span class="row-label">Mode</span><span class="badge badge-blue">${esc(status.mode || 'approval_gated')}</span></div>
+      <div class="row"><span class="row-label">Automation</span><span class="badge ${flags.SEO_AUTOMATION_ENABLED?.enabled ? 'badge-green' : 'badge-yellow'}">${flags.SEO_AUTOMATION_ENABLED?.enabled ? 'enabled' : 'disabled'}</span></div>
+      <div class="row"><span class="row-label">Public writes</span><span class="badge badge-green">disabled</span></div>
+      <div class="row"><span class="row-label">Latest run</span><span>${esc(status.latest_run?.status || 'no run')}</span></div>
+      <div class="row"><span class="row-label">Counts</span><span>${counts.findings || 0} findings · ${counts.strategies || 0} strategies · ${counts.previews || 0} previews · ${counts.preview_executions || 0} preview executions</span></div>
+      <div class="row"><span class="row-label">Scheduler</span><span>${status.scheduler_runtime?.running ? 'running' : 'not running'} · last check ${esc(status.scheduler_runtime?.last_stuck_job_check || 'none')}</span></div>`;
+    if (!run) {
+      analysisEl.innerHTML = '<div class="empty-state">No preview automation run yet.</div>';
+      previewsEl.innerHTML = '<div class="empty-state">No previews yet.</div>';
+      calEl.innerHTML = '<div class="empty-state">No scheduled preview items yet.</div>';
+      return;
+    }
+    const findings = run.findings || [];
+    const strategies = run.strategies || [];
+    analysisEl.innerHTML = `
+      <div class="row"><span class="row-label">Findings</span><span class="badge badge-blue">${findings.length}</span></div>
+      ${findings.slice(0, 8).map(f => `<div class="row"><span style="font-size:12px">${esc(f.brand_id)} / ${esc(f.location_id || 'all')} · ${esc(f.category)} · ${esc(f.issue)}</span><span class="badge badge-yellow">${esc(f.severity)}</span></div>`).join('')}
+      <div class="row"><span class="row-label">Strategies</span><span class="badge badge-blue">${strategies.length}</span></div>
+      ${strategies.slice(0, 4).map(s => `<div class="row"><span style="font-size:12px">${esc(s.brand_id)} · ${esc(s.period)} · ${jsonCell(JSON.parse(s.strategy_json).primary_objectives?.[0] || '')}</span><span class="badge badge-green">${esc(s.status)}</span></div>`).join('')}`;
+    const previews = run.previews || [];
+    const policies = run.policy_results || [];
+    previewsEl.innerHTML = previews.length ? previews.slice(0, 12).map(p => {
+      const policy = policies.find(x => x.item_id === p.id);
+      return `<div class="row"><span style="font-size:12px">${esc(p.brand_id)} / ${esc(p.location_id || 'all')} · ${esc(p.content_type)} · ${esc(p.title)}</span><span class="badge ${policy?.result === 'PASS' ? 'badge-green' : 'badge-yellow'}">${esc(policy?.result || 'policy pending')}</span></div>`;
+    }).join('') : '<div class="empty-state">No previews generated.</div>';
+    const scheduled = run.calendar || [];
+    calEl.innerHTML = scheduled.length ? `<table><thead><tr><th>When</th><th>Brand</th><th>Location</th><th>Title</th><th>Status</th></tr></thead><tbody>${scheduled.slice(0, 7).map(i => `<tr><td>${fmtDate(i.scheduled_publish_at)}</td><td>${esc(i.brand_id)}</td><td>${esc(i.location_id || 'all')}</td><td>${esc(i.title || '')}</td><td><span class="badge badge-green">${esc(i.status)}</span></td></tr>`).join('')}</tbody></table>` : '<div class="empty-state">No scheduled preview items.</div>';
+  } catch (e) {
+    statusEl.innerHTML = `<div class="error-msg">Couldn't load automation: ${esc(e.message)}</div>`;
+    analysisEl.innerHTML = '';
+    previewsEl.innerHTML = '';
+    calEl.innerHTML = '';
+  }
+}
+
+async function runPreviewAutomation() {
+  const statusEl = document.getElementById('automation-status');
+  statusEl.innerHTML = '<div class="skeleton"></div><div class="row-label">Running preview-only automation cycle...</div>';
+  try {
+    await api('/api/seo/automation/run-preview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    await loadAutomation();
+    await loadCalendarTab();
+  } catch (e) {
+    statusEl.innerHTML = `<div class="error-msg">Preview automation failed: ${esc(e.message)}</div>`;
+  }
+}
+
 // ── Evidence ─────────────────────────────────────────────────────────────
 
 async function loadEvidence() {
@@ -1521,6 +1619,7 @@ async function loadPolicies() {
 // ── Boot ─────────────────────────────────────────────────────────────────
 
 async function boot() {
+  updateAuthUi();
   await loadBrandSelector();
   await loadLocationSelector();
   await loadWriteFlags();
