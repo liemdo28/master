@@ -20,6 +20,11 @@ function safeParseContent(raw: unknown): unknown {
 // GET /api/seo/write-flags
 seoReportsRouter.get('/write-flags', (_req: Request, res: Response) => {
   const flags = getSeoWriteFlags();
+  const publicWriteEnabled =
+    flags.SEO_PRODUCTION_PUBLISH_ENABLED.enabled ||
+    flags.SEO_GBP_WRITE_ENABLED.enabled ||
+    flags.SEO_WEBSITE_WRITE_ENABLED.enabled ||
+    flags.SEO_BACKLINK_WRITE_ENABLED.enabled;
   res.json({
     ok: true,
     flags,
@@ -28,7 +33,7 @@ seoReportsRouter.get('/write-flags', (_req: Request, res: Response) => {
       false_values: ['unset', '', '0', 'false', 'off'],
       true_values: ['1', 'true', 'on', 'yes', 'enabled'],
     },
-    live_write_status: Object.values(flags).some(f => f.enabled) ? 'PARTIALLY_ENABLED' : 'DISABLED',
+    live_write_status: publicWriteEnabled ? 'PARTIALLY_ENABLED' : 'DISABLED',
   });
 });
 
