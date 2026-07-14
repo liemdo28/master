@@ -27,6 +27,16 @@ export interface AIProviderRequest {
 
 export type AIProviderStatus = 'completed' | 'failed' | 'waiting_for_login' | 'waiting_for_manual_paste';
 
+export type AIProviderHealthStatus =
+  | 'HEALTHY'
+  | 'DEGRADED'
+  | 'BLOCKED_CREDENTIALS'
+  | 'BLOCKED_LOGIN'
+  | 'FAILED_NETWORK'
+  | 'FAILED_TIMEOUT'
+  | 'FAILED_SCHEMA'
+  | 'FALLBACK_ACTIVE';
+
 export interface AIProviderResult {
   status: AIProviderStatus;
   raw_response?: string;

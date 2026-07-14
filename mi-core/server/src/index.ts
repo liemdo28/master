@@ -104,6 +104,7 @@ import { seoReportsRouter } from './routes/seo-reports';
 import { seoEvidenceRouteRouter } from './routes/seo-evidence-route';
 import { seoCalendarRouter } from './routes/seo-calendar';
 import { seoAutomationPreviewRouter } from './routes/seo-automation-preview';
+import { seoAiProvidersRouter } from './routes/seo-ai-providers';
 import { seoRateLimiter, requireSeoAccess } from './seo/seo-security';
 import { startSeoScheduler } from './seo/scheduler/seo-scheduler';
 import { getSeoWriteFlags } from './seo/seo-write-guards';
@@ -304,6 +305,7 @@ app.use('/api/seo',             seoReportsRouter);          // SEO Control Cente
 app.use('/api/seo',             seoEvidenceRouteRouter);    // SEO Control Center: evidence viewer + read-only policy
 app.use('/api/seo',             seoCalendarRouter);         // SEO Control Center: content calendar
 app.use('/api/seo',             seoAutomationPreviewRouter);// SEO Control Center: preview automation certification
+app.use('/api/seo',             seoAiProvidersRouter);      // SEO Control Center: AI provider health/probe
 app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
 app.use('/api/company-os',      companyOsRouter);          // Mi Company OS: 19-dept pipeline
 app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution

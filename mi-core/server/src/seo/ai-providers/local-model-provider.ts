@@ -25,7 +25,11 @@ export class LocalModelProvider implements AIProvider {
     try {
       const result = await providerRouter.generateText(
         [{ role: 'user', content: redactedPrompt }],
-        { providers: ['ollama'] },
+        {
+          providers: ['ollama'],
+          model: process.env.SEO_LOCAL_MODEL || process.env.OLLAMA_SEO_MODEL || process.env.OLLAMA_FAST_MODEL || 'qwen2.5-coder:7b',
+          timeoutMs: Number(process.env.SEO_LOCAL_PROVIDER_TIMEOUT_MS || 120_000),
+        },
       );
 
       const jobRow = db.prepare('SELECT id FROM seo_ai_jobs WHERE idempotency_key = ?').get(req.idempotency_key) as
