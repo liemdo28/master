@@ -164,7 +164,7 @@ seoLocalRouter.get('/gbp/posts', (req: Request, res: Response) => {
     };
   });
 
-  res.json({ ok: true, brand_id: brandId || null, location_id: locationId ?? null, total: previews.length + rows.length, posts: [...previews, ...(rows as any[])] });
+  res.json({ ok: true, brand_id: brandId || null, location_id: locationId ?? null, total: previews.length, posts: previews });
 });
 
 // POST /api/seo/gbp/posts/generate  body: { brand_id, location_id, topic }

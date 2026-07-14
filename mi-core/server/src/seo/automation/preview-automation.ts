@@ -199,7 +199,7 @@ function cleanupPreviewArtifacts(): void {
   const placeholders = brandIds.map(() => '?').join(',');
   const clusterIds = db.prepare(`SELECT id FROM seo_topic_clusters WHERE brand_id IN (${placeholders})`).all(...brandIds) as { id: string }[];
   const tx = db.transaction(() => {
-    db.prepare(`DELETE FROM seo_keywords WHERE brand_id IN (${placeholders}) AND source = 'automation_preview'`).run(...brandIds);
+    db.prepare(`DELETE FROM seo_keywords WHERE brand_id IN (${placeholders}) AND source IN ('automation_preview', 'deterministic_expansion')`).run(...brandIds);
     for (const row of clusterIds) db.prepare('DELETE FROM seo_cluster_nodes WHERE cluster_id = ?').run(row.id);
     db.prepare(`DELETE FROM seo_topic_clusters WHERE brand_id IN (${placeholders})`).run(...brandIds);
     db.prepare(`DELETE FROM seo_content_items WHERE brand_id IN (${placeholders}) AND status = 'SCHEDULED_PREVIEW_ONLY'`).run(...brandIds);
@@ -208,7 +208,10 @@ function cleanupPreviewArtifacts(): void {
     db.prepare(`DELETE FROM seo_analysis_findings WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
     db.prepare(`DELETE FROM seo_strategies WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
     db.prepare(`DELETE FROM seo_policy_results WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
-    db.prepare(`DELETE FROM seo_issues WHERE audit_id LIKE 'functional:%'`).run();
+    db.prepare(`DELETE FROM seo_issues
+      WHERE brand_id IN (${placeholders})
+      AND (audit_id LIKE 'functional:%' OR issue_type LIKE 'local_%' OR issue_type = 'nap_conflict')`).run(...brandIds);
+    db.prepare(`DELETE FROM seo_reports WHERE brand_id IN (${placeholders})`).run(...brandIds);
     db.prepare(`UPDATE seo_actions SET status = 'rejected', result = 'superseded by fresh preview automation run'
       WHERE category IN ('article_publish','gbp_post_publish') AND status = 'pending'`).run();
   });
