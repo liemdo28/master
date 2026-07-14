@@ -55,7 +55,7 @@ try {
   const isoBust = `?iso=${Date.now()}`;
   const { bakudanPublisher: bakudanIso } = await import(`../publishing/bakudan-publisher.ts${isoBust}`);
   const { rawSushiPublisher: rawSushiIso } = await import(`../publishing/raw-sushi-publisher.ts${isoBust}`);
-  const { createFileSnapshot, getPublishSnapshot, restoreFromSnapshot, PRODUCTION_DEPLOY_REFUSAL } =
+  const { createFileSnapshot, getPublishSnapshot, restoreFromSnapshot } =
     await import(`../publishing/publish-safety.ts${isoBust}`);
 
   // ── Module instance: REAL BAKUDAN_ROOT (read-only isGitTracked check) ─
@@ -161,8 +161,8 @@ try {
   check('rolled-back file is byte-identical (sha256) to the pre-modification original',
     restoredSha === scratchOriginalSha, `original=${scratchOriginalSha} restored=${restoredSha}`);
 
-  // ── Missing approval / production blocked: hard invariant, both publishers ─
-  section('Missing approval + production blocked (publishApproved honest refusal)');
+  // ── Production flags and approved source publish, both publishers ─────
+  section('Production flags + approved source publish');
 
   // A snapshot with no linked seo_actions row / no approval_id at all —
   // publishApproved() is called directly against it, exactly as a caller
@@ -187,22 +187,79 @@ try {
 
   process.env.SEO_PRODUCTION_PUBLISH_ENABLED = 'true';
   process.env.SEO_WEBSITE_WRITE_ENABLED = 'true';
-  const bakudanCiBlockedResult = await bakudanIso.publishApproved(noApprovalSnap.snapshotId + '-ci-repeat');
-  check('Bakudan publishApproved() still hard-refuses production deploy even when flags are enabled',
-    bakudanCiBlockedResult.success === false && bakudanCiBlockedResult.error === PRODUCTION_DEPLOY_REFUSAL,
-    JSON.stringify(bakudanCiBlockedResult));
-  const rawSushiCiBlockedResult = await rawSushiIso.publishApproved(rawSushiSnap.snapshotId + '-ci-repeat');
-  check('Raw Sushi publishApproved() still hard-refuses production deploy even when flags are enabled',
-    rawSushiCiBlockedResult.success === false && rawSushiCiBlockedResult.error === PRODUCTION_DEPLOY_REFUSAL,
-    JSON.stringify(rawSushiCiBlockedResult));
+
+  const { getSeoDb, nowIso } = await import(`../seo-db.ts${isoBust}`);
+
+  const bakudanPublishHtml = '<html><body><h1>Approved Bakudan source publish</h1></body></html>';
+  const bakudanPublishTarget = 'blog/approved-source-publish.html';
+  const { draftPath: bakudanPublishDraft } = await bakudanIso.createDraft('approved-bakudan-source-publish', bakudanPublishHtml, bakudanPublishTarget);
+  const bakudanPublishPreview = await bakudanIso.createPreview(bakudanPublishDraft);
+  const bakudanPublishSnap = await bakudanIso.createSnapshot(bakudanPublishTarget);
+  getSeoDb().prepare(`
+    INSERT INTO seo_pipeline_state (
+      content_id, created_at, updated_at, keyword_id, repair_loop_count, generation_attempt,
+      draft_path, target_path, preview_path, preview_build_success, snapshot_id
+    ) VALUES (?, ?, ?, NULL, 0, 0, ?, ?, ?, 1, ?)
+  `).run('content-bakudan-source-publish', nowIso(), nowIso(), bakudanPublishDraft, bakudanPublishTarget, bakudanPublishPreview.previewPath, bakudanPublishSnap.snapshotId);
+  getSeoDb().prepare(`
+    INSERT INTO seo_content_items (id, created_at, updated_at, brand_id, status)
+    VALUES (?, ?, ?, ?, ?)
+  `).run('content-bakudan-source-publish', nowIso(), nowIso(), 'bakudan', 'PRODUCTION_READY');
+  const bakudanPublishResult = await bakudanIso.publishApproved(bakudanPublishSnap.snapshotId);
+  const bakudanPublishedPath = join(tmpBakudanRoot, bakudanPublishTarget);
+  check('Bakudan publishApproved() writes approved draft to untracked source path when flags are enabled',
+    bakudanPublishResult.success === true && existsSync(bakudanPublishedPath), JSON.stringify(bakudanPublishResult));
+  check('Bakudan source publish preserves draft body bytes',
+    readFileSync(bakudanPublishedPath, 'utf8') === bakudanPublishHtml);
+  check('Bakudan publish snapshot is marked live',
+    getPublishSnapshot(bakudanPublishSnap.snapshotId).status === 'live');
+  const bakudanPublishRollback = await bakudanIso.rollback(bakudanPublishSnap.snapshotId);
+  check('Bakudan rollback removes new source-published file when it did not exist before snapshot',
+    bakudanPublishRollback.success === true && !existsSync(bakudanPublishedPath), JSON.stringify(bakudanPublishRollback));
+
+  const rawDraft = [
+    '---',
+    'title: "Approved Raw Sushi Source Publish"',
+    'slug: approved-raw-sushi-source-publish',
+    `date: ${new Date().toISOString().slice(0, 10)}`,
+    'excerpt: "A source publish test draft for Stockton sushi content."',
+    'meta_description: "A practical Stockton sushi article source publish test that stays within the approved Raw Sushi draft workflow."',
+    'image: ""',
+    'primary_keyword: "stockton sushi"',
+    'secondary_keywords: []',
+    'post_type: local_discovery',
+    'target_audience: "Stockton guests"',
+    'published: false',
+    '---',
+    '',
+    '# Approved Raw Sushi Source Publish',
+    '',
+    'This is an approved source publish test.',
+  ].join('\n');
+  const rawTarget = 'blog/approved-raw-sushi-source-publish.html';
+  const { draftPath: rawPublishDraft } = await rawSushiIso.createDraft('approved-raw-sushi-source-publish', rawDraft, rawTarget);
+  const rawPublishPreview = await rawSushiIso.createPreview(rawPublishDraft);
+  const rawPublishSnap = await rawSushiIso.createSnapshot(rawTarget);
+  getSeoDb().prepare(`
+    INSERT INTO seo_pipeline_state (
+      content_id, created_at, updated_at, keyword_id, repair_loop_count, generation_attempt,
+      draft_path, target_path, preview_path, preview_build_success, snapshot_id
+    ) VALUES (?, ?, ?, NULL, 0, 0, ?, ?, ?, 1, ?)
+  `).run('content-raw-source-publish', nowIso(), nowIso(), rawPublishDraft, rawTarget, rawPublishPreview.previewPath, rawPublishSnap.snapshotId);
+  getSeoDb().prepare(`
+    INSERT INTO seo_content_items (id, created_at, updated_at, brand_id, status)
+    VALUES (?, ?, ?, ?, ?)
+  `).run('content-raw-source-publish', nowIso(), nowIso(), 'raw_sushi', 'PRODUCTION_READY');
+  const rawPublishResult = await rawSushiIso.publishApproved(rawPublishSnap.snapshotId);
+  check('Raw Sushi publishApproved() flips approved markdown draft to published:true when flags are enabled',
+    rawPublishResult.success === true && /published:\s*true/.test(readFileSync(rawPublishDraft, 'utf8')), JSON.stringify(rawPublishResult));
+  check('Raw Sushi publish snapshot is marked live',
+    getPublishSnapshot(rawPublishSnap.snapshotId).status === 'live');
+  const rawPublishRollback = await rawSushiIso.rollback(rawPublishSnap.snapshotId);
+  check('Raw Sushi rollback restores published:false from the recorded source backup',
+    rawPublishRollback.success === true && /published:\s*false/.test(readFileSync(rawPublishDraft, 'utf8')), JSON.stringify(rawPublishRollback));
   delete process.env.SEO_PRODUCTION_PUBLISH_ENABLED;
   delete process.env.SEO_WEBSITE_WRITE_ENABLED;
-
-  note('Design observation (not a bug): publishApproved() never inspects the linked seo_actions ' +
-    'row\'s approval_id at all — it unconditionally calls submitSeoAction() then refuses. So "missing ' +
-    'approval" and "production blocked" are the same code path/invariant in the current implementation, ' +
-    'not two independently-triggerable states. Confirmed intentional per the inline comments in ' +
-    'bakudan-publisher.ts/raw-sushi-publisher.ts ("explicit, honest no-op refusal").');
 
   // ── Expired approval ───────────────────────────────────────────────
   section('Expired approval (approval/gate.ts expiry concept)');
@@ -214,20 +271,19 @@ try {
     'behavior the code does not have.');
   void gateGetById; // referenced only to make the "checked the real export" intent explicit
 
-  // ── Bonus: production_deploy really does route through the real approval gate ─
-  section('Approval-gate wiring sanity (seo-approval-bridge.ts -> approval/gate.ts)');
-  const { getSeoDb } = await import(`../seo-db.ts${isoBust}`);
-  const actionRow = getSeoDb().prepare(
-    `SELECT * FROM seo_actions WHERE idempotency_key = ?`
-  ).get(`bakudan-publish-${noApprovalSnap.snapshotId}`);
-  check('publishApproved() really did create a seo_actions row via submitSeoAction()', !!actionRow);
-  check('that seo_actions row has policy_tier REQUIRES_APPROVAL (production_deploy)', actionRow.policy_tier === 'REQUIRES_APPROVAL',
-    actionRow.policy_tier);
-  check('that seo_actions row has a real approval_id from the approval queue', !!actionRow.approval_id);
-  const { getById } = await import(`../../approval/gate.ts${isoBust}`);
-  const queuedAction = getById(actionRow.approval_id);
-  check('the approval_id resolves to a real pending row in approval_queue', !!queuedAction && queuedAction.status === 'pending',
-    JSON.stringify(queuedAction));
+  // ── Bonus: production_deploy policy still requires approval ──────────
+  section('Approval-gate policy sanity');
+  const { submitSeoAction } = await import(`../seo-approval-bridge.ts${isoBust}`);
+  const approvalOutcome = submitSeoAction({
+    category: 'production_deploy',
+    brand_id: 'bakudan',
+    description: 'Publishing test policy sanity',
+    target: 'snapshot-policy-sanity',
+    idempotency_key: `publishing-policy-sanity-${Date.now()}`,
+  });
+  check('production_deploy still queues approval before any route can execute publishApproved()',
+    approvalOutcome.outcome === 'pending_approval' && approvalOutcome.tier === 'REQUIRES_APPROVAL',
+    JSON.stringify(approvalOutcome));
 
 } finally {
   try { (await import(`../seo-db.ts?cleanup=${Date.now()}`)).getSeoDb().close(); } catch { /* ignore */ }

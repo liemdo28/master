@@ -55,6 +55,14 @@ export interface SnapshotBeforeState {
   targetWasGitTracked: boolean;
 }
 
+export interface SnapshotAfterState {
+  publishedPath?: string;
+  sourcePath?: string;
+  sourceBackupPath?: string | null;
+  sha256?: string;
+  note?: string;
+}
+
 /**
  * Copies the current file at targetPath (if it exists) to a timestamped
  * backup path under `<repoRoot>/.seo-preview/backups/`, and inserts a
@@ -90,8 +98,10 @@ export function createFileSnapshot(brandId: string, repoRoot: string, targetPath
 interface PublishSnapshotRow {
   id: string;
   brand_id: string;
+  content_id: string | null;
   target: string;
   before_state: string | null;
+  after_state: string | null;
   status: string;
 }
 
@@ -141,9 +151,53 @@ export function restoreFromSnapshot(repoRoot: string, snapshotId: string): { suc
   return { success: true };
 }
 
-/** Standard, honest refusal reason for publishApproved() in both adapters. */
-export const PRODUCTION_DEPLOY_REFUSAL =
-  'production_deploy requires the site CI/deploy pipeline to be hardened first — see INITIAL_AUDIT.md open questions; this adapter intentionally does not push to production';
+export function restorePublishedSnapshot(repoRoot: string, snapshotId: string): { success: boolean; error?: string } {
+  const row = getPublishSnapshot(snapshotId);
+  if (!row) return { success: false, error: `snapshot ${snapshotId} not found` };
+
+  let before: SnapshotBeforeState;
+  let after: SnapshotAfterState;
+  try {
+    before = JSON.parse(row.before_state || '{}');
+    after = JSON.parse(row.after_state || '{}');
+  } catch {
+    return { success: false, error: `snapshot ${snapshotId} has unparseable before_state/after_state` };
+  }
+
+  const rawTarget = after.publishedPath || before.targetPath;
+  if (!rawTarget) return { success: false, error: `snapshot ${snapshotId} does not record a published target` };
+  const absoluteTarget = resolveWithinRoot(repoRoot, rawTarget);
+  if (isGitTracked(repoRoot, absoluteTarget) || before.targetWasGitTracked) {
+    return { success: false, error: `refusing rollback on git-tracked path: ${absoluteTarget}` };
+  }
+
+  const sourcePath = after.sourcePath ? resolveWithinRoot(repoRoot, after.sourcePath) : absoluteTarget;
+  const sourceBackupPath = after.sourceBackupPath ? resolveWithinRoot(repoRoot, after.sourceBackupPath) : null;
+  if (sourceBackupPath) {
+    if (!fs.existsSync(sourceBackupPath)) return { success: false, error: `source backup missing on disk: ${sourceBackupPath}` };
+    if (isGitTracked(repoRoot, sourcePath)) return { success: false, error: `refusing rollback on git-tracked source path: ${sourcePath}` };
+    fs.copyFileSync(sourceBackupPath, sourcePath);
+  } else if (before.existed && before.backupPath) {
+    if (!fs.existsSync(before.backupPath)) return { success: false, error: `backup file missing on disk: ${before.backupPath}` };
+    fs.copyFileSync(before.backupPath, absoluteTarget);
+  } else if (!before.existed) {
+    if (fs.existsSync(absoluteTarget)) fs.unlinkSync(absoluteTarget);
+  } else {
+    return { success: false, error: `snapshot ${snapshotId} does not contain enough backup information to rollback` };
+  }
+
+  getSeoDb().prepare(`UPDATE seo_publish_snapshots SET status = 'rolled_back', rolled_back_at = ? WHERE id = ?`)
+    .run(nowIso(), snapshotId);
+  return { success: true };
+}
+
+export function markSnapshotLive(snapshotId: string, after: SnapshotAfterState): void {
+  getSeoDb().prepare(`
+    UPDATE seo_publish_snapshots
+    SET status = 'live', after_state = ?
+    WHERE id = ? AND status = 'pending'
+  `).run(JSON.stringify(after), snapshotId);
+}
 
 export function markSnapshotFailed(snapshotId: string, reason: string): void {
   getSeoDb().prepare(`UPDATE seo_publish_snapshots SET status = 'failed' WHERE id = ? AND status != 'live'`).run(snapshotId);

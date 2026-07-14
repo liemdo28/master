@@ -8,8 +8,9 @@
  *  - Never overwrite an existing git-tracked live page file — only ever
  *    write to new untracked paths, or a site's own documented content-intake
  *    mechanism (e.g. RawSushi's public/content/posts/*.md).
- *  - publishApproved() is an honest no-op refusal for both adapters — see
- *    bakudan-publisher.ts / raw-sushi-publisher.ts for the specific reason.
+ *  - publishApproved() only writes when production + website flags are both
+ *    enabled and the caller has already passed the approval-gated route.
+ *    It writes source content only; it never git pushes or deploys.
  */
 
 export interface WebsitePublisher {
@@ -26,8 +27,8 @@ export interface WebsitePublisher {
 
   /**
    * REQUIRES an already-approved seo_publish_snapshots row (status must not
-   * already be 'live'). Both concrete adapters intentionally implement this
-   * as a safe, honest no-op refusal — see their inline comments.
+   * already be 'live') and enabled write flags. Implementations write only
+   * safe source/draft paths and never run deploy commands.
    */
   publishApproved(snapshotId: string): Promise<{ success: boolean; error?: string }>;
 

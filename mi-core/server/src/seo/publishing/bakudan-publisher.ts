@@ -15,24 +15,26 @@
  *  - "Preview" means: basic well-formedness check + copy into
  *    .seo-preview/ — an honest description given the site has no real
  *    build pipeline to run.
- *  - publishApproved() is an explicit, honest no-op refusal. It still
- *    routes the attempt through submitSeoAction(production_deploy) so the
- *    approval-gate/evidence trail is real.
+ *  - publishApproved() only copies an approved draft into a new/untracked
+ *    source path after the route-level approval guard and live-write flags
+ *    have passed. It never git pushes or runs a production deploy.
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { createHash } from 'crypto';
 import type { WebsitePublisher } from './website-publisher';
-import { submitSeoAction } from '../seo-approval-bridge';
 import { recordEvidence } from '../seo-evidence';
-import { seoId } from '../seo-db';
+import { getSeoDb, nowIso, seoId } from '../seo-db';
 import { disabledReason, isSeoProductionPublishEnabled, isSeoWebsiteWriteEnabled } from '../seo-write-guards';
 import {
   createFileSnapshot,
-  restoreFromSnapshot,
+  getPublishSnapshot,
+  restorePublishedSnapshot,
   isGitTracked,
+  markSnapshotLive,
+  resolveWithinRoot,
   markSnapshotFailed,
-  PRODUCTION_DEPLOY_REFUSAL,
 } from './publish-safety';
 
 const BAKUDAN_ROOT = process.env.BAKUDAN_ROOT || 'D:/Project/Master/Bakudan/bakudanramen.com-current';
@@ -41,6 +43,10 @@ const PREVIEW_DIR = path.join(BAKUDAN_ROOT, '.seo-preview');
 
 function ensureDir(dir: string): void {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+function sha256File(filePath: string): string {
+  return createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
 }
 
 /**
@@ -134,29 +140,76 @@ class BakudanPublisher implements WebsitePublisher {
       ? disabledReason('SEO_PRODUCTION_PUBLISH_ENABLED')
       : !isSeoWebsiteWriteEnabled()
         ? disabledReason('SEO_WEBSITE_WRITE_ENABLED')
-        : PRODUCTION_DEPLOY_REFUSAL;
-    submitSeoAction({
-      category: 'production_deploy',
-      brand_id: this.brandId,
-      description: `Publish attempt for Bakudan snapshot ${snapshotId}`,
-      target: 'production',
-      rollback_plan: `Restore from backup recorded on snapshot ${snapshotId} via rollback()`,
-      idempotency_key: `bakudan-publish-${snapshotId}`,
-    });
+        : null;
+    if (flagRefusal) {
+      markSnapshotFailed(snapshotId, flagRefusal);
+      recordEvidence({
+        brand_id: this.brandId,
+        category: 'production_deploy',
+        summary: `Publish refused: ${flagRefusal}`,
+        payload: { snapshotId },
+      });
+      return { success: false, error: flagRefusal };
+    }
 
-    markSnapshotFailed(snapshotId, flagRefusal);
+    const snapshot = getPublishSnapshot(snapshotId);
+    if (!snapshot || snapshot.brand_id !== this.brandId) {
+      return { success: false, error: `snapshot ${snapshotId} not found for ${this.brandId}` };
+    }
+    if (snapshot.status !== 'pending') {
+      return { success: false, error: `snapshot ${snapshotId} is not pending (status=${snapshot.status})` };
+    }
+
+    const state = getSeoDb().prepare('SELECT * FROM seo_pipeline_state WHERE snapshot_id = ?')
+      .get(snapshotId) as { content_id: string; draft_path: string | null; target_path: string | null; preview_build_success: number | null } | undefined;
+    if (!state?.draft_path || !state.target_path || state.preview_build_success !== 1) {
+      return { success: false, error: 'publish requires a successful pipeline preview with draft_path and target_path bound to this snapshot' };
+    }
+    if (!fs.existsSync(state.draft_path)) {
+      return { success: false, error: `draft_path missing on disk: ${state.draft_path}` };
+    }
+
+    let before: { existed?: boolean; targetPath?: string; targetWasGitTracked?: boolean };
+    try {
+      before = JSON.parse(snapshot.before_state || '{}');
+    } catch {
+      return { success: false, error: `snapshot ${snapshotId} has unparseable before_state` };
+    }
+
+    const targetPath = before.targetPath || state.target_path;
+    const absoluteTarget = resolveWithinRoot(BAKUDAN_ROOT, targetPath);
+    if (before.targetWasGitTracked || isGitTracked(BAKUDAN_ROOT, absoluteTarget)) {
+      return { success: false, error: `refusing to publish to git-tracked path: ${absoluteTarget}` };
+    }
+    if (fs.existsSync(absoluteTarget) && !before.existed) {
+      return { success: false, error: `target appeared after snapshot and has no recorded backup: ${absoluteTarget}` };
+    }
+
+    ensureDir(path.dirname(absoluteTarget));
+    fs.copyFileSync(state.draft_path, absoluteTarget);
+    const digest = sha256File(absoluteTarget);
+    getSeoDb().prepare('UPDATE seo_publish_snapshots SET content_id = ? WHERE id = ? AND content_id IS NULL')
+      .run(state.content_id, snapshotId);
+    markSnapshotLive(snapshotId, {
+      publishedPath: absoluteTarget,
+      sourcePath: state.draft_path,
+      sha256: digest,
+      note: 'Copied approved Bakudan draft into a new/untracked source path only; no git push or deploy was run.',
+    });
+    getSeoDb().prepare('UPDATE seo_content_items SET status = ?, published_at = ?, updated_at = ? WHERE id = ?')
+      .run('SOURCE_PUBLISHED_PENDING_DEPLOY', nowIso(), nowIso(), state.content_id);
     recordEvidence({
       brand_id: this.brandId,
       category: 'production_deploy',
-      summary: `Publish refused: ${flagRefusal}`,
-      payload: { snapshotId },
+      summary: `Published Bakudan approved source content for snapshot ${snapshotId}`,
+      payload: { snapshotId, content_id: state.content_id, publishedPath: absoluteTarget, sha256: digest, deploy_ran: false },
     });
 
-    return { success: false, error: flagRefusal };
+    return { success: true };
   }
 
   async rollback(snapshotId: string): Promise<{ success: boolean; error?: string }> {
-    const result = restoreFromSnapshot(BAKUDAN_ROOT, snapshotId);
+    const result = restorePublishedSnapshot(BAKUDAN_ROOT, snapshotId);
     recordEvidence({
       brand_id: this.brandId,
       category: 'rollback',
