@@ -73,24 +73,6 @@
       "categories": ["Japanese Restaurant", "Sushi Restaurant"],
       "apple_status": "pending_audit",
       "bing_status": "pending_audit"
-    },
-    {
-      "location_id": "modesto",
-      "brand_id": "raw_sushi",
-      "name": "Raw Sushi Bistro - Modesto",
-      "short_name": "Modesto",
-      "status": "active",
-      "address": "1200 I Street, Modesto, CA 95354",
-      "phone": "+12095669560",
-      "website_url": "https://www.rawsushibar.com/modesto/",
-      "menu_url": "https://www.rawsushibar.com/menu/modesto/",
-      "order_url": "needs_config",
-      "hours": "needs_config",
-      "geo": { "lat": 0, "lng": 0 },
-      "gbp_place_id": "needs_config",
-      "categories": ["Japanese Restaurant", "Sushi Restaurant"],
-      "apple_status": "pending_audit",
-      "bing_status": "pending_audit"
     }
   ]
 }

@@ -42,7 +42,7 @@ const HARDCODED_LOCATIONS = [
     account_id:  '',
     location_name: 'Raw Sushi Bistro',
     address: '10742 Trinity Pkwy Suite D, Stockton, CA 95219',
-    website_uri: 'https://rawstockton.com',
+    website_uri: 'https://www.rawsushibar.com',
     phone: '',
   },
 ];
