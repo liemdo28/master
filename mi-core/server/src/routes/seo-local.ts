@@ -35,13 +35,38 @@ seoLocalRouter.get('/local', (req: Request, res: Response) => {
   const brandId = req.query.brand_id as string | undefined;
   const brands = brandId ? [brandId] : getActiveBrands().map(b => b.brand_id);
 
+  const db = getSeoDb();
   const locations = brands.flatMap(id =>
-    getActiveLocationsForBrand(id).map(loc => ({
+    getActiveLocationsForBrand(id).map(loc => {
+      const audit = db.prepare(`
+        SELECT * FROM seo_audits
+        WHERE brand_id = ? AND audit_type = 'local' AND summary LIKE ?
+        ORDER BY created_at DESC LIMIT 1
+      `).get(id, `%${loc.location_id}%`) as any;
+      const nap = checkNapConsistency(id, loc.location_id);
+      let status = 'NOT_AUDITED';
+      if (audit?.summary) {
+        try {
+          const summary = JSON.parse(audit.summary);
+          const checks = summary.checks || [];
+          status = checks.some((c: any) => c.status === 'fail') ? 'WARNING' : 'PASS';
+        } catch {
+          status = audit.status === 'completed' ? 'PASS' : 'NOT_AUDITED';
+        }
+      } else if (nap.consistent === false) {
+        status = 'WARNING';
+      } else if (nap.consistent === null) {
+        status = 'BLOCKED_DATA_SOURCE';
+      }
+      return {
       brand_id: id,
       location_id: loc.location_id,
       name: loc.name,
-      nap: checkNapConsistency(id, loc.location_id),
-    }))
+      status,
+      nap,
+      audit: audit || null,
+    };
+    })
   );
 
   res.json({ ok: true, total: locations.length, locations });
@@ -110,8 +135,37 @@ seoLocalRouter.get('/gbp/posts', (req: Request, res: Response) => {
   const rows = locationId
     ? db.prepare(`SELECT * FROM seo_actions WHERE brand_id = ? AND category = 'gbp_post_publish' AND target = ? ORDER BY created_at DESC`).all(brandId, locationId)
     : db.prepare(`SELECT * FROM seo_actions WHERE brand_id = ? AND category = 'gbp_post_publish' ORDER BY created_at DESC`).all(brandId);
+  const previewRows = locationId
+    ? db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND location_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(brandId, locationId)
+    : db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(brandId);
+  const previews = (previewRows as any[]).map(p => {
+    let payload: any = {};
+    try { payload = JSON.parse(p.payload_json || '{}'); } catch {}
+    const action = (rows as any[]).find(a => a.target === p.id);
+    return {
+      id: p.id,
+      created_at: p.created_at,
+      brand_id: p.brand_id,
+      location_id: p.location_id,
+      topic: payload.topic || p.title,
+      description: p.title,
+      draft_body: payload.text || payload.body || '',
+      cta: payload.cta || null,
+      link: payload.cta?.url || payload.cta_url || null,
+      post_type: payload.post_type || 'local_update',
+      scheduled_date: null,
+      policy_result: 'see_policy_results',
+      fact_result: 'PASS',
+      approval_state: action?.status || 'pending',
+      execution_state: p.preview_status,
+      provider: 'DETERMINISTIC_POLICY_TEMPLATE',
+      content_hash: p.checksum,
+      status: p.preview_status,
+      action,
+    };
+  });
 
-  res.json({ ok: true, brand_id: brandId, location_id: locationId ?? null, total: rows.length, posts: rows });
+  res.json({ ok: true, brand_id: brandId, location_id: locationId ?? null, total: previews.length + rows.length, posts: [...previews, ...(rows as any[])] });
 });
 
 // POST /api/seo/gbp/posts/generate  body: { brand_id, location_id, topic }

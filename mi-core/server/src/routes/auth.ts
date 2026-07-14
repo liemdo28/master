@@ -285,6 +285,15 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     const isLocal = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
     if (isLocal) return next();
   }
+  if (req.query.token || req.query.csrf) {
+    appendAuthAudit({
+      event: 'query_token_rejected',
+      path: req.path,
+      ip: req.ip,
+      user_agent: req.headers['user-agent'] || null,
+    });
+    return res.status(401).json({ error: 'query_token_auth_rejected' });
+  }
   const token = extractToken(req);
   if (!getAuthSessionFromToken(token)) {
     return res.status(401).json({ error: 'Unauthorized — login with PIN' });
@@ -295,7 +304,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 function extractToken(req: Request): string | null {
   const auth = req.headers.authorization;
   if (auth?.startsWith('Bearer ')) return auth.slice(7);
-  return (req.query.token as string) || null;
+  return null;
 }
 
 export function __createTestSessionForAuth(input: { role?: MiRole; actor_id?: string; brand_scope?: string[]; location_scope?: string[]; ttlMs?: number } = {}): AuthSession {

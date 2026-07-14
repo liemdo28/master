@@ -16,8 +16,21 @@ import {
   loadBrandConfig,
   type BrandRecord, type LocationRecord, type ConnectorRunRecord,
 } from '../seo/brand-config';
+import { getSeoDb } from '../seo/seo-db';
 
 export const seoRouter = Router();
+
+function canonicalIssues(brandId?: string): any[] {
+  try {
+    const db = getSeoDb();
+    const rows = brandId
+      ? db.prepare('SELECT * FROM seo_issues WHERE brand_id = ? AND status = ? ORDER BY created_at DESC LIMIT 500').all(brandId, 'open')
+      : db.prepare('SELECT * FROM seo_issues WHERE status = ? ORDER BY created_at DESC LIMIT 500').all('open');
+    return rows as any[];
+  } catch {
+    return [];
+  }
+}
 
 // ── Persistence ─────────────────────────────────────────────────────────────
 const PERSIST_DIR = path.join(process.cwd(), 'data', 'seo');
@@ -141,7 +154,7 @@ seoRouter.get('/brands/:brandId/dashboard', (req: Request, res: Response) => {
   const activeLocs = locs.filter(l => l.status === 'active');
   const agents = Array.from(seoAgents.values());
   const online = agents.filter(a => a.status === 'online').length;
-  const brandIssues = seoIssues.filter(i => i.brand_id === brand.brand_id);
+  const brandIssues = [...seoIssues.filter(i => i.brand_id === brand.brand_id), ...canonicalIssues(brand.brand_id)];
   const brandOpps = seoOpportunities.filter(o => o.brand_id === brand.brand_id);
   const brandRuns = getConnectorRuns(brand.brand_id);
 
@@ -342,14 +355,14 @@ seoRouter.get('/dashboard', (_req: Request, res: Response) => {
   const activeBrands = brands.filter(b => b.status === 'active');
   const agents = Array.from(seoAgents.values());
   const online = agents.filter(a => a.status === 'online').length;
-  const totalIssues = seoReports.reduce((s, r) => s + (r.issues_count || 0), 0);
+  const totalIssues = seoReports.reduce((s, r) => s + (r.issues_count || 0), 0) + canonicalIssues().length;
   const allLocs = getAllLocations();
 
   // Compute brand-level summaries
   const brandSummaries = brands.map(b => {
     const health = computeBrandHealth(b.brand_id);
     const locs = getAllLocationsForBrand(b.brand_id);
-    const brandIssues = seoIssues.filter(i => i.brand_id === b.brand_id);
+    const brandIssues = [...seoIssues.filter(i => i.brand_id === b.brand_id), ...canonicalIssues(b.brand_id)];
     const dataSources = getDataSourcesByBrand().filter(d => d.brand_id === b.brand_id);
     const realSources = dataSources.filter(d => d.source !== 'seeded' && d.record_count > 0);
     const seededSources = dataSources.filter(d => d.source === 'seeded');
@@ -680,7 +693,7 @@ seoRouter.post('/issues', (req: Request, res: Response) => {
 seoRouter.get('/issues', (req: Request, res: Response) => {
   const brandId = req.query.brand_id as string | undefined;
   const reportIssues = seoReports.filter(r => r.payload?.issues || r.issues).flatMap(r => r.payload?.issues || r.issues || []);
-  let allIssues = [...seoIssues, ...reportIssues].slice(-200);
+  let allIssues = [...canonicalIssues(brandId), ...seoIssues, ...reportIssues].slice(-500);
   if (brandId) {
     allIssues = allIssues.filter((i: any) => i.brand_id === brandId);
   }

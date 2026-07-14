@@ -429,9 +429,15 @@ let currentBrand = '';    // '' = All
 let currentLocation = ''; // '' = all locations
 let activeBrands = [];    // [{brand_id, name}]
 const urlAuth = new URLSearchParams(location.search);
-let SEO_AUTH_TOKEN = urlAuth.get('token') || sessionStorage.getItem('mi_auth_token') || localStorage.getItem('mi_auth_token') || '';
-let SEO_CSRF_TOKEN = urlAuth.get('csrf') || sessionStorage.getItem('mi_csrf_token') || localStorage.getItem('mi_csrf_token') || '';
-let SEO_AUTH_ROLE = sessionStorage.getItem('mi_auth_role') || localStorage.getItem('mi_auth_role') || '';
+if (urlAuth.has('token') || urlAuth.has('csrf')) {
+  urlAuth.delete('token');
+  urlAuth.delete('csrf');
+  const safeQuery = urlAuth.toString();
+  history.replaceState(null, document.title, location.pathname + (safeQuery ? `?${safeQuery}` : '') + location.hash);
+}
+let SEO_AUTH_TOKEN = sessionStorage.getItem('mi_auth_token') || '';
+let SEO_CSRF_TOKEN = sessionStorage.getItem('mi_csrf_token') || '';
+let SEO_AUTH_ROLE = sessionStorage.getItem('mi_auth_role') || '';
 
 // ── Fetch helpers ────────────────────────────────────────────────────────
 
@@ -517,16 +523,19 @@ async function loginWithPin() {
   }
 }
 
-function logoutSeo() {
+async function logoutSeo() {
+  const tokenToRevoke = SEO_AUTH_TOKEN;
   SEO_AUTH_TOKEN = '';
   SEO_CSRF_TOKEN = '';
   SEO_AUTH_ROLE = '';
   sessionStorage.removeItem('mi_auth_token');
   sessionStorage.removeItem('mi_csrf_token');
   sessionStorage.removeItem('mi_auth_role');
-  localStorage.removeItem('mi_auth_token');
-  localStorage.removeItem('mi_csrf_token');
-  localStorage.removeItem('mi_auth_role');
+  try {
+    if (tokenToRevoke) {
+      await fetch('/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${tokenToRevoke}` } });
+    }
+  } catch {}
   updateAuthUi();
   showLoginPanel('Session cleared.');
 }
@@ -652,9 +661,20 @@ async function loadOverview() {
       const byStatus = {};
       for (const k of all) byStatus[k.status] = (byStatus[k.status] || 0) + 1;
       const entries = Object.entries(byStatus);
+      let extra = '';
+      try {
+        const status = await api('/api/seo/automation/status');
+        const run = status.latest_run || {};
+        const connectors = (status.connectors || []).flatMap(b => (b.connectors || []).map(c => `${b.brand_id}:${c.id}=${c.read_status || c.status}`));
+        extra = `
+          <div class="row"><span class="row-label">AI Provider</span><span class="badge badge-yellow">DEGRADED / FALLBACK_ACTIVE</span></div>
+          <div class="row"><span class="row-label">Provider</span><span>DETERMINISTIC_POLICY_TEMPLATE</span></div>
+          <div class="row"><span class="row-label">Last Automation Run</span><span>${esc(run.status || 'no run')} ${run.created_at ? `· ${fmtDate(run.created_at)}` : ''}</span></div>
+          <div class="row"><span class="row-label">Connector Status</span><span style="font-size:11px">${esc(connectors.join(' · ') || 'not configured')}</span></div>`;
+      } catch {}
       document.getElementById('ov-keyword-status').innerHTML = entries.length
-        ? entries.map(([s, c]) => `<div class="row"><span class="row-label">${esc(s)}</span><span class="badge badge-blue">${c}</span></div>`).join('')
-        : '<div class="empty-state">No keywords discovered yet.</div>';
+        ? entries.map(([s, c]) => `<div class="row"><span class="row-label">${esc(s)}</span><span class="badge badge-blue">${c}</span></div>`).join('') + extra
+        : '<div class="empty-state">No keywords discovered yet.</div>' + extra;
     }
   } catch (e) {
     document.getElementById('ov-keywords').textContent = 'ERR';
@@ -1087,12 +1107,14 @@ async function loadKeywords() {
     const kws = d.keywords || [];
     if (!kws.length) { body.innerHTML = '<div class="empty-state">No keywords yet for this brand — click "Discover Keywords" to start.</div>'; return; }
     body.innerHTML = `<table>
-      <thead><tr><th>Keyword</th><th>Status</th><th>Intent</th><th>Target URL</th></tr></thead>
+      <thead><tr><th>Keyword</th><th>Location</th><th>Status</th><th>Intent</th><th>Source</th><th>Metrics</th></tr></thead>
       <tbody>${kws.map(k => `<tr>
         <td>${esc(k.keyword)}</td>
+        <td>${esc(k.location_id || 'all')}</td>
         <td><span class="badge badge-blue">${esc(k.status)}</span></td>
         <td>${esc(k.search_intent || '—')}</td>
-        <td style="font-size:11px;color:var(--muted)">${esc(k.target_url || '—')}</td>
+        <td>${esc(k.source || '—')}</td>
+        <td style="font-size:11px;color:var(--muted)">volume unavailable · demand ${k.estimated_demand ?? 'BLOCKED_DATA_SOURCE'}</td>
       </tr>`).join('')}</tbody>
     </table>`;
   } catch (e) {
@@ -1290,13 +1312,15 @@ async function loadLocal() {
     if (!locs.length) { body.innerHTML = '<div class="empty-state">No locations found.</div>'; return; }
     body.innerHTML = `<div class="grid">` + locs.map(l => {
       const nap = l.nap || {};
-      const consistent = nap.consistent === true;
+      const status = l.status || (nap.consistent === true ? 'PASS' : (nap.consistent === false ? 'WARNING' : 'BLOCKED_DATA_SOURCE'));
+      const good = status === 'PASS';
       return `<div class="card" style="margin-bottom:0">
         <div class="card-header"><span class="card-title">${esc(l.name)}</span>
-          <span class="badge ${consistent ? 'badge-green' : 'badge-yellow'}">${consistent ? 'NAP consistent' : (nap.consistent === false ? 'NAP issues' : 'unknown')}</span>
+          <span class="badge ${good ? 'badge-green' : 'badge-yellow'}">${esc(status)}</span>
         </div>
         <div class="card-body">
           <div class="row"><span class="row-label">Brand</span><span>${esc(l.brand_id)}</span></div>
+          <div class="row"><span class="row-label">NAP</span><span>${esc(nap.consistent === true ? 'PASS' : nap.consistent === false ? 'WARNING' : 'BLOCKED_DATA_SOURCE')}</span></div>
           <button class="btn btn-sm" onclick="runLocalAudit('${esc(l.brand_id)}','${esc(l.location_id)}')">Run Audit</button>
         </div>
       </div>`;
@@ -1327,11 +1351,13 @@ async function loadGbpPosts() {
     const posts = d.posts || [];
     if (!posts.length) { body.innerHTML = '<div class="empty-state">No GBP posts yet — generate a draft above.</div>'; return; }
     body.innerHTML = `<table>
-      <thead><tr><th>Description</th><th>Status</th><th>Created</th></tr></thead>
+      <thead><tr><th>Topic / Body</th><th>Location</th><th>CTA</th><th>Provider</th><th>Status</th></tr></thead>
       <tbody>${posts.map(p => `<tr>
-        <td>${esc(p.description || '—')}</td>
-        <td><span class="badge badge-blue">${esc(p.status)}</span></td>
-        <td style="font-size:11px;color:var(--muted)">${fmtDate(p.created_at)}</td>
+        <td><strong>${esc(p.topic || p.description || '—')}</strong><div class="row-label">${esc((p.draft_body || '').slice(0, 220) || p.description || '')}</div><div class="row-label">hash: ${esc(p.content_hash || '—')}</div></td>
+        <td>${esc(p.location_id || p.target || '—')}</td>
+        <td style="font-size:11px">${esc(p.cta?.label || p.cta || '—')}<br>${esc(p.link || '')}</td>
+        <td><span class="badge badge-yellow">${esc(p.provider || 'DETERMINISTIC_POLICY_TEMPLATE')}</span></td>
+        <td><span class="badge badge-blue">${esc(p.status || p.approval_state || 'pending')}</span><div class="row-label">${fmtDate(p.created_at)}</div></td>
       </tr>`).join('')}</tbody>
     </table>`;
   } catch (e) {

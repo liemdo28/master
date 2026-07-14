@@ -12,6 +12,14 @@ import { getSeoWriteFlags } from '../seo-write-guards';
 import { createFact, listFacts, setFactStatus, type BusinessFactRecord } from '../facts/fact-registry';
 import { evaluatePolicy } from '../seo-policy-engine';
 import { generateGbpPostDraft } from '../local/gbp-posts';
+import { insertKeyword, findByNormalized } from '../keywords/keyword-store';
+import { normalizeKeyword } from '../keywords/keyword-normalizer';
+import { classifySearchIntent } from '../keywords/search-intent-classifier';
+import { buildClusterMap } from '../clusters/cluster-builder';
+import { runLocalAudit } from '../local/local-audit';
+import { submitSeoAction } from '../seo-approval-bridge';
+import { generateWeeklyReport } from '../reporting/report-generator';
+import { getPending, reject } from '../../approval/gate';
 
 type BrandId = 'bakudan' | 'raw_sushi';
 
@@ -31,6 +39,8 @@ const GBP_TOPICS = [
   'A location-specific dinner idea for nearby guests',
   'An evergreen weekend visit prompt for restaurant-near-me searches',
 ];
+
+const FALLBACK_PROVIDER = 'DETERMINISTIC_POLICY_TEMPLATE';
 
 function ensureTables(): void {
   getSeoDb().exec(`
@@ -180,6 +190,31 @@ function connectorStatus(brand: BrandRecord) {
   });
 }
 
+function cleanupPreviewArtifacts(): void {
+  const db = getSeoDb();
+  for (const approval of getPending().filter(a => a.category === 'seo_article_publish' || a.category === 'seo_gbp_post_publish')) {
+    reject(approval.id, 'preview-automation-refresh');
+  }
+  const brandIds = DEMO_TARGETS.map(t => t.brand_id);
+  const placeholders = brandIds.map(() => '?').join(',');
+  const clusterIds = db.prepare(`SELECT id FROM seo_topic_clusters WHERE brand_id IN (${placeholders})`).all(...brandIds) as { id: string }[];
+  const tx = db.transaction(() => {
+    db.prepare(`DELETE FROM seo_keywords WHERE brand_id IN (${placeholders}) AND source = 'automation_preview'`).run(...brandIds);
+    for (const row of clusterIds) db.prepare('DELETE FROM seo_cluster_nodes WHERE cluster_id = ?').run(row.id);
+    db.prepare(`DELETE FROM seo_topic_clusters WHERE brand_id IN (${placeholders})`).run(...brandIds);
+    db.prepare(`DELETE FROM seo_content_items WHERE brand_id IN (${placeholders}) AND status = 'SCHEDULED_PREVIEW_ONLY'`).run(...brandIds);
+    db.prepare(`DELETE FROM seo_content_previews WHERE brand_id IN (${placeholders})`).run(...brandIds);
+    db.prepare(`DELETE FROM seo_preview_executions WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
+    db.prepare(`DELETE FROM seo_analysis_findings WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
+    db.prepare(`DELETE FROM seo_strategies WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
+    db.prepare(`DELETE FROM seo_policy_results WHERE run_id IN (SELECT id FROM seo_functional_runs)`).run();
+    db.prepare(`DELETE FROM seo_issues WHERE audit_id LIKE 'functional:%'`).run();
+    db.prepare(`UPDATE seo_actions SET status = 'rejected', result = 'superseded by fresh preview automation run'
+      WHERE category IN ('article_publish','gbp_post_publish') AND status = 'pending'`).run();
+  });
+  tx();
+}
+
 function analysisFindings(brand: BrandRecord, loc: LocationRecord, runId: string) {
   const now = nowIso();
   const missingNap = [loc.address, loc.phone, loc.hours].some(v => !v || v === 'needs_config');
@@ -235,9 +270,59 @@ function analysisFindings(brand: BrandRecord, loc: LocationRecord, runId: string
     )
   `);
   for (const row of rows) {
-    stmt.run({ id: seoId('finding'), created_at: now, run_id: runId, brand_id: brand.brand_id, location_id: loc.location_id, ...row });
+    const findingId = seoId('finding');
+    stmt.run({ id: findingId, created_at: now, run_id: runId, brand_id: brand.brand_id, location_id: loc.location_id, ...row });
+    getSeoDb().prepare(`
+      INSERT INTO seo_issues (id, created_at, audit_id, brand_id, severity, issue_type, affected_url, description, recommended_fix, safe_auto_fix, approval_required, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, 'open')
+    `).run(
+      seoId('iss'),
+      now,
+      `functional:${runId}`,
+      brand.brand_id,
+      row.severity === 'warning' ? 'warning' : 'info',
+      row.category.replace(/\s+/g, '_').toLowerCase(),
+      row.affected_url,
+      `[${loc.location_id}] ${row.issue}`,
+      row.recommended_action,
+      row.required_approval === 'none' ? 0 : 1,
+    );
   }
   return rows;
+}
+
+function seedKeywords(brand: BrandRecord, loc: LocationRecord, strategy: any, article: any): any[] {
+  const keywordSet = new Set<string>();
+  for (const kw of strategy.priority_keywords || []) keywordSet.add(String(kw));
+  keywordSet.add(article.target_keyword);
+  for (const kw of article.secondary_keywords || []) keywordSet.add(String(kw));
+  for (const topic of strategy.topic_clusters || []) keywordSet.add(String(topic));
+  const created: any[] = [];
+  for (const keyword of keywordSet) {
+    const normalized = normalizeKeyword(keyword);
+    const existing = findByNormalized(brand.brand_id, normalized)
+      .find(k => (k.location_id || null) === loc.location_id && k.source === 'automation_preview');
+    if (existing) {
+      created.push(existing);
+      continue;
+    }
+    const intent = classifySearchIntent(keyword);
+    created.push(insertKeyword({
+      brand_id: brand.brand_id,
+      location_id: loc.location_id,
+      keyword,
+      search_intent: intent.intent,
+      funnel_stage: intent.intent === 'transactional' ? 'conversion' : intent.intent === 'commercial' ? 'consideration' : 'discovery',
+      estimated_demand: null,
+      difficulty_estimate: null,
+      local_relevance: 0.8,
+      business_relevance: 0.85,
+      menu_relevance: 0.7,
+      conversion_potential: 0.72,
+      source: 'automation_preview',
+    }));
+  }
+  return created;
 }
 
 function buildStrategy(brand: BrandRecord, loc: LocationRecord, runId: string) {
@@ -381,7 +466,7 @@ function createCalendarItem(params: {
       search_intent, article_type, status, quality_score, ai_provider, scheduled_publish_at,
       published_at, approval_id, current_version_id, deleted_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)
-  `).run(id, now, now, params.brand.brand_id, params.loc.location_id, params.title, slug, 'local restaurant discovery', params.type, 'SCHEDULED_PREVIEW_ONLY', 0.86, 'policy_template_preview', params.scheduledAt);
+  `).run(id, now, now, params.brand.brand_id, params.loc.location_id, params.title, slug, 'local restaurant discovery', params.type, 'SCHEDULED_PREVIEW_ONLY', 0.86, FALLBACK_PROVIDER, params.scheduledAt);
 
   const idempotencyKey = `${params.runId}:${params.brand.brand_id}:${params.loc.location_id}:${params.previewId}:preview`;
   db.prepare(`
@@ -393,6 +478,32 @@ function createCalendarItem(params: {
     policy: 'preview execution only; live publishing flags remain disabled',
   }));
   return { id, scheduled_at: params.scheduledAt, title: params.title, brand_id: params.brand.brand_id, location_id: params.loc.location_id, channel: params.type.includes('gbp') ? 'GBP' : 'website', execution_status: 'SCHEDULED_PREVIEW_ONLY' };
+}
+
+function enqueuePreviewApproval(params: {
+  brand: BrandRecord;
+  loc: LocationRecord;
+  previewId: string;
+  contentType: string;
+  title: string;
+  checksum: string;
+  payload: unknown;
+}) {
+  const category = params.contentType === 'gbp_post' ? 'gbp_post_publish' : 'article_publish';
+  return submitSeoAction({
+    category,
+    brand_id: params.brand.brand_id,
+    location_id: params.loc.location_id,
+    description: `${params.contentType === 'gbp_post' ? 'GBP post' : 'Article'} preview for ${params.brand.name}/${params.loc.location_id}: "${params.title}"`,
+    target: params.previewId,
+    before_state: 'no_public_write',
+    after_state: 'preview_only_pending_ceo_review',
+    rollback_plan: 'Reject the approval; no live publish has occurred.',
+    idempotency_key: `preview-approval:${params.previewId}`,
+    payload: { content_hash: params.checksum, preview: params.payload },
+    action_key: category,
+    payload_hash: params.checksum,
+  });
 }
 
 function latestRows<T>(sql: string, ...params: unknown[]): T[] {
@@ -448,6 +559,7 @@ export function getFunctionalAutomationRun(runId?: string) {
 export async function runFunctionalPreviewAutomation() {
   ensureTables();
   const db = getSeoDb();
+  cleanupPreviewArtifacts();
   const runId = seoId('functional');
   const startedAt = nowIso();
   db.prepare('INSERT INTO seo_functional_runs (id, created_at, run_type, status, summary) VALUES (?, ?, ?, ?, ?)')
@@ -456,7 +568,8 @@ export async function runFunctionalPreviewAutomation() {
   const result: any = {
     run_id: runId,
     started_at: startedAt,
-    ai_provider_status: 'MANUAL_FALLBACK_REQUIRED',
+    ai_provider_status: 'DEGRADED / FALLBACK_ACTIVE',
+    provider: FALLBACK_PROVIDER,
     google_connector_status: {},
     brands: {},
     public_writes: { website: false, gbp: false, backlinks: false, google_connector: false },
@@ -473,9 +586,35 @@ export async function runFunctionalPreviewAutomation() {
 
     const facts = [articleLoc, ...gbpLocs].flatMap(loc => seedFacts(brand, loc));
     const findings = activeLocs.flatMap(loc => analysisFindings(brand, loc, runId));
+    for (const loc of activeLocs) {
+      try { await runLocalAudit(brand.brand_id, loc.location_id); } catch {}
+    }
     const strategy = buildStrategy(brand, articleLoc, runId);
     const article = buildArticle(brand, articleLoc, runId);
+    const keywords = seedKeywords(brand, articleLoc, strategy, article);
     const gbpDrafts = buildGbpDrafts(brand, gbpLocs.length ? gbpLocs : [articleLoc], runId);
+    const clusterMap = buildClusterMap(brand.brand_id);
+
+    const approvalResults = [
+      enqueuePreviewApproval({
+        brand,
+        loc: articleLoc,
+        previewId: article.id,
+        contentType: 'article',
+        title: article.title,
+        checksum: article.content_checksum,
+        payload: article,
+      }),
+      ...gbpDrafts.map(draft => enqueuePreviewApproval({
+        brand,
+        loc: getLocationById(brand.brand_id, draft.location_id)!,
+        previewId: draft.id,
+        contentType: 'gbp_post',
+        title: draft.topic,
+        checksum: draft.checksum,
+        payload: draft,
+      })),
+    ];
 
     const calendarItems = [
       createCalendarItem({
@@ -506,13 +645,18 @@ export async function runFunctionalPreviewAutomation() {
       article_location: articleLoc.location_id,
       locations_analyzed: activeLocs.map(l => l.location_id),
       facts_seeded_or_verified: facts.length,
+      provider: FALLBACK_PROVIDER,
       findings_count: findings.length,
+      keywords_count: keywords.length,
+      clusters_count: clusterMap.clusters.length,
       strategy_30_day: strategy,
       article_preview: article,
       gbp_drafts: gbpDrafts,
       calendar_items: calendarItems,
+      approvals: approvalResults,
       policy_results: [...[article], ...gbpDrafts].map(item => ({ id: item.id, result: item.policy.result, blockers: item.policy.blockers, warnings: item.policy.warnings })),
     };
+    try { generateWeeklyReport(brand.brand_id); } catch {}
   }
 
   db.prepare(`
