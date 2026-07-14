@@ -26,19 +26,19 @@ const db = getSeoDb();
 const now = nowIso();
 
 db.prepare(`INSERT INTO seo_actions (id, created_at, brand_id, category, policy_tier, description, status, target)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('gbp-raw-modesto', now, 'raw_sushi', 'gbp_post_publish', 'REQUIRES_APPROVAL', 'Raw Sushi GBP post', 'pending', 'modesto');
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('gbp-raw-outside-scope', now, 'raw_sushi', 'gbp_post_publish', 'REQUIRES_APPROVAL', 'Raw Sushi GBP post', 'pending', 'outside_scope');
 db.prepare(`INSERT INTO seo_publish_snapshots (id, created_at, brand_id, content_id, target, before_state, after_state, status)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('snap-raw', now, 'raw_sushi', 'content-raw', 'production', '{}', '{}', 'pending');
 db.prepare(`INSERT INTO seo_publish_snapshots (id, created_at, brand_id, content_id, target, before_state, after_state, status)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('snap-bakudan', now, 'bakudan', 'content-bakudan', 'production', '{}', '{}', 'pending');
 db.prepare(`INSERT INTO seo_content_items (id, created_at, updated_at, brand_id, location_id, title, slug, status)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('article-raw', now, now, 'raw_sushi', 'modesto', 'Raw article', 'raw-article', 'IDEA');
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('article-raw', now, now, 'raw_sushi', 'outside_scope', 'Raw article', 'raw-article', 'IDEA');
 db.prepare(`INSERT INTO seo_backlinks (id, created_at, updated_at, brand_id, source_domain, source_url, destination_url, status)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('backlink-raw', now, now, 'raw_sushi', 'example.com', 'https://example.com/raw', 'https://raw.example.com', 'PENDING');
 db.prepare(`INSERT INTO seo_keywords (id, created_at, updated_at, brand_id, location_id, keyword, normalized_keyword, status)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('kw-raw', now, now, 'raw_sushi', 'modesto', 'sushi near me', 'sushi near me', 'DISCOVERED');
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`).run('kw-raw', now, now, 'raw_sushi', 'outside_scope', 'sushi near me', 'sushi near me', 'DISCOVERED');
 db.prepare(`INSERT INTO seo_business_facts (id, created_at, updated_at, brand_id, location_id, category, field_name, value, source, status)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run('fact-raw', now, now, 'raw_sushi', 'modesto', 'hours', 'weekday_hours', '11-9', 'test', 'UNVERIFIED');
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run('fact-raw', now, now, 'raw_sushi', 'outside_scope', 'hours', 'weekday_hours', '11-9', 'test', 'UNVERIFIED');
 
 function makeReq({ method = 'POST', path, session, body = {}, query = {}, params = {} }) {
   return {
@@ -103,10 +103,10 @@ section('Object-ID resource scope');
   const stocktonCeo = auth.__createTestSessionForAuth({ role: 'CEO', brand_scope: ['raw_sushi'], location_scope: ['stockton'] });
 
   check('Bakudan-scoped CEO cannot publish Raw Sushi GBP action by ID',
-    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-modesto/publish', session: bakudanCeo, body: { brand_id: 'bakudan' } })).payload?.error === 'seo_resource_scope_violation');
+    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-outside-scope/publish', session: bakudanCeo, body: { brand_id: 'bakudan' } })).payload?.error === 'seo_resource_scope_violation');
 
-  check('Stockton-scoped CEO cannot operate on Modesto GBP action ID',
-    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-modesto/publish', session: stocktonCeo, body: { brand_id: 'raw_sushi', location_id: 'stockton' } })).payload?.error === 'seo_resource_scope_violation');
+  check('Stockton-scoped CEO cannot operate on an outside-scope Raw Sushi GBP action ID',
+    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-outside-scope/publish', session: stocktonCeo, body: { brand_id: 'raw_sushi', location_id: 'stockton' } })).payload?.error === 'seo_resource_scope_violation');
 
   check('user cannot rollback snapshot belonging to another brand',
     runMiddleware(makeReq({ path: '/api/seo/publish/raw_sushi/snap-raw/rollback', session: bakudanCeo, body: { brand_id: 'bakudan' } })).payload?.error === 'seo_resource_scope_violation');
@@ -127,7 +127,7 @@ section('Object-ID resource scope');
     runMiddleware(makeReq({ method: 'GET', path: '/api/seo/evidence', session: bakudanCeo, query: { brand_id: 'raw_sushi' } })).payload?.error === 'seo_scope_violation');
 
   check('server canonical resource scope overrides conflicting client body values',
-    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-modesto/publish', session: bakudanCeo, body: { brand_id: 'bakudan', location_id: 'stone_oak' } })).payload?.error === 'seo_resource_scope_violation');
+    runMiddleware(makeReq({ path: '/api/seo/gbp/posts/gbp-raw-outside-scope/publish', session: bakudanCeo, body: { brand_id: 'bakudan', location_id: 'stone_oak' } })).payload?.error === 'seo_resource_scope_violation');
 
   const wildcard = auth.__createTestSessionForAuth({ role: 'CEO', brand_scope: ['*'], location_scope: ['*'] });
   const approvalId = approvalFor({

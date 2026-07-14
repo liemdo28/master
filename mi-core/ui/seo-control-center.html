@@ -111,6 +111,12 @@
 
   .refresh-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 4px 10px; font-size: 11px; }
   .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .auth-panel { background: #0d0d16; border-bottom: 1px solid var(--border); padding: 12px 24px; display: none; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .auth-panel.show { display: flex; }
+  .auth-panel input { max-width: 220px; }
+  .auth-panel .auth-msg { font-size: 12px; color: var(--muted); }
+  .auth-state { font-size: 11px; color: var(--muted); }
+  .auth-state strong { color: var(--text); }
 
   pre.report-json { white-space: pre-wrap; font-size: 11px; line-height: 1.5; color: #c4cad6; max-height: 320px; overflow-y: auto; background: #0d0d14; padding: 10px; border-radius: 6px; }
 
@@ -158,8 +164,21 @@
   <h1>SEO Control Center</h1>
   <select id="brand-select"><option value="">Loading brands…</option></select>
   <select id="location-select"><option value="">All locations</option></select>
-  <div class="header-meta"><span id="header-ts">Loading…</span></div>
+  <div class="header-meta">
+    <span class="badge badge-green" id="readonly-badge">READ_ONLY</span>
+    <span class="auth-state" id="auth-state">Not signed in</span>
+    <button class="btn btn-sm btn-ghost" id="login-toggle" onclick="toggleLoginPanel()">Sign in</button>
+    <span id="header-ts">Loading…</span>
+  </div>
 </header>
+
+<div class="auth-panel" id="auth-panel">
+  <label class="field-label" style="margin:0">Mi PIN</label>
+  <input type="password" id="pin-input" autocomplete="current-password" placeholder="Enter PIN">
+  <button class="btn btn-sm" onclick="loginWithPin()">Sign in</button>
+  <button class="btn btn-sm btn-ghost" onclick="logoutSeo()">Clear session</button>
+  <span class="auth-msg" id="auth-msg">SEO data requires a bearer session. Static dashboard shell is visible without login.</span>
+</div>
 
 <div class="layout">
   <nav class="sidebar" id="sidebar-nav">
@@ -171,6 +190,7 @@
     <button data-view="gbp">Google Business Profile</button>
     <button data-view="backlinks">Backlinks</button>
     <button data-view="approvals">Approvals</button>
+    <button data-view="automation">Automation</button>
     <button data-view="evidence">Evidence</button>
     <button data-view="reports">Reports</button>
     <button data-view="policies">Policies</button>
@@ -200,6 +220,32 @@
           <div class="card-header"><span class="card-title">Recent Evidence / Actions</span></div>
           <div class="card-body" id="ov-evidence"><div class="skeleton"></div></div>
         </div>
+      </div>
+    </div>
+
+    <!-- ── Automation ───────────────────────────────────────────── -->
+    <div class="view" id="view-automation">
+      <h2>Automation</h2>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Preview Automation Certification</span>
+          <button class="btn btn-sm" onclick="runPreviewAutomation()">Run Preview Cycle</button>
+        </div>
+        <div class="card-body" id="automation-status"><div class="skeleton"></div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Analysis / Strategy</span></div>
+          <div class="card-body" id="automation-analysis"><div class="skeleton"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Content Previews</span></div>
+          <div class="card-body" id="automation-previews"><div class="skeleton"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Next Scheduled Preview Items</span></div>
+        <div class="card-body" id="automation-calendar"><div class="skeleton"></div></div>
       </div>
     </div>
 
@@ -383,8 +429,15 @@ let currentBrand = '';    // '' = All
 let currentLocation = ''; // '' = all locations
 let activeBrands = [];    // [{brand_id, name}]
 const urlAuth = new URLSearchParams(location.search);
-const SEO_AUTH_TOKEN = urlAuth.get('token') || sessionStorage.getItem('mi_auth_token') || localStorage.getItem('mi_auth_token') || '';
-const SEO_CSRF_TOKEN = urlAuth.get('csrf') || sessionStorage.getItem('mi_csrf_token') || localStorage.getItem('mi_csrf_token') || '';
+if (urlAuth.has('token') || urlAuth.has('csrf')) {
+  urlAuth.delete('token');
+  urlAuth.delete('csrf');
+  const safeQuery = urlAuth.toString();
+  history.replaceState(null, document.title, location.pathname + (safeQuery ? `?${safeQuery}` : '') + location.hash);
+}
+let SEO_AUTH_TOKEN = sessionStorage.getItem('mi_auth_token') || '';
+let SEO_CSRF_TOKEN = sessionStorage.getItem('mi_csrf_token') || '';
+let SEO_AUTH_ROLE = sessionStorage.getItem('mi_auth_role') || '';
 
 // ── Fetch helpers ────────────────────────────────────────────────────────
 
@@ -397,6 +450,9 @@ async function api(path, opts) {
   const r = await fetch(BASE + path, { ...(opts || {}), headers });
   const body = await r.json().catch(() => ({}));
   if (!r.ok || body.ok === false) {
+    if (r.status === 401) {
+      showLoginPanel(body.error || 'seo_bearer_auth_required');
+    }
     throw new Error(body.error || `${r.status} ${r.statusText}`);
   }
   return body;
@@ -412,6 +468,78 @@ function fmtDate(s) {
   catch { return s; }
 }
 
+function updateAuthUi() {
+  const state = document.getElementById('auth-state');
+  const btn = document.getElementById('login-toggle');
+  if (SEO_AUTH_TOKEN) {
+    state.innerHTML = `Signed in${SEO_AUTH_ROLE ? ` as <strong>${esc(SEO_AUTH_ROLE)}</strong>` : ''}`;
+    btn.textContent = 'Session';
+  } else {
+    state.textContent = 'Not signed in';
+    btn.textContent = 'Sign in';
+  }
+}
+
+function showLoginPanel(message) {
+  document.getElementById('auth-panel').classList.add('show');
+  if (message) document.getElementById('auth-msg').textContent = message;
+  updateAuthUi();
+}
+
+function toggleLoginPanel() {
+  document.getElementById('auth-panel').classList.toggle('show');
+  updateAuthUi();
+}
+
+async function loginWithPin() {
+  const input = document.getElementById('pin-input');
+  const msg = document.getElementById('auth-msg');
+  const pin = input.value;
+  if (!pin) {
+    msg.textContent = 'Enter the Mi PIN.';
+    return;
+  }
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin }),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok || !body.token) throw new Error(body.error || `${r.status} ${r.statusText}`);
+    SEO_AUTH_TOKEN = body.token;
+    SEO_CSRF_TOKEN = body.csrf_token || '';
+    SEO_AUTH_ROLE = body.role || '';
+    sessionStorage.setItem('mi_auth_token', SEO_AUTH_TOKEN);
+    sessionStorage.setItem('mi_csrf_token', SEO_CSRF_TOKEN);
+    sessionStorage.setItem('mi_auth_role', SEO_AUTH_ROLE);
+    input.value = '';
+    msg.textContent = 'Signed in. Loading live read-only SEO data...';
+    document.getElementById('auth-panel').classList.remove('show');
+    updateAuthUi();
+    await boot();
+  } catch (e) {
+    msg.textContent = 'Login failed: ' + e.message;
+  }
+}
+
+async function logoutSeo() {
+  const tokenToRevoke = SEO_AUTH_TOKEN;
+  SEO_AUTH_TOKEN = '';
+  SEO_CSRF_TOKEN = '';
+  SEO_AUTH_ROLE = '';
+  sessionStorage.removeItem('mi_auth_token');
+  sessionStorage.removeItem('mi_csrf_token');
+  sessionStorage.removeItem('mi_auth_role');
+  try {
+    if (tokenToRevoke) {
+      await fetch('/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${tokenToRevoke}` } });
+    }
+  } catch {}
+  updateAuthUi();
+  showLoginPanel('Session cleared.');
+}
+
 // ── Navigation ───────────────────────────────────────────────────────────
 
 const VIEW_LOADERS = {
@@ -423,6 +551,7 @@ const VIEW_LOADERS = {
   gbp: loadGbpTab,
   backlinks: loadBacklinks,
   approvals: loadApprovals,
+  automation: loadAutomation,
   evidence: loadEvidence,
   reports: loadReports,
   policies: loadPolicies,
@@ -532,9 +661,20 @@ async function loadOverview() {
       const byStatus = {};
       for (const k of all) byStatus[k.status] = (byStatus[k.status] || 0) + 1;
       const entries = Object.entries(byStatus);
+      let extra = '';
+      try {
+        const status = await api('/api/seo/automation/status');
+        const run = status.latest_run || {};
+        const connectors = (status.connectors || []).flatMap(b => (b.connectors || []).map(c => `${b.brand_id}:${c.id}=${c.read_status || c.status}`));
+        extra = `
+          <div class="row"><span class="row-label">AI Provider</span><span class="badge badge-yellow">DEGRADED / FALLBACK_ACTIVE</span></div>
+          <div class="row"><span class="row-label">Provider</span><span>DETERMINISTIC_POLICY_TEMPLATE</span></div>
+          <div class="row"><span class="row-label">Last Automation Run</span><span>${esc(run.status || 'no run')} ${run.created_at ? `· ${fmtDate(run.created_at)}` : ''}</span></div>
+          <div class="row"><span class="row-label">Connector Status</span><span style="font-size:11px">${esc(connectors.join(' · ') || 'not configured')}</span></div>`;
+      } catch {}
       document.getElementById('ov-keyword-status').innerHTML = entries.length
-        ? entries.map(([s, c]) => `<div class="row"><span class="row-label">${esc(s)}</span><span class="badge badge-blue">${c}</span></div>`).join('')
-        : '<div class="empty-state">No keywords discovered yet.</div>';
+        ? entries.map(([s, c]) => `<div class="row"><span class="row-label">${esc(s)}</span><span class="badge badge-blue">${c}</span></div>`).join('') + extra
+        : '<div class="empty-state">No keywords discovered yet.</div>' + extra;
     }
   } catch (e) {
     document.getElementById('ov-keywords').textContent = 'ERR';
@@ -630,20 +770,14 @@ async function loadCalendarTab() {
   const unschedEl = document.getElementById('cal-unscheduled');
   const toolbar = document.getElementById('cal-toolbar');
 
-  if (!currentBrand) {
-    toolbar.style.display = 'none';
-    body.innerHTML = brandScopedNotice('the content calendar');
-    unschedEl.innerHTML = '';
-    return;
-  }
-
   toolbar.style.display = calView === 'list' ? 'none' : 'flex';
   document.getElementById('cal-range-label').textContent = calRangeLabel();
   body.innerHTML = '<div class="skeleton"></div>';
 
   try {
     const { from, to } = calRangeBounds();
-    const params = new URLSearchParams({ brand_id: currentBrand, view: calView });
+    const params = new URLSearchParams({ view: calView });
+    if (currentBrand) params.set('brand_id', currentBrand);
     if (currentLocation) params.set('location_id', currentLocation);
     if (from) params.set('from', from);
     if (to) params.set('to', to);
@@ -960,19 +1094,21 @@ function previewCalendarItem(id) {
 
 async function loadKeywords() {
   const body = document.getElementById('kw-body');
-  if (!currentBrand) { body.innerHTML = brandScopedNotice('search terms'); return; }
   body.innerHTML = '<div class="skeleton"></div>';
   try {
-    const d = await api(`/api/seo/keywords?brand_id=${encodeURIComponent(currentBrand)}`);
+    const path = currentBrand ? `/api/seo/keywords?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/keywords';
+    const d = await api(path);
     const kws = d.keywords || [];
     if (!kws.length) { body.innerHTML = '<div class="empty-state">No keywords yet for this brand — click "Discover Keywords" to start.</div>'; return; }
     body.innerHTML = `<table>
-      <thead><tr><th>Keyword</th><th>Status</th><th>Intent</th><th>Target URL</th></tr></thead>
+      <thead><tr><th>Keyword</th><th>Location</th><th>Status</th><th>Intent</th><th>Source</th><th>Metrics</th></tr></thead>
       <tbody>${kws.map(k => `<tr>
         <td>${esc(k.keyword)}</td>
+        <td>${esc(k.location_id || 'all')}</td>
         <td><span class="badge badge-blue">${esc(k.status)}</span></td>
         <td>${esc(k.search_intent || '—')}</td>
-        <td style="font-size:11px;color:var(--muted)">${esc(k.target_url || '—')}</td>
+        <td>${esc(k.source || '—')}</td>
+        <td style="font-size:11px;color:var(--muted)">volume unavailable · demand ${k.estimated_demand ?? 'BLOCKED_DATA_SOURCE'}</td>
       </tr>`).join('')}</tbody>
     </table>`;
   } catch (e) {
@@ -1170,13 +1306,15 @@ async function loadLocal() {
     if (!locs.length) { body.innerHTML = '<div class="empty-state">No locations found.</div>'; return; }
     body.innerHTML = `<div class="grid">` + locs.map(l => {
       const nap = l.nap || {};
-      const consistent = nap.consistent === true;
+      const status = l.status || (nap.consistent === true ? 'PASS' : (nap.consistent === false ? 'WARNING' : 'BLOCKED_DATA_SOURCE'));
+      const good = status === 'PASS';
       return `<div class="card" style="margin-bottom:0">
         <div class="card-header"><span class="card-title">${esc(l.name)}</span>
-          <span class="badge ${consistent ? 'badge-green' : 'badge-yellow'}">${consistent ? 'NAP consistent' : (nap.consistent === false ? 'NAP issues' : 'unknown')}</span>
+          <span class="badge ${good ? 'badge-green' : 'badge-yellow'}">${esc(status)}</span>
         </div>
         <div class="card-body">
           <div class="row"><span class="row-label">Brand</span><span>${esc(l.brand_id)}</span></div>
+          <div class="row"><span class="row-label">NAP</span><span>${esc(nap.consistent === true ? 'PASS' : nap.consistent === false ? 'WARNING' : 'BLOCKED_DATA_SOURCE')}</span></div>
           <button class="btn btn-sm" onclick="runLocalAudit('${esc(l.brand_id)}','${esc(l.location_id)}')">Run Audit</button>
         </div>
       </div>`;
@@ -1200,18 +1338,19 @@ function loadGbpTab() { loadGbpPosts(); }
 
 async function loadGbpPosts() {
   const body = document.getElementById('gbp-posts-body');
-  if (!currentBrand) { body.innerHTML = brandScopedNotice('GBP posts'); return; }
   body.innerHTML = '<div class="skeleton"></div>';
   try {
-    const d = await api(`/api/seo/gbp/posts?brand_id=${encodeURIComponent(currentBrand)}`);
+    const d = await api(currentBrand ? `/api/seo/gbp/posts?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/gbp/posts');
     const posts = d.posts || [];
     if (!posts.length) { body.innerHTML = '<div class="empty-state">No GBP posts yet — generate a draft above.</div>'; return; }
     body.innerHTML = `<table>
-      <thead><tr><th>Description</th><th>Status</th><th>Created</th></tr></thead>
+      <thead><tr><th>Topic / Body</th><th>Location</th><th>CTA</th><th>Provider</th><th>Status</th></tr></thead>
       <tbody>${posts.map(p => `<tr>
-        <td>${esc(p.description || '—')}</td>
-        <td><span class="badge badge-blue">${esc(p.status)}</span></td>
-        <td style="font-size:11px;color:var(--muted)">${fmtDate(p.created_at)}</td>
+        <td><strong>${esc(p.topic || p.description || '—')}</strong><div class="row-label">${esc((p.draft_body || '').slice(0, 220) || p.description || '')}</div><div class="row-label">hash: ${esc(p.content_hash || '—')}</div></td>
+        <td>${esc(p.location_id || p.target || '—')}</td>
+        <td style="font-size:11px">${esc(p.cta?.label || p.cta || '—')}<br>${esc(p.link || '')}</td>
+        <td><span class="badge badge-yellow">${esc(p.provider || 'DETERMINISTIC_POLICY_TEMPLATE')}</span></td>
+        <td><span class="badge badge-blue">${esc(p.status || p.approval_state || 'pending')}</span><div class="row-label">${fmtDate(p.created_at)}</div></td>
       </tr>`).join('')}</tbody>
     </table>`;
   } catch (e) {
@@ -1310,6 +1449,76 @@ async function rejectAction(id) {
   catch (e) { alert('Reject failed: ' + e.message); }
 }
 
+// ── Automation ───────────────────────────────────────────────────────────
+
+function jsonCell(value, max = 260) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  return esc((text || '').slice(0, max)) + ((text || '').length > max ? '…' : '');
+}
+
+async function loadAutomation() {
+  const statusEl = document.getElementById('automation-status');
+  const analysisEl = document.getElementById('automation-analysis');
+  const previewsEl = document.getElementById('automation-previews');
+  const calEl = document.getElementById('automation-calendar');
+  statusEl.innerHTML = '<div class="skeleton"></div>';
+  analysisEl.innerHTML = '<div class="skeleton"></div>';
+  previewsEl.innerHTML = '<div class="skeleton"></div>';
+  calEl.innerHTML = '<div class="skeleton"></div>';
+  try {
+    const status = await api('/api/seo/automation/status');
+    let run = null;
+    try { run = await api('/api/seo/automation/runs/latest'); } catch { run = null; }
+    const counts = status.counts || {};
+    const flags = status.flags || {};
+    statusEl.innerHTML = `
+      <div class="row"><span class="row-label">Mode</span><span class="badge badge-blue">${esc(status.mode || 'approval_gated')}</span></div>
+      <div class="row"><span class="row-label">Automation</span><span class="badge ${flags.SEO_AUTOMATION_ENABLED?.enabled ? 'badge-green' : 'badge-yellow'}">${flags.SEO_AUTOMATION_ENABLED?.enabled ? 'enabled' : 'disabled'}</span></div>
+      <div class="row"><span class="row-label">Public writes</span><span class="badge badge-green">disabled</span></div>
+      <div class="row"><span class="row-label">Latest run</span><span>${esc(status.latest_run?.status || 'no run')}</span></div>
+      <div class="row"><span class="row-label">Counts</span><span>${counts.findings || 0} findings · ${counts.strategies || 0} strategies · ${counts.previews || 0} previews · ${counts.preview_executions || 0} preview executions</span></div>
+      <div class="row"><span class="row-label">Scheduler</span><span>${status.scheduler_runtime?.running ? 'running' : 'not running'} · last check ${esc(status.scheduler_runtime?.last_stuck_job_check || 'none')}</span></div>`;
+    if (!run) {
+      analysisEl.innerHTML = '<div class="empty-state">No preview automation run yet.</div>';
+      previewsEl.innerHTML = '<div class="empty-state">No previews yet.</div>';
+      calEl.innerHTML = '<div class="empty-state">No scheduled preview items yet.</div>';
+      return;
+    }
+    const findings = run.findings || [];
+    const strategies = run.strategies || [];
+    analysisEl.innerHTML = `
+      <div class="row"><span class="row-label">Findings</span><span class="badge badge-blue">${findings.length}</span></div>
+      ${findings.slice(0, 8).map(f => `<div class="row"><span style="font-size:12px">${esc(f.brand_id)} / ${esc(f.location_id || 'all')} · ${esc(f.category)} · ${esc(f.issue)}</span><span class="badge badge-yellow">${esc(f.severity)}</span></div>`).join('')}
+      <div class="row"><span class="row-label">Strategies</span><span class="badge badge-blue">${strategies.length}</span></div>
+      ${strategies.slice(0, 4).map(s => `<div class="row"><span style="font-size:12px">${esc(s.brand_id)} · ${esc(s.period)} · ${jsonCell(JSON.parse(s.strategy_json).primary_objectives?.[0] || '')}</span><span class="badge badge-green">${esc(s.status)}</span></div>`).join('')}`;
+    const previews = run.previews || [];
+    const policies = run.policy_results || [];
+    previewsEl.innerHTML = previews.length ? previews.slice(0, 12).map(p => {
+      const policy = policies.find(x => x.item_id === p.id);
+      return `<div class="row"><span style="font-size:12px">${esc(p.brand_id)} / ${esc(p.location_id || 'all')} · ${esc(p.content_type)} · ${esc(p.title)}</span><span class="badge ${policy?.result === 'PASS' ? 'badge-green' : 'badge-yellow'}">${esc(policy?.result || 'policy pending')}</span></div>`;
+    }).join('') : '<div class="empty-state">No previews generated.</div>';
+    const scheduled = run.calendar || [];
+    calEl.innerHTML = scheduled.length ? `<table><thead><tr><th>When</th><th>Brand</th><th>Location</th><th>Title</th><th>Status</th></tr></thead><tbody>${scheduled.slice(0, 7).map(i => `<tr><td>${fmtDate(i.scheduled_publish_at)}</td><td>${esc(i.brand_id)}</td><td>${esc(i.location_id || 'all')}</td><td>${esc(i.title || '')}</td><td><span class="badge badge-green">${esc(i.status)}</span></td></tr>`).join('')}</tbody></table>` : '<div class="empty-state">No scheduled preview items.</div>';
+  } catch (e) {
+    statusEl.innerHTML = `<div class="error-msg">Couldn't load automation: ${esc(e.message)}</div>`;
+    analysisEl.innerHTML = '';
+    previewsEl.innerHTML = '';
+    calEl.innerHTML = '';
+  }
+}
+
+async function runPreviewAutomation() {
+  const statusEl = document.getElementById('automation-status');
+  statusEl.innerHTML = '<div class="skeleton"></div><div class="row-label">Running preview-only automation cycle...</div>';
+  try {
+    await api('/api/seo/automation/run-preview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    await loadAutomation();
+    await loadCalendarTab();
+  } catch (e) {
+    statusEl.innerHTML = `<div class="error-msg">Preview automation failed: ${esc(e.message)}</div>`;
+  }
+}
+
 // ── Evidence ─────────────────────────────────────────────────────────────
 
 async function loadEvidence() {
@@ -1340,7 +1549,16 @@ async function loadWriteFlags() {
   const body = document.getElementById('write-flags-body');
   if (!body) return;
   try {
-    const d = await api('/api/seo/write-flags');
+    let d;
+    try {
+      d = await api('/api/seo/write-flags');
+    } catch (e) {
+      if (!SEO_AUTH_TOKEN && String(e.message || '').includes('seo_bearer_auth_required')) {
+        d = await api('/api/seo-public/status');
+      } else {
+        throw e;
+      }
+    }
     const flags = d.flags || {};
     const rows = Object.values(flags).map(f => `
       <div class="row">
@@ -1420,6 +1638,7 @@ async function loadPolicies() {
 // ── Boot ─────────────────────────────────────────────────────────────────
 
 async function boot() {
+  updateAuthUi();
   await loadBrandSelector();
   await loadLocationSelector();
   await loadWriteFlags();

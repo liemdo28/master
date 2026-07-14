@@ -83,8 +83,8 @@ async function runSeoPublishPipeline(wo: WorkOrder, req: GStackRequest): Promise
   const raw = req.raw_request;
   const topicMatch = raw.match(/(?:cho|for|ve|về|topic|chu de|chủ đề)\s+(.{3,40}?)(?:\s*$|\s*[,.])/i);
   const topic = topicMatch ? topicMatch[1].trim() : 'sushi stockton';
-  const location: 'raw_stockton' | 'raw_modesto' = /modesto/i.test(raw) ? 'raw_modesto' : 'raw_stockton';
-  const city = location === 'raw_modesto' ? 'Modesto' : 'Stockton';
+  const location = 'raw_stockton';
+  const city = 'Stockton';
 
   // Reality Gate: this skill REQUIRES_APPROVAL — return approval request first
   const approvalRequired = classify({ intent: wo.intent.intent, skill_id: 'raw_seo_publish', action_description: `Publish SEO article about "${topic}" to rawsushibar.com` });

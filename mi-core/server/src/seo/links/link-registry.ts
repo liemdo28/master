@@ -43,8 +43,8 @@ export interface RegisterPageInput {
  *    "/menu*" -> menu, "/blog-*" or any path containing "blog-cms" -> blog,
  *    ordering/reservation platform links (Toast, OpenTable, DoorDash, etc.)
  *    or "/order*"/"/reserve*" paths -> money, "/" -> home.
- *  - Raw Sushi Bar (rawsushibar.com): "/stockton/" and "/modesto/" (its two
- *    physical locations) -> location, "/menu/*" -> menu,
+ *  - Raw Sushi Bar (rawsushibar.com): "/stockton/" (its physical location)
+ *    -> location, "/menu/*" -> menu,
  *    "/content/posts/*" -> blog.
  * Anything that doesn't match a known pattern falls back to 'other' rather
  * than guessing.
@@ -69,7 +69,7 @@ export function classifyPageType(url: string): PageType {
   if (/\/(order|ordering|reserve|reservation)s?(\/|$)/.test(pathname)) return 'money';
 
   if (/^\/locations\//.test(pathname)) return 'location';
-  if (/^\/(stockton|modesto)\/?/.test(pathname)) return 'location';
+  if (/^\/stockton\/?/.test(pathname)) return 'location';
 
   if (/^\/menu\/?/.test(pathname)) return 'menu';
 

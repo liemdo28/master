@@ -98,7 +98,7 @@ export async function runLocalAudit(brandId: string, locationId: string): Promis
     const completedAt = nowIso();
     const nap: NapConsistencyResult = { consistent: null, reason: 'location_not_found', brand_id: brandId, location_id: locationId, checked_at: completedAt };
     db.prepare(`UPDATE seo_audits SET status = 'completed', summary = ?, completed_at = ? WHERE id = ?`)
-      .run(JSON.stringify({ checks, issues_created: 0 }), completedAt, auditId);
+      .run(JSON.stringify({ location_id: locationId, checks, issues_created: 0 }), completedAt, auditId);
     return { audit_id: auditId, brand_id: brandId, location_id: locationId, started_at: startedAt, completed_at: completedAt, checks, issues_created: 0, nap };
   }
 
@@ -153,7 +153,7 @@ export async function runLocalAudit(brandId: string, locationId: string): Promis
 
   const completedAt = nowIso();
   db.prepare(`UPDATE seo_audits SET status = 'completed', summary = ?, completed_at = ? WHERE id = ?`)
-    .run(JSON.stringify({ checks, issues_created: issuesCreated, nap_consistent: nap.consistent }), completedAt, auditId);
+    .run(JSON.stringify({ location_id: locationId, checks, issues_created: issuesCreated, nap_consistent: nap.consistent }), completedAt, auditId);
 
   return { audit_id: auditId, brand_id: brandId, location_id: locationId, started_at: startedAt, completed_at: completedAt, checks, issues_created: issuesCreated, nap };
 }

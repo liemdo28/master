@@ -256,6 +256,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
   <a class="ni" data-sec="finance"><span class="ic">💰</span>Finance<span class="nb r" id="nav-finance">!</span></a>
   <div class="nl">System</div>
   <a class="ni" data-sec="connectors"><span class="ic">🔌</span>Connectors<span class="nb y" id="nav-conn">2</span></a>
+  <a class="ni" data-sec="seo"><span class="ic">📈</span>SEO Control Center<span class="nb g">READ</span></a>
   <a class="ni" data-sec="burnin"><span class="ic">📊</span>Burn-In</a>
 </nav>
 
@@ -297,6 +298,10 @@ tr:hover td{background:rgba(255,255,255,.018)}
   </div>
 
   <div class="g3">
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📈 SEO Control Center</div><a class="card-link" href="/seo-control-center.html">Open →</a></div>
+      <div class="card-body" id="home-seo"><div class="sk"></div><div class="sk w80"></div></div>
+    </div>
     <div class="card">
       <div class="card-hd"><div class="card-title">📅 Lịch hôm nay</div><a class="card-link" onclick="switchSection('calendar')">Tất cả →</a></div>
       <div class="card-body" id="home-cal"><div class="sk"></div><div class="sk w80"></div><div class="sk w60"></div></div>
@@ -554,13 +559,22 @@ tr:hover td{background:rgba(255,255,255,.018)}
   </div>
 </div>
 
+<!-- SEO CONTROL CENTER -->
+<div id="sec-seo" class="section">
+  <div class="sec-title">📈 SEO Control Center <span class="tag tg">READ_ONLY</span></div>
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Production Access</div><a class="card-link" href="/seo-control-center.html">Open dashboard →</a></div>
+    <div class="card-body" id="seo-body"><div class="sk h40"></div><div class="sk"></div><div class="sk w80"></div></div>
+  </div>
+</div>
+
 </main>
 </div>
 
 <script>
 // STATE
 const LD = {};   // loaded flags per section
-let _snap=null, _exec=null, _brain=null, _conn=null, _bi=null, _qb=null, _alerts=[];
+let _snap=null, _exec=null, _brain=null, _conn=null, _bi=null, _qb=null, _seo=null, _alerts=[];
 let _autoTimer=null;
 
 // CLOCK
@@ -592,6 +606,7 @@ function lazyLoad(s){
   if(s==='health')renderHealth();
   if(s==='finance')renderFinance();
   if(s==='connectors')renderConnectors();
+  if(s==='seo')renderSeo();
   if(s==='burnin')loadBurnIn();
 }
 
@@ -617,14 +632,15 @@ async function getBrain(){return _brain||(_brain=await api('/api/brain/status'))
 async function getConn(){if(_conn)return _conn;const r=await api('/api/visibility/connectors');_conn=r?.connectors?r:null;return _conn}
 async function getBi(){return _bi||(_bi=await api('/api/coo-v4/burnin'))}
 async function getQb(){return _qb||(_qb=await api('/api/visibility/quickbooks'))}
+async function getSeo(){return _seo||(_seo=await api('/api/seo-public/status'))}
 
 // REFRESH
 async function refreshAll(){
   const ico=document.getElementById('refresh-ico');
   ico.classList.add('spinning');
   Object.keys(LD).forEach(k=>delete LD[k]);
-  _snap=null;_exec=null;_brain=null;_conn=null;_bi=null;_qb=null;_alerts=[];
-  await Promise.all([getSnap(),getExec(),getBrain(),getConn(),getBi(),getQb()]);
+  _snap=null;_exec=null;_brain=null;_conn=null;_bi=null;_qb=null;_seo=null;_alerts=[];
+  await Promise.all([getSnap(),getExec(),getBrain(),getConn(),getBi(),getQb(),getSeo()]);
   await renderHome();
   const cur=document.querySelector('.ni.active');if(cur&&cur.dataset.sec!=='home')lazyLoad(cur.dataset.sec);
   document.getElementById('last-updated').textContent='Cập nhật: '+new Date().toLocaleTimeString('vi-VN');
@@ -669,7 +685,7 @@ function applyAlerts(alerts){
 
 // HOME
 async function renderHome(){
-  const[exec,snap,brain,conn,bi,qbRaw]=await Promise.all([getExec(),getSnap(),getBrain(),getConn(),getBi(),getQb()]);
+  const[exec,snap,brain,conn,bi,qbRaw,seo]=await Promise.all([getExec(),getSnap(),getBrain(),getConn(),getBi(),getQb(),getSeo()]);
   const qb=exec?.finance_qb?.data||qbRaw;
   const gmail=exec?.gmail?.data;
   const calendar=exec?.calendar?.data;
@@ -702,6 +718,7 @@ async function renderHome(){
       `<div style="margin-top:6px"><span class="tag ${stress==='LOW'?'tg':stress==='MEDIUM'?'ty':'tr'}">Stress: ${stress||'–'}</span></div>`;
   }
   renderQbMini(qb,'home-finance-qb');
+  renderSeoMini(seo,'home-seo');
   if(bi){
     document.getElementById('kpi-burnin').textContent=bi.burn_in_score??'–';
     document.getElementById('kpi-burnin-sub').textContent='Day '+(bi.days_elapsed||1)+'/7 · '+(bi.burn_in_status||'');
@@ -736,6 +753,37 @@ function renderWorkOrdersPreview(workOrders){
   const body=document.getElementById('home-workorders-body'); if(!body)return;
   const items=workOrders?.items||[];
   body.innerHTML=items.length?items.slice(0,5).map(wo=>`<div class="li"><div class="li-ic">📋</div><div class="li-b"><div class="li-t">${esc(wo.title||wo.id)}</div><div class="li-s">${esc(wo.priority||'P2')} · ${esc(wo.status||'open')} · ${esc(wo.project||'no project')}</div></div><span class="tag ${wo.priority==='P0'||wo.priority==='P1'?'tr':'ty'}">${esc(wo.priority||'P2')}</span></div>`).join(''):`<div class="empty"><div class="ei">✅</div><div class="et">Không có work order mở</div></div>`;
+}
+function shortSha(v){return v?String(v).slice(0,8):'unknown'}
+function renderSeoMini(seo,targetId){
+  const el=document.getElementById(targetId); if(!el)return;
+  if(!seo){el.innerHTML='<div class="empty"><div class="ei">📈</div><div class="et">SEO status unavailable</div></div>';return}
+  const flags=seo.flags||{};
+  const writesOff=Object.values(flags).every(v=>v?.enabled===false || v===false);
+  el.innerHTML=`<div class="abox ${writesOff?'ok':'warn'}">
+    <div class="abox-ico">${writesOff?'✅':'⚠️'}</div>
+    <div class="abox-bd"><div class="abox-title">SEO Control Center ${writesOff?'READ_ONLY':'check flags'}</div>
+    <div class="abox-text">Runtime: ${esc(shortSha(seo.runtime_sha))} · Bind: ${esc(seo.bind_host||'unknown')} · Auth: ${seo.auth_configured?'configured':'missing PIN hash'}</div>
+    <div class="abox-text">Trusted user mapping: ${seo.trusted_mapping_configured?'configured':'missing'} · Write API: ${esc(seo.live_write_status||'unknown')}</div>
+    <a class="abox-link ev" href="/seo-control-center.html">📈 Open SEO Control Center →</a></div></div>`;
+}
+async function renderSeo(){
+  const seo=await getSeo();
+  const el=document.getElementById('seo-body'); if(!el)return;
+  if(!seo){el.innerHTML='<div class="empty"><div class="ei">📈</div><div class="et">SEO status unavailable</div></div>';return}
+  const flags=seo.flags||{};
+  const flagRows=Object.entries(flags).map(([k,v])=>{
+    const enabled = v?.enabled===true || v===true;
+    return `<div class="li"><div class="li-ic">${enabled?'⚠️':'✅'}</div><div class="li-b"><div class="li-t">${esc(k)}</div><div class="li-s">${enabled?'enabled':'disabled'}</div></div><span class="tag ${enabled?'tr':'tg'}">${enabled?'ON':'OFF'}</span></div>`;
+  }).join('');
+  el.innerHTML=`<div class="abox ${Object.values(flags).every(v=>v?.enabled===false || v===false)?'ok':'warn'}">
+    <div class="abox-ico">📈</div>
+    <div class="abox-bd"><div class="abox-title">SEO dashboard is linked in Mi</div>
+    <div class="abox-text">Dashboard: ${esc(seo.dashboard_url||'/seo-control-center.html')}</div>
+    <div class="abox-text">Runtime SHA: ${esc(seo.runtime_sha||'unknown')} · Source: ${esc(seo.runtime_source||'unknown')} · Bind: ${esc(seo.bind_host||'unknown')}</div>
+    <div class="abox-text">Auth: ${seo.auth_configured?'configured':'missing PIN hash'} · Trusted mapping: ${seo.trusted_mapping_configured?'configured':'missing'}</div>
+    <a class="abox-link ev" href="/seo-control-center.html">📈 Open SEO Control Center →</a></div></div>
+    <div class="card" style="margin-top:12px"><div class="card-hd"><div class="card-title">Production Write Flags</div><span class="tag tg">READ_ONLY</span></div><div class="card-body">${flagRows||'<div class="empty"><div class="et">No flags reported</div></div>'}</div></div>`;
 }
 function bar(lbl,frac,val,col){return`<div class="hbar"><div class="hbar-lbl">${lbl}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(frac*100,100).toFixed(0)}%;background:${col}"></div></div><div class="hbar-val">${val}</div></div>`}
 function fmtDate(v){try{return v?new Date(v).toLocaleString('vi-VN'):'none'}catch{return v||'none'}}

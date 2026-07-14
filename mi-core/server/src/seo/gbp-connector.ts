@@ -20,32 +20,64 @@ import * as fs from 'fs';
 import * as path from 'path';
 import Database from 'better-sqlite3';
 import { getAuthedClient, loadTokens } from '../visibility/connectors/google/google-auth';
+import { getAllLocations, LocationRecord } from './brand-config';
 
 // ── Config ───────────────────────────────────────────────────────────────────
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'D:/Project/Master/.local-agent-global';
 const GBP_SCOPE = 'https://www.googleapis.com/auth/business.manage';
 const PERFORMANCE_API = 'https://businessprofileperformance.googleapis.com/v1';
 
-// Hardcoded location IDs from business.google.com (store codes)
-// Bypasses mybusinessaccountmanagement.googleapis.com (quota=0, needs apply)
-const HARDCODED_LOCATIONS = [
-  {
-    location_id: 'locations/13607740634521426033',
-    account_id:  '',
-    location_name: 'Bakudan Ramen',
-    address: '17619 La Cantera Pkwy 208, San Antonio, TX 78257',
-    website_uri: 'https://bakudanramen.com',
-    phone: '',
-  },
-  {
-    location_id: 'locations/2490512',
-    account_id:  '',
-    location_name: 'Raw Sushi Bistro',
-    address: '10742 Trinity Pkwy Suite D, Stockton, CA 95219',
-    website_uri: 'https://rawstockton.com',
-    phone: '',
-  },
-];
+type ConfiguredGbpLocation = {
+  location_id: string;
+  account_id: string;
+  brand_id: string;
+  seo_location_id: string;
+  location_name: string;
+  address: string;
+  website_uri: string;
+  phone: string;
+};
+
+const GBP_LOCATION_ENV_BY_SEO_ID: Record<string, string> = {
+  'bakudan:bandera': 'GOOGLE_LOCATION_ID_BAKUDAN_BANDERA',
+  'bakudan:stone-oak': 'GOOGLE_LOCATION_ID_BAKUDAN_STONE_OAK',
+  'bakudan:the-rim': 'GOOGLE_LOCATION_ID_BAKUDAN_RIM',
+  'raw_sushi:stockton': 'GOOGLE_LOCATION_ID_RAW_SUSHI_STOCKTON',
+};
+
+function cleanConfigValue(value?: string): string {
+  if (!value || value === 'needs_config') return '';
+  return value;
+}
+
+function asLocationResource(raw?: string): string {
+  if (!raw) return '';
+  return raw.startsWith('locations/') ? raw : `locations/${raw}`;
+}
+
+function configuredLocations(): ConfiguredGbpLocation[] {
+  const accountId = process.env.GOOGLE_ACCOUNT_ID || '';
+
+  return getAllLocations()
+    .filter((loc: LocationRecord) => loc.status === 'active')
+    .map((loc: LocationRecord) => {
+      const envName = GBP_LOCATION_ENV_BY_SEO_ID[`${loc.brand_id}:${loc.location_id}`];
+      const locationResource = asLocationResource(envName ? process.env[envName] : '');
+      if (!locationResource) return null;
+
+      return {
+        location_id: locationResource,
+        account_id: accountId,
+        brand_id: loc.brand_id,
+        seo_location_id: loc.location_id,
+        location_name: loc.name,
+        address: cleanConfigValue(loc.address),
+        website_uri: cleanConfigValue(loc.website_url),
+        phone: cleanConfigValue(loc.phone),
+      };
+    })
+    .filter((loc): loc is ConfiguredGbpLocation => !!loc);
+}
 
 const GBP_METRICS = [
   'CALL_CLICKS',
@@ -194,8 +226,9 @@ export async function listLocations(): Promise<any> {
     };
   }
 
-  // Use hardcoded locations — mybusinessaccountmanagement API has quota=0
-  const allLocations = [...HARDCODED_LOCATIONS];
+  // Use explicit env IDs mapped to canonical SEO locations. The account
+  // management API has quota=0 in this environment, so discovery is not safe.
+  const allLocations = configuredLocations();
 
   if (snapshotDb && allLocations.length) {
     const upsert = snapshotDb.prepare(`
@@ -213,7 +246,7 @@ export async function listLocations(): Promise<any> {
   return {
     locations: allLocations,
     count: allLocations.length,
-    source: 'hardcoded',
+    source: 'env_configured',
   };
 }
 
@@ -279,7 +312,7 @@ export async function storeDailySnapshot(): Promise<any> {
     };
   }
 
-  const locations = [...HARDCODED_LOCATIONS];
+  const locations = configuredLocations();
   if (!locations.length) {
     return { status: 'NO_LOCATIONS', detail: 'No GBP locations configured' };
   }

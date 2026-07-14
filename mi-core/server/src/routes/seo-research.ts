@@ -5,7 +5,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { getBrandById } from '../seo/brand-config';
+import { getActiveBrands, getBrandById } from '../seo/brand-config';
 import { submitSeoAction } from '../seo/seo-approval-bridge';
 import { recordEvidence } from '../seo/seo-evidence';
 import { seoId } from '../seo/seo-db';
@@ -31,11 +31,13 @@ export const seoResearchRouter = Router();
 
 // GET /api/seo/keywords?brand_id=&status=
 seoResearchRouter.get('/keywords', (req: Request, res: Response) => {
-  const brandId = req.query.brand_id as string | undefined;
-  if (!brandId) return res.status(400).json({ ok: false, error: 'brand_id is required' });
+  const brandId = (req.query.brand_id as string | undefined) || undefined;
   const status = req.query.status as string | undefined;
-  const keywords = listKeywords(brandId, { status });
-  res.json({ ok: true, brand_id: brandId, total: keywords.length, keywords });
+  if (brandId && !getBrandById(brandId)) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+  const brandIds = brandId ? [brandId] : getActiveBrands().map(b => b.brand_id);
+  const keywords = brandIds.flatMap(id => listKeywords(id, { status }));
+  keywords.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+  res.json({ ok: true, brand_id: brandId || null, total: keywords.length, keywords });
 });
 
 // POST /api/seo/keywords/discover  { brand_id, seed_terms?: string[] }

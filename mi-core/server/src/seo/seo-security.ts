@@ -188,6 +188,8 @@ export const ROUTE_POLICIES: SeoRoutePolicy[] = [
   { methods: ['POST'], match: /^\/local\/([^/]+)\/gbp-sync$/, routeKey: '/local/:locationId/gbp-sync', permission: 'gbp_core_data_approval', highRisk: true, approvalCategory: 'gbp_core_info_change', approvalAction: 'sync_gbp_snapshot', resourceType: 'local_location' },
   { methods: ['POST'], match: /^\/internal-links\/analyze$/, routeKey: '/internal-links/analyze', permission: 'run_audit' },
   { methods: ['POST'], match: /^\/reports\/generate$/, routeKey: '/reports/generate', permission: 'run_audit' },
+  { methods: ['POST'], match: /^\/automation\/run-preview$/, routeKey: '/automation/run-preview', permission: 'manage_schedule' },
+  { methods: ['POST'], match: /^\/ai-providers\/probe$/, routeKey: '/ai-providers/probe', permission: 'manage_connectors' },
   { methods: ['POST'], match: /^\/agents\/register$/, routeKey: '/agents/register', permission: 'manage_connectors' },
   { methods: ['POST'], match: /^\/agents\/([^/]+)\/health$/, routeKey: '/agents/:id/health', permission: 'manage_connectors' },
   { methods: ['POST'], match: /^\/agents\/([^/]+)\/status$/, routeKey: '/agents/:id/status', permission: 'manage_connectors' },

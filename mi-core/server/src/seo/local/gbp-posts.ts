@@ -262,19 +262,17 @@ export interface GbpSyncResult {
   status: 'NOT_CONNECTED' | 'NO_MATCH' | 'SNAPSHOT_STORED' | 'ERROR';
   detail: string;
   snapshot_id?: string;
-  /** Honest per-capability status — see gbp-connector.ts's HARDCODED_LOCATIONS note. */
+  /** Honest per-capability status — account discovery/metrics may still be quota-limited. */
   capability: 'MOCK' | 'CONFIGURED' | 'CONNECTED' | 'LIVE_VERIFIED';
 }
 
 /**
  * Pulls current GBP data via the existing gbp-connector.ts and writes a row
- * to seo_gbp_snapshots. IMPORTANT honesty note: gbp-connector.ts's
- * listLocations() currently returns a hardcoded fallback array
- * (HARDCODED_LOCATIONS) rather than a live Business Information API call —
- * the file documents this as a workaround for
- * mybusinessaccountmanagement.googleapis.com returning quota=0. This function
- * therefore reports 'CONNECTED' (real token + business.manage scope
- * verified) rather than 'LIVE_VERIFIED' for the NAP fields it stores.
+ * to seo_gbp_snapshots. IMPORTANT honesty note: gbp-connector.ts's location
+ * list is mapped from canonical SEO config + explicit GBP location IDs because
+ * Business Profile account/location discovery is quota-limited in this
+ * environment. This function therefore reports 'CONNECTED' rather than
+ * 'LIVE_VERIFIED' for the NAP fields it stores.
  */
 export async function syncGbpSnapshot(brandId: string, locationId: string): Promise<GbpSyncResult> {
   const location = getLocationById(brandId, locationId);
@@ -299,7 +297,18 @@ export async function syncGbpSnapshot(brandId: string, locationId: string): Prom
     };
   }
 
-  let locResult: { error?: string; locations?: Array<{ location_id: string; location_name: string; address: string; website_uri: string; phone: string }> };
+  let locResult: {
+    error?: string;
+    locations?: Array<{
+      location_id: string;
+      brand_id?: string;
+      seo_location_id?: string;
+      location_name: string;
+      address: string;
+      website_uri: string;
+      phone: string;
+    }>;
+  };
   try {
     locResult = await listLocations();
   } catch (e) {
@@ -310,11 +319,16 @@ export async function syncGbpSnapshot(brandId: string, locationId: string): Prom
   }
 
   const candidates = locResult.locations || [];
+  const exactMatch = candidates.find(l =>
+    l.brand_id === brandId &&
+    l.seo_location_id === locationId
+  );
   const firstWord = (location.name || '').toLowerCase().split(' ')[0];
-  const match = candidates.find(l =>
+  const legacyNameMatch = candidates.find(l =>
     (location.gbp_place_id && l.location_id === location.gbp_place_id) ||
     (firstWord && l.location_name?.toLowerCase().includes(firstWord))
-  ) || candidates[0];
+  );
+  const match = exactMatch || legacyNameMatch;
 
   if (!match) {
     return { status: 'NO_MATCH', detail: `No GBP location returned by gbp-connector.listLocations() to match ${locationId}`, capability: 'CONNECTED' };
@@ -326,7 +340,7 @@ export async function syncGbpSnapshot(brandId: string, locationId: string): Prom
     address: match.address,
     phone: match.phone,
     website_uri: match.website_uri,
-    source: 'gbp_connector.listLocations (hardcoded fallback in HARDCODED_LOCATIONS — mybusinessaccountmanagement quota=0, see gbp-connector.ts header comment)',
+    source: 'gbp_connector.listLocations (env_configured from canonical SEO location config + explicit GBP location IDs; Business Profile discovery/metrics may be quota-limited)',
     synced_at: nowIso(),
   };
 
@@ -347,7 +361,7 @@ export async function syncGbpSnapshot(brandId: string, locationId: string): Prom
 
   return {
     status: 'SNAPSHOT_STORED',
-    detail: 'Stored GBP snapshot from gbp-connector.ts (OAuth token + business.manage scope verified real; underlying address/phone/website data is a static hardcoded fallback, not a live Business Information API response — see capability field)',
+    detail: 'Stored GBP snapshot from gbp-connector.ts (OAuth token + business.manage scope verified real; location identity comes from canonical SEO config plus explicit GBP location IDs; Business Information discovery/metrics remain quota-limited — see capability field)',
     snapshot_id: id,
     capability: 'CONNECTED',
   };

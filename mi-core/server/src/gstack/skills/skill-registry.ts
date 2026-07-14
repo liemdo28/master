@@ -451,9 +451,9 @@ async function executeSkill(id: string, params: Record<string, string> = {}, wor
         const { publishArticle } = require('../connectors/raw-website-connector');
         const { captureEvidence } = require('../evidence/evidence-generator');
 
-        const title = params.title || `${params.topic || 'Sushi'} — Raw Sushi Bar ${params.location === 'raw_modesto' ? 'Modesto' : 'Stockton'}`;
+        const title = params.title || `${params.topic || 'Sushi'} — Raw Sushi Bar Stockton`;
         const keyword = params.keyword || params.topic || 'sushi stockton';
-        const location = (params.location as 'raw_stockton' | 'raw_modesto') || 'raw_stockton';
+        const location = 'raw_stockton';
 
         const slugVal = title.toLowerCase()
           .replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 60);
@@ -483,7 +483,7 @@ async function executeSkill(id: string, params: Record<string, string> = {}, wor
           cta: 'Order now',
           cta_url: 'https://rawsushibar.com/order.html',
           post_type: 'conversion_order',
-          target_audience: 'Sushi lovers in Stockton and Modesto, CA',
+          target_audience: 'Sushi lovers in Stockton, CA',
           location,
         });
 

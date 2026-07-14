@@ -111,14 +111,19 @@ async function auditProviderCall(params: {
   }
 }
 
-async function callOllamaText(messages: ChatMessage[], model: string, timeoutMs: number): Promise<ProviderTextResult> {
+async function callOllamaText(messages: ChatMessage[], model: string, timeoutMs: number, jsonMode = false): Promise<ProviderTextResult> {
   if (isCbOpen()) throw new Error('Ollama circuit breaker OPEN — skipping to fallback');
   chatMetrics.ollamaCall();
   try {
     const res = await fetch(`${OLLAMA_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, stream: false }),
+      body: JSON.stringify({
+        model,
+        messages,
+        stream: false,
+        ...(jsonMode ? { format: 'json' } : {}),
+      }),
       signal: AbortSignal.timeout(timeoutMs),
     });
     if (!res.ok) { recordCbFailure(); throw new Error(`Ollama text error: ${res.status}`); }
@@ -237,12 +242,12 @@ async function tryProviders<T>(
 }
 
 export const providerRouter = {
-  generateText(messages: ChatMessage[], options: { providers?: ProviderName[]; model?: string; timeoutMs?: number } = {}) {
+  generateText(messages: ChatMessage[], options: { providers?: ProviderName[]; model?: string; timeoutMs?: number; jsonMode?: boolean } = {}) {
     const providers = options.providers || envList('MI_TEXT_PROVIDER_ORDER', DEFAULTS.generateText);
     const timeoutMs = options.timeoutMs || 60000;
     return tryProviders('generateText', providers, async (provider) => {
       const model = options.model || textModel(provider);
-      if (provider === 'ollama') return callOllamaText(messages, model, timeoutMs);
+      if (provider === 'ollama') return callOllamaText(messages, model, timeoutMs, options.jsonMode === true);
       if (provider === 'anthropic') return callAnthropicText(messages, model, timeoutMs);
       return callOpenAiCompatibleText(provider, messages, model, timeoutMs);
     });
