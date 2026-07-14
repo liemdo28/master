@@ -127,17 +127,16 @@ seoLocalRouter.post('/local/:locationId/gbp-sync', async (req: Request, res: Res
 
 // GET /api/seo/gbp/posts?brand_id=&location_id=
 seoLocalRouter.get('/gbp/posts', (req: Request, res: Response) => {
-  const brandId = req.query.brand_id as string | undefined;
-  if (!brandId) return res.status(400).json({ ok: false, error: 'brand_id required' });
+  const brandId = (req.query.brand_id as string | undefined) || undefined;
   const locationId = req.query.location_id as string | undefined;
+  const brandIds = brandId ? [brandId] : getActiveBrands().map(b => b.brand_id);
 
   const db = getSeoDb();
-  const rows = locationId
-    ? db.prepare(`SELECT * FROM seo_actions WHERE brand_id = ? AND category = 'gbp_post_publish' AND target = ? ORDER BY created_at DESC`).all(brandId, locationId)
-    : db.prepare(`SELECT * FROM seo_actions WHERE brand_id = ? AND category = 'gbp_post_publish' ORDER BY created_at DESC`).all(brandId);
-  const previewRows = locationId
-    ? db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND location_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(brandId, locationId)
-    : db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(brandId);
+  const rows = brandIds.flatMap(id =>
+    db.prepare(`SELECT * FROM seo_actions WHERE brand_id = ? AND category = 'gbp_post_publish' ORDER BY created_at DESC`).all(id));
+  const previewRows = brandIds.flatMap(id => locationId
+    ? db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND location_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(id, locationId)
+    : db.prepare(`SELECT * FROM seo_content_previews WHERE brand_id = ? AND content_type = 'gbp_post' ORDER BY created_at DESC`).all(id));
   const previews = (previewRows as any[]).map(p => {
     let payload: any = {};
     try { payload = JSON.parse(p.payload_json || '{}'); } catch {}
@@ -165,7 +164,7 @@ seoLocalRouter.get('/gbp/posts', (req: Request, res: Response) => {
     };
   });
 
-  res.json({ ok: true, brand_id: brandId, location_id: locationId ?? null, total: previews.length + rows.length, posts: [...previews, ...(rows as any[])] });
+  res.json({ ok: true, brand_id: brandId || null, location_id: locationId ?? null, total: previews.length + rows.length, posts: [...previews, ...(rows as any[])] });
 });
 
 // POST /api/seo/gbp/posts/generate  body: { brand_id, location_id, topic }

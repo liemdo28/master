@@ -17,7 +17,7 @@
 
 import { Router, Request, Response } from 'express';
 import { getSeoDb, nowIso, seoId } from '../seo/seo-db';
-import { getBrandById } from '../seo/brand-config';
+import { getActiveBrands, getBrandById } from '../seo/brand-config';
 import { submitSeoAction } from '../seo/seo-approval-bridge';
 import { recordEvidence } from '../seo/seo-evidence';
 import { insertKeyword } from '../seo/keywords/keyword-store';
@@ -133,10 +133,11 @@ function serializeItem(row: ContentItemRow, preview: PublishSnapshotRow | undefi
 // ── GET /api/seo/calendar?brand_id=&location_id=&from=&to=&view= ─────────
 
 seoCalendarRouter.get('/calendar', (req: Request, res: Response) => {
-  const brandId = req.query.brand_id as string | undefined;
-  if (!brandId) return res.status(400).json({ ok: false, error: 'brand_id is required' });
-  const brand = getBrandById(brandId);
-  if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+  const brandId = (req.query.brand_id as string | undefined) || undefined;
+  if (brandId) {
+    const brand = getBrandById(brandId);
+    if (!brand) return res.status(404).json({ ok: false, error: 'brand_not_found' });
+  }
 
   const locationId = req.query.location_id as string | undefined;
   const from = req.query.from as string | undefined;
@@ -145,8 +146,29 @@ seoCalendarRouter.get('/calendar', (req: Request, res: Response) => {
 
   try {
     const db = getSeoDb();
-    const clauses = ['ci.brand_id = ?', 'ci.deleted_at IS NULL'];
-    const params: unknown[] = [brandId];
+    const clauses = ['ci.deleted_at IS NULL'];
+    const params: unknown[] = [];
+    if (brandId) {
+      clauses.push('ci.brand_id = ?');
+      params.push(brandId);
+    } else {
+      const activeBrandIds = getActiveBrands().map(b => b.brand_id);
+      if (activeBrandIds.length === 0) {
+        return res.json({
+          ok: true,
+          brand_id: null,
+          location_id: locationId || null,
+          from: from || null,
+          to: to || null,
+          view,
+          total: 0,
+          scheduled: [],
+          unscheduled: [],
+        });
+      }
+      clauses.push(`ci.brand_id IN (${activeBrandIds.map(() => '?').join(',')})`);
+      params.push(...activeBrandIds);
+    }
     if (locationId) { clauses.push('ci.location_id = ?'); params.push(locationId); }
 
     const rows = db.prepare(`
@@ -178,7 +200,7 @@ seoCalendarRouter.get('/calendar', (req: Request, res: Response) => {
 
     res.json({
       ok: true,
-      brand_id: brandId,
+      brand_id: brandId || null,
       location_id: locationId || null,
       from: from || null,
       to: to || null,

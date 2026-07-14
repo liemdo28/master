@@ -770,20 +770,14 @@ async function loadCalendarTab() {
   const unschedEl = document.getElementById('cal-unscheduled');
   const toolbar = document.getElementById('cal-toolbar');
 
-  if (!currentBrand) {
-    toolbar.style.display = 'none';
-    body.innerHTML = brandScopedNotice('the content calendar');
-    unschedEl.innerHTML = '';
-    return;
-  }
-
   toolbar.style.display = calView === 'list' ? 'none' : 'flex';
   document.getElementById('cal-range-label').textContent = calRangeLabel();
   body.innerHTML = '<div class="skeleton"></div>';
 
   try {
     const { from, to } = calRangeBounds();
-    const params = new URLSearchParams({ brand_id: currentBrand, view: calView });
+    const params = new URLSearchParams({ view: calView });
+    if (currentBrand) params.set('brand_id', currentBrand);
     if (currentLocation) params.set('location_id', currentLocation);
     if (from) params.set('from', from);
     if (to) params.set('to', to);
@@ -1100,10 +1094,10 @@ function previewCalendarItem(id) {
 
 async function loadKeywords() {
   const body = document.getElementById('kw-body');
-  if (!currentBrand) { body.innerHTML = brandScopedNotice('search terms'); return; }
   body.innerHTML = '<div class="skeleton"></div>';
   try {
-    const d = await api(`/api/seo/keywords?brand_id=${encodeURIComponent(currentBrand)}`);
+    const path = currentBrand ? `/api/seo/keywords?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/keywords';
+    const d = await api(path);
     const kws = d.keywords || [];
     if (!kws.length) { body.innerHTML = '<div class="empty-state">No keywords yet for this brand — click "Discover Keywords" to start.</div>'; return; }
     body.innerHTML = `<table>
@@ -1344,10 +1338,9 @@ function loadGbpTab() { loadGbpPosts(); }
 
 async function loadGbpPosts() {
   const body = document.getElementById('gbp-posts-body');
-  if (!currentBrand) { body.innerHTML = brandScopedNotice('GBP posts'); return; }
   body.innerHTML = '<div class="skeleton"></div>';
   try {
-    const d = await api(`/api/seo/gbp/posts?brand_id=${encodeURIComponent(currentBrand)}`);
+    const d = await api(currentBrand ? `/api/seo/gbp/posts?brand_id=${encodeURIComponent(currentBrand)}` : '/api/seo/gbp/posts');
     const posts = d.posts || [];
     if (!posts.length) { body.innerHTML = '<div class="empty-state">No GBP posts yet — generate a draft above.</div>'; return; }
     body.innerHTML = `<table>
