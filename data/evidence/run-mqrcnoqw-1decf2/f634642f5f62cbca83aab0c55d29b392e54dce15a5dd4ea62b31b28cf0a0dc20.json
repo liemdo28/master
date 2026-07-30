@@ -1,0 +1,35 @@
+{
+  "primary_intent": {
+    "intent": "technology_concern",
+    "label_vi": "Lo ngại công nghệ",
+    "confidence": 0.7,
+    "evidence_keywords": [
+      "bug",
+      "bug"
+    ],
+    "suggested_investigation": [
+      "Check server health",
+      "Review recent deployments",
+      "Check error rates",
+      "Assess technical debt"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "general_status_check",
+      "label_vi": "Kiểm tra tổng quát",
+      "confidence": 0.5,
+      "evidence_keywords": [
+        "ổn"
+      ],
+      "suggested_investigation": [
+        "Run health check",
+        "Review active priorities",
+        "Check pending actions",
+        "Summarize current state"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

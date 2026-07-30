@@ -1,0 +1,487 @@
+name: SEC-WEB-CONTAIN-001 - One-File Emergency Deploy (.htaccess only)
+
+# CHANGE-ID: SEC-WEB-CONTAIN-001-DEPLOY
+# STATUS: PREPARED, NOT YET APPROVED FOR EXECUTION
+#
+# This workflow uploads exactly ONE file (.htaccess) to Production via
+# scp + verify + atomic rename. It deliberately does NOT use deploy.yml's
+# repository-wide rsync (which uses --delete against a directory containing
+# runtime-generated logs and .env backup files - confirmed unsafe for a
+# one-file emergency change by SEC-WEB-CONTAIN-001-DRYRUN's own dry-run
+# result: 6 files would be deleted by that mechanism).
+#
+# This workflow contains NO:
+#   - repository-wide rsync
+#   - --delete anywhere
+#   - reference to/invocation of deploy.yml
+#   - migration command
+#   - opcache clear
+#   - database command
+#   - cron/job trigger
+#   - notification send
+#   - any endpoint probing beyond the fixed allowed/blocked lists in the
+#     post-deploy check step (no following redirects on blocked routes, no
+#     response bodies read/printed)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Must be exactly: SEC-WEB-CONTAIN-001-DEPLOY"
+        required: true
+        type: string
+
+concurrency:
+  group: sec-web-contain-001-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy-single-file:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      EXPECTED_HEAD_SHA: "13ef3ddd80c2cf315991090521471df42c2b150d"
+      EXPECTED_BASE_SHA: "fd5bdf707871e73b667cde9fd267553a597a5b72"
+      EXPECTED_CANDIDATE_HASH: "9d7735b899bb5b9a6300fbe0fdded434a1e8994b3c8b8361d471d54d6982bc99"
+      PROD_URL: "https://dashboard.bakudanramen.com"
+    steps:
+      - name: Validate exact confirmation input (fail closed)
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirmation }}" != "SEC-WEB-CONTAIN-001-DEPLOY" ]; then
+            echo "::error::confirmation must be exactly 'SEC-WEB-CONTAIN-001-DEPLOY'"
+            exit 1
+          fi
+          echo "Input validation: PASS"
+
+      - name: Checkout this workflow's own source (self-assertion target)
+        uses: actions/checkout@v4
+        with:
+          path: _self
+
+      - name: Static safety assertions on this workflow file
+        run: |
+          set -euo pipefail
+          F="_self/.github/workflows/deploy-sec-web-contain-001.yml"
+
+          # Build a scan target that excludes:
+          #  (a) full-line comments (both the top-of-file YAML header, which
+          #      must legitimately document these forbidden terms by name,
+          #      and inline shell comments) - via `grep -v '^\s*#'`.
+          #  (b) this very step's own run block, which must legitimately
+          #      contain these keywords as pattern text, not as usage -
+          #      via the awk skip-block below.
+          # Without this, a blanket text search would self-match its own
+          # documentation/definition lines - a bug already hit once in the
+          # companion dry-run workflow and deliberately not repeated here.
+          SCAN=$(awk '
+            /- name: Static safety assertions/ { skip=1 }
+            skip && /^      - name:/ && !/Static safety assertions/ { skip=0 }
+            !skip { print }
+          ' "$F" | grep -v '^\s*#' || true)
+
+          if echo "$SCAN" | grep -q -- '--delete'; then
+            echo "::error::--delete found in an actual step - forbidden for a one-file deploy"; exit 1
+          fi
+          if echo "$SCAN" | grep -qE '(uses:\s*\S*deploy\.yml|actions/workflows/deploy\.yml/dispatches|gh workflow run[^\n]*deploy)'; then
+            echo "::error::This file contains an actual deploy.yml invocation path - forbidden"; exit 1
+          fi
+          # No repo-wide rsync: any "rsync" invocation must have an explicit
+          # single source file argument, never a bare "./" or directory source.
+          if echo "$SCAN" | grep -qE '^\s*rsync .*(\s\./\s|\s\./$|\s\.\s)'; then
+            echo "::error::A directory-source rsync invocation was found - forbidden"; exit 1
+          fi
+          # Forbid actual execution of migrate.php/cron.php via SSH+php (not
+          # the legitimate bare-GET status-code checks required by Part 11,
+          # which never invoke `php` and only read an HTTP status code).
+          if echo "$SCAN" | grep -qiE 'php[^|]*\b(cron|migrate)\.php'; then
+            echo "::error::A direct PHP execution of cron.php/migrate.php was found - forbidden"; exit 1
+          fi
+          # Forbid any non-GET HTTP verb or payload against any endpoint
+          # (every check in this file must be a bare status-code GET).
+          if echo "$SCAN" | grep -qE 'curl[^|]*(-X[[:space:]]*POST|-X[[:space:]]*PUT|-X[[:space:]]*DELETE|[[:space:]]-d[[:space:]]|--data)'; then
+            echo "::error::A non-GET/payload-bearing curl invocation was found - forbidden"; exit 1
+          fi
+          if echo "$SCAN" | grep -qiE '(opcache_reset|opcache-clear|cli_run_migration|smoke-asana|cli_upsert_finance_credentials|bill_audit)'; then
+            echo "::error::A forbidden operational command reference was found"; exit 1
+          fi
+          echo "Static safety assertions: PASS (no --delete, no deploy.yml invocation, no directory-source rsync, no PHP execution of migrate.php/cron.php, no non-GET HTTP calls, no migration/opcache/db-credential/bill-audit reference)"
+
+      - name: Checkout hotfix branch
+        uses: actions/checkout@v4
+        with:
+          ref: hotfix/sec-web-contain-001-diagnostic
+          fetch-depth: 0
+
+      - name: Verify exact HEAD SHA
+        run: |
+          set -euo pipefail
+          HEAD_SHA=$(git rev-parse HEAD)
+          echo "Checked branch SHA: $HEAD_SHA"
+          if [ "$HEAD_SHA" != "$EXPECTED_HEAD_SHA" ]; then
+            echo "::error::HEAD SHA does not match the CEO-approved candidate ($EXPECTED_HEAD_SHA) - aborting. The branch pointer may have moved since approval."
+            exit 1
+          fi
+          echo "HEAD SHA check: PASS"
+
+      - name: Verify base ancestor relationship
+        run: |
+          set -euo pipefail
+          if ! git merge-base --is-ancestor "$EXPECTED_BASE_SHA" HEAD; then
+            echo "::error::expected base SHA is not an ancestor of HEAD"
+            exit 1
+          fi
+          echo "Base ancestor check: PASS"
+
+      - name: Diff vs base - must be exactly .htaccess (FAIL BEFORE SSH)
+        run: |
+          set -euo pipefail
+          CHANGED="$(git diff --name-only "$EXPECTED_BASE_SHA"...HEAD || true)"
+          echo "Changed files versus base:"
+          echo "$CHANGED"
+          COUNT="$(printf '%s\n' "$CHANGED" | grep -c . || true)"
+          if [ "$COUNT" != "1" ] || [ "$CHANGED" != ".htaccess" ]; then
+            echo "::error::Changed file set is not exactly '.htaccess' - FAIL BEFORE SSH"
+            exit 1
+          fi
+          echo "Diff scope check: PASS (exactly .htaccess)"
+
+      - name: Verify candidate hash matches the CEO-approved hash
+        id: hash
+        run: |
+          set -euo pipefail
+          HASH=$(sha256sum .htaccess | awk '{print $1}')
+          echo "candidate_hash=$HASH" >> "$GITHUB_OUTPUT"
+          echo "Candidate .htaccess hash: $HASH"
+          if [ "$HASH" != "$EXPECTED_CANDIDATE_HASH" ]; then
+            echo "::error::Candidate hash does not match the approved hash ($EXPECTED_CANDIDATE_HASH) - the file changed since dry-run validation. Aborting."
+            exit 1
+          fi
+          echo "Candidate hash check: PASS"
+
+      - name: Install temporary SSH key (restrictive permissions)
+        env:
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DH_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+          chmod 600 ~/.ssh/known_hosts
+          echo "SSH key installed at restrictive permissions (600). Not printed."
+
+      - name: Remote path guard (Production identity, read-only)
+        id: identity
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          REMOTE_HOME=$($SSH "${DH_USER}@${DH_HOST}" 'echo $HOME')
+
+          FAIL=0
+          RESULT_LINES=()
+
+          [ "$DH_PATH" != "/" ] && RESULT_LINES+=("Target path is not /: PASS") || { RESULT_LINES+=("Target path is /: FAIL"); FAIL=1; }
+          [ "$DH_PATH" != "$REMOTE_HOME" ] && RESULT_LINES+=("Target path is not account home root: PASS") || { RESULT_LINES+=("Target path is account home root: FAIL"); FAIL=1; }
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -d '${DH_PATH}'"; then
+            RESULT_LINES+=("Target path exists as a directory: PASS")
+          else
+            RESULT_LINES+=("Target path exists as a directory: FAIL"); FAIL=1
+          fi
+
+          NONEMPTY_COUNT=$($SSH "${DH_USER}@${DH_HOST}" "ls -A '${DH_PATH}' 2>/dev/null | wc -l" || echo 0)
+          if [ "${NONEMPTY_COUNT:-0}" -gt 0 ]; then
+            RESULT_LINES+=("Target path is non-empty: PASS")
+          else
+            RESULT_LINES+=("Target path is non-empty: FAIL"); FAIL=1
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/index.php'"; then
+            RESULT_LINES+=("App marker index.php present: PASS")
+          else
+            RESULT_LINES+=("App marker index.php present: FAIL"); FAIL=1
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/.env'"; then
+            RESULT_LINES+=(".env marker present (existence only, not read): PASS")
+          else
+            RESULT_LINES+=(".env marker present: FAIL"); FAIL=1
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/.htaccess'"; then
+            RESULT_LINES+=("Existing .htaccess present: PASS")
+          else
+            RESULT_LINES+=("Existing .htaccess present: FAIL"); FAIL=1
+          fi
+
+          printf '%s\n' "${RESULT_LINES[@]}" | tee /tmp/identity_check.txt
+
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::Production path identity check FAILED - aborting before any file operation"
+            echo "identity_status=FAIL" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "identity_status=PASS" >> "$GITHUB_OUTPUT"
+
+      - name: Backup remote .htaccess (outside document root, restrictive permissions)
+        id: backup
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          TS=$(date -u +%Y%m%dT%H%M%SZ)
+          ORIG_PERM=$($SSH "${DH_USER}@${DH_HOST}" "stat -c '%a' '${DH_PATH}/.htaccess'")
+          ORIG_HASH=$($SSH "${DH_USER}@${DH_HOST}" "sha256sum '${DH_PATH}/.htaccess'" | awk '{print $1}')
+
+          $SSH "${DH_USER}@${DH_HOST}" "mkdir -p '${DH_PATH}/../htaccess-backups' && cp '${DH_PATH}/.htaccess' '${DH_PATH}/../htaccess-backups/htaccess.${TS}.bak' && chmod 600 '${DH_PATH}/../htaccess-backups/htaccess.${TS}.bak'"
+          BACKUP_HASH=$($SSH "${DH_USER}@${DH_HOST}" "sha256sum '${DH_PATH}/../htaccess-backups/htaccess.${TS}.bak'" | awk '{print $1}')
+
+          if [ "$BACKUP_HASH" != "$ORIG_HASH" ]; then
+            echo "::error::Backup hash does not match live file hash immediately after backup - aborting"
+            exit 1
+          fi
+
+          echo "backup_ts=$TS" >> "$GITHUB_OUTPUT"
+          echo "orig_perm=$ORIG_PERM" >> "$GITHUB_OUTPUT"
+          echo "orig_hash=$ORIG_HASH" >> "$GITHUB_OUTPUT"
+          echo "backup_hash=$BACKUP_HASH" >> "$GITHUB_OUTPUT"
+          echo "Backup created and verified. Original hash: $ORIG_HASH  Backup hash: $BACKUP_HASH (match confirmed)"
+
+      - name: Upload candidate to temporary remote path (no live file touched yet)
+        id: upload
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0 \
+            .htaccess "${DH_USER}@${DH_HOST}:${DH_PATH}/.htaccess.sec-web-contain-001.tmp"
+
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          UPLOADED_HASH=$($SSH "${DH_USER}@${DH_HOST}" "sha256sum '${DH_PATH}/.htaccess.sec-web-contain-001.tmp'" | awk '{print $1}')
+          echo "uploaded_hash=$UPLOADED_HASH" >> "$GITHUB_OUTPUT"
+
+          if [ "$UPLOADED_HASH" != "$EXPECTED_CANDIDATE_HASH" ]; then
+            echo "::error::Uploaded file hash mismatch - removing temp file, live .htaccess was never touched"
+            $SSH "${DH_USER}@${DH_HOST}" "rm -f '${DH_PATH}/.htaccess.sec-web-contain-001.tmp'"
+            echo "upload_status=HASH_MISMATCH" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "upload_status=VERIFIED" >> "$GITHUB_OUTPUT"
+          echo "Uploaded file hash verified against approved candidate hash."
+
+      - name: Atomic rename into place
+        id: activate
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SSH "${DH_USER}@${DH_HOST}" "chmod ${{ steps.backup.outputs.orig_perm }} '${DH_PATH}/.htaccess.sec-web-contain-001.tmp'"
+          $SSH "${DH_USER}@${DH_HOST}" "mv '${DH_PATH}/.htaccess.sec-web-contain-001.tmp' '${DH_PATH}/.htaccess'"
+          echo "activated=true" >> "$GITHUB_OUTPUT"
+          echo ".htaccess atomically replaced."
+
+      - name: Post-deploy status-only checks (no bodies, no redirect-follow on blocked routes)
+        id: postcheck
+        run: |
+          set -euo pipefail
+          ROLLBACK=false
+          declare -A RESULTS
+
+          check_allowed () {
+            local path="$1" expect="$2"
+            local code
+            code=$(curl -s -o /dev/null -w "%{http_code}" -m 15 "${PROD_URL}${path}")
+            RESULTS["$path"]="$code"
+            echo "$path -> $code (expected $expect)"
+          }
+          # SEC-WEB-CONTAIN-001-DIAGNOSTIC (hardened per CEO review):
+          # - Status comes from curl's own --write-out, never parsed out of
+          #   the header dump.
+          # - Headers are written to a per-check temp file (deleted
+          #   immediately after use, never uploaded as an artifact) purely to
+          #   extract Location/marker; body is always discarded (-o /dev/null)
+          #   and redirects are never followed (--max-redirs 0).
+          # - Every pipeline that can legitimately produce zero matches (an
+          #   absent Location or absent marker is an EXPECTED diagnostic
+          #   result, not a shell error) ends in `|| true` so `set -e` /
+          #   `set -o pipefail` (active in this job's default shell) cannot
+          #   abort the step just because grep found nothing.
+          # - Only the exact literal value "blocked" proves a match. A
+          #   present-but-different value is a distinct, reported anomaly
+          #   ("INVALID DIAGNOSTIC RESPONSE"), never silently treated as
+          #   success just for being non-empty.
+          # - Multiple header blocks (e.g. a 1xx interim response ahead of
+          #   the final response) are handled by taking the LAST non-empty
+          #   block in the dump - the one that reflects the final,
+          #   client-visible status/headers - not the first.
+          check_blocked () {
+            local path="$1"
+            local tmpheaders status last_block marker_raw location interpretation
+
+            tmpheaders=$(mktemp)
+            status=$(curl -s -D "$tmpheaders" -o /dev/null -w '%{http_code}' -m 15 --max-redirs 0 "${PROD_URL}${path}" || echo "000")
+
+            # Select the last non-empty header block (handles interim 1xx
+            # responses ahead of the final one; --max-redirs 0 already
+            # guarantees no *redirect* was followed, so this is defensive,
+            # not an expectation of multiple real responses).
+            last_block=$(awk 'BEGIN{RS="\r?\n\r?\n"} NF>0{last=$0} END{print last}' "$tmpheaders" 2>/dev/null || true)
+            if [ -z "$last_block" ]; then
+              last_block=$(cat "$tmpheaders" 2>/dev/null || true)
+            fi
+
+            marker_raw=$(printf '%s\n' "$last_block" | grep -i '^X-Sec-Web-Contain:' | tail -1 | sed -E 's/^[Xx]-[Ss]ec-[Ww]eb-[Cc]ontain:[[:space:]]*//' | tr -d '\r' || true)
+            location=$(printf '%s\n' "$last_block" | grep -i '^Location:' | tail -1 | sed -E 's/^[Ll]ocation:[[:space:]]*//' | tr -d '\r' || true)
+            # Sanitize: never record/print a query string, even though these
+            # are all same-app internal redirects (e.g. /login) - defensive.
+            location="${location%%\?*}"
+
+            rm -f "$tmpheaders" || true
+
+            if [ "$marker_raw" = "blocked" ]; then
+              interpretation="A: PROVEN DENY MATCH (exact marker)"
+            elif [ -z "$marker_raw" ]; then
+              interpretation="B: INCONCLUSIVE (no marker - does not imply PHP was reached)"
+            else
+              interpretation="INVALID DIAGNOSTIC RESPONSE (marker present but not exactly \"blocked\")"
+            fi
+
+            if [ "$status" = "200" ]; then
+              interpretation="C: FAIL - raw 200 observed, rollback regardless of marker"
+            elif [ "$status" = "500" ]; then
+              interpretation="D: FAIL - Apache/application 500, rollback"
+            fi
+
+            RESULTS["$path"]="status=${status:-none} location=${location:-none} marker=${marker_raw:-none}"
+            echo "$path -> status=${status:-none} location=${location:-none} marker=${marker_raw:-none}"
+            echo "  interpretation: $interpretation"
+            ROLLBACK=true
+          }
+
+          check_allowed "/" "302 or 200"
+          ROOT_CODE="${RESULTS["/"]}"
+          [ "$ROOT_CODE" = "500" ] && ROLLBACK=true
+
+          check_allowed "/login" "200"
+          [ "${RESULTS["/login"]}" != "200" ] && ROLLBACK=true
+
+          check_allowed "/assets/css/style.css" "200"
+          [ "${RESULTS["/assets/css/style.css"]}" != "200" ] && ROLLBACK=true
+
+          check_allowed "/assets/js/app.js" "200"
+          [ "${RESULTS["/assets/js/app.js"]}" != "200" ] && ROLLBACK=true
+
+          check_blocked "/.git/HEAD"
+          check_blocked "/.git/config"
+          check_blocked "/db_query.php"
+          check_blocked "/check2.php"
+          check_blocked "/probe_schema.php"
+          check_blocked "/duplicate-scan-run.php"
+          check_blocked "/migrate.php"
+          check_blocked "/create_qa_user.php"
+          check_blocked "/cron.php"
+
+          {
+            for k in "${!RESULTS[@]}"; do
+              echo "${k}=${RESULTS[$k]}"
+            done
+          } > /tmp/postcheck_results.txt
+
+          echo "rollback_needed=$ROLLBACK" >> "$GITHUB_OUTPUT"
+          if [ "$ROLLBACK" = "true" ]; then
+            echo "::error::Post-deploy checks failed - triggering automatic rollback"
+          else
+            echo "Post-deploy checks: all PASS"
+          fi
+
+      - name: Automatic rollback (only runs if upload/activation/health-check failed)
+        id: rollback
+        if: failure() || steps.postcheck.outputs.rollback_needed == 'true'
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          TS="${{ steps.backup.outputs.backup_ts }}"
+          if [ -z "$TS" ]; then
+            echo "::error::No backup was ever created (failure happened before backup step) - nothing to restore from, live file was never touched by this workflow"
+            echo "rollback_status=NOT_NEEDED_NO_CHANGE_MADE" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          $SSH "${DH_USER}@${DH_HOST}" "rm -f '${DH_PATH}/.htaccess.sec-web-contain-001.tmp'" || true
+          $SSH "${DH_USER}@${DH_HOST}" "cp '${DH_PATH}/../htaccess-backups/htaccess.${TS}.bak' '${DH_PATH}/.htaccess' && chmod ${{ steps.backup.outputs.orig_perm }} '${DH_PATH}/.htaccess'"
+          RESTORED_HASH=$($SSH "${DH_USER}@${DH_HOST}" "sha256sum '${DH_PATH}/.htaccess'" | awk '{print $1}')
+          if [ "$RESTORED_HASH" != "${{ steps.backup.outputs.backup_hash }}" ]; then
+            echo "::error::CRITICAL - restored hash does not match backup hash. Manual intervention required."
+            echo "rollback_status=RESTORE_HASH_MISMATCH_MANUAL_INTERVENTION_REQUIRED" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "rollback_status=ROLLED_BACK" >> "$GITHUB_OUTPUT"
+          echo "ROLLED BACK: restored hash verified equal to backup hash."
+
+      - name: Remove temporary SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+          echo "Temporary SSH key removed."
+
+      - name: Write sanitized deployment report
+        if: always()
+        env:
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          mkdir -p sec-web-contain-001-deploy-report
+          cat > sec-web-contain-001-deploy-report/SEC_WEB_CONTAIN_DEPLOYMENT_REPORT.md << EOF
+          # SEC-WEB-CONTAIN-001 Deployment Report
+
+          Workflow run ID: ${{ github.run_id }}
+          Deployed branch SHA: ${{ env.EXPECTED_HEAD_SHA }}
+          Candidate hash (expected): ${{ env.EXPECTED_CANDIDATE_HASH }}
+          Candidate hash (computed this run): ${{ steps.hash.outputs.candidate_hash }}
+          Prior remote .htaccess hash: ${{ steps.backup.outputs.orig_hash }}
+          Backup path: <PRODUCTION_PATH>/../htaccess-backups/htaccess.${{ steps.backup.outputs.backup_ts }}.bak (masked)
+          Backup hash: ${{ steps.backup.outputs.backup_hash }}
+          Upload result: ${{ steps.upload.outputs.upload_status }}
+          Uploaded hash (pre-activation): ${{ steps.upload.outputs.uploaded_hash }}
+          Activated (atomic rename performed): ${{ steps.activate.outputs.activated }}
+          Post-deploy rollback needed: ${{ steps.postcheck.outputs.rollback_needed }}
+          Rollback status: ${{ steps.rollback.outputs.rollback_status }}
+
+          No secrets, credentials, or file contents are included in this report.
+          EOF
+          if [ -f /tmp/postcheck_results.txt ]; then
+            {
+              echo ""
+              echo "## Post-deploy HTTP status checks"
+              cat /tmp/postcheck_results.txt
+            } >> sec-web-contain-001-deploy-report/SEC_WEB_CONTAIN_DEPLOYMENT_REPORT.md
+          fi
+
+      - name: Upload sanitized deployment report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sec-web-contain-001-deploy-report
+          path: sec-web-contain-001-deploy-report/
+          retention-days: 30

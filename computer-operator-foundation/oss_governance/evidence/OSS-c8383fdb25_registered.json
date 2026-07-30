@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-c8383fdb25",
+  "name": "OpenClaw",
+  "github": "https://github.com/openclaw/openclaw",
+  "owner_division": "Operator",
+  "category": "Operator",
+  "description": "Gateway-style browser orchestration (not primary operator)",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.047876,
+  "created_iso": "2026-06-26T05:31:38.047877+00:00",
+  "updated_at": 1782451898.047876,
+  "updated_iso": "2026-06-26T05:31:38.047884+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.047876,
+      "iso": "2026-06-26T05:31:38.047885+00:00"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "Maria": { "role": "team member", "context": "project/operations" },
+  "Hoang": { "role": "team member", "context": "development" },
+  "Nguyen": { "role": "team member", "context": "operations" }
+}

@@ -1,0 +1,49 @@
+{
+  "primary_intent": {
+    "intent": "revenue_concern",
+    "label_vi": "Lo ngại doanh thu",
+    "confidence": 0.85,
+    "evidence_keywords": [
+      "lỗ"
+    ],
+    "suggested_investigation": [
+      "Analyze revenue trends",
+      "Compare with prior period",
+      "Check conversion rates",
+      "Review AOV and traffic"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "strategic_question",
+      "label_vi": "Câu hỏi chiến lược",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "deploy"
+      ],
+      "suggested_investigation": [
+        "Review business goals",
+        "Analyze market conditions",
+        "Assess resource availability",
+        "Check competitive landscape"
+      ]
+    },
+    {
+      "intent": "technology_concern",
+      "label_vi": "Lo ngại công nghệ",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "deploy",
+        "deploy"
+      ],
+      "suggested_investigation": [
+        "Check server health",
+        "Review recent deployments",
+        "Check error rates",
+        "Assess technical debt"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

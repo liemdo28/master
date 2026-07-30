@@ -1,0 +1,100 @@
+RewriteEngine On
+RewriteBase /
+
+# ── Pass custom headers to PHP ────────────────────────────────────────
+SetEnvIf Request_URI "." HTTP_X_MI_TOKEN=$HTTP:x-mi-token
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP:x-mi-token} .+
+    RewriteRule .* - [E=HTTP_X_MI_TOKEN:%{HTTP:x-mi-token}]
+</IfModule>
+
+# ── Security: disable directory listings ──────────────────────────────
+Options -Indexes
+
+# ── Security headers ──────────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ── Gzip compression ──────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json text/plain text/xml
+</IfModule>
+
+# ── Browser caching for static assets ────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 1 hour"
+    ExpiresByType application/javascript    "access plus 1 hour"
+    ExpiresByType image/png                 "access plus 1 year"
+    ExpiresByType image/jpeg                "access plus 1 year"
+    ExpiresByType image/svg+xml             "access plus 1 year"
+    ExpiresByType image/x-icon              "access plus 1 year"
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType application/font-woff2    "access plus 1 year"
+</IfModule>
+<IfModule mod_headers.c>
+    # Static assets: `immutable` is only safe with content-hashed filenames.
+    # Since filenames are plain (app.js, layout.js…), use a 1-hour TTL so
+    # deploys propagate within 1 hour rather than being stuck for 1 year.
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico|woff2)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+    # Prevent caching on HTML/PHP pages
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+    </FilesMatch>
+    # Service worker must never be immutably cached — browsers must always be
+    # able to detect a new SW version on the next page load.
+    <FilesMatch "^sw\.js$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# ── Pass Authorization header to PHP (required for Bearer token auth) ─
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+# ── Force HTTPS ───────────────────────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^(127\.0\.0\.1|localhost)(:[0-9]+)?$ [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ── SEC-WEB-CONTAIN-001 — EMERGENCY CONTAINMENT (2026-07-12) ──────────
+# Confirmed public exposure of utility/debug scripts and source-control
+# metadata. Replaces the old explicit pass-through allowlist below,
+# which was the root cause (it let migrate.php, db_query.php, and
+# duplicate-scan-run.php execute directly over HTTP with no auth).
+# See reports/security-incidents/web-utility-exposure/ for full detail.
+
+# Block source-control metadata and sensitive/internal directories
+# (nested paths included via the trailing (/|$) alternation).
+RewriteCond %{REQUEST_URI} ^/(\.git|\.github|config|database|sql|migration|migrations|scripts|qa|tests|test-results|reports|logs|artifacts|\.backups|\.local-agent|performance|walkthrough-recorder|walkthrough_video)(/|$) [NC]
+RewriteRule ^ - [F,L]
+
+# Block sensitive filenames/extensions: env files, quarantined/backup
+# files, raw SQL/DB files, and private key/cert material.
+RewriteCond %{REQUEST_URI} (^|/)\.env(\.|$) [NC,OR]
+RewriteCond %{REQUEST_URI} \.(QUARANTINED|bak|backup|old|orig|log|sql|sqlite3?|pem|key|crt|p12|pfx)$ [NC]
+RewriteRule ^ - [F,L]
+
+# Deny direct HTTP execution of every .php file except the router entry
+# point and the standalone Telegram webhook. NOTE: the webhook path is
+# UNCONFIRMED — kept allowed only because webhooks/telegram.php's own
+# docblock self-declares as the registered production webhook URL and
+# breaking a live inbound webhook is worse than a temporary allowance.
+# See reports/security-incidents/web-utility-exposure/EMERGENCY_CONTAINMENT_PLAN.md.
+RewriteCond %{REQUEST_URI} \.php$
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/webhooks/telegram\.php$ [NC]
+RewriteRule ^ - [F,L]
+
+# ── Router: rewrite every non-existent path to index.php?route=xxx ───
+# index.php dispatches /api/v1/* to the v1 bootstrap and /api/* session routes
+# through its own switch, so we do NOT exclude /api/ any more.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
+RewriteRule ^$ index.php?route= [L]

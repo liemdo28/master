@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-8ffcbbde90",
+  "name": "Airbyte",
+  "github": "https://github.com/airbytehq/airbyte",
+  "owner_division": "Marketing",
+  "category": "Marketing",
+  "description": "Data integration platform",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.851538,
+  "created_iso": "2026-06-26T05:35:22.851540+00:00",
+  "updated_at": 1782452122.851538,
+  "updated_iso": "2026-06-26T05:35:22.851548+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.851538,
+      "iso": "2026-06-26T05:35:22.851551+00:00"
+    }
+  ]
+}

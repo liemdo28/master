@@ -1,0 +1,272 @@
+[
+  {
+    "id": "GRD_1782657000948_wjbrr6",
+    "timestamp": 1782657000948,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782656991840_373rzo",
+    "timestamp": 1782656991840,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782656642818_zi6e1e",
+    "timestamp": 1782656642818,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782656114242_f1jbov",
+    "timestamp": 1782656114242,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782655885359_55wla2",
+    "timestamp": 1782655885359,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782655635077_ab9ubv",
+    "timestamp": 1782655635077,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782655629843_qwkuqi",
+    "timestamp": 1782655629843,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782655591302_th2o81",
+    "timestamp": 1782655591302,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  },
+  {
+    "id": "GRD_1782655586464_ajzhf9",
+    "timestamp": 1782655586464,
+    "pillars": [
+      {
+        "pillar": "data",
+        "threatLoad": 50,
+        "protection": 50
+      },
+      {
+        "pillar": "revenue",
+        "threatLoad": 25,
+        "protection": 75
+      },
+      {
+        "pillar": "reputation",
+        "threatLoad": 0,
+        "protection": 100
+      },
+      {
+        "pillar": "operations",
+        "threatLoad": 0,
+        "protection": 100
+      }
+    ],
+    "overall": 81.25,
+    "weakest": "data",
+    "anyCritical": false,
+    "posture": "SECURE"
+  }
+]

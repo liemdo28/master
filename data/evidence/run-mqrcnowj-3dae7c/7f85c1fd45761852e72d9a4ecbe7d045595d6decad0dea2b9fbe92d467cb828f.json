@@ -1,0 +1,48 @@
+{
+  "primary_intent": {
+    "intent": "revenue_concern",
+    "label_vi": "Lo ngại doanh thu",
+    "confidence": 0.85,
+    "evidence_keywords": [
+      "lỗ"
+    ],
+    "suggested_investigation": [
+      "Analyze revenue trends",
+      "Compare with prior period",
+      "Check conversion rates",
+      "Review AOV and traffic"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "strategic_question",
+      "label_vi": "Câu hỏi chiến lược",
+      "confidence": 0.7,
+      "evidence_keywords": [
+        "should we"
+      ],
+      "suggested_investigation": [
+        "Review business goals",
+        "Analyze market conditions",
+        "Assess resource availability",
+        "Check competitive landscape"
+      ]
+    },
+    {
+      "intent": "general_status_check",
+      "label_vi": "Kiểm tra tổng quát",
+      "confidence": 0.5,
+      "evidence_keywords": [
+        "ổn"
+      ],
+      "suggested_investigation": [
+        "Run health check",
+        "Review active priorities",
+        "Check pending actions",
+        "Summarize current state"
+      ]
+    }
+  ],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

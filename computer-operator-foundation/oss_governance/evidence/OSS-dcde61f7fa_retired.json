@@ -1,0 +1,76 @@
+{
+  "project_id": "OSS-dcde61f7fa",
+  "name": "TEST_INTEGRATION",
+  "github": "https://github.com/test/integration",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Integration test project",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "RETIRED",
+  "status": "INACTIVE",
+  "roi": {
+    "status": "EVALUATED",
+    "composite_score": 0.87,
+    "components": {
+      "license_friendlyness": 1.0,
+      "community_health": 0.68,
+      "integration_fit": 1.0,
+      "maintenance_burden": 0.8
+    },
+    "verdict": "STRONG_BUY"
+  },
+  "maintenance_cost": {
+    "components": {
+      "release_freq": {
+        "months": 1.5,
+        "score": 0.7,
+        "label": "active"
+      },
+      "breaking_changes": {
+        "count": 0,
+        "score": 1.0,
+        "label": "stable"
+      },
+      "documentation": {
+        "value": "good",
+        "score": 0.7
+      }
+    },
+    "score": 0.8,
+    "status": "EVALUATED"
+  },
+  "risk": {
+    "composite_score": 0.0,
+    "components": {
+      "license_risk": 0.0,
+      "community_health": 0.31999999999999995
+    },
+    "verdict": "LOW"
+  },
+  "scorecard": null,
+  "created_at": 1782451898.0665514,
+  "created_iso": "2026-06-26T05:31:38.066553+00:00",
+  "updated_at": 1782451898.1071856,
+  "updated_iso": "2026-06-26T05:31:38.107197+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0665514,
+      "iso": "2026-06-26T05:31:38.066556+00:00"
+    },
+    {
+      "stage": "AUDIT",
+      "timestamp": 1782451898.067345,
+      "iso": "2026-06-26T05:31:38.067353+00:00"
+    },
+    {
+      "stage": "RETIRED",
+      "timestamp": 1782451898.1071856,
+      "iso": "2026-06-26T05:31:38.107199+00:00"
+    }
+  ],
+  "retired_reason": "integration test cleanup",
+  "retired_at": 1782451898.1071856,
+  "retired_iso": "2026-06-26T05:31:38.107188+00:00"
+}

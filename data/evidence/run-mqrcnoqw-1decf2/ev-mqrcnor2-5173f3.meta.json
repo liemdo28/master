@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnor2-5173f3",
+  "objectiveRunId": "run-mqrcnoqw-1decf2",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch chẩn đoán công nghệ | 4 steps, ~2min | Risk: undefined",
+  "sha256": "5b8295679832e446fa19450eb3853534bb58977ff4162ffd2d22a85e233d5b14",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnoqw-1decf2\\5b8295679832e446fa19450eb3853534bb58977ff4162ffd2d22a85e233d5b14.json",
+  "capturedAt": "2026-06-24T00:43:18.158Z",
+  "readOnly": true
+}

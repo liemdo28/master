@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-ba23f5933b",
+  "name": "Metabase",
+  "github": "https://github.com/metabase/metabase",
+  "owner_division": "Finance",
+  "category": "Finance",
+  "description": "Open source BI / dashboards",
+  "license": "AGPL-3.0",
+  "license_risk": "HIGH",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.051578,
+  "created_iso": "2026-06-26T05:31:38.051580+00:00",
+  "updated_at": 1782451898.051578,
+  "updated_iso": "2026-06-26T05:31:38.051587+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.051578,
+      "iso": "2026-06-26T05:31:38.051588+00:00"
+    }
+  ]
+}

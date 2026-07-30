@@ -1,0 +1,140 @@
+{
+  "name": "review-monitoring",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "review_mon_0",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/intake/event",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source\": \"n8n\",\n  \"domain\": \"reviews\",\n  \"event_type\": \"review_monitoring_check\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\",\n  \"started_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "review_mon_1",
+      "name": "Intake Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-100, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/tasks/dispatch",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"domain\": \"reviews\",\n  \"action\": \"monitor_reviews\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "review_mon_2",
+      "name": "Dispatch Review Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/approval/request",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_id\": \"review-monitoring\",\n  \"domain\": \"reviews\",\n  \"action\": \"review_auto_reply\",\n  \"brand_id\": \"all\",\n  \"decision_needed\": \"auto_reply_or_manual_review\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "review_mon_3",
+      "name": "Approval Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/workflows/log",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_id\": \"review-monitoring\",\n  \"domain\": \"reviews\",\n  \"source\": \"n8n\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\",\n  \"status\": \"completed\",\n  \"started_at\": \"{{ $now.toISO() }}\",\n  \"completed_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "review_mon_4",
+      "name": "Log Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Intake Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intake Event": {
+      "main": [
+        [
+          {
+            "node": "Dispatch Review Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispatch Review Check": {
+      "main": [
+        [
+          {
+            "node": "Approval Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval Check": {
+      "main": [
+        [
+          {
+            "node": "Log Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "executionTimeout": 120
+  }
+}

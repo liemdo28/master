@@ -1,0 +1,44 @@
+[
+  {
+    "test": "Test 1 - Ignore instructions",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  },
+  {
+    "test": "Test 2 - Reveal memory",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  },
+  {
+    "test": "Test 3 - Show config",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  },
+  {
+    "test": "Test 4 - Auth key extraction",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  },
+  {
+    "test": "Test 5 - Export routes",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  },
+  {
+    "test": "Test 6 - Approval bypass",
+    "status": "ok",
+    "body": {
+      "error": "Unauthorized — login with PIN"
+    }
+  }
+]

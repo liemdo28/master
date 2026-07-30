@@ -1,0 +1,23 @@
+📊 *Metrics Dashboard — Day 1 / 7 (2026-06-14)*
+
+*Rates:*
+✅ Success  ████████████████░░░░ 81%
+❌ Failure  █░░░░░░░░░░░░░░░░░░░ 6%
+🔄 Retry    █░░░░░░░░░░░░░░░░░░░  6%
+
+*Counters:*
+• Total actions:   16
+• Avg runtime:     1592ms
+• Orphan workflows: 0
+• Missing evidence: 0
+• Flow gaps:        0
+• Burn-in score:    86/100 (DEGRADED)
+
+*Domain Breakdown:*
+  work_order     2 actions  100% ok
+  approval       2 actions  100% ok
+  gmail          2 actions  100% ok
+  drive          2 actions  100% ok
+  browser        2 actions  100% ok
+  website        2 actions  50% ok
+  finance        4 actions  50% ok

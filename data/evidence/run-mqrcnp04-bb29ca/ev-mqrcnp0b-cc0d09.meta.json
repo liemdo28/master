@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnp0b-cc0d09",
+  "objectiveRunId": "run-mqrcnp04-bb29ca",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch phân tích marketing | 3 steps, ~2min | Risk: undefined",
+  "sha256": "697b09dc13f3f06c9d9612c1f85cc91899ac23b35cf1379f15821fc47c6acfae",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnp04-bb29ca\\697b09dc13f3f06c9d9612c1f85cc91899ac23b35cf1379f15821fc47c6acfae.json",
+  "capturedAt": "2026-06-24T00:43:18.491Z",
+  "readOnly": true
+}

@@ -1,0 +1,130 @@
+{
+  "agent": "seo-local-maps-agent",
+  "type": "gbp-audit",
+  "generated_at": "2026-06-18T11:38:50.090Z",
+  "payload": {
+    "summary": "Audited 3 locations",
+    "locations": [
+      {
+        "location_id": "bandera",
+        "name": "Bakudan Ramen - Bandera",
+        "address": "PLACEHOLDER_BANDERA_ADDRESS, San Antonio, TX",
+        "phone": "PLACEHOLDER_PHONE_BANDERA",
+        "website_url": "https://bakudanramen.com/locations/bandera",
+        "menu_url": "https://bakudanramen.com/menu",
+        "order_url": "https://order.bakudanramen.com/bandera",
+        "hours": "11:00-22:00",
+        "geo": {
+          "lat": 0,
+          "lng": 0
+        },
+        "gbp_place_id": "PLACEHOLDER_GBP_BANDERA",
+        "categories": [
+          "Japanese Restaurant",
+          "Ramen Restaurant"
+        ],
+        "photos": {
+          "status": "audit_pending",
+          "count": 0
+        },
+        "reviews": {
+          "rating": 0,
+          "count": 0,
+          "response_rate": 0
+        },
+        "qa": {
+          "count": 0
+        },
+        "attributes": {},
+        "apple_status": "pending_audit",
+        "bing_status": "pending_audit",
+        "utm_links": {
+          "website": "https://bakudanramen.com/locations/bandera?utm_source=gbp&utm_medium=organic&utm_campaign=bandera",
+          "menu": "https://bakudanramen.com/menu?utm_source=gbp&utm_medium=organic&utm_campaign=bandera",
+          "order": "https://order.bakudanramen.com/bandera?utm_source=gbp&utm_medium=organic&utm_campaign=bandera"
+        }
+      },
+      {
+        "location_id": "stone-oak",
+        "name": "Bakudan Ramen - Stone Oak",
+        "address": "PLACEHOLDER_STONEOAK_ADDRESS, San Antonio, TX",
+        "phone": "PLACEHOLDER_PHONE_STONEOAK",
+        "website_url": "https://bakudanramen.com/locations/stone-oak",
+        "menu_url": "https://bakudanramen.com/menu",
+        "order_url": "https://order.bakudanramen.com/stone-oak",
+        "hours": "11:00-22:00",
+        "geo": {
+          "lat": 0,
+          "lng": 0
+        },
+        "gbp_place_id": "PLACEHOLDER_GBP_STONEOAK",
+        "categories": [
+          "Japanese Restaurant",
+          "Ramen Restaurant"
+        ],
+        "photos": {
+          "status": "audit_pending",
+          "count": 0
+        },
+        "reviews": {
+          "rating": 0,
+          "count": 0,
+          "response_rate": 0
+        },
+        "qa": {
+          "count": 0
+        },
+        "attributes": {},
+        "apple_status": "pending_audit",
+        "bing_status": "pending_audit",
+        "utm_links": {
+          "website": "https://bakudanramen.com/locations/stone-oak?utm_source=gbp&utm_medium=organic&utm_campaign=stone-oak",
+          "menu": "https://bakudanramen.com/menu?utm_source=gbp&utm_medium=organic&utm_campaign=stone-oak",
+          "order": "https://order.bakudanramen.com/stone-oak?utm_source=gbp&utm_medium=organic&utm_campaign=stone-oak"
+        }
+      },
+      {
+        "location_id": "the-rim",
+        "name": "Bakudan Ramen - The Rim",
+        "address": "PLACEHOLDER_THERIM_ADDRESS, San Antonio, TX",
+        "phone": "PLACEHOLDER_PHONE_THERIM",
+        "website_url": "https://bakudanramen.com/locations/the-rim",
+        "menu_url": "https://bakudanramen.com/menu",
+        "order_url": "https://order.bakudanramen.com/the-rim",
+        "hours": "11:00-22:00",
+        "geo": {
+          "lat": 0,
+          "lng": 0
+        },
+        "gbp_place_id": "PLACEHOLDER_GBP_THERIM",
+        "categories": [
+          "Japanese Restaurant",
+          "Ramen Restaurant"
+        ],
+        "photos": {
+          "status": "audit_pending",
+          "count": 0
+        },
+        "reviews": {
+          "rating": 0,
+          "count": 0,
+          "response_rate": 0
+        },
+        "qa": {
+          "count": 0
+        },
+        "attributes": {},
+        "apple_status": "pending_audit",
+        "bing_status": "pending_audit",
+        "utm_links": {
+          "website": "https://bakudanramen.com/locations/the-rim?utm_source=gbp&utm_medium=organic&utm_campaign=the-rim",
+          "menu": "https://bakudanramen.com/menu?utm_source=gbp&utm_medium=organic&utm_campaign=the-rim",
+          "order": "https://order.bakudanramen.com/the-rim?utm_source=gbp&utm_medium=organic&utm_campaign=the-rim"
+        }
+      }
+    ],
+    "nap_consistency": "all_match",
+    "photo_schedule": "pending",
+    "review_response_status": "pending"
+  }
+}

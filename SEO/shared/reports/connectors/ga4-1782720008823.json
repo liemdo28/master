@@ -1,0 +1,219 @@
+{
+  "source": "ga4",
+  "fetched_at": "2026-06-29T08:00:08.823Z",
+  "property_id": "properties/543110659",
+  "organic_traffic": [
+    {
+      "channel": "Organic Search",
+      "landing_page": "/",
+      "source_medium": "google / organic",
+      "sessions": 254,
+      "users": 242,
+      "conversions": 0,
+      "bounce_rate": 0.2283464566929134
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/menu.html",
+      "source_medium": "google / organic",
+      "sessions": 134,
+      "users": 106,
+      "conversions": 0,
+      "bounce_rate": 0.746268656716418
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/",
+      "source_medium": "bing / organic",
+      "sessions": 11,
+      "users": 11,
+      "conversions": 0,
+      "bounce_rate": 0.09090909090909091
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/happy-hour.html",
+      "source_medium": "google / organic",
+      "sessions": 10,
+      "users": 9,
+      "conversions": 0,
+      "bounce_rate": 0.7
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "(not set)",
+      "source_medium": "google / organic",
+      "sessions": 8,
+      "users": 8,
+      "conversions": 0,
+      "bounce_rate": 1
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/locations.html",
+      "source_medium": "google / organic",
+      "sessions": 7,
+      "users": 7,
+      "conversions": 0,
+      "bounce_rate": 0.8571428571428571
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/order.html",
+      "source_medium": "google / organic",
+      "sessions": 6,
+      "users": 6,
+      "conversions": 0,
+      "bounce_rate": 0.8333333333333334
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "",
+      "source_medium": "google / organic",
+      "sessions": 3,
+      "users": 3,
+      "conversions": 0,
+      "bounce_rate": 1
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/",
+      "source_medium": "duckduckgo / organic",
+      "sessions": 1,
+      "users": 1,
+      "conversions": 0,
+      "bounce_rate": 0
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/",
+      "source_medium": "yahoo / organic",
+      "sessions": 1,
+      "users": 1,
+      "conversions": 0,
+      "bounce_rate": 0
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/blog.html",
+      "source_medium": "google / organic",
+      "sessions": 1,
+      "users": 1,
+      "conversions": 0,
+      "bounce_rate": 1
+    },
+    {
+      "channel": "Organic Search",
+      "landing_page": "/menu.html",
+      "source_medium": "bing / organic",
+      "sessions": 1,
+      "users": 1,
+      "conversions": 0,
+      "bounce_rate": 1
+    }
+  ],
+  "utm_performance": [
+    {
+      "campaign": "(direct)",
+      "source_medium": "(direct) / (none)",
+      "sessions": 548,
+      "conversions": 0
+    },
+    {
+      "campaign": "(organic)",
+      "source_medium": "google / organic",
+      "sessions": 424,
+      "conversions": 0
+    },
+    {
+      "campaign": "(not set)",
+      "source_medium": "(not set)",
+      "sessions": 114,
+      "conversions": 0
+    },
+    {
+      "campaign": "(organic)",
+      "source_medium": "bing / organic",
+      "sessions": 12,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "m.yelp.com / referral",
+      "sessions": 12,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "ig / social",
+      "sessions": 8,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "therimsa.com / referral",
+      "sessions": 6,
+      "conversions": 0
+    },
+    {
+      "campaign": "(cross-network)",
+      "source_medium": "(data not available)",
+      "sessions": 4,
+      "conversions": 0
+    },
+    {
+      "campaign": "(ai-assistant)",
+      "source_medium": "chatgpt.com / ai-assistant",
+      "sessions": 3,
+      "conversions": 0
+    },
+    {
+      "campaign": "(not set)",
+      "source_medium": "google / cpc",
+      "sessions": 3,
+      "conversions": 0
+    },
+    {
+      "campaign": "(organic)",
+      "source_medium": "google / cpc",
+      "sessions": 2,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "maps.apple.com / referral",
+      "sessions": 2,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "villageatstoneoak.com / referral",
+      "sessions": 2,
+      "conversions": 0
+    },
+    {
+      "campaign": "(referral)",
+      "source_medium": "yelp.com / referral",
+      "sessions": 2,
+      "conversions": 0
+    },
+    {
+      "campaign": "",
+      "source_medium": "google / cpc",
+      "sessions": 1,
+      "conversions": 0
+    },
+    {
+      "campaign": "(organic)",
+      "source_medium": "duckduckgo / organic",
+      "sessions": 1,
+      "conversions": 0
+    },
+    {
+      "campaign": "(organic)",
+      "source_medium": "yahoo / organic",
+      "sessions": 1,
+      "conversions": 0
+    }
+  ]
+}

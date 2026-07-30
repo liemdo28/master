@@ -1,0 +1,15 @@
+--- BEFORE STATE — views/layouts/main.php (Create Task form) ---
+Captured before PATCH-REAL-001 by Autonomous Coding Backend.
+
+Context (Quick Create Task modal form):
+
+        <form action="<?= APP_URL ?>/tasks" method="POST" id="quickTaskForm">
+        <div class="modal-body">
+
+            <!-- Title & Description -->
+
+Selector state BEFORE:
+  hasModal           = true
+  hasSubmit          = true
+  hasForm            = false   (no data-testid="create-task-form")
+  quickTaskFormCount = 1

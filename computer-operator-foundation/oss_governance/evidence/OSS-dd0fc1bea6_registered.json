@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-dd0fc1bea6",
+  "name": "Continue",
+  "github": "https://github.com/continuedev/continue",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "IDE-integrated AI coding assistant",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8397386,
+  "created_iso": "2026-06-26T05:35:22.839742+00:00",
+  "updated_at": 1782452122.8397386,
+  "updated_iso": "2026-06-26T05:35:22.839754+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8397386,
+      "iso": "2026-06-26T05:35:22.839756+00:00"
+    }
+  ]
+}

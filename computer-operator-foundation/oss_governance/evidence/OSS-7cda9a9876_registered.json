@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-7cda9a9876",
+  "name": "Open WebUI",
+  "github": "https://github.com/open-webui/open-webui",
+  "owner_division": "Creative",
+  "category": "Creative",
+  "description": "Self-hosted AI chat UI",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.062361,
+  "created_iso": "2026-06-26T05:31:38.062363+00:00",
+  "updated_at": 1782451898.062361,
+  "updated_iso": "2026-06-26T05:31:38.062371+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.062361,
+      "iso": "2026-06-26T05:31:38.062372+00:00"
+    }
+  ]
+}

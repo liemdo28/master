@@ -1,0 +1,48 @@
+{
+  "_comment": "Sample OCR output — simulates what the WhatsApp OCR pipeline would produce from a photo of the filled form",
+  "ocr_run_id": "ocr_so_20260609_172345",
+  "template_id": "FoodSafety-StoneOak-v2",
+  "store_id": "stone_oak",
+  "store_name": "Stone Oak",
+  "scan_timestamp": "2026-06-09T17:23:45Z",
+  "source": "whatsapp_photo",
+  "form_image_url": "https://sheets.googleapis.com/forms/stone_oak/SO-20260609-PM.jpg",
+  "header": {
+    "date":          { "value": "06/09/2026",       "confidence": 0.97 },
+    "shift":         { "value": "PM",               "confidence": 0.95 },
+    "employee":      { "value": "Maria G.",         "confidence": 0.91 },
+    "manager":       { "value": "Chef David",       "confidence": 0.88 },
+    "submission_id": { "value": "SO-20260609-PM",   "confidence": 0.96 }
+  },
+  "rows": [
+    { "field_id": "SO-01", "item": "Walk-In Cooler",     "required_range": "40F_or_below",  "value_11am": 38,  "value_4pm": 37,  "conf_11am": 0.97, "conf_4pm": 0.96, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-02", "item": "Walk-In Freezer",    "required_range": "0F_or_below",   "value_11am": -2,  "value_4pm": -3,  "conf_11am": 0.95, "conf_4pm": 0.94, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-03", "item": "Prep Area Refrig",   "required_range": "40F_or_below",  "value_11am": 39,  "value_4pm": 40,  "conf_11am": 0.96, "conf_4pm": 0.93, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-04", "item": "Ramen Refrig Below", "required_range": "40F_or_below",  "value_11am": 41,  "value_4pm": 38,  "conf_11am": 0.94, "conf_4pm": 0.95, "status_11am": "FAIL", "status_4pm": "PASS", "corrective_action": "SO-04 AM above 40F — moved items to walk-in" },
+    { "field_id": "SO-05", "item": "Ramen Refrig Top",   "required_range": "40F_or_below",  "value_11am": 37,  "value_4pm": 36,  "conf_11am": 0.97, "conf_4pm": 0.96, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-06", "item": "Freezer Line",       "required_range": "0F_or_below",   "value_11am": 0,   "value_4pm": -1,  "conf_11am": 0.92, "conf_4pm": 0.93, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-07", "item": "Tapas Refrig Below", "required_range": "40F_or_below",  "value_11am": 40,  "value_4pm": 39,  "conf_11am": 0.95, "conf_4pm": 0.96, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-08", "item": "Tapas Refrig Top",   "required_range": "40F_or_below",  "value_11am": 38,  "value_4pm": 40,  "conf_11am": 0.94, "conf_4pm": 0.93, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-09", "item": "Pork Chashu Top",    "required_range": "40F_or_below",  "value_11am": 39,  "value_4pm": 38,  "conf_11am": 0.96, "conf_4pm": 0.97, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-10", "item": "Chicken Chashu Top", "required_range": "40F_or_below",  "value_11am": 37,  "value_4pm": 37,  "conf_11am": 0.95, "conf_4pm": 0.95, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-11", "item": "Fryer 1",            "required_range": "325F_minimum",  "value_11am": 330, "value_4pm": 328, "conf_11am": 0.93, "conf_4pm": 0.94, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-12", "item": "Fryer 2",            "required_range": "325F_minimum",  "value_11am": 315, "value_4pm": 325, "conf_11am": 0.91, "conf_4pm": 0.93, "status_11am": "FAIL", "status_4pm": "PASS", "corrective_action": "SO-12 AM below 325F — adjusted thermostat" },
+    { "field_id": "SO-13", "item": "Pasta Boiler 1",     "required_range": "200F_minimum",  "value_11am": 205, "value_4pm": 210, "conf_11am": 0.96, "conf_4pm": 0.95, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-14", "item": "Pasta Boiler 2",     "required_range": "200F_minimum",  "value_11am": 208, "value_4pm": 206, "conf_11am": 0.94, "conf_4pm": 0.94, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-15", "item": "Seasoned Eggs Warm", "required_range": "100F_minimum",  "value_11am": 105, "value_4pm": 102, "conf_11am": 0.95, "conf_4pm": 0.93, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-16", "item": "Pork Broth",         "required_range": "200F_minimum",  "value_11am": 210, "value_4pm": 212, "conf_11am": 0.97, "conf_4pm": 0.97, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-17", "item": "Chicken Broth",      "required_range": "200F_minimum",  "value_11am": 208, "value_4pm": 205, "conf_11am": 0.96, "conf_4pm": 0.96, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" },
+    { "field_id": "SO-18", "item": "Veggie Broth",       "required_range": "200F_minimum",  "value_11am": 203, "value_4pm": 201, "conf_11am": 0.94, "conf_4pm": 0.94, "status_11am": "PASS", "status_4pm": "PASS", "corrective_action": "" }
+  ],
+  "summary": {
+    "total_fields": 18,
+    "pass_count": 16,
+    "fail_count": 2,
+    "overall_status": "NEEDS_REVIEW",
+    "failed_fields": ["SO-04", "SO-12"],
+    "low_confidence_fields": [],
+    "avg_confidence": 0.945
+  },
+  "sheet_write_status": "PENDING",
+  "db_record_id": null
+}

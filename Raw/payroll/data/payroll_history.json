@@ -1,0 +1,28 @@
+{
+  "periods": [
+    {
+      "id": 1,
+      "period_name": "June 12 2026",
+      "added_at": "2026-07-02T07:00:05.829109",
+      "files": {
+        "csv_report": "d:/Project/Master/Raw/payroll/output/csv_payroll_report.json",
+        "qb_report": "d:/Project/Master/Raw/payroll/output/qb_payroll_report.json"
+      },
+      "totals": {
+        "employee_count": 21,
+        "total_regular_pay": 14464.8,
+        "total_ot_pay": 826.66,
+        "total_tips": 5145.3,
+        "total_calsaver": 64.3,
+        "net_pay": 20372.46
+      },
+      "qb_summary": {
+        "taxable_wages": 20161.19,
+        "check_amount": 18356.77,
+        "company_taxes": 1745.34,
+        "total_employer": 21906.53
+      }
+    }
+  ],
+  "last_updated": "2026-07-02T07:00:05.829119"
+}

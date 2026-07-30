@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-07-07T00:58:00.000Z",
+  "machine": "LIEMDO-PC",
+  "git_commit": "0b4ea904e44ef4baca2c1e59a6b23be85421bcc2",
+  "runtime_certified_at": "2026-07-06",
+  "services": {
+    "mi_core": {
+      "name": "mi-core",
+      "status": "FULL_GO",
+      "certified_at": "2026-07-06",
+      "port": 4001,
+      "pm2_id": 1,
+      "pm2_pid": 24028,
+      "endpoints": [
+        "/api/chat",
+        "/api/health",
+        "/api/game/create",
+        "/api/game/file/:taskId/:filename",
+        "/api/game/publish"
+      ],
+      "workflow": {
+        "ceo_acceptance": "PASS",
+        "qa_score": 100,
+        "qa_threshold": 95,
+        "artifact_delivery": "PASS",
+        "job_id": "game-1783385750648-h88dwv",
+        "job_created_at": "2026-07-07T00:55:50Z"
+      },
+      "notes": "Core CEO chat flow through /api/chat certified. Game department workflow operational. Survived PC restart."
+    },
+    "whatsapp_gateway": {
+      "name": "mi-whatsapp-gateway",
+      "status": "online",
+      "certified_at": null,
+      "port": 3211,
+      "pm2_id": 5,
+      "pm2_pid": 16476,
+      "notes": "Online after PC restart. CEO chat flow via WhatsApp not individually certified in this result — only /api/chat certified."
+    },
+    "mi_ai_service": {
+      "name": "mi-ai-service",
+      "status": "online",
+      "port": 4002,
+      "pm2_id": 4,
+      "pm2_pid": 6576,
+      "notes": "Python FastAPI service wrapping Ollama."
+    },
+    "mi_n8n": {
+      "name": "mi-n8n",
+      "status": "online",
+      "port": 5678,
+      "pm2_id": 6,
+      "pm2_pid": 20816,
+      "notes": "n8n execution bus."
+    },
+    "mi_node_agent": {
+      "name": "mi-node-agent",
+      "status": "online",
+      "pm2_id": 8,
+      "pm2_pid": 10984,
+      "notes": "Cluster mode, secondary device discovery."
+    },
+    "mi_accounting": {
+      "name": "mi-accounting",
+      "status": "online",
+      "port": 8844,
+      "pm2_id": 2,
+      "pm2_pid": 24008,
+      "notes": "Accounting engine."
+    },
+    "mi_ceo_observer": {
+      "name": "mi-ceo-observer",
+      "status": "online_retry",
+      "port": 3212,
+      "pm2_id": 3,
+      "pm2_pid": 18520,
+      "notes": "CEO session observer. Retry loop active."
+    },
+    "qb_ops_agent": {
+      "name": "qb-ops-agent",
+      "status": "online",
+      "port": 3457,
+      "pm2_id": 7,
+      "pm2_pid": 16892,
+      "notes": "QBWC heartbeat agent."
+    }
+  },
+  "registry_status": "FULL_GO",
+  "scope_of_certification": {
+    "certified": [
+      "mi-core port 4001",
+      "CEO /api/chat endpoint",
+      "Game Department workflow engine",
+      "QA repair loop",
+      "Artifact delivery HTTP 200",
+      "PM2 persistence (survived PC restart)"
+    ],
+    "not_individually_certified": [
+      "WhatsApp Gateway (online but chat flow not end-to-end tested via WhatsApp)",
+      "CEO Observer (retry loop)",
+      "QB Ops Agent (operational but QB integration not tested"
+    ]
+  }
+}

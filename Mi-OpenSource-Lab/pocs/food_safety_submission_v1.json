@@ -1,0 +1,58 @@
+{
+  "workflow_id": "food_safety_submission_v1",
+  "name": "Food Safety Submission Workflow",
+  "trigger": {
+    "type": "whatsapp_message",
+    "group_scope": ["food_safety"]
+  },
+  "steps": [
+    {
+      "id": "detect_store",
+      "type": "mi.store.detect",
+      "input": "{{message}}"
+    },
+    {
+      "id": "extract_values",
+      "type": "mi.food_safety.extract",
+      "input": "{{message}}"
+    },
+    {
+      "id": "validate_count",
+      "type": "mi.validation.count",
+      "expected": 19
+    },
+    {
+      "id": "classify_result",
+      "type": "mi.food_safety.classify"
+    },
+    {
+      "id": "request_confirmation",
+      "type": "mi.whatsapp.reply",
+      "message": "Reply 1 Confirm, 2 Edit, 3 Manager Review, 4 Cancel"
+    },
+    {
+      "id": "save_submission",
+      "type": "mi.db.write",
+      "approval_required": false
+    },
+    {
+      "id": "sync_sheet",
+      "type": "mi.google_sheet.sync"
+    },
+    {
+      "id": "manager_alert",
+      "type": "mi.whatsapp.alert",
+      "condition": "needs_review > 0"
+    },
+    {
+      "id": "audit",
+      "type": "mi.audit.write"
+    }
+  ],
+  "guardrails": {
+    "dry_run_default": true,
+    "human_approval_required_for": ["manager_alert", "db.write"],
+    "max_retries": 2,
+    "audit_required": true
+  }
+}

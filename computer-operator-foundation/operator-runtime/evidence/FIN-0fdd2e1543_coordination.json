@@ -1,0 +1,28 @@
+{
+  "coord_task_id": "FIN-0fdd2e1543",
+  "task_name": "Build connector: Payroll System",
+  "objective_id": "OBJ-FIN-DATA-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782450179.1178398,
+  "created_iso": "2026-06-26T05:02:59.117841+00:00",
+  "updated_at": 1782450179.1178482,
+  "owner": "data_engineering",
+  "priority": "MEDIUM",
+  "description": "No connector for Payroll System.",
+  "source_signals": [
+    {
+      "source": "payroll",
+      "status": "MISSING"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782450179.117849
+    }
+  ]
+}

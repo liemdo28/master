@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-26-asset-creative-os",
+  "version": "1.0.0",
+  "description": "Phase 26 — Asset & Creative Production OS. Asset registry, creative briefs, brand compliance, approval-gated creative workflow.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

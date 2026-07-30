@@ -1,0 +1,216 @@
+name: P0 Production Filesystem Containment
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Must be exactly: P0-PRODUCTION-FILESYSTEM-CONTAINMENT"
+        required: true
+        type: string
+
+concurrency:
+  group: p0-production-filesystem-containment
+  cancel-in-progress: false
+
+jobs:
+  contain:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PROD_URL: "https://dashboard.bakudanramen.com"
+    steps:
+      - name: Validate confirmation
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirmation }}" != "P0-PRODUCTION-FILESYSTEM-CONTAINMENT" ]; then
+            echo "::error::confirmation input mismatch"
+            exit 1
+          fi
+          echo "Confirmation accepted."
+
+      - name: Install temporary SSH key
+        env:
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DH_SSH_KEY" > ~/.ssh/contain_key
+          chmod 600 ~/.ssh/contain_key
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+          chmod 600 ~/.ssh/known_hosts
+          echo "Temporary SSH key installed; key material not printed."
+
+      - name: Contain public filesystem resources
+        id: contain
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/contain_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          TS="$(date -u +%Y%m%dT%H%M%SZ)"
+          {
+            echo "TS=$TS"
+            $SSH "${DH_USER}@${DH_HOST}" "DH_PATH='${DH_PATH}' bash -s" <<'REMOTE'
+          set -euo pipefail
+          ROOT="${DH_PATH:?missing DH_PATH}"
+          TS="$(date -u +%Y%m%dT%H%M%SZ)"
+          RESOURCES=( ".git" "db_query.php" "check2.php" "probe_schema.php" "duplicate-scan-run.php" "migrate.php" "create_qa_user.php" "cron.php" )
+
+          case "$ROOT" in
+            ""|"/"|"$HOME"|"$HOME/") echo "IDENTITY=FAIL_UNSAFE_ROOT"; exit 12 ;;
+          esac
+          [ -d "$ROOT" ] || { echo "IDENTITY=FAIL_NOT_DIRECTORY"; exit 13; }
+          [ -f "$ROOT/index.php" ] || { echo "IDENTITY=FAIL_NO_INDEX"; exit 14; }
+          [ -f "$ROOT/.env" ] || { echo "IDENTITY=FAIL_NO_ENV_MARKER"; exit 15; }
+
+          ROOT_REAL="$(cd "$ROOT" && pwd -P)"
+          BACKUP="$HOME/taskflow-containment-backups/$TS"
+          QUAR="$HOME/taskflow-quarantine/$TS"
+          mkdir -p "$BACKUP" "$QUAR"
+          chmod 700 "$HOME/taskflow-containment-backups" "$HOME/taskflow-quarantine" "$BACKUP" "$QUAR"
+
+          echo "DOCUMENT_ROOT_MASKED=~/${ROOT_REAL#"$HOME"/}"
+          echo "BACKUP_MASKED=~/taskflow-containment-backups/$TS"
+          echo "QUARANTINE_MASKED=~/taskflow-quarantine/$TS"
+          echo "IDENTITY=PASS"
+          echo "METADATA_BEGIN"
+          for r in "${RESOURCES[@]}"; do
+            p="$ROOT/$r"
+            if [ -e "$p" ]; then
+              type="file"
+              [ -d "$p" ] && type="directory"
+              size="$(du -sb "$p" 2>/dev/null | awk '{print $1}')"
+              owner="$(stat -c '%U:%G' "$p")"
+              perms="$(stat -c '%a' "$p")"
+              if [ -d "$p" ]; then
+                sha="$(cd "$ROOT" && tar -cf - "$r" 2>/dev/null | sha256sum | awk '{print $1}')"
+              else
+                sha="$(sha256sum "$p" | awk '{print $1}')"
+              fi
+              echo "$r|exists=YES|type=$type|size=$size|owner=$owner|permissions=$perms|sha256=$sha"
+            else
+              echo "$r|exists=NO|type=NA|size=NA|owner=NA|permissions=NA|sha256=NA"
+            fi
+          done
+          echo "METADATA_END"
+
+          for r in "${RESOURCES[@]}"; do
+            p="$ROOT/$r"
+            if [ -e "$p" ]; then
+              cp -a "$p" "$BACKUP/"
+            fi
+          done
+          chmod -R go-rwx "$BACKUP"
+
+          echo "MOVED_BEGIN"
+          for r in "${RESOURCES[@]}"; do
+            p="$ROOT/$r"
+            if [ -e "$p" ]; then
+              mv "$p" "$QUAR/"
+              chmod -R go-rwx "$QUAR/$r"
+              echo "$r"
+            fi
+          done
+          chmod -R go-rwx "$QUAR"
+          echo "MOVED_END"
+          echo "ROLLBACK_POSSIBLE=YES"
+          REMOTE
+          } | tee containment-raw.txt
+
+          grep -E '^(DOCUMENT_ROOT_MASKED|BACKUP_MASKED|QUARANTINE_MASKED|IDENTITY|ROLLBACK_POSSIBLE)=' containment-raw.txt > containment-summary.env
+          {
+            echo "metadata<<EOF"
+            sed -n '/^METADATA_BEGIN$/,/^METADATA_END$/p' containment-raw.txt | sed '/^METADATA_/d'
+            echo "EOF"
+            echo "moved<<EOF"
+            sed -n '/^MOVED_BEGIN$/,/^MOVED_END$/p' containment-raw.txt | sed '/^MOVED_/d'
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Public status checks
+        id: public
+        run: |
+          set -euo pipefail
+          : > public-status.txt
+          FAIL=0
+          for p in "/.git/HEAD" "/.git/config" "/db_query.php" "/check2.php" "/probe_schema.php" "/duplicate-scan-run.php" "/migrate.php" "/create_qa_user.php" "/cron.php"; do
+            code="$(curl -s -o /dev/null -w "%{http_code}" --max-redirs 0 --max-time 15 "${PROD_URL}${p}")"
+            echo "$p -> $code" | tee -a public-status.txt
+            if [ "$code" != "403" ] && [ "$code" != "404" ]; then FAIL=1; fi
+          done
+          echo "public_fail=$FAIL" >> "$GITHUB_OUTPUT"
+
+      - name: Application health checks
+        id: health
+        run: |
+          set -euo pipefail
+          : > app-health.txt
+          FAIL=0
+          check () {
+            local p="$1"
+            local ok="$2"
+            local code
+            code="$(curl -s -o /dev/null -w "%{http_code}" --max-redirs 0 --max-time 15 "${PROD_URL}${p}")"
+            echo "$p -> $code" | tee -a app-health.txt
+            case "$ok" in
+              root) [ "$code" = "200" ] || [ "$code" = "302" ] || FAIL=1 ;;
+              200) [ "$code" = "200" ] || FAIL=1 ;;
+            esac
+          }
+          check "/" root
+          check "/login" 200
+          check "/assets/css/style.css" 200
+          check "/assets/js/app.js" 200
+          echo "health_fail=$FAIL" >> "$GITHUB_OUTPUT"
+
+      - name: Write sanitized report
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p p0-production-filesystem-containment-report
+          DOCROOT="$(grep '^DOCUMENT_ROOT_MASKED=' containment-summary.env 2>/dev/null | cut -d= -f2- || true)"
+          BACKUP="$(grep '^BACKUP_MASKED=' containment-summary.env 2>/dev/null | cut -d= -f2- || true)"
+          QUAR="$(grep '^QUARANTINE_MASKED=' containment-summary.env 2>/dev/null | cut -d= -f2- || true)"
+          {
+            echo "# P0 Production Filesystem Containment Report"
+            echo
+            echo "Document root: ${DOCROOT:-UNKNOWN}"
+            echo "Backup location: ${BACKUP:-UNKNOWN}"
+            echo "Quarantine location: ${QUAR:-UNKNOWN}"
+            echo "Rollback possible: $(grep '^ROLLBACK_POSSIBLE=' containment-summary.env 2>/dev/null | cut -d= -f2- || echo UNKNOWN)"
+            echo
+            echo "## Metadata"
+            sed -n '/^METADATA_BEGIN$/,/^METADATA_END$/p' containment-raw.txt 2>/dev/null | sed '/^METADATA_/d' || true
+            echo
+            echo "## Moved"
+            sed -n '/^MOVED_BEGIN$/,/^MOVED_END$/p' containment-raw.txt 2>/dev/null | sed '/^MOVED_/d' || true
+            echo
+            echo "## Public Status"
+            cat public-status.txt 2>/dev/null || true
+            echo
+            echo "## Application Health"
+            cat app-health.txt 2>/dev/null || true
+            echo
+            echo "No file contents, secrets, or response bodies are included."
+          } > p0-production-filesystem-containment-report/REPORT.md
+
+      - name: Upload sanitized report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-production-filesystem-containment-report
+          path: p0-production-filesystem-containment-report/
+          retention-days: 30
+
+      - name: Remove temporary SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/contain_key
+          echo "Temporary SSH key removed."

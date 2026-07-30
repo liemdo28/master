@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+logs/*.log
+logs/*.json
+logs/*.md
+logs/last-run.txt
+*.DS_Store
+/tmp/

@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqw11pts-r454bii",
+  "objectiveId": "OBJ-083",
+  "taskId": "ENG-021",
+  "requestedBy": "system",
+  "approvalType": "website_content_publish",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Plan website conversion improvements",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T07:17:08.224Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

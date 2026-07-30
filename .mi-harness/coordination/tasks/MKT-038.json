@@ -1,0 +1,17 @@
+{
+  "id": "MKT-038",
+  "objectiveId": "OBJ-069",
+  "title": "Classify negative review spike",
+  "description": "Group review issues by store, theme, and urgency.",
+  "division": "marketing",
+  "owner": "review-intelligence",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T06:20:22.191Z",
+  "updatedAt": "2026-06-27T06:20:22.191Z",
+  "completedAt": null
+}

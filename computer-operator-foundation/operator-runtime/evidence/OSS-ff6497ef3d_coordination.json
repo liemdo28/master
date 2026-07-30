@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-ff6497ef3d",
+  "task_name": "Advance Playwright past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782451898.0744934,
+  "created_iso": "2026-06-26T05:31:38.074494+00:00",
+  "updated_at": 1782451898.074503,
+  "owner": "operator_lead",
+  "priority": "MEDIUM",
+  "description": "Playwright has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-3bab193a67",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782451898.0745037
+    }
+  ]
+}

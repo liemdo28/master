@@ -1,0 +1,133 @@
+{
+  "agent": "seo-analytics-agent",
+  "type": "weekly-kpi",
+  "generated_at": "2026-06-18T07:15:56.982Z",
+  "payload": {
+    "summary": "Weekly KPI snapshot - 13 pages, 9 keywords, 169 technical issues",
+    "metrics": {
+      "locations_count": 3,
+      "gbp_profiles": 3,
+      "pages_audited": 13,
+      "keywords_tracked": 9,
+      "technical_issues": 169,
+      "citations_tracked": 57,
+      "content_briefs": 9,
+      "reviews_tracked": 0
+    },
+    "opportunities": {
+      "high_impressions_low_ctr_pages": [],
+      "keywords_pos_4_to_15": [],
+      "weak_map_locations": []
+    },
+    "dashboard_payload": {
+      "weekly_kpis": {
+        "locations_count": 3,
+        "gbp_profiles": 3,
+        "pages_audited": 13,
+        "keywords_tracked": 9,
+        "technical_issues": 169,
+        "citations_tracked": 57,
+        "content_briefs": 9,
+        "reviews_tracked": 0
+      },
+      "rankings": [
+        {
+          "id": "ranking_snapshots_1781766956960_3teh5f",
+          "keyword": "Best Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/best-ramen-san-antonio",
+          "_ts": "2026-06-18T07:15:56.960Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956962_6vlqsk",
+          "keyword": "Tonkotsu Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+          "_ts": "2026-06-18T07:15:56.962Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956964_1narxm",
+          "keyword": "Japanese Food in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/japanese-food-san-antonio",
+          "_ts": "2026-06-18T07:15:56.964Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956966_n4hygg",
+          "keyword": "Ramen Near UTSA",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-utsa",
+          "_ts": "2026-06-18T07:15:56.966Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956967_vr1ki7",
+          "keyword": "Ramen Near The Rim",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+          "_ts": "2026-06-18T07:15:56.967Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956968_18564z",
+          "keyword": "Ramen Near La Cantera",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": null,
+          "_ts": "2026-06-18T07:15:56.968Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956970_huakso",
+          "keyword": "Ramen in Stone Oak",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/ramen-stone-oak",
+          "_ts": "2026-06-18T07:15:56.970Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956971_1bpxsl",
+          "keyword": "Vegetarian Ramen in San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+          "_ts": "2026-06-18T07:15:56.972Z"
+        },
+        {
+          "id": "ranking_snapshots_1781766956973_0a8f68",
+          "keyword": "Happy Hour Ramen San Antonio",
+          "position": null,
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+          "_ts": "2026-06-18T07:15:56.973Z"
+        }
+      ],
+      "opportunities": {
+        "high_impressions_low_ctr_pages": [],
+        "keywords_pos_4_to_15": [],
+        "weak_map_locations": []
+      },
+      "generated_at": "2026-06-18T07:15:56.976Z"
+    }
+  }
+}

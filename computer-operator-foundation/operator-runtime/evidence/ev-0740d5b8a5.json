@@ -1,0 +1,11 @@
+{
+  "evidence_id": "ev-0740d5b8a5",
+  "type": "download_file",
+  "run_id": "run-342eb698c425",
+  "task_id": "task-8dc100f36717",
+  "file_path": "D:\\Project\\computer-operator-foundation\\operator-runtime\\downloads\\operator-runtime-download.txt",
+  "content": null,
+  "description": "Safe test file download",
+  "registered_at": 1782448817.9585862,
+  "registered_iso": "2026-06-26T04:40:17Z"
+}

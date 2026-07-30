@@ -1,0 +1,16 @@
+{
+  "name": "mi-remote-agent",
+  "version": "1.0.0",
+  "description": "Mi Remote Agent — deploy on remote machine for Mi-Core integration",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs",
+    "start:integration": "PROJECT_NAME=integration-system PROJECT_ROOT=/path/to/integration-system node index.mjs",
+    "start:whatsapp":    "PROJECT_NAME=whatsapp-api PROJECT_ROOT=/path/to/whatsapp-ai-gateway node index.mjs"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}

@@ -1,0 +1,32 @@
+1
+00:00:00,000 --> 00:00:05,000
+Bước 1: mở dashboard.bakudanramen.com và đăng nhập bằng email hoangdle@gmail.com cùng mật khẩu được cấp.
+
+2
+00:00:05,000 --> 00:00:11,000
+Bước 2: vào Overview để xem tình trạng vận hành: việc quá hạn, tiến độ team, rủi ro và các việc cần xử lý hôm nay.
+
+3
+00:00:11,000 --> 00:00:17,000
+Bước 3: mở My Tasks để lọc việc của mình theo ưu tiên, hạn chót và trạng thái; bấm vào từng dòng để xem chi tiết.
+
+4
+00:00:17,000 --> 00:00:23,000
+Bước 4: dùng nút Create để tạo project, task hoặc bill; nhập tiêu đề, người phụ trách, hạn chót và nhấn Save.
+
+5
+00:00:23,000 --> 00:00:29,000
+Bước 5: dùng Calendar để nhìn lịch theo tháng, và Inbox để kiểm tra phân công, bình luận, nhắc hạn và cảnh báo quá hạn.
+
+6
+00:00:29,000 --> 00:00:35,000
+Bước 6: trong trang chi tiết task, cập nhật trạng thái, thêm bình luận, đổi deadline hoặc đánh dấu hoàn thành.
+
+7
+00:00:35,000 --> 00:00:40,000
+Bước 7: với quyền admin hoặc manager, quản lý users, stores, vendors, bills, penalty và yêu cầu gia hạn deadline.
+
+8
+00:00:40,000 --> 00:00:44,000
+Mỗi ngày: xem Overview, xử lý My Tasks, kiểm tra Calendar và Inbox, rồi cập nhật task ngay khi có thay đổi.
+

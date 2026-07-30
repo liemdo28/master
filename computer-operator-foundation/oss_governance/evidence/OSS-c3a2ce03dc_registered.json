@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-c3a2ce03dc",
+  "name": "ComfyUI",
+  "github": "https://github.com/comfyanonymous/ComfyUI",
+  "owner_division": "Creative",
+  "category": "Creative",
+  "description": "Stable Diffusion node-based UI",
+  "license": "GPL-3.0",
+  "license_risk": "MEDIUM",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8585722,
+  "created_iso": "2026-06-26T05:35:22.858575+00:00",
+  "updated_at": 1782452122.8585722,
+  "updated_iso": "2026-06-26T05:35:22.858584+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8585722,
+      "iso": "2026-06-26T05:35:22.858586+00:00"
+    }
+  ]
+}

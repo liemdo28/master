@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-550dba584a",
+  "task_name": "Advance ComfyUI past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452122.8903224,
+  "created_iso": "2026-06-26T05:35:22.890323+00:00",
+  "updated_at": 1782452122.8903306,
+  "owner": "creative_lead",
+  "priority": "MEDIUM",
+  "description": "ComfyUI has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-c3a2ce03dc",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452122.8903315
+    }
+  ]
+}

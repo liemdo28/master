@@ -1,0 +1,112 @@
+{
+  "name": "quickbooks-daily-sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 5 * * *"
+            }
+          ]
+        }
+      },
+      "id": "qb_sync_0",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/intake/event",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source\": \"n8n\",\n  \"domain\": \"quickbooks\",\n  \"event_type\": \"qb_daily_sync_request\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\",\n  \"started_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "qb_sync_1",
+      "name": "Intake Event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-100, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/tasks/dispatch",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"domain\": \"quickbooks\",\n  \"action\": \"daily_sync\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\"\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "qb_sync_2",
+      "name": "Trigger QB Sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:4001/api/mi/workflows/log",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_id\": \"quickbooks-daily-sync\",\n  \"domain\": \"quickbooks\",\n  \"source\": \"n8n\",\n  \"brand_id\": \"all\",\n  \"location_id\": \"all\",\n  \"status\": \"completed\",\n  \"started_at\": \"{{ $now.toISO() }}\",\n  \"completed_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "qb_sync_3",
+      "name": "Log Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Intake Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intake Event": {
+      "main": [
+        [
+          {
+            "node": "Trigger QB Sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger QB Sync": {
+      "main": [
+        [
+          {
+            "node": "Log Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "executionTimeout": 300
+  }
+}

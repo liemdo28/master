@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-wal
+*.db-shm
+storage/
+data/
+.vscode/
+*.log
+.DS_Store

@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnoym-c28869",
+  "objectiveRunId": "run-mqrcnoy9-b61032",
+  "sourceType": "context_snapshot",
+  "sourceRef": "executive-memory-layer",
+  "summary": "Active incidents: 0 | Open risks: 0 | CEO priorities: 0 | Department scores: N/A",
+  "sha256": "fd815e4a0a1585a881aac65151c8efc6e2ff4f81e68c06fa22e1b52329672aab",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnoy9-b61032\\fd815e4a0a1585a881aac65151c8efc6e2ff4f81e68c06fa22e1b52329672aab.json",
+  "capturedAt": "2026-06-24T00:43:18.430Z",
+  "readOnly": true
+}

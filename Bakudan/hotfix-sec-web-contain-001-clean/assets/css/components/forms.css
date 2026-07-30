@@ -1,0 +1,37 @@
+/* ============ FORMS ============ */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+    display: block;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg-primary);
+    transition: var(--transition);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.form-control::placeholder { color: var(--text-muted); }
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+textarea.form-control { resize: vertical; min-height: 80px; }
+

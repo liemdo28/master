@@ -1,0 +1,24 @@
+{
+  "program_name": "Bakudan Rewards",
+  "how_to_join": "Ask any staff member to sign you up in-store, or sign up via our website.",
+  "earning": {
+    "rate": "1 point per $1 spent",
+    "bonus_events": ["Double points every Tuesday", "Birthday month: 3x points"]
+  },
+  "redemption": [
+    { "points": 50,  "reward": "$5 off your order" },
+    { "points": 100, "reward": "Free bowl of ramen (up to $14.99 value)" },
+    { "points": 200, "reward": "Free meal for two (up to $35 value)" },
+    { "points": 500, "reward": "Private dining experience for four" }
+  ],
+  "tiers": [
+    { "name": "Regular",   "min_points": 0,    "perks": ["Standard earning rate"] },
+    { "name": "Gold",      "min_points": 200,  "perks": ["1.25x points", "Priority seating"] },
+    { "name": "Bakudan",   "min_points": 500,  "perks": ["1.5x points", "Monthly free appetizer", "Early menu access"] }
+  ],
+  "faq": [
+    { "q": "Do points expire?", "a": "Points expire after 12 months of inactivity." },
+    { "q": "Can I use points at all locations?", "a": "Yes, points are shared across all Bakudan locations." },
+    { "q": "Can I transfer points?", "a": "Points are non-transferable." }
+  ]
+}

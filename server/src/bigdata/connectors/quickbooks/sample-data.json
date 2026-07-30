@@ -1,0 +1,47 @@
+{
+  "store": "bakudan",
+  "date": "2026-06-10",
+  "transactions": [
+    {
+      "id": "qb-001",
+      "type": "sale",
+      "date": "2026-06-10T11:30:00Z",
+      "amount": 145.50,
+      "description": "Sales Receipt — Table 12 lunch",
+      "customer": "Walk-in",
+      "status": "completed"
+    },
+    {
+      "id": "qb-002",
+      "type": "expense",
+      "date": "2026-06-10T09:00:00Z",
+      "amount": -320.00,
+      "description": "Produce supplier — Sysco",
+      "customer": "Sysco Foods",
+      "status": "paid"
+    },
+    {
+      "id": "qb-003",
+      "type": "refund",
+      "date": "2026-06-10T14:00:00Z",
+      "amount": -28.00,
+      "description": "Customer complaint — wrong order",
+      "customer": "John D.",
+      "status": "processed"
+    }
+  ],
+  "bank_feed_items": [
+    {
+      "id": "bf-001",
+      "date": "2026-06-10",
+      "description": "DOORDASH* PAYOUT",
+      "amount": 892.34,
+      "matched": true
+    }
+  ],
+  "reconcile_status": {
+    "period": "2026-06",
+    "status": "in_progress",
+    "discrepancy": 0.00
+  }
+}

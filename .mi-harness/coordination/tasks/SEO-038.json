@@ -1,0 +1,17 @@
+{
+  "id": "SEO-038",
+  "objectiveId": "OBJ-093",
+  "title": "Run SEO technical audit",
+  "description": "Collect technical blockers and evidence.",
+  "division": "seo",
+  "owner": "seo-technical-agent",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T07:17:12.185Z",
+  "updatedAt": "2026-06-27T07:17:12.185Z",
+  "completedAt": null
+}

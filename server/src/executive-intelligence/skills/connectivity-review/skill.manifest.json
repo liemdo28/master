@@ -1,0 +1,14 @@
+{
+  "name": "connectivity-review",
+  "version": "1.0.0",
+  "entry": "skills/connectivity-review/SKILL.md",
+  "approved": true,
+  "approvedBy": "cto",
+  "scope": ["connectivity", "finance", "operations"],
+  "sha256": "REPLACE_ME",
+  "policy": {
+    "mode": "read-only",
+    "allowedConnectors": ["quickbooks", "toast", "doordash"],
+    "approvalRequiredForWrite": true
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "phase": "0.5",
+  "module": "oss_governance",
+  "started_at": "2026-06-26T05:35:22.834203+00:00",
+  "tests": [
+    {
+      "name": "seed_25_candidates",
+      "status": "PASS",
+      "detail": "registered=27"
+    },
+    {
+      "name": "registry_25_projects",
+      "status": "PASS",
+      "detail": "count=27"
+    },
+    {
+      "name": "8_lifecycle_stages",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "6_divisions",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "6_categories",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_mit_low",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_agpl_high",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_unknown",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_score_mit",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_score_agpl",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "license_score_unknown",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "8_stage_gates",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "retired_is_terminal",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "can_advance_to_audit",
+      "status": "PASS",
+      "detail": "Stage gate satisfied"
+    },
+    {
+      "name": "cannot_skip_stages",
+      "status": "PASS",
+      "detail": "Cannot skip stages from DISCOVERY to PRODUCTION"
+    },
+    {
+      "name": "advance_to_audit",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "pipeline_has_stages",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "pipeline_total",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "coord_summary",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "risks_detected",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "self_test_pass",
+      "status": "PASS",
+      "detail": "passed=47/47 failures=0"
+    },
+    {
+      "name": "dashboard_13_endpoints",
+      "status": "PASS",
+      "detail": "passed=13/13"
+    }
+  ],
+  "summary": {
+    "total_tests": 22,
+    "passed": 22,
+    "failed": 0,
+    "registry_count": 27,
+    "dashboard_endpoints": 13,
+    "dashboard_passed": 13,
+    "self_test_passed": 47,
+    "self_test_total": 47,
+    "pipeline_health": "BLOCKED",
+    "coordination_tasks": 0,
+    "risks_detected": 6,
+    "risk_types": [
+      "HIGH_LICENSE_RISK",
+      "STUCK_PIPELINE"
+    ]
+  },
+  "status": "PASS",
+  "finished_at": "2026-06-26T05:35:23.998044+00:00",
+  "dashboard_smoke": {
+    "total_endpoints": 13,
+    "passed": 13,
+    "failed": 0,
+    "results": [
+      {
+        "endpoint": "GET /api/oss/health",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/registry",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/pipeline",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/scorecards",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/risks",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/coordination",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/lifecycle/events",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/lifecycle/gates",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/summary",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/runtime-proof",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/registry/division/Engineering",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "GET /api/oss/registry/stage/DISCOVERY",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      },
+      {
+        "endpoint": "POST /api/oss/coordination/emit",
+        "status_code": 200,
+        "valid_json": true,
+        "ok": true
+      }
+    ]
+  }
+}

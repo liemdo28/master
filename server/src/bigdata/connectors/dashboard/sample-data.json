@@ -1,0 +1,41 @@
+{
+  "store": "bakudan",
+  "captured_at": "2026-06-10T08:00:00Z",
+  "tasks": [
+    {
+      "id": "t-001",
+      "title": "Inventory check — produce storage",
+      "assignee": "Maria",
+      "status": "overdue",
+      "due_date": "2026-06-09T17:00:00Z",
+      "updated_at": "2026-06-09T12:00:00Z"
+    },
+    {
+      "id": "t-002",
+      "title": "Opening checklist — June 10",
+      "assignee": "Hoang",
+      "status": "completed",
+      "due_date": "2026-06-10T10:00:00Z",
+      "updated_at": "2026-06-10T09:45:00Z"
+    }
+  ],
+  "approvals": [
+    {
+      "id": "a-001",
+      "action": "Staff overtime approval — Nguyen",
+      "actor": "Maria",
+      "status": "approved",
+      "amount": 45.00,
+      "created_at": "2026-06-10T07:30:00Z"
+    }
+  ],
+  "penalties": [],
+  "notifications": [
+    {
+      "id": "n-001",
+      "type": "health_inspection",
+      "message": "Scheduled health inspection 2026-06-15",
+      "created_at": "2026-06-08T10:00:00Z"
+    }
+  ]
+}

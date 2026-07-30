@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-23-operations-control-tower",
+  "version": "1.0.0",
+  "description": "Phase 23 — Restaurant Operations Control Tower. Store health, checklist compliance, food-safety monitor, incident routing, staffing risk.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

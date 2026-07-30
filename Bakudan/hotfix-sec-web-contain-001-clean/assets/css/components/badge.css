@@ -1,0 +1,11 @@
+/* ============ BADGES ============ */
+.badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 9px; border-radius: var(--radius-md);
+    font-size: 11px; font-weight: 600;
+}
+.badge-active { background: var(--green-bg); color: var(--green); }
+.badge-inactive { background: var(--bg-tertiary); color: var(--text-muted); }
+.badge-admin { background: var(--accent-bg); color: var(--accent); }
+.badge-member { background: var(--blue-bg); color: var(--blue); }
+

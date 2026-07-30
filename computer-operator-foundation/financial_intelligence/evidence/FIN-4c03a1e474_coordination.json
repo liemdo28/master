@@ -1,0 +1,28 @@
+{
+  "coord_task_id": "FIN-4c03a1e474",
+  "task_name": "Build connector: Google Search Console",
+  "objective_id": "OBJ-FIN-DATA-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449671.9211056,
+  "created_iso": "2026-06-26T04:54:31.921106+00:00",
+  "updated_at": 1782449671.9211142,
+  "owner": "data_engineering",
+  "priority": "MEDIUM",
+  "description": "No connector for Google Search Console.",
+  "source_signals": [
+    {
+      "source": "gsc",
+      "status": "MISSING"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449671.9211154
+    }
+  ]
+}

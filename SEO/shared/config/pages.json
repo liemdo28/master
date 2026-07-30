@@ -1,0 +1,17 @@
+{
+  "pages": [
+    { "id": "home", "url": "https://bakudanramen.com/", "type": "homepage" },
+    { "id": "menu", "url": "https://bakudanramen.com/menu", "type": "menu" },
+    { "id": "loc-bandera", "url": "https://bakudanramen.com/locations/bandera", "type": "location", "location_id": "bandera" },
+    { "id": "loc-stone-oak", "url": "https://bakudanramen.com/locations/stone-oak", "type": "location", "location_id": "stone-oak" },
+    { "id": "loc-the-rim", "url": "https://bakudanramen.com/locations/the-rim", "type": "location", "location_id": "the-rim" },
+    { "id": "lp-best-ramen", "url": "https://bakudanramen.com/best-ramen-san-antonio", "type": "landing", "target_keyword": "Best Ramen in San Antonio" },
+    { "id": "lp-tonkotsu", "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio", "type": "landing", "target_keyword": "Tonkotsu Ramen in San Antonio" },
+    { "id": "lp-japanese-food", "url": "https://bakudanramen.com/japanese-food-san-antonio", "type": "landing", "target_keyword": "Japanese Food in San Antonio" },
+    { "id": "lp-utsa", "url": "https://bakudanramen.com/ramen-near-utsa", "type": "landing", "target_keyword": "Ramen Near UTSA" },
+    { "id": "lp-rim-cantera", "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera", "type": "landing", "target_keyword": "Ramen Near The Rim" },
+    { "id": "lp-stone-oak", "url": "https://bakudanramen.com/ramen-stone-oak", "type": "landing", "target_keyword": "Ramen in Stone Oak" },
+    { "id": "lp-vegetarian", "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio", "type": "landing", "target_keyword": "Vegetarian Ramen in San Antonio" },
+    { "id": "lp-happy-hour", "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio", "type": "landing", "target_keyword": "Happy Hour Ramen San Antonio" }
+  ]
+}

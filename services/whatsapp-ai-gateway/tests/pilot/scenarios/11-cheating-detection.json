@@ -1,0 +1,12 @@
+[
+  { "id": "CD-01", "pattern": "SAME_VALUE_REPEATED", "count": 3, "expected": "PATTERN_LOGGED", "description": "Same exact value 3+ times" },
+  { "id": "CD-02", "pattern": "SAME_SUBMISSION", "expected": "PATTERN_LOGGED", "description": "Same full submission repeated" },
+  { "id": "CD-03", "pattern": "PRIOR_DAY_MATCH", "expected": "PATTERN_LOGGED", "description": "Values identical to prior day" },
+  { "id": "CD-04", "pattern": "PERFECT_BOUNDARIES", "expected": "PATTERN_LOGGED", "description": "Too many perfect boundary values" },
+  { "id": "CD-05", "submissionTime": 20, "expected": "PATTERN_LOGGED", "description": "Submission too fast" },
+  { "id": "CD-06", "pattern": "PHOTO_REUSED", "expected": "PATTERN_LOGGED", "description": "Photo reused" },
+  { "id": "CD-07", "stores": 3, "expected": "PATTERN_LOGGED", "description": "Same employee submits all stores" },
+  { "id": "CD-08", "logsAtSameTimestamp": 5, "expected": "PATTERN_LOGGED", "description": "Many logs at same timestamp" },
+  { "id": "CD-09", "photoRequired": true, "photoSent": false, "expected": "FLAGGED", "description": "No photo when required" },
+  { "id": "CD-10", "pattern": "REPEATED_MISMATCH", "expected": "PATTERN_LOGGED", "description": "Human repeatedly mismatches sensor" }
+]

@@ -1,0 +1,6 @@
+/*
+  Autonomous patch validation sentinel.
+  Non-production QA asset only. Do not ship as UI runtime CSS.
+  Generated: 2026-06-06T11:19:02.534Z
+*/
+.autonomous-patch-validation { outline: 1px solid transparent; }

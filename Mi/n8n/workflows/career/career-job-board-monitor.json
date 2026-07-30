@@ -1,0 +1,19 @@
+{
+  "workflow_id": "career-job-board-monitor",
+  "name": "Career Job Board Monitor",
+  "domain": "career",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "personal",
+  "location_id": "all",
+  "schedule": "0 */4 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Monitors job boards for new postings matching criteria. Match scoring done in Mi-Core.",
+  "actions": [
+    {"order": 1, "type": "http_request", "name": "intake_event", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/intake/event", "body": {"source": "n8n", "domain": "career", "event_type": "career_job_monitor_request", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "started_at": "{{started_at}}"}},
+    {"order": 2, "type": "http_request", "name": "trigger_mi_core", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch", "body": {"domain": "career", "action": "job_board_monitor", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}"}},
+    {"order": 3, "type": "http_request", "name": "log_result", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/workflows/log", "body": {"workflow_id": "career-job-board-monitor", "domain": "career", "source": "n8n", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "status": "{{trigger_mi_core.status}}", "started_at": "{{started_at}}", "completed_at": "{{completed_at}}", "error": ""}}
+  ]
+}

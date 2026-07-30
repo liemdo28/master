@@ -1,0 +1,10 @@
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^(127\.0\.0\.1|localhost)(:[0-9]+)?$ [NC]
+RewriteCond %{REQUEST_URI} ^/(\.git|\.github|config|database|sql|migration|migrations|scripts|qa|tests|test-results|reports|logs|artifacts|\.backups|\.local-agent|performance|walkthrough-recorder|walkthrough_video)(/|$) [NC]
+RewriteCond %{REQUEST_URI} (^|/)\.env(\.|$) [NC,OR]
+RewriteCond %{REQUEST_URI} \.(QUARANTINED|bak|backup|old|orig|log|sql|sqlite3?|pem|key|crt|p12|pfx)$ [NC]
+RewriteCond %{REQUEST_URI} \.php$
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/webhooks/telegram\.php$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d

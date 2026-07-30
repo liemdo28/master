@@ -1,0 +1,180 @@
+name: P0 Post-Containment Read-Only Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Must be exactly: P0-POST-CONTAINMENT-READONLY"
+        required: true
+        type: string
+
+concurrency:
+  group: p0-post-containment-readonly-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Validate confirmation
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirmation }}" != "P0-POST-CONTAINMENT-READONLY" ]; then
+            echo "::error::confirmation input mismatch"
+            exit 1
+          fi
+          echo "Confirmation accepted."
+
+      - name: Install temporary SSH key
+        env:
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DH_SSH_KEY" > ~/.ssh/audit_key
+          chmod 600 ~/.ssh/audit_key
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+          chmod 600 ~/.ssh/known_hosts
+          echo "Temporary SSH key installed; key material not printed."
+
+      - name: Remote read-only audit
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/audit_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          mkdir -p p0-post-containment-readonly-audit
+          $SSH "${DH_USER}@${DH_HOST}" "DH_PATH='${DH_PATH}' bash -s" > p0-post-containment-readonly-audit/REPORT.md <<'REMOTE'
+          set -euo pipefail
+          ROOT="${DH_PATH:?missing DH_PATH}"
+          echo "# P0 Post-Containment Read-Only Audit"
+          echo
+          echo "Document root: ~/${ROOT#"$HOME"/}"
+          echo
+          echo "## Crontab"
+          if crontab -l >/tmp/p0_crontab.$$ 2>/dev/null; then
+            sed -E \
+              -e "s#${ROOT}#<DOCUMENT_ROOT>#g" \
+              -e "s#${HOME}#~#g" \
+              -e 's#([?&](key|secret|token)=)[^[:space:]&]+#\1<redacted>#gI' \
+              /tmp/p0_crontab.$$
+          else
+            echo "NO_CRONTAB_OR_NOT_READABLE"
+            : > /tmp/p0_crontab.$$
+          fi
+          echo
+          echo "## Cron Path Status"
+          if grep -E 'cron\.php|/api/.*/jobs|telegram_daily_summary|run_notifications|DailyDuplicateTaskBillScanner' /tmp/p0_crontab.$$ >/tmp/p0_cron_hits.$$ 2>/dev/null; then
+            while IFS= read -r line; do
+              sanitized="$(printf '%s\n' "$line" | sed -E -e "s#${ROOT}#<DOCUMENT_ROOT>#g" -e "s#${HOME}#~#g" -e 's#([?&](key|secret|token)=)[^[:space:]&]+#\1<redacted>#gI')"
+              status="UNKNOWN"
+              if printf '%s\n' "$line" | grep -q "$ROOT/cron.php"; then
+                if [ -e "$ROOT/cron.php" ]; then status="REFERENCED_FILE_EXISTS"; else status="REFERENCED_FILE_MISSING"; fi
+              elif printf '%s\n' "$line" | grep -q 'https://dashboard.bakudanramen.com/cron.php'; then
+                status="REFERENCES_PUBLIC_HTTP_CRON"
+              elif printf '%s\n' "$line" | grep -Eq '/api/.*/jobs'; then
+                status="REFERENCES_ROUTED_JOB_ENDPOINT"
+              fi
+              echo "$sanitized | status=$status"
+            done < /tmp/p0_cron_hits.$$
+          else
+            echo "NO_CRON_CONSUMER_FOUND_IN_CRONTAB"
+          fi
+          rm -f /tmp/p0_cron_hits.$$ /tmp/p0_crontab.$$
+          echo
+          echo "## Quarantine Presence"
+          for r in .git db_query.php check2.php probe_schema.php duplicate-scan-run.php migrate.php create_qa_user.php cron.php; do
+            found="$(find "$HOME/taskflow-quarantine" -mindepth 2 -maxdepth 2 -name "$r" -print 2>/dev/null | tail -1 || true)"
+            if [ -n "$found" ]; then
+              echo "$r|quarantined=YES|path=~/taskflow-quarantine/${found#"$HOME/taskflow-quarantine/"}"
+            else
+              echo "$r|quarantined=NO|path=NA"
+            fi
+          done
+          echo
+          echo "## Public Root Presence"
+          for r in .git db_query.php check2.php probe_schema.php duplicate-scan-run.php migrate.php create_qa_user.php cron.php; do
+            if [ -e "$ROOT/$r" ]; then echo "$r|public_root=YES"; else echo "$r|public_root=NO"; fi
+          done
+          echo
+          echo "## Migration Metadata"
+          php <<'PHP'
+          <?php
+          chdir(getenv('DH_PATH'));
+          require_once 'config/database.php';
+          $pdo = Database::getInstance()->getConnection();
+          $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          $db = $pdo->query('SELECT DATABASE()')->fetchColumn();
+          echo "database=" . preg_replace('/[^A-Za-z0-9_.-]/', '_', (string)$db) . PHP_EOL;
+          $tables = $pdo->query("SELECT table_name, create_time, update_time, table_rows FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name LIKE '%migrat%' ORDER BY table_name")->fetchAll(PDO::FETCH_ASSOC);
+          if (!$tables) {
+              echo "migration_ledger_tables=NONE_FOUND" . PHP_EOL;
+          } else {
+              foreach ($tables as $t) {
+                  echo "ledger_table={$t['table_name']}|create_time={$t['create_time']}|update_time={$t['update_time']}|rows={$t['table_rows']}" . PHP_EOL;
+              }
+          }
+          $targets = [
+              ['api_tokens', null],
+              ['devices', null],
+              ['notification_deliveries', null],
+              ['rate_limits', null],
+              ['audit_log', null],
+              ['sync_events', null],
+              ['task_watchers', null],
+              ['tasks', 'creator_id'],
+              ['notifications', 'sender_id'],
+              ['deadline_extensions', 'requested_at'],
+              ['releases', 'created_by'],
+              ['release_artifacts', null],
+              ['usage_events', null],
+              ['store_checklists', null],
+              ['deploy_freezes', null],
+              ['task_comments', null],
+              ['task_mentions', null],
+              ['task_notifications', null],
+              ['task_reviewer_notes', null],
+              ['task_approval_notes', null],
+          ];
+          $stmtTable = $pdo->prepare("SELECT create_time, update_time, table_rows FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?");
+          $stmtCol = $pdo->prepare("SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?");
+          foreach ($targets as [$table, $column]) {
+              $stmtTable->execute([$table]);
+              $meta = $stmtTable->fetch(PDO::FETCH_ASSOC);
+              if (!$meta) {
+                  echo "target=$table|exists=NO" . PHP_EOL;
+                  continue;
+              }
+              $line = "target=$table|exists=YES|create_time={$meta['create_time']}|update_time={$meta['update_time']}|rows={$meta['table_rows']}";
+              if ($column) {
+                  $stmtCol->execute([$table, $column]);
+                  $line .= "|column_$column=" . ($stmtCol->fetchColumn() ? 'YES' : 'NO');
+              }
+              echo $line . PHP_EOL;
+          }
+          PHP
+          echo
+          echo "No utility scripts, cron jobs, migrations, or business-data mutations were executed by this audit."
+          REMOTE
+
+      - name: Upload read-only audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-post-containment-readonly-audit
+          path: p0-post-containment-readonly-audit/
+          retention-days: 30
+
+      - name: Remove temporary SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/audit_key
+          echo "Temporary SSH key removed."

@@ -1,0 +1,44 @@
+{
+  "project_id": "OSS-dcde61f7fa",
+  "project_name": "TEST_INTEGRATION",
+  "roi": {
+    "status": "EVALUATED",
+    "composite_score": 0.87,
+    "components": {
+      "license_friendlyness": 1.0,
+      "community_health": 0.68,
+      "integration_fit": 1.0,
+      "maintenance_burden": 0.8
+    },
+    "verdict": "STRONG_BUY"
+  },
+  "risk": {
+    "composite_score": 0.0,
+    "components": {
+      "license_risk": 0.0,
+      "community_health": 0.31999999999999995
+    },
+    "verdict": "LOW"
+  },
+  "maintenance_cost": {
+    "components": {
+      "release_freq": {
+        "months": 1.5,
+        "score": 0.7,
+        "label": "active"
+      },
+      "breaking_changes": {
+        "count": 0,
+        "score": 1.0,
+        "label": "stable"
+      },
+      "documentation": {
+        "value": "good",
+        "score": 0.7
+      }
+    },
+    "score": 0.8,
+    "status": "EVALUATED"
+  },
+  "evaluated_at": "2026-06-26T05:31:38.068747+00:00"
+}

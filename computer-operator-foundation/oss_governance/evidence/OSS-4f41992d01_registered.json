@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-4f41992d01",
+  "name": "Aider",
+  "github": "https://github.com/Aider-AI/aider",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "AI pair programming in the terminal",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6620467,
+  "created_iso": "2026-06-26T05:33:33.662050+00:00",
+  "updated_at": 1782452013.6620467,
+  "updated_iso": "2026-06-26T05:33:33.662058+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6620467,
+      "iso": "2026-06-26T05:33:33.662059+00:00"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+.dev/
+node_modules/
+dist/
+build/
+.cache/
+.env
+.env.local
+.env.preview
+*.log
+logs/errors/*.log
+logs/performance/*.log
+!logs/.gitkeep
+!logs/errors/.gitkeep
+!logs/performance/.gitkeep
+Thumbs.db
+.DS_Store
+._*
+**/._*
+.vscode/
+.idea/
+uploads/
+storage/
+tmp/
+cache/
+config/ai.local.php
+config/telegram.local.php
+config/email.local.php
+NUL
+**/NUL
+.github/deploy_key
+.github/deploy_key.pub
+
+# Financial document samples (sensitive PDFs — store locally only)
+Bill_Sample/
+
+# Nested project copy (IDE artifact)
+dashboard.bakudanramen.com/
+
+# Local workspace artifacts
+Desktop/
+
+# Legacy/backup files with credentials
+database.php.legacy-exposed-do-not-use
+database.php.QUARANTINED
+.env.preview.QUARANTINED
+*.QUARANTINED
+
+# Walkthrough recorder runtime output
+walkthrough-recorder/.user-data/
+walkthrough-recorder/output/
+walkthrough-recorder/recordings/
+walkthrough-recorder/screenshots/
+walkthrough-recorder/reports/
+
+# QA Playwright artifacts (generated at runtime)
+qa/playwright/.auth/
+qa/artifacts/
+qa/reports/html/
+qa/reports/results.json
+qa/reports/failure-report.md
+qa/reports/sql-evidence.md
+qa/videos/*.webm
+qa/videos/*.mp4
+qa/screenshots/*.png

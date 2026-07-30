@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:04,000
+CEO Dashboard Walkthrough: start with the Today Brief.
+
+2
+00:00:04,000 --> 00:00:08,000
+The top panel reduces the dashboard to three CEO decisions.
+
+3
+00:00:08,000 --> 00:00:11,500
+First: review the highest-ranked decision for today.
+
+4
+00:00:11,500 --> 00:00:15,000
+Second: open Pay / File for bills, tax, and cash-risk items.
+
+5
+00:00:15,000 --> 00:00:18,500
+Third: follow up on overdue tasks, compliance, and overloaded teams.
+
+6
+00:00:18,500 --> 00:00:23,000
+Detailed finance, operations, and compliance panels stay below as drill-downs.
+
+7
+00:00:23,000 --> 00:00:26,800
+The sidebar now repeats the same three CEO entry points.

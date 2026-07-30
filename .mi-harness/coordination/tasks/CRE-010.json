@@ -1,0 +1,17 @@
+{
+  "id": "CRE-010",
+  "objectiveId": "OBJ-037",
+  "title": "Prepare creative assets for revenue campaign",
+  "description": "Create draft assets and hold for approval.",
+  "division": "creative",
+  "owner": "creative-division",
+  "priority": "P0",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "marketing_publish",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:40.759Z",
+  "updatedAt": "2026-06-27T04:36:40.759Z",
+  "completedAt": null
+}

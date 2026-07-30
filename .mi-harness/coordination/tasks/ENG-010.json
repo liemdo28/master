@@ -1,0 +1,17 @@
+{
+  "id": "ENG-010",
+  "objectiveId": "OBJ-037",
+  "title": "Plan website conversion improvements",
+  "description": "Create website change list; publishing requires approval.",
+  "division": "engineering",
+  "owner": "engineering-division",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "website_content_publish",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:40.741Z",
+  "updatedAt": "2026-06-27T04:36:40.741Z",
+  "completedAt": null
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@bakudan-seo/analytics-agent",
+  "version": "1.0.0",
+  "description": "analytics agent",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

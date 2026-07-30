@@ -1,0 +1,2433 @@
+{
+  "generated_at": "2026-06-15T09:09:35.011Z",
+  "overallPass": true,
+  "suites": [
+    {
+      "id": "M1",
+      "message": "Dashboard + QB",
+      "expectedTypes": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "result": {
+        "parent_tracking_id": "WF-M1",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260615-1403",
+        "original_message": "Dashboard + QB",
+        "expected_children": 2,
+        "executed_children": 2,
+        "completed_children": 1,
+        "failed_children": 0,
+        "approval_pending_children": 1,
+        "dropped_children": 0,
+        "children": [
+          {
+            "tracking_id": "WF-M1-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260615-1404",
+            "clause_index": 0,
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "target_entity": "Dashboard",
+            "status": "approval_pending",
+            "job_id": "JOB-mqeznz6k-021",
+            "result": "DASHBOARD_AUDIT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-1404.json",
+              ".local-agent-global/execution-queue/JOB-mqeznz6k-021.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M1-B",
+            "workflow_id": "FINANCE-REPORT-20260615-635",
+            "clause_index": 1,
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "target_entity": null,
+            "status": "completed",
+            "job_id": "JOB-mqeznz7t-379",
+            "result": "FINANCE_REPORT executed successfully.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260615-635.json",
+              ".local-agent-global/execution-queue/JOB-mqeznz7t-379.json"
+            ]
+          }
+        ],
+        "final_summary": "Executed 2/2 child workflows. 0 failed, 1 waiting for approval, 0 dropped.",
+        "created_at": "2026-06-15T09:06:22.605Z",
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-M1.json"
+      },
+      "checks": [
+        {
+          "label": "M1: no silent drop",
+          "pass": true,
+          "detail": "2/2"
+        },
+        {
+          "label": "M1: expected workflow types",
+          "pass": true,
+          "detail": "DASHBOARD_AUDIT,FINANCE_REPORT"
+        },
+        {
+          "label": "M1: all children visible",
+          "pass": true,
+          "detail": "WF-M1-A,WF-M1-B"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "M2",
+      "message": "Dashboard + QB + Raw SEO",
+      "expectedTypes": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "result": {
+        "parent_tracking_id": "WF-M2",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260615-1405",
+        "original_message": "Dashboard + QB + Raw SEO",
+        "expected_children": 3,
+        "executed_children": 3,
+        "completed_children": 1,
+        "failed_children": 0,
+        "approval_pending_children": 2,
+        "dropped_children": 0,
+        "children": [
+          {
+            "tracking_id": "WF-M2-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260615-1406",
+            "clause_index": 0,
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "target_entity": "Dashboard",
+            "status": "approval_pending",
+            "job_id": "JOB-mqeznzqa-867",
+            "result": "DASHBOARD_AUDIT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-1406.json",
+              ".local-agent-global/execution-queue/JOB-mqeznzqa-867.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M2-B",
+            "workflow_id": "FINANCE-REPORT-20260615-636",
+            "clause_index": 1,
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "target_entity": null,
+            "status": "completed",
+            "job_id": "JOB-mqeznzrj-945",
+            "result": "FINANCE_REPORT executed successfully.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260615-636.json",
+              ".local-agent-global/execution-queue/JOB-mqeznzrj-945.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M2-C",
+            "workflow_id": "SEO-CONTENT-20260615-739",
+            "clause_index": 2,
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "target_entity": "Raw Sushi",
+            "status": "approval_pending",
+            "job_id": "JOB-mqeznzst-001",
+            "result": "SEO_CONTENT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260615-739.json",
+              ".local-agent-global/execution-queue/JOB-mqeznzst-001.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-739.md"
+            ]
+          }
+        ],
+        "final_summary": "Executed 3/3 child workflows. 0 failed, 2 waiting for approval, 0 dropped.",
+        "created_at": "2026-06-15T09:06:23.399Z",
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-M2.json"
+      },
+      "checks": [
+        {
+          "label": "M2: no silent drop",
+          "pass": true,
+          "detail": "3/3"
+        },
+        {
+          "label": "M2: expected workflow types",
+          "pass": true,
+          "detail": "DASHBOARD_AUDIT,FINANCE_REPORT,SEO_CONTENT"
+        },
+        {
+          "label": "M2: all children visible",
+          "pass": true,
+          "detail": "WF-M2-A,WF-M2-B,WF-M2-C"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "M3",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expectedTypes": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "result": {
+        "parent_tracking_id": "WF-M3",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260615-1407",
+        "original_message": "Dashboard + QB + Raw SEO + Maria",
+        "expected_children": 4,
+        "executed_children": 4,
+        "completed_children": 1,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "dropped_children": 0,
+        "children": [
+          {
+            "tracking_id": "WF-M3-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260615-1408",
+            "clause_index": 0,
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "target_entity": "Dashboard",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo0kb-230",
+            "result": "DASHBOARD_AUDIT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-1408.json",
+              ".local-agent-global/execution-queue/JOB-mqezo0kb-230.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M3-B",
+            "workflow_id": "FINANCE-REPORT-20260615-637",
+            "clause_index": 1,
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "target_entity": null,
+            "status": "completed",
+            "job_id": "JOB-mqezo0m0-221",
+            "result": "FINANCE_REPORT executed successfully.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260615-637.json",
+              ".local-agent-global/execution-queue/JOB-mqezo0m0-221.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M3-C",
+            "workflow_id": "SEO-CONTENT-20260615-740",
+            "clause_index": 2,
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "target_entity": "Raw Sushi",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo0o6-187",
+            "result": "SEO_CONTENT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260615-740.json",
+              ".local-agent-global/execution-queue/JOB-mqezo0o6-187.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-740.md"
+            ]
+          },
+          {
+            "tracking_id": "WF-M3-D",
+            "workflow_id": "EMAIL-DRAFT-20260615-471",
+            "clause_index": 3,
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "target_entity": "Maria",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo0pp-896",
+            "result": "EMAIL_DRAFT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260615-471.json",
+              ".local-agent-global/execution-queue/JOB-mqezo0pp-896.json"
+            ]
+          }
+        ],
+        "final_summary": "Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.",
+        "created_at": "2026-06-15T09:06:24.544Z",
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-M3.json"
+      },
+      "checks": [
+        {
+          "label": "M3: no silent drop",
+          "pass": true,
+          "detail": "4/4"
+        },
+        {
+          "label": "M3: expected workflow types",
+          "pass": true,
+          "detail": "DASHBOARD_AUDIT,FINANCE_REPORT,SEO_CONTENT,EMAIL_DRAFT"
+        },
+        {
+          "label": "M3: all children visible",
+          "pass": true,
+          "detail": "WF-M3-A,WF-M3-B,WF-M3-C,WF-M3-D"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "M4",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expectedTypes": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "result": {
+        "parent_tracking_id": "WF-M4",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260615-1409",
+        "original_message": "Dashboard + QB + Raw SEO + Maria",
+        "expected_children": 4,
+        "executed_children": 4,
+        "completed_children": 0,
+        "failed_children": 1,
+        "approval_pending_children": 3,
+        "dropped_children": 0,
+        "children": [
+          {
+            "tracking_id": "WF-M4-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260615-1410",
+            "clause_index": 0,
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "target_entity": "Dashboard",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo1il-537",
+            "result": "DASHBOARD_AUDIT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-1410.json",
+              ".local-agent-global/execution-queue/JOB-mqezo1il-537.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M4-B",
+            "workflow_id": "FINANCE-REPORT-20260615-638",
+            "clause_index": 1,
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "target_entity": null,
+            "status": "failed",
+            "job_id": null,
+            "result": "FINANCE_REPORT failed independently; other children continued.",
+            "error": "Forced failure for finance_qb",
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260615-638.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-M4-C",
+            "workflow_id": "SEO-CONTENT-20260615-741",
+            "clause_index": 2,
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "target_entity": "Raw Sushi",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo1mb-818",
+            "result": "SEO_CONTENT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260615-741.json",
+              ".local-agent-global/execution-queue/JOB-mqezo1mb-818.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-741.md"
+            ]
+          },
+          {
+            "tracking_id": "WF-M4-D",
+            "workflow_id": "EMAIL-DRAFT-20260615-472",
+            "clause_index": 3,
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "target_entity": "Maria",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo1ni-571",
+            "result": "EMAIL_DRAFT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260615-472.json",
+              ".local-agent-global/execution-queue/JOB-mqezo1ni-571.json"
+            ]
+          }
+        ],
+        "final_summary": "Executed 4/4 child workflows. 1 failed, 3 waiting for approval, 0 dropped.",
+        "created_at": "2026-06-15T09:06:25.761Z",
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-M4.json"
+      },
+      "checks": [
+        {
+          "label": "M4: no silent drop",
+          "pass": true,
+          "detail": "4/4"
+        },
+        {
+          "label": "M4: expected workflow types",
+          "pass": true,
+          "detail": "DASHBOARD_AUDIT,FINANCE_REPORT,SEO_CONTENT,EMAIL_DRAFT"
+        },
+        {
+          "label": "M4: all children visible",
+          "pass": true,
+          "detail": "WF-M4-A,WF-M4-B,WF-M4-C,WF-M4-D"
+        },
+        {
+          "label": "M4: partial failure isolated",
+          "pass": true,
+          "detail": "dashboard_monitoring:approval_pending,finance_qb:failed,seo_content:approval_pending,email_comms:approval_pending"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "M5",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expectedTypes": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "result": {
+        "parent_tracking_id": "WF-001",
+        "parent_workflow_id": "DASHBOARD-AUDIT-20260615-1411",
+        "original_message": "Dashboard + QB + Raw SEO + Maria",
+        "expected_children": 4,
+        "executed_children": 4,
+        "completed_children": 1,
+        "failed_children": 0,
+        "approval_pending_children": 3,
+        "dropped_children": 0,
+        "children": [
+          {
+            "tracking_id": "WF-001-A",
+            "workflow_id": "DASHBOARD-AUDIT-20260615-1412",
+            "clause_index": 0,
+            "workflow_type": "DASHBOARD_AUDIT",
+            "domain": "dashboard_monitoring",
+            "target_entity": "Dashboard",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo2gr-884",
+            "result": "DASHBOARD_AUDIT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-1412.json",
+              ".local-agent-global/execution-queue/JOB-mqezo2gr-884.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-001-B",
+            "workflow_id": "FINANCE-REPORT-20260615-639",
+            "clause_index": 1,
+            "workflow_type": "FINANCE_REPORT",
+            "domain": "finance_qb",
+            "target_entity": null,
+            "status": "completed",
+            "job_id": "JOB-mqezo2j2-375",
+            "result": "FINANCE_REPORT executed successfully.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/FINANCE-REPORT-20260615-639.json",
+              ".local-agent-global/execution-queue/JOB-mqezo2j2-375.json"
+            ]
+          },
+          {
+            "tracking_id": "WF-001-C",
+            "workflow_id": "SEO-CONTENT-20260615-742",
+            "clause_index": 2,
+            "workflow_type": "SEO_CONTENT",
+            "domain": "seo_content",
+            "target_entity": "Raw Sushi",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo2la-400",
+            "result": "SEO_CONTENT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/SEO-CONTENT-20260615-742.json",
+              ".local-agent-global/execution-queue/JOB-mqezo2la-400.json",
+              "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-742.md"
+            ]
+          },
+          {
+            "tracking_id": "WF-001-D",
+            "workflow_id": "EMAIL-DRAFT-20260615-473",
+            "clause_index": 3,
+            "workflow_type": "EMAIL_DRAFT",
+            "domain": "email_comms",
+            "target_entity": "Maria",
+            "status": "approval_pending",
+            "job_id": "JOB-mqezo2mw-150",
+            "result": "EMAIL_DRAFT executed through safe steps and is waiting for approval before external write.",
+            "error": null,
+            "evidence": [
+              ".local-agent-global/workflows/EMAIL-DRAFT-20260615-473.json",
+              ".local-agent-global/execution-queue/JOB-mqezo2mw-150.json"
+            ]
+          }
+        ],
+        "final_summary": "Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.",
+        "created_at": "2026-06-15T09:06:27.036Z",
+        "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-001.json"
+      },
+      "checks": [
+        {
+          "label": "M5: no silent drop",
+          "pass": true,
+          "detail": "4/4"
+        },
+        {
+          "label": "M5: expected workflow types",
+          "pass": true,
+          "detail": "DASHBOARD_AUDIT,FINANCE_REPORT,SEO_CONTENT,EMAIL_DRAFT"
+        },
+        {
+          "label": "M5: all children visible",
+          "pass": true,
+          "detail": "WF-001-A,WF-001-B,WF-001-C,WF-001-D"
+        },
+        {
+          "label": "M5: parent and child tracking visible",
+          "pass": true,
+          "detail": "WF-001 -> WF-001-A,WF-001-B,WF-001-C,WF-001-D"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "regressionPassed": 100,
+  "regressionTotal": 100,
+  "successRate": 100,
+  "regression": [
+    {
+      "id": "R001",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R001.json"
+    },
+    {
+      "id": "R002",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R002.json"
+    },
+    {
+      "id": "R003",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R003.json"
+    },
+    {
+      "id": "R004",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R004.json"
+    },
+    {
+      "id": "R005",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R005.json"
+    },
+    {
+      "id": "R006",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R006.json"
+    },
+    {
+      "id": "R007",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R007.json"
+    },
+    {
+      "id": "R008",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R008.json"
+    },
+    {
+      "id": "R009",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R009.json"
+    },
+    {
+      "id": "R010",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R010.json"
+    },
+    {
+      "id": "R011",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R011.json"
+    },
+    {
+      "id": "R012",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R012.json"
+    },
+    {
+      "id": "R013",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R013.json"
+    },
+    {
+      "id": "R014",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R014.json"
+    },
+    {
+      "id": "R015",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R015.json"
+    },
+    {
+      "id": "R016",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R016.json"
+    },
+    {
+      "id": "R017",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R017.json"
+    },
+    {
+      "id": "R018",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R018.json"
+    },
+    {
+      "id": "R019",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R019.json"
+    },
+    {
+      "id": "R020",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R020.json"
+    },
+    {
+      "id": "R021",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R021.json"
+    },
+    {
+      "id": "R022",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R022.json"
+    },
+    {
+      "id": "R023",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R023.json"
+    },
+    {
+      "id": "R024",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R024.json"
+    },
+    {
+      "id": "R025",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R025.json"
+    },
+    {
+      "id": "R026",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R026.json"
+    },
+    {
+      "id": "R027",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R027.json"
+    },
+    {
+      "id": "R028",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R028.json"
+    },
+    {
+      "id": "R029",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R029.json"
+    },
+    {
+      "id": "R030",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R030.json"
+    },
+    {
+      "id": "R031",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R031.json"
+    },
+    {
+      "id": "R032",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R032.json"
+    },
+    {
+      "id": "R033",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R033.json"
+    },
+    {
+      "id": "R034",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R034.json"
+    },
+    {
+      "id": "R035",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R035.json"
+    },
+    {
+      "id": "R036",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R036.json"
+    },
+    {
+      "id": "R037",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R037.json"
+    },
+    {
+      "id": "R038",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R038.json"
+    },
+    {
+      "id": "R039",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R039.json"
+    },
+    {
+      "id": "R040",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R040.json"
+    },
+    {
+      "id": "R041",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R041.json"
+    },
+    {
+      "id": "R042",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R042.json"
+    },
+    {
+      "id": "R043",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R043.json"
+    },
+    {
+      "id": "R044",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R044.json"
+    },
+    {
+      "id": "R045",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R045.json"
+    },
+    {
+      "id": "R046",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R046.json"
+    },
+    {
+      "id": "R047",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R047.json"
+    },
+    {
+      "id": "R048",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R048.json"
+    },
+    {
+      "id": "R049",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R049.json"
+    },
+    {
+      "id": "R050",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R050.json"
+    },
+    {
+      "id": "R051",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R051.json"
+    },
+    {
+      "id": "R052",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R052.json"
+    },
+    {
+      "id": "R053",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R053.json"
+    },
+    {
+      "id": "R054",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R054.json"
+    },
+    {
+      "id": "R055",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R055.json"
+    },
+    {
+      "id": "R056",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R056.json"
+    },
+    {
+      "id": "R057",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R057.json"
+    },
+    {
+      "id": "R058",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R058.json"
+    },
+    {
+      "id": "R059",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R059.json"
+    },
+    {
+      "id": "R060",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R060.json"
+    },
+    {
+      "id": "R061",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R061.json"
+    },
+    {
+      "id": "R062",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R062.json"
+    },
+    {
+      "id": "R063",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R063.json"
+    },
+    {
+      "id": "R064",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R064.json"
+    },
+    {
+      "id": "R065",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R065.json"
+    },
+    {
+      "id": "R066",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R066.json"
+    },
+    {
+      "id": "R067",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R067.json"
+    },
+    {
+      "id": "R068",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R068.json"
+    },
+    {
+      "id": "R069",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R069.json"
+    },
+    {
+      "id": "R070",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R070.json"
+    },
+    {
+      "id": "R071",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R071.json"
+    },
+    {
+      "id": "R072",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R072.json"
+    },
+    {
+      "id": "R073",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R073.json"
+    },
+    {
+      "id": "R074",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R074.json"
+    },
+    {
+      "id": "R075",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R075.json"
+    },
+    {
+      "id": "R076",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R076.json"
+    },
+    {
+      "id": "R077",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R077.json"
+    },
+    {
+      "id": "R078",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R078.json"
+    },
+    {
+      "id": "R079",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R079.json"
+    },
+    {
+      "id": "R080",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R080.json"
+    },
+    {
+      "id": "R081",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R081.json"
+    },
+    {
+      "id": "R082",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R082.json"
+    },
+    {
+      "id": "R083",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R083.json"
+    },
+    {
+      "id": "R084",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R084.json"
+    },
+    {
+      "id": "R085",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R085.json"
+    },
+    {
+      "id": "R086",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R086.json"
+    },
+    {
+      "id": "R087",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R087.json"
+    },
+    {
+      "id": "R088",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R088.json"
+    },
+    {
+      "id": "R089",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R089.json"
+    },
+    {
+      "id": "R090",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R090.json"
+    },
+    {
+      "id": "R091",
+      "message": "Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R091.json"
+    },
+    {
+      "id": "R092",
+      "message": "Check Dashboard + QB",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R092.json"
+    },
+    {
+      "id": "R093",
+      "message": "Dashboard + QuickBooks",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT"
+      ],
+      "executed_children": 2,
+      "expected_children": 2,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R093.json"
+    },
+    {
+      "id": "R094",
+      "message": "Dashboard + QB + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R094.json"
+    },
+    {
+      "id": "R095",
+      "message": "Check Dashboard + QuickBooks + Raw SEO",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R095.json"
+    },
+    {
+      "id": "R096",
+      "message": "Dashboard + QB + SEO Raw Sushi",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT"
+      ],
+      "executed_children": 3,
+      "expected_children": 3,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R096.json"
+    },
+    {
+      "id": "R097",
+      "message": "Dashboard + QB + Raw SEO + Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R097.json"
+    },
+    {
+      "id": "R098",
+      "message": "Check Dashboard + QB + Raw SEO + báo Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R098.json"
+    },
+    {
+      "id": "R099",
+      "message": "Review Dashboard + QuickBooks + tạo SEO Raw Sushi + gửi Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R099.json"
+    },
+    {
+      "id": "R100",
+      "message": "Dashboard + coi QB + Raw Sushi SEO + send Maria",
+      "expected": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "actual": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "executed_children": 4,
+      "expected_children": 4,
+      "dropped_children": 0,
+      "pass": true,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-R100.json"
+    }
+  ]
+}

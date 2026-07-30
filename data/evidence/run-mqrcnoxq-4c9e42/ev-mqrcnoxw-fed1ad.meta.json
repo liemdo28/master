@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnoxw-fed1ad",
+  "objectiveRunId": "run-mqrcnoxq-4c9e42",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: marketing_concern (70%), Alternatives: 0, Ambiguous: false",
+  "sha256": "3f2c9c0f5f3dacca2eafad4299cc36834cb280ab34509a2abeab829b8b7db9ef",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnoxq-4c9e42\\3f2c9c0f5f3dacca2eafad4299cc36834cb280ab34509a2abeab829b8b7db9ef.json",
+  "capturedAt": "2026-06-24T00:43:18.404Z",
+  "readOnly": true
+}

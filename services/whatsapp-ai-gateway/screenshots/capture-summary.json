@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-06-09T04:40:15.427Z",
+  "dashboard_url": "http://localhost:3210",
+  "files": [
+    "dashboard-status.html",
+    "health-check.json",
+    "api-stats.json",
+    "api-messages.json",
+    "api-safety.json"
+  ]
+}

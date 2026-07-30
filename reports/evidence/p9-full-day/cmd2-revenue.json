@@ -1,0 +1,8 @@
+{
+  "stores": [
+    "bakudan_ramen",
+    "raw_sushi_bar"
+  ],
+  "cashflow_months": 3,
+  "ceo_reply": "💰 *Doanh Thu — 14/6/2026*\n\n⚠️ QuickBooks: sync lỗi kể từ 10/6/2026\n   Lỗi: Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35\n\n📌 Cần fix QB sync trước khi lấy được doanh thu thực.\n   Gõ: \"fix quickbooks sync\" để Mi xử lý.\n\nBusinesses: Raw Sushi Bar + Bakudan Ramen"
+}

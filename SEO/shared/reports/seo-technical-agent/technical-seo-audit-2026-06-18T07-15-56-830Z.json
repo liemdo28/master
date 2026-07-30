@@ -1,0 +1,1378 @@
+{
+  "agent": "seo-technical-agent",
+  "type": "technical-seo-audit",
+  "generated_at": "2026-06-18T07:15:56.830Z",
+  "payload": {
+    "summary": "Ran 13 checks on 13 pages = 169 issue records",
+    "checks": [
+      "indexing",
+      "sitemap",
+      "robots_txt",
+      "canonical_tags",
+      "broken_links",
+      "redirects",
+      "duplicate_titles",
+      "duplicate_meta",
+      "thin_content",
+      "mobile_usability",
+      "page_speed",
+      "core_web_vitals",
+      "image_alt_text"
+    ],
+    "pages_audited": 13,
+    "issues": [
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "home",
+        "url": "https://bakudanramen.com/",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "menu",
+        "url": "https://bakudanramen.com/menu",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/menu"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-bandera",
+        "url": "https://bakudanramen.com/locations/bandera",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/locations/bandera"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-stone-oak",
+        "url": "https://bakudanramen.com/locations/stone-oak",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/locations/stone-oak"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "loc-the-rim",
+        "url": "https://bakudanramen.com/locations/the-rim",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/locations/the-rim"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-best-ramen",
+        "url": "https://bakudanramen.com/best-ramen-san-antonio",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/best-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-tonkotsu",
+        "url": "https://bakudanramen.com/tonkotsu-ramen-san-antonio",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/tonkotsu-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-japanese-food",
+        "url": "https://bakudanramen.com/japanese-food-san-antonio",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/japanese-food-san-antonio"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-utsa",
+        "url": "https://bakudanramen.com/ramen-near-utsa",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/ramen-near-utsa"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-rim-cantera",
+        "url": "https://bakudanramen.com/ramen-near-the-rim-la-cantera",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/ramen-near-the-rim-la-cantera"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-stone-oak",
+        "url": "https://bakudanramen.com/ramen-stone-oak",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/ramen-stone-oak"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-vegetarian",
+        "url": "https://bakudanramen.com/vegetarian-ramen-san-antonio",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/vegetarian-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "indexing",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit indexing for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "sitemap",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit sitemap for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "robots_txt",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit robots_txt for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "canonical_tags",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit canonical_tags for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "broken_links",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit broken_links for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "redirects",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit redirects for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "duplicate_titles",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_titles for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "duplicate_meta",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit duplicate_meta for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "thin_content",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit thin_content for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "mobile_usability",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit mobile_usability for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "page_speed",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit page_speed for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "core_web_vitals",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit core_web_vitals for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      },
+      {
+        "page_id": "lp-happy-hour",
+        "url": "https://bakudanramen.com/happy-hour-ramen-san-antonio",
+        "check": "image_alt_text",
+        "status": "pending",
+        "severity": "info",
+        "detail": "Audit image_alt_text for https://bakudanramen.com/happy-hour-ramen-san-antonio"
+      }
+    ]
+  }
+}

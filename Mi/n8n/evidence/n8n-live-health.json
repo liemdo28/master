@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-06-28T21:00:00.000Z",
+  "n8n_instance": {
+    "version": "2.27.3",
+    "install_method": "npm global",
+    "binary_path": "C:\\Users\\liemdo\\AppData\\Roaming\\npm\\n8n.cmd",
+    "port": 5678,
+    "pm2_process": "mi-n8n",
+    "health_endpoint": "http://127.0.0.1:5678/healthz",
+    "status": "PM2_MANAGED"
+  },
+  "workflow_registry": {
+    "total_workflows": 22,
+    "approval_gated": 9,
+    "auto_run": 13,
+    "departments_covered": 5,
+    "registry_path": "Mi/n8n/registry/N8N_WORKFLOW_REGISTRY.md"
+  },
+  "mi_core_endpoints": {
+    "POST_api_mi_workflows_log": "CONFIGURED",
+    "POST_api_mi_workflows_evidence": "CONFIGURED",
+    "POST_api_mi_workflows_heartbeat": "CONFIGURED",
+    "GET_api_mi_workflows_status": "CONFIGURED",
+    "POST_api_mi_approval_request": "CONFIGURED",
+    "POST_api_mi_intake_event": "CONFIGURED"
+  },
+  "live_oss_workers": [
+    "Uptime Kuma",
+    "Playwright",
+    "DuckDB",
+    "Graphology",
+    "FFmpeg",
+    "OpenTelemetry"
+  ],
+  "health": "LIVE_READY"
+}

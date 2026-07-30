@@ -1,0 +1,128 @@
+{
+  "ts": "2026-06-26T05:02:58.626737+00:00",
+  "phase": "3B Financial Intelligence",
+  "warehouse_available": true,
+  "engines_run": {
+    "revenue_engine": {
+      "ok": true,
+      "aggregation_confidence": 43,
+      "freshness": "PARTIAL",
+      "live_sources": 1,
+      "total_sources": 3,
+      "trend_available": false,
+      "freshness_awareness": "PARTIAL"
+    },
+    "store_ranking_engine": {
+      "ok": true,
+      "total_stores": 4,
+      "top_store": "Bakudan The Rim",
+      "top_score": 23
+    },
+    "source_health_engine": {
+      "ok": true,
+      "overall_health": "BLOCKED",
+      "counts": {
+        "LIVE": 2,
+        "STALE": 0,
+        "PARTIAL": 0,
+        "MISSING": 5,
+        "BLOCKED": 1
+      }
+    },
+    "financial_risk_engine": {
+      "ok": true,
+      "total_risks": 5,
+      "by_severity": {
+        "P0": 0,
+        "P1": 3,
+        "P2": 2,
+        "P3": 0
+      }
+    },
+    "cfo_question_engine": {
+      "ok": true,
+      "total_questions": 6,
+      "answerable": 4,
+      "blocked": 2,
+      "overall_confidence": 27
+    },
+    "coordination_adapter": {
+      "ok": true,
+      "tasks_created": 5,
+      "risks_created": 5,
+      "alerts_created": 0,
+      "total_tasks": 10
+    }
+  },
+  "api_endpoints": {
+    "/api/finance/health": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/revenue": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/stores": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/risks": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/questions": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/questions/revenue_today": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/questions/best_store": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/questions/stale_sources": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/questions/financial_risks": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/health/sources": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/coordination": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    },
+    "/api/finance/runtime-proof": {
+      "method": "GET",
+      "status": 200,
+      "ok": true
+    }
+  },
+  "errors": [],
+  "final_status": "FINANCIAL_INTELLIGENCE_READY",
+  "runtime_metrics": {
+    "successful_endpoints": 12,
+    "total_endpoints": 12,
+    "endpoint_success_rate": 100.0,
+    "engines_successful": 6,
+    "total_engines": 6
+  }
+}

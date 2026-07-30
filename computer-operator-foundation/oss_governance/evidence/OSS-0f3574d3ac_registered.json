@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-0f3574d3ac",
+  "name": "Grafana",
+  "github": "https://github.com/grafana/grafana",
+  "owner_division": "IT",
+  "category": "IT",
+  "description": "Observability dashboards",
+  "license": "AGPL-3.0",
+  "license_risk": "HIGH",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6746156,
+  "created_iso": "2026-06-26T05:33:33.674618+00:00",
+  "updated_at": 1782452013.6746156,
+  "updated_iso": "2026-06-26T05:33:33.674625+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6746156,
+      "iso": "2026-06-26T05:33:33.674626+00:00"
+    }
+  ]
+}

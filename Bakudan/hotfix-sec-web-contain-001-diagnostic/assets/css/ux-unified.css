@@ -1,0 +1,226 @@
+/* ============================================================
+   UX UNIFIED — Design System Bridge Layer v5
+   Ensures CEO, Staff Home, Bills, Team, Overview pages all
+   share the same visual language. Applied after all other CSS.
+   ============================================================ */
+
+/* ── Typography Upgrade ──
+   Body font size and weight from spec.                          */
+body {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+/* ── Page headings (all content pages) ── */
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    margin: 0 0 4px;
+    line-height: 1.2;
+}
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin: 0;
+}
+
+/* ── Content area max width ──
+   CEO spec: 1440px. Other pages: 1280px.                        */
+.content-area > .content-max {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+.content-area > .content-max-wide {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* ── Section title labels (uppercase + muted) ── */
+.section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+/* ── Unified KPI grid (4-col) ── */
+.kpi-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+@media(max-width:900px)  { .kpi-grid-4 { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:520px)  { .kpi-grid-4 { grid-template-columns: repeat(2,1fr); } }
+
+.kpi-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+@media(max-width:700px)  { .kpi-grid-3 { grid-template-columns: 1fr 1fr; } }
+
+/* ── Two-column layout (main + sidebar) ── */
+.layout-main-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+@media(max-width:960px)  { .layout-main-sidebar { grid-template-columns: 1fr; } }
+
+.layout-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+@media(max-width:900px)  { .layout-two-col { grid-template-columns: 1fr; } }
+
+/* ── Surface cards (unified) ──
+   var(--surface) is now defined in tokens.css = #18181b        */
+.surface-card {
+    background: var(--surface, var(--bg-card));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);   /* 16px */
+    padding: 20px;
+}
+.surface-card + .surface-card { /* adjacent stacking */ }
+
+/* ── Insight / alert items ── */
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border-left: 3px solid transparent;
+    margin-bottom: 8px;
+}
+.insight-item:last-child { margin-bottom: 0; }
+.insight-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 4px;
+}
+
+.insight-critical { background: rgba(220,38,38,.08); border-left-color: #DC2626; }
+.insight-critical .insight-dot { background: #DC2626; }
+
+.insight-warning  { background: rgba(245,158,11,.08); border-left-color: #F59E0B; }
+.insight-warning  .insight-dot { background: #F59E0B; }
+
+.insight-ok       { background: rgba(34,197,94,.08); border-left-color: #22C55E; }
+.insight-ok       .insight-dot { background: #22C55E; }
+
+.insight-info     { background: rgba(59,130,246,.08); border-left-color: #3B82F6; }
+.insight-info     .insight-dot { background: #3B82F6; }
+
+/* ── Unified table rows ── */
+.data-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+.data-row:last-child { border-bottom: none; }
+.data-row:hover { background: rgba(255,255,255,.03); border-radius: 8px;
+                  padding-left: 8px; padding-right: 8px; margin: 0 -8px; }
+
+/* ── Status-aware border-left ── */
+.bl-critical { border-left: 3px solid var(--status-critical, #EF4444) !important; }
+.bl-warning  { border-left: 3px solid var(--status-warning,  #F59E0B) !important; }
+.bl-ok       { border-left: 3px solid var(--status-ok,       #22C55E) !important; }
+.bl-info     { border-left: 3px solid var(--status-info,     #3B82F6) !important; }
+.bl-neutral  { border-left: 3px solid var(--status-neutral,  #94A3B8) !important; }
+
+/* ── Avatar circle ── */
+.avatar-circle {
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; flex-shrink: 0;
+    font-weight: 700; color: #fff;
+    font-size: 13px;
+}
+.avatar-sm  { width: 28px; height: 28px; font-size: 11px; }
+.avatar-md  { width: 36px; height: 36px; font-size: 14px; }
+.avatar-lg  { width: 48px; height: 48px; font-size: 18px; }
+
+/* ── Progress bar (unified) ── */
+.prog-bar {
+    height: 8px; border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    overflow: hidden;
+}
+.prog-fill {
+    height: 100%; border-radius: 999px;
+    transition: width .4s ease;
+}
+.prog-green  .prog-fill, .prog-fill.c-green  { background: #22C55E; }
+.prog-amber  .prog-fill, .prog-fill.c-amber  { background: #F59E0B; }
+.prog-red    .prog-fill, .prog-fill.c-red    { background: #EF4444; }
+.prog-blue   .prog-fill, .prog-fill.c-blue   { background: #3B82F6; }
+
+/* ── Meta text row (icon + label + value) ── */
+.meta-row {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-muted);
+}
+.meta-row strong { color: var(--text); font-weight: 600; }
+
+/* ── Action links ── */
+.action-link {
+    font-size: 12px; font-weight: 600; color: var(--blue);
+    text-decoration: none;
+}
+.action-link:hover { text-decoration: underline; color: var(--blue); }
+
+/* ── Empty state (unified) ── */
+.empty-block {
+    text-align: center; padding: 48px 20px;
+    color: var(--text-muted);
+}
+.empty-block .empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-block .empty-title { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
+.empty-block .empty-desc  { font-size: 13px; }
+
+/* ── Form controls (unified surface) ── */
+.form-control-dark {
+    width: 100%; padding: 9px 12px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color .15s;
+    box-sizing: border-box;
+}
+.form-control-dark:focus { outline: none; border-color: var(--status-info, #3B82F6); }
+.form-control-dark option { background: #1E293B; }
+.form-control-dark::placeholder { color: var(--text-muted); }
+
+/* ── Scrollbar (unified thin) ── */
+* { scrollbar-width: thin; scrollbar-color: var(--bg-tertiary) transparent; }
+
+/* ── Hover elevation (add to any card/row) ── */
+.hover-lift {
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-hover);
+}
+
+/* ── Responsive utilities ── */
+@media(max-width:768px) {
+    .hide-mobile  { display: none !important; }
+    .kpi-grid-4   { grid-template-columns: repeat(2,1fr); gap: 10px; }
+}
+@media(min-width:769px) {
+    .hide-desktop { display: none !important; }
+}

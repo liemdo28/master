@@ -1,0 +1,1 @@
+{"ok":true,"message_id":"test-1781494970934","reply":"✅ Không có gì cần duyệt lúc này.  \n*Giải thích:*  \n- Hệ thống hiện tại không có yêu cầu nào cần phê duyệt (pending_count = 0).  \n- Tuy có 1 vấn đề nghiêm trọng (QB Agent sync lỗi checksum), nhưng đây là sự cố kỹ thuật, không thuộc phạm vi phê duyệt.  \n\nAnh yên tâm nhé! 🙌"}

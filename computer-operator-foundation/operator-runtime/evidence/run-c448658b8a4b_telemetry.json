@@ -1,0 +1,74 @@
+{
+  "run_id": "run-c448658b8a4b",
+  "task_id": "task-844dc9650040",
+  "objective_id": "obj-7642f296",
+  "adapter": "playwright-chromium",
+  "mode": "sandbox",
+  "target": "https://example.com",
+  "start_time": 1782448760.0945308,
+  "start_iso": "2026-06-26T04:39:20Z",
+  "end_time": 1782448760.9262571,
+  "end_iso": "2026-06-26T04:39:20Z",
+  "duration_ms": 831.7,
+  "action_count": 5,
+  "success": true,
+  "errors": [],
+  "screenshots": [
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo1_public_read.png"
+  ],
+  "downloads": [],
+  "evidence_ids": [
+    "ev-fde83b9575",
+    "ev-a91a729a6a",
+    "ev-c204023866"
+  ],
+  "policy_decision": {
+    "ok": true,
+    "target": "https://example.com",
+    "classification": "SAFE",
+    "status": "APPROVED"
+  },
+  "status": "COMPLETED",
+  "actions": [
+    {
+      "seq": 1,
+      "type": "navigate",
+      "detail": "goto https://example.com",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448760.6185
+    },
+    {
+      "seq": 2,
+      "type": "read_title",
+      "detail": "read document.title",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448760.7565675
+    },
+    {
+      "seq": 3,
+      "type": "extract_links",
+      "detail": "query all <a> elements",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448760.7687225
+    },
+    {
+      "seq": 4,
+      "type": "screenshot",
+      "detail": "save demo1_public_read.png",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448760.7860727
+    },
+    {
+      "seq": 5,
+      "type": "done",
+      "detail": "demo1 completed",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448760.9262538
+    }
+  ]
+}

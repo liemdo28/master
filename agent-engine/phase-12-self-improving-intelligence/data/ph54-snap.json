@@ -1,0 +1,131 @@
+[
+  {
+    "id": "VEN_1782656995807_n86x31",
+    "timestamp": 1782656995807,
+    "vendors": [
+      {
+        "name": "Alpha",
+        "score": 100,
+        "tier": "PREFERRED",
+        "breakdown": {
+          "onTime": 100,
+          "quality": 100,
+          "price": 100,
+          "reliability": 100
+        }
+      },
+      {
+        "name": "Beta",
+        "score": 72,
+        "tier": "APPROVED",
+        "breakdown": {
+          "onTime": 70,
+          "quality": 70,
+          "price": 80,
+          "reliability": 70
+        }
+      },
+      {
+        "name": "Gamma",
+        "score": 36,
+        "tier": "PROBATION",
+        "breakdown": {
+          "onTime": 30,
+          "quality": 30,
+          "price": 60,
+          "reliability": 30
+        }
+      }
+    ],
+    "count": 3,
+    "preferred": 1,
+    "probation": 1,
+    "topVendor": "Alpha"
+  },
+  {
+    "id": "VEN_1782656987606_jfbqrn",
+    "timestamp": 1782656987606,
+    "vendors": [
+      {
+        "name": "Alpha",
+        "score": 100,
+        "tier": "PREFERRED",
+        "breakdown": {
+          "onTime": 100,
+          "quality": 100,
+          "price": 100,
+          "reliability": 100
+        }
+      },
+      {
+        "name": "Beta",
+        "score": 72,
+        "tier": "APPROVED",
+        "breakdown": {
+          "onTime": 70,
+          "quality": 70,
+          "price": 80,
+          "reliability": 70
+        }
+      },
+      {
+        "name": "Gamma",
+        "score": 36,
+        "tier": "PROBATION",
+        "breakdown": {
+          "onTime": 30,
+          "quality": 30,
+          "price": 60,
+          "reliability": 30
+        }
+      }
+    ],
+    "count": 3,
+    "preferred": 1,
+    "probation": 1,
+    "topVendor": "Alpha"
+  },
+  {
+    "id": "VEN_1782656981524_9gh0s7",
+    "timestamp": 1782656981524,
+    "vendors": [
+      {
+        "name": "Alpha",
+        "score": 100,
+        "tier": "PREFERRED",
+        "breakdown": {
+          "onTime": 100,
+          "quality": 100,
+          "price": 100,
+          "reliability": 100
+        }
+      },
+      {
+        "name": "Beta",
+        "score": 72,
+        "tier": "APPROVED",
+        "breakdown": {
+          "onTime": 70,
+          "quality": 70,
+          "price": 80,
+          "reliability": 70
+        }
+      },
+      {
+        "name": "Gamma",
+        "score": 36,
+        "tier": "PROBATION",
+        "breakdown": {
+          "onTime": 30,
+          "quality": 30,
+          "price": 60,
+          "reliability": 30
+        }
+      }
+    ],
+    "count": 3,
+    "preferred": 1,
+    "probation": 1,
+    "topVendor": "Alpha"
+  }
+]

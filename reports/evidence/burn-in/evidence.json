@@ -1,0 +1,89 @@
+{
+  "phase": "BURN_IN",
+  "target": "JARVIS_V4_BURN_IN_READY",
+  "passed": 31,
+  "failed": 0,
+  "day": 1,
+  "start_date": "2026-06-14T14:28:46.719Z",
+  "snapshot": {
+    "date": "2026-06-14",
+    "day": 1,
+    "generated_at": "2026-06-14T14:28:50.550Z",
+    "success_rate": 0.8125,
+    "failure_rate": 0.0625,
+    "retry_rate": 0.0625,
+    "avg_runtime_ms": 1592,
+    "total_actions": 16,
+    "orphan_workflows": 0,
+    "missing_evidence": 0,
+    "flow_gaps": 0,
+    "flow_gap_detail": [],
+    "burn_in_score": 86,
+    "burn_in_status": "DEGRADED",
+    "domains": {
+      "work_order": {
+        "total": 2,
+        "success": 2,
+        "failure": 0,
+        "rate": 1
+      },
+      "approval": {
+        "total": 2,
+        "success": 2,
+        "failure": 0,
+        "rate": 1
+      },
+      "gmail": {
+        "total": 2,
+        "success": 2,
+        "failure": 0,
+        "rate": 1
+      },
+      "drive": {
+        "total": 2,
+        "success": 2,
+        "failure": 0,
+        "rate": 1
+      },
+      "browser": {
+        "total": 2,
+        "success": 2,
+        "failure": 0,
+        "rate": 1
+      },
+      "website": {
+        "total": 2,
+        "success": 1,
+        "failure": 0,
+        "rate": 0.5
+      },
+      "finance": {
+        "total": 4,
+        "success": 2,
+        "failure": 1,
+        "rate": 0.5
+      }
+    },
+    "alerts": []
+  },
+  "burn_in_summary": {
+    "days_elapsed": 1,
+    "days_remaining": 6,
+    "total_events": 16,
+    "overall_success_rate": 0.8125,
+    "overall_failure_rate": 0.0625,
+    "overall_retry_rate": 0.0625,
+    "avg_ms": 1592,
+    "total_orphans": 0,
+    "status": "IN_PROGRESS"
+  },
+  "weekly_summary": {
+    "trend": "insufficient_data",
+    "days": 1,
+    "alerts": []
+  },
+  "qb_root_cause": "Stale expected checksum in dd_machine_state — QB file modified while connector offline",
+  "qb_fix_plan": "Reset dd_machine_state on LIEMDO-PC with QB open",
+  "ceo_report_id": "CEO_WEEKLY_1781447330581",
+  "generated_at": "2026-06-14T14:28:50.603Z"
+}

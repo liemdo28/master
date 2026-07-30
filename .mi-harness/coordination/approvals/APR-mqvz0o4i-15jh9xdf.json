@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqvz0o4i-15jh9xdf",
+  "objectiveId": "OBJ-063",
+  "taskId": "OPS-034",
+  "requestedBy": "system",
+  "approvalType": "doordash_campaign_change",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Audit DoorDash conversion levers",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T06:20:20.130Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

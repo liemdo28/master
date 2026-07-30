@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-a45ce48596",
+  "name": "Plausible",
+  "github": "https://github.com/plausible/analytics",
+  "owner_division": "Marketing",
+  "category": "Marketing",
+  "description": "Privacy-friendly web analytics",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.0561047,
+  "created_iso": "2026-06-26T05:31:38.056110+00:00",
+  "updated_at": 1782451898.0561047,
+  "updated_iso": "2026-06-26T05:31:38.056116+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0561047,
+      "iso": "2026-06-26T05:31:38.056118+00:00"
+    }
+  ]
+}

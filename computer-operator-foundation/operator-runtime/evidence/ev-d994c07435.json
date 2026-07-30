@@ -1,0 +1,37 @@
+{
+  "evidence_id": "ev-d994c07435",
+  "type": "execution_log",
+  "run_id": "run-410d1c9d1563",
+  "task_id": "task-b9fba3ef4c1c",
+  "file_path": null,
+  "content": {
+    "target": "https://example.com",
+    "actions": [
+      {
+        "type": "navigate",
+        "url": "https://example.com"
+      },
+      {
+        "type": "read_title",
+        "value": "Example Domain"
+      },
+      {
+        "type": "extract_links",
+        "count": 1
+      }
+    ],
+    "errors": [],
+    "title": "Example Domain",
+    "links": [
+      {
+        "href": "https://iana.org/domains/example",
+        "text": "Learn more"
+      }
+    ],
+    "link_count": 1,
+    "duration_seconds": 3.532
+  },
+  "description": "Demo1 execution log",
+  "registered_at": 1782449487.7698393,
+  "registered_iso": "2026-06-26T04:51:27Z"
+}

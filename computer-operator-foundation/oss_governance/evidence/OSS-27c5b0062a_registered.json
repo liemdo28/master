@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-27c5b0062a",
+  "name": "Stagehand",
+  "github": "https://github.com/browserbase/stagehand",
+  "owner_division": "Operator",
+  "category": "Operator",
+  "description": "AI browser agent framework",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8448303,
+  "created_iso": "2026-06-26T05:35:22.844833+00:00",
+  "updated_at": 1782452122.8448303,
+  "updated_iso": "2026-06-26T05:35:22.844843+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8448303,
+      "iso": "2026-06-26T05:35:22.844845+00:00"
+    }
+  ]
+}

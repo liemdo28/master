@@ -1,0 +1,924 @@
+/* ================================================================
+   CEO ADOPTION UI — v3  OPUS BLUE/NAVY THEME
+   dashboard.bakudanramen.com — PREVIEW ONLY
+   ================================================================
+   Philosophy: Calm navy dark theme. Readable for 8h sessions.
+   Red = critical only. Blue = primary. Green = healthy.
+   ================================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 0 — OPUS BLUE/NAVY COLOR SYSTEM
+   ══════════════════════════════════════════════════════════════ */
+:root {
+    /* ── Semantic theme tokens (Opus-style) ── */
+    --bg-main:         #0B1623;   /* deep navy page bg */
+    --bg-sidebar:      #0B1220;   /* darker navy sidebar */
+    --bg-card:         #102033;   /* navy card surface */
+    --bg-card-raised:  #13263A;   /* elevated / hover */
+    --bg-elevated:     #1A3248;   /* highest surface */
+    --border-card:     #1E3A5F;   /* blue-tinted border */
+    --border-subtle:   rgba(30,58,95,.7);
+    --border-hover:    #2a5080;
+
+    /* ── Text ── */
+    --text-main:       #EAF2FF;   /* bright blue-white */
+    --text-secondary:  #A7B6C8;   /* mid blue-gray */
+    --text-muted:      #7F8FA3;   /* muted blue-gray */
+
+    /* ── Accent colors — semantic ── */
+    --accent-primary:  #3B82F6;   /* blue — navigation, info, primary action */
+    --accent-cyan:     #14B8A6;   /* teal — secondary highlight */
+    --accent-success:  #22C55E;   /* green — healthy, complete, ok */
+    --accent-warning:  #F59E0B;   /* yellow — attention, due soon */
+    --accent-danger:   #EF4444;   /* red — critical, overdue, destructive ONLY */
+    --accent-purple:   #8B5CF6;   /* purple — pending, waiting */
+
+    /* Backgrounds for status */
+    --accent-primary-bg:  rgba(59,130,246,.12);
+    --accent-cyan-bg:     rgba(20,184,166,.12);
+    --accent-success-bg:  rgba(34,197,94,.12);
+    --accent-warning-bg:  rgba(245,158,11,.12);
+    --accent-danger-bg:   rgba(239,68,68,.12);
+    --accent-purple-bg:   rgba(139,92,246,.12);
+
+    /* ── Legacy overrides (map existing vars to new theme) ── */
+    --page-bg:      var(--bg-main);
+    --card-bg:      var(--bg-card);
+    --card-raised:  var(--bg-card-raised);
+    --card-border:  var(--border-card);
+    --sidebar-bg:   var(--bg-sidebar);
+    --sidebar-border: var(--border-subtle);
+    --sidebar-w:    360px;
+
+    --text:           var(--text-main);
+    --text-secondary: var(--text-secondary);
+    --text-muted:     var(--text-muted);
+
+    /* accent → primary blue (not red) */
+    --accent:        var(--accent-primary);
+    --accent-hover:  #60a5fa;
+    --accent-bg:     var(--accent-primary-bg);
+    --accent-border: rgba(59,130,246,.35);
+
+    /* status tokens */
+    --status-critical:    var(--accent-danger);
+    --status-warning:     var(--accent-warning);
+    --status-ok:          var(--accent-success);
+    --status-info:        var(--accent-primary);
+    --status-critical-bg: var(--accent-danger-bg);
+    --status-warning-bg:  var(--accent-warning-bg);
+    --status-ok-bg:       var(--accent-success-bg);
+    --status-info-bg:     var(--accent-primary-bg);
+
+    --ceo-red:    var(--accent-danger);
+    --ceo-amber:  var(--accent-warning);
+    --ceo-green:  var(--accent-success);
+    --ceo-blue:   var(--accent-primary);
+
+    --bg-primary:   var(--bg-main);
+    --bg-secondary: var(--bg-sidebar);
+    --bg-tertiary:  #132840;
+    --bg-hover:     #1A3248;
+    --border:       var(--border-card);
+
+    /* neon overrides — map to calm versions */
+    --neon-cyan:   var(--accent-cyan);
+    --neon-pink:   var(--accent-danger);
+    --neon-purple: var(--accent-purple);
+
+    /* Typography scale */
+    --text-xs:   12px;
+    --text-sm:   13px;
+    --text-base: 15px;
+    --text-md:   16px;
+    --text-lg:   18px;
+    --text-xl:   22px;
+    --text-2xl:  26px;
+    --text-3xl:  32px;
+    --text-4xl:  44px;
+    --text-5xl:  56px;
+
+    /* Radius */
+    --radius:      8px;
+    --radius-md:   12px;
+    --radius-lg:   16px;
+    --radius-card: 16px;
+    --radius-full: 999px;
+
+    /* Shadows — blue-tinted */
+    --shadow-sm: 0 1px 4px rgba(0,0,0,.5);
+    --shadow-md: 0 4px 16px rgba(0,10,30,.6);
+    --shadow-lg: 0 8px 32px rgba(0,10,30,.7);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 1 — GLOBAL BODY
+   ══════════════════════════════════════════════════════════════ */
+body {
+    font-size: 15px;
+    line-height: 1.6;
+    background: var(--page-bg) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 2 — SIDEBAR (navy blue)
+   ══════════════════════════════════════════════════════════════ */
+.sidebar {
+    background: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-card) !important;
+    width: var(--sidebar-w) !important;
+}
+
+/* Logo */
+.sidebar .sidebar-header,
+.sidebar .sidebar-header { background: var(--bg-sidebar) !important; border-bottom-color: var(--border-card) !important; }
+.sidebar .sidebar-header h1,
+.sidebar-header h1 { font-size: 18px !important; font-weight: 800 !important; color: #EAF2FF !important; }
+/* Logo accent → blue/teal instead of red */
+.sidebar .sidebar-header h1 span,
+.sidebar-header h1 span { color: var(--accent-cyan) !important; }
+
+/* Section labels */
+.sidebar .sb-section,
+.sidebar .nav-section-title {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: .14em !important;
+    color: #6b7f94 !important;
+    padding: 22px 14px 7px !important;
+    text-transform: uppercase !important;
+}
+.sidebar .sb-group:first-child .sb-section,
+.sidebar .sb-group:first-child .nav-section-title { padding-top: 12px !important; }
+
+/* Nav items */
+.sidebar .sb-item,
+.sidebar .nav-item {
+    height: 42px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #8fa0b4 !important;
+    padding: 0 12px 0 14px !important;
+    gap: 11px !important;
+    border-radius: 9px !important;
+    margin-bottom: 2px !important;
+    border-left: 3px solid transparent !important;
+}
+.sidebar .sb-item:hover,
+.sidebar .nav-item:hover {
+    background: rgba(255,255,255,.05) !important;
+    color: #d0dce8 !important;
+}
+
+/* Active state — BLUE not red */
+.sidebar .sb-item--active,
+.sidebar .nav-item.active {
+    background: rgba(59,130,246,.15) !important;
+    color: #93c5fd !important;
+    border-left-color: var(--accent-primary) !important;
+    font-weight: 600 !important;
+}
+.sidebar .sb-item--active .sb-item__icon,
+.sidebar .nav-item.active .icon { color: var(--accent-primary) !important; }
+.sidebar .sb-item--active:hover { background: rgba(59,130,246,.22) !important; }
+
+/* Icons */
+.sidebar .sb-item__icon,
+.sidebar .nav-item .icon {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 16px !important;
+    color: #5d6d7e !important;
+}
+.sidebar .sb-item__icon svg { width: 17px !important; height: 17px !important; }
+.sidebar .sb-item:hover .sb-item__icon,
+.sidebar .nav-item:hover .icon { color: #9faab8 !important; }
+
+/* Badges — red only for true alerts */
+.sb-badge {
+    background: #ef4444 !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 6px !important;
+    box-shadow: none !important;
+}
+.nav-item .badge.danger { background: rgba(239,68,68,.2) !important; color: #fca5a5 !important; }
+
+/* Count pill */
+.sb-count {
+    background: rgba(255,255,255,.07) !important;
+    color: #6b7f94 !important;
+    font-size: 11px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+}
+
+/* User footer */
+.sidebar .sidebar-footer { background: var(--bg-sidebar) !important; border-top-color: var(--border-card) !important; }
+.sidebar .user-details .name { font-size: 14px !important; font-weight: 600 !important; color: #d0e4f7 !important; }
+.sidebar .user-details .role { font-size: 12px !important; color: #7F8FA3 !important; }
+.sidebar .user-avatar { width: 36px !important; height: 36px !important; font-size: 14px !important; background: #1e4080 !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 3 — PAGE HEADER
+   ══════════════════════════════════════════════════════════════ */
+.page-header {
+    background: var(--bg-sidebar) !important;
+    border-bottom: 1px solid var(--border-card) !important;
+    height: 60px !important;
+    padding: 0 32px !important;
+}
+.page-header h2 {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #EAF2FF !important;
+    letter-spacing: -.3px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 4 — CONTENT AREA + MAIN
+   ══════════════════════════════════════════════════════════════ */
+.main-content { margin-left: var(--sidebar-w) !important; }
+.content-area { padding: 28px 32px !important; background: var(--page-bg) !important; }
+
+@media (max-width: 1100px) {
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .content-area {
+        padding: 20px 16px 96px !important;
+        overflow-x: hidden !important;
+    }
+
+    .page-header {
+        padding: 0 16px !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .mobile-toggle {
+        display: flex !important;
+    }
+
+    .sidebar {
+        transform: translateX(-100%) !important;
+    }
+
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 5 — CARDS  (navy blue surfaces)
+   page = #0B1623   card = #102033   border = #1E3A5F
+   ══════════════════════════════════════════════════════════════ */
+.ov-kpi,
+.ov-biz-card,
+.ov-store-header,
+.ov-store-body,
+.my-task-row,
+.card,
+[class*="ov-card"] {
+    background: var(--bg-card) !important;
+    border-color: var(--border-card) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+.ov-kpi:hover,
+.ov-biz-card:hover,
+.card:hover {
+    background: var(--bg-card-raised) !important;
+    border-color: var(--border-hover) !important;
+    box-shadow: var(--shadow-lg) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 6 — KPI CARDS  ← CEO SEES THESE FIRST
+   ══════════════════════════════════════════════════════════════ */
+.ov-kpi-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 18px !important;
+    margin-bottom: 28px !important;
+}
+@media (min-width: 1920px) { .ov-kpi-row { grid-template-columns: repeat(4, 1fr) !important; } }
+@media (max-width: 1440px) { .ov-kpi-row { grid-template-columns: repeat(3, 1fr) !important; } }
+@media (max-width: 1100px) { .ov-kpi-row { grid-template-columns: repeat(2, 1fr) !important; } }
+
+.ov-kpi {
+    padding: 24px 22px 22px !important;
+    border-radius: var(--radius-card) !important;
+    border-top-width: 2px !important;
+    border-top-style: solid !important;
+    min-width: 0 !important;
+}
+/* Colored top border per card type */
+.ov-kpi.kpi-cyan  { border-top-color: #0891b2 !important; }
+.ov-kpi.kpi-lime  { border-top-color: #65a30d !important; }
+.ov-kpi.kpi-pink  { border-top-color: var(--accent) !important; }
+.ov-kpi.kpi-purple{ border-top-color: #7c3aed !important; }
+
+/* KPI number — massive, unmissable */
+.ov-kpi-value {
+    font-size: clamp(30px, 2.6vw, 46px) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+    margin-bottom: 6px !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+}
+/* KPI label */
+.ov-kpi-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: .1em !important;
+    color: var(--text-secondary) !important;
+    text-transform: uppercase !important;
+    margin-top: 8px !important;
+}
+/* KPI icon */
+.ov-kpi-icon,
+.ov-kpi-icon-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+    margin-bottom: 14px !important;
+    border-radius: 12px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 7 — SECTION HEADERS
+   ══════════════════════════════════════════════════════════════ */
+.ov-section-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #d4dde8 !important;
+    letter-spacing: -.1px !important;
+}
+.ov-section-head { margin-bottom: 16px !important; padding: 0 !important; }
+.ov-section-badge {
+    font-size: 12px !important;
+    padding: 4px 12px !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-full) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 8 — BUSINESS HEALTH CARDS
+   ══════════════════════════════════════════════════════════════ */
+.ov-biz-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 16px !important;
+}
+.ov-biz-card {
+    padding: 20px !important;
+    border-radius: var(--radius-card) !important;
+}
+.ov-biz-name { font-size: 15px !important; font-weight: 800 !important; color: #d4dde8 !important; }
+.ov-biz-stat-val { font-size: 22px !important; font-weight: 900 !important; color: #eef2f7 !important; }
+.ov-biz-stat-label { font-size: 11px !important; color: var(--text-secondary) !important; margin-top: 3px !important; }
+.ov-risk-chip { font-size: 11px !important; padding: 3px 9px !important; font-weight: 700 !important; }
+.ov-risk-red    { background: var(--accent-danger-bg)  !important; color: #fca5a5 !important; border-color: rgba(239,68,68,.3)   !important; animation: none !important; }
+.ov-risk-yellow { background: var(--accent-warning-bg) !important; color: #fcd34d !important; border-color: rgba(245,158,11,.3)  !important; }
+.ov-risk-green  { background: var(--accent-success-bg) !important; color: #86efac !important; border-color: rgba(34,197,94,.3)   !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 9 — PRIORITY DECISIONS CARDS
+   ══════════════════════════════════════════════════════════════ */
+.ov-store-header {
+    padding: 16px 20px !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--card-bg) !important;
+}
+.ov-store-body { background: var(--card-bg) !important; padding: 16px !important; }
+.ov-store-name { font-size: 15px !important; font-weight: 800 !important; color: #d4dde8 !important; }
+.ov-store-count { font-size: 12px !important; color: var(--text-secondary) !important; }
+.ov-store-overdue { font-size: 13px !important; font-weight: 800 !important; }
+.ov-store-pct { font-size: 13px !important; font-weight: 800 !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 10 — MY TASKS ROWS
+   ══════════════════════════════════════════════════════════════ */
+.my-task-row {
+    background: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+    padding: 13px 18px !important;
+    gap: 12px !important;
+    border-radius: 10px !important;
+}
+.my-task-row:hover {
+    background: var(--card-raised) !important;
+    border-color: var(--card-border-hover) !important;
+    transform: translateX(3px) !important;
+}
+.my-task-row .task-info .task-name { font-size: 14px !important; font-weight: 600 !important; color: #d4dde8 !important; }
+.my-task-row .task-info .task-sub { font-size: 12px !important; margin-top: 3px !important; }
+.my-task-row .task-due-chip { font-size: 12px !important; }
+.my-task-row .tbadge { font-size: 11px !important; padding: 3px 9px !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 11 — TABLES
+   ══════════════════════════════════════════════════════════════ */
+.data-table th, .list-table th {
+    font-size: 11px !important;
+    padding: 11px 16px !important;
+    color: var(--text-secondary) !important;
+    background: rgba(255,255,255,.03) !important;
+    letter-spacing: .07em !important;
+}
+.data-table td, .list-table td {
+    padding: 13px 16px !important;
+    font-size: 14px !important;
+    color: #c8d6e0 !important;
+    border-bottom-color: rgba(255,255,255,.05) !important;
+}
+.data-table tr:hover td,
+.list-table tr:hover td { background: rgba(255,255,255,.03) !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 12 — FILTER TABS
+   ══════════════════════════════════════════════════════════════ */
+.filter-tab {
+    font-size: 13px !important;
+    padding: 6px 15px !important;
+    font-weight: 600 !important;
+    background: rgba(255,255,255,.05) !important;
+    border-color: rgba(255,255,255,.08) !important;
+    color: var(--text-secondary) !important;
+}
+.filter-tab:hover { background: rgba(255,255,255,.09) !important; color: #d4dde8 !important; }
+.fbadge { font-size: 11px !important; padding: 2px 7px !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 13 — BUTTONS (semantic colors)
+   Primary=blue  Success=green  Warning=yellow  Danger=red
+   ══════════════════════════════════════════════════════════════ */
+.btn, button.btn { font-size: 14px !important; padding: 9px 18px !important; font-weight: 600 !important; }
+.btn-sm { font-size: 12px !important; padding: 6px 12px !important; }
+
+/* Primary → blue */
+.btn-primary, .btn-accent {
+    background: var(--accent-primary) !important;
+    border-color: var(--accent-primary) !important;
+    color: #fff !important;
+}
+.btn-primary:hover, .btn-accent:hover {
+    background: #60a5fa !important;
+    border-color: #60a5fa !important;
+}
+
+/* Success → green */
+.btn-success {
+    background: var(--accent-success) !important;
+    border-color: var(--accent-success) !important;
+    color: #fff !important;
+}
+
+/* Warning → yellow */
+.btn-warning {
+    background: var(--accent-warning) !important;
+    border-color: var(--accent-warning) !important;
+    color: #0f172a !important;
+}
+
+/* Danger → red (critical only) */
+.btn-danger {
+    background: var(--accent-danger) !important;
+    border-color: var(--accent-danger) !important;
+    color: #fff !important;
+}
+.btn-danger:hover { background: #f87171 !important; border-color: #f87171 !important; }
+
+/* Outline / secondary */
+.btn-outline, .btn-secondary {
+    background: rgba(255,255,255,.05) !important;
+    border-color: var(--border-card) !important;
+    color: var(--text-secondary) !important;
+}
+.btn-outline:hover, .btn-secondary:hover {
+    background: rgba(255,255,255,.1) !important;
+    border-color: var(--border-hover) !important;
+    color: var(--text-main) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 14 — CATEGORY MATRIX
+   ══════════════════════════════════════════════════════════════ */
+.ov-cat-matrix { font-size: 13px !important; }
+.ov-cat-matrix th { font-size: 11px !important; padding: 11px 12px !important; }
+.ov-cat-matrix td { padding: 11px 10px !important; }
+.ov-cat-store { font-size: 13px !important; font-weight: 700 !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 15 — STORE TABS
+   ══════════════════════════════════════════════════════════════ */
+.ov-store-tab { font-size: 13px !important; padding: 8px 18px !important; font-weight: 700 !important; }
+.ov-store-tab-dot { width: 9px !important; height: 9px !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 16 — ALERTS + EMPTY STATE
+   ══════════════════════════════════════════════════════════════ */
+.alert { font-size: 14px !important; padding: 13px 18px !important; }
+.empty-state h3 { font-size: 17px !important; }
+.empty-state p  { font-size: 14px !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 17 — 2K RESPONSIVE BOOST
+   ══════════════════════════════════════════════════════════════ */
+@media (min-width: 2200px) {
+    :root { --sidebar-w: 380px; }
+    .content-area { padding: 36px 48px !important; }
+    .ov-kpi-value { font-size: 56px !important; }
+    .ov-kpi { padding: 30px 26px !important; }
+    .ov-biz-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important; }
+    body { font-size: 16px; }
+    .data-table td, .list-table td { font-size: 15px !important; }
+    .sidebar .sb-item, .sidebar .nav-item { font-size: 15px !important; height: 44px !important; }
+}
+@media (min-width: 3200px) {
+    .ov-kpi-value { font-size: 68px !important; }
+    .ov-kpi-label { font-size: 14px !important; }
+    body { font-size: 18px; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYER 18 — SCROLLBAR
+   ══════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 7px !important; height: 7px !important; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1) !important; border-radius: 4px !important; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.18) !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   CEO UI V2 — DASHBOARD OVERVIEW OVERRIDES
+   Target: cc-* classes in views/dashboard/overview.php
+   Root fix: KPI numbers 26px→60px, card contrast, density
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Executive Summary Strip ──────────────────────────────── */
+.cc-exec-strip {
+    gap: 14px !important;
+    flex-wrap: nowrap !important;
+}
+@media (max-width: 1400px) { .cc-exec-strip { flex-wrap: wrap !important; } }
+
+.cc-kpi-tile {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-card) !important;
+    border-radius: 16px !important;
+    padding: 20px 22px 18px !important;
+    min-width: 150px !important;
+    min-width: 0 !important;
+    gap: 4px !important;
+    box-shadow: 0 4px 20px rgba(0,10,30,.55) !important;
+    transition: all .2s !important;
+}
+.cc-kpi-tile:hover {
+    background: var(--bg-card-raised) !important;
+    border-color: var(--border-hover) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 28px rgba(0,10,30,.65) !important;
+}
+
+/* KPI number — THE KEY FIX: 26px → 60px */
+.cc-kpi-tile-num {
+    font-size: clamp(34px, 3.2vw, 60px) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+    margin: 4px 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+}
+@media (min-width: 2200px) { .cc-kpi-tile-num { font-size: 72px !important; } }
+@media (max-width: 1600px) { .cc-kpi-tile-num { font-size: 48px !important; } }
+@media (max-width: 1500px) { .cc-kpi-tile-num { font-size: clamp(32px, 2.5vw, 42px) !important; } }
+
+/* KPI header label */
+.cc-kpi-tile-head {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: #7a8fa8 !important;
+    letter-spacing: .1em !important;
+    gap: 6px !important;
+}
+
+/* KPI sub-description */
+.cc-kpi-tile-sub {
+    font-size: 12px !important;
+    color: #5d6d7e !important;
+    margin-top: 2px !important;
+    line-height: 1.4 !important;
+}
+
+/* Status badge */
+.cc-kpi-tile-badge {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+    margin-top: 6px !important;
+    letter-spacing: .07em !important;
+}
+
+/* ── Unified Risk Score ────────────────────────────────────── */
+.cc-risk-panel {
+    background: var(--bg-card) !important;
+    border-color: var(--border-card) !important;
+    border-radius: 16px !important;
+    padding: 20px 22px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.5) !important;
+}
+.cc-risk-score-num {
+    font-size: clamp(34px, 3vw, 60px) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0 !important;
+}
+.cc-risk-score-label {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+}
+.cc-risk-bar-row { font-size: 12px !important; color: #7a8fa8 !important; gap: 9px !important; }
+.cc-risk-bar-track { height: 6px !important; }
+
+/* ── Section headers ──────────────────────────────────────── */
+.cc-section {
+    background: var(--bg-card) !important;
+    border-color: var(--border-card) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.4) !important;
+}
+.cc-section-header {
+    padding: 16px 22px !important;
+    border-bottom-color: var(--border-card) !important;
+}
+.cc-section-title {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #7aaad4 !important;   /* blue-gray, readable */
+    letter-spacing: .1em !important;
+}
+.cc-section-badge {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+}
+.cc-section-body { padding: 20px 22px !important; }
+.cc-section-icon { color: #7a8fa8 !important; }
+
+/* ── Priority Decision Cards ─────────────────────────────── */
+.cc-decisions-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+}
+@media (max-width: 1400px) { .cc-decisions-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 900px)  { .cc-decisions-grid { grid-template-columns: 1fr !important; } }
+
+.cc-decision-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-card) !important;
+    border-radius: 14px !important;
+    padding: 20px !important;
+    gap: 14px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.5) !important;
+    transition: all .2s !important;
+}
+.cc-decision-card:hover {
+    background: var(--bg-card-raised) !important;
+    border-color: var(--border-hover) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Rank badge — bigger */
+.cc-dec-rank {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 15px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+}
+
+/* Decision title */
+.cc-dec-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #eef2f7 !important;
+    line-height: 1.3 !important;
+    margin-bottom: 5px !important;
+}
+
+/* Badges */
+.cc-dec-deadline-badge {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 3px 9px !important;
+    border-radius: 6px !important;
+    color: #b8c0cc !important;
+}
+.cc-dec-impact-badge {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 3px 10px !important;
+    letter-spacing: .06em !important;
+}
+
+/* Consequence text */
+.cc-dec-consequence {
+    font-size: 13px !important;
+    color: #7a8fa8 !important;
+    line-height: 1.5 !important;
+}
+
+/* Prediction box */
+.cc-dec-prediction {
+    padding: 10px 12px !important;
+    border-left-width: 3px !important;
+    border-radius: 0 8px 8px 0 !important;
+}
+.cc-dec-prediction-label {
+    font-size: 10px !important;
+    color: #5d6d7e !important;
+    margin-bottom: 4px !important;
+}
+.cc-dec-prediction-text {
+    font-size: 13px !important;
+    color: #c8d6e0 !important;
+    line-height: 1.5 !important;
+}
+
+/* Amount */
+.cc-dec-amount {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    color: #eef2f7 !important;
+    letter-spacing: -1px !important;
+}
+
+/* Action button */
+.cc-dec-action-btn {
+    height: 40px !important;
+    padding: 0 20px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    border-radius: 10px !important;
+    letter-spacing: .02em !important;
+}
+.cc-dec-footer {
+    padding-top: 12px !important;
+    border-top-color: rgba(255,255,255,.08) !important;
+}
+
+/* ── Finance Section ──────────────────────────────────────── */
+.cc-cash-label  { font-size: 13px !important; color: #7a8fa8 !important; width: 90px !important; }
+.cc-cash-amount { font-size: 16px !important; font-weight: 800 !important; color: #eef2f7 !important; }
+.cc-cash-count  { font-size: 12px !important; color: #5d6d7e !important; }
+.cc-cash-row    { padding: 12px 0 !important; }
+.cc-cash-bar-track { height: 6px !important; }
+
+/* Risk board */
+.cc-risk-board  { gap: 10px !important; }
+.cc-risk-col    { padding: 14px !important; border-radius: 12px !important; }
+
+/* ── Overview layout guard: prevent cramped panels from clipping text ────── */
+.cc-root,
+.cc-section,
+.cc-section-body,
+.cc-decision-card {
+    min-width: 0 !important;
+}
+.cc-decisions-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr)) !important;
+    align-items: stretch !important;
+}
+.cc-finance-grid,
+.cc-ops-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)) !important;
+    align-items: start !important;
+}
+.cc-risk-board {
+    grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)) !important;
+}
+.cc-store-row,
+.cc-team-row,
+.cc-vendor-card {
+    min-width: 0 !important;
+}
+.cc-store-row {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    row-gap: 6px !important;
+}
+.cc-store-name {
+    flex: 1 1 180px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.25 !important;
+}
+.cc-store-row > div:not(.cc-store-name) {
+    min-width: 0 !important;
+}
+.cc-store-flag,
+.cc-store-status-badge {
+    flex-shrink: 0 !important;
+    max-width: 100% !important;
+}
+.cc-store-row > div[style*="trending-down"],
+.cc-store-row > div[style*="Revenue"],
+.cc-store-row > div[style*="f59e0b"] {
+    flex: 1 0 100% !important;
+    margin-left: 24px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+}
+.cc-cash-row {
+    flex-wrap: wrap !important;
+}
+.cc-cash-bar-wrap {
+    min-width: 120px !important;
+}
+
+/* ── Next Action Banner ───────────────────────────────────── */
+.cc-next-action-banner {
+    padding: 14px 18px !important;
+    border-radius: 12px !important;
+    gap: 14px !important;
+}
+
+/* ── Executive KPI bar (compact strip) ───────────────────── */
+.exec-kpi-bar   { padding: 12px 20px !important; }
+.exec-kpi-val   { font-size: 22px !important; font-weight: 800 !important; }
+.exec-kpi-lbl   { font-size: 12px !important; color: #5d6d7e !important; }
+
+/* ── "Why ranked" tooltips / info text ───────────────────── */
+.cc-why-ranked  { font-size: 13px !important; color: #7a8fa8 !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   TOP 3 ACTIONS — color-coded grouping (Opus rules)
+   Red=Critical  Yellow=Warning  Green=OK  Blue=Info/Normal
+   ══════════════════════════════════════════════════════════════ */
+.cc-decision-card[data-impact="critical"],
+.cc-decision-card[data-level="critical"] {
+    border-left: 4px solid var(--accent-danger) !important;
+    background: #180f0f !important;  /* very dark red tint */
+}
+.cc-decision-card[data-impact="high"],
+.cc-decision-card[data-level="high"] {
+    border-left: 4px solid var(--accent-warning) !important;
+    background: #181408 !important;  /* very dark yellow tint */
+}
+.cc-decision-card[data-impact="medium"],
+.cc-decision-card[data-level="medium"] {
+    border-left: 4px solid var(--accent-primary) !important;
+}
+.cc-decision-card:first-child {
+    /* Top #1 action — blue accent border */
+    border-top: 2px solid var(--accent-primary) !important;
+    box-shadow: 0 0 0 1px rgba(59,130,246,.2), 0 4px 20px rgba(0,10,30,.6) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2K / 4K RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+@media (min-width: 2200px) {
+    .cc-kpi-tile { padding: 26px 28px 22px !important; }
+    .cc-kpi-tile-num { font-size: 76px !important; letter-spacing: 0 !important; }
+    .cc-dec-title { font-size: 18px !important; }
+    .cc-dec-amount { font-size: 34px !important; }
+    .cc-dec-action-btn { height: 44px !important; font-size: 14px !important; }
+    .cc-section-title { font-size: 14px !important; }
+    .cc-cash-amount { font-size: 18px !important; }
+    .cc-decisions-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (min-width: 3200px) {
+    .cc-kpi-tile-num { font-size: 90px !important; letter-spacing: 0 !important; }
+    .cc-dec-title { font-size: 20px !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE OVERRIDE — Beat !important sidebar margin
+   Must be LAST to override Layer 4's margin-left: var(--sidebar-w) !important
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .main-content { margin-left: 0 !important; width: 100% !important; min-width: 0 !important; }
+    .sidebar { width: 280px !important; transform: translateX(-100%) !important; }
+    .sidebar.open { transform: translateX(0) !important; }
+    .sidebar-backdrop { display: none !important; }
+    .sidebar.open ~ .sidebar-backdrop.active,
+    .sidebar-backdrop.active { display: block !important; }
+    .page-header { height: 48px !important; padding: 0 12px !important; }
+    .page-header h2 { font-size: 16px !important; }
+    .content-area { padding: 12px !important; padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important; }
+}
+@media (min-width: 769px) and (max-width: 1100px) {
+    .main-content { margin-left: 0 !important; width: 100% !important; min-width: 0 !important; }
+    .sidebar { width: 280px !important; transform: translateX(-100%) !important; }
+    .sidebar.open { transform: translateX(0) !important; }
+    .mobile-toggle { display: flex !important; }
+}

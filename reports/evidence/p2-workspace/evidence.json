@@ -1,0 +1,136 @@
+{
+  "phase": "P2",
+  "target": "WORKSPACE_PRODUCTION_CERTIFIED",
+  "results": {
+    "Read Gmail inbox (real API call)": {
+      "ok": true,
+      "data": {
+        "messages": [
+          {
+            "id": "19ec625b3b940fae",
+            "threadId": "19ec625b3b940fae"
+          },
+          {
+            "id": "19ec4eefa0fa143b",
+            "threadId": "19ec4eefa0fa143b"
+          },
+          {
+            "id": "19ec4eefa039f39e",
+            "threadId": "19ec4eec2e770afb"
+          },
+          {
+            "id": "19ec4eef60ea54ad",
+            "threadId": "19ec4eec2e770afb"
+          },
+          {
+            "id": "19ec4eef4b735afd",
+            "threadId": "19ec4eec2e770afb"
+          }
+        ],
+        "nextPageToken": "09000299108861708598",
+        "resultSizeEstimate": 201
+      }
+    },
+    "Read email content (message detail)": {
+      "ok": true,
+      "data": {
+        "id": "19ec625b3b940fae"
+      }
+    },
+    "Create Gmail draft (real API call)": {
+      "ok": true,
+      "data": {
+        "draft_id": "r-1341956680736541856",
+        "message_id": "19ec67242f8851cb"
+      }
+    },
+    "List Drive files (real API call)": {
+      "ok": true,
+      "data": {
+        "file_count": 5,
+        "files": [
+          "Raw Daily 2026",
+          "B2 - SO -  Nightly Summary - ",
+          "2026 - BR- Nightly Summary "
+        ]
+      }
+    },
+    "Upload file to Drive (real multipart upload)": {
+      "ok": true,
+      "data": {
+        "file_id": "1o50OSSfCTj4b0lfygRyUjXwv8ZjwpqDL",
+        "name": "JARVIS_P2_Cert_1781445839502.md",
+        "url": "https://drive.google.com/file/d/1o50OSSfCTj4b0lfygRyUjXwv8ZjwpqDL/view?usp=drivesdk"
+      }
+    },
+    "Read Calendar events (real API call)": {
+      "ok": true,
+      "data": {
+        "events_count": 5,
+        "next": "Bakudan Ramen weekly"
+      }
+    }
+  },
+  "generated_at": "2026-06-14T14:03:57.278Z",
+  "gmail_unread_count": 201,
+  "sample_email": {
+    "id": "19ec625b3b940fae"
+  },
+  "draft_id": "r-1341956680736541856",
+  "drive_files": [
+    {
+      "mimeType": "application/vnd.google-apps.spreadsheet",
+      "id": "1q5cRZSuIV__9pDfFQBoso3r1sxQRPvBd7QCsChNs77k",
+      "name": "Raw Daily 2026",
+      "modifiedTime": "2026-06-14T04:24:45.298Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.spreadsheet",
+      "id": "1zPY0rwjhg2ASc70yYKfnPw8sHCpCZh7nkCeTzY0TvRY",
+      "name": "B2 - SO -  Nightly Summary - ",
+      "modifiedTime": "2026-06-14T03:09:10.645Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.spreadsheet",
+      "id": "1W_bM9BVDCr2xGvMMfr82w2GkAVWrN0s1E0kQuPnRX34",
+      "name": "2026 - BR- Nightly Summary ",
+      "modifiedTime": "2026-06-14T02:50:55.877Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.spreadsheet",
+      "id": "1vVenPz6k1lfeBiGcb6pilRo0uSVJJRr3CmBzuvgH3Wc",
+      "name": "B1 - EMPLOYEE TIPSHARE",
+      "modifiedTime": "2026-06-14T02:46:31.129Z"
+    },
+    {
+      "mimeType": "application/vnd.google-apps.spreadsheet",
+      "id": "1WErWX9_cH2uDd6c04w9CajrlK0yqCU7euoxDTPd87BE",
+      "name": "B2 -Tipshare Log",
+      "modifiedTime": "2026-06-14T02:11:49.421Z"
+    }
+  ],
+  "drive_file_id": "1o50OSSfCTj4b0lfygRyUjXwv8ZjwpqDL",
+  "drive_file_url": "https://drive.google.com/file/d/1o50OSSfCTj4b0lfygRyUjXwv8ZjwpqDL/view?usp=drivesdk",
+  "calendar_events": [
+    {
+      "summary": "Bakudan Ramen weekly",
+      "start": "2026-06-15T22:00:00+07:00"
+    },
+    {
+      "summary": "Bakudan Ramen weekly",
+      "start": "2026-06-22T22:00:00+07:00"
+    },
+    {
+      "summary": "Bakudan Ramen weekly",
+      "start": "2026-06-29T22:00:00+07:00"
+    },
+    {
+      "summary": "Bakudan Ramen weekly",
+      "start": "2026-07-06T22:00:00+07:00"
+    },
+    {
+      "summary": "De9 (UIC), De9C (UIC) and 941 Form",
+      "start": "2026-07-08"
+    }
+  ]
+}

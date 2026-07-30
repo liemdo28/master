@@ -1,0 +1,10 @@
+{
+  "generated": "2026-07-06T10:00:00+07:00",
+  "note": "Captured via netstat -ano | Select-String 'LISTENING'",
+  "critical_services": {
+    "4001": { "service": "Mi-Core Server", "status": "DOWN", "expected_pid": "PM2 managed" },
+    "3211": { "service": "WhatsApp AI Gateway", "status": "DOWN", "expected_pid": "PM2 managed" },
+    "11434": { "service": "Ollama (local AI)", "status": "LISTENING", "pid": 20764, "models": ["qwen3:8b", "qwen3:14b", "nomic-embed-text"] }
+  },
+  "action": "Run: cd mi-core && pm2 startOrRestart ecosystem.config.js"
+}

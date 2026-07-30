@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgenView — Mi CEO Dashboard</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --card: #12121a; --border: #1e1e2e; --accent: #7c3aed;
+    --green: #10b981; --red: #ef4444; --yellow: #f59e0b; --blue: #3b82f6;
+    --text: #e2e8f0; --muted: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 18px; font-weight: 700; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .header-meta { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-green  { background: #064e3b; color: var(--green); }
+  .badge-red    { background: #450a0a; color: var(--red); }
+  .badge-yellow { background: #451a03; color: var(--yellow); }
+  .badge-blue   { background: #1e3a5f; color: var(--blue); }
+
+  .main { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+  /* Stat bar */
+  .stat-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .stat-value { font-size: 26px; font-weight: 700; }
+  .stat-sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media(max-width:900px) { .grid,.grid-3 { grid-template-columns:1fr; } }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .card-body { padding: 14px 16px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; }
+  td { padding: 8px 8px; border-bottom: 1px solid #1a1a28; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #16162a; }
+
+  /* Rows */
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a1a28; font-size: 13px; }
+  .row:last-child { border: none; }
+  .row-label { color: var(--muted); font-size: 12px; }
+
+  /* Leader lock */
+  .leader-bar { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+  .leader-icon { font-size: 22px; }
+  .leader-info { flex: 1; }
+  .leader-name { font-weight: 700; font-size: 15px; }
+  .leader-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .leader-tasks { font-size: 11px; color: var(--muted); flex-shrink: 0; text-align: right; }
+
+  /* Briefing */
+  .briefing-text { white-space: pre-wrap; font-size: 13px; line-height: 1.6; color: #c4cad6; max-height: 280px; overflow-y: auto; }
+
+  /* Error */
+  .error-msg { color: var(--red); font-size: 12px; padding: 8px; background: #1a0808; border-radius: 6px; }
+
+  /* Refresh */
+  .refresh-btn { background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; padding: 4px 10px; font-size: 11px; }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Loading skeleton */
+  .skeleton { background: linear-gradient(90deg,#1a1a28 25%,#22223a 50%,#1a1a28 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; height: 14px; margin: 6px 0; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="status-dot" id="dot"></div>
+  <h1>AgenView — Mi CEO Dashboard</h1>
+  <div class="header-meta" id="header-ts">Loading…</div>
+</header>
+
+<div class="main">
+
+  <!-- Stat bar -->
+  <div class="stat-bar" id="stat-bar">
+    <div class="stat"><div class="stat-label">System</div><div class="stat-value" id="s-status">—</div></div>
+    <div class="stat"><div class="stat-label">Open WOs</div><div class="stat-value" id="s-open-wo">—</div><div class="stat-sub" id="s-total-wo"></div></div>
+    <div class="stat"><div class="stat-label">Active Agents</div><div class="stat-value" id="s-agents">—</div><div class="stat-sub" id="s-actions">— actions/24h</div></div>
+    <div class="stat"><div class="stat-label">SPOFs</div><div class="stat-value" id="s-spof">—</div></div>
+    <div class="stat"><div class="stat-label">Open Incidents</div><div class="stat-value" id="s-inc">—</div></div>
+    <div class="stat"><div class="stat-label">Nodes Online</div><div class="stat-value" id="s-nodes">—</div></div>
+  </div>
+
+  <!-- Leader Lock bar -->
+  <div class="leader-bar" id="leader-bar">
+    <div class="leader-icon">👑</div>
+    <div class="leader-info">
+      <div class="leader-name" id="leader-name">Loading…</div>
+      <div class="leader-meta" id="leader-meta"></div>
+    </div>
+    <div class="leader-tasks" id="leader-tasks"></div>
+  </div>
+
+  <!-- Row 1: Work Orders + Agent Activity -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Work Orders</span>
+        <button class="refresh-btn" onclick="loadWOs()">↻</button>
+      </div>
+      <div class="card-body">
+        <table id="wo-table">
+          <thead><tr><th>Intent</th><th>Project</th><th>Status</th><th>Priority</th></tr></thead>
+          <tbody id="wo-body"><tr><td colspan="4" class="skeleton" style="height:80px"></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Agent Activity (24h)</span>
+        <button class="refresh-btn" onclick="loadAgents()">↻</button>
+      </div>
+      <div class="card-body">
+        <table id="agent-table">
+          <thead><tr><th>Role</th><th>Actions</th><th>Pass Rate</th><th>Status</th></tr></thead>
+          <tbody id="agent-body"><tr><td colspan="4" class="skeleton" style="height:80px"></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: SPOFs + Incidents + Approvals -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><span class="card-title">SPOFs</span></div>
+      <div class="card-body" id="spof-body"><div class="skeleton"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Open Incidents</span>
+        <button class="refresh-btn" onclick="loadIncidents()">↻</button>
+      </div>
+      <div class="card-body" id="incident-body"><div class="skeleton"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Pending Approvals</span></div>
+      <div class="card-body" id="approval-body"><div class="skeleton"></div></div>
+    </div>
+  </div>
+
+  <!-- Row 3: Daily Briefing + Nodes -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Daily Briefing</span>
+        <button class="refresh-btn" onclick="loadBriefing()">↻ Regenerate</button>
+      </div>
+      <div class="card-body">
+        <pre class="briefing-text" id="briefing-text">Loading…</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Node Registry</span>
+        <button class="refresh-btn" onclick="loadNodes()">↻</button>
+      </div>
+      <div class="card-body">
+        <table id="node-table">
+          <thead><tr><th>Node</th><th>Role</th><th>Caps</th><th>Status</th></tr></thead>
+          <tbody id="node-body"><tr><td colspan="4" class="skeleton" style="height:60px"></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BASE = '';
+
+async function api(path) {
+  const r = await fetch(BASE + path);
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  return r.json();
+}
+
+// ── Overview ─────────────────────────────────────────────────────────────────
+
+async function loadOverview() {
+  try {
+    const d = await api('/api/agenview/overview');
+    const ov = d.data || d;
+    document.getElementById('s-status').textContent = ov.system_status || '—';
+    document.getElementById('s-status').style.color = ov.system_status === 'OK' ? 'var(--green)' : 'var(--yellow)';
+    document.getElementById('s-open-wo').textContent = ov.open_work_orders ?? '—';
+    document.getElementById('s-total-wo').textContent = `of ${ov.total_work_orders ?? '?'} total`;
+    document.getElementById('s-agents').textContent = ov.active_agents ?? '—';
+    document.getElementById('s-actions').textContent = `${ov.agent_actions_24h ?? 0} actions/24h`;
+    document.getElementById('s-spof').textContent = ov.spof_count ?? '—';
+    document.getElementById('s-spof').style.color = (ov.spof_count || 0) > 0 ? 'var(--yellow)' : 'var(--green)';
+    document.getElementById('s-inc').textContent = ov.memory?.open_incidents ?? '—';
+    document.getElementById('header-ts').textContent = `Last updated: ${new Date(d.ts || Date.now()).toLocaleTimeString('vi-VN')}`;
+
+    // SPOFs
+    const spofs = ov.top_spofs || [];
+    document.getElementById('spof-body').innerHTML = spofs.length
+      ? spofs.map(s => `<div class="row"><span>${s.name}</span><span class="badge badge-yellow">${s.dependents} deps · score ${s.score}</span></div>`).join('')
+      : '<div class="row" style="color:var(--green)">✅ No SPOFs detected</div>';
+  } catch (e) {
+    document.getElementById('s-status').textContent = 'ERR';
+    console.error(e);
+  }
+}
+
+// ── Leader Lock ───────────────────────────────────────────────────────────────
+
+async function loadLeader() {
+  try {
+    const d = await api('/api/nodes/leader');
+    const s = d.data || d;
+    document.getElementById('leader-name').textContent = s.leader_node ? `Leader: ${s.leader_node}` : '⚠️ No active leader';
+    const age = s.last_heartbeat ? Math.floor((Date.now() - new Date(s.last_heartbeat).getTime()) / 1000) : null;
+    document.getElementById('leader-meta').textContent = age !== null
+      ? `Last heartbeat: ${age}s ago · Failovers: ${s.failover_count}`
+      : `Failovers: ${s.failover_count}`;
+    document.getElementById('leader-tasks').textContent = s.is_leader ? '🟢 This node is leader' : (s.healthy ? '🟡 Remote leader' : '🔴 No healthy leader');
+  } catch {
+    document.getElementById('leader-name').textContent = 'Leader lock unavailable';
+  }
+}
+
+// ── Nodes ─────────────────────────────────────────────────────────────────────
+
+async function loadNodes() {
+  try {
+    const d = await api('/api/nodes/persistent');
+    const nodes = (d.data || d).nodes || [];
+    document.getElementById('s-nodes').textContent = `${(d.data || d).online ?? nodes.filter(n=>n.status==='online').length}/${nodes.length}`;
+    document.getElementById('node-body').innerHTML = nodes.length
+      ? nodes.map(n => `<tr>
+          <td>${n.node_name}<br><small style="color:var(--muted)">${n.address}</small></td>
+          <td><span class="badge badge-blue">${n.role}</span></td>
+          <td style="font-size:11px;color:var(--muted)">${(n.capabilities||[]).slice(0,3).join(', ')}</td>
+          <td><span class="badge ${n.status==='online'?'badge-green':'badge-red'}">${n.status}</span></td>
+        </tr>`).join('')
+      : '<tr><td colspan="4" style="color:var(--muted);text-align:center">No nodes registered</td></tr>';
+  } catch (e) {
+    document.getElementById('node-body').innerHTML = `<tr><td colspan="4" class="error-msg">${e.message}</td></tr>`;
+  }
+}
+
+// ── Work Orders ───────────────────────────────────────────────────────────────
+
+async function loadWOs() {
+  try {
+    const d = await api('/api/agenview/work-orders');
+    const wos = d.data || [];
+    const statusColor = s => ({'in_progress':'badge-blue','delivered':'badge-green','pending':'badge-yellow','cancelled':'badge-red'}[s]||'badge-yellow');
+    document.getElementById('wo-body').innerHTML = wos.slice(0,12).map(w => `<tr>
+      <td>${w.intent || '—'}</td>
+      <td style="color:var(--muted);font-size:12px">${(w.project||'').slice(0,20)}</td>
+      <td><span class="badge ${statusColor(w.status)}">${w.status}</span></td>
+      <td style="font-size:11px">${w.priority||'—'}</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted);text-align:center">No work orders</td></tr>';
+  } catch (e) {
+    document.getElementById('wo-body').innerHTML = `<tr><td colspan="4" class="error-msg">${e.message}</td></tr>`;
+  }
+}
+
+// ── Agents ────────────────────────────────────────────────────────────────────
+
+async function loadAgents() {
+  try {
+    const d = await api('/api/agenview/agents');
+    const agents = d.data || [];
+    document.getElementById('agent-body').innerHTML = agents.slice(0,10).map(a => `<tr>
+      <td>${a.role}</td>
+      <td>${a.actions_24h}</td>
+      <td>${a.pass_rate}%</td>
+      <td><span class="badge ${a.status==='active'?'badge-green':'badge-yellow'}">${a.status}</span></td>
+    </tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted);text-align:center">No activity</td></tr>';
+  } catch (e) {
+    document.getElementById('agent-body').innerHTML = `<tr><td colspan="4" class="error-msg">${e.message}</td></tr>`;
+  }
+}
+
+// ── Incidents ─────────────────────────────────────────────────────────────────
+
+async function loadIncidents() {
+  try {
+    const d = await api('/api/agenview/incidents');
+    const incs = (d.data || []).filter(i => !i.resolved).slice(0,6);
+    document.getElementById('incident-body').innerHTML = incs.length
+      ? incs.map(i => `<div class="row"><span style="font-size:12px">${i.title || i.error_type || 'Incident'}</span><span class="badge badge-red">open</span></div>`).join('')
+      : '<div class="row" style="color:var(--green)">✅ No open incidents</div>';
+  } catch (e) {
+    document.getElementById('incident-body').innerHTML = `<div class="error-msg">${e.message}</div>`;
+  }
+}
+
+// ── Approvals ─────────────────────────────────────────────────────────────────
+
+async function loadApprovals() {
+  try {
+    const d = await api('/api/agenview/approvals');
+    const items = d.data || [];
+    document.getElementById('approval-body').innerHTML = items.length
+      ? items.slice(0,6).map(a => `<div class="row"><span style="font-size:12px">${a.action||a.id||'Approval'}</span><span class="badge badge-yellow">pending</span></div>`).join('')
+      : '<div class="row" style="color:var(--green)">✅ Nothing pending</div>';
+  } catch (e) {
+    document.getElementById('approval-body').innerHTML = `<div class="error-msg">${e.message}</div>`;
+  }
+}
+
+// ── Daily Briefing ────────────────────────────────────────────────────────────
+
+async function loadBriefing() {
+  document.getElementById('briefing-text').textContent = 'Generating…';
+  try {
+    const d = await api('/api/briefing/latest');
+    const b = d.data || d;
+    document.getElementById('briefing-text').textContent = b.full_text || b.summary || '(no briefing available)';
+  } catch {
+    // Try generate
+    try {
+      const d = await fetch(BASE + '/api/briefing/generate', { method: 'POST' }).then(r=>r.json());
+      const b = d.data || d;
+      document.getElementById('briefing-text').textContent = b.full_text || '(generated)';
+    } catch (e2) {
+      document.getElementById('briefing-text').textContent = `Error: ${e2.message}`;
+    }
+  }
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+
+async function boot() {
+  await Promise.all([
+    loadOverview(),
+    loadLeader(),
+    loadNodes(),
+    loadWOs(),
+    loadAgents(),
+    loadIncidents(),
+    loadApprovals(),
+    loadBriefing(),
+  ]);
+  // Auto-refresh overview every 30s
+  setInterval(() => Promise.all([loadOverview(), loadLeader()]), 30_000);
+}
+
+boot();
+</script>
+</body>
+</html>

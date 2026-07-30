@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnop2-d5a316",
+  "objectiveRunId": "run-mqrcnoot-0eb61d",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch kiểm tra vận hành | 6 steps, ~3min | Risk: undefined",
+  "sha256": "25449f9632c4eefb6feb96c9826144db50f905e6f5048b61226d91dc08334bcc",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnoot-0eb61d\\25449f9632c4eefb6feb96c9826144db50f905e6f5048b61226d91dc08334bcc.json",
+  "capturedAt": "2026-06-24T00:43:18.086Z",
+  "readOnly": true
+}

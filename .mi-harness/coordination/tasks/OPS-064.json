@@ -1,0 +1,17 @@
+{
+  "id": "OPS-064",
+  "objectiveId": "OBJ-117",
+  "title": "Audit DoorDash conversion levers",
+  "description": "Check DoorDash menu/campaign risks without making live changes.",
+  "division": "operations",
+  "owner": "business-operators",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "doordash_campaign_change",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T09:15:15.349Z",
+  "updatedAt": "2026-06-27T09:15:15.349Z",
+  "completedAt": null
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojyt79-2414d4",
+  "objectiveRunId": "run-mqojyt75-2d9c1a",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: compliance_concern (80%), Alternatives: 0, Ambiguous: false",
+  "sha256": "7ff81dc1d713ec22c0a0e517f336a646928d8fe506a8eb9289c8fa0e75d83863",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojyt75-2d9c1a\\7ff81dc1d713ec22c0a0e517f336a646928d8fe506a8eb9289c8fa0e75d83863.json",
+  "capturedAt": "2026-06-22T01:44:35.925Z",
+  "readOnly": true
+}

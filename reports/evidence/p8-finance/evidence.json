@@ -1,0 +1,387 @@
+{
+  "phase": "P8",
+  "target": "FINANCE_OPERATOR_CERTIFIED",
+  "summary": {
+    "qb_health": "error",
+    "qb_alert": "SYNC_FAILED",
+    "categories": "Food & Beverage: $450, Payroll: $2800, Software: $89.99, Rent: $3200, Utilities: $125.5, Food & Beverage: $5420",
+    "cashflow": {
+      "months": 3,
+      "forecast": [
+        {
+          "month": "tháng 7 năm 2026",
+          "projected_inflow": 0,
+          "projected_outflow": 0,
+          "net": 0,
+          "note": "Requires QuickBooks historical data"
+        },
+        {
+          "month": "tháng 8 năm 2026",
+          "projected_inflow": 0,
+          "projected_outflow": 0,
+          "net": 0,
+          "note": "Requires QuickBooks historical data"
+        },
+        {
+          "month": "tháng 9 năm 2026",
+          "projected_inflow": 0,
+          "projected_outflow": 0,
+          "net": 0,
+          "note": "Requires QuickBooks historical data"
+        }
+      ],
+      "risk_flags": [],
+      "summary": "3-month cash flow forecast requires QuickBooks API integration (set QB_CLIENT_ID)."
+    },
+    "stores": [
+      "Bakudan Ramen",
+      "Raw Sushi Bar"
+    ],
+    "recommendation": "Fix QB sync first (checksum mismatch) to get real financial data."
+  },
+  "findings": {
+    "qb_status": {
+      "machine": {
+        "machine_id": "laptop-01",
+        "current_version": "",
+        "last_sync_at": "2026-06-10T16:19:06.766Z",
+        "last_sync_status": "error",
+        "last_error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "updated_at": "2026-06-10 16:19:06"
+      },
+      "recent_syncs": 10,
+      "failures": 10
+    },
+    "findDuplicates — check for duplicate bills": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "account": "accounts_payable",
+          "dateRange": "last_30_days",
+          "duplicates": [],
+          "total_amount": 0,
+          "note": "Connect to QuickBooks for real duplicate detection"
+        },
+        "duration_ms": 0,
+        "agent": "bookkeeper",
+        "metadata": {}
+      }
+    },
+    "findDuplicates — check for duplicate payments": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "account": "accounts_receivable",
+          "dateRange": "last_30_days",
+          "duplicates": [],
+          "total_amount": 0,
+          "note": "Connect to QuickBooks for real duplicate detection"
+        },
+        "duration_ms": 0,
+        "agent": "bookkeeper",
+        "metadata": {}
+      }
+    },
+    "categorized": [
+      {
+        "amount": 450,
+        "desc": "Sysco Foods delivery — produce and dairy",
+        "date": "2026-06-10",
+        "category": "Food & Beverage"
+      },
+      {
+        "amount": 2800,
+        "desc": "Maria Garcia payroll — week ending 6/7",
+        "date": "2026-06-08",
+        "category": "Payroll"
+      },
+      {
+        "amount": 89.99,
+        "desc": "Mailchimp monthly subscription",
+        "date": "2026-06-01",
+        "category": "Software"
+      },
+      {
+        "amount": 3200,
+        "desc": "Bakudan Ramen rent — June 2026",
+        "date": "2026-06-01",
+        "category": "Rent"
+      },
+      {
+        "amount": 125.5,
+        "desc": "Pacific Gas and Electric bill",
+        "date": "2026-06-05",
+        "category": "Utilities"
+      },
+      {
+        "amount": 5420,
+        "desc": "DoorDash payout — week ending 6/8",
+        "date": "2026-06-09",
+        "category": "Food & Beverage"
+      }
+    ],
+    "generatePL — June 2026 P&L": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "period": "2026-06",
+          "store": "bakudan_ramen",
+          "revenue": 0,
+          "expenses": 0,
+          "profit": 0,
+          "report": "P&L Report — 2026-06 (bakudan_ramen)\nRevenue: $0\nExpenses: $0\nNet Profit: $0\n\nQuickBooks not configured. Set QB_CLIENT_ID + QB_CLIENT_SECRET + QB_COMPANY_ID",
+          "note": "QuickBooks not configured. Set QB_CLIENT_ID + QB_CLIENT_SECRET + QB_COMPANY_ID"
+        },
+        "duration_ms": 0,
+        "agent": "accountant",
+        "metadata": {
+          "period": "2026-06",
+          "store": "bakudan_ramen"
+        }
+      }
+    },
+    "generatePL — Q2 2026 all stores": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "period": "Q2-2026",
+          "store": "all",
+          "revenue": 0,
+          "expenses": 0,
+          "profit": 0,
+          "report": "P&L Report — Q2-2026\nRevenue: $0\nExpenses: $0\nNet Profit: $0\n\nQuickBooks not configured. Set QB_CLIENT_ID + QB_CLIENT_SECRET + QB_COMPANY_ID",
+          "note": "QuickBooks not configured. Set QB_CLIENT_ID + QB_CLIENT_SECRET + QB_COMPANY_ID"
+        },
+        "duration_ms": 0,
+        "agent": "accountant",
+        "metadata": {
+          "period": "Q2-2026"
+        }
+      }
+    },
+    "cashFlowForecast — 3-month outlook": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "months": 3,
+          "forecast": [
+            {
+              "month": "tháng 7 năm 2026",
+              "projected_inflow": 0,
+              "projected_outflow": 0,
+              "net": 0,
+              "note": "Requires QuickBooks historical data"
+            },
+            {
+              "month": "tháng 8 năm 2026",
+              "projected_inflow": 0,
+              "projected_outflow": 0,
+              "net": 0,
+              "note": "Requires QuickBooks historical data"
+            },
+            {
+              "month": "tháng 9 năm 2026",
+              "projected_inflow": 0,
+              "projected_outflow": 0,
+              "net": 0,
+              "note": "Requires QuickBooks historical data"
+            }
+          ],
+          "risk_flags": [],
+          "summary": "3-month cash flow forecast requires QuickBooks API integration (set QB_CLIENT_ID)."
+        },
+        "duration_ms": 12,
+        "agent": "cfo",
+        "metadata": {
+          "months": 3
+        }
+      }
+    },
+    "storeAnalysis — Bakudan Ramen": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "store": "bakudan_ramen",
+          "period": "last_30_days",
+          "revenue": 0,
+          "cost_of_goods": 0,
+          "gross_margin": 0,
+          "trends": [],
+          "recommendation": "Connect bakudan_ramen POS system (set BAKUDAN_RAMEN_POS_API_KEY) to enable real store analysis."
+        },
+        "duration_ms": 0,
+        "agent": "cfo",
+        "metadata": {
+          "store": "bakudan_ramen",
+          "period": "last_30_days"
+        }
+      }
+    },
+    "storeAnalysis — Raw Sushi Bar": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "store": "raw_sushi_bar",
+          "period": "last_30_days",
+          "revenue": 0,
+          "cost_of_goods": 0,
+          "gross_margin": 0,
+          "trends": [],
+          "recommendation": "Connect raw_sushi_bar POS system (set RAW_SUSHI_BAR_POS_API_KEY) to enable real store analysis."
+        },
+        "duration_ms": 0,
+        "agent": "cfo",
+        "metadata": {
+          "store": "raw_sushi_bar",
+          "period": "last_30_days"
+        }
+      }
+    },
+    "reconcileAccount — main checking": {
+      "ok": true,
+      "result": {
+        "success": true,
+        "output": {
+          "account": "main_checking",
+          "period": "june_2026",
+          "matched": 0,
+          "unmatched": 0,
+          "discrepancies": [],
+          "note": "Reconciliation requires QuickBooks API or bank CSV. Set QB_CLIENT_ID + QB_CLIENT_SECRET."
+        },
+        "duration_ms": 0,
+        "agent": "bookkeeper",
+        "metadata": {
+          "account": "main_checking",
+          "period": "june_2026"
+        }
+      }
+    }
+  },
+  "qb": {
+    "state": {
+      "machine_id": "laptop-01",
+      "current_version": "",
+      "last_sync_at": "2026-06-10T16:19:06.766Z",
+      "last_sync_status": "error",
+      "last_error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+      "hostname": "LIEMDO-PC",
+      "platform": "win32",
+      "updated_at": "2026-06-10 16:19:06"
+    },
+    "syncs": [
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:19:06.766Z",
+        "created_at": "2026-06-10 16:19:06"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:18:19.080Z",
+        "created_at": "2026-06-10 16:18:19"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:14:06.865Z",
+        "created_at": "2026-06-10 16:14:06"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:13:19.061Z",
+        "created_at": "2026-06-10 16:13:19"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:09:07.401Z",
+        "created_at": "2026-06-10 16:09:08"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:08:18.988Z",
+        "created_at": "2026-06-10 16:08:18"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:04:06.765Z",
+        "created_at": "2026-06-10 16:04:06"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T16:03:19.088Z",
+        "created_at": "2026-06-10 16:03:19"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T15:59:07.434Z",
+        "created_at": "2026-06-10 15:59:07"
+      },
+      {
+        "machine_id": "laptop-01",
+        "event_type": "SYNC_FAILED",
+        "mi_version": "1.0.0",
+        "error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+        "hostname": "LIEMDO-PC",
+        "platform": "win32",
+        "timestamp": "2026-06-10T15:58:19.612Z",
+        "created_at": "2026-06-10 15:58:19"
+      }
+    ]
+  },
+  "passed": 15,
+  "failed": 0,
+  "generated_at": "2026-06-14T14:13:13.983Z"
+}

@@ -1,0 +1,62 @@
+{
+  "workflow_id": "quickbooks-daily-sync",
+  "name": "QuickBooks Daily Sync",
+  "domain": "quickbooks",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 5 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Daily QuickBooks sync. Triggers QB read-only sync agent via Mi-Core, logs success/failure.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "quickbooks",
+        "event_type": "qb_daily_sync_request",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "trigger_qb_sync",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "quickbooks",
+        "action": "daily_sync",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 3,
+      "type": "http_request",
+      "name": "log_result",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "quickbooks-daily-sync",
+        "domain": "quickbooks",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "{{trigger_qb_sync.status}}",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+/* ============ MODAL ============ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .6);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 680px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp .25s ease;
+}
+
+.modal-header {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg) 16px 0 0;
+    z-index: 2;
+}
+
+.modal-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 22px;
+}
+
+
+/* ============ RESCHEDULE MODAL ============ */
+.reschedule-section {
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border)
+}
+
+.reschedule-history {
+    margin-top: 12px
+}
+
+.reschedule-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-top: 6px
+}
+
+.reschedule-link:hover {
+    border-color: var(--border-hover);
+    color: var(--text)
+}
+
+
+
+/* ============================================
+   Create Task Modal
+   Scoped to .ct-modal so the generic .modal-overlay
+   rules above (z-index 200, display:none) stay
+   active for reschedule / version / etc. modals.
+   ============================================ */
+.ct-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .6);
+    backdrop-filter: blur(4px);
+    z-index: 3000;          /* > sidebar (2000) on mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+    /* ROOT CAUSE FIX: overlay must not capture pointer events when hidden */
+    pointer-events: none;
+}
+
+.ct-modal.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.ct-modal .modal-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 520px;
+    max-width: 95vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: scale(.95);
+    transition: transform .25s ease;
+    z-index: 3001;          /* > overlay (3000) so content sits above backdrop */
+    position: relative;     /* ensure z-index takes effect inside flex overlay */
+}
+
+.ct-modal.open .modal-box {
+    transform: scale(1);
+}
+
+.modal-box .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-box .modal-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.modal-box .modal-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.modal-box .modal-close:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+.modal-box .modal-body {
+    padding: 20px;
+}
+
+.modal-box .modal-body .form-group {
+    margin-bottom: 14px;
+}
+
+.modal-box .modal-body label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.modal-box .modal-body .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal-box .modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Urgency toggle */
+.urgency-options {
+    display: flex;
+    gap: 8px;
+}
+
+.urgency-option {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    background: var(--bg-primary);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.urgency-option:hover {
+    border-color: var(--border-hover);
+}
+
+.urgency-option.selected {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-bg);
+}
+
+.urgency-option.urgency-gap-opt.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-bg);
+    animation: urgencyBlink 1.5s ease-in-out infinite;
+}
+
+.urgency-option input[type="radio"] {
+    display: none;
+}

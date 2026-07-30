@@ -1,0 +1,161 @@
+name: Rotate Production DB Config
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ INCIDENT-ONLY WORKFLOW — db-credential-exposure (2026-07-11)                 │
+# │ Single purpose: write a rotated DB_USER/DB_PASS/DB_NAME into production's    │
+# │ .env, nothing else. Does NOT rsync the repo, does NOT run migrations, does   │
+# │ NOT deploy application code. See reports/security-incidents/                 │
+# │ db-credential-exposure/CREDENTIAL_ROTATION_RUNBOOK.md for the full runbook.  │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type CONFIRM to proceed with production DB config rotation'
+        required: true
+
+concurrency:
+  group: production-db-rotation
+  cancel-in-progress: false
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    environment: production   # requires GitHub Environment "production" to exist;
+                               # add required reviewers via repo Settings for a manual approval gate
+
+    steps:
+      - name: Require explicit confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "CONFIRM" ]; then
+            echo "::error::Confirmation input must be exactly 'CONFIRM'. Aborting."
+            exit 1
+          fi
+          echo "Confirmed by ${{ github.actor }} at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Dry validation — required secrets present (values never displayed)
+        env:
+          PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          missing=""
+          [ -z "$PROD_DB_USER" ]      && missing="$missing PROD_DB_USER"
+          [ -z "$PROD_DB_PASSWORD" ]  && missing="$missing PROD_DB_PASSWORD"
+          [ -z "$PROD_DB_NAME" ]      && missing="$missing PROD_DB_NAME"
+          [ -z "$DH_HOST" ]           && missing="$missing DH_HOST"
+          [ -z "$DH_USER" ]           && missing="$missing DH_USER"
+          [ -z "$DH_PATH" ]           && missing="$missing DH_PATH"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required secrets in the 'production' GitHub Environment:$missing"
+            echo "Add them under Settings > Environments > production > Environment secrets, then re-run."
+            exit 1
+          fi
+          echo "OK: all required secrets are present in the production environment (values not shown)."
+
+      - name: Path safety guard
+        env:
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          if [ -z "$DH_PATH" ] || [ "$DH_PATH" = "/" ] || [[ "$DH_PATH" =~ ^/home/[^/]+/?$ ]]; then
+            echo "::error::DH_PATH is empty, root, or a home root — refusing to proceed."
+            exit 1
+          fi
+          echo "OK: target path passes basic safety checks (path itself not printed)."
+
+      - name: Install SSH keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+
+      - name: Environment identity check
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          MARKER=$(ssh "${DH_USER}@${DH_HOST}" "cat ${DH_PATH}/.environment-identity 2>/dev/null || echo 'MISSING'")
+          if [ "$MARKER" != "MISSING" ] && [ "$MARKER" != "ENVIRONMENT=production" ]; then
+            echo "::error::Remote marker says '$MARKER', expected 'ENVIRONMENT=production' or no marker yet. Refusing to proceed."
+            exit 1
+          fi
+          echo "OK: environment identity check passed (marker: $([ "$MARKER" = "MISSING" ] && echo 'not yet created' || echo 'matches production'))"
+
+      - name: Backup current .env on server (not printed, not committed)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" "
+            cd ${DH_PATH} &&
+            if [ -f .env ]; then
+              cp .env .env.pre-rotation-backup.\$(date +%Y%m%d%H%M%S) &&
+              chmod 600 .env.pre-rotation-backup.* &&
+              echo 'Backup created (filename only, contents not shown)'
+            else
+              echo 'No existing .env found — nothing to back up'
+            fi
+          "
+
+      - name: Write new .env with rotated production DB config (piped, never echoed)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+          PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
+          PROD_DB_HOST: ${{ secrets.PROD_DB_HOST_OVERRIDE || 'mysql-taskflow.bakudanramen.com' }}
+        run: |
+          {
+            echo "DB_HOST=${PROD_DB_HOST}"
+            echo "DB_NAME=${PROD_DB_NAME}"
+            echo "DB_USER=${PROD_DB_USER}"
+            echo "DB_PASS=${PROD_DB_PASSWORD}"
+            echo "DB_CHARSET=utf8mb4"
+            echo "APP_ENV=production"
+          } | ssh "${DH_USER}@${DH_HOST}" "cd ${DH_PATH} && umask 077 && cat > .env.new.\$\$ && mv .env.new.\$\$ .env && chmod 600 .env && echo 'New .env written — contents not displayed'"
+
+      - name: Validate written file has the expected keys (names only, not values)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" "cd ${DH_PATH} && grep -o '^[A-Z_]*=' .env | sort"
+
+      - name: Clear PHP opcache
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" "cd ${DH_PATH} && php -r 'if(function_exists(\"opcache_reset\")){opcache_reset();echo \"opcache cleared\n\";}else{echo \"no opcache\n\";}'"
+
+      - name: Basic reachability check (no auth, no data)
+        run: |
+          sleep 3
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 https://dashboard.bakudanramen.com/api/version)
+          echo "GET /api/version → HTTP $HTTP_CODE"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::App did not return 200 on a basic reachability check — investigate before running the full authenticated smoke test."
+          fi
+
+      - name: Next steps reminder
+        run: |
+          echo "Config deploy step complete."
+          echo "REQUIRED NEXT: run the full authenticated smoke test (login, /health, /overview, /my-tasks, /bills, one read-only API) per CREDENTIAL_ROTATION_RUNBOOK.md before revoking the old credential."

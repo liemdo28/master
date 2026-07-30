@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-00339df5a5",
+  "name": "Mautic",
+  "github": "https://github.com/mautic/mautic",
+  "owner_division": "Marketing",
+  "category": "Marketing",
+  "description": "Open marketing automation",
+  "license": "GPL-3.0",
+  "license_risk": "MEDIUM",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6722538,
+  "created_iso": "2026-06-26T05:33:33.672260+00:00",
+  "updated_at": 1782452013.6722538,
+  "updated_iso": "2026-06-26T05:33:33.672267+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6722538,
+      "iso": "2026-06-26T05:33:33.672269+00:00"
+    }
+  ]
+}

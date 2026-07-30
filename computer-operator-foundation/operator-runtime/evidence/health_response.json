@@ -1,0 +1,1 @@
+{"components":{"coordination":"ok","evidence_registry":"ok","playwright_adapter":"ok","policy_guard":"ok","telemetry":"ok"},"evidence_on_disk":28,"phase":"2B","runs_on_disk":8,"service":"operator-runtime","status":"ok","timestamp":"2026-06-26T04:58:02Z","version":"1.0.0"}

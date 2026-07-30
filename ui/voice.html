@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi Voice</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101316;
+      --panel: #171d22;
+      --panel-2: #20272e;
+      --text: #eef3f4;
+      --muted: #9fb0b7;
+      --line: #32404a;
+      --accent: #35d087;
+      --danger: #ff6b6b;
+      --warn: #f6c95f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top left, #163028 0, transparent 32rem), var(--bg);
+      color: var(--text);
+    }
+    main {
+      width: min(980px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .status {
+      min-width: 150px;
+      color: var(--muted);
+      text-align: right;
+      font-size: 14px;
+    }
+    .surface {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) 1fr;
+      gap: 16px;
+    }
+    .panel {
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, .22);
+    }
+    .controls {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .mic {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      border: 1px solid color-mix(in srgb, var(--accent) 70%, #ffffff 10%);
+      background: #17362a;
+      color: var(--text);
+      font-size: 48px;
+      cursor: pointer;
+      justify-self: center;
+      transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .mic:hover { transform: translateY(-1px); }
+    .mic.recording {
+      background: #402020;
+      border-color: var(--danger);
+      box-shadow: 0 0 0 10px rgba(255, 107, 107, .12);
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.035); }
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button.secondary {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+    .meta {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+    .chat {
+      min-height: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bubble {
+      max-width: 86%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: #183128;
+      border-color: #285341;
+    }
+    .bubble.mi {
+      align-self: flex-start;
+      background: var(--panel-2);
+    }
+    .empty {
+      margin: auto;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      max-width: 440px;
+    }
+    .meter {
+      height: 8px;
+      background: #26313a;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .meter > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width .12s ease;
+    }
+    @media (max-width: 760px) {
+      main { width: min(100vw - 20px, 620px); padding: 18px 0; }
+      header { align-items: flex-start; }
+      .surface { grid-template-columns: 1fr; }
+      .chat { min-height: 420px; }
+      .bubble { max-width: 96%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Mi Voice</h1>
+      <div id="status" class="status">Đang kiểm tra...</div>
+    </header>
+    <section class="surface">
+      <aside class="panel controls">
+        <button id="mic" class="mic" title="Bấm để ghi âm">🎙</button>
+        <div class="meter"><span id="level"></span></div>
+        <div class="row">
+          <button id="stop" class="secondary" disabled>Dừng</button>
+          <button id="clear" class="secondary">Xóa màn hình</button>
+        </div>
+        <label><input id="speak" type="checkbox" checked /> Mi đọc câu trả lời</label>
+        <div class="meta">
+          <div id="health">Voice: unknown</div>
+          <div id="latency">Latency: -</div>
+          <div id="source">Source: -</div>
+        </div>
+      </aside>
+      <section id="chat" class="panel chat">
+        <div class="empty">Bấm micro rồi nói với Mi. Câu trả lời sẽ hiện ở đây.</div>
+      </section>
+    </section>
+  </main>
+  <script>
+    const micBtn = document.getElementById('mic');
+    const stopBtn = document.getElementById('stop');
+    const clearBtn = document.getElementById('clear');
+    const chat = document.getElementById('chat');
+    const statusEl = document.getElementById('status');
+    const healthEl = document.getElementById('health');
+    const latencyEl = document.getElementById('latency');
+    const sourceEl = document.getElementById('source');
+    const speakEl = document.getElementById('speak');
+    const levelEl = document.getElementById('level');
+
+    let recorder;
+    let chunks = [];
+    let stream;
+    let audioCtx;
+    let analyser;
+    let rafId;
+
+    function setStatus(text) { statusEl.textContent = text; }
+
+    function addBubble(role, text) {
+      const empty = chat.querySelector('.empty');
+      if (empty) empty.remove();
+      const el = document.createElement('div');
+      el.className = `bubble ${role}`;
+      el.textContent = text;
+      chat.appendChild(el);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function readAloud(text) {
+      if (!speakEl.checked || !window.speechSynthesis || !text) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
+      u.lang = 'vi-VN';
+      u.rate = 1.02;
+      window.speechSynthesis.speak(u);
+    }
+
+    async function checkHealth() {
+      try {
+        const res = await fetch('/api/voice/health');
+        const data = await res.json();
+        healthEl.textContent = `Voice: ${data.status} | STT ${data.transcription.available ? 'online' : 'offline'} | TTS ${data.tts.available ? 'online' : 'browser'}`;
+        setStatus(data.status === 'ok' ? 'Sẵn sàng' : 'Voice degraded');
+      } catch (err) {
+        healthEl.textContent = 'Voice: offline';
+        setStatus('Không kết nối được');
+      }
+    }
+
+    function startMeter() {
+      audioCtx = new AudioContext();
+      const src = audioCtx.createMediaStreamSource(stream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      src.connect(analyser);
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      const tick = () => {
+        analyser.getByteFrequencyData(data);
+        const avg = data.reduce((a, b) => a + b, 0) / data.length;
+        levelEl.style.width = `${Math.min(100, Math.round(avg * 1.8))}%`;
+        rafId = requestAnimationFrame(tick);
+      };
+      tick();
+    }
+
+    function stopMeter() {
+      cancelAnimationFrame(rafId);
+      levelEl.style.width = '0%';
+      if (audioCtx) audioCtx.close();
+      audioCtx = null;
+    }
+
+    async function startRecording() {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      chunks = [];
+      recorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : undefined });
+      recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+      recorder.onstop = submitAudio;
+      recorder.start();
+      startMeter();
+      micBtn.classList.add('recording');
+      micBtn.disabled = true;
+      stopBtn.disabled = false;
+      setStatus('Đang nghe...');
+    }
+
+    function stopRecording() {
+      if (recorder && recorder.state !== 'inactive') recorder.stop();
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      stopMeter();
+      micBtn.classList.remove('recording');
+      micBtn.disabled = false;
+      stopBtn.disabled = true;
+      setStatus('Đang xử lý...');
+    }
+
+    async function submitAudio() {
+      const blob = new Blob(chunks, { type: chunks[0]?.type || 'audio/webm' });
+      const form = new FormData();
+      form.append('audio', blob, 'mi-voice.webm');
+      const started = performance.now();
+      try {
+        const res = await fetch('/api/voice/ask', { method: 'POST', body: form });
+        const data = await res.json();
+        latencyEl.textContent = `Latency: ${data.latency_ms || Math.round(performance.now() - started)}ms`;
+        sourceEl.textContent = `Source: ${data.source || '-'}`;
+        if (!data.ok) {
+          addBubble('mi', data.error || 'Em chưa nghe rõ anh.');
+          setStatus('Chưa nghe rõ');
+          return;
+        }
+        addBubble('user', data.transcript || '(không có transcript)');
+        addBubble('mi', data.reply || 'Em chưa có câu trả lời.');
+        readAloud(data.reply || '');
+        setStatus('Sẵn sàng');
+      } catch (err) {
+        addBubble('mi', `Lỗi voice: ${err.message || err}`);
+        setStatus('Lỗi');
+      }
+    }
+
+    micBtn.addEventListener('click', startRecording);
+    stopBtn.addEventListener('click', stopRecording);
+    clearBtn.addEventListener('click', () => {
+      chat.innerHTML = '<div class="empty">Bấm micro rồi nói với Mi. Câu trả lời sẽ hiện ở đây.</div>';
+      latencyEl.textContent = 'Latency: -';
+      sourceEl.textContent = 'Source: -';
+    });
+
+    checkHealth();
+  </script>
+</body>
+</html>

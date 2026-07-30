@@ -1,0 +1,92 @@
+/* ============================================================
+   BUTTONS — Unified v5
+   ============================================================ */
+
+.btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    min-height: 38px;
+    border-radius: var(--radius-md);   /* 12px */
+    font-family: inherit;
+    font-size: 13px; font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    line-height: 1.4;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Variants */
+.btn-primary {
+    background: var(--status-info, #2563EB);
+    color: #fff;
+    border-color: var(--status-info, #2563EB);
+}
+.btn-primary:hover {
+    background: #1D4ED8;
+    border-color: #1D4ED8;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,99,235,.35);
+}
+
+.btn-danger-primary {
+    background: var(--accent, #dc2626);
+    color: #fff;
+    border-color: var(--accent, #dc2626);
+}
+.btn-danger-primary:hover {
+    background: var(--accent-hover, #ef4444);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220,38,38,.35);
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+.btn-secondary:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+    border-color: var(--border-hover);
+}
+
+.btn-danger {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-color: var(--accent-border);
+}
+.btn-danger:hover { background: rgba(220,38,38,.18); }
+
+.btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+.btn-outline:hover {
+    background: var(--bg-tertiary);
+    color: var(--text);
+    border-color: var(--border-hover);
+}
+
+.btn-ghost {
+    background: rgba(255,255,255,.06);
+    border-color: var(--border);
+    color: var(--text);
+}
+.btn-ghost:hover {
+    background: rgba(255,255,255,.1);
+    border-color: var(--border-hover);
+    color: var(--text);
+}
+
+/* Sizes */
+.btn-sm  { padding: 5px 12px; font-size: 12px; min-height: 30px; border-radius: var(--radius-sm); }
+.btn-lg  { padding: 12px 24px; font-size: 15px; min-height: 48px; }
+.btn-xl  { padding: 14px 28px; font-size: 16px; min-height: 52px; }
+.btn-icon { padding: 8px; width: 36px; height: 36px; justify-content: center; min-height: unset; }
+.w-full  { width: 100%; }

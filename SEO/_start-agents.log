@@ -1,0 +1,16 @@
+spawned seo-local-maps-agent on port 4011 (pid 10268)
+spawned seo-website-agent on port 4012 (pid 20668)
+spawned seo-technical-agent on port 4013 (pid 13392)
+spawned seo-schema-agent on port 4014 (pid 9524)
+spawned seo-content-agent on port 4015 (pid 30324)
+spawned seo-citation-agent on port 4016 (pid 27460)
+spawned seo-analytics-agent on port 4017 (pid 31984)
+spawned seo-automation-orchestrator on port 4020 (pid 10584)
+health: seo-local-maps-agent port 4011 => ONLINE
+health: seo-website-agent port 4012 => ONLINE
+health: seo-technical-agent port 4013 => ONLINE
+health: seo-schema-agent port 4014 => ONLINE
+health: seo-content-agent port 4015 => ONLINE
+health: seo-citation-agent port 4016 => ONLINE
+health: seo-analytics-agent port 4017 => ONLINE
+health: seo-automation-orchestrator port 4020 => ONLINE

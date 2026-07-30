@@ -1,0 +1,326 @@
+[
+  {
+    "id": "S44_1782656995007_qf1bqs",
+    "timestamp": 1782656995007,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656995007,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782656995005_iubyim",
+    "timestamp": 1782656995005,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656995006
+  },
+  {
+    "id": "S44_1782656995005_tgaifb",
+    "timestamp": 1782656995005,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656995006
+  },
+  {
+    "id": "S44_1782656986199_j1346a",
+    "timestamp": 1782656986199,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656986199,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782656986197_6aiptv",
+    "timestamp": 1782656986197,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656986198
+  },
+  {
+    "id": "S44_1782656986196_h2q1y2",
+    "timestamp": 1782656986196,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656986198
+  },
+  {
+    "id": "S44_1782656637129_zes10p",
+    "timestamp": 1782656637129,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656637129,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782656637127_n92nyz",
+    "timestamp": 1782656637127,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656637128
+  },
+  {
+    "id": "S44_1782656637127_fekwgo",
+    "timestamp": 1782656637127,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656637128
+  },
+  {
+    "id": "S44_1782656108631_1vjhvy",
+    "timestamp": 1782656108631,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656108632,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782656108630_sf1ceg",
+    "timestamp": 1782656108630,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656108631
+  },
+  {
+    "id": "S44_1782656108630_1m9m55",
+    "timestamp": 1782656108630,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656108631
+  },
+  {
+    "id": "S44_1782655879689_0d2qy4",
+    "timestamp": 1782655879689,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782655879690,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782655879688_m22nqd",
+    "timestamp": 1782655879688,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782655879689
+  },
+  {
+    "id": "S44_1782655879687_pih9cx",
+    "timestamp": 1782655879687,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782655879688
+  },
+  {
+    "id": "S44_1782655633443_lgmzwq",
+    "timestamp": 1782655633443,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782655633443,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782655633442_xcizbx",
+    "timestamp": 1782655633442,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782655633442
+  },
+  {
+    "id": "S44_1782655633441_xm6i39",
+    "timestamp": 1782655633441,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782655633442
+  },
+  {
+    "id": "S44_1782655628634_rbhxem",
+    "timestamp": 1782655628634,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782655628634,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782655628633_o7tgbh",
+    "timestamp": 1782655628633,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782655628634
+  },
+  {
+    "id": "S44_1782655628632_kc7vq2",
+    "timestamp": 1782655628632,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782655628633
+  },
+  {
+    "id": "S44_1782655590126_vif5ws",
+    "timestamp": 1782655590126,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782655590126,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782655590125_4imylv",
+    "timestamp": 1782655590125,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782655590126
+  },
+  {
+    "id": "S44_1782655590124_q1zvay",
+    "timestamp": 1782655590124,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782655590125
+  },
+  {
+    "id": "S44_1782648363745_5lmvbu",
+    "timestamp": 1782648363745,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782648363745,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782648363743_zftyo2",
+    "timestamp": 1782648363743,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782648363744
+  },
+  {
+    "id": "S44_1782648363743_6e6x17",
+    "timestamp": 1782648363743,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782648363744
+  },
+  {
+    "id": "S44_1782648091128_5e9l2p",
+    "timestamp": 1782648091128,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782648091128,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782648091126_cywtxh",
+    "timestamp": 1782648091126,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782648091127
+  },
+  {
+    "id": "S44_1782648091126_ysaorr",
+    "timestamp": 1782648091126,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782648091127
+  },
+  {
+    "id": "S44_1782647064589_w8v19m",
+    "timestamp": 1782647064590,
+    "signal": "test-signal",
+    "status": "open",
+    "approvalRequired": false,
+    "assignedTo": null
+  },
+  {
+    "id": "S44_1782647064589_8mha6i",
+    "timestamp": 1782647064589,
+    "signal": "test-signal",
+    "status": "open",
+    "approvalRequired": false,
+    "assignedTo": null
+  },
+  {
+    "id": "S44_1782646234236_5x6eif",
+    "timestamp": 1782646234236,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782646234237,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S44_1782646234235_9prnf1",
+    "timestamp": 1782646234235,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782646234236
+  },
+  {
+    "id": "S44_1782646234235_x5pt9m",
+    "timestamp": 1782646234235,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782646234236
+  }
+]

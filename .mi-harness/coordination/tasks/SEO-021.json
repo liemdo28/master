@@ -1,0 +1,17 @@
+{
+  "id": "SEO-021",
+  "objectiveId": "OBJ-051",
+  "title": "Identify SEO revenue pages",
+  "description": "Rank pages and search intents tied to Raw Sushi revenue.",
+  "division": "seo",
+  "owner": "seo-growth",
+  "priority": "P0",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T06:19:09.679Z",
+  "updatedAt": "2026-06-27T06:19:09.679Z",
+  "completedAt": null
+}

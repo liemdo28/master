@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Dashboard Local AI Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; max-width: 900px; color: #1f2937; }
+    label, textarea, button { display: block; width: 100%; box-sizing: border-box; }
+    textarea { min-height: 110px; padding: 12px; margin: 8px 0 12px; }
+    button { width: auto; padding: 10px 14px; cursor: pointer; }
+    .status, .answer { border: 1px solid #d1d5db; padding: 12px; margin-top: 12px; }
+    .blocked { color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h1>Mi Dashboard Local AI Demo</h1>
+  <p>Status: <span id="support">Checking browser support...</span></p>
+  <label for="question">Dashboard question</label>
+  <textarea id="question">Explain what this approval status means: pending manager review.</textarea>
+  <button id="ask">Ask locally</button>
+  <div class="status" id="modelStatus">Model status: not loaded. This offline-safe demo uses fallback logic unless WebLLM is installed.</div>
+  <div class="answer" id="answer">Answer will appear here.</div>
+
+  <script>
+    const blocked = [
+      'deploy production',
+      'delete task',
+      'send whatsapp',
+      'approve payroll',
+      'modify quickbooks'
+    ];
+    const allowed = [
+      'explain',
+      'summarize',
+      'rewrite',
+      'approval status'
+    ];
+
+    const support = document.getElementById('support');
+    support.textContent = 'gpu' in navigator ? 'WebGPU API detected; WebLLM can be tested after approved install.' : 'WebGPU unavailable; fallback mode active.';
+
+    document.getElementById('ask').addEventListener('click', () => {
+      const q = document.getElementById('question').value.trim();
+      const lower = q.toLowerCase();
+      const answer = document.getElementById('answer');
+      if (blocked.some(term => lower.includes(term))) {
+        answer.innerHTML = '<span class="blocked">Blocked: local assistant cannot perform production or financial actions.</span>';
+        return;
+      }
+      if (!allowed.some(term => lower.includes(term))) {
+        answer.textContent = 'Fallback: ask a low-risk dashboard explanation, summary, rewrite, or approval-status question.';
+        return;
+      }
+      answer.textContent = 'Local fallback answer: pending manager review means the task is waiting for a manager to inspect the evidence and approve, reject, or escalate it. No production action was performed.';
+    });
+  </script>
+</body>
+</html>

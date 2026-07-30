@@ -1,0 +1,5 @@
+[Mi][Auth] PIN configured — auth enforcement active
+[Mi][Auth] MI_CORE_API_KEY configured — API key enforcement active
+[Mi][EADDRINUSE] Port 4001 busy — waiting for release (attempt 1)
+[Mi][EADDRINUSE] Port 4001 busy — waiting for release (attempt 2)
+[Mi][EADDRINUSE] Port 4001 still busy after 3 attempts — exiting so PM2 can restart cleanly

@@ -1,0 +1,142 @@
+{
+  "daily-website-crawl": {
+    "jobId": "daily-website-crawl",
+    "runId": "daily-website-crawl-1783065600053",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 23166,
+    "started_at": "2026-07-03T08:00:00.053Z",
+    "completed_at": "2026-07-03T08:00:23.219Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 13
+    }
+  },
+  "daily-gbp-sync": {
+    "jobId": "daily-gbp-sync",
+    "runId": "daily-gbp-sync-1783065600054",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 8604,
+    "started_at": "2026-07-03T08:00:00.054Z",
+    "completed_at": "2026-07-03T08:00:08.658Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "daily-gsc-sync": {
+    "jobId": "daily-gsc-sync",
+    "runId": "daily-gsc-sync-1783065600056",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 5013,
+    "started_at": "2026-07-03T08:00:00.056Z",
+    "completed_at": "2026-07-03T08:00:05.069Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "daily-ga4-sync": {
+    "jobId": "daily-ga4-sync",
+    "runId": "daily-ga4-sync-1783065600019",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 6669,
+    "started_at": "2026-07-03T08:00:00.019Z",
+    "completed_at": "2026-07-03T08:00:06.688Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "daily-technical-audit": {
+    "jobId": "daily-technical-audit",
+    "runId": "daily-technical-audit-1783065600051",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 56697,
+    "started_at": "2026-07-03T08:00:00.051Z",
+    "completed_at": "2026-07-03T08:00:56.748Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "daily-schema-validation": {
+    "jobId": "daily-schema-validation",
+    "runId": "daily-schema-validation-1783065600049",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 8253,
+    "started_at": "2026-07-03T08:00:00.049Z",
+    "completed_at": "2026-07-03T08:00:08.302Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "weekly-content-plan": {
+    "jobId": "weekly-content-plan",
+    "runId": "weekly-content-plan-1782723600415",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 1701,
+    "started_at": "2026-06-29T09:00:00.415Z",
+    "completed_at": "2026-06-29T09:00:02.116Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "weekly-executive-seo-report": {
+    "jobId": "weekly-executive-seo-report",
+    "runId": "weekly-executive-seo-report-1782723600408",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 2653,
+    "started_at": "2026-06-29T09:00:00.408Z",
+    "completed_at": "2026-06-29T09:00:03.061Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "weekly-citation-scan": {
+    "jobId": "weekly-citation-scan",
+    "runId": "weekly-citation-scan-1782723600412",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 8202,
+    "started_at": "2026-06-29T09:00:00.412Z",
+    "completed_at": "2026-06-29T09:00:08.614Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  },
+  "monthly-full-seo-audit": {
+    "jobId": "monthly-full-seo-audit",
+    "runId": "monthly-full-seo-audit-1782900001593",
+    "status": "completed",
+    "attempts": 1,
+    "duration_ms": 40708,
+    "started_at": "2026-07-01T10:00:01.594Z",
+    "completed_at": "2026-07-01T10:00:42.302Z",
+    "error": null,
+    "result_summary": {
+      "ok": true,
+      "records": 0
+    }
+  }
+}

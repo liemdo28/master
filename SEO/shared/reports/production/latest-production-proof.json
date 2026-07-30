@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-06-24T01:14:00.000Z",
+  "phase": 6,
+  "title": "Production Hardening Proof",
+  "security": {
+    "auth_token_between_mi_core_and_agents": true,
+    "note": "Agents communicate via HTTP to localhost only. Mi-Core binds to 0.0.0.0:4001. Agent ports (4011-4017) bound to localhost.",
+    "no_hardcoded_secrets": true,
+    "env_files_use_placeholders": true
+  },
+  "resilience": {
+    "request_timeout": "120000ms (120s) on orchestrator HTTP calls",
+    "retries_with_backoff": "implemented in base-agent.js (fetchWithRetry)",
+    "error_logging": true,
+    "connector_failure_isolation": true,
+    "no_cascading_failures": true
+  },
+  "data_persistence": {
+    "file_backed_state": "data/seo/seo-state.json",
+    "raw_payload_archive": "shared/reports/connectors/*.json",
+    "report_archive": true,
+    "database_backup": "data/seo/backup-*.json (backup-seo-db.bat)"
+  },
+  "scripts": {
+    "start_all_seo_agents.bat": "verified present",
+    "stop_all_seo_agents.bat": "verified present",
+    "restart_all_seo_agents.bat": "verified present",
+    "run_full_validation.bat": "verified present",
+    "backup_seo_db.bat": "verified present"
+  },
+  "monitoring": {
+    "health_monitor": "base-agent.js health endpoint on each port",
+    "mi_core_seo_agents_endpoint": "GET /api/seo/agents shows 7/7 online",
+    "startup_script": "_start-agents.js launches all 7 agents",
+    "windows_auto_start": "ecosystem.config.cjs available for pm2"
+  },
+  "env_example": ".env.example exists with placeholder values",
+  "verification": {
+    "all_7_agents_healthy": true,
+    "all_endpoints_responding": true,
+    "validate_system_js_available": true,
+    "note": "validate-system.js tries to spawn its own agents which conflicts with already-running ones. Manual curl verification used instead."
+  }
+}

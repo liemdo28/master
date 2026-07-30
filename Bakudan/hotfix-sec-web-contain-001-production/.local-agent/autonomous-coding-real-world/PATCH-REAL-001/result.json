@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "patchId": "PATCH-REAL-001",
+  "workflowId": "WORKFLOW-REAL-DASHBOARD-001",
+  "taskId": "TASK-REAL-DASHBOARD-001",
+  "filesChanged": [
+    {
+      "filePath": "apps/agency/apps/web/src/pages/DevPanel.jsx",
+      "changeType": "modified",
+      "insertions": 1,
+      "deletions": 0,
+      "timestamp": "2026-06-07T14:04:00.000Z",
+      "workflowId": "WORKFLOW-REAL-DASHBOARD-001",
+      "taskId": "TASK-REAL-DASHBOARD-001"
+    }
+  ],
+  "qaResult": {
+    "ok": true,
+    "mode": "git-diff",
+    "durationMs": 200,
+    "highestSeverity": "PASS",
+    "checks": [
+      {
+        "name": "single file changed",
+        "ok": true
+      },
+      {
+        "name": "only data-testid attribute added",
+        "ok": true
+      },
+      {
+        "name": "no logic change",
+        "ok": true
+      },
+      {
+        "name": "no forbidden files touched",
+        "ok": true
+      }
+    ]
+  },
+  "iteration": 1,
+  "risk": "low",
+  "git": {
+    "status": {
+      "ok": true,
+      "command": "git diff -- apps/agency/apps/web/src/pages/DevPanel.jsx",
+      "stdout": "+1 line: data-testid=\"dev-agent-run-btn\"",
+      "stderr": ""
+    },
+    "commitCandidate": true,
+    "note": "Do not commit or push without explicit CEO approval."
+  },
+  "nextAction": "Complete"
+}

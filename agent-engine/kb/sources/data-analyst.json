@@ -1,0 +1,11 @@
+{
+  "domain": "data-analyst",
+  "domainName": "Data Analysis",
+  "sources": [
+    { "name": "data.gov (dataset guides)", "url": "https://data.gov", "license": "Public Domain", "attribution": "US Government", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "World Bank Open Data", "url": "https://data.worldbank.org", "license": "CC BY 4.0", "attribution": "The World Bank", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn", "license": "Apache 2.0", "attribution": "Kaggle / Google", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include", "notes": "Tutorials Apache 2.0; exercise notebooks CC BY" },
+    { "name": "Wikipedia — Statistics", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" }
+  ],
+  "seedDocuments": []
+}

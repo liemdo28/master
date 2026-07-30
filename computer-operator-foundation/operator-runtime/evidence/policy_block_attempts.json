@@ -1,0 +1,58 @@
+[
+  {
+    "target": "doordash.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'doordash.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "toasttab.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'toasttab.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "qbo.intuit.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'qbo.intuit.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "business.google.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'business.google.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "panel.dreamhost.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'panel.dreamhost.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "dash.cloudflare.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'dash.cloudflare.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "chase.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'chase.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  },
+  {
+    "target": "payroll.example.com",
+    "attempted_at": "2026-06-26T04:51:40Z",
+    "blocked": true,
+    "error": "POLICY BLOCK: target 'payroll.example.com' is not allowed. status=BLOCKED_BY_POLICY",
+    "duration_seconds": 0.0
+  }
+]

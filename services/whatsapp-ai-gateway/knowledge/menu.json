@@ -1,0 +1,44 @@
+{
+  "_comment": "Bakudan Ramen menu — update prices/items here without touching code",
+  "categories": [
+    {
+      "name": "Ramen",
+      "items": [
+        { "name": "Tonkotsu Ramen", "price": 15.99, "description": "Rich creamy pork bone broth, chashu pork, soft egg, bamboo shoots, nori", "popular": true },
+        { "name": "Spicy Miso Ramen", "price": 15.99, "description": "Bold red miso broth with chili oil, ground pork, corn, green onions", "popular": true },
+        { "name": "Shoyu Ramen", "price": 14.99, "description": "Light soy-based chicken broth, chicken chashu, menma, narutomaki" },
+        { "name": "Vegan Shoyu Ramen", "price": 14.99, "description": "Plant-based shoyu broth, tofu, mushrooms, bok choy, corn", "vegan": true },
+        { "name": "Shio Ramen", "price": 14.99, "description": "Delicate salt-based broth, clams, shrimp, yuzu zest" },
+        { "name": "Bakudan Special", "price": 18.99, "description": "Our chef's signature — triple broth blend, all toppings included", "popular": true }
+      ]
+    },
+    {
+      "name": "Appetizers",
+      "items": [
+        { "name": "Gyoza (6 pcs)", "price": 7.99, "description": "Pan-fried pork & cabbage dumplings, yuzu ponzu" },
+        { "name": "Karaage", "price": 9.99, "description": "Japanese fried chicken, kewpie mayo, lemon" },
+        { "name": "Takoyaki (6 pcs)", "price": 8.99, "description": "Octopus balls, bonito flakes, mayo, okonomiyaki sauce" },
+        { "name": "Edamame", "price": 4.99, "description": "Salted steamed soybeans", "vegan": true }
+      ]
+    },
+    {
+      "name": "Drinks",
+      "items": [
+        { "name": "Japanese Ramune", "price": 3.99 },
+        { "name": "Matcha Latte", "price": 5.99 },
+        { "name": "Yuzu Lemonade", "price": 4.99 },
+        { "name": "Soft Drink", "price": 2.99 },
+        { "name": "Hot Green Tea", "price": 2.49 }
+      ]
+    },
+    {
+      "name": "Add-ons",
+      "items": [
+        { "name": "Extra Chashu (3 pcs)", "price": 3.99 },
+        { "name": "Soft Boiled Egg", "price": 1.99 },
+        { "name": "Extra Noodles", "price": 2.49 },
+        { "name": "Extra Broth", "price": 1.99 }
+      ]
+    }
+  ]
+}

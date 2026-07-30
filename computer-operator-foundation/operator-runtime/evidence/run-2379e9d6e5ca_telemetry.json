@@ -1,0 +1,78 @@
+{
+  "run_id": "run-2379e9d6e5ca",
+  "task_id": "task-cab5c7b5f955",
+  "objective_id": "obj-b40b72c4",
+  "adapter": "playwright-chromium",
+  "mode": "sandbox",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html",
+  "start_time": 1782448820.13032,
+  "start_iso": "2026-06-26T04:40:20Z",
+  "end_time": 1782448821.1419506,
+  "end_iso": "2026-06-26T04:40:21Z",
+  "duration_ms": 1011.6,
+  "action_count": 5,
+  "success": true,
+  "errors": [],
+  "screenshots": [
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page1_home.png",
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page2_about.png",
+    "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page3_products.png"
+  ],
+  "downloads": [],
+  "evidence_ids": [
+    "ev-e41bbb2980",
+    "ev-964a122887",
+    "ev-97df30ea68",
+    "ev-3d0098116e",
+    "ev-917bed03fa"
+  ],
+  "policy_decision": {
+    "ok": true,
+    "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html",
+    "classification": "SAFE",
+    "status": "APPROVED"
+  },
+  "status": "COMPLETED",
+  "actions": [
+    {
+      "seq": 1,
+      "type": "open_homepage",
+      "detail": "goto file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448820.7782664
+    },
+    {
+      "seq": 2,
+      "type": "extract_internal_links",
+      "detail": "query nav a[href]",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448820.9074597
+    },
+    {
+      "seq": 3,
+      "type": "visit_page_2",
+      "detail": "goto file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/about.html",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448820.9257948
+    },
+    {
+      "seq": 4,
+      "type": "visit_page_3",
+      "detail": "goto file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/products.html",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448821.0032544
+    },
+    {
+      "seq": 5,
+      "type": "done",
+      "detail": "demo4 completed",
+      "success": true,
+      "error": null,
+      "timestamp": 1782448821.1419451
+    }
+  ]
+}

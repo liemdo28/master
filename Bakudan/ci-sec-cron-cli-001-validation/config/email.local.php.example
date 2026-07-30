@@ -1,0 +1,32 @@
+<?php
+/**
+ * email.local.php — Local SMTP credentials (copy to email.local.php and fill in)
+ *
+ * This file is gitignored. Create it on the server:
+ *   cp config/email.local.php.example config/email.local.php
+ *
+ * ── Gmail (App Password) ───────────────────────────────────────────────────────
+ *   Host: smtp.gmail.com  Port: 587  Encryption: tls
+ *   Username: your-gmail@gmail.com
+ *   Password: your-16-char-app-password (Google Account → Security → App Passwords)
+ *
+ * ── DreamHost SMTP ─────────────────────────────────────────────────────────────
+ *   Host: smtp.dreamhost.com  Port: 587  Encryption: tls
+ *   Username: noreply@yourdomain.com  (mailbox must exist in DreamHost panel)
+ *   Password: mailbox password
+ *
+ * ── Disable SMTP (fall back to PHP mail()) ────────────────────────────────────
+ *   define('MAIL_DRIVER', 'mail');
+ */
+
+// Sender identity
+define('EMAIL_FROM_ADDRESS', 'noreply@dashboard.bakudanramen.com');
+define('EMAIL_FROM_NAME',    'TaskFlow');
+
+// SMTP driver settings
+define('MAIL_DRIVER',     'smtp');
+define('MAIL_HOST',       'smtp.gmail.com');
+define('MAIL_PORT',       587);
+define('MAIL_ENCRYPTION', 'tls');
+define('MAIL_USERNAME',   'your-email@gmail.com');
+define('MAIL_PASSWORD',   'your-app-password-here');

@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "commit": "ebc53db1c0b4a7ec8f114b703bad5e79b2110118",
+    "branch": "claude/local-offline-ai-agent-PQx1C",
+    "node": "v24.14.1",
+    "os": "win32",
+    "started_at": "2026-06-08T23:36:38.229Z",
+    "completed_at": "2026-06-08T23:38:49.383Z",
+    "duration_min": "2.00"
+  },
+  "verdict": "CERTIFIED ✅",
+  "checks": 12,
+  "violations": [],
+  "results": {
+    "memory_delta_pct": 9.25,
+    "avg_cpu_pct": 0.2,
+    "api_p95_ms": 37,
+    "ledger_valid": true,
+    "ledger_rows": 12,
+    "gpu_available": false,
+    "power_wh": 1.091,
+    "power_cost_usd": 0.0001
+  },
+  "limits": {
+    "memDeltaPct": 8,
+    "cpuPct": 5
+  },
+  "check_log": [
+    {
+      "check": 1,
+      "elapsed_min": "0.17",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": -1.02,
+      "avgCpu": 0,
+      "ledgerRows": 0,
+      "p95_ms": 38,
+      "flushed": 5,
+      "errors": 0
+    },
+    {
+      "check": 2,
+      "elapsed_min": "0.33",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 7.16,
+      "avgCpu": 0.39,
+      "ledgerRows": 1,
+      "p95_ms": 38,
+      "flushed": 8,
+      "errors": 0
+    },
+    {
+      "check": 3,
+      "elapsed_min": "0.50",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.39,
+      "avgCpu": 0.37,
+      "ledgerRows": 2,
+      "p95_ms": 38,
+      "flushed": 11,
+      "errors": 0
+    },
+    {
+      "check": 4,
+      "elapsed_min": "0.67",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.72,
+      "avgCpu": 0.31,
+      "ledgerRows": 3,
+      "p95_ms": 38,
+      "flushed": 14,
+      "errors": 0
+    },
+    {
+      "check": 5,
+      "elapsed_min": "0.83",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 9.02,
+      "avgCpu": 0.31,
+      "ledgerRows": 4,
+      "p95_ms": 37,
+      "flushed": 17,
+      "errors": 0
+    },
+    {
+      "check": 6,
+      "elapsed_min": "1.00",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 9.08,
+      "avgCpu": 0.26,
+      "ledgerRows": 5,
+      "p95_ms": 37,
+      "flushed": 20,
+      "errors": 0
+    },
+    {
+      "check": 7,
+      "elapsed_min": "1.17",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 9.08,
+      "avgCpu": 0.22,
+      "ledgerRows": 6,
+      "p95_ms": 37,
+      "flushed": 23,
+      "errors": 0
+    },
+    {
+      "check": 8,
+      "elapsed_min": "1.33",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 9.25,
+      "avgCpu": 0.23,
+      "ledgerRows": 7,
+      "p95_ms": 37,
+      "flushed": 26,
+      "errors": 0
+    },
+    {
+      "check": 9,
+      "elapsed_min": "1.50",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.63,
+      "avgCpu": 0.23,
+      "ledgerRows": 8,
+      "p95_ms": 37,
+      "flushed": 29,
+      "errors": 0
+    },
+    {
+      "check": 10,
+      "elapsed_min": "1.67",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.39,
+      "avgCpu": 0.2,
+      "ledgerRows": 9,
+      "p95_ms": 37,
+      "flushed": 32,
+      "errors": 0
+    },
+    {
+      "check": 11,
+      "elapsed_min": "1.83",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.79,
+      "avgCpu": 0.19,
+      "ledgerRows": 10,
+      "p95_ms": 37,
+      "flushed": 35,
+      "errors": 0
+    },
+    {
+      "check": 12,
+      "elapsed_min": "2.00",
+      "pass": {
+        "memory": true,
+        "cpu": true,
+        "ledger": true,
+        "api_p95": true,
+        "queue": true
+      },
+      "memDeltaPct": 8.65,
+      "avgCpu": 0.2,
+      "ledgerRows": 11,
+      "p95_ms": 37,
+      "flushed": 38,
+      "errors": 0
+    }
+  ]
+}

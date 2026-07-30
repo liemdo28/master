@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqw11spo-r4mknca",
+  "objectiveId": "OBJ-092",
+  "taskId": "FIN-038",
+  "requestedBy": "system",
+  "approvalType": "credential_use",
+  "riskLevel": "high",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Investigate QuickBooks sync health",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T07:17:11.964Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

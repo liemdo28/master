@@ -1,0 +1,27 @@
+{
+  "target": "https://example.com",
+  "actions": [
+    {
+      "type": "navigate",
+      "url": "https://example.com"
+    },
+    {
+      "type": "read_title",
+      "value": "Example Domain"
+    },
+    {
+      "type": "extract_links",
+      "count": 1
+    }
+  ],
+  "errors": [],
+  "title": "Example Domain",
+  "links": [
+    {
+      "href": "https://iana.org/domains/example",
+      "text": "Learn more"
+    }
+  ],
+  "link_count": 1,
+  "duration_seconds": 3.532
+}

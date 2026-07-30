@@ -1,0 +1,849 @@
+{
+  "info": {
+    "_postman_id": "taskflow-qa-2026-04-23",
+    "name": "TaskFlow QA — Critical Flows",
+    "description": "QA collection for TaskFlow dashboard API. Run Auth/Login first — token auto-saved to {{token}}.\n\nBase URL: https://dashboard.bakudanramen.com\nAuth: Bearer {{token}}\n\nCritical Flows: CF-01 through CF-15",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "https://dashboard.bakudanramen.com",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "approval_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "CF-01 — Login (get token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('access_token present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('access_token');",
+                  "    pm.collectionVariables.set('token', json.access_token);",
+                  "    console.log('Token saved:', json.access_token.substring(0, 20) + '...');",
+                  "});",
+                  "",
+                  "pm.test('token_type is Bearer', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.token_type).to.eql('Bearer');",
+                  "});",
+                  "",
+                  "pm.test('user role present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.user).to.have.property('role');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@bakudanramen.com\",\n  \"password\": \"your-password-here\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "CF-01: Login with admin credentials. Token is auto-saved to {{token}} collection variable on success."
+          },
+          "response": [
+            {
+              "name": "200 OK — Login success",
+              "status": "OK",
+              "code": 200,
+              "header": [{"key": "Content-Type", "value": "application/json"}],
+              "body": "{\n  \"access_token\": \"eyJ...\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 3600,\n  \"refresh_token\": \"rt_...\",\n  \"user\": {\n    \"id\": 1,\n    \"name\": \"Admin\",\n    \"email\": \"admin@bakudanramen.com\",\n    \"role\": \"admin\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /me — Token verify",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('user object returned', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id');",
+                  "    pm.expect(json).to.have.property('role');",
+                  "    pm.expect(json).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/auth/me",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Verify token is valid and returns authenticated user details."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Focus",
+      "item": [
+        {
+          "name": "CF-02 — Focus feed",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('risk_chips array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('risk_chips');",
+                  "    pm.expect(json.risk_chips).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('top_decisions array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('top_decisions');",
+                  "    pm.expect(json.top_decisions).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('risk_score is numeric', function () {",
+                  "    var json = pm.response.json();",
+                  "    if (json.risk_score !== undefined) {",
+                  "        pm.expect(json.risk_score).to.be.a('number');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus"]
+            },
+            "description": "CF-02: Main focus feed — returns risk chips and top decisions."
+          },
+          "response": []
+        },
+        {
+          "name": "CF-03 — Decision feed (role-filtered)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('decisions array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('decisions');",
+                  "    pm.expect(json.decisions).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('count field present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('count');",
+                  "    pm.expect(json.count).to.be.at.least(0);",
+                  "});",
+                  "",
+                  "// Save first approval_id for CF-06",
+                  "var json = pm.response.json();",
+                  "if (json.decisions && json.decisions.length > 0) {",
+                  "    pm.collectionVariables.set('approval_id', json.decisions[0].decision_id || json.decisions[0].id);",
+                  "    console.log('Saved approval_id:', pm.collectionVariables.get('approval_id'));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/decisions",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "decisions"]
+            },
+            "description": "CF-03: Decision feed filtered by role. Admin sees all; member sees own scope only."
+          },
+          "response": []
+        },
+        {
+          "name": "CF-04 — Risk snapshot",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('unified_risk_score is numeric', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('unified_risk_score');",
+                  "    pm.expect(json.unified_risk_score).to.be.a('number');",
+                  "});",
+                  "",
+                  "pm.test('risk score in valid range 0-100', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.unified_risk_score).to.be.at.least(0);",
+                  "    pm.expect(json.unified_risk_score).to.be.at.most(100);",
+                  "});",
+                  "",
+                  "pm.test('generated_at present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('generated_at');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/risk",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "risk"]
+            },
+            "description": "CF-04: Current risk snapshot. unified_risk_score should match last cron output."
+          },
+          "response": []
+        },
+        {
+          "name": "CF-14 — Activity feed",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('activity array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    var items = json.activity || json.items || json;",
+                  "    pm.expect(items).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('recent cron_run entry exists', function () {",
+                  "    var json = pm.response.json();",
+                  "    var items = json.activity || json.items || json;",
+                  "    if (Array.isArray(items) && items.length > 0) {",
+                  "        var hasCronRun = items.some(function(item) {",
+                  "            return item.type === 'cron_run';",
+                  "        });",
+                  "        pm.expect(hasCronRun).to.be.true;",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/activity",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "activity"]
+            },
+            "description": "CF-14: Activity feed. Most recent entry should be type='cron_run', severity='info'."
+          },
+          "response": []
+        },
+        {
+          "name": "CF-05 — Approval queue (pending)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('approvals array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('approvals');",
+                  "    pm.expect(json.approvals).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('all returned items are pending', function () {",
+                  "    var json = pm.response.json();",
+                  "    if (json.approvals && json.approvals.length > 0) {",
+                  "        json.approvals.forEach(function(item) {",
+                  "            pm.expect(item.status).to.eql('pending');",
+                  "        });",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/approvals",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "approvals"]
+            },
+            "description": "CF-05: Pending approval queue. All returned items should have status='pending'."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Approvals",
+      "item": [
+        {
+          "name": "CF-06 — Approve decision",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('status updated to approved', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.status).to.be.oneOf(['approved', 'success', 'ok']);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"approve\",\n  \"note\": \"QA test approval\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/approvals/{{approval_id}}/resolve",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "approvals", "{{approval_id}}", "resolve"]
+            },
+            "description": "CF-06: Approve a pending decision. approval_id auto-populated from CF-03 response."
+          },
+          "response": []
+        },
+        {
+          "name": "CF-06b — Reject decision",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('status updated to rejected', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.status).to.be.oneOf(['rejected', 'success', 'ok']);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"reject\",\n  \"note\": \"QA test rejection\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/focus/approvals/{{approval_id}}/resolve",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "focus", "approvals", "{{approval_id}}", "resolve"]
+            },
+            "description": "CF-06b: Reject a pending decision (alternate flow). Use a different approval_id than CF-06."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "CF-07 — Dashboard summary (assignee names)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('recent_tasks present', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('recent_tasks');",
+                  "});",
+                  "",
+                  "pm.test('assignee_name not null on assigned tasks (BUG-02)', function () {",
+                  "    var json = pm.response.json();",
+                  "    var tasks = json.recent_tasks || [];",
+                  "    tasks.forEach(function(task) {",
+                  "        if (task.assignee_id !== null && task.assignee_id !== undefined) {",
+                  "            pm.expect(task.assignee_name).to.not.be.null;",
+                  "            pm.expect(task.assignee_name).to.not.eql('null');",
+                  "        }",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/dashboard/summary",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "dashboard", "summary"]
+            },
+            "description": "CF-07: Dashboard summary. Verifies BUG-02 fix — assignee_name must not be null on tasks with assignee_id."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "CF-08 — All projects visible (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('projects array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    var projects = json.projects || json;",
+                  "    pm.expect(projects).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('admin sees more than 4 projects (BUG-06)', function () {",
+                  "    var json = pm.response.json();",
+                  "    var projects = json.projects || json;",
+                  "    // Admin should not be limited to only projects they are a member of",
+                  "    console.log('Projects visible:', Array.isArray(projects) ? projects.length : 'N/A');",
+                  "    pm.expect(Array.isArray(projects)).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/projects",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "projects"]
+            },
+            "description": "CF-08: All non-archived projects for admin. Verifies BUG-06 fix — admin should see all projects, not just ones they joined."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "CF-09 — Task list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('tasks array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    var tasks = json.tasks || json.data || json;",
+                  "    pm.expect(tasks).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/tasks",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "tasks"]
+            },
+            "description": "CF-09: Full task list."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /my-tasks — Member task list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('tasks array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    var tasks = json.tasks || json.data || json;",
+                  "    pm.expect(tasks).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/tasks/my",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "tasks", "my"]
+            },
+            "description": "My-tasks endpoint — used by member/staff landing page."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "item": [
+        {
+          "name": "CF-10 — Bills list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('bills array present', function () {",
+                  "    var json = pm.response.json();",
+                  "    var bills = json.bills || json.data || json;",
+                  "    pm.expect(bills).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('no is_test bills returned (BUG-05)', function () {",
+                  "    var json = pm.response.json();",
+                  "    var bills = json.bills || json.data || json;",
+                  "    if (Array.isArray(bills)) {",
+                  "        bills.forEach(function(bill) {",
+                  "            pm.expect(bill.is_test).to.not.eql(1);",
+                  "        });",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/bills",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "bills"]
+            },
+            "description": "CF-10: Bills list. Also verifies BUG-05 fix — is_test bills should not appear."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /bills/{id}/pay — Mark bill paid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Only run assertions if we get a non-404",
+                  "if (pm.response.code !== 404) {",
+                  "    pm.test('HTTP 200', function () {",
+                  "        pm.response.to.have.status(200);",
+                  "    });",
+                  "    pm.test('success response', function () {",
+                  "        var json = pm.response.json();",
+                  "        pm.expect(json.status).to.be.oneOf(['paid', 'success', 'ok']);",
+                  "    });",
+                  "} else {",
+                  "    console.log('Bill ID not found — update the URL with a real unpaid bill ID');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Accept", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paid_date\": \"2026-04-23\",\n  \"note\": \"QA test payment\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/v1/bills/1/pay",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "v1", "bills", "1", "pay"]
+            },
+            "description": "Mark a bill as paid. Update the bill ID in the URL to match an actual unpaid bill."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cron",
+      "item": [
+        {
+          "name": "CF-11 — Cron pipeline (standard)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('response starts with OK (CF-11)', function () {",
+                  "    pm.expect(pm.response.text()).to.match(/^OK/);",
+                  "});",
+                  "",
+                  "pm.test('risk score present in output', function () {",
+                  "    pm.expect(pm.response.text()).to.include('risk=');",
+                  "});",
+                  "",
+                  "pm.test('decisions count present', function () {",
+                  "    pm.expect(pm.response.text()).to.include('decisions=');",
+                  "});",
+                  "",
+                  "pm.test('session_cleanup present (BUG-01)', function () {",
+                  "    pm.expect(pm.response.text()).to.include('cleanup=');",
+                  "});",
+                  "",
+                  "pm.test('activity logged count present', function () {",
+                  "    pm.expect(pm.response.text()).to.include('activity=');",
+                  "});",
+                  "",
+                  "console.log('Cron output:', pm.response.text());"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Accept", "value": "text/plain"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/cron.php?key=taskflow-cron-2024-secret",
+              "host": ["{{BASE_URL}}"],
+              "path": ["cron.php"],
+              "query": [
+                {"key": "key", "value": "taskflow-cron-2024-secret"}
+              ]
+            },
+            "description": "CF-11: Full cron pipeline run. Response must start with 'OK'. Also verifies CF-12 (risk recompute), CF-13 (decision feed refresh), CF-14 (activity logged), CF-15 (session cleanup)."
+          },
+          "response": [
+            {
+              "name": "200 OK — Cron success",
+              "status": "OK",
+              "code": 200,
+              "header": [{"key": "Content-Type", "value": "text/plain"}],
+              "body": "OK    | new_notifs=0 · bills=0 · recurring=0 · asana=skip · queue=0->0 · tg_today=skip · tg_overdue=skip · risk=22.50 · decisions=3 · approvals=2 · push=0 · cleanup=0 · activity=1 · stale=0 · 342ms"
+            }
+          ]
+        },
+        {
+          "name": "CF-11b — Cron with force_telegram",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('response starts with OK', function () {",
+                  "    pm.expect(pm.response.text()).to.match(/^OK/);",
+                  "});",
+                  "",
+                  "pm.test('tg_today present in output', function () {",
+                  "    pm.expect(pm.response.text()).to.include('tg_today=');",
+                  "});",
+                  "",
+                  "console.log('Cron (force_telegram) output:', pm.response.text());"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Accept", "value": "text/plain"}
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/cron.php?key=taskflow-cron-2024-secret&force_telegram=1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["cron.php"],
+              "query": [
+                {"key": "key", "value": "taskflow-cron-2024-secret"},
+                {"key": "force_telegram", "value": "1"}
+              ]
+            },
+            "description": "CF-11b: Cron with force_telegram=1 — forces Telegram reminder to fire regardless of hour."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

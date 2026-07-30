@@ -1,0 +1,132 @@
+[
+  {
+    "id": "MKT_1782656996683_jttt3r",
+    "timestamp": 1782656996683,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782656988501_mpedz4",
+    "timestamp": 1782656988501,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782656638897_r1pxav",
+    "timestamp": 1782656638897,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782656110123_xm0jqd",
+    "timestamp": 1782656110123,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655881518_pgpu1b",
+    "timestamp": 1782655881518,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655634403_hnij2p",
+    "timestamp": 1782655634403,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655629417_o6zdq0",
+    "timestamp": 1782655629417,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655590976_kjd4ii",
+    "timestamp": 1782655590976,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655585804_cuwq8g",
+    "timestamp": 1782655585804,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  },
+  {
+    "id": "MKT_1782655446669_55txzw",
+    "timestamp": 1782655446669,
+    "trend": {
+      "slope": 10,
+      "trend": "up",
+      "normRate": 40
+    },
+    "opportunity": {
+      "score": 95,
+      "band": "HOT"
+    }
+  }
+]

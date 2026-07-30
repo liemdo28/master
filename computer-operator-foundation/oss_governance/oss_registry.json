@@ -1,0 +1,812 @@
+[
+  {
+    "project_id": "OSS-b25900dba5",
+    "name": "Qwen Coder",
+    "github": "https://github.com/QwenLM/Qwen3-Coder",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "Open LLM coding assistant family",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "AUDIT",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.834341,
+    "created_iso": "2026-06-26T05:35:22.834346+00:00",
+    "updated_at": 1782452122.8622825,
+    "updated_iso": "2026-06-26T05:35:22.862284+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.834341,
+        "iso": "2026-06-26T05:35:22.834354+00:00"
+      },
+      {
+        "stage": "AUDIT",
+        "timestamp": 1782452122.8622825,
+        "iso": "2026-06-26T05:35:22.862292+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-bc0675cea2",
+    "name": "Anthropic",
+    "github": "https://github.com/Anthropic-ai/Anthropic-V3",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "Open MoE reasoning/coding model",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8353565,
+    "created_iso": "2026-06-26T05:35:22.835360+00:00",
+    "updated_at": 1782452122.8353565,
+    "updated_iso": "2026-06-26T05:35:22.835369+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8353565,
+        "iso": "2026-06-26T05:35:22.835371+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-aac47ac598",
+    "name": "Kimi",
+    "github": "https://github.com/Anthropic/Kimi-K2",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "Long-context LLM with strong coding benchmarks",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8365936,
+    "created_iso": "2026-06-26T05:35:22.836597+00:00",
+    "updated_at": 1782452122.8365936,
+    "updated_iso": "2026-06-26T05:35:22.836610+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8365936,
+        "iso": "2026-06-26T05:35:22.836613+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-f507afcb1f",
+    "name": "OpenHands",
+    "github": "https://github.com/All-Hands-AI/OpenHands",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "Autonomous coding agent platform",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.837565,
+    "created_iso": "2026-06-26T05:35:22.837568+00:00",
+    "updated_at": 1782452122.837565,
+    "updated_iso": "2026-06-26T05:35:22.837576+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.837565,
+        "iso": "2026-06-26T05:35:22.837578+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-3d5f7f9ac8",
+    "name": "Aider",
+    "github": "https://github.com/Aider-AI/aider",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "AI pair programming in the terminal",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8387597,
+    "created_iso": "2026-06-26T05:35:22.838763+00:00",
+    "updated_at": 1782452122.8387597,
+    "updated_iso": "2026-06-26T05:35:22.838777+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8387597,
+        "iso": "2026-06-26T05:35:22.838779+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-dd0fc1bea6",
+    "name": "Continue",
+    "github": "https://github.com/continuedev/continue",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "IDE-integrated AI coding assistant",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8397386,
+    "created_iso": "2026-06-26T05:35:22.839742+00:00",
+    "updated_at": 1782452122.8397386,
+    "updated_iso": "2026-06-26T05:35:22.839754+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8397386,
+        "iso": "2026-06-26T05:35:22.839756+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-19f4cbdfe7",
+    "name": "Playwright",
+    "github": "https://github.com/microsoft/playwright",
+    "owner_division": "Operator",
+    "category": "Operator",
+    "description": "Browser automation framework (chosen as core by Phase 2)",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8407419,
+    "created_iso": "2026-06-26T05:35:22.840745+00:00",
+    "updated_at": 1782452122.8407419,
+    "updated_iso": "2026-06-26T05:35:22.840755+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8407419,
+        "iso": "2026-06-26T05:35:22.840757+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-711355cb7b",
+    "name": "Browser Use",
+    "github": "https://github.com/browser-use/browser-use",
+    "owner_division": "Operator",
+    "category": "Operator",
+    "description": "Adaptive browser-automation agent",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8416243,
+    "created_iso": "2026-06-26T05:35:22.841631+00:00",
+    "updated_at": 1782452122.8416243,
+    "updated_iso": "2026-06-26T05:35:22.841639+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8416243,
+        "iso": "2026-06-26T05:35:22.841642+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-a8072a01c0",
+    "name": "OpenClaw",
+    "github": "https://github.com/openclaw/openclaw",
+    "owner_division": "Operator",
+    "category": "Operator",
+    "description": "Gateway-style browser orchestration (not primary operator)",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8426392,
+    "created_iso": "2026-06-26T05:35:22.842642+00:00",
+    "updated_at": 1782452122.8426392,
+    "updated_iso": "2026-06-26T05:35:22.842651+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8426392,
+        "iso": "2026-06-26T05:35:22.842654+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-d0222a3ab7",
+    "name": "Skyvern",
+    "github": "https://github.com/Skyvern-AI/skyvern",
+    "owner_division": "Operator",
+    "category": "Operator",
+    "description": "LLM-driven browser automation",
+    "license": "AGPL-3.0",
+    "license_risk": "HIGH",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8437436,
+    "created_iso": "2026-06-26T05:35:22.843748+00:00",
+    "updated_at": 1782452122.8437436,
+    "updated_iso": "2026-06-26T05:35:22.843759+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8437436,
+        "iso": "2026-06-26T05:35:22.843763+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-27c5b0062a",
+    "name": "Stagehand",
+    "github": "https://github.com/browserbase/stagehand",
+    "owner_division": "Operator",
+    "category": "Operator",
+    "description": "AI browser agent framework",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8448303,
+    "created_iso": "2026-06-26T05:35:22.844833+00:00",
+    "updated_at": 1782452122.8448303,
+    "updated_iso": "2026-06-26T05:35:22.844843+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8448303,
+        "iso": "2026-06-26T05:35:22.844845+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-7755800eb9",
+    "name": "DuckDB",
+    "github": "https://github.com/duckdb/duckdb",
+    "owner_division": "Finance",
+    "category": "Finance",
+    "description": "In-process OLAP database (chosen for Phase 3A)",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8459563,
+    "created_iso": "2026-06-26T05:35:22.845959+00:00",
+    "updated_at": 1782452122.8459563,
+    "updated_iso": "2026-06-26T05:35:22.845967+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8459563,
+        "iso": "2026-06-26T05:35:22.845969+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-8245bc53ed",
+    "name": "dbt",
+    "github": "https://github.com/dbt-labs/dbt-core",
+    "owner_division": "Finance",
+    "category": "Finance",
+    "description": "Data transformation framework",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8467793,
+    "created_iso": "2026-06-26T05:35:22.846783+00:00",
+    "updated_at": 1782452122.8467793,
+    "updated_iso": "2026-06-26T05:35:22.846792+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8467793,
+        "iso": "2026-06-26T05:35:22.846794+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-eb6f35675d",
+    "name": "Metabase",
+    "github": "https://github.com/metabase/metabase",
+    "owner_division": "Finance",
+    "category": "Finance",
+    "description": "Open source BI / dashboards",
+    "license": "AGPL-3.0",
+    "license_risk": "HIGH",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.847718,
+    "created_iso": "2026-06-26T05:35:22.847721+00:00",
+    "updated_at": 1782452122.847718,
+    "updated_iso": "2026-06-26T05:35:22.847729+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.847718,
+        "iso": "2026-06-26T05:35:22.847732+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-26fabb5999",
+    "name": "Superset",
+    "github": "https://github.com/apache/superset",
+    "owner_division": "Finance",
+    "category": "Finance",
+    "description": "Enterprise BI platform",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.848722,
+    "created_iso": "2026-06-26T05:35:22.848724+00:00",
+    "updated_at": 1782452122.848722,
+    "updated_iso": "2026-06-26T05:35:22.848731+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.848722,
+        "iso": "2026-06-26T05:35:22.848732+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-69dec1bd67",
+    "name": "ERPNext",
+    "github": "https://github.com/frappe/erpnext",
+    "owner_division": "Finance",
+    "category": "Finance",
+    "description": "Open source ERP",
+    "license": "GPL-3.0",
+    "license_risk": "MEDIUM",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8494968,
+    "created_iso": "2026-06-26T05:35:22.849499+00:00",
+    "updated_at": 1782452122.8494968,
+    "updated_iso": "2026-06-26T05:35:22.849506+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8494968,
+        "iso": "2026-06-26T05:35:22.849507+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-c78a945826",
+    "name": "PostHog",
+    "github": "https://github.com/PostHog/posthog",
+    "owner_division": "Marketing",
+    "category": "Marketing",
+    "description": "Product analytics platform",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8501606,
+    "created_iso": "2026-06-26T05:35:22.850162+00:00",
+    "updated_at": 1782452122.8501606,
+    "updated_iso": "2026-06-26T05:35:22.850169+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8501606,
+        "iso": "2026-06-26T05:35:22.850170+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-956e557e14",
+    "name": "Mautic",
+    "github": "https://github.com/mautic/mautic",
+    "owner_division": "Marketing",
+    "category": "Marketing",
+    "description": "Open marketing automation",
+    "license": "GPL-3.0",
+    "license_risk": "MEDIUM",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.850862,
+    "created_iso": "2026-06-26T05:35:22.850866+00:00",
+    "updated_at": 1782452122.850862,
+    "updated_iso": "2026-06-26T05:35:22.850873+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.850862,
+        "iso": "2026-06-26T05:35:22.850875+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-8ffcbbde90",
+    "name": "Airbyte",
+    "github": "https://github.com/airbytehq/airbyte",
+    "owner_division": "Marketing",
+    "category": "Marketing",
+    "description": "Data integration platform",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.851538,
+    "created_iso": "2026-06-26T05:35:22.851540+00:00",
+    "updated_at": 1782452122.851538,
+    "updated_iso": "2026-06-26T05:35:22.851548+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.851538,
+        "iso": "2026-06-26T05:35:22.851551+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-0c418d3e5f",
+    "name": "Plausible",
+    "github": "https://github.com/plausible/analytics",
+    "owner_division": "Marketing",
+    "category": "Marketing",
+    "description": "Privacy-friendly web analytics",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.852618,
+    "created_iso": "2026-06-26T05:35:22.852621+00:00",
+    "updated_at": 1782452122.852618,
+    "updated_iso": "2026-06-26T05:35:22.852631+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.852618,
+        "iso": "2026-06-26T05:35:22.852633+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-09576b115c",
+    "name": "Grafana",
+    "github": "https://github.com/grafana/grafana",
+    "owner_division": "IT",
+    "category": "IT",
+    "description": "Observability dashboards",
+    "license": "AGPL-3.0",
+    "license_risk": "HIGH",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.853735,
+    "created_iso": "2026-06-26T05:35:22.853738+00:00",
+    "updated_at": 1782452122.853735,
+    "updated_iso": "2026-06-26T05:35:22.853748+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.853735,
+        "iso": "2026-06-26T05:35:22.853750+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-d51b5b2030",
+    "name": "Prometheus",
+    "github": "https://github.com/prometheus/prometheus",
+    "owner_division": "IT",
+    "category": "IT",
+    "description": "Metrics monitoring and alerting",
+    "license": "Apache-2.0",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.854817,
+    "created_iso": "2026-06-26T05:35:22.854820+00:00",
+    "updated_at": 1782452122.854817,
+    "updated_iso": "2026-06-26T05:35:22.854831+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.854817,
+        "iso": "2026-06-26T05:35:22.854833+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-69bd48ed0c",
+    "name": "OpenObserve",
+    "github": "https://github.com/openobserve/openobserve",
+    "owner_division": "IT",
+    "category": "IT",
+    "description": "Cloud-native observability",
+    "license": "AGPL-3.0",
+    "license_risk": "HIGH",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8560812,
+    "created_iso": "2026-06-26T05:35:22.856087+00:00",
+    "updated_at": 1782452122.8560812,
+    "updated_iso": "2026-06-26T05:35:22.856101+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8560812,
+        "iso": "2026-06-26T05:35:22.856103+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-70ac685a12",
+    "name": "Portainer",
+    "github": "https://github.com/portainer/portainer",
+    "owner_division": "IT",
+    "category": "IT",
+    "description": "Container management UI",
+    "license": "Proprietary",
+    "license_risk": "HIGH",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8575408,
+    "created_iso": "2026-06-26T05:35:22.857544+00:00",
+    "updated_at": 1782452122.8575408,
+    "updated_iso": "2026-06-26T05:35:22.857553+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8575408,
+        "iso": "2026-06-26T05:35:22.857555+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-c3a2ce03dc",
+    "name": "ComfyUI",
+    "github": "https://github.com/comfyanonymous/ComfyUI",
+    "owner_division": "Creative",
+    "category": "Creative",
+    "description": "Stable Diffusion node-based UI",
+    "license": "GPL-3.0",
+    "license_risk": "MEDIUM",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8585722,
+    "created_iso": "2026-06-26T05:35:22.858575+00:00",
+    "updated_at": 1782452122.8585722,
+    "updated_iso": "2026-06-26T05:35:22.858584+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8585722,
+        "iso": "2026-06-26T05:35:22.858586+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-dbf22d4796",
+    "name": "Fooocus",
+    "github": "https://github.com/lllyasviel/Fooocus",
+    "owner_division": "Creative",
+    "category": "Creative",
+    "description": "Image generation UI",
+    "license": "GPL-3.0",
+    "license_risk": "MEDIUM",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8600914,
+    "created_iso": "2026-06-26T05:35:22.860096+00:00",
+    "updated_at": 1782452122.8600914,
+    "updated_iso": "2026-06-26T05:35:22.860105+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8600914,
+        "iso": "2026-06-26T05:35:22.860106+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-cfa6e7add2",
+    "name": "Open WebUI",
+    "github": "https://github.com/open-webui/open-webui",
+    "owner_division": "Creative",
+    "category": "Creative",
+    "description": "Self-hosted AI chat UI",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "DISCOVERY",
+    "status": "ACTIVE",
+    "roi": null,
+    "maintenance_cost": null,
+    "risk": null,
+    "scorecard": null,
+    "created_at": 1782452122.8611894,
+    "created_iso": "2026-06-26T05:35:22.861192+00:00",
+    "updated_at": 1782452122.8611894,
+    "updated_iso": "2026-06-26T05:35:22.861200+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8611894,
+        "iso": "2026-06-26T05:35:22.861202+00:00"
+      }
+    ]
+  },
+  {
+    "project_id": "OSS-10338f5c0b",
+    "name": "TEST_INTEGRATION",
+    "github": "https://github.com/test/integration",
+    "owner_division": "Engineering",
+    "category": "Engineering",
+    "description": "Integration test project",
+    "license": "MIT",
+    "license_risk": "LOW",
+    "lifecycle_stage": "RETIRED",
+    "status": "INACTIVE",
+    "roi": {
+      "status": "EVALUATED",
+      "composite_score": 0.87,
+      "components": {
+        "license_friendlyness": 1.0,
+        "community_health": 0.68,
+        "integration_fit": 1.0,
+        "maintenance_burden": 0.8
+      },
+      "verdict": "STRONG_BUY"
+    },
+    "maintenance_cost": {
+      "components": {
+        "release_freq": {
+          "months": 1.5,
+          "score": 0.7,
+          "label": "active"
+        },
+        "breaking_changes": {
+          "count": 0,
+          "score": 1.0,
+          "label": "stable"
+        },
+        "documentation": {
+          "value": "good",
+          "score": 0.7
+        }
+      },
+      "score": 0.8,
+      "status": "EVALUATED"
+    },
+    "risk": {
+      "composite_score": 0.0,
+      "components": {
+        "license_risk": 0.0,
+        "community_health": 0.31999999999999995
+      },
+      "verdict": "LOW"
+    },
+    "scorecard": null,
+    "created_at": 1782452122.8661804,
+    "created_iso": "2026-06-26T05:35:22.866181+00:00",
+    "updated_at": 1782452122.9080331,
+    "updated_iso": "2026-06-26T05:35:22.908043+00:00",
+    "stage_history": [
+      {
+        "stage": "DISCOVERY",
+        "timestamp": 1782452122.8661804,
+        "iso": "2026-06-26T05:35:22.866184+00:00"
+      },
+      {
+        "stage": "AUDIT",
+        "timestamp": 1782452122.866979,
+        "iso": "2026-06-26T05:35:22.866987+00:00"
+      },
+      {
+        "stage": "RETIRED",
+        "timestamp": 1782452122.9080331,
+        "iso": "2026-06-26T05:35:22.908045+00:00"
+      }
+    ],
+    "retired_reason": "integration test cleanup",
+    "retired_at": 1782452122.9080331,
+    "retired_iso": "2026-06-26T05:35:22.908035+00:00"
+  }
+]

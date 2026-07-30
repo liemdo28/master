@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnosq-caa6f3",
+  "objectiveRunId": "run-mqrcnosh-f0afc6",
+  "sourceType": "decision_matrix",
+  "sourceRef": "executive-decision-engine",
+  "summary": "📊 Decision Matrix: 2 issues analyzed\n🔴 Critical: 0 | 🟠 High: 0 | 🟡 Medium: 0 | 🟢 Low: 2\n✅ No critical issues detected",
+  "sha256": "c53ce3777e53e82d0934efc86915d67145609a16f7885685eeb087bb83e082f4",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnosh-f0afc6\\c53ce3777e53e82d0934efc86915d67145609a16f7885685eeb087bb83e082f4.json",
+  "capturedAt": "2026-06-24T00:43:18.218Z",
+  "readOnly": true
+}

@@ -1,0 +1,38 @@
+{
+  "coord_task_id": "coord-3c18838bcc",
+  "task_name": "Demo1-PublicRead-example.com",
+  "objective_id": "obj-7642f296",
+  "target": "https://example.com",
+  "approval_level": "READ_ONLY",
+  "operator_type": "web",
+  "state": "DONE",
+  "created_at": 1782448760.0945213,
+  "updated_at": 1782448760.9265733,
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782448760.0945215
+    },
+    {
+      "state": "DISPATCHED",
+      "timestamp": 1782448760.0945244
+    },
+    {
+      "state": "IN_PROGRESS",
+      "timestamp": 1782448760.0945263
+    },
+    {
+      "state": "DONE",
+      "timestamp": 1782448760.9265738
+    }
+  ],
+  "evidence_ids": [
+    "ev-fde83b9575",
+    "ev-a91a729a6a",
+    "ev-c204023866"
+  ],
+  "run_ids": [
+    "run-c448658b8a4b"
+  ],
+  "error": null
+}

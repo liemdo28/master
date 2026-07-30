@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqvyz5z8-1c582f18",
+  "objectiveId": "OBJ-052",
+  "taskId": "IT-020",
+  "requestedBy": "system",
+  "approvalType": "credential_use",
+  "riskLevel": "high",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Route QB connector repair",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T06:19:09.956Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

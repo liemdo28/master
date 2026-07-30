@@ -1,0 +1,10 @@
+{
+  "domain": "marketing",
+  "domainName": "Marketing",
+  "sources": [
+    { "name": "Wikipedia — Marketing", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" },
+    { "name": "Google Ads Help Center", "url": "https://support.google.com/google-ads", "license": "CC BY 4.0", "attribution": "Google LLC", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "HubSpot Blog", "url": "https://blog.hubspot.com", "license": "© Proprietary", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "ToS prohibits scraping" }
+  ],
+  "seedDocuments": []
+}

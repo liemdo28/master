@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojqtt4-4242ec",
+  "objectiveRunId": "run-mqojqtsx-10db01",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: general_status_check (50%), Alternatives: 0, Ambiguous: false",
+  "sha256": "78127fa61026960cf533a7c9b91add6fd15d2357d1a55093f28402e68a0d195b",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojqtsx-10db01\\78127fa61026960cf533a7c9b91add6fd15d2357d1a55093f28402e68a0d195b.json",
+  "capturedAt": "2026-06-22T01:38:23.464Z",
+  "readOnly": true
+}

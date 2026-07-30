@@ -1,0 +1,29 @@
+name: Dump Duplicate Groups
+on:
+  workflow_dispatch:
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+      - name: Add host key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' \
+            'pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL5SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=' \
+            >> ~/.ssh/known_hosts
+      - name: Deploy scripts
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: rsync -az --exclude ".git" --exclude ".github" --exclude ".env" --exclude ".env.preview" -e "ssh" ./ "${DH_USER}@${DH_HOST}:${DH_PATH}/"
+      - name: Dump duplicate groups
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/dump_duplicate_groups.php"

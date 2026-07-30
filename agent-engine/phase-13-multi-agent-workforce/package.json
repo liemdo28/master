@@ -1,0 +1,14 @@
+{
+  "name": "mi-phase-13-multi-agent-workforce",
+  "version": "1.0.0",
+  "description": "Phase 13 — Multi-Agent Workforce. Real executable: team registry, task router, handoff engine, conflict engine, review engine, performance scorecard.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": {
+    "test": "node test/runtime-proof.mjs",
+    "smoke": "node src/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

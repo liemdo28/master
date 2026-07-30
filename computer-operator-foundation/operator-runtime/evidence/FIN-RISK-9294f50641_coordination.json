@@ -1,0 +1,24 @@
+{
+  "coord_task_id": "FIN-RISK-9294f50641",
+  "task_name": "FIN RISK: DOORDASH_MISSING",
+  "objective_id": "OBJ-FIN-RISK-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449473.9657989,
+  "created_iso": "2026-06-26T04:51:13.965804+00:00",
+  "updated_at": 1782449473.9658482,
+  "owner": "data_engineering",
+  "priority": "P1",
+  "description": "doordash source missing from warehouse",
+  "risk_type": "DOORDASH_MISSING",
+  "evidence": {},
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449473.9658563
+    }
+  ]
+}

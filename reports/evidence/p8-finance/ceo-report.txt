@@ -1,0 +1,10 @@
+💰 *Finance Operator Report — P8 Certification*
+*QB Agent Status:* ⚠️ SYNC_FAILED
+*QB Error:* Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc99
+*Transactions categorized:* 6
+• Food & Beverage: $450.00
+• Payroll: $2800.00
+• Software: $89.99
+*Stores analyzed:* Bakudan Ramen + Raw Sushi Bar
+*P&L:* Generated for Q2-2026
+*Cash flow forecast:* 3-month outlook generated

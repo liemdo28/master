@@ -1,0 +1,462 @@
+[
+  {
+    "id": "SEN_1782656997181_isd04k",
+    "timestamp": 1782656997181,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782656997180_qa88ab",
+    "timestamp": 1782656997180,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782656988897_hh0nav",
+    "timestamp": 1782656988897,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782656988896_zq8lr6",
+    "timestamp": 1782656988896,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782656639328_7wvwi0",
+    "timestamp": 1782656639328,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782656639327_yezkva",
+    "timestamp": 1782656639327,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782656110600_6zl536",
+    "timestamp": 1782656110600,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782656110600_vpm5xc",
+    "timestamp": 1782656110600,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655882124_h3c2zx",
+    "timestamp": 1782655882124,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655882124_iydnnr",
+    "timestamp": 1782655882124,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655634488_kh4uyg",
+    "timestamp": 1782655634488,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655634487_2z8c6w",
+    "timestamp": 1782655634488,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655629501_wmrptw",
+    "timestamp": 1782655629501,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655629500_gvjl1b",
+    "timestamp": 1782655629500,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655591064_ixf9h9",
+    "timestamp": 1782655591064,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655591063_2kt2gj",
+    "timestamp": 1782655591063,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655586051_7pjesc",
+    "timestamp": 1782655586051,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655586051_dsbmql",
+    "timestamp": 1782655586051,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  },
+  {
+    "id": "SEN_1782655446804_nq3va7",
+    "timestamp": 1782655446804,
+    "sentiment": {
+      "count": 4,
+      "avg": 1.5,
+      "dist": {
+        "1": 2,
+        "2": 2,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "negativeRatio": 1,
+      "nps": -100,
+      "band": "NEGATIVE"
+    },
+    "trend": {
+      "direction": "flat",
+      "delta": 0
+    },
+    "posture": "AT_RISK"
+  },
+  {
+    "id": "SEN_1782655446803_587628",
+    "timestamp": 1782655446803,
+    "sentiment": {
+      "count": 4,
+      "avg": 4.25,
+      "dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "negativeRatio": 0,
+      "nps": 50,
+      "band": "POSITIVE"
+    },
+    "trend": {
+      "direction": "improving",
+      "delta": 1.5
+    },
+    "posture": "GROWTH"
+  }
+]

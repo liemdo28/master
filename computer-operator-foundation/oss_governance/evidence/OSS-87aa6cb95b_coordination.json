@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-87aa6cb95b",
+  "task_name": "Advance Aider past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452123.471571,
+  "created_iso": "2026-06-26T05:35:23.471571+00:00",
+  "updated_at": 1782452123.4715786,
+  "owner": "engineering_lead",
+  "priority": "MEDIUM",
+  "description": "Aider has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-3d5f7f9ac8",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452123.4715793
+    }
+  ]
+}

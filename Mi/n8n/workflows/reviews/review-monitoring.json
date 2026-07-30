@@ -1,0 +1,76 @@
+{
+  "workflow_id": "review-monitoring",
+  "name": "Review Monitoring Trigger",
+  "domain": "reviews",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": true,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 * * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Hourly review monitoring. Pulls review sources if configured, sends event to Mi-Core. Mi decides auto-reply, approval, or escalation.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "reviews",
+        "event_type": "review_monitoring_check",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "dispatch_review_check",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "reviews",
+        "action": "monitor_reviews",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 3,
+      "type": "http_request",
+      "name": "approval_check",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/approval/request",
+      "body": {
+        "workflow_id": "review-monitoring",
+        "domain": "reviews",
+        "action": "review_auto_reply",
+        "brand_id": "{{brand_id}}",
+        "decision_needed": "auto_reply_or_manual_review"
+      }
+    },
+    {
+      "order": 4,
+      "type": "http_request",
+      "name": "log_result",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "review-monitoring",
+        "domain": "reviews",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "{{dispatch_review_check.status}}",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

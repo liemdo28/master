@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ALR_1782656998156_s17pzm",
+    "timestamp": 1782656998156,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S78_1782656998153_mw06na",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656998156
+  },
+  {
+    "id": "ALR_1782656989769_jquwa2",
+    "timestamp": 1782656989769,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S78_1782656989766_irv3c3",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656989770
+  },
+  {
+    "id": "ALR_1782656640457_o1gpwl",
+    "timestamp": 1782656640457,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S78_1782656640454_phy4g4",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656640457
+  },
+  {
+    "id": "ALR_1782656111811_up8r6k",
+    "timestamp": 1782656111811,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S78_1782656111808_4zae5c",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656111811
+  },
+  {
+    "id": "ALR_1782655883326_p669gu",
+    "timestamp": 1782655883326,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S78_1782655883321_oo800m",
+    "acknowledged": true,
+    "acknowledgedAt": 1782655883327
+  }
+]

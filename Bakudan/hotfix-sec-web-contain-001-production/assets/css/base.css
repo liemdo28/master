@@ -1,0 +1,125 @@
+
+:root {
+    /* ── Layout ── */
+    /* DASH-7: 2K screens — wider sidebar */
+    --sidebar-w: 320px;
+    --header-h:  56px;
+
+    /* ── Backgrounds ──
+       These names are used by legacy components.
+       They map to the surface scale defined in tokens.css.     */
+    --bg-primary:   #09090b;   /* = --surface-1 */
+    --bg-secondary: #18181b;   /* = --surface-2 */
+    --bg-tertiary:  #27272a;   /* = --surface-3 */
+    --bg-hover:     #3f3f46;   /* = --surface-4 */
+    --bg-card:      #18181b;   /* = --surface-2 */
+
+    /* ── Borders ── */
+    --border:       rgba(255,255,255,.08);   /* unified with CEO pages */
+    --border-hover: rgba(255,255,255,.15);
+
+    /* ── Text ── */
+    --text:           #fafafa;
+    --text-secondary: #a1a1aa;
+    /* --text-muted defined in tokens.css */
+
+    /* ── Brand accent (red) ── */
+    --accent:        #dc2626;
+    --accent-hover:  #ef4444;
+    --accent-bg:     rgba(220,38,38,.1);
+    --accent-border: rgba(220,38,38,.3);
+
+    /* ── Status colors ── */
+    --green:      #22c55e;
+    --green-bg:   rgba(34,197,94,.1);
+    --blue:       #3b82f6;
+    --blue-bg:    rgba(59,130,246,.1);
+    --amber:      #f59e0b;
+    --amber-bg:   rgba(245,158,11,.1);
+    --purple:     #a855f7;
+    --purple-bg:  rgba(168,85,247,.1);
+
+    /* ── Neon accents (mobile nav only) ── */
+    --neon-pink:   #ff2bd6;
+    --neon-cyan:   #00f5ff;
+    --neon-lime:   #b6ff00;
+    --neon-purple: #7c3cff;
+    --neon-yellow: #ffea00;
+
+    /* ── Radius aliases ──
+       --radius       → legacy small (8px)
+       --radius-lg    → legacy large (now 16px to match CEO spec)
+       --radius-card  → canonical card radius (16px, from tokens.css)  */
+    --radius:    8px;
+    --radius-lg: 16px;          /* was 12px — upgraded to match CEO 16px cards */
+
+    /* ── Shadows ── */
+    --shadow:    0 1px 3px rgba(0,0,0,.35);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,.45);
+
+    /* ── Transitions ── */
+    --transition: all .15s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; transition: var(--transition); }
+a:hover { color: var(--accent-hover); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--bg-hover); }
+
+
+/* ============ ALERTS ============ */
+.alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+    animation: slideUp .3s ease;
+}
+.alert-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,.2); }
+.alert-error { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+
+
+/* ============ EMPTY STATE ============ */
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+.empty-state .icon { font-size: 42px; margin-bottom: 14px; }
+.empty-state h3 { color: var(--text-secondary); margin-bottom: 6px; font-size: 16px; }
+.empty-state p { font-size: 13px; }
+
+
+/* ============ UTILITIES ============ */
+.flex { display: flex; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-center { display: flex; align-items: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.text-sm { font-size: 12px; }
+.text-muted { color: var(--text-muted); }
+.text-center { text-align: center; }
+.hidden { display: none !important; }
+
+
+/* ============ ANIMATIONS ============ */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}

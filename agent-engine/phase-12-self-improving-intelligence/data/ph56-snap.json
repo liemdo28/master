@@ -1,0 +1,632 @@
+[
+  {
+    "id": "TAL_1782656995975_s19y24",
+    "timestamp": 1782656995975,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782656987851_gymrby",
+    "timestamp": 1782656987851,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782656638279_3p38lo",
+    "timestamp": 1782656638279,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782656109627_fza9m7",
+    "timestamp": 1782656109627,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655880816_3jbnep",
+    "timestamp": 1782655880816,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655634142_0z0aer",
+    "timestamp": 1782655634142,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655629265_voz8xy",
+    "timestamp": 1782655629265,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655590806_olg273",
+    "timestamp": 1782655590806,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655585484_s22axn",
+    "timestamp": 1782655585484,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  },
+  {
+    "id": "TAL_1782655323312_nwnnvm",
+    "timestamp": 1782655323312,
+    "people": [
+      {
+        "name": "A",
+        "role": "dev",
+        "utilization": 1.5,
+        "status": "OVERLOADED",
+        "retention": {
+          "score": 62.5,
+          "band": "HIGH",
+          "drivers": [
+            {
+              "factor": "overload",
+              "points": 30
+            },
+            {
+              "factor": "low-performance",
+              "points": 7.5
+            },
+            {
+              "factor": "stale-review",
+              "points": 15
+            },
+            {
+              "factor": "churn-window",
+              "points": 10
+            }
+          ]
+        }
+      },
+      {
+        "name": "B",
+        "role": "dev",
+        "utilization": 0.75,
+        "status": "BALANCED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      },
+      {
+        "name": "C",
+        "role": "ops",
+        "utilization": 0.2,
+        "status": "UNDERUTILIZED",
+        "retention": {
+          "score": 0,
+          "band": "LOW",
+          "drivers": []
+        }
+      }
+    ],
+    "headcount": 3,
+    "overloaded": 1,
+    "underutilized": 1,
+    "atRisk": 1,
+    "highRisk": 1,
+    "avgUtilization": 0.82,
+    "status": "CRITICAL"
+  }
+]

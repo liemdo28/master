@@ -1,0 +1,17 @@
+{
+  "id": "OPS-033",
+  "objectiveId": "OBJ-061",
+  "title": "Prepare approval-gated review responses",
+  "description": "Draft responses; live replies require approval.",
+  "division": "operations",
+  "owner": "business-operators",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "review_response",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T06:19:11.432Z",
+  "updatedAt": "2026-06-27T06:19:11.432Z",
+  "completedAt": null
+}

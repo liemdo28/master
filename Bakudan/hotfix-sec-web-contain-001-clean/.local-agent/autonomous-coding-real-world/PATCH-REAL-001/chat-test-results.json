@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-06-07T14:06:00.000Z",
+  "project": "dashboard.bakudanramen.com",
+  "canonicalPath": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+  "workflowId": "WORKFLOW-REAL-DASHBOARD-001",
+  "taskId": "TASK-REAL-DASHBOARD-001",
+  "patchId": "PATCH-REAL-001",
+  "tests": [
+    {
+      "n": 1,
+      "prompt": "Which Dashboard source is canonical?",
+      "structured": true,
+      "response": {
+        "project": "dashboard.bakudanramen.com",
+        "canonicalPath": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+        "repository": "https://github.com/liemdo28/dashboard.bakudanramen.com.git",
+        "branch": "main",
+        "patchEligibility": "PATCH_ALLOWED",
+        "fingerprint": "c729c64f415d62d7c560fbc46452cd65835946699131c19da691f80775ce832a"
+      }
+    },
+    {
+      "n": 2,
+      "prompt": "Fix Dashboard safe UI issue",
+      "structured": true,
+      "response": {
+        "action": "autonomous-patch",
+        "patchId": "PATCH-REAL-001",
+        "fileChanged": "apps/agency/apps/web/src/pages/DevPanel.jsx",
+        "change": "added data-testid=\"dev-agent-run-btn\"",
+        "qa": "PASS",
+        "safety": "PASS",
+        "deploy": false,
+        "gitPush": false
+      }
+    },
+    {
+      "n": 3,
+      "prompt": "Show latest patch",
+      "structured": true,
+      "response": {
+        "patchId": "PATCH-REAL-001",
+        "workflowId": "WORKFLOW-REAL-DASHBOARD-001",
+        "taskId": "TASK-REAL-DASHBOARD-001",
+        "risk": "low",
+        "iteration": 1,
+        "ok": true
+      }
+    },
+    {
+      "n": 4,
+      "prompt": "Show changed files",
+      "structured": true,
+      "response": {
+        "files": [
+          {
+            "filePath": "apps/agency/apps/web/src/pages/DevPanel.jsx",
+            "changeType": "modified",
+            "insertions": 1,
+            "deletions": 0
+          }
+        ],
+        "count": 1
+      }
+    },
+    {
+      "n": 5,
+      "prompt": "Show patch evidence",
+      "structured": true,
+      "response": {
+        "evidenceFolder": ".local-agent/autonomous-coding-real-world/PATCH-REAL-001/",
+        "files": [
+          "patch-plan.md",
+          "before.diff",
+          "after.diff",
+          "changed-files.json",
+          "qa-before.md",
+          "qa-after.md",
+          "result.json",
+          "safety-check.md"
+        ]
+      }
+    },
+    {
+      "n": 6,
+      "prompt": "Show QA after patch",
+      "structured": true,
+      "response": {
+        "ok": true,
+        "highestSeverity": "PASS",
+        "checks": [
+          { "name": "single file changed", "ok": true },
+          { "name": "only data-testid attribute added", "ok": true },
+          { "name": "no logic change", "ok": true },
+          { "name": "no forbidden files touched", "ok": true }
+        ]
+      }
+    }
+  ],
+  "allStructured": true
+}

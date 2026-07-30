@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-06-28T21:00:00.000Z",
+  "workflows": [
+    {"id": "mi-system-health-check", "domain": "system", "approval": false, "department": "IT"},
+    {"id": "seo-daily-audit", "domain": "seo", "approval": true, "department": "Marketing"},
+    {"id": "seo-weekly-executive-report", "domain": "seo", "approval": false, "department": "Executive"},
+    {"id": "review-monitoring", "domain": "reviews", "approval": true, "department": "Marketing"},
+    {"id": "review-spike-alert", "domain": "reviews", "approval": true, "department": "Marketing"},
+    {"id": "food-safety-daily-reminder", "domain": "food-safety", "approval": true, "department": "Operations"},
+    {"id": "food-safety-missing-submission-alert", "domain": "food-safety", "approval": true, "department": "Operations"},
+    {"id": "quickbooks-daily-sync", "domain": "finance", "approval": false, "department": "Finance"},
+    {"id": "quickbooks-freshness-check", "domain": "finance", "approval": false, "department": "Finance"},
+    {"id": "doordash-weekly-campaign-review", "domain": "doordash", "approval": true, "department": "Operations"},
+    {"id": "doordash-health-check", "domain": "doordash", "approval": false, "department": "Operations"},
+    {"id": "gbp-performance-check", "domain": "reviews", "approval": true, "department": "Marketing"},
+    {"id": "daily-ceo-brief", "domain": "executive", "approval": false, "department": "Executive"},
+    {"id": "oss-health-check", "domain": "system", "approval": false, "department": "IT"},
+    {"id": "duplicate-task-check", "domain": "system", "approval": false, "department": "IT"},
+    {"id": "exec-daily-brief", "domain": "executive", "approval": false, "department": "Executive"},
+    {"id": "exec-weekly-brief", "domain": "executive", "approval": false, "department": "Executive"},
+    {"id": "exec-monthly-report", "domain": "executive", "approval": true, "department": "Executive"},
+    {"id": "finance-qb-sync", "domain": "finance", "approval": false, "department": "Finance"},
+    {"id": "finance-tax-reminder", "domain": "finance", "approval": false, "department": "Finance"},
+    {"id": "finance-payroll-reminder", "domain": "finance", "approval": true, "department": "Finance"},
+    {"id": "ops-daily-store-health", "domain": "ops", "approval": false, "department": "Operations"}
+  ],
+  "total": 22,
+  "approval_gated": 9,
+  "auto_run": 13
+}

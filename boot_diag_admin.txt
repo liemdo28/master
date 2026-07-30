@@ -1,0 +1,762 @@
+===== BOOT CONFIG FIRMWARE =====
+
+Firmware Boot Manager
+---------------------
+identifier              {fwbootmgr}
+displayorder            {bootmgr}
+                        {cf43eda3-86f9-11f1-8568-806e6f6e6963}
+                        {cf43eda4-86f9-11f1-8568-806e6f6e6963}
+                        {cf43eda5-86f9-11f1-8568-806e6f6e6963}
+timeout                 0
+
+Windows Boot Manager
+--------------------
+identifier              {bootmgr}
+device                  partition=\Device\HarddiskVolume6
+path                    \EFI\Microsoft\Boot\bootmgfw.efi
+description             Windows Boot Manager
+locale                  en-us
+inherit                 {globalsettings}
+default                 {current}
+resumeobject            {c06048d6-8529-11f1-99fa-a52fd58bf1c4}
+displayorder            {current}
+toolsdisplayorder       {memdiag}
+timeout                 30
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda3-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:CD/DVD Drive
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda4-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:Removable Device
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda5-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:Network Device
+
+===== BOOT CONFIG ALL =====
+
+Firmware Boot Manager
+---------------------
+identifier              {fwbootmgr}
+displayorder            {bootmgr}
+                        {cf43eda3-86f9-11f1-8568-806e6f6e6963}
+                        {cf43eda4-86f9-11f1-8568-806e6f6e6963}
+                        {cf43eda5-86f9-11f1-8568-806e6f6e6963}
+timeout                 0
+
+Windows Boot Manager
+--------------------
+identifier              {bootmgr}
+device                  partition=\Device\HarddiskVolume6
+path                    \EFI\Microsoft\Boot\bootmgfw.efi
+description             Windows Boot Manager
+locale                  en-us
+inherit                 {globalsettings}
+default                 {current}
+resumeobject            {c06048d6-8529-11f1-99fa-a52fd58bf1c4}
+displayorder            {current}
+toolsdisplayorder       {memdiag}
+timeout                 30
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda3-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:CD/DVD Drive
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda4-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:Removable Device
+
+Firmware Application (101fffff)
+-------------------------------
+identifier              {cf43eda5-86f9-11f1-8568-806e6f6e6963}
+description             UEFI:Network Device
+
+Windows Boot Loader
+-------------------
+identifier              {current}
+device                  partition=C:
+path                    \Windows\system32\winload.efi
+description             Windows 11
+locale                  en-us
+inherit                 {bootloadersettings}
+isolatedcontext         Yes
+allowedinmemorysettings 0x15000075
+osdevice                partition=C:
+systemroot              \Windows
+resumeobject            {c06048d6-8529-11f1-99fa-a52fd58bf1c4}
+nx                      OptIn
+bootmenupolicy          Standard
+
+Windows Boot Loader
+-------------------
+identifier              {ec62cadc-10d2-11f1-8496-345a6079bc50}
+device                  ramdisk=[\Device\HarddiskVolume9]\Recovery\WindowsRE\Winre.wim,{ec62cade-10d2-11f1-8496-345a6079bc50}
+path                    \windows\system32\winload.efi
+description             Windows Recovery Environment
+locale                  en-US
+inherit                 {bootloadersettings}
+displaymessage          Recovery
+osdevice                ramdisk=[\Device\HarddiskVolume9]\Recovery\WindowsRE\Winre.wim,{ec62cade-10d2-11f1-8496-345a6079bc50}
+systemroot              \windows
+nx                      OptIn
+bootmenupolicy          Standard
+winpe                   Yes
+
+Resume from Hibernate
+---------------------
+identifier              {c06048d6-8529-11f1-99fa-a52fd58bf1c4}
+device                  partition=C:
+path                    \Windows\system32\winresume.efi
+description             Windows Resume Application
+locale                  en-us
+inherit                 {resumeloadersettings}
+isolatedcontext         Yes
+allowedinmemorysettings 0x15000075
+filedevice              partition=C:
+custom:21000026         partition=C:
+filepath                \hiberfil.sys
+bootmenupolicy          Standard
+debugoptionenabled      No
+
+Resume from Hibernate
+---------------------
+identifier              {ec62cad9-10d2-11f1-8496-345a6079bc50}
+device                  partition=C:
+path                    \WINDOWS\system32\winresume.efi
+description             Windows Resume Application
+locale                  en-US
+inherit                 {resumeloadersettings}
+recoverysequence        {ec62cadc-10d2-11f1-8496-345a6079bc50}
+recoveryenabled         Yes
+isolatedcontext         Yes
+allowedinmemorysettings 0x15000075
+filedevice              partition=C:
+custom:21000026         partition=C:
+filepath                \hiberfil.sys
+bootmenupolicy          Standard
+debugoptionenabled      No
+
+Windows Memory Tester
+---------------------
+identifier              {memdiag}
+device                  partition=\Device\HarddiskVolume6
+path                    \EFI\Microsoft\Boot\memtest.efi
+description             Windows Memory Diagnostic
+locale                  en-us
+inherit                 {globalsettings}
+badmemoryaccess         Yes
+
+EMS Settings
+------------
+identifier              {emssettings}
+bootems                 No
+
+Debugger Settings
+-----------------
+identifier              {dbgsettings}
+debugtype               Local
+
+RAM Defects
+-----------
+identifier              {badmemory}
+
+Global Settings
+---------------
+identifier              {globalsettings}
+inherit                 {dbgsettings}
+                        {emssettings}
+                        {badmemory}
+
+Boot Loader Settings
+--------------------
+identifier              {bootloadersettings}
+inherit                 {globalsettings}
+                        {hypervisorsettings}
+
+Hypervisor Settings
+-------------------
+identifier              {hypervisorsettings}
+hypervisordebugtype     Serial
+hypervisordebugport     1
+hypervisorbaudrate      115200
+
+Resume Loader Settings
+----------------------
+identifier              {resumeloadersettings}
+inherit                 {globalsettings}
+
+Device options
+--------------
+identifier              {ec62cade-10d2-11f1-8496-345a6079bc50}
+description             Windows Recovery
+ramdisksdidevice        partition=\Device\HarddiskVolume9
+ramdisksdipath          \Recovery\WindowsRE\boot.sdi
+
+===== WIN RE =====
+Windows Recovery Environment (Windows RE) and system reset configuration
+Information:
+
+    Windows RE status:         Disabled
+    Windows RE location:       
+    Boot Configuration Data (BCD) identifier: ec62cadc-10d2-11f1-8496-345a6079bc50
+    Recovery image location:   
+    Recovery image index:      0
+    Custom image location:     
+    Custom image index:        0
+    Windows RE Version:        0.0.0.0
+
+REAGENTC.EXE: Operation Successful.
+    
+
+===== C DIRTY =====
+Volume - C: is NOT Dirty
+
+===== CHKDSK C SCAN =====
+The type of the file system is NTFS.
+
+Stage 1: Examining basic file system structure ...
+Progress: 0 of 2614272 done; Stage:  0%; Total:  0%; ETA:   2:05:40    Progress: 16335 of 2614272 done; Stage:  0%; Total:  0%; ETA:   2:05:24 .  Progress: 76346 of 2614272 done; Stage:  2%; Total:  1%; ETA:   2:04:25 .. Progress: 111617 of 2614272 done; Stage:  4%; Total:  1%; ETA:   0:01:02 ...Progress: 157279 of 2614272 done; Stage:  6%; Total:  2%; ETA:   0:01:07    Progress: 212481 of 2614272 done; Stage:  8%; Total:  3%; ETA:   0:01:07 .  Progress: 252673 of 2614272 done; Stage:  9%; Total:  3%; ETA:   0:01:08 .. Progress: 309776 of 2614272 done; Stage: 11%; Total:  4%; ETA:   0:01:08 ...Progress: 363856 of 2614272 done; Stage: 13%; Total:  5%; ETA:   0:01:07    Progress: 411137 of 2614272 done; Stage: 15%; Total:  5%; ETA:   0:01:07 .  Progress: 467457 of 2614272 done; Stage: 17%; Total:  6%; ETA:   0:01:07 .. Progress: 530572 of 2614272 done; Stage: 20%; Total:  7%; ETA:   0:01:05 ...Progress: 609410 of 2614272 done; Stage: 23%; Total:  8%; ETA:   0:01:02    Progress: 705651 of 2614272 done; Stage: 26%; Total:  9%; ETA:   0:00:57 .  Progress: 779056 of 2614272 done; Stage: 29%; Total: 10%; ETA:   0:00:55 .. Progress: 849665 of 2614272 done; Stage: 32%; Total: 11%; ETA:   0:00:54 ...Progress: 909569 of 2614272 done; Stage: 34%; Total: 12%; ETA:   0:00:54    Progress: 977665 of 2614272 done; Stage: 37%; Total: 13%; ETA:   0:00:54 .  Progress: 1041987 of 2614272 done; Stage: 39%; Total: 14%; ETA:   0:00:52 .. Progress: 1120001 of 2614272 done; Stage: 42%; Total: 15%; ETA:   0:00:51 ...Progress: 1200901 of 2614272 done; Stage: 45%; Total: 16%; ETA:   0:00:51    Progress: 1300347 of 2614272 done; Stage: 49%; Total: 17%; ETA:   0:00:47 .  Progress: 1374021 of 2614272 done; Stage: 52%; Total: 18%; ETA:   0:00:47 .. Progress: 1437185 of 2614272 done; Stage: 54%; Total: 19%; ETA:   0:00:47 ...                                                                                       
+Snapshot was deleted.  CHKDSK cannot continue.
+
+===== DISM CHECK HEALTH =====
+
+Deployment Image Servicing and Management tool
+Version: 10.0.26100.8972
+
+Image Version: 10.0.26200.8973
+
+
+Attempting to cancel the operation...
+
+
+Error: 1223
+
+Operation was incomplete because of a cancel request.
+
+The DISM log file can be found at C:\Windows\Logs\DISM\dism.log
+
+===== SFC VERIFY ONLY =====
+  
+ B e g i n n i n g   s y s t e m   s c a n .     T h i s   p r o c e s s   w i l l   t a k e   s o m e   t i m e .   
+   
+ B e g i n n i n g   v e r i f i c a t i o n   p h a s e   o f   s y s t e m   s c a n .   
+  V e r i f i c a t i o n   0 %   c o m p l e t e .  V e r i f i c a t i o n   1 %   c o m p l e t e .  V e r i f i c a t i o n   1 %   c o m p l e t e .  V e r i f i c a t i o n   2 %   c o m p l e t e .  V e r i f i c a t i o n   2 %   c o m p l e t e .  V e r i f i c a t i o n   3 %   c o m p l e t e .  V e r i f i c a t i o n   3 %   c o m p l e t e .  V e r i f i c a t i o n   4 %   c o m p l e t e .  V e r i f i c a t i o n   4 %   c o m p l e t e .  V e r i f i c a t i o n   5 %   c o m p l e t e .  V e r i f i c a t i o n   5 %   c o m p l e t e .  V e r i f i c a t i o n   6 %   c o m p l e t e .  V e r i f i c a t i o n   6 %   c o m p l e t e .  V e r i f i c a t i o n   7 %   c o m p l e t e .  V e r i f i c a t i o n   7 %   c o m p l e t e .  V e r i f i c a t i o n   8 %   c o m p l e t e .  V e r i f i c a t i o n   8 %   c o m p l e t e .  V e r i f i c a t i o n   9 %   c o m p l e t e .  V e r i f i c a t i o n   9 %   c o m p l e t e .  V e r i f i c a t i o n   1 0 %   c o m p l e t e .  V e r i f i c a t i o n   1 0 %   c o m p l e t e .  V e r i f i c a t i o n   1 1 %   c o m p l e t e .  V e r i f i c a t i o n   1 1 %   c o m p l e t e .  V e r i f i c a t i o n   1 2 %   c o m p l e t e .  V e r i f i c a t i o n   1 2 %   c o m p l e t e .  V e r i f i c a t i o n   1 3 %   c o m p l e t e .  V e r i f i c a t i o n   1 3 %   c o m p l e t e .  V e r i f i c a t i o n   1 4 %   c o m p l e t e .  V e r i f i c a t i o n   1 4 %   c o m p l e t e .  V e r i f i c a t i o n   1 5 %   c o m p l e t e .  V e r i f i c a t i o n   1 5 %   c o m p l e t e .  V e r i f i c a t i o n   1 6 %   c o m p l e t e .  V e r i f i c a t i o n   1 6 %   c o m p l e t e .  V e r i f i c a t i o n   1 7 %   c o m p l e t e .  V e r i f i c a t i o n   1 8 %   c o m p l e t e .  V e r i f i c a t i o n   1 8 %   c o m p l e t e .  V e r i f i c a t i o n   1 9 %   c o m p l e t e .  V e r i f i c a t i o n   1 9 %   c o m p l e t e .  V e r i f i c a t i o n   2 0 %   c o m p l e t e .  V e r i f i c a t i o n   2 0 %   c o m p l e t e .  V e r i f i c a t i o n   2 1 %   c o m p l e t e .  V e r i f i c a t i o n   2 1 %   c o m p l e t e .  V e r i f i c a t i o n   2 2 %   c o m p l e t e .  V e r i f i c a t i o n   2 2 %   c o m p l e t e .  V e r i f i c a t i o n   2 3 %   c o m p l e t e .  V e r i f i c a t i o n   2 3 %   c o m p l e t e .  V e r i f i c a t i o n   2 4 %   c o m p l e t e .  V e r i f i c a t i o n   2 4 %   c o m p l e t e .  V e r i f i c a t i o n   2 5 %   c o m p l e t e .  V e r i f i c a t i o n   2 5 %   c o m p l e t e .  V e r i f i c a t i o n   2 6 %   c o m p l e t e .  V e r i f i c a t i o n   2 6 %   c o m p l e t e .  V e r i f i c a t i o n   2 7 %   c o m p l e t e .  V e r i f i c a t i o n   2 7 %   c o m p l e t e .  V e r i f i c a t i o n   2 8 %   c o m p l e t e .  V e r i f i c a t i o n   2 8 %   c o m p l e t e .  V e r i f i c a t i o n   2 9 %   c o m p l e t e .  V e r i f i c a t i o n   2 9 %   c o m p l e t e .  V e r i f i c a t i o n   3 0 %   c o m p l e t e .  V e r i f i c a t i o n   3 0 %   c o m p l e t e .  V e r i f i c a t i o n   3 1 %   c o m p l e t e .  V e r i f i c a t i o n   3 1 %   c o m p l e t e .  V e r i f i c a t i o n   3 2 %   c o m p l e t e .  V e r i f i c a t i o n   3 2 %   c o m p l e t e .  V e r i f i c a t i o n   3 3 %   c o m p l e t e .  V e r i f i c a t i o n   3 3 %   c o m p l e t e .  V e r i f i c a t i o n   3 4 %   c o m p l e t e .  V e r i f i c a t i o n   3 5 %   c o m p l e t e .  V e r i f i c a t i o n   3 5 %   c o m p l e t e .  V e r i f i c a t i o n   3 6 %   c o m p l e t e .  V e r i f i c a t i o n   3 6 %   c o m p l e t e .  V e r i f i c a t i o n   3 7 %   c o m p l e t e .  V e r i f i c a t i o n   3 7 %   c o m p l e t e .  V e r i f i c a t i o n   3 8 %   c o m p l e t e .  V e r i f i c a t i o n   3 8 %   c o m p l e t e .  V e r i f i c a t i o n   3 9 %   c o m p l e t e .  V e r i f i c a t i o n   3 9 %   c o m p l e t e .  V e r i f i c a t i o n   4 0 %   c o m p l e t e .  V e r i f i c a t i o n   4 0 %   c o m p l e t e .  V e r i f i c a t i o n   4 1 %   c o m p l e t e .  V e r i f i c a t i o n   4 1 %   c o m p l e t e .  V e r i f i c a t i o n   4 2 %   c o m p l e t e .  V e r i f i c a t i o n   4 2 %   c o m p l e t e .  V e r i f i c a t i o n   4 3 %   c o m p l e t e .  V e r i f i c a t i o n   4 3 %   c o m p l e t e .  V e r i f i c a t i o n   4 4 %   c o m p l e t e .  V e r i f i c a t i o n   4 4 %   c o m p l e t e .  V e r i f i c a t i o n   4 5 %   c o m p l e t e .  V e r i f i c a t i o n   4 5 %   c o m p l e t e .  V e r i f i c a t i o n   4 6 %   c o m p l e t e .  V e r i f i c a t i o n   4 6 %   c o m p l e t e .  V e r i f i c a t i o n   4 7 %   c o m p l e t e .  V e r i f i c a t i o n   4 7 %   c o m p l e t e .  V e r i f i c a t i o n   4 8 %   c o m p l e t e .  V e r i f i c a t i o n   4 8 %   c o m p l e t e .  V e r i f i c a t i o n   4 9 %   c o m p l e t e .  V e r i f i c a t i o n   4 9 %   c o m p l e t e .  V e r i f i c a t i o n   5 0 %   c o m p l e t e .  V e r i f i c a t i o n   5 0 %   c o m p l e t e .  V e r i f i c a t i o n   5 1 %   c o m p l e t e .  V e r i f i c a t i o n   5 2 %   c o m p l e t e .  V e r i f i c a t i o n   5 2 %   c o m p l e t e .  V e r i f i c a t i o n   5 3 %   c o m p l e t e .  V e r i f i c a t i o n   5 3 %   c o m p l e t e .  V e r i f i c a t i o n   5 4 %   c o m p l e t e .  V e r i f i c a t i o n   5 4 %   c o m p l e t e .  V e r i f i c a t i o n   5 5 %   c o m p l e t e .  V e r i f i c a t i o n   5 5 %   c o m p l e t e .  V e r i f i c a t i o n   5 6 %   c o m p l e t e .  V e r i f i c a t i o n   5 6 %   c o m p l e t e .  V e r i f i c a t i o n   5 7 %   c o m p l e t e .  V e r i f i c a t i o n   5 7 %   c o m p l e t e .  V e r i f i c a t i o n   5 8 %   c o m p l e t e .  V e r i f i c a t i o n   5 8 %   c o m p l e t e .  V e r i f i c a t i o n   5 9 %   c o m p l e t e .  V e r i f i c a t i o n   5 9 %   c o m p l e t e .  V e r i f i c a t i o n   6 0 %   c o m p l e t e .  V e r i f i c a t i o n   6 0 %   c o m p l e t e .  V e r i f i c a t i o n   6 1 %   c o m p l e t e .  V e r i f i c a t i o n   6 1 %   c o m p l e t e .  V e r i f i c a t i o n   6 2 %   c o m p l e t e .  V e r i f i c a t i o n   6 2 %   c o m p l e t e .  V e r i f i c a t i o n   6 3 %   c o m p l e t e .  V e r i f i c a t i o n   6 3 %   c o m p l e t e .  V e r i f i c a t i o n   6 4 %   c o m p l e t e .  V e r i f i c a t i o n   6 4 %   c o m p l e t e .  V e r i f i c a t i o n   6 5 %   c o m p l e t e .  V e r i f i c a t i o n   6 5 %   c o m p l e t e .  V e r i f i c a t i o n   6 6 %   c o m p l e t e .  V e r i f i c a t i o n   6 6 %   c o m p l e t e .  V e r i f i c a t i o n   6 7 %   c o m p l e t e .  V e r i f i c a t i o n   6 7 %   c o m p l e t e .  V e r i f i c a t i o n   6 8 %   c o m p l e t e .  V e r i f i c a t i o n   6 9 %   c o m p l e t e .  V e r i f i c a t i o n   6 9 %   c o m p l e t e .  V e r i f i c a t i o n   7 0 %   c o m p l e t e .  V e r i f i c a t i o n   7 0 %   c o m p l e t e .  V e r i f i c a t i o n   7 1 %   c o m p l e t e .  V e r i f i c a t i o n   7 1 %   c o m p l e t e .  V e r i f i c a t i o n   7 2 %   c o m p l e t e .  V e r i f i c a t i o n   7 2 %   c o m p l e t e .  V e r i f i c a t i o n   7 3 %   c o m p l e t e .  V e r i f i c a t i o n   7 3 %   c o m p l e t e .  V e r i f i c a t i o n   7 4 %   c o m p l e t e .  V e r i f i c a t i o n   7 4 %   c o m p l e t e .  V e r i f i c a t i o n   7 5 %   c o m p l e t e .  V e r i f i c a t i o n   7 5 %   c o m p l e t e .  V e r i f i c a t i o n   7 6 %   c o m p l e t e .  V e r i f i c a t i o n   7 6 %   c o m p l e t e .  V e r i f i c a t i o n   7 7 %   c o m p l e t e .  V e r i f i c a t i o n   7 7 %   c o m p l e t e .  V e r i f i c a t i o n   7 8 %   c o m p l e t e .  V e r i f i c a t i o n   7 8 %   c o m p l e t e .  V e r i f i c a t i o n   7 9 %   c o m p l e t e .  V e r i f i c a t i o n   7 9 %   c o m p l e t e .  V e r i f i c a t i o n   8 0 %   c o m p l e t e .  V e r i f i c a t i o n   8 0 %   c o m p l e t e .  V e r i f i c a t i o n   8 1 %   c o m p l e t e .  V e r i f i c a t i o n   8 1 %   c o m p l e t e .  V e r i f i c a t i o n   8 2 %   c o m p l e t e .  V e r i f i c a t i o n   8 2 %   c o m p l e t e .  V e r i f i c a t i o n   8 3 %   c o m p l e t e .  V e r i f i c a t i o n   8 3 %   c o m p l e t e .  V e r i f i c a t i o n   8 4 %   c o m p l e t e .  V e r i f i c a t i o n   8 4 %   c o m p l e t e .  V e r i f i c a t i o n   8 5 %   c o m p l e t e .  V e r i f i c a t i o n   8 6 %   c o m p l e t e .  V e r i f i c a t i o n   8 6 %   c o m p l e t e .  V e r i f i c a t i o n   8 7 %   c o m p l e t e .  V e r i f i c a t i o n   8 7 %   c o m p l e t e .  V e r i f i c a t i o n   8 8 %   c o m p l e t e .  V e r i f i c a t i o n   8 8 %   c o m p l e t e .  V e r i f i c a t i o n   8 9 %   c o m p l e t e .  V e r i f i c a t i o n   8 9 %   c o m p l e t e .  V e r i f i c a t i o n   9 0 %   c o m p l e t e .  V e r i f i c a t i o n   9 0 %   c o m p l e t e .  V e r i f i c a t i o n   9 1 %   c o m p l e t e .  V e r i f i c a t i o n   9 1 %   c o m p l e t e .  V e r i f i c a t i o n   9 2 %   c o m p l e t e .  V e r i f i c a t i o n   9 2 %   c o m p l e t e .  V e r i f i c a t i o n   9 3 %   c o m p l e t e .  V e r i f i c a t i o n   9 3 %   c o m p l e t e .  V e r i f i c a t i o n   9 4 %   c o m p l e t e .  V e r i f i c a t i o n   9 4 %   c o m p l e t e .  V e r i f i c a t i o n   9 5 %   c o m p l e t e .  V e r i f i c a t i o n   9 5 %   c o m p l e t e .  V e r i f i c a t i o n   9 6 %   c o m p l e t e .  V e r i f i c a t i o n   9 6 %   c o m p l e t e .  V e r i f i c a t i o n   9 7 %   c o m p l e t e .  V e r i f i c a t i o n   9 7 %   c o m p l e t e .  V e r i f i c a t i o n   9 8 %   c o m p l e t e .  V e r i f i c a t i o n   9 8 %   c o m p l e t e .  V e r i f i c a t i o n   9 9 %   c o m p l e t e .  V e r i f i c a t i o n   9 9 %   c o m p l e t e .  V e r i f i c a t i o n   1 0 0 %   c o m p l e t e .  
+   
+ W i n d o w s   R e s o u r c e   P r o t e c t i o n   d i d   n o t   f i n d   a n y   i n t e g r i t y   v i o l a t i o n s .   
+ 
+===== SECURE BOOT =====
+True
+
+===== SMART PREDICT =====
+
+
+InstanceName   : SCSI\Disk&Ven_Samsung&Prod_SSD_860_EVO_250G\4&15a1b48b&0&040000_0
+PredictFailure : False
+Reason         : 0
+
+InstanceName   : SCSI\Disk&Ven_&Prod_ST250LT003-9YG14\4&15a1b48b&0&060000_0
+PredictFailure : False
+Reason         : 0
+
+
+
+
+===== DISKS/PARTITIONS =====
+
+
+DiskNumber            : 1
+PartitionStyle        : GPT
+ProvisioningType      : Fixed
+OperationalStatus     : Online
+HealthStatus          : Healthy
+BusType               : SATA
+UniqueIdFormat        : FCPH Name
+OfflineReason         : 
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Disk.ObjectId="{4d59be42-1111-11
+                        f1-8490-806e6f6e6963}:DI:\\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307
+                        -b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : 5000C50039074283
+AdapterSerialNumber   : 
+AllocatedSize         : 250059350016
+BootFromDisk          : False
+FirmwareVersion       : 0001DEM1
+FriendlyName          : ST250LT003-9YG14C
+Guid                  : {1657c623-8f39-4b76-8663-7d8cd06601fe}
+IsBoot                : False
+IsClustered           : False
+IsHighlyAvailable     : False
+IsOffline             : False
+IsReadOnly            : False
+IsScaleOut            : False
+IsSystem              : False
+LargestFreeExtent     : 0
+Location              : Integrated : Bus 0 : Device 23 : Function 0 : Adapter 0 : Port 6
+LogicalSectorSize     : 512
+Manufacturer          : 
+Model                 : ST250LT003-9YG14C
+Number                : 1
+NumberOfPartitions    : 2
+Path                  : \\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91ef
+                        b8b}
+PhysicalSectorSize    : 4096
+SerialNumber          :             W040RGSV
+Signature             : 
+Size                  : 250059350016
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Disk
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+DiskNumber            : 2
+PartitionStyle        : GPT
+ProvisioningType      : Fixed
+OperationalStatus     : Online
+HealthStatus          : Healthy
+BusType               : NVMe
+UniqueIdFormat        : SCSI Name String
+OfflineReason         : 
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Disk.ObjectId="{4d59be42-1111-11
+                        f1-8490-806e6f6e6963}:DI:\\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f5
+                        6307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : eui.00000000000000000000005079608820
+AdapterSerialNumber   : 2545079608820       _0000
+AllocatedSize         : 1000203837440
+BootFromDisk          : True
+FirmwareVersion       : SN15536 
+FriendlyName          : BIWIN NV7200 1TB
+Guid                  : {0b84492f-e797-46dc-a832-9bd13a68a633}
+IsBoot                : True
+IsClustered           : False
+IsHighlyAvailable     : False
+IsOffline             : False
+IsReadOnly            : False
+IsScaleOut            : False
+IsSystem              : True
+LargestFreeExtent     : 1048576
+Location              : PCI Slot 8 : Bus 7 : Device 0 : Function 0 : Adapter 1
+LogicalSectorSize     : 512
+Manufacturer          : 
+Model                 : BIWIN NV7200 1TB
+Number                : 2
+NumberOfPartitions    : 4
+Path                  : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+PhysicalSectorSize    : 4096
+SerialNumber          : 0000_0000_0000_0000_0000_0050_7960_8820.
+Signature             : 
+Size                  : 1000204886016
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Disk
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+DiskNumber            : 0
+PartitionStyle        : GPT
+ProvisioningType      : Fixed
+OperationalStatus     : Online
+HealthStatus          : Healthy
+BusType               : SATA
+UniqueIdFormat        : FCPH Name
+OfflineReason         : 
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Disk.ObjectId="{4d59be42-1111-11
+                        f1-8490-806e6f6e6963}:DI:\\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{5
+                        3f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : 500253E84064BFE0
+AdapterSerialNumber   : 
+AllocatedSize         : 249937715200
+BootFromDisk          : False
+FirmwareVersion       : RVT01B6Q
+FriendlyName          : Samsung SSD 860 EVO 250GB
+Guid                  : {f861fd8c-d71a-4242-970b-d9cb6decef72}
+IsBoot                : False
+IsClustered           : False
+IsHighlyAvailable     : False
+IsOffline             : False
+IsReadOnly            : False
+IsScaleOut            : False
+IsSystem              : False
+LargestFreeExtent     : 120586240
+Location              : Integrated : Bus 0 : Device 23 : Function 0 : Adapter 0 : Port 4
+LogicalSectorSize     : 512
+Manufacturer          : 
+Model                 : Samsung SSD 860 EVO 250GB
+Number                : 0
+NumberOfPartitions    : 3
+Path                  : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+PhysicalSectorSize    : 512
+SerialNumber          : S3Y9NX0K845839E
+Signature             : 
+Size                  : 250059350016
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Disk
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+
+
+
+
+OperationalStatus     : Online
+Type                  : Reserved
+DiskPath              : \\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91ef
+                        b8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0044-000000000000}\\?\scsi#disk&ven_&prod_st2
+                        50lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0044-000000000000}5000C50039074283
+AccessPaths           : 
+DiskId                : \\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91ef
+                        b8b}
+DiskNumber            : 1
+DriveLetter           :  
+GptType               : {e3c9e316-0b5c-4db8-817d-f92df00215ae}
+Guid                  : {4113e7bc-f993-414a-986b-8f2d9f6f2624}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 17408
+PartitionNumber       : 1
+Size                  : 134217728
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Basic
+DiskPath              : \\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91ef
+                        b8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-100800000000}\\?\scsi#disk&ven_&prod_st2
+                        50lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-100800000000}5000C50039074283
+AccessPaths           : {E:\, \\?\Volume{0450e282-7552-4ae7-8c88-6dfb1a57b8a9}\}
+DiskId                : \\?\scsi#disk&ven_&prod_st250lt003-9yg14#4&15a1b48b&0&060000#{53f56307-b6bf-11d0-94f2-00a0c91ef
+                        b8b}
+DiskNumber            : 1
+DriveLetter           : E
+GptType               : {ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}
+Guid                  : {0450e282-7552-4ae7-8c88-6dfb1a57b8a9}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : False
+IsHidden              : False
+IsOffline             : False
+IsReadOnly            : False
+IsShadowCopy          : False
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : False
+Offset                : 135266304
+PartitionNumber       : 2
+Size                  : 249923895296
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : System
+DiskPath              : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-100000000000}\\?\scsi#disk&ven_nvme&prod
+                        _biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-100000000000}eui.00000000000000000000005079608820
+AccessPaths           : {\\?\Volume{5d138901-dace-46f3-9feb-63ca365d4f81}\}
+DiskId                : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+DiskNumber            : 2
+DriveLetter           :  
+GptType               : {c12a7328-f81f-11d2-ba4b-00a0c93ec93b}
+Guid                  : {5d138901-dace-46f3-9feb-63ca365d4f81}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : True
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 1048576
+PartitionNumber       : 1
+Size                  : 104857600
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Reserved
+DiskPath              : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-500600000000}\\?\scsi#disk&ven_nvme&prod
+                        _biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-500600000000}eui.00000000000000000000005079608820
+AccessPaths           : 
+DiskId                : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+DiskNumber            : 2
+DriveLetter           :  
+GptType               : {e3c9e316-0b5c-4db8-817d-f92df00215ae}
+Guid                  : {2a0685cf-de05-4aee-a3b9-2703010af5ca}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 105906176
+PartitionNumber       : 2
+Size                  : 16777216
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Basic
+DiskPath              : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-500700000000}\\?\scsi#disk&ven_nvme&prod
+                        _biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-500700000000}eui.00000000000000000000005079608820
+AccessPaths           : {C:\, \\?\Volume{49148d8e-abef-4512-9a5d-d27da334f3d9}\}
+DiskId                : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+DiskNumber            : 2
+DriveLetter           : C
+GptType               : {ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}
+Guid                  : {49148d8e-abef-4512-9a5d-d27da334f3d9}
+IsActive              : False
+IsBoot                : True
+IsDAX                 : False
+IsHidden              : False
+IsOffline             : False
+IsReadOnly            : False
+IsShadowCopy          : False
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : False
+Offset                : 122683392
+PartitionNumber       : 3
+Size                  : 999230013440
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Recovery
+DiskPath              : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-10aee8000000}\\?\scsi#disk&ven_nvme&prod
+                        _biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-10aee8000000}eui.00000000000000000000005079608820
+AccessPaths           : {\\?\Volume{c210f2d0-a45b-4fe3-b242-189d7c6fb919}\}
+DiskId                : \\?\scsi#disk&ven_nvme&prod_biwin_nv7200_1tb#5&33767c8f&0&000000#{53f56307-b6bf-11d0-94f2-00a0c
+                        91efb8b}
+DiskNumber            : 2
+DriveLetter           :  
+GptType               : {de94bba4-06d1-4d40-a16a-bfd50179d6ac}
+Guid                  : {c210f2d0-a45b-4fe3-b242-189d7c6fb919}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 999352696832
+PartitionNumber       : 4
+Size                  : 850395136
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Recovery
+DiskPath              : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-100000000000}\\?\scsi#disk&ven_samsung&p
+                        rod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-100000000000}500253E84064BFE0
+AccessPaths           : {\\?\Volume{95ac64c5-77b2-4a52-ac83-9cd47dd71941}\}
+DiskId                : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+DiskNumber            : 0
+DriveLetter           :  
+GptType               : {de94bba4-06d1-4d40-a16a-bfd50179d6ac}
+Guid                  : {95ac64c5-77b2-4a52-ac83-9cd47dd71941}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 1048576
+PartitionNumber       : 1
+Size                  : 523239424
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Basic
+DiskPath              : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-702600000000}\\?\scsi#disk&ven_samsung&p
+                        rod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-702600000000}500253E84064BFE0
+AccessPaths           : {D:\, \\?\Volume{262d6858-5e0a-4bfc-be6f-24aafb1ad651}\}
+DiskId                : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+DiskNumber            : 0
+DriveLetter           : D
+GptType               : {ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}
+Guid                  : {262d6858-5e0a-4bfc-be6f-24aafb1ad651}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : False
+IsHidden              : False
+IsOffline             : False
+IsReadOnly            : False
+IsShadowCopy          : False
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : False
+Offset                : 644874240
+PartitionNumber       : 2
+Size                  : 248818635264
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+OperationalStatus     : Online
+Type                  : Recovery
+DiskPath              : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+ObjectId              : {1}\\LIEMDO-PC\root/Microsoft/Windows/Storage/Providers_v2\WSP_Partition.ObjectId="{4d59be42-11
+                        11-11f1-8490-806e6f6e6963}:PR:{00000000-0000-0000-0000-30153a000000}\\?\scsi#disk&ven_samsung&p
+                        rod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}"
+PassThroughClass      : 
+PassThroughIds        : 
+PassThroughNamespace  : 
+PassThroughServer     : 
+UniqueId              : {00000000-0000-0000-0000-30153a000000}500253E84064BFE0
+AccessPaths           : {\\?\Volume{34443cc2-4f97-4c62-a681-2433e10275bc}\}
+DiskId                : \\?\scsi#disk&ven_samsung&prod_ssd_860_evo_250g#4&15a1b48b&0&040000#{53f56307-b6bf-11d0-94f2-00
+                        a0c91efb8b}
+DiskNumber            : 0
+DriveLetter           :  
+GptType               : {de94bba4-06d1-4d40-a16a-bfd50179d6ac}
+Guid                  : {34443cc2-4f97-4c62-a681-2433e10275bc}
+IsActive              : False
+IsBoot                : False
+IsDAX                 : 
+IsHidden              : True
+IsOffline             : False
+IsReadOnly            : 
+IsShadowCopy          : 
+IsSystem              : False
+MbrType               : 
+NoDefaultDriveLetter  : 
+Offset                : 249463570432
+PartitionNumber       : 3
+Size                  : 594542592
+TransitionState       : 1
+PSComputerName        : 
+CimClass              : ROOT/Microsoft/Windows/Storage:MSFT_Partition
+CimInstanceProperties : {ObjectId, PassThroughClass, PassThroughIds, PassThroughNamespace...}
+CimSystemProperties   : Microsoft.Management.Infrastructure.CimSystemProperties
+
+
+

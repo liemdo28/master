@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-22-revenue-growth-os",
+  "version": "1.0.0",
+  "description": "Phase 22 — Sales & Revenue Growth OS. Revenue opportunities, channel performance, promotion planning, offer risk, sales-task routing, growth scorecard.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

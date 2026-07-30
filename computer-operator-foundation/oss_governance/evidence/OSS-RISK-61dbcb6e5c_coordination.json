@@ -1,0 +1,35 @@
+{
+  "coord_task_id": "OSS-RISK-61dbcb6e5c",
+  "task_name": "OSS RISK: STUCK_PIPELINE",
+  "objective_id": "OBJ-OSS-RISK",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782451898.106317,
+  "created_iso": "2026-06-26T05:31:38.106318+00:00",
+  "updated_at": 1782451898.1063259,
+  "owner": "engineering_lead",
+  "priority": "P2",
+  "description": "Pipeline is BLOCKED: 28 projects stuck in early stages vs 0 in active use",
+  "risk_type": "STUCK_PIPELINE",
+  "evidence": {
+    "total_projects": 28,
+    "by_stage": {
+      "AUDIT": 2,
+      "DISCOVERY": 26
+    },
+    "stuck_in_early": 28,
+    "in_active_use": 0,
+    "retired": 0,
+    "pipeline_health": "BLOCKED",
+    "ts": "2026-06-26T05:31:38.092888+00:00"
+  },
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782451898.1063268
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+⚡ *Production Performance Dashboard*
+
+🟡 System: DEGRADED  (71/100)
+📊 Traces: 2 total  |  avg 29ms  |  errors 50%
+🔧 Flow gaps: 1  (0 critical)
+
+*Health Checks:*
+✅ workflow_db: 2 workflows total
+❌ skill_marketplace: skills.json missing
+✅ executive_memory: owner_profile.json present
+✅ google_tokens: access_token present
+❌ qb_agent_db: sync_status=error
+✅ no_orphan_workflows: 0 orphan/stuck workflows
+✅ evidence_dirs: all present
+
+*Flow Gaps:*
+⚠️  [low] Expected file missing: coo-v4/skills.json

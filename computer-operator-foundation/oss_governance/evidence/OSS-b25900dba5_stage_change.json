@@ -1,0 +1,32 @@
+{
+  "project_id": "OSS-b25900dba5",
+  "name": "Qwen Coder",
+  "github": "https://github.com/QwenLM/Qwen3-Coder",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Open LLM coding assistant family",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "AUDIT",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.834341,
+  "created_iso": "2026-06-26T05:35:22.834346+00:00",
+  "updated_at": 1782452122.8622825,
+  "updated_iso": "2026-06-26T05:35:22.862284+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.834341,
+      "iso": "2026-06-26T05:35:22.834354+00:00"
+    },
+    {
+      "stage": "AUDIT",
+      "timestamp": 1782452122.8622825,
+      "iso": "2026-06-26T05:35:22.862292+00:00"
+    }
+  ]
+}

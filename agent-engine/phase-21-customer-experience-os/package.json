@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-21-customer-experience-os",
+  "version": "1.0.0",
+  "description": "Phase 21 — Customer Experience OS. Customer profiles, feedback ingestion, review intelligence, sentiment risk, approval-gated service recovery, loyalty signals.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

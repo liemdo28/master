@@ -1,0 +1,92 @@
+{
+  "plan_id": "plan-1782092303479-2",
+  "created_at": "2026-06-22T01:38:23.479Z",
+  "intent": "compliance_concern",
+  "title": "Kế hoạch kiểm tra tuân thủ",
+  "description": "Kiểm tra trạng thái tuân thủ pháp luật và quy định",
+  "total_steps": 4,
+  "estimated_total_seconds": 85,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Quét giấy phép và chứng nhận",
+      "description": "Check license expiry dates, certifications, permits",
+      "engine": "license-scanner",
+      "required_data": [
+        "license_registry"
+      ],
+      "outputs": [
+        "license_status"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Kiểm tra insurance",
+      "description": "Verify insurance coverage, policy status, renewal dates",
+      "engine": "insurance-check",
+      "required_data": [
+        "insurance_data"
+      ],
+      "outputs": [
+        "insurance_status"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [],
+      "can_parallel": true,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Tổng hợp và xếp hạng rủi ro",
+      "description": "Combine findings, prioritize by urgency",
+      "engine": "compliance-analysis",
+      "required_data": [
+        "license_status",
+        "insurance_status"
+      ],
+      "outputs": [
+        "compliance_report"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "1",
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "QA và tạo brief",
+      "description": "Validate compliance check, generate CEO summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "compliance_report"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "3"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-4",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.8,
+  "requires_ceo_approval": false
+}

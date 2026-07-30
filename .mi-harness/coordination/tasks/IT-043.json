@@ -1,0 +1,17 @@
+{
+  "id": "IT-043",
+  "objectiveId": "OBJ-110",
+  "title": "Bootstrap Phase 10 Company OS Operational loop",
+  "description": "Wire Objective -> Strategy -> Projects -> Tasks -> Divisions -> Evidence -> Approval -> Metrics -> Outcome -> Executive Report.",
+  "division": "it",
+  "owner": "company-os-operational",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T09:15:12.785Z",
+  "updatedAt": "2026-06-27T09:15:12.785Z",
+  "completedAt": null
+}

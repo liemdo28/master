@@ -1,0 +1,12 @@
+diff --git a/apps/agency/apps/web/src/pages/DevPanel.jsx b/apps/agency/apps/web/src/pages/DevPanel.jsx
+index 2ebce72..6310c85 100644
+--- a/apps/agency/apps/web/src/pages/DevPanel.jsx
++++ b/apps/agency/apps/web/src/pages/DevPanel.jsx
+@@ -131,6 +131,7 @@ export default function DevPanel() {
+           className="btn btn-primary"
+           onClick={handleRun}
+           disabled={running || !projectId}
++          data-testid="dev-agent-run-btn"
+         >
+           {running ? 'Running...' : 'Run'}
+         </button>

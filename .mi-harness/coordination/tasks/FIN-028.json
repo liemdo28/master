@@ -1,0 +1,17 @@
+{
+  "id": "FIN-028",
+  "objectiveId": "OBJ-066",
+  "title": "Investigate QuickBooks sync health",
+  "description": "Check QB source freshness and connector error evidence.",
+  "division": "finance",
+  "owner": "financial-intelligence",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "credential_use",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T06:20:21.766Z",
+  "updatedAt": "2026-06-27T06:20:21.766Z",
+  "completedAt": null
+}

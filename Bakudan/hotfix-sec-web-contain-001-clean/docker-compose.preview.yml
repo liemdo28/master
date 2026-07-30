@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  preview-web:
+    image: php:8.2-apache
+    container_name: bakudan-preview
+    ports:
+      - "5003:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - APP_ENV=staging
+      - APP_URL=http://127.0.0.1:5003
+      - DB_HOST=preview-db
+      - DB_PORT=3306
+      - DB_NAME=bakudan_preview
+      - DB_USER=bakudan
+      - DB_PASS=preview_pass
+      - PREVIEW_QA_BYPASS=1
+    working_dir: /var/www/html
+    command: >
+      bash -c "
+        a2enmod rewrite &&
+        echo '<Directory /var/www/html>
+          AllowOverride All
+          Require all granted
+        </Directory>' > /etc/apache2/conf-available/override.conf &&
+        a2enconf override &&
+        docker-php-ext-install pdo pdo_mysql &&
+        apache2-foreground
+      "
+    depends_on:
+      - preview-db
+
+  preview-db:
+    image: mysql:8.0
+    container_name: bakudan-preview-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: preview_root_pass
+      MYSQL_DATABASE: bakudan_preview
+      MYSQL_USER: bakudan
+      MYSQL_PASSWORD: preview_pass
+    volumes:
+      - preview_db_data:/var/lib/mysql
+      - ./database/migrations/phase11_store_checklists.sql:/docker-entrypoint-initdb.d/01_phase11.sql
+
+volumes:
+  preview_db_data:

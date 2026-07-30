@@ -1,0 +1,176 @@
+name: P0 Verification — Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_migrations:
+        description: 'Also run DB migrations on preview'
+        required: false
+        default: 'true'
+        type: boolean
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install SSH keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL5SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+
+      - name: Deploy phase11 branch to preview
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          rsync -avz --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude ".gitignore" \
+            --exclude ".claude" \
+            --exclude ".env" \
+            --exclude "node_modules" \
+            --exclude "vendor" \
+            --exclude "uploads" \
+            --exclude "storage" \
+            --exclude "tmp" \
+            --exclude "NUL" \
+            -e "ssh" \
+            ./ "${DH_USER}@${DH_HOST}:${DH_PATH}/"
+          echo "✅ Files deployed"
+
+      - name: Run DB migrations on preview
+        if: ${{ github.event.inputs.run_migrations == 'true' }}
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== Running migrations on preview DB ==="
+          ssh "${DH_USER}@${DH_HOST}" "
+            cd \${DH_PATH}
+            php -r '
+              require_once \"config/database.php\";
+              \$pdo = Database::getInstance()->getConnection();
+              \$migrations = [
+                \"database/migrations/2026_06_10_bill_registry_upgrade.sql\",
+                \"database/migrations/2026_06_10_duplicate_control.sql\",
+                \"database/migrations/2026_06_10_assignment_flow_fix.sql\",
+              ];
+              foreach (\$migrations as \$f) {
+                if (!file_exists(\$f)) { echo \"SKIP (not found): \$f\n\"; continue; }
+                \$sql = file_get_contents(\$f);
+                // Split on semicolons but skip delimiter changes
+                \$stmts = array_filter(array_map(\"trim\", explode(\";\", \$sql)));
+                \$ok = 0; \$err = 0;
+                foreach (\$stmts as \$s) {
+                  if (empty(\$s) || stripos(\$s,\"--\") === 0) continue;
+                  try { \$pdo->exec(\$s); \$ok++; }
+                  catch (PDOException \$e) {
+                    if (strpos(\$e->getMessage(),\"Duplicate column\") !== false ||
+                        strpos(\$e->getMessage(),\"already exists\") !== false ||
+                        strpos(\$e->getMessage(),\"1060\") !== false ||
+                        strpos(\$e->getMessage(),\"1061\") !== false) { \$ok++; continue; }
+                    echo \"WARN: \".\$e->getMessage().\"\n\"; \$err++;
+                  }
+                }
+                echo \"Migration \$f: \$ok ok, \$err errors\n\";
+              }
+              echo \"Migrations complete.\n\";
+            '
+          "
+
+      - name: Run P0 Verification Script (CLI)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== P0 Verification Results ==="
+          ssh "${DH_USER}@${DH_HOST}" "
+            cd \${DH_PATH}
+            php -r '
+              \$_GET[\"key\"] = \"bkd_verify_2026\";
+              \$_SERVER[\"REQUEST_URI\"] = \"/run_p0_verification.php\";
+              \$_SERVER[\"HTTP_HOST\"] = \"preview.dashboard.bakudanramen.com\";
+              \$_SERVER[\"SERVER_NAME\"] = \"preview.dashboard.bakudanramen.com\";
+
+              // Capture output and strip HTML
+              ob_start();
+              require \"run_p0_verification.php\";
+              \$html = ob_get_clean();
+              // Strip tags, collapse whitespace
+              \$text = strip_tags(\$html);
+              \$text = preg_replace(\"/[ \t]+/\", \" \", \$text);
+              \$text = preg_replace(\"/\n{3,}/\", \"\n\n\", \$text);
+              echo \$text;
+            '
+          "
+
+      - name: Run Daily Scanner on preview
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== Running DailyDuplicateTaskBillScanner ==="
+          ssh "${DH_USER}@${DH_HOST}" "
+            cd \${DH_PATH}
+            php -r '
+              \$_SERVER[\"HTTP_HOST\"] = \"preview.dashboard.bakudanramen.com\";
+              require_once \"config/database.php\";
+              require_once \"crons/DailyDuplicateTaskBillScanner.php\";
+              try {
+                \$scanner = new DailyDuplicateTaskBillScanner();
+                \$result = \$scanner->run();
+                echo json_encode(\$result ?? [\"status\" => \"complete\"], JSON_PRETTY_PRINT) . \"\n\";
+              } catch (Throwable \$e) {
+                echo \"Scanner error: \" . \$e->getMessage() . \"\n\";
+              }
+            ' && \
+            php -r '
+              require_once \"config/database.php\";
+              \$pdo = Database::getInstance()->getConnection();
+              try {
+                \$groups = \$pdo->query(\"SELECT COUNT(*) FROM duplicate_groups\")->fetchColumn();
+                \$items  = \$pdo->query(\"SELECT COUNT(*) FROM duplicate_group_items\")->fetchColumn();
+                echo \"duplicate_groups: \$groups rows\n\";
+                echo \"duplicate_group_items: \$items rows\n\";
+              } catch (Exception \$e) {
+                echo \"Table check error: \" . \$e->getMessage() . \"\n\";
+              }
+            '
+          "
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "=============================================="
+          echo "  P0 Verification complete — check output above"
+          echo "  PASS = schema ready"
+          echo "  FAIL = run migration or fix code"
+          echo "  WARN = optional / informational"
+          echo "=============================================="
+          echo ""
+          echo "Next manual steps (see reports/P0_VERIFICATION_SPEC.md):"
+          echo "  Phase B — Duplicate bill modal (browser)"
+          echo "  Phase C — Duplicate task modal (browser)"
+          echo "  Phase E — /admin/duplicates UI (browser)"
+          echo "  Phase F — Assignment flow (2 browser sessions)"
+          echo "  Phase G — Popup notification (browser)"
+          echo "  Phase I — CEO bill data import (browser)"
+          echo "  Phase K — Dashboard drilldown clickthrough (browser)"

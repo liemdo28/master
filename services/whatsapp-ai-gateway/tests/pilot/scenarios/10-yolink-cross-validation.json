@@ -1,0 +1,15 @@
+[
+  { "id": "YL-01", "humanValue": 35, "sensorValue": 35.2, "diff": 0.2, "expected": "ACCEPTED", "description": "YoLink matches human" },
+  { "id": "YL-02", "humanValue": 35, "sensorValue": 38, "diff": 3, "expected": "ACCEPTED_WITH_WARNING", "description": "YoLink within tolerance" },
+  { "id": "YL-03", "humanValue": 35, "sensorValue": 45, "diff": 10, "expected": "MISMATCH_ALERT", "description": "YoLink mismatch > tolerance" },
+  { "id": "YL-04", "sensorStatus": "OFFLINE", "expected": "MANUAL_ENTRY_USED", "description": "Sensor offline manual entry" },
+  { "id": "YL-05", "sensorStatus": "STALE", "age_minutes": 45, "expected": "MANUAL_ENTRY_USED", "description": "Sensor stale manual entry" },
+  { "id": "YL-06", "sensorStatus": "NOT_MAPPED", "expected": "CROSS_VALIDATION_SKIPPED", "description": "Sensor not mapped skipped" },
+  { "id": "YL-07", "sensorItem": "Walk-in Freezer", "expected": "MISMATCH_FLAGGED", "description": "Sensor mapped to wrong item" },
+  { "id": "YL-08", "sensorStatus": "WARNING", "expected": "HIGH_ALERT", "description": "Sensor in warning state" },
+  { "id": "YL-09", "sensorStatus": "ONLINE", "expected": "TRUST_UPDATED", "description": "Sensor recovered trust updated" },
+  { "id": "YL-10", "mismatch": true, "confirmed": true, "expected": "CONFIRMED_STORED", "description": "Human confirms despite mismatch" },
+  { "id": "YL-11", "choice": "SENSOR", "expected": "SENSOR_VALUE_USED", "description": "User chooses sensor value" },
+  { "id": "YL-12", "choice": "REENTER", "expected": "REENTER_PROMPT", "description": "User chooses to re-enter" },
+  { "id": "YL-13", "mismatch": true, "diff": 15, "expected": "PHOTO_REQUIRED", "description": "Large mismatch requires photo" }
+]

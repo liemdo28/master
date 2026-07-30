@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqvz0quf-15k14b07",
+  "objectiveId": "OBJ-075",
+  "taskId": "OPS-041",
+  "requestedBy": "system",
+  "approvalType": "review_response",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Prepare approval-gated review responses",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T06:20:23.655Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

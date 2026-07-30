@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnow3-c8e3d1",
+  "objectiveRunId": "run-mqrcnovx-cba70a",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: revenue_concern (85%), Alternatives: 0, Ambiguous: false",
+  "sha256": "6411d361a270e2100449e72891aece10c4209c5bab911fe8b0acc05e9bcf6be6",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnovx-cba70a\\6411d361a270e2100449e72891aece10c4209c5bab911fe8b0acc05e9bcf6be6.json",
+  "capturedAt": "2026-06-24T00:43:18.339Z",
+  "readOnly": true
+}

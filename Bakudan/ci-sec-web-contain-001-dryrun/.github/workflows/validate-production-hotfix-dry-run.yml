@@ -1,0 +1,473 @@
+name: SEC-WEB-CONTAIN-001 - Production Rsync Dry-Run (Validation Only)
+
+# CHANGE-ID: SEC-WEB-CONTAIN-001-DRYRUN
+# STATUS: VALIDATION ONLY
+#
+# This workflow proves whether deploying hotfix/sec-web-contain-001-production
+# through the existing Production rsync mechanism would touch anything beyond
+# .htaccess. It NEVER performs a real rsync and cannot deploy:
+#   - no dry_run=false input exists anywhere in this file
+#   - no deploy job exists
+#   - no step calls or dispatches deploy.yml
+#   - no step uploads the candidate .htaccess to the server
+#   - no step mutates any remote file
+#   - the ONLY rsync invocation in this file always carries --dry-run
+#
+# The rsync command DOES include --delete, deliberately, so that this dry-run
+# mirrors deploy.yml's real behavior exactly (deploy.yml uses
+# `-avz --checksum --delete`). Per rsync's own documented semantics,
+# --delete combined with --dry-run never deletes anything - it only lists,
+# via --itemize-changes, which files WOULD be deleted if a real (non-dry-run)
+# rsync ran with the same flags. Omitting --delete here would make this
+# dry-run fail to simulate the real deployment and was rejected for that
+# reason.
+#
+# Any step below that fails stops the job; later steps do not run. This is
+# deliberate: the diff-scope check must fail BEFORE the SSH step ever runs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Must be exactly: DRY-RUN-ONLY"
+        required: true
+        type: string
+      expected_base_sha:
+        description: "Must be exactly: fd5bdf707871e73b667cde9fd267553a597a5b72"
+        required: true
+        type: string
+      expected_changed_file:
+        description: "Must be exactly: .htaccess"
+        required: true
+        type: string
+
+concurrency:
+  group: sec-web-contain-001-dryrun
+  cancel-in-progress: true
+
+jobs:
+  dry-run-validate:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Validate exact input values (fail closed)
+        run: |
+          set -euo pipefail
+          fail=0
+          if [ "${{ inputs.confirmation }}" != "DRY-RUN-ONLY" ]; then
+            echo "::error::confirmation must be exactly 'DRY-RUN-ONLY'"
+            fail=1
+          fi
+          if [ "${{ inputs.expected_base_sha }}" != "fd5bdf707871e73b667cde9fd267553a597a5b72" ]; then
+            echo "::error::expected_base_sha did not match the confirmed production commit"
+            fail=1
+          fi
+          if [ "${{ inputs.expected_changed_file }}" != ".htaccess" ]; then
+            echo "::error::expected_changed_file must be exactly '.htaccess'"
+            fail=1
+          fi
+          if [ "$fail" = "1" ]; then
+            echo "ABORT: input validation failed"
+            exit 1
+          fi
+          echo "Input validation: PASS"
+
+      - name: Checkout this workflow's own source (self-assertion target)
+        uses: actions/checkout@v4
+        with:
+          path: _self
+
+      - name: Static safety assertions on this workflow file
+        run: |
+          set -euo pipefail
+          F="_self/.github/workflows/validate-production-hotfix-dry-run.yml"
+
+          # Exactly one rsync invocation must exist in this entire file.
+          RSYNC_LINES=$(grep -c '^\s*rsync ' "$F" || true)
+          if [ "$RSYNC_LINES" != "1" ]; then
+            echo "::error::Expected exactly 1 rsync invocation in this workflow, found $RSYNC_LINES"
+            exit 1
+          fi
+
+          # Extract that rsync command's full backslash-continued block and
+          # confirm both required flags are present in it.
+          RSYNC_BLOCK=$(awk '/^\s*rsync /{p=1} p{print; if ($0 !~ /\\$/) exit}' "$F")
+          echo "$RSYNC_BLOCK"
+          echo "$RSYNC_BLOCK" | grep -q -- '--dry-run' || { echo "::error::rsync command missing --dry-run"; exit 1; }
+          echo "$RSYNC_BLOCK" | grep -q -- '--delete'  || { echo "::error::rsync command missing --delete"; exit 1; }
+
+          # No deploy-capable path may exist anywhere in this file. This
+          # intentionally matches only actual invocation syntax (reusable
+          # workflow calls, dispatch API paths, gh CLI dispatch), not prose
+          # comments that merely mention "deploy.yml" by name for
+          # documentation purposes - a bare substring match would also flag
+          # this very check's own error message below, which is useless.
+          if grep -qE '(uses:\s*\S*deploy\.yml|actions/workflows/deploy\.yml/dispatches|gh workflow run[^\n]*deploy)' "$F"; then
+            echo "::error::This file contains an actual deploy.yml invocation path - forbidden"; exit 1
+          fi
+          if grep -qiE 'dry_run:\s*false' "$F"; then
+            echo "::error::A dry_run=false input/value exists - forbidden"; exit 1
+          fi
+          if grep -qE '^\s{2}deploy:\s*$' "$F"; then
+            echo "::error::A job literally named 'deploy' exists - forbidden"; exit 1
+          fi
+
+          echo "Static safety assertions: PASS (exactly 1 rsync invocation, --dry-run present, --delete present, no deploy-capable path)"
+
+      - name: Checkout hotfix branch
+        uses: actions/checkout@v4
+        with:
+          ref: hotfix/sec-web-contain-001-production
+          fetch-depth: 0
+
+      - name: Resolve checked branch SHA
+        id: shas
+        run: |
+          set -euo pipefail
+          HEAD_SHA=$(git rev-parse HEAD)
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "Checked branch SHA: $HEAD_SHA"
+
+      - name: Confirm base/ancestor relationship
+        run: |
+          set -euo pipefail
+          BASE="${{ inputs.expected_base_sha }}"
+          if ! git merge-base --is-ancestor "$BASE" HEAD; then
+            echo "::error::expected_base_sha is not an ancestor of HEAD - branch relationship unconfirmed"
+            exit 1
+          fi
+          echo "Base ancestor check: PASS"
+
+      - name: Diff vs base - must be exactly the expected file (FAIL BEFORE SSH)
+        id: diffcheck
+        run: |
+          set -euo pipefail
+          BASE="${{ inputs.expected_base_sha }}"
+          CHANGED="$(git diff --name-only "$BASE"...HEAD || true)"
+          echo "Changed files versus base:"
+          echo "$CHANGED"
+          COUNT="$(printf '%s\n' "$CHANGED" | grep -c . || true)"
+          if [ "$COUNT" != "1" ] || [ "$CHANGED" != "${{ inputs.expected_changed_file }}" ]; then
+            echo "::error::Changed file set is not exactly '${{ inputs.expected_changed_file }}' - FAIL BEFORE SSH"
+            exit 1
+          fi
+          echo "Diff scope check: PASS (exactly ${{ inputs.expected_changed_file }})"
+          {
+            echo "changed_files<<EOF"
+            printf '%s\n' "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Local repository safety checks
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Working tree not clean after checkout"
+            exit 1
+          fi
+          echo "Local safety checks: PASS (working tree clean, diff scope already confirmed above)"
+
+      - name: Compute candidate .htaccess hash
+        id: hash
+        run: |
+          set -euo pipefail
+          HASH=$(sha256sum .htaccess | awk '{print $1}')
+          echo "candidate_hash=$HASH" >> "$GITHUB_OUTPUT"
+          echo "Candidate .htaccess hash: $HASH"
+
+      - name: Install temporary SSH key (restrictive permissions)
+        env:
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DH_SSH_KEY" > ~/.ssh/dryrun_key
+          chmod 600 ~/.ssh/dryrun_key
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+          chmod 600 ~/.ssh/known_hosts
+          echo "SSH key installed at restrictive permissions (600). Not printed."
+
+      - name: Remote identity check (Production path guard, read-only)
+        id: identity
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/dryrun_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          REMOTE_HOME=$($SSH "${DH_USER}@${DH_HOST}" 'echo $HOME')
+          $SSH "${DH_USER}@${DH_HOST}" "pwd" > /dev/null
+
+          FAIL=0
+          RESULT_LINES=()
+
+          if [ "$DH_PATH" = "/" ]; then
+            RESULT_LINES+=("Target path is /: FAIL"); FAIL=1
+          else
+            RESULT_LINES+=("Target path is not /: PASS")
+          fi
+
+          if [ "$DH_PATH" = "$REMOTE_HOME" ]; then
+            RESULT_LINES+=("Target path is account home root: FAIL"); FAIL=1
+          else
+            RESULT_LINES+=("Target path is not account home root: PASS")
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -d '${DH_PATH}'"; then
+            RESULT_LINES+=("Target path exists as a directory: PASS")
+          else
+            RESULT_LINES+=("Target path exists as a directory: FAIL"); FAIL=1
+          fi
+
+          NONEMPTY_COUNT=$($SSH "${DH_USER}@${DH_HOST}" "ls -A '${DH_PATH}' 2>/dev/null | wc -l" || echo 0)
+          if [ "${NONEMPTY_COUNT:-0}" -gt 0 ]; then
+            RESULT_LINES+=("Target path is non-empty: PASS")
+          else
+            RESULT_LINES+=("Target path is non-empty: FAIL"); FAIL=1
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/index.php'"; then
+            RESULT_LINES+=("App marker index.php present: PASS")
+          else
+            RESULT_LINES+=("App marker index.php present: IDENTITY MARKER MISSING")
+          fi
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/.env'"; then
+            RESULT_LINES+=(".env marker present (existence only, not read): PASS")
+          else
+            RESULT_LINES+=(".env marker present: IDENTITY MARKER MISSING")
+          fi
+
+          printf '%s\n' "${RESULT_LINES[@]}" > /tmp/identity_check.txt
+          cat /tmp/identity_check.txt
+
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::Production path identity check FAILED - aborting before rsync"
+            echo "identity_status=FAIL" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "identity_status=PASS" >> "$GITHUB_OUTPUT"
+
+      - name: Remote current .htaccess hash (read-only, no content printed)
+        id: remotehash
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/dryrun_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          if $SSH "${DH_USER}@${DH_HOST}" "test -f '${DH_PATH}/.htaccess'"; then
+            REMOTE_HASH=$($SSH "${DH_USER}@${DH_HOST}" "sha256sum '${DH_PATH}/.htaccess'" | awk '{print $1}')
+          else
+            REMOTE_HASH="FILE_NOT_FOUND"
+          fi
+          echo "remote_hash=$REMOTE_HASH" >> "$GITHUB_OUTPUT"
+          echo "Remote current .htaccess hash: $REMOTE_HASH"
+
+      - name: Rsync dry-run (mirrors deploy.yml exactly, plus --dry-run/--itemize-changes)
+        id: rsync
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          # Exact mirror of deploy.yml's rsync command
+          # (`rsync -avz --checksum --delete <same 6 excludes> -e ssh ./ user@host:path/`)
+          # with exactly two additions: --dry-run and --itemize-changes.
+          # --delete is intentionally included and NEVER removed: --dry-run
+          # guarantees no file is actually deleted, while still reporting
+          # every path that a real (non-dry-run) run with these exact flags
+          # would delete. This is the only rsync invocation in this file -
+          # asserted by the "Static safety assertions" step above.
+          rsync -avz --checksum --delete --dry-run --itemize-changes \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude ".gitignore" \
+            --exclude ".claude" \
+            --exclude ".env" \
+            --exclude "node_modules" \
+            --exclude "vendor" \
+            --exclude "uploads" \
+            --exclude "storage" \
+            --exclude "tmp" \
+            --exclude "NUL" \
+            -e "ssh -i ~/.ssh/dryrun_key -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0" \
+            ./ "${DH_USER}@${DH_HOST}:${DH_PATH}/" > /tmp/rsync_itemize.txt
+          echo "Rsync dry-run completed (--dry-run set: no file was transferred, updated, or deleted)."
+          cat /tmp/rsync_itemize.txt
+
+      - name: Parse dry-run results
+        id: parse
+        run: |
+          set -euo pipefail
+          F=/tmp/rsync_itemize.txt
+          # itemize-changes format: an 11-char flag field, a space, then the path.
+          # Leading char = direction/type, NOT content-vs-no-change:
+          #   '<' = file is being sent TO the remote (this is a PUSH rsync,
+          #         local -> remote, same direction as deploy.yml -> this is
+          #         the character that actually appears for real content
+          #         changes here, confirmed against this run's raw output).
+          #   '>' = file being received FROM the remote (pull direction -
+          #         included defensively; should not occur for this command,
+          #         but matching it too avoids silently missing a result if
+          #         rsync's behavior ever differs).
+          #   '.' = NOT being transferred - only an attribute (e.g. time
+          #         'contentt') may differ; content already matches per
+          #         --checksum. Tracked separately below, never counted as
+          #         created/updated/unexpected, since it reflects
+          #         pre-existing drift unrelated to this change, not a risk
+          #         introduced by it.
+          #   '*deleting   name'   = file would be deleted (--delete +
+          #                          --dry-run: reported only, nothing
+          #                          actually removed).
+          #   '*deleting   name/'  = directory would be deleted (trailing /).
+          CREATED=$(grep -E '^[<>]f\+\+\+\+\+\+\+\+\+ ' "$F" | awk '{print $2}' || true)
+          UPDATED=$(grep -E '^[<>]f' "$F" | grep -v -E '^[<>]f\+\+\+\+\+\+\+\+\+ ' | awk '{print $2}' || true)
+          ATTR_ONLY=$(grep -E '^\.f' "$F" | awk '{print $2}' || true)
+          DELETED_ALL=$(grep -E '^\*deleting' "$F" | awk '{print $2}' || true)
+          DELETED_DIRS=$(printf '%s\n' "$DELETED_ALL" | grep -E '/$' || true)
+          DELETED_FILES=$(printf '%s\n' "$DELETED_ALL" | grep -v -E '/$' | grep -v '^$' || true)
+
+          ALL_CHANGED=$(printf '%s\n%s\n' "$CREATED" "$UPDATED" | grep -v '^$' || true)
+          UNEXPECTED=$(printf '%s\n' "$ALL_CHANGED" | grep -v -x '\.htaccess' || true)
+
+          DELETED_FILES_COUNT=$(printf '%s\n' "$DELETED_FILES" | grep -c . || true)
+          DELETED_DIRS_COUNT=$(printf '%s\n' "$DELETED_DIRS" | grep -c . || true)
+          UNEXPECTED_COUNT=$(printf '%s\n' "$UNEXPECTED" | grep -c . || true)
+          ATTR_ONLY_COUNT=$(printf '%s\n' "$ATTR_ONLY" | grep -c . || true)
+
+          {
+            echo "created<<EOF"; printf '%s\n' "$CREATED"; echo "EOF"
+            echo "updated<<EOF"; printf '%s\n' "$UPDATED"; echo "EOF"
+            echo "attr_only<<EOF"; printf '%s\n' "$ATTR_ONLY"; echo "EOF"
+            echo "attr_only_count=$ATTR_ONLY_COUNT"
+            echo "deleted_files<<EOF"; printf '%s\n' "$DELETED_FILES"; echo "EOF"
+            echo "deleted_dirs<<EOF"; printf '%s\n' "$DELETED_DIRS"; echo "EOF"
+            echo "deleted_files_count=$DELETED_FILES_COUNT"
+            echo "deleted_dirs_count=$DELETED_DIRS_COUNT"
+            echo "unexpected<<EOF"; printf '%s\n' "$UNEXPECTED"; echo "EOF"
+            echo "unexpected_count=$UNEXPECTED_COUNT"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Created: $CREATED"
+          echo "Updated: $UPDATED"
+          echo "Attribute-only (no content change): $ATTR_ONLY"
+          echo "Deleted files count: $DELETED_FILES_COUNT"
+          echo "Deleted directories count: $DELETED_DIRS_COUNT"
+          echo "Unexpected count: $UNEXPECTED_COUNT"
+
+      - name: Remove temporary SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/dryrun_key
+          echo "Temporary SSH key removed."
+
+      - name: Write sanitized artifact files
+        if: always()
+        env:
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -euo pipefail
+          mkdir -p sec-web-contain-001-rsync-dry-run
+
+          cat > sec-web-contain-001-rsync-dry-run/DRY_RUN_SUMMARY.md << EOF
+          # SEC-WEB-CONTAIN-001-DRYRUN — Summary
+
+          Checked branch SHA: ${{ steps.shas.outputs.head_sha }}
+          Base SHA verified (ancestor check): PASS
+          Diff vs base: exactly \`.htaccess\` (enforced before any SSH step ran)
+          Candidate .htaccess hash: ${{ steps.hash.outputs.candidate_hash }}
+          Remote current .htaccess hash: ${{ steps.remotehash.outputs.remote_hash }}
+          Production path identity: ${{ steps.identity.outputs.identity_status }}
+
+          This dry-run mirrors deploy.yml's real rsync command exactly (same source path,
+          target path, exclude list, --checksum, --delete), adding only --dry-run and
+          --itemize-changes. --delete + --dry-run together report deletions without
+          performing them, so the counts below reflect what a real deploy would actually do.
+
+          Would upload/update: see CHANGED_FILE_LIST.txt
+          Would delete (files): ${{ steps.parse.outputs.deleted_files_count }}
+          Would delete (directories): ${{ steps.parse.outputs.deleted_dirs_count }}
+          Unexpected differences count: ${{ steps.parse.outputs.unexpected_count }}
+          Attribute-only differences (no content change, e.g. timestamp-only): ${{ steps.parse.outputs.attr_only_count }}
+          (Attribute-only entries are pre-existing drift between the repo and the live
+          server unrelated to this hotfix - not counted as created/updated/unexpected,
+          listed separately in CHANGED_FILE_LIST.txt for full transparency.)
+
+          No real file transfer, update, or deletion occurred (rsync --dry-run). No remote
+          file was mutated. No deploy workflow was called or dispatched from here.
+          EOF
+
+          {
+            echo "# Created:"
+            printf '%s\n' "${{ steps.parse.outputs.created }}"
+            echo ""
+            echo "# Updated:"
+            printf '%s\n' "${{ steps.parse.outputs.updated }}"
+            echo ""
+            echo "# Attribute-only (no content change - not counted as updated/unexpected):"
+            printf '%s\n' "${{ steps.parse.outputs.attr_only }}"
+            echo ""
+            echo "# Would be deleted (files):"
+            printf '%s\n' "${{ steps.parse.outputs.deleted_files }}"
+            echo ""
+            echo "# Would be deleted (directories):"
+            printf '%s\n' "${{ steps.parse.outputs.deleted_dirs }}"
+            echo ""
+            echo "# Unexpected (anything other than .htaccess):"
+            printf '%s\n' "${{ steps.parse.outputs.unexpected }}"
+          } > sec-web-contain-001-rsync-dry-run/CHANGED_FILE_LIST.txt
+
+          cat > sec-web-contain-001-rsync-dry-run/REMOTE_IDENTITY_CHECK.md << 'EOF'
+          # Remote Identity Check (read-only, no content read, path masked)
+
+          Target path shown only as <PRODUCTION_PATH> below (masked per instruction not to
+          expose absolute server paths in artifacts).
+          EOF
+          sed 's#'"$DH_PATH"'#<PRODUCTION_PATH>#g' /tmp/identity_check.txt >> sec-web-contain-001-rsync-dry-run/REMOTE_IDENTITY_CHECK.md || true
+
+          cat > sec-web-contain-001-rsync-dry-run/HASH_COMPARISON.md << EOF
+          # Hash Comparison
+
+          Candidate .htaccess hash:        ${{ steps.hash.outputs.candidate_hash }}
+          Remote current .htaccess hash:   ${{ steps.remotehash.outputs.remote_hash }}
+          Same/Different: $( [ "${{ steps.hash.outputs.candidate_hash }}" = "${{ steps.remotehash.outputs.remote_hash }}" ] && echo "SAME" || echo "DIFFERENT" )
+          EOF
+
+          rm -f /tmp/rsync_itemize.txt /tmp/identity_check.txt
+
+      - name: Upload sanitized artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sec-web-contain-001-rsync-dry-run
+          path: sec-web-contain-001-rsync-dry-run/
+          retention-days: 14
+
+      - name: Final gate result
+        run: |
+          set -euo pipefail
+          UNEXPECTED_COUNT="${{ steps.parse.outputs.unexpected_count }}"
+          DELETED_FILES_COUNT="${{ steps.parse.outputs.deleted_files_count }}"
+          DELETED_DIRS_COUNT="${{ steps.parse.outputs.deleted_dirs_count }}"
+          IDENTITY="${{ steps.identity.outputs.identity_status }}"
+          if [ "$IDENTITY" = "PASS" ] \
+             && [ "${UNEXPECTED_COUNT:-1}" = "0" ] \
+             && [ "${DELETED_FILES_COUNT:-1}" = "0" ] \
+             && [ "${DELETED_DIRS_COUNT:-1}" = "0" ]; then
+            echo "SEC-WEB-CONTAIN-001 DEPLOYMENT GATE: PASS"
+          else
+            echo "SEC-WEB-CONTAIN-001 DEPLOYMENT GATE: FAIL"
+            echo "(Any deletion at all fails this gate. Per instruction, this is never worked"
+            echo "around by removing --delete from the dry-run - a real deletion risk must be"
+            echo "investigated and resolved, not hidden by testing a weaker command.)"
+          fi
+          echo "Production deployment: NOT PERFORMED (this workflow cannot deploy)"

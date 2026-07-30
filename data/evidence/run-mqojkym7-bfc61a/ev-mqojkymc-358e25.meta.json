@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojkymc-358e25",
+  "objectiveRunId": "run-mqojkym7-bfc61a",
+  "sourceType": "reflection",
+  "sourceRef": "executive-reflection",
+  "summary": "Confidence: 15% (very_low) | Assumptions: 2 | Missing: 1",
+  "sha256": "1e4707ea9493ef35f58bfd7ba1afa57186df4aed03d3e7bde7bc3f17a307795a",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojkym7-bfc61a\\1e4707ea9493ef35f58bfd7ba1afa57186df4aed03d3e7bde7bc3f17a307795a.json",
+  "capturedAt": "2026-06-22T01:33:49.764Z",
+  "readOnly": true
+}

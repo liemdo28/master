@@ -1,0 +1,40 @@
+{
+    "timestamp": "2026-06-02T09:37:12+02:00",
+    "app_env": "production",
+    "db": {
+        "host": "unknown",
+        "port": 3306,
+        "name": "unknown",
+        "user": "unknown"
+    },
+    "strategy_assessment": "production SQL database",
+    "table_counts": [],
+    "latest_backup": null,
+    "checks": [
+        {
+            "label": "APP_ENV present",
+            "ok": true,
+            "detail": "APP_ENV=production"
+        },
+        {
+            "label": "DB config present",
+            "ok": false,
+            "detail": "host=unknown db=unknown user=unknown port=3306"
+        },
+        {
+            "label": "Dangerous command protection",
+            "ok": true,
+            "detail": "Blocked: dangerous SQL pattern in production environment. Matched: DELETE FROM tasks WHERE 1=1"
+        },
+        {
+            "label": "Latest backup exists",
+            "ok": false,
+            "detail": "No backup found in backups/"
+        }
+    ],
+    "passed": false,
+    "failures": [
+        "DB config present: host=unknown db=unknown user=unknown port=3306",
+        "Latest backup exists: No backup found in backups/"
+    ]
+}

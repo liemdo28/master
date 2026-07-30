@@ -1,0 +1,4 @@
+  File "d:\Project\Master\_sr_deep.py", line 47
+    non_stockton = [
+                   ^
+SyntaxError: '[' was never closed

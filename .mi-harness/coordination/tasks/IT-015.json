@@ -1,0 +1,17 @@
+{
+  "id": "IT-015",
+  "objectiveId": "OBJ-038",
+  "title": "Route QB connector repair",
+  "description": "Repair connector only after credential-safe approval.",
+  "division": "it",
+  "owner": "it-operations",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "credential_use",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:40.843Z",
+  "updatedAt": "2026-06-27T04:36:40.843Z",
+  "completedAt": null
+}

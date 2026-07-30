@@ -1,0 +1,30 @@
+{
+  "phase": "P5",
+  "target": "MARKETING_FACTORY_CERTIFIED",
+  "assets": {
+    "seo_article": {
+      "file": "seo-article-ramen.md",
+      "topic": "Best Ramen in Stockton CA 2026",
+      "keywords": 3
+    },
+    "flyer": {
+      "file": "flyer-bakudan-summer.html",
+      "size": "1080x1080",
+      "type": "promotional"
+    },
+    "banner": {
+      "file": "banner-sushi-happyhour.html",
+      "size": "1920x480",
+      "type": "banner"
+    },
+    "video": {
+      "script": "generated",
+      "duration": "30s",
+      "platform": "instagram-reels"
+    },
+    "social_posts": 3
+  },
+  "passed": 7,
+  "failed": 0,
+  "generated_at": "2026-06-14T14:13:07.993Z"
+}

@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-06-18T06:18:38.357Z",
+  "agents": {
+    "seo-local-maps-agent": {
+      "port": 4001,
+      "healthy": false,
+      "stderr": ""
+    }
+  },
+  "checks": {},
+  "status": "FAIL",
+  "error": "seo-local-maps-agent failed to become healthy. stderr: ",
+  "finished_at": "2026-06-18T06:18:48.427Z"
+}

@@ -1,0 +1,132 @@
+[
+  {
+    "input": "Mi oi, tao bai SEO cho Raw AUD-SINGLE3",
+    "ok": true,
+    "ms": 822,
+    "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Why Fresh Sashimi Matters: A Guide to Quality Japanese Fish*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nPreview:\n- Article draft: ready\n- Featured image: ready\n- OG image: ready\n- Social preview: ready\n- Image evidence: .local-agent-global\\seo-images\\featured-SEO-CONTENT-20260615-1034.svg\n\nApproval ID: *APPR-mqfdeu2r-410*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: SEO-CONTENT-20260615-1034",
+    "result_ok": true,
+    "metadata": {
+      "intent": "seo_content",
+      "message_class": "action_request",
+      "source": "execution-engine",
+      "confidence": 85,
+      "requires_followup": true,
+      "execution_action": "workflow_created",
+      "workflow_id": "SEO-CONTENT-20260615-1034",
+      "evidence_path": ".local-agent-global/workflows/SEO-CONTENT-20260615-1034.json",
+      "draft_preview_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-1034.md"
+    },
+    "approval_id": "APPR-mqfdeu2r-410"
+  },
+  {
+    "input": "Kiem tra Dashboard, coi QB, tao SEO Raw Sushi roi gui Maria AUD-MULTI3",
+    "ok": true,
+    "ms": 2861,
+    "reply": "Task 1 executed: DASHBOARD_AUDIT (Dashboard) — approval required before external write.\nTask 2 executed: FINANCE_REPORT.\nTask 3 executed: SEO_CONTENT (Raw Sushi) — approval required before external write.\nTask 4 executed: EMAIL_DRAFT (Maria) — approval required before external write.\nFinal summary: Executed 4/4 child workflows. 0 failed, 3 waiting for approval, 0 dropped.\nNo silent drop. Total tasks: 4.",
+    "result_ok": true,
+    "metadata": {
+      "intent": "multi_intent",
+      "source": "multi-intent-executor",
+      "confidence": 0.95,
+      "requires_followup": true,
+      "parent_tracking_id": "WF-20260615-015",
+      "parent_workflow_id": "DASHBOARD-AUDIT-20260615-2073",
+      "expected_children": 4,
+      "executed_children": 4,
+      "dropped_children": 0,
+      "failed_children": 0,
+      "approval_pending_children": 3,
+      "trace_path": "E:\\Project\\Master\\mi-core\\.local-agent-global\\workflows\\multi-intent\\WF-20260615-015.json",
+      "children": [
+        {
+          "tracking_id": "WF-20260615-015-A",
+          "workflow_id": "DASHBOARD-AUDIT-20260615-2074",
+          "workflow_type": "DASHBOARD_AUDIT",
+          "domain": "dashboard_monitoring",
+          "status": "approval_pending",
+          "evidence": [
+            ".local-agent-global/workflows/DASHBOARD-AUDIT-20260615-2074.json",
+            ".local-agent-global/execution-queue/JOB-mqfdevvb-167.json"
+          ],
+          "error": null
+        },
+        {
+          "tracking_id": "WF-20260615-015-B",
+          "workflow_id": "FINANCE-REPORT-20260615-984",
+          "workflow_type": "FINANCE_REPORT",
+          "domain": "finance_qb",
+          "status": "completed",
+          "evidence": [
+            ".local-agent-global/workflows/FINANCE-REPORT-20260615-984.json",
+            ".local-agent-global/execution-queue/JOB-mqfdew0b-744.json"
+          ],
+          "error": null
+        },
+        {
+          "tracking_id": "WF-20260615-015-C",
+          "workflow_id": "SEO-CONTENT-20260615-1035",
+          "workflow_type": "SEO_CONTENT",
+          "domain": "seo_content",
+          "status": "approval_pending",
+          "evidence": [
+            ".local-agent-global/workflows/SEO-CONTENT-20260615-1035.json",
+            ".local-agent-global/execution-queue/JOB-mqfdew5i-508.json",
+            "E:\\Project\\Master\\mi-core\\.local-agent-global\\seo-drafts\\seo-preview-SEO-CONTENT-20260615-1035.md"
+          ],
+          "error": null
+        },
+        {
+          "tracking_id": "WF-20260615-015-D",
+          "workflow_id": "EMAIL-DRAFT-20260615-657",
+          "workflow_type": "EMAIL_DRAFT",
+          "domain": "email_comms",
+          "status": "approval_pending",
+          "evidence": [
+            ".local-agent-global/workflows/EMAIL-DRAFT-20260615-657.json",
+            ".local-agent-global/execution-queue/JOB-mqfdewap-471.json"
+          ],
+          "error": null
+        }
+      ]
+    },
+    "approval_id": null
+  },
+  {
+    "input": "Doanh thu Raw Sushi bao nhieu AUD-FIN3",
+    "ok": true,
+    "ms": 636,
+    "reply": "Em da tao ban nhap de anh duyet.\n\nStatus: *Draft ready*\nTitle: *Action for Raw Sushi*\nFor: *Raw Sushi*\nApproval: *Waiting for CEO*\n\nApproval ID: *APPR-mqfdewsy-843*\n\nAnh reply: *APPROVE* / *EDIT* / *CANCEL*\n\nReference: FINANCE-REPORT-20260615-985",
+    "result_ok": true,
+    "metadata": {
+      "intent": "finance_qb",
+      "message_class": "action_request",
+      "source": "execution-engine",
+      "confidence": 85,
+      "requires_followup": true,
+      "execution_action": "workflow_created",
+      "workflow_id": "FINANCE-REPORT-20260615-985",
+      "evidence_path": ".local-agent-global/workflows/FINANCE-REPORT-20260615-985.json",
+      "draft_preview_path": null
+    },
+    "approval_id": "APPR-mqfdewsy-843"
+  },
+  {
+    "input": "deploy production AUD-DANGER3",
+    "ok": true,
+    "ms": 111,
+    "reply": "Hanh dong nay *NGUY HIEM* va bi BLOCK:\nType: dangerous_action\nMi khong tu thuc hien. Can CEO xac nhan truc tiep.",
+    "result_ok": true,
+    "metadata": {
+      "intent": "deployment",
+      "message_class": "dangerous_action",
+      "source": "execution-engine",
+      "confidence": 95,
+      "requires_followup": true,
+      "execution_action": "dangerous_blocked",
+      "workflow_id": null,
+      "evidence_path": null,
+      "draft_preview_path": null
+    },
+    "approval_id": null
+  }
+]

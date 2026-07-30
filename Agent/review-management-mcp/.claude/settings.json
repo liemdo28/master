@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//e/Project/Master/review-management-mcp/**)",
+      "Bash(git -C \"E:\\\\Project\\\\Master\\\\review-management-mcp\" log --oneline -5)",
+      "Bash(git -C \"E:\\\\Project\\\\Master\\\\review-management-mcp\" remote -v)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(pip install:*)",
+      "Read(//c/Users/liemdo/Downloads/review-management-mcp-20260331T094913Z-001/**)",
+      "Read(//c/Users/liemdo/Downloads/**)",
+      "Bash(node scripts/test-connection.mjs)",
+      "Bash(gh auth *)",
+      "Read(//e/Project/Master/packing-list/**)"
+    ],
+    "additionalDirectories": [
+      "E:\\Project\\Master\\review-management-mcp",
+      "C:\\Users\\liemdo\\Downloads\\review-management-mcp-20260331T094913Z-1-001\\review-management-mcp"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-25-hr-labor-os",
+  "version": "1.0.0",
+  "description": "Phase 25 — HR / Staffing / Labor OS. Employee registry, labor cost, schedule risk, attendance, training compliance, performance scorecard.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

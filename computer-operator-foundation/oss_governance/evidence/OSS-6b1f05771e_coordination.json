@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-6b1f05771e",
+  "task_name": "Advance Qwen Coder past AUDIT",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782451898.0698137,
+  "created_iso": "2026-06-26T05:31:38.069814+00:00",
+  "updated_at": 1782451898.0698159,
+  "owner": "engineering_lead",
+  "priority": "MEDIUM",
+  "description": "Qwen Coder has been in AUDIT \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-45a46c141b",
+      "stage": "AUDIT",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782451898.0698166
+    }
+  ]
+}

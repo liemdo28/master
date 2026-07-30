@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqw59ktw-6izifdx",
+  "objectiveId": "OBJ-111",
+  "taskId": "CRE-029",
+  "requestedBy": "system",
+  "approvalType": "marketing_publish",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Prepare creative assets for revenue campaign",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T09:15:13.460Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

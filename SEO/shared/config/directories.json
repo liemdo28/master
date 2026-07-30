@@ -1,0 +1,23 @@
+{
+  "directories": [
+    { "id": "gbp", "name": "Google Business Profile", "tier": 1 },
+    { "id": "apple", "name": "Apple Business Connect", "tier": 1 },
+    { "id": "bing", "name": "Bing Places", "tier": 1 },
+    { "id": "yelp", "name": "Yelp", "tier": 1 },
+    { "id": "tripadvisor", "name": "Tripadvisor", "tier": 1 },
+    { "id": "facebook", "name": "Facebook", "tier": 1 },
+    { "id": "instagram", "name": "Instagram", "tier": 1 },
+    { "id": "restaurantji", "name": "Restaurantji", "tier": 2 },
+    { "id": "restaurant-guru", "name": "Restaurant Guru", "tier": 2 },
+    { "id": "the-rim-directory", "name": "The Rim Directory", "tier": 2 },
+    { "id": "doordash", "name": "DoorDash", "tier": 1 },
+    { "id": "ubereats", "name": "Uber Eats", "tier": 1 },
+    { "id": "grubhub", "name": "Grubhub", "tier": 1 },
+    { "id": "toast", "name": "Toast", "tier": 1 },
+    { "id": "waze", "name": "Waze", "tier": 2 },
+    { "id": "mapbox", "name": "Mapbox", "tier": 2 },
+    { "id": "tomtom", "name": "TomTom", "tier": 2 },
+    { "id": "here", "name": "HERE", "tier": 2 },
+    { "id": "local-sa", "name": "San Antonio Local Directories", "tier": 3 }
+  ]
+}

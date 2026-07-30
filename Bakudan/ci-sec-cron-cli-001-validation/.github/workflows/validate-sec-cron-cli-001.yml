@@ -1,0 +1,735 @@
+name: SEC-CRON-CLI-001 - Private CLI Cron Validation (Prepare/Validate Only)
+
+# CHANGE-ID: SEC-CRON-CLI-001-VALIDATION-WORKFLOW
+# STATUS: VALIDATION ONLY - activation remains NOT APPROVED
+#
+# Uploads the private CLI cron package (bootstrap.php, cron.php, README.md)
+# to a non-public directory outside document root, validates PHP syntax,
+# verifies environment/DB identity, runs exactly one --dry-run, and proves
+# (via before/after read-only DB snapshots) that the dry-run made no writes.
+#
+# This workflow contains NO:
+#   - deploy.yml invocation
+#   - repository-wide rsync (upload is scp of exactly 3 named files)
+#   - --delete anywhere
+#   - migration execution
+#   - cron activation / crontab installation
+#   - --execute-approved passed to cron.php (dry-run only, always)
+#   - SEC_CRON_CLI_001_APPROVED=1 set anywhere
+#   - queue drain / notification send / webhook call
+#   - database writes (every SQL statement in this file is a SELECT)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "Must be exactly: SEC-CRON-CLI-001-VALIDATE"
+        required: true
+        type: string
+
+concurrency:
+  group: sec-cron-cli-001-validation
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      EXPECTED_COMMIT_SHA: "bb59a43375bf81a007ef8264ba59152399451a65"
+      EXPECTED_DB_NAME: "taskflow_db"
+    steps:
+      - name: Validate exact confirmation input (fail closed)
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirmation }}" != "SEC-CRON-CLI-001-VALIDATE" ]; then
+            echo "::error::confirmation must be exactly 'SEC-CRON-CLI-001-VALIDATE'"
+            exit 1
+          fi
+          echo "Input validation: PASS"
+
+      - name: Checkout this workflow's own source (self-assertion target)
+        uses: actions/checkout@v4
+        with:
+          path: _self
+
+      - name: Static safety assertions on this workflow file
+        run: |
+          set -euo pipefail
+          F="_self/.github/workflows/validate-sec-cron-cli-001.yml"
+
+          # Exclude full-line comments and this very step's own run block
+          # (which must legitimately name these forbidden terms as
+          # documentation/pattern text, not as usage) before scanning.
+          SCAN=$(awk '
+            /- name: Static safety assertions/ { skip=1 }
+            skip && /^      - name:/ && !/Static safety assertions/ { skip=0 }
+            !skip { print }
+          ' "$F" | grep -v '^\s*#' || true)
+
+          if echo "$SCAN" | grep -qE '(uses:\s*\S*deploy\.yml|actions/workflows/deploy\.yml/dispatches|gh workflow run[^\n]*deploy)'; then
+            echo "::error::References an actual deploy.yml invocation - forbidden"; exit 1
+          fi
+          if echo "$SCAN" | grep -q -- '--delete'; then
+            echo "::error::--delete found - forbidden"; exit 1
+          fi
+          if echo "$SCAN" | grep -qE '^\s*rsync .*(\s\./\s|\s\./$|\s\.\s)'; then
+            echo "::error::A directory-source (repository-wide) rsync was found - forbidden"; exit 1
+          fi
+          # Forbid --execute-approved ever appearing as an actual CLI argument
+          # (e.g. "cron.php --execute-approved"), not just mentioned in text
+          # explaining it must never be used.
+          if echo "$SCAN" | grep -qE 'cron\.php[^|]*--execute-approved'; then
+            echo "::error::--execute-approved passed to cron.php - forbidden in this workflow"; exit 1
+          fi
+          # Forbid ever setting the activation flag to 1 (only "unset or 0" allowed)
+          if echo "$SCAN" | grep -qE 'SEC_CRON_CLI_001_APPROVED\s*=\s*1\b'; then
+            echo "::error::SEC_CRON_CLI_001_APPROVED=1 found - forbidden in this workflow"; exit 1
+          fi
+          if echo "$SCAN" | grep -qE '\bcrontab\b'; then
+            echo "::error::crontab command reference found - forbidden"; exit 1
+          fi
+          # Forbid any non-SELECT SQL keyword appearing in an actual query
+          # string (INSERT/UPDATE/DELETE/DROP/TRUNCATE/ALTER/GRANT).
+          if echo "$SCAN" | grep -qiE "(INSERT[[:space:]]+INTO|UPDATE[[:space:]]+\w+[[:space:]]+SET|DELETE[[:space:]]+FROM|DROP[[:space:]]+TABLE|TRUNCATE[[:space:]]+TABLE|\bGRANT\b)"; then
+            echo "::error::A non-read-only SQL keyword was found in an actual query - forbidden"; exit 1
+          fi
+          echo "Static safety assertions: PASS"
+
+      - name: Checkout exact commit and verify required files
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.EXPECTED_COMMIT_SHA }}
+          fetch-depth: 0
+
+      - name: Verify commit SHA and required file set
+        run: |
+          set -euo pipefail
+          HEAD_SHA=$(git rev-parse HEAD)
+          if [ "$HEAD_SHA" != "$EXPECTED_COMMIT_SHA" ]; then
+            echo "::error::Checked out SHA does not match expected commit"; exit 1
+          fi
+          for f in ops/sec-cron-cli-001/bootstrap.php ops/sec-cron-cli-001/cron.php ops/sec-cron-cli-001/README.md; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Required file missing: $f"; exit 1
+            fi
+          done
+          echo "Commit and file-set verification: PASS"
+          echo "Only these 3 files will be uploaded - nothing else in this checkout is used."
+
+      - name: Verify SSH secret names exist (values never printed)
+        id: secretcheck
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+          DH_PORT: ${{ secrets.DH_PORT }}
+        run: |
+          set -euo pipefail
+          MISSING=()
+          [ -z "${DH_HOST:-}" ] && MISSING+=("host secret")
+          [ -z "${DH_USER:-}" ] && MISSING+=("user secret")
+          [ -z "${DH_SSH_KEY:-}" ] && MISSING+=("SSH key secret")
+          if [ "${#MISSING[@]}" -gt 0 ]; then
+            echo "::error::Missing required secret(s): ${MISSING[*]}"
+            exit 1
+          fi
+          PORT="${DH_PORT:-22}"
+          echo "port=${PORT}" >> "$GITHUB_OUTPUT"
+          echo "Secret presence check: PASS (host/user/key secret names all resolve to a non-empty value; port=${PORT} - values never printed)"
+
+      - name: Network preflight - DNS and TCP only, before any SSH auth attempt
+        id: preflight
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+        run: |
+          set -uo pipefail
+          PORT="${{ steps.secretcheck.outputs.port }}"
+
+          if timeout 5 getent hosts "$DH_HOST" > /dev/null 2>&1; then
+            echo "DNS preflight: PASS"
+            echo "dns_status=PASS" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::DNS resolution failed for the configured host"
+            echo "dns_status=FAIL" >> "$GITHUB_OUTPUT"
+            echo "tcp_status=NOT_ATTEMPTED" >> "$GITHUB_OUTPUT"
+            echo "failure_class=DNS_FAILURE" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          TCP_ERR=$(mktemp)
+          if timeout 5 bash -c "cat < /dev/null > /dev/tcp/${DH_HOST}/${PORT}" 2>"$TCP_ERR"; then
+            echo "TCP SSH-port preflight: PASS"
+            echo "dns_status=PASS" >> "$GITHUB_OUTPUT"
+            echo "tcp_status=PASS" >> "$GITHUB_OUTPUT"
+            echo "failure_class=NONE" >> "$GITHUB_OUTPUT"
+            rm -f "$TCP_ERR"
+          else
+            ERR_TEXT=$(cat "$TCP_ERR" 2>/dev/null || true)
+            rm -f "$TCP_ERR"
+            echo "TCP SSH-port preflight: FAIL"
+            echo "dns_status=PASS" >> "$GITHUB_OUTPUT"
+            echo "tcp_status=FAIL" >> "$GITHUB_OUTPUT"
+            if echo "$ERR_TEXT" | grep -qi "refused"; then
+              echo "::error::TCP connection refused on the SSH port"
+              echo "failure_class=CONNECTION_REFUSED" >> "$GITHUB_OUTPUT"
+            else
+              echo "::error::TCP connection to the SSH port timed out"
+              echo "failure_class=TCP_TIMEOUT" >> "$GITHUB_OUTPUT"
+            fi
+            exit 1
+          fi
+
+      - name: Install temporary SSH key (restrictive permissions)
+        env:
+          DH_SSH_KEY: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DH_SSH_KEY" > ~/.ssh/cron_val_key
+          chmod 600 ~/.ssh/cron_val_key
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+          chmod 600 ~/.ssh/known_hosts
+          echo "SSH key installed at restrictive permissions (600). Not printed."
+
+      - name: Production path identity and private-target guard (read-only)
+        id: identity
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          set -uo pipefail
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+
+          AUTH_ERR=$(mktemp)
+          REMOTE_HOME=$($SSH "${DH_USER}@${DH_HOST}" 'echo $HOME' 2>"$AUTH_ERR")
+          AUTH_RC=$?
+          if [ "$AUTH_RC" != "0" ]; then
+            ERR_TEXT=$(cat "$AUTH_ERR" 2>/dev/null || true)
+            rm -f "$AUTH_ERR"
+            echo "ssh_auth_status=FAIL" >> "$GITHUB_OUTPUT"
+            if [ "$AUTH_RC" = "255" ]; then
+              if echo "$ERR_TEXT" | grep -qi "host key verification failed"; then
+                echo "::error::SSH host key verification failed"
+                echo "failure_class=HOST_KEY_FAILURE" >> "$GITHUB_OUTPUT"
+              elif echo "$ERR_TEXT" | grep -qiE "permission denied|publickey"; then
+                echo "::error::SSH authentication failed (permission denied)"
+                echo "failure_class=AUTH_FAILURE" >> "$GITHUB_OUTPUT"
+              elif echo "$ERR_TEXT" | grep -qi "timed out"; then
+                echo "::error::SSH connection timed out during auth attempt"
+                echo "failure_class=TCP_TIMEOUT" >> "$GITHUB_OUTPUT"
+              else
+                echo "::error::SSH connection failed for an unclassified reason"
+                echo "failure_class=UNKNOWN" >> "$GITHUB_OUTPUT"
+              fi
+            else
+              echo "::error::SSH connected and authenticated, but the remote command failed"
+              echo "failure_class=REMOTE_COMMAND_FAILURE" >> "$GITHUB_OUTPUT"
+            fi
+            echo "identity_status=FAIL" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          rm -f "$AUTH_ERR"
+          echo "ssh_auth_status=PASS" >> "$GITHUB_OUTPUT"
+          echo "failure_class=NONE" >> "$GITHUB_OUTPUT"
+          set -e
+          PRIVATE_ROOT="${REMOTE_HOME}/taskflow-private"
+
+          FAIL=0
+          RESULT_LINES=()
+
+          if $SSH "${DH_USER}@${DH_HOST}" "test -d '${DH_PATH}'"; then
+            RESULT_LINES+=("Public document root exists: PASS")
+          else
+            RESULT_LINES+=("Public document root exists: FAIL"); FAIL=1
+          fi
+
+          case "$PRIVATE_ROOT" in
+            "$DH_PATH"|"${DH_PATH}"/*)
+              RESULT_LINES+=("Private target is outside public document root: FAIL"); FAIL=1 ;;
+            *)
+              RESULT_LINES+=("Private target is outside public document root: PASS") ;;
+          esac
+
+          [ "$PRIVATE_ROOT" != "/" ] && RESULT_LINES+=("Private target is not /: PASS") || { RESULT_LINES+=("Private target is not /: FAIL"); FAIL=1; }
+          [ "$PRIVATE_ROOT" != "$REMOTE_HOME" ] && RESULT_LINES+=("Private target is not home root: PASS") || { RESULT_LINES+=("Private target is not home root: FAIL"); FAIL=1; }
+
+          case "$PRIVATE_ROOT" in
+            *taskflow-private*) RESULT_LINES+=("Private target path contains taskflow-private: PASS") ;;
+            *) RESULT_LINES+=("Private target path contains taskflow-private: FAIL"); FAIL=1 ;;
+          esac
+
+          case "$PRIVATE_ROOT" in
+            *..*) RESULT_LINES+=("No path traversal segment: FAIL"); FAIL=1 ;;
+            *) RESULT_LINES+=("No path traversal segment: PASS") ;;
+          esac
+
+          # Symlink check: if the private root (or its parent) is/contains a
+          # symlink, verify it does not resolve back into the public docroot.
+          REAL_PRIVATE=$($SSH "${DH_USER}@${DH_HOST}" "mkdir -p '${PRIVATE_ROOT}' && cd '${PRIVATE_ROOT}' && pwd -P")
+          REAL_PUBLIC=$($SSH "${DH_USER}@${DH_HOST}" "cd '${DH_PATH}' && pwd -P")
+          case "$REAL_PRIVATE" in
+            "$REAL_PUBLIC"|"${REAL_PUBLIC}"/*)
+              RESULT_LINES+=("Symlink resolution does not point into public docroot: FAIL"); FAIL=1 ;;
+            *)
+              RESULT_LINES+=("Symlink resolution does not point into public docroot: PASS") ;;
+          esac
+
+          printf '%s\n' "${RESULT_LINES[@]}" | tee /tmp/identity_check.txt
+
+          echo "private_root=${PRIVATE_ROOT}" >> "$GITHUB_OUTPUT"
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::Production path identity check FAILED - aborting"
+            echo "identity_status=FAIL" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "identity_status=PASS" >> "$GITHUB_OUTPUT"
+
+      - name: Create private directory layout (restrictive permissions, no web access)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          $SSH "${DH_USER}@${DH_HOST}" "
+            mkdir -p '${PRIVATE_ROOT}/cron' '${PRIVATE_ROOT}/logs' '${PRIVATE_ROOT}/locks' '${PRIVATE_ROOT}/config' &&
+            chmod 700 '${PRIVATE_ROOT}' '${PRIVATE_ROOT}/cron' '${PRIVATE_ROOT}/logs' '${PRIVATE_ROOT}/locks' '${PRIVATE_ROOT}/config'
+          "
+          echo "Private directory layout created with 700 permissions, no web-servable location."
+
+      - name: Upload exactly bootstrap.php, cron.php, README.md (scp, no directory rsync)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SCP="scp -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SCP ops/sec-cron-cli-001/bootstrap.php "${DH_USER}@${DH_HOST}:${PRIVATE_ROOT}/cron/bootstrap.php"
+          $SCP ops/sec-cron-cli-001/cron.php       "${DH_USER}@${DH_HOST}:${PRIVATE_ROOT}/cron/cron.php"
+          $SCP ops/sec-cron-cli-001/README.md      "${DH_USER}@${DH_HOST}:${PRIVATE_ROOT}/README.md"
+
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SSH "${DH_USER}@${DH_HOST}" "chmod 700 '${PRIVATE_ROOT}/cron/bootstrap.php' '${PRIVATE_ROOT}/cron/cron.php' && chmod 600 '${PRIVATE_ROOT}/README.md'"
+          echo "Uploaded exactly 3 files. No other file from this checkout was transferred."
+
+      - name: Private environment file (secrets required, never printed)
+        id: privenv
+        env:
+          PROD_DB_HOST: ${{ secrets.PROD_DB_HOST }}
+          PROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
+          PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
+          PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PROD_DB_HOST:-}" ] || [ -z "${PROD_DB_NAME:-}" ] || [ -z "${PROD_DB_USER:-}" ] || [ -z "${PROD_DB_PASSWORD:-}" ]; then
+            echo "::error::One or more required secrets (PROD_DB_HOST/PROD_DB_NAME/PROD_DB_USER/PROD_DB_PASSWORD) are missing"
+            echo "STOP: VALIDATION FAIL"
+            exit 1
+          fi
+          if [ "$PROD_DB_NAME" != "$EXPECTED_DB_NAME" ]; then
+            echo "::error::PROD_DB_NAME does not match expected production database name"
+            exit 1
+          fi
+
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          umask 077
+          TMPENV=$(mktemp)
+          {
+            echo "APP_ENV=production"
+            echo "TASKFLOW_PRIVATE_ROOT=${PRIVATE_ROOT}"
+            echo "TASKFLOW_APP_ROOT=\${HOME}/dashboard.bakudanramen.com"
+            echo "TASKFLOW_EXPECTED_DB_NAME=${EXPECTED_DB_NAME}"
+            echo "DB_HOST=${PROD_DB_HOST}"
+            echo "DB_PORT=3306"
+            echo "DB_NAME=${PROD_DB_NAME}"
+            echo "DB_USER=${PROD_DB_USER}"
+            echo "DB_PASS=${PROD_DB_PASSWORD}"
+            echo "DB_CHARSET=utf8mb4"
+            # Deliberately absent/0: real execution must stay blocked.
+            echo "SEC_CRON_CLI_001_APPROVED=0"
+          } > "$TMPENV"
+          chmod 600 "$TMPENV"
+
+          SCP="scp -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SCP "$TMPENV" "${DH_USER}@${DH_HOST}:${PRIVATE_ROOT}/config/production.env"
+          shred -u "$TMPENV" 2>/dev/null || rm -f "$TMPENV"
+
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SSH "${DH_USER}@${DH_HOST}" "chmod 600 '${PRIVATE_ROOT}/config/production.env'"
+          echo "Private env file written remotely with 600 permissions. Contents never printed."
+          echo "SEC_CRON_CLI_001_APPROVED is explicitly 0 - real execution stays blocked."
+          echo "env_ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: PHP syntax validation (php -l)
+        id: syntax
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          BOOT_LINT=$($SSH "${DH_USER}@${DH_HOST}" "/usr/bin/php -l '${PRIVATE_ROOT}/cron/bootstrap.php'" 2>&1) || true
+          CRON_LINT=$($SSH "${DH_USER}@${DH_HOST}" "/usr/bin/php -l '${PRIVATE_ROOT}/cron/cron.php'" 2>&1) || true
+          echo "$BOOT_LINT"
+          echo "$CRON_LINT"
+          if ! echo "$BOOT_LINT" | grep -q "No syntax errors detected"; then
+            echo "::error::bootstrap.php syntax check FAILED"; echo "syntax_status=FAIL" >> "$GITHUB_OUTPUT"; exit 1
+          fi
+          if ! echo "$CRON_LINT" | grep -q "No syntax errors detected"; then
+            echo "::error::cron.php syntax check FAILED"; echo "syntax_status=FAIL" >> "$GITHUB_OUTPUT"; exit 1
+          fi
+          echo "syntax_status=PASS" >> "$GITHUB_OUTPUT"
+          echo "PHP syntax validation: PASS for both files"
+
+      - name: DB snapshot BEFORE dry-run (read-only, reuses bootstrap's verified connection)
+        id: snapshot_before
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          $SSH "${DH_USER}@${DH_HOST}" "cat > '${PRIVATE_ROOT}/cron/_snapshot.php'" << 'PHP'
+          <?php
+          declare(strict_types=1);
+          require_once __DIR__ . '/bootstrap.php';
+          $home = getenv('HOME') ?: dirname(__DIR__, 2);
+          $appRoot = getenv('TASKFLOW_APP_ROOT') ?: $home . '/dashboard.bakudanramen.com';
+          $privateRoot = getenv('TASKFLOW_PRIVATE_ROOT') ?: $home . '/taskflow-private';
+          $envFile = getenv('TASKFLOW_PRIVATE_ENV') ?: $privateRoot . '/config/production.env';
+          $identity = sec_cron_bootstrap_app($appRoot, $envFile);
+          $pdo = Database::getInstance()->getConnection();
+          $dbName = $identity['database'];
+
+          function sec_cron_table_exists(PDO $pdo, string $dbName, string $table): bool {
+              $stmt = $pdo->prepare('SELECT 1 FROM information_schema.tables WHERE table_schema = ? AND table_name = ? LIMIT 1');
+              $stmt->execute([$dbName, $table]);
+              return (bool)$stmt->fetchColumn();
+          }
+
+          function sec_cron_column_exists(PDO $pdo, string $dbName, string $table, string $column): bool {
+              $stmt = $pdo->prepare('SELECT 1 FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name = ? LIMIT 1');
+              $stmt->execute([$dbName, $table, $column]);
+              return (bool)$stmt->fetchColumn();
+          }
+
+          function sec_cron_pick_timestamp_column(PDO $pdo, string $dbName, string $table): ?string {
+              foreach (['created_at', 'applied_at', 'updated_at', 'logged_at'] as $candidate) {
+                  if (sec_cron_column_exists($pdo, $dbName, $table, $candidate)) {
+                      return $candidate;
+                  }
+              }
+              return null;
+          }
+
+          // Auto-detects the real primary key column name (e.g. penalty_id,
+          // notification_id) rather than assuming "id". Takes the first
+          // column of a composite key by ordinal position, if any.
+          function sec_cron_detect_primary_key(PDO $pdo, string $dbName, string $table): ?string {
+              $stmt = $pdo->prepare(
+                  "SELECT k.COLUMN_NAME
+                   FROM information_schema.table_constraints t
+                   JOIN information_schema.key_column_usage k
+                     ON t.CONSTRAINT_NAME = k.CONSTRAINT_NAME
+                    AND t.TABLE_SCHEMA = k.TABLE_SCHEMA
+                    AND t.TABLE_NAME = k.TABLE_NAME
+                   WHERE t.CONSTRAINT_TYPE = 'PRIMARY KEY'
+                     AND t.TABLE_SCHEMA = ?
+                     AND t.TABLE_NAME = ?
+                   ORDER BY k.ORDINAL_POSITION
+                   LIMIT 1"
+              );
+              $stmt->execute([$dbName, $table]);
+              $col = $stmt->fetchColumn();
+              return $col !== false ? (string)$col : null;
+          }
+
+          function sec_cron_snapshot_table(PDO $pdo, string $dbName, string $table, ?string $groupByCol = null): array {
+              if (!sec_cron_table_exists($pdo, $dbName, $table)) {
+                  return ['table_exists' => false, 'status' => 'TABLE_MISSING'];
+              }
+              try {
+                  $out = ['table_exists' => true];
+
+                  $pk = sec_cron_detect_primary_key($pdo, $dbName, $table);
+                  $out['primary_key_used'] = $pk ?? 'none';
+                  $out['max_primary_key'] = $pk !== null
+                      ? (int)$pdo->query("SELECT COALESCE(MAX(`$pk`),0) FROM `$table`")->fetchColumn()
+                      : null;
+
+                  $tsCol = sec_cron_pick_timestamp_column($pdo, $dbName, $table);
+                  $out['timestamp_source'] = $tsCol ?? 'none';
+                  $out['max_timestamp'] = $tsCol !== null
+                      ? (string)$pdo->query("SELECT MAX(`$tsCol`) FROM `$table`")->fetchColumn()
+                      : null;
+
+                  $out['count'] = (int)$pdo->query("SELECT COUNT(*) FROM `$table`")->fetchColumn();
+                  $out['status'] = $tsCol !== null ? 'OK' : 'COLUMN_MISSING_HANDLED';
+
+                  if ($groupByCol !== null && sec_cron_column_exists($pdo, $dbName, $table, $groupByCol)) {
+                      $rows = $pdo->query("SELECT `$groupByCol` AS g, COUNT(*) AS c FROM `$table` GROUP BY `$groupByCol` ORDER BY `$groupByCol`")->fetchAll();
+                      $out['group_counts'] = array_map(fn($r) => $r['g'] . ':' . $r['c'], $rows);
+                  }
+                  return $out;
+              } catch (Throwable $e) {
+                  return ['table_exists' => true, 'status' => 'QUERY_ERROR'];
+              }
+          }
+
+          $snapshot = [
+              'tasks' => sec_cron_snapshot_table($pdo, $dbName, 'tasks'),
+              'email_queue' => sec_cron_snapshot_table($pdo, $dbName, 'email_queue', 'status'),
+              'notifications' => sec_cron_snapshot_table($pdo, $dbName, 'notifications'),
+              'penalty_log' => sec_cron_snapshot_table($pdo, $dbName, 'penalty_log'),
+          ];
+
+          if ($snapshot['tasks']['table_exists'] && sec_cron_column_exists($pdo, $dbName, 'tasks', 'recurring_root_id')) {
+              try {
+                  $snapshot['tasks']['recurring_count'] = (int)$pdo->query('SELECT COUNT(*) FROM tasks WHERE recurring_root_id IS NOT NULL')->fetchColumn();
+              } catch (Throwable $e) {
+                  $snapshot['tasks']['recurring_count'] = null;
+                  $snapshot['tasks']['status'] = 'QUERY_ERROR';
+              }
+          } else {
+              $snapshot['tasks']['recurring_count'] = null;
+          }
+
+          $hasQueryError = false;
+          foreach ($snapshot as $table => $data) {
+              if (($data['status'] ?? '') === 'QUERY_ERROR') {
+                  $hasQueryError = true;
+              }
+          }
+
+          echo json_encode($snapshot, JSON_UNESCAPED_SLASHES) . PHP_EOL;
+          if ($hasQueryError) {
+              fwrite(STDERR, "SEC-CRON-CLI-001 snapshot: at least one table reported QUERY_ERROR - failing closed\n");
+              exit(1);
+          }
+          PHP
+          $SSH "${DH_USER}@${DH_HOST}" "chmod 600 '${PRIVATE_ROOT}/cron/_snapshot.php'"
+          SNAPSHOT=$($SSH "${DH_USER}@${DH_HOST}" "php '${PRIVATE_ROOT}/cron/_snapshot.php'")
+          echo "$SNAPSHOT"
+          echo "snapshot<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$SNAPSHOT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Dry-run execution (exactly once, --dry-run only)
+        id: dryrun
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          OUTPUT=$($SSH "${DH_USER}@${DH_HOST}" "cd '${PRIVATE_ROOT}/cron' && /usr/bin/php cron.php --dry-run")
+          echo "$OUTPUT"
+          STATUS=$(echo "$OUTPUT" | grep -o '"status": *"[A-Z]*"' | head -1 || true)
+          EXTSENDS=$(echo "$OUTPUT" | grep -o '"external_sends": *"[a-z]*"' | head -1 || true)
+          DBWRITES=$(echo "$OUTPUT" | grep -o '"database_writes": *"[a-z]*"' | head -1 || true)
+          if ! echo "$STATUS" | grep -q "PASS"; then
+            echo "::error::Dry-run did not report PASS"; exit 1
+          fi
+          if ! echo "$EXTSENDS" | grep -q "none"; then
+            echo "::error::Dry-run did not self-report external_sends=none"; exit 1
+          fi
+          if ! echo "$DBWRITES" | grep -q "none"; then
+            echo "::error::Dry-run did not self-report database_writes=none"; exit 1
+          fi
+          LOG_CHECK=$($SSH "${DH_USER}@${DH_HOST}" "tail -5 '${PRIVATE_ROOT}/logs/cron.jsonl' 2>/dev/null | grep -c dry_run_pass" || echo 0)
+          echo "dry_run_log_matches=${LOG_CHECK}" >> "$GITHUB_OUTPUT"
+          echo "dryrun_status=PASS" >> "$GITHUB_OUTPUT"
+
+      - name: DB snapshot AFTER dry-run and diff (proves zero writes, or reports UNKNOWN)
+        id: snapshot_after
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          # Same schema-aware script as the BEFORE step; it exits non-zero (and
+          # this command substitution, verified to trip set -e) if any table
+          # reports QUERY_ERROR - fails closed rather than reporting a false
+          # SNAPSHOT_MATCH. Removal of _snapshot.php itself is handled by the
+          # dedicated guaranteed-cleanup step later (runs even on failure).
+          SNAPSHOT_AFTER=$($SSH "${DH_USER}@${DH_HOST}" "php '${PRIVATE_ROOT}/cron/_snapshot.php'")
+          echo "$SNAPSHOT_AFTER"
+
+          BEFORE='${{ steps.snapshot_before.outputs.snapshot }}'
+          if [ "$BEFORE" = "$SNAPSHOT_AFTER" ]; then
+            echo "write_safety_status=SNAPSHOT_MATCH (before/after snapshots identical across tasks, email_queue, notifications, penalty_log)" >> "$GITHUB_OUTPUT"
+          else
+            echo "write_safety_status=SNAPSHOT_DIFFERENT (a monitored table changed between before/after snapshots)" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "snapshot_after<<EOF"
+            echo "$SNAPSHOT_AFTER"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Lock test (two overlapping dry-runs - safe, dry-run never writes/sends)
+        id: locktest
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -euo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          # Launch both from a single remote shell so they truly overlap;
+          # both are --dry-run (source-verified to never write or send).
+          RESULT=$($SSH "${DH_USER}@${DH_HOST}" "
+            cd '${PRIVATE_ROOT}/cron'
+            ( /usr/bin/php cron.php --dry-run > /tmp/sec_cron_lock_a.out 2>&1; echo \$? > /tmp/sec_cron_lock_a.rc ) &
+            PID1=\$!
+            sleep 0.2
+            ( /usr/bin/php cron.php --dry-run > /tmp/sec_cron_lock_b.out 2>&1; echo \$? > /tmp/sec_cron_lock_b.rc ) &
+            PID2=\$!
+            wait \$PID1 \$PID2
+            echo 'RC_A='\$(cat /tmp/sec_cron_lock_a.rc)
+            echo 'RC_B='\$(cat /tmp/sec_cron_lock_b.rc)
+            rm -f /tmp/sec_cron_lock_a.out /tmp/sec_cron_lock_a.rc /tmp/sec_cron_lock_b.out /tmp/sec_cron_lock_b.rc
+            test -f '${PRIVATE_ROOT}/locks/cron.lock' && echo 'LOCK_FILE_STILL_PRESENT' || echo 'LOCK_FILE_RELEASED'
+          ")
+          echo "$RESULT"
+          if echo "$RESULT" | grep -q "LOCK_FILE_RELEASED" && echo "$RESULT" | grep -qE "RC_A=0|RC_B=0"; then
+            echo "lock_status=PASS (one process ran to completion, lock released after)" >> "$GITHUB_OUTPUT"
+          else
+            echo "lock_status=UNKNOWN (result did not clearly match expected one-wins/one-blocked pattern)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Guaranteed cleanup of remote temporary validation helper
+        if: always()
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+        run: |
+          set -uo pipefail
+          PRIVATE_ROOT="${{ steps.identity.outputs.private_root }}"
+          # If the identity step never completed, there is nothing to clean up
+          # and no way to reach the server safely - skip without failing.
+          if [ -z "$PRIVATE_ROOT" ]; then
+            echo "No private_root was ever established - nothing to clean up."
+            exit 0
+          fi
+          if [ ! -f ~/.ssh/cron_val_key ]; then
+            echo "SSH key already unavailable - cannot perform remote cleanup this run."
+            exit 0
+          fi
+          SSH="ssh -i ~/.ssh/cron_val_key -o BatchMode=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0"
+          # Exact single path only - never a wildcard, never any other private
+          # file (bootstrap.php, cron.php, README.md, config/, logs/, locks/
+          # are all deliberately left untouched).
+          TARGET="${PRIVATE_ROOT}/cron/_snapshot.php"
+          case "$TARGET" in
+            "${PRIVATE_ROOT}"/cron/_snapshot.php) : ;;
+            *) echo "::error::Unexpected cleanup target path shape - refusing to delete"; exit 1 ;;
+          esac
+          $SSH "${DH_USER}@${DH_HOST}" "rm -f '${TARGET}'" || true
+          echo "Guaranteed cleanup: removed the temporary snapshot helper if it existed (no content printed)."
+
+      - name: Remove temporary SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/cron_val_key
+          echo "Temporary SSH key removed."
+
+      - name: Write sanitized validation artifacts
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p reports/sec-cron-cli-001-validation
+
+          cat > reports/sec-cron-cli-001-validation/VALIDATION_SUMMARY.md << EOF
+          # SEC-CRON-CLI-001 Validation Summary
+
+          Commit validated: ${EXPECTED_COMMIT_SHA}
+          DNS preflight: ${{ steps.preflight.outputs.dns_status }}
+          TCP SSH-port preflight: ${{ steps.preflight.outputs.tcp_status }}
+          SSH authentication: ${{ steps.identity.outputs.ssh_auth_status }}
+          Failure classification: ${{ steps.identity.outputs.failure_class || steps.preflight.outputs.failure_class }}
+          Identity check: ${{ steps.identity.outputs.identity_status }}
+          Syntax check: ${{ steps.syntax.outputs.syntax_status }}
+          Dry-run: ${{ steps.dryrun.outputs.dryrun_status }}
+          Write-safety: ${{ steps.snapshot_after.outputs.write_safety_status }}
+          Lock test: ${{ steps.locktest.outputs.lock_status }}
+
+          Activation remains NOT APPROVED. The private-environment activation flag
+          was written with its disabled value (0), not its enabled value.
+          No cron schedule installation command was run. The approved-execution
+          command-line flag was never passed to cron.php.
+          EOF
+
+          cat > reports/sec-cron-cli-001-validation/PHP_SYNTAX_RESULT.md << EOF
+          # PHP Syntax Result
+          bootstrap.php and cron.php: ${{ steps.syntax.outputs.syntax_status }}
+          EOF
+
+          cat > reports/sec-cron-cli-001-validation/ENVIRONMENT_IDENTITY.md << 'EOF'
+          # Environment Identity (path masked)
+          EOF
+          sed 's#'"${{ steps.identity.outputs.private_root }}"'#<PRIVATE_ROOT>#g' /tmp/identity_check.txt >> reports/sec-cron-cli-001-validation/ENVIRONMENT_IDENTITY.md || true
+
+          cat > reports/sec-cron-cli-001-validation/DRY_RUN_RESULT.md << EOF
+          # Dry-Run Result
+          Status: ${{ steps.dryrun.outputs.dryrun_status }}
+          JSONL log entries matching dry_run_pass (last 5 lines scanned): ${{ steps.dryrun.outputs.dry_run_log_matches }}
+          EOF
+
+          cat > reports/sec-cron-cli-001-validation/WRITE_SAFETY_RESULT.md << EOF
+          # Write-Safety Result
+          ${{ steps.snapshot_after.outputs.write_safety_status }}
+
+          Tables checked (read-only, before vs after, schema-aware): tasks, email_queue
+          (plus per-status counts), notifications, penalty_log. For each table:
+          row count, the auto-detected real primary key column (primary_key_used -
+          never assumed to be "id") and its max value, and the best available
+          timestamp column (timestamp_source) in priority order (created_at,
+          applied_at, updated_at, logged_at) - falling back to
+          COLUMN_MISSING_HANDLED if neither a timestamp nor a primary key exists,
+          or TABLE_MISSING if the table itself is absent. This is not exhaustive
+          across the entire schema - only these named tables were verified, and
+          any QUERY_ERROR fails this check closed rather than reporting a false
+          match.
+          EOF
+
+          cat > reports/sec-cron-cli-001-validation/LOCK_RESULT.md << EOF
+          # Lock Test Result
+          ${{ steps.locktest.outputs.lock_status }}
+          Both processes ran in --dry-run mode only (source-verified: dry-run never
+          writes to the database or sends externally), so this test carried no
+          production-data risk regardless of outcome.
+          EOF
+
+          cat > reports/sec-cron-cli-001-validation/ACTIVATION_READINESS.md << EOF
+          # Activation Readiness
+          This workflow performed VALIDATION ONLY. Activation requires a separate,
+          explicit approval and is not implied by any result in this report.
+          Real execution requires both the approved-execution command-line flag AND
+          the private-environment activation flag set to its enabled value - neither
+          condition was ever created by this workflow.
+          EOF
+
+      - name: Upload sanitized validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sec-cron-cli-001-validation
+          path: reports/sec-cron-cli-001-validation/
+          retention-days: 30

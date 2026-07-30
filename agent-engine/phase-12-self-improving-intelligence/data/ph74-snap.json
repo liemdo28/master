@@ -1,0 +1,308 @@
+[
+  {
+    "id": "RSK_1782656997839_5asicp",
+    "timestamp": 1782656997839,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782656989455_j2ebps",
+    "timestamp": 1782656989456,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782656640011_g3wapk",
+    "timestamp": 1782656640011,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782656111198_uae5za",
+    "timestamp": 1782656111198,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782655882958_nzbspa",
+    "timestamp": 1782655882958,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782655634623_5pc9s3",
+    "timestamp": 1782655634623,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782655629677_ply61w",
+    "timestamp": 1782655629677,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782655591141_i4hc2l",
+    "timestamp": 1782655591141,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  },
+  {
+    "id": "RSK_1782655586199_x4aiyr",
+    "timestamp": 1782655586199,
+    "current": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "category": "security",
+          "probability": 0.8,
+          "impact": 90,
+          "exposure": 72,
+          "severity": "CRITICAL"
+        }
+      ],
+      "totalExposure": 72,
+      "maxExposure": 72,
+      "topRisk": "data-breach",
+      "criticalCount": 1,
+      "highCount": 0
+    },
+    "projected": {
+      "rows": [
+        {
+          "name": "data-breach",
+          "projectedProbability": 0.96,
+          "projectedExposure": 86.4,
+          "severity": "CRITICAL"
+        }
+      ],
+      "projectedTotalExposure": 86.4
+    },
+    "rising": true,
+    "posture": "CRITICAL"
+  }
+]

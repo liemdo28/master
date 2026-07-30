@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-0d4e89b459",
+  "task_name": "Advance TEST_INTEGRATION past AUDIT",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452013.707983,
+  "created_iso": "2026-06-26T05:33:33.707983+00:00",
+  "updated_at": 1782452013.7079914,
+  "owner": "engineering_lead",
+  "priority": "MEDIUM",
+  "description": "TEST_INTEGRATION has been in AUDIT \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-f413fd2dda",
+      "stage": "AUDIT",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452013.7079923
+    }
+  ]
+}

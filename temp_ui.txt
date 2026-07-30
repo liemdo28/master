@@ -1,0 +1,14 @@
+from pathlib import Path
+import re
+
+root = Path(r'd:\Project\Master\mi-core\ui')
+files = [root / 'index.html', root / 'mobile.html']
+
+premium_css = r'''
+/* Premium AI visual pass: richer Mi logo + unified AI icon system */
+.mi-ai-logo{width:44px;height:44px;flex-shrink:0;overflow:visible;filter:drop-shadow(0 0 20px rgba(79,142,247,.38)) drop-shadow(0 12px 28px rgba(0,0,0,.30))}
+.mi-ai-logo .halo{fill:url(#miHalo);opacity:.92}.mi-ai-logo .shell{fill:url(#miLogoCore);stroke:rgba(255,255,255,.24);stroke-width:1.2}.mi-ai-logo .orbit{fill:none;stroke:url(#miOrbit);stroke-width:2.25;stroke-linecap:round;stroke-dasharray:18 7;opacity:.95}.mi-ai-logo .chip{fill:rgba(9,9,15,.64);stroke:rgba(255,255,255,.2);stroke-width:1}.mi-ai-logo .trace{fill:none;stroke:#06b6d4;stroke-width:1.45;stroke-linecap:round;opacity:.95}.mi-ai-logo .spark{fill:#e8eaf0}.mi-ai-logo .node{fill:#06b6d4;filter:drop-shadow(0 0 5px rgba(6,182,212,.8))}.mi-ai-logo .mark{fill:#fff;font-family:Inter,system-ui,sans-serif;font-size:20px;font-weight:950;letter-spacing:-1.6px}
+.logo-wrap{display:flex;align-items:center;gap:10px}.logo-wrap .logo,.logo-wrap .topbar-title{line-height:1}
+.ic,.qi,.navbtn .ni,.li-ic,.cc-ic,.chat-av{position:relative;display:inline-flex!important;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(135deg,rgba(79,142,247,.22),rgba(124,93,249,.14))!important;border:1px solid rgba(79,142,247,.24)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 22px rgba(0,0,0,.12);overflow:hidden;vertical-align:middle}
+.ic,.qi,.navbtn .ni{color:transparent!important}.ic{width:26px!important;height:26px!important}.qi{width:30px!important;height:30px!important;margin-bottom:7px!important}.navbtn .ni{width:24px!important;height:24px!important;margin-bottom:2px}.li-ic,.cc-ic,.chat-av{color:var(--accent)!important}
+.ic:before,.

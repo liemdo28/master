@@ -1,0 +1,60 @@
+{
+  "registry_version": "1.0.0",
+  "generated_at": "2026-06-24",
+  "description": "Domain registry — maps workflow domain to Mi-Core agent/service responsible for that domain.",
+  "domains": [
+    {
+      "domain": "seo",
+      "display_name": "SEO",
+      "owner_service": "mi-core:/api/seo",
+      "brands_enabled": ["bakudan", "rawsushi"],
+      "workflow_ids": ["seo-daily-audit", "seo-weekly-executive-report"]
+    },
+    {
+      "domain": "reviews",
+      "display_name": "Review Monitoring",
+      "owner_service": "mi-core:/api/marketing/reviews",
+      "brands_enabled": ["bakudan", "rawsushi"],
+      "workflow_ids": ["review-monitoring"]
+    },
+    {
+      "domain": "food-safety",
+      "display_name": "Food Safety",
+      "owner_service": "mi-core:/api/food-safety",
+      "brands_enabled": ["bakudan", "rawsushi"],
+      "workflow_ids": ["food-safety-daily-reminder"]
+    },
+    {
+      "domain": "quickbooks",
+      "display_name": "QuickBooks",
+      "owner_service": "mi-core:/api/qb-agent",
+      "brands_enabled": ["bakudan"],
+      "workflow_ids": ["quickbooks-daily-sync"]
+    },
+    {
+      "domain": "doordash",
+      "display_name": "DoorDash",
+      "owner_service": "mi-core:/api/doordash-agent",
+      "brands_enabled": ["bakudan", "rawsushi"],
+      "workflow_ids": ["doordash-weekly-campaign-review"]
+    },
+    {
+      "domain": "system",
+      "display_name": "System Health",
+      "owner_service": "mi-core:/api/health",
+      "brands_enabled": ["all"],
+      "workflow_ids": ["mi-system-health-check"]
+    },
+    {
+      "domain": "websites",
+      "display_name": "Website",
+      "owner_service": "mi-core:/api/websites",
+      "brands_enabled": ["bakudan", "rawsushi"],
+      "workflow_ids": []
+    }
+  ],
+  "notes": [
+    "Every domain MUST route through Mi-Core. n8n must NEVER call a brand-specific endpoint directly.",
+    "brand-specific business logic lives in Mi-Core, not n8n."
+  ]
+}

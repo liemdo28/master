@@ -1,0 +1,227 @@
+{
+  "started_at": "2026-06-26T04:51:38Z",
+  "blocked_tests": [
+    {
+      "target": "doordash.com",
+      "decision": {
+        "ok": false,
+        "target": "doordash.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "merchant.doordash.com",
+      "decision": {
+        "ok": false,
+        "target": "merchant.doordash.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "toasttab.com",
+      "decision": {
+        "ok": false,
+        "target": "toasttab.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "pos.toasttab.com",
+      "decision": {
+        "ok": false,
+        "target": "pos.toasttab.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "qbo.intuit.com",
+      "decision": {
+        "ok": false,
+        "target": "qbo.intuit.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "quickbooks.intuit.com",
+      "decision": {
+        "ok": false,
+        "target": "quickbooks.intuit.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "business.google.com",
+      "decision": {
+        "ok": false,
+        "target": "business.google.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "google.com/business",
+      "decision": {
+        "ok": false,
+        "target": "google.com/business",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "dreamhost.com",
+      "decision": {
+        "ok": false,
+        "target": "dreamhost.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "panel.dreamhost.com",
+      "decision": {
+        "ok": false,
+        "target": "panel.dreamhost.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "dash.cloudflare.com",
+      "decision": {
+        "ok": false,
+        "target": "dash.cloudflare.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "cloudflare.com",
+      "decision": {
+        "ok": false,
+        "target": "cloudflare.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "mybank.com",
+      "decision": {
+        "ok": false,
+        "target": "mybank.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "chase.com",
+      "decision": {
+        "ok": false,
+        "target": "chase.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "payroll.example.com",
+      "decision": {
+        "ok": false,
+        "target": "payroll.example.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "adp.com",
+      "decision": {
+        "ok": false,
+        "target": "adp.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    },
+    {
+      "target": "paychex.com",
+      "decision": {
+        "ok": false,
+        "target": "paychex.com",
+        "classification": "BLOCKED",
+        "status": "BLOCKED_BY_POLICY"
+      },
+      "passed": true
+    }
+  ],
+  "safe_tests": [
+    {
+      "target": "https://example.com",
+      "decision": {
+        "ok": true,
+        "target": "https://example.com",
+        "classification": "SAFE",
+        "status": "APPROVED"
+      },
+      "passed": true
+    },
+    {
+      "target": "file:///d:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+      "decision": {
+        "ok": true,
+        "target": "file:///d:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+        "classification": "SAFE",
+        "status": "APPROVED"
+      },
+      "passed": true
+    },
+    {
+      "target": "http://localhost:8765/api/operator/health",
+      "decision": {
+        "ok": true,
+        "target": "http://localhost:8765/api/operator/health",
+        "classification": "SAFE",
+        "status": "APPROVED"
+      },
+      "passed": true
+    },
+    {
+      "target": "http://127.0.0.1:8080/test",
+      "decision": {
+        "ok": true,
+        "target": "http://127.0.0.1:8080/test",
+        "classification": "SAFE",
+        "status": "APPROVED"
+      },
+      "passed": true
+    }
+  ],
+  "summary": {
+    "total": 21,
+    "blocked_tested": 17,
+    "blocked_passed": 17,
+    "safe_tested": 4,
+    "safe_passed": 4,
+    "all_passed": true,
+    "duration_seconds": 0.0
+  },
+  "finished_at": "2026-06-26T04:51:38Z"
+}

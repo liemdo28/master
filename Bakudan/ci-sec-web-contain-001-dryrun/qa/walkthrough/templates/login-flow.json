@@ -1,0 +1,14 @@
+{
+  "name": "Login Flow",
+  "description": "Verify login page loads, credentials work, and dashboard appears",
+  "steps": [
+    { "action": "goto", "url": "/login", "description": "Navigate to login page" },
+    { "action": "screenshot", "description": "Login page visible" },
+    { "action": "fill", "selector": "input[name='email']", "value": "admin@bakudanramen.com", "description": "Enter email" },
+    { "action": "fill", "selector": "input[name='password']", "value": "admin123", "description": "Enter password" },
+    { "action": "screenshot", "description": "Credentials filled" },
+    { "action": "click", "selector": "button[type='submit']", "description": "Click login button" },
+    { "action": "wait", "pattern": "/(dashboard|overview|my-tasks)", "description": "Wait for redirect to dashboard" },
+    { "action": "screenshot", "description": "Dashboard loaded successfully" }
+  ]
+}

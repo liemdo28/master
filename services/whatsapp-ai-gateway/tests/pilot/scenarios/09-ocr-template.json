@@ -1,0 +1,15 @@
+[
+  { "id": "OC-01", "condition": "clean", "confidence": 0.95, "expected": "PROCESSED", "description": "Clean template photo" },
+  { "id": "OC-02", "condition": "rotated", "confidence": 0.8, "expected": "RETAKE", "description": "Rotated photo retake" },
+  { "id": "OC-03", "condition": "blurry", "confidence": 0.5, "expected": "NEEDS_REVIEW", "description": "Blurry low confidence" },
+  { "id": "OC-04", "condition": "dark", "confidence": 0.4, "expected": "NEEDS_REVIEW", "description": "Dark photo low confidence" },
+  { "id": "OC-05", "condition": "missing_corner", "confidence": 0.6, "expected": "BLOCKED", "description": "Missing corner blocked" },
+  { "id": "OC-06", "condition": "wrong_template", "expected": "WRONG_TEMPLATE", "description": "Wrong template blocked" },
+  { "id": "OC-07", "condition": "old_template", "expected": "REGENERATE", "description": "Old template asks regenerate" },
+  { "id": "OC-08", "condition": "incomplete", "confidence": 0.7, "expected": "FILL_MISSING", "description": "Missing values fill required" },
+  { "id": "OC-09", "condition": "ocr_wrong", "ocrValue": "38", "actualValue": "35", "expected": "USER_EDIT", "description": "OCR wrong value user edits" },
+  { "id": "OC-10", "condition": "user_confirmed", "confidence": 0.9, "expected": "CONFIRMED", "description": "User confirmed OCR value" },
+  { "id": "OC-11", "input": "CONFIRM", "expected": "WRITTEN", "description": "CONFIRM writes to sheet" },
+  { "id": "OC-12", "input": "RETAKE", "expected": "RESET", "description": "RETAKE resets OCR session" },
+  { "id": "OC-13", "input": "CANCEL", "expected": "NO_WRITE", "description": "CANCEL prevents sheet write" }
+]

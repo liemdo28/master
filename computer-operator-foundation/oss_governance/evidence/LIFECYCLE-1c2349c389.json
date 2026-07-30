@@ -1,0 +1,12 @@
+{
+  "event_id": "LIFECYCLE-1c2349c389",
+  "project_id": "OSS-f413fd2dda",
+  "project_name": "TEST_INTEGRATION",
+  "from_stage": "ACTIVE",
+  "to_stage": "RETIRED",
+  "approver": "test_runner",
+  "notes": "integration test cleanup",
+  "reason": "integration test cleanup",
+  "ts": 1782452013.7231333,
+  "iso": "2026-06-26T05:33:33.723135+00:00"
+}

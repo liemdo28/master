@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojqttl-f40679",
+  "objectiveRunId": "run-mqojqtti-3fae0d",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch kiểm tra tuân thủ | 4 steps, ~2min | Risk: undefined",
+  "sha256": "95918fe84251844135d9218f96547ae9edefa06b72e228dc42388c73c22483a5",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojqtti-3fae0d\\95918fe84251844135d9218f96547ae9edefa06b72e228dc42388c73c22483a5.json",
+  "capturedAt": "2026-06-22T01:38:23.481Z",
+  "readOnly": true
+}

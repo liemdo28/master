@@ -1,0 +1,20 @@
+{
+  "primary_intent": {
+    "intent": "strategic_question",
+    "label_vi": "Câu hỏi chiến lược",
+    "confidence": 0.7,
+    "evidence_keywords": [
+      "should we",
+      "invest"
+    ],
+    "suggested_investigation": [
+      "Review business goals",
+      "Analyze market conditions",
+      "Assess resource availability",
+      "Check competitive landscape"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

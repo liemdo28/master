@@ -1,0 +1,16 @@
+# Dev4 Failed Cases
+# Add each failed case here. Dev3 will pick these up and add to regression suite.
+# Format: one YAML list entry per case.
+
+# - id: DEV4-001
+#   input: "the exact message text"
+#   sender: "dev4-test-XXX"
+#   failure_class: intent_fail
+#   expected_intent: dashboard_query
+#   expected_entity: Dashboard
+#   expected_response_class: executive_status_report
+#   expected_safety_gate: false
+#   actual_reply: ""
+#   severity: P1
+#   date: 2026-06-15
+#   notes: ""

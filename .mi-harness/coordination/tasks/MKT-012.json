@@ -1,0 +1,17 @@
+{
+  "id": "MKT-012",
+  "objectiveId": "OBJ-023",
+  "title": "Draft approval-gated campaign plan",
+  "description": "Prepare campaign plan; publishing requires CEO approval.",
+  "division": "marketing",
+  "owner": "marketing-intelligence",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "marketing_publish",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:39.080Z",
+  "updatedAt": "2026-06-27T04:36:39.080Z",
+  "completedAt": null
+}

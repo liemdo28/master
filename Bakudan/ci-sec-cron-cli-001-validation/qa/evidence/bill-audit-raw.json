@@ -1,0 +1,1517 @@
+{
+    "generated_at": "2026-06-12T00:45:35-07:00",
+    "today": "2026-06-12",
+    "php_version": "8.2.30",
+    "schema": {
+        "columns": [
+            "id",
+            "store_id",
+            "title",
+            "vendor",
+            "vendor_id",
+            "amount",
+            "due_date",
+            "repeat_type",
+            "repeat_interval",
+            "repeat_day",
+            "repeat_parent_id",
+            "status",
+            "note",
+            "color",
+            "created_by",
+            "reminded_at",
+            "created_at",
+            "updated_at",
+            "google_event_id",
+            "due_time",
+            "category",
+            "is_template",
+            "business_id",
+            "is_test",
+            "currency",
+            "checker_user_id",
+            "approver_user_id",
+            "verifier_user_id",
+            "payment_method",
+            "frequency",
+            "last_paid_date",
+            "next_due_date",
+            "is_archived",
+            "archived_at",
+            "archived_reason",
+            "duplicate_of_bill_id",
+            "duplicate_hash",
+            "notes",
+            "responsible_user_id"
+        ],
+        "bill_tables": [
+            "bill_categories",
+            "bill_evidence",
+            "bill_history",
+            "bills",
+            "vendor_attachments",
+            "vendors"
+        ],
+        "total_bills": 347,
+        "active_bills": 347,
+        "archived_bills": 0,
+        "has_columns": {
+            "finance_category": false,
+            "frequency": true,
+            "responsible_user_id": true,
+            "checker_user_id": true,
+            "approver_user_id": true,
+            "verifier_user_id": true,
+            "paid_at": false,
+            "reminded_at": true,
+            "workflow_status": false,
+            "is_archived": true
+        }
+    },
+    "ws1_duplicates": {
+        "exact_group_count": 20,
+        "total_bills_to_archive": 307,
+        "verdict": "FAIL",
+        "groups": [
+            {
+                "canonical_id": 25,
+                "duplicate_ids": [
+                    31,
+                    37,
+                    43,
+                    49,
+                    55,
+                    61,
+                    67,
+                    73,
+                    79,
+                    85,
+                    91,
+                    97,
+                    103,
+                    109,
+                    115,
+                    121,
+                    127,
+                    133,
+                    139,
+                    145,
+                    151,
+                    157,
+                    163,
+                    166,
+                    169,
+                    172,
+                    178,
+                    184
+                ],
+                "dup_count": 28,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 26,
+                "duplicate_ids": [
+                    32,
+                    38,
+                    44,
+                    50,
+                    56,
+                    62,
+                    68,
+                    74,
+                    80,
+                    86,
+                    92,
+                    98,
+                    104,
+                    110,
+                    116,
+                    122,
+                    128,
+                    134,
+                    140,
+                    146,
+                    152,
+                    158,
+                    164,
+                    167,
+                    170,
+                    173,
+                    179,
+                    185
+                ],
+                "dup_count": 28,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 27,
+                "duplicate_ids": [
+                    33,
+                    39,
+                    45,
+                    51,
+                    57,
+                    63,
+                    69,
+                    75,
+                    81,
+                    87,
+                    93,
+                    99,
+                    105,
+                    111,
+                    117,
+                    123,
+                    129,
+                    135,
+                    141,
+                    147,
+                    153,
+                    159,
+                    165,
+                    168,
+                    171,
+                    174,
+                    180,
+                    186
+                ],
+                "dup_count": 28,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 22,
+                "duplicate_ids": [
+                    28,
+                    34,
+                    40,
+                    46,
+                    52,
+                    58,
+                    64,
+                    70,
+                    76,
+                    82,
+                    88,
+                    94,
+                    100,
+                    106,
+                    112,
+                    118,
+                    124,
+                    130,
+                    136,
+                    142,
+                    148,
+                    154,
+                    160,
+                    175,
+                    181
+                ],
+                "dup_count": 25,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 23,
+                "duplicate_ids": [
+                    29,
+                    35,
+                    41,
+                    47,
+                    53,
+                    59,
+                    65,
+                    71,
+                    77,
+                    83,
+                    89,
+                    95,
+                    101,
+                    107,
+                    113,
+                    119,
+                    125,
+                    131,
+                    137,
+                    143,
+                    149,
+                    155,
+                    161,
+                    176,
+                    182
+                ],
+                "dup_count": 25,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 24,
+                "duplicate_ids": [
+                    30,
+                    36,
+                    42,
+                    48,
+                    54,
+                    60,
+                    66,
+                    72,
+                    78,
+                    84,
+                    90,
+                    96,
+                    102,
+                    108,
+                    114,
+                    120,
+                    126,
+                    132,
+                    138,
+                    144,
+                    150,
+                    156,
+                    162,
+                    177,
+                    183
+                ],
+                "dup_count": 25,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-05-23",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 190,
+                "duplicate_ids": [
+                    198,
+                    206,
+                    214,
+                    222,
+                    230,
+                    238,
+                    246,
+                    254,
+                    262,
+                    270,
+                    275,
+                    292,
+                    300,
+                    305,
+                    313,
+                    321,
+                    326,
+                    331,
+                    336,
+                    344
+                ],
+                "dup_count": 20,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-01",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 191,
+                "duplicate_ids": [
+                    199,
+                    207,
+                    215,
+                    223,
+                    231,
+                    239,
+                    247,
+                    255,
+                    263,
+                    271,
+                    276,
+                    293,
+                    301,
+                    306,
+                    314,
+                    322,
+                    327,
+                    332,
+                    337,
+                    345
+                ],
+                "dup_count": 20,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 192,
+                "duplicate_ids": [
+                    200,
+                    208,
+                    216,
+                    224,
+                    232,
+                    240,
+                    248,
+                    256,
+                    264,
+                    272,
+                    277,
+                    294,
+                    302,
+                    307,
+                    315,
+                    323,
+                    328,
+                    333,
+                    338,
+                    346
+                ],
+                "dup_count": 20,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-01",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 193,
+                "duplicate_ids": [
+                    201,
+                    209,
+                    217,
+                    225,
+                    233,
+                    241,
+                    249,
+                    257,
+                    265,
+                    273,
+                    278,
+                    295,
+                    303,
+                    308,
+                    316,
+                    324,
+                    329,
+                    334,
+                    339,
+                    347
+                ],
+                "dup_count": 20,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 194,
+                "duplicate_ids": [
+                    202,
+                    210,
+                    218,
+                    226,
+                    234,
+                    242,
+                    250,
+                    258,
+                    266,
+                    274,
+                    279,
+                    296,
+                    304,
+                    309,
+                    317,
+                    325,
+                    330,
+                    335,
+                    340,
+                    348
+                ],
+                "dup_count": 20,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 187,
+                "duplicate_ids": [
+                    195,
+                    203,
+                    211,
+                    219,
+                    227,
+                    235,
+                    243,
+                    251,
+                    259,
+                    267,
+                    297,
+                    310,
+                    318,
+                    341
+                ],
+                "dup_count": 14,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 188,
+                "duplicate_ids": [
+                    196,
+                    204,
+                    212,
+                    220,
+                    228,
+                    236,
+                    244,
+                    252,
+                    260,
+                    268,
+                    298,
+                    311,
+                    319,
+                    342
+                ],
+                "dup_count": 14,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 189,
+                "duplicate_ids": [
+                    197,
+                    205,
+                    213,
+                    221,
+                    229,
+                    237,
+                    245,
+                    253,
+                    261,
+                    269,
+                    299,
+                    312,
+                    320,
+                    343
+                ],
+                "dup_count": 14,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 280,
+                "duplicate_ids": [
+                    286
+                ],
+                "dup_count": 1,
+                "title": "TEST DUPLICATE BILL",
+                "store": "Raw Stockton",
+                "amount": 100,
+                "due_date": "2026-07-01",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 281,
+                "duplicate_ids": [
+                    287
+                ],
+                "dup_count": 1,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 282,
+                "duplicate_ids": [
+                    288
+                ],
+                "dup_count": 1,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 283,
+                "duplicate_ids": [
+                    289
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 284,
+                "duplicate_ids": [
+                    290
+                ],
+                "dup_count": 1,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            },
+            {
+                "canonical_id": 285,
+                "duplicate_ids": [
+                    291
+                ],
+                "dup_count": 1,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "category": "",
+                "match_reason": "Exact: title+store+amount+due_date"
+            }
+        ]
+    },
+    "ws2_recurrence": {
+        "total_recurring": 347,
+        "overdue_recurring_count": 28,
+        "verdict": "WARN"
+    },
+    "ws3_categories": {
+        "distribution": [
+            {
+                "category": "MISSING",
+                "cnt": 339
+            },
+            {
+                "category": "MISSING",
+                "cnt": 4
+            },
+            {
+                "category": "MISSING",
+                "cnt": 1
+            },
+            {
+                "category": "MISSING",
+                "cnt": 1
+            },
+            {
+                "category": "MISSING",
+                "cnt": 1
+            },
+            {
+                "category": "MISSING",
+                "cnt": 1
+            }
+        ],
+        "missing_count": 100,
+        "verdict": "WARN",
+        "bills_needing_category": [
+            {
+                "id": 282,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 284,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 285,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 288,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 290,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 291,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-20"
+            },
+            {
+                "id": 280,
+                "title": "TEST DUPLICATE BILL",
+                "store": "Raw Stockton",
+                "amount": 100,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 281,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 283,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 286,
+                "title": "TEST DUPLICATE BILL",
+                "store": "Raw Stockton",
+                "amount": 100,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 287,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 289,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-07-01"
+            },
+            {
+                "id": 237,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 245,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 229,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 253,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 261,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 269,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 221,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 213,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 299,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 205,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 312,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 320,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 197,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 189,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 343,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "amount": 0,
+                "due_date": "2026-06-23"
+            },
+            {
+                "id": 324,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 236,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 235,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 239,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 234,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 241,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 242,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 233,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 243,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 244,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 348,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 247,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 231,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 249,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 250,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 251,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 252,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 347,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 228,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 255,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 227,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 257,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 226,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 258,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 259,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 260,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 345,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 225,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 263,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 223,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 265,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 266,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 267,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 268,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 188,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 271,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 220,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 219,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 273,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 274,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 218,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 276,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 217,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 278,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 279,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 342,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 341,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 340,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 215,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 202,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 207,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 303,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 304,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 306,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 194,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 204,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 308,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 309,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 310,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 311,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 195,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 203,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 319,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 325,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 196,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 322,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 199,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 327,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 316,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 314,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 201,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 187,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            },
+            {
+                "id": 317,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "amount": 0,
+                "due_date": "2026-06-20"
+            }
+        ]
+    },
+    "ws4_store_ownership": {
+        "no_store_count": 0,
+        "invalid_store_count": 0,
+        "verdict": "PASS"
+    },
+    "ws5_responsibility": {
+        "no_responsible_count": 100,
+        "no_checker_count": 347,
+        "no_approver_count": 347,
+        "verdict": "WARN"
+    },
+    "ws6_payment_status": {
+        "by_status": [
+            {
+                "status": "paid",
+                "cnt": 199
+            },
+            {
+                "status": "pending",
+                "cnt": 148
+            }
+        ],
+        "stuck_30d_count": 0,
+        "verdict": "PASS",
+        "stuck_30d": []
+    },
+    "ws7_dashboard": {
+        "kpis": {
+            "total_active": 347,
+            "overdue_by_status": 0,
+            "overdue_by_date": 28,
+            "pending": 148,
+            "paid": 199,
+            "due_7d": 0,
+            "due_30d": 114,
+            "overdue_amount": 0,
+            "pending_amount": 200
+        },
+        "overdue_status_vs_date_delta": 28,
+        "verdict": "WARN"
+    },
+    "ws8_reminders": {
+        "due_in_7d_total": 0,
+        "due_in_7d_not_reminded": 0,
+        "verdict": "PASS"
+    },
+    "ws9_credit_card": {
+        "total_cc_bills": 0,
+        "paid": 0,
+        "overdue": 0,
+        "duplicate_groups": 0,
+        "verdict": "PASS",
+        "cc_bills": []
+    },
+    "ws10_store_health": {
+        "store_count": 8,
+        "stores": [
+            {
+                "store_id": 2,
+                "store_name": "Raw Stockton",
+                "total_bills": 209,
+                "paid": 106,
+                "overdue": 28,
+                "dup_groups": 14,
+                "missing_category": 0,
+                "missing_owner": 209,
+                "health_score": 0,
+                "grade": "F"
+            },
+            {
+                "store_id": 12,
+                "store_name": "Heo Holding",
+                "total_bills": 42,
+                "paid": 27,
+                "overdue": 0,
+                "dup_groups": 2,
+                "missing_category": 0,
+                "missing_owner": 42,
+                "health_score": 52,
+                "grade": "D"
+            },
+            {
+                "store_id": 8,
+                "store_name": "IFT",
+                "total_bills": 42,
+                "paid": 27,
+                "overdue": 0,
+                "dup_groups": 2,
+                "missing_category": 0,
+                "missing_owner": 42,
+                "health_score": 52,
+                "grade": "D"
+            },
+            {
+                "store_id": 11,
+                "store_name": "Modesto",
+                "total_bills": 42,
+                "paid": 27,
+                "overdue": 0,
+                "dup_groups": 2,
+                "missing_category": 0,
+                "missing_owner": 42,
+                "health_score": 52,
+                "grade": "D"
+            },
+            {
+                "store_id": 7,
+                "store_name": "Bakudan - Bandera (B3)",
+                "total_bills": 3,
+                "paid": 3,
+                "overdue": 0,
+                "dup_groups": 0,
+                "missing_category": 0,
+                "missing_owner": 3,
+                "health_score": 97,
+                "grade": "A"
+            },
+            {
+                "store_id": 5,
+                "store_name": "Bakudan - The Rim (B1)",
+                "total_bills": 3,
+                "paid": 3,
+                "overdue": 0,
+                "dup_groups": 0,
+                "missing_category": 0,
+                "missing_owner": 3,
+                "health_score": 97,
+                "grade": "A"
+            },
+            {
+                "store_id": 6,
+                "store_name": "Bakudan - Stone Oak (B2)",
+                "total_bills": 0,
+                "paid": 0,
+                "overdue": 0,
+                "dup_groups": 0,
+                "missing_category": 0,
+                "missing_owner": 0,
+                "health_score": 100,
+                "grade": "A"
+            },
+            {
+                "store_id": 10,
+                "store_name": "Copper (C1, C2, C3)",
+                "total_bills": 0,
+                "paid": 0,
+                "overdue": 0,
+                "dup_groups": 0,
+                "missing_category": 0,
+                "missing_owner": 0,
+                "health_score": 100,
+                "grade": "A"
+            }
+        ]
+    }
+}

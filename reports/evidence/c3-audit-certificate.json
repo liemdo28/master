@@ -1,0 +1,23 @@
+{
+  "audit_id": "AUDIT_1781444855946",
+  "target": "dashboard.bakudanramen.com",
+  "command": "audit dashboard bakudanramen.com — check performance, security, errors",
+  "workflow_id": "wf_1781444855440_r9glsc",
+  "audited_files": [
+    "agenview-router.ts",
+    "index.ts",
+    "agenview.html"
+  ],
+  "findings": {
+    "total": 0,
+    "critical": 0,
+    "resolved": 0,
+    "manual_review": 0
+  },
+  "test_result": "PASS",
+  "qa_score": 85,
+  "gate_status": "FLAGGED",
+  "verdict": "DASHBOARD_AUDIT_PASSED",
+  "certified_at": "2026-06-14T13:47:35.946Z",
+  "council_decision": "PROCEED"
+}

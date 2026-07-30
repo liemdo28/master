@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqw59h82-6ihh2jk",
+  "objectiveId": "OBJ-103",
+  "taskId": "MKT-056",
+  "requestedBy": "system",
+  "approvalType": "marketing_publish",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Draft approval-gated campaign plan",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T09:15:08.786Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

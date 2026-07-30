@@ -1,0 +1,69 @@
+{
+  "workflow_id": "seo-weekly-executive-report",
+  "name": "SEO Weekly Executive Report",
+  "domain": "seo",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 9 * * 1",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Weekly SEO executive report. Asks Mi-Core to create report, waits for result, sends summary to dashboard/WhatsApp.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "seo",
+        "event_type": "seo_weekly_report_request",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "dispatch_report_task",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "seo",
+        "action": "weekly_executive_report",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 3,
+      "type": "wait",
+      "name": "wait_for_report",
+      "poll_interval_sec": 30,
+      "timeout_sec": 600
+    },
+    {
+      "order": 4,
+      "type": "http_request",
+      "name": "log_result",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "seo-weekly-executive-report",
+        "domain": "seo",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "{{dispatch_report_task.status}}",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnquz-abc848",
+  "objectiveRunId": "run-mqrcnquu-e01ab7",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: strategic_question (70%), Alternatives: 0, Ambiguous: false",
+  "sha256": "8502ec8577c7e90ae8affb54a108b3f04d2083c98fddec855f75c0220833749d",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnquu-e01ab7\\8502ec8577c7e90ae8affb54a108b3f04d2083c98fddec855f75c0220833749d.json",
+  "capturedAt": "2026-06-24T00:43:20.891Z",
+  "readOnly": true
+}

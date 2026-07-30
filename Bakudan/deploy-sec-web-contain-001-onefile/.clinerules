@@ -1,0 +1,24 @@
+Bakudan Dashboard Cline Rules
+
+Workspace:
+- Open only this project root: E:\Project\Master\Bakudan\dashboard.bakudanramen.com
+- Do not use Desktop, Downloads, Documents, or parent folders as the workspace.
+
+Source layout:
+- There is no app/ directory in this project.
+- Config files are under config/.
+- The safety guard file is config/safety-guard.php.
+- The database config file is config/database.php.
+- Never reference app/config/safety-guard.php.
+
+PHP validation:
+- Use C:\xampp\php\php.exe for PHP CLI on this Windows machine.
+- For syntax checks, run scripts/php-lint.ps1 instead of hand-writing php -l commands.
+- If C:\xampp\php\php.exe is missing, stop and report the missing PHP binary. Do not guess another command.
+
+Task discipline:
+- One objective per task.
+- Do not combine source audit, security audit, database migration, quota audit, and UI QA in one task.
+- Before editing, inspect the exact file path with rg --files.
+- If a requested path does not exist, report "PATH_NOT_FOUND" and stop. Do not invent an equivalent path.
+- Output command results directly. Do not claim validation without command output.

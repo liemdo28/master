@@ -1,0 +1,100 @@
+name: Phase 13.5 Bill Audit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install SSH keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trR+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+
+      - name: Deploy audit scripts
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          rsync -avz -e "ssh" scripts/cli_bill_audit.php scripts/cli_emergency_scan.php scripts/cli_duplicate_cleanup.php scripts/cli_purge_cleanup.php \
+            "${DH_USER}@${DH_HOST}:${DH_PATH}/scripts/"
+
+      - name: Run Phase 13.5 Bill Audit
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== BILL_AUDIT_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_bill_audit.php 2>&1"
+          echo ""
+          echo "=== BILL_AUDIT_END ==="
+
+      - name: Run P0 Emergency Duplicate Scan
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== EMERGENCY_SCAN_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_emergency_scan.php 2>&1"
+          echo ""
+          echo "=== EMERGENCY_SCAN_END ==="
+
+      - name: P0 Duplicate Cleanup — Dry Run
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== CLEANUP_DRYRUN_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_duplicate_cleanup.php 2>&1"
+          echo ""
+          echo "=== CLEANUP_DRYRUN_END ==="
+
+      - name: P0 Duplicate Cleanup — EXECUTE
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== CLEANUP_EXECUTE_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_duplicate_cleanup.php --execute 2>&1"
+          echo ""
+          echo "=== CLEANUP_EXECUTE_END ==="
+
+      - name: Purge Cleanup — Dry Run
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== PURGE_DRYRUN_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_purge_cleanup.php 2>&1"
+          echo ""
+          echo "=== PURGE_DRYRUN_END ==="
+
+      - name: Purge Cleanup — EXECUTE
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          echo "=== PURGE_EXECUTE_START ==="
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_purge_cleanup.php --execute 2>&1"
+          echo ""
+          echo "=== PURGE_EXECUTE_END ==="

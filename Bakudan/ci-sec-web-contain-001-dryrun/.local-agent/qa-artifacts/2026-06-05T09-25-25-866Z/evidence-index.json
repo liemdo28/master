@@ -1,0 +1,3556 @@
+{
+  "project": "TaskFlow Dashboard",
+  "projectPath": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com",
+  "timestamp": "2026-06-05T09-25-25-866Z",
+  "artifactDir": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\qa-artifacts\\2026-06-05T09-25-25-866Z",
+  "adapterResults": [
+    {
+      "adapter": "build",
+      "ok": false,
+      "command": "npm run build",
+      "exitCode": 1,
+      "durationMs": 367,
+      "errors": []
+    },
+    {
+      "adapter": "test",
+      "ok": false,
+      "command": "npm test",
+      "exitCode": 1,
+      "durationMs": 330,
+      "errors": []
+    },
+    {
+      "adapter": "lint",
+      "ok": false,
+      "command": "npm run lint",
+      "exitCode": 1,
+      "durationMs": 482,
+      "errors": []
+    },
+    {
+      "adapter": "smoke",
+      "ok": false,
+      "command": "npm run live:smoke",
+      "exitCode": 1,
+      "durationMs": 295,
+      "errors": [
+        {
+          "type": "SMOKE_ERROR",
+          "message": "Command failed: npm run live:smoke\nnpm error Missing script: \"live:smoke\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: C:\\Users\\liemdo\\AppData\\Local\\npm-cache\\_logs\\2026-06-05T09_25_25_811Z-debug-0.log\n"
+        }
+      ]
+    }
+  ],
+  "screenshots": [],
+  "videos": [],
+  "traces": [],
+  "logs": [
+    "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\qa-artifacts\\2026-06-05T09-25-25-866Z\\build-output.log",
+    "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\qa-artifacts\\2026-06-05T09-25-25-866Z\\test-output.log",
+    "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\qa-artifacts\\2026-06-05T09-25-25-866Z\\lint-output.log",
+    "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\qa-artifacts\\2026-06-05T09-25-25-866Z\\smoke-output.log"
+  ],
+  "reports": [
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-17-13-384Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-17-13-384Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-21-50-728Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-21-50-728Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-31-16-318Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-31-16-318Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-46-21-540Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-46-21-540Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-48-09-061Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-48-09-061Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T02-09-30-515Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T02-09-30-515Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\.last-run.json",
+      "type": "json",
+      "name": ".last-run.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-17-13-384Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-17-13-384Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-21-50-728Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-21-50-728Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-31-16-318Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-31-16-318Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-46-21-540Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-46-21-540Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-48-09-061Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-48-09-061Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T02-09-30-515Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T02-09-30-515Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\.last-run.json",
+      "type": "json",
+      "name": ".last-run.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-17-13-384Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-17-13-384Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-21-50-728Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-21-50-728Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-31-16-318Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-31-16-318Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-46-21-540Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-46-21-540Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-48-09-061Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-48-09-061Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T02-09-30-515Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T02-09-30-515Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\.last-run.json",
+      "type": "json",
+      "name": ".last-run.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-17-13-384Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-17-13-384Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-04T10-21-50-728Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-04T10-21-50-728Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-31-16-318Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-31-16-318Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-46-21-540Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-46-21-540Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T01-48-09-061Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T01-48-09-061Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\.local-agent\\reports\\qa-report-2026-06-05T02-09-30-515Z.json",
+      "type": "json",
+      "name": "qa-report-2026-06-05T02-09-30-515Z.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\.last-run.json",
+      "type": "json",
+      "name": ".last-run.json"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-API-returns-data-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-day-API-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-day-API-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\calendar-Calendar-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "calendar-Calendar-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-admin-stores-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-bills-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-bills-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-calendar-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-dashboard-loads-without-crash-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-my-tasks-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "dashboard-Dashboard-sidebar-navigation-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-invalid-login-shows-error-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-login-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-login-page-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-logout-works-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-logout-works-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md",
+      "type": "other",
+      "name": "login-Login-Flow-valid-login-redirects-to-dashboard-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-CEO-boardroom-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-compliance-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-control-tower-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-digital-twin-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-documents-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-employee-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-manager-command-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-procurement-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-release-dashboard-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-shift-management-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-store-command-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "new-modules-New-Modules-Phase-11-training-center-loads-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-calendar-shows-tasks-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-my-tasks-page-renders-task-list-mobile\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\error-context.md"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\test-failed-1.png"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-chromium\\video.webm",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-chromium\\video.webm"
+    },
+    {
+      "path": "E:\\Project\\Master\\Bakudan\\dashboard.bakudanramen.com\\test-results\\tasks-Tasks-task-detail-page-loads-mobile\\error-context.md",
+      "type": "other",
+      "name": "tasks-Tasks-task-detail-page-loads-mobile\\error-context.md"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-26fabb5999",
+  "name": "Superset",
+  "github": "https://github.com/apache/superset",
+  "owner_division": "Finance",
+  "category": "Finance",
+  "description": "Enterprise BI platform",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.848722,
+  "created_iso": "2026-06-26T05:35:22.848724+00:00",
+  "updated_at": 1782452122.848722,
+  "updated_iso": "2026-06-26T05:35:22.848731+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.848722,
+      "iso": "2026-06-26T05:35:22.848732+00:00"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+    "name": "walkthrough-recorder",
+    "version": "1.0.0",
+    "description": "Automated walkthrough recorder for TaskFlow dashboard — CEO, Manager, Member, Admin roles",
+    "private": true,
+    "scripts": {
+        "record:ceo": "node scripts/record-ceo.js",
+        "record:manager": "node scripts/record-manager.js",
+        "record:member": "node scripts/record-member.js",
+        "record:admin": "node scripts/record-admin.js",
+        "record:all": "npm run record:ceo && npm run record:manager && npm run record:member && npm run record:admin",
+        "gate:check": "node scripts/release-gate.js",
+        "report": "node scripts/generate-report.js",
+        "incident:capture": "node scripts/incident-capture.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "playwright": "1.44.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

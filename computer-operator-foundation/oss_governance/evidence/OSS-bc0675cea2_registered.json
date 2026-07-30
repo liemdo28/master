@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-bc0675cea2",
+  "name": "Anthropic",
+  "github": "https://github.com/Anthropic-ai/Anthropic-V3",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Open MoE reasoning/coding model",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.8353565,
+  "created_iso": "2026-06-26T05:35:22.835360+00:00",
+  "updated_at": 1782452122.8353565,
+  "updated_iso": "2026-06-26T05:35:22.835369+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.8353565,
+      "iso": "2026-06-26T05:35:22.835371+00:00"
+    }
+  ]
+}

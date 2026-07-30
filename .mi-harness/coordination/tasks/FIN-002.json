@@ -1,0 +1,17 @@
+{
+  "id": "FIN-002",
+  "objectiveId": "OBJ-004",
+  "title": "Measure revenue baseline and gap",
+  "description": "Confirm baseline revenue before any growth claim.",
+  "division": "finance",
+  "owner": "financial-intelligence",
+  "priority": "P0",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T03:55:41.970Z",
+  "updatedAt": "2026-06-27T03:55:41.970Z",
+  "completedAt": null
+}

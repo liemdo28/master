@@ -1,0 +1,33 @@
+--- Restart 1/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=36196 Health= EADDRINUSE=0
+--- Restart 2/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=29136 Health= EADDRINUSE=0
+--- Restart 3/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=27128 Health= EADDRINUSE=0
+--- Restart 4/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=36296 Health= EADDRINUSE=0
+--- Restart 5/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=3624 Health= EADDRINUSE=0
+--- Restart 6/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=33824 Health= EADDRINUSE=0
+--- Restart 7/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=34036 Health= EADDRINUSE=0
+--- Restart 8/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=31328 Health= EADDRINUSE=0
+--- Restart 9/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=33484 Health= EADDRINUSE=0
+--- Restart 10/10 ---
+[PM2] [mi-core](2) ✓
+  Status=online PID= PortPID=12648 Health= EADDRINUSE=0
+
+=== STORM RESULTS: Failed=0/10 | Total EADDRINUSE=0 ===
+Final PM2 restart_time counter: 114 (was 103)

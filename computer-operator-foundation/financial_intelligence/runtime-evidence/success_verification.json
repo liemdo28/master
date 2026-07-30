@@ -1,0 +1,197 @@
+{
+  "best_store": {
+    "question": "Store n\u00e0o l\u1eddi nh\u1ea5t?",
+    "answer": "Top store (by data readiness): Bakudan The Rim (score: 23/100). NOTE: This reflects data infrastructure readiness, NOT actual financial performance.",
+    "confidence": 23,
+    "sources": [
+      "warehouse_freshness",
+      "warehouse_sources"
+    ],
+    "freshness": "LIVE",
+    "ts": "2026-06-26T05:13:05.235148+00:00"
+  },
+  "stale_sources": {
+    "question": "Ngu\u1ed3n t\u00e0i ch\u00ednh n\u00e0o \u0111ang stale?",
+    "answer": "Toast POS: MISSING; DoorDash Merchant: MISSING; Payroll System: MISSING; Google Analytics 4: MISSING; Google Search Console: MISSING; Google Business Profile Reviews: BLOCKED",
+    "confidence": 25,
+    "sources": [
+      "warehouse_freshness_registry"
+    ],
+    "freshness": "BLOCKED",
+    "ts": "2026-06-26T05:13:05.281598+00:00"
+  },
+  "risk_summary": {
+    "total_risks": 5,
+    "by_severity": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 2,
+      "P3": 0
+    },
+    "has_critical": false,
+    "risks": [
+      {
+        "risk_id": "TOAST_MISSING",
+        "risk": "TOAST_MISSING",
+        "severity": "P1",
+        "description": "Toast POS source missing from warehouse",
+        "evidence": {
+          "source": "toast",
+          "source_name": "Toast POS",
+          "status": "MISSING",
+          "age_days": null,
+          "owner": "operations",
+          "classification": "MISSING",
+          "last_seen": null,
+          "expected_cadence": "daily"
+        },
+        "ts": "2026-06-26T05:13:05.285892+00:00"
+      },
+      {
+        "risk_id": "DOORDASH_MISSING",
+        "risk": "DOORDASH_MISSING",
+        "severity": "P1",
+        "description": "DoorDash Merchant source missing from warehouse",
+        "evidence": {
+          "source": "doordash",
+          "source_name": "DoorDash Merchant",
+          "status": "MISSING",
+          "age_days": null,
+          "owner": "operations",
+          "classification": "MISSING",
+          "last_seen": null,
+          "expected_cadence": "daily"
+        },
+        "ts": "2026-06-26T05:13:05.285902+00:00"
+      },
+      {
+        "risk_id": "PAYROLL_MISSING",
+        "risk": "PAYROLL_MISSING",
+        "severity": "P1",
+        "description": "Payroll source missing \u2014 labor and profit KPIs blocked",
+        "evidence": {
+          "source": "payroll",
+          "source_name": "Payroll System",
+          "status": "MISSING",
+          "age_days": null,
+          "owner": "hr_finance",
+          "classification": "MISSING",
+          "last_seen": null,
+          "expected_cadence": "weekly"
+        },
+        "ts": "2026-06-26T05:13:05.285905+00:00"
+      },
+      {
+        "risk_id": "MISSING_CONNECTORS",
+        "risk": "MISSING_CONNECTORS",
+        "severity": "P2",
+        "description": "No connector built for: toast, doordash, payroll, ga4, gsc",
+        "affected_sources": [
+          "toast",
+          "doordash",
+          "payroll",
+          "ga4",
+          "gsc"
+        ],
+        "ts": "2026-06-26T05:13:05.326057+00:00"
+      },
+      {
+        "risk_id": "GBP_BLOCKED",
+        "risk": "GBP_BLOCKED",
+        "severity": "P2",
+        "description": "Google Business Profile blocked \u2014 review data unavailable",
+        "evidence": {
+          "source": "gbp",
+          "source_name": "Google Business Profile Reviews",
+          "status": "BLOCKED",
+          "age_days": null,
+          "owner": "marketing",
+          "classification": "BLOCKED",
+          "last_seen": null,
+          "expected_cadence": "daily"
+        },
+        "ts": "2026-06-26T05:13:05.326067+00:00"
+      }
+    ],
+    "ts": "2026-06-26T05:13:05.326076+00:00"
+  },
+  "all_questions": {
+    "total_questions": 6,
+    "answerable": 4,
+    "blocked": 2,
+    "overall_confidence": 27,
+    "questions": {
+      "revenue_today": {
+        "question": "Revenue h\u00f4m nay bao nhi\u00eau?",
+        "answer": "BLOCKED \u2014 Kh\u00f4ng c\u00f3 d\u1eef li\u1ec7u revenue. Toast, DoorDash, QuickBooks ch\u01b0a k\u1ebft n\u1ed1i v\u1edbi d\u1eef li\u1ec7u POS th\u1ef1c t\u1ebf.",
+        "confidence": 0,
+        "sources": [
+          "warehouse_freshness_registry",
+          "warehouse_sources"
+        ],
+        "freshness": "PARTIAL",
+        "ts": "2026-06-26T05:13:05.373905+00:00",
+        "blocked": true,
+        "blocked_reason": "No POS data ingested. All revenue sources returning MISSING or simulated data."
+      },
+      "revenue_this_week": {
+        "question": "Revenue tu\u1ea7n n\u00e0y t\u0103ng hay gi\u1ea3m?",
+        "answer": "BLOCKED \u2014 Kh\u00f4ng c\u00f3 d\u1eef li\u1ec7u revenue theo tu\u1ea7n. C\u1ea7n k\u1ebft n\u1ed1i POS tr\u01b0\u1edbc.",
+        "confidence": 0,
+        "sources": [
+          "warehouse_freshness_registry"
+        ],
+        "freshness": "PARTIAL",
+        "ts": "2026-06-26T05:13:05.406413+00:00",
+        "blocked": true,
+        "blocked_reason": "No revenue data ingested into warehouse. Toast, DoorDash, and QB revenue sources are not yet connected with actual POS data."
+      },
+      "best_store": {
+        "question": "Store n\u00e0o l\u1eddi nh\u1ea5t?",
+        "answer": "Top store (by data readiness): Bakudan The Rim (score: 23/100). NOTE: This reflects data infrastructure readiness, NOT actual financial performance.",
+        "confidence": 23,
+        "sources": [
+          "warehouse_freshness",
+          "warehouse_sources"
+        ],
+        "freshness": "LIVE",
+        "ts": "2026-06-26T05:13:05.424474+00:00"
+      },
+      "stale_sources": {
+        "question": "Ngu\u1ed3n t\u00e0i ch\u00ednh n\u00e0o \u0111ang stale?",
+        "answer": "Toast POS: MISSING; DoorDash Merchant: MISSING; Payroll System: MISSING; Google Analytics 4: MISSING; Google Search Console: MISSING; Google Business Profile Reviews: BLOCKED",
+        "confidence": 25,
+        "sources": [
+          "warehouse_freshness_registry"
+        ],
+        "freshness": "BLOCKED",
+        "ts": "2026-06-26T05:13:05.514648+00:00"
+      },
+      "financial_risks": {
+        "question": "R\u1ee7i ro t\u00e0i ch\u00ednh hi\u1ec7n t\u1ea1i?",
+        "answer": "5 r\u1ee7i ro: [P1] TOAST_MISSING: Toast POS source missing from warehouse; [P1] DOORDASH_MISSING: DoorDash Merchant source missing from warehouse; [P1] PAYROLL_MISSING: Payroll source missing \u2014 labor and profit KPIs blocked; [P2] MISSING_CONNECTORS: No connector built for: toast, doordash, payroll, ga4, gsc; [P2] GBP_BLOCKED: Google Business Profile blocked \u2014 review data unavailable",
+        "confidence": 90,
+        "sources": [
+          "warehouse_freshness",
+          "warehouse_sources",
+          "warehouse_health"
+        ],
+        "freshness": "LIVE",
+        "ts": "2026-06-26T05:13:05.547003+00:00"
+      },
+      "weekly_summary": {
+        "question": "Tu\u1ea7n n\u00e0y c\u1ea7n ch\u00fa \u00fd t\u00e0i ch\u00ednh g\u00ec?",
+        "answer": "Store co data tot nhat: Bakudan The Rim (score: 23/100) | Nguon stale: Toast POS: MISSING; DoorDash Merchant: MISSING; Payroll System: MISSING; Google Analytics 4: MISSING; Google Search Console: MISSING; Google Business Profile Reviews: BLOCKED | Rui ro: 5 r\u1ee7i ro: [P1] TOAST_MISSING: Toast POS source missing from warehouse; [P1] DOORDASH_MISSING: DoorDash Merchant source missing from warehouse; [P1] PAYROLL_MISSING: Payroll source missing \u2014 labor and profit KPIs blocked; [P2] MISSING_CONNECTORS: No connector built for: toast, doordash, payroll, ga4, gsc; [P2] GBP_BLOCKED: Google Business Profile blocked \u2014 review data unavailable",
+        "confidence": 25,
+        "sources": [
+          "warehouse_freshness",
+          "warehouse_sources",
+          "warehouse_health"
+        ],
+        "freshness": "LIVE",
+        "ts": "2026-06-26T05:13:05.706757+00:00"
+      }
+    },
+    "ts": "2026-06-26T05:13:05.706790+00:00"
+  }
+}

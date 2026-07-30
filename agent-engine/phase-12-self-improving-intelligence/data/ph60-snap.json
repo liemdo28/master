@@ -1,0 +1,172 @@
+[
+  {
+    "id": "ORG_1782656996512_hnyzz8",
+    "timestamp": 1782656996512,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782656988251_6alg86",
+    "timestamp": 1782656988251,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782656638629_zqymoa",
+    "timestamp": 1782656638629,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782656109964_iyof5b",
+    "timestamp": 1782656109964,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655881245_wgnx5s",
+    "timestamp": 1782655881245,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655634321_bexhq4",
+    "timestamp": 1782655634321,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655629341_bsnprr",
+    "timestamp": 1782655629341,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655590882_8o75ek",
+    "timestamp": 1782655590882,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655585635_1564lm",
+    "timestamp": 1782655585635,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  },
+  {
+    "id": "ORG_1782655446435_sj6hln",
+    "timestamp": 1782655446435,
+    "index": 64.5,
+    "band": "WATCH",
+    "weakest": "finance",
+    "contributions": {
+      "team": 24,
+      "project": 15,
+      "finance": 12,
+      "ops": 13.5
+    },
+    "warnings": [
+      "Org health is WATCH (index 64.5).",
+      "Weakest domain: finance."
+    ]
+  }
+]

@@ -1,0 +1,3403 @@
+{
+  "started": "2026-06-15T08:36:40.904Z",
+  "finished": "2026-06-15T08:37:50.507Z",
+  "baseline": {
+    "pid": 2104,
+    "status": "online",
+    "restart_count": 141,
+    "uptime_seconds": 75,
+    "memory_bytes": 225669120
+  },
+  "final": {
+    "pid": 2104,
+    "status": "online",
+    "restart_count": 141,
+    "uptime_seconds": 144,
+    "memory_bytes": 227053568
+  },
+  "port_pid": 2104,
+  "eaddr_count": 0,
+  "samples": [
+    {
+      "at": "2026-06-15T08:37:22.376Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 117,
+        "memory_bytes": 227078144
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    },
+    {
+      "at": "2026-06-15T08:37:27.842Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 122,
+        "memory_bytes": 227078144
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    },
+    {
+      "at": "2026-06-15T08:37:33.332Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 127,
+        "memory_bytes": 227078144
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    },
+    {
+      "at": "2026-06-15T08:37:38.731Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 133,
+        "memory_bytes": 227078144
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    },
+    {
+      "at": "2026-06-15T08:37:44.179Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 138,
+        "memory_bytes": 227049472
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    },
+    {
+      "at": "2026-06-15T08:37:49.604Z",
+      "pm2": {
+        "pid": 2104,
+        "status": "online",
+        "restart_count": 141,
+        "uptime_seconds": 144,
+        "memory_bytes": 227053568
+      },
+      "port_pid": 2104,
+      "eaddr": 0
+    }
+  ],
+  "multiPassed": 100,
+  "financePassed": 50,
+  "approvalPassed": 100,
+  "multi": [
+    {
+      "i": 1,
+      "message": "Kiểm tra Dashboard, QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 2,
+      "message": "Kiem tra Dashboard, QuickBooks, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 3,
+      "message": "Check Dashboard, coi QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 4,
+      "message": "Review Dashboard, check QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 5,
+      "message": "Kiểm tra Dashboard, QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 6,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 7,
+      "message": "Check Dashboard, coi QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 8,
+      "message": "Review Dashboard, check QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 9,
+      "message": "Kiểm tra Dashboard, QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 10,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 11,
+      "message": "Check Dashboard, coi QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 12,
+      "message": "Review Dashboard, check QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 13,
+      "message": "Kiểm tra Dashboard, QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 14,
+      "message": "Kiem tra Dashboard, QuickBooks, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 15,
+      "message": "Check Dashboard, coi QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 16,
+      "message": "Review Dashboard, check QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 17,
+      "message": "Kiểm tra Dashboard, QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 18,
+      "message": "Kiem tra Dashboard, QuickBooks, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 19,
+      "message": "Check Dashboard, coi QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 20,
+      "message": "Review Dashboard, check QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 21,
+      "message": "Kiểm tra Dashboard, QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 22,
+      "message": "Kiem tra Dashboard, QuickBooks, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 23,
+      "message": "Check Dashboard, coi QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 24,
+      "message": "Review Dashboard, check QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 25,
+      "message": "Kiểm tra Dashboard, QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 26,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 27,
+      "message": "Check Dashboard, coi QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 28,
+      "message": "Review Dashboard, check QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 29,
+      "message": "Kiểm tra Dashboard, QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 30,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 31,
+      "message": "Check Dashboard, coi QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 32,
+      "message": "Review Dashboard, check QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 33,
+      "message": "Kiểm tra Dashboard, QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 34,
+      "message": "Kiem tra Dashboard, QuickBooks, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 35,
+      "message": "Check Dashboard, coi QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 36,
+      "message": "Review Dashboard, check QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 37,
+      "message": "Kiểm tra Dashboard, QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 38,
+      "message": "Kiem tra Dashboard, QuickBooks, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 39,
+      "message": "Check Dashboard, coi QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 40,
+      "message": "Review Dashboard, check QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 41,
+      "message": "Kiểm tra Dashboard, QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 42,
+      "message": "Kiem tra Dashboard, QuickBooks, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 43,
+      "message": "Check Dashboard, coi QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 44,
+      "message": "Review Dashboard, check QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 45,
+      "message": "Kiểm tra Dashboard, QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 46,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 47,
+      "message": "Check Dashboard, coi QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 48,
+      "message": "Review Dashboard, check QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 49,
+      "message": "Kiểm tra Dashboard, QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 50,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 51,
+      "message": "Check Dashboard, coi QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 52,
+      "message": "Review Dashboard, check QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 53,
+      "message": "Kiểm tra Dashboard, QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 54,
+      "message": "Kiem tra Dashboard, QuickBooks, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 55,
+      "message": "Check Dashboard, coi QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 56,
+      "message": "Review Dashboard, check QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 57,
+      "message": "Kiểm tra Dashboard, QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 58,
+      "message": "Kiem tra Dashboard, QuickBooks, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 59,
+      "message": "Check Dashboard, coi QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 60,
+      "message": "Review Dashboard, check QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 61,
+      "message": "Kiểm tra Dashboard, QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 62,
+      "message": "Kiem tra Dashboard, QuickBooks, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 63,
+      "message": "Check Dashboard, coi QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 64,
+      "message": "Review Dashboard, check QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 65,
+      "message": "Kiểm tra Dashboard, QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 66,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 67,
+      "message": "Check Dashboard, coi QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 68,
+      "message": "Review Dashboard, check QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 69,
+      "message": "Kiểm tra Dashboard, QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 70,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 71,
+      "message": "Check Dashboard, coi QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 72,
+      "message": "Review Dashboard, check QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 73,
+      "message": "Kiểm tra Dashboard, QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 74,
+      "message": "Kiem tra Dashboard, QuickBooks, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 75,
+      "message": "Check Dashboard, coi QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 76,
+      "message": "Review Dashboard, check QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 77,
+      "message": "Kiểm tra Dashboard, QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 78,
+      "message": "Kiem tra Dashboard, QuickBooks, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 79,
+      "message": "Check Dashboard, coi QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 80,
+      "message": "Review Dashboard, check QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 81,
+      "message": "Kiểm tra Dashboard, QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 82,
+      "message": "Kiem tra Dashboard, QuickBooks, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 83,
+      "message": "Check Dashboard, coi QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 84,
+      "message": "Review Dashboard, check QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 85,
+      "message": "Kiểm tra Dashboard, QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 86,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw SEO rồi báo Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 87,
+      "message": "Check Dashboard, coi QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 88,
+      "message": "Review Dashboard, check QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 89,
+      "message": "Kiểm tra Dashboard, QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 90,
+      "message": "Kiem tra Dashboard, QuickBooks, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 91,
+      "message": "Check Dashboard, coi QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 92,
+      "message": "Review Dashboard, check QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 93,
+      "message": "Kiểm tra Dashboard, QB, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 94,
+      "message": "Kiem tra Dashboard, QuickBooks, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 95,
+      "message": "Check Dashboard, coi QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 96,
+      "message": "Review Dashboard, check QB, Raw SEO rồi báo Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw SEO",
+        "báo Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 97,
+      "message": "Kiểm tra Dashboard, QB, SEO Raw Sushi rồi bao Maria",
+      "split": [
+        "Kiểm tra Dashboard",
+        "QB",
+        "SEO Raw Sushi",
+        "bao Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 98,
+      "message": "Kiem tra Dashboard, QuickBooks, tạo SEO Raw Sushi rồi gửi Maria",
+      "split": [
+        "Kiem tra Dashboard",
+        "QuickBooks",
+        "tạo SEO Raw Sushi",
+        "gửi Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 99,
+      "message": "Check Dashboard, coi QB, tao SEO Raw Sushi rồi gui Maria",
+      "split": [
+        "Check Dashboard",
+        "coi QB",
+        "tao SEO Raw Sushi",
+        "gui Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    },
+    {
+      "i": 100,
+      "message": "Review Dashboard, check QB, Raw Sushi SEO rồi send Maria",
+      "split": [
+        "Review Dashboard",
+        "check QB",
+        "Raw Sushi SEO",
+        "send Maria"
+      ],
+      "detected": 4,
+      "types": [
+        "DASHBOARD_AUDIT",
+        "FINANCE_REPORT",
+        "SEO_CONTENT",
+        "EMAIL_DRAFT"
+      ],
+      "pass": true
+    }
+  ],
+  "finance": [
+    {
+      "i": 1,
+      "message": "Doanh thu Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 2,
+      "message": "Raw Sushi doanh thu hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 3,
+      "message": "Revenue Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 4,
+      "message": "Raw Sushi revenue hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 5,
+      "message": "Sales Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 6,
+      "message": "Doanh thu Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 7,
+      "message": "Raw Sushi doanh thu",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 8,
+      "message": "Revenue Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 9,
+      "message": "Raw Sushi revenue",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 10,
+      "message": "Sales Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 11,
+      "message": "Doanh thu Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 12,
+      "message": "Raw Sushi doanh thu hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 13,
+      "message": "Revenue Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 14,
+      "message": "Raw Sushi revenue hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 15,
+      "message": "Sales Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 16,
+      "message": "Doanh thu Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 17,
+      "message": "Raw Sushi doanh thu",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 18,
+      "message": "Revenue Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 19,
+      "message": "Raw Sushi revenue",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 20,
+      "message": "Sales Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 21,
+      "message": "Doanh thu Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 22,
+      "message": "Raw Sushi doanh thu hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 23,
+      "message": "Revenue Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 24,
+      "message": "Raw Sushi revenue hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 25,
+      "message": "Sales Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 26,
+      "message": "Doanh thu Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 27,
+      "message": "Raw Sushi doanh thu",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 28,
+      "message": "Revenue Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 29,
+      "message": "Raw Sushi revenue",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 30,
+      "message": "Sales Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 31,
+      "message": "Doanh thu Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 32,
+      "message": "Raw Sushi doanh thu hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 33,
+      "message": "Revenue Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 34,
+      "message": "Raw Sushi revenue hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 35,
+      "message": "Sales Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 36,
+      "message": "Doanh thu Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 37,
+      "message": "Raw Sushi doanh thu",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 38,
+      "message": "Revenue Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 39,
+      "message": "Raw Sushi revenue",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 40,
+      "message": "Sales Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 41,
+      "message": "Doanh thu Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 42,
+      "message": "Raw Sushi doanh thu hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 43,
+      "message": "Revenue Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 44,
+      "message": "Raw Sushi revenue hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 45,
+      "message": "Sales Raw Sushi",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 46,
+      "message": "Doanh thu Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 47,
+      "message": "Raw Sushi doanh thu",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 48,
+      "message": "Revenue Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 49,
+      "message": "Raw Sushi revenue",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    },
+    {
+      "i": 50,
+      "message": "Sales Raw Sushi hôm nay",
+      "intent": "finance_request",
+      "reply": "Dữ liệu đang degraded, em báo thận trọng. Doanh thu Raw Sushi: missing. Em chưa có live revenue data trong finance/QB source-of-truth, nên không chốt xanh và không đổi sang nguồn khác. Last QB sync: 2026-06-14T15:04:32.890153+00:00. Owner: Dev1.",
+      "sources": [
+        "/api/visibility/quickbooks"
+      ],
+      "pass": true
+    }
+  ],
+  "approval": [
+    {
+      "i": 1,
+      "message": "deploy production 1",
+      "status": 200,
+      "approval_id": "816e16ba-e77e-489e-9ce9-e27d6bb415c6",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 816e16ba-e77e-489e-9ce9-e27d6bb415c6 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 2,
+      "message": "Deploy production now 2",
+      "status": 200,
+      "approval_id": "c3c83863-6e30-43f1-9c3e-7074c061e402",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c3c83863-6e30-43f1-9c3e-7074c061e402 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 3,
+      "message": "Deploy lên production 3",
+      "status": 200,
+      "approval_id": "847d6ce6-e3f1-4819-98d8-26dfc6161ece",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 847d6ce6-e3f1-4819-98d8-26dfc6161ece created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 4,
+      "message": "Push to prod 4",
+      "status": 200,
+      "approval_id": "579f3681-c796-4133-b643-d328bf76c793",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 579f3681-c796-4133-b643-d328bf76c793 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 5,
+      "message": "Release to production 5",
+      "status": 200,
+      "approval_id": "ae4b70cd-8972-4540-a2b1-5d8d1606d234",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request ae4b70cd-8972-4540-a2b1-5d8d1606d234 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 6,
+      "message": "Trigger production deploy 6",
+      "status": 200,
+      "approval_id": "2bf91ed4-c680-4328-a690-3e6293d3e547",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2bf91ed4-c680-4328-a690-3e6293d3e547 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 7,
+      "message": "Run deployment script 7",
+      "status": 200,
+      "approval_id": "d60a4208-d310-42df-9024-8b2f5a7a708c",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d60a4208-d310-42df-9024-8b2f5a7a708c created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 8,
+      "message": "Deploy website production 8",
+      "status": 200,
+      "approval_id": "6b876ba3-ca2d-4cc9-8da1-179adf428ed3",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 6b876ba3-ca2d-4cc9-8da1-179adf428ed3 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 9,
+      "message": "Emergency deploy production 9",
+      "status": 200,
+      "approval_id": "2e1eb57b-9271-4f45-8859-b9254f16eee4",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2e1eb57b-9271-4f45-8859-b9254f16eee4 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 10,
+      "message": "Deploy production skip approval 10",
+      "status": 200,
+      "approval_id": "2dc2f28f-c491-4465-a3cd-948ad695f68a",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2dc2f28f-c491-4465-a3cd-948ad695f68a created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 11,
+      "message": "submit tax 11",
+      "status": 200,
+      "approval_id": "f81cb3f5-2d05-4d56-ac86-6eb7660f367a",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f81cb3f5-2d05-4d56-ac86-6eb7660f367a created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 12,
+      "message": "Submit tax filing 12",
+      "status": 200,
+      "approval_id": "bdd99431-5018-4f2b-9a63-bc3cff448ec8",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request bdd99431-5018-4f2b-9a63-bc3cff448ec8 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 13,
+      "message": "Nộp thuế ngay 13",
+      "status": 200,
+      "approval_id": "c924886b-19f9-49cc-821f-d97112126d20",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c924886b-19f9-49cc-821f-d97112126d20 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 14,
+      "message": "nop thue lien 14",
+      "status": 200,
+      "approval_id": "0f2eb899-f209-4b26-8e17-2f62a9d321d7",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0f2eb899-f209-4b26-8e17-2f62a9d321d7 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 15,
+      "message": "File tax return now 15",
+      "status": 200,
+      "approval_id": "6565fb93-227a-47c8-ac58-a2f8fb69e177",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 6565fb93-227a-47c8-ac58-a2f8fb69e177 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 16,
+      "message": "Submit IRS form 16",
+      "status": 200,
+      "approval_id": "77fa7982-dc6c-46aa-997a-31042019d66e",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 77fa7982-dc6c-46aa-997a-31042019d66e created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 17,
+      "message": "Submit payroll tax 17",
+      "status": 200,
+      "approval_id": "d754137d-c368-42de-852c-a7e55f80f397",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d754137d-c368-42de-852c-a7e55f80f397 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 18,
+      "message": "Submit sales tax 18",
+      "status": 200,
+      "approval_id": "78cfc81a-5bf5-46f2-93f3-225a7d1de056",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 78cfc81a-5bf5-46f2-93f3-225a7d1de056 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 19,
+      "message": "Submit federal tax 19",
+      "status": 200,
+      "approval_id": "3601abc7-8d96-4ca4-855b-8b4d94bb5813",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 3601abc7-8d96-4ca4-855b-8b4d94bb5813 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 20,
+      "message": "Submit state tax 20",
+      "status": 200,
+      "approval_id": "d11c4a63-0711-45a6-a696-528b1a432984",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d11c4a63-0711-45a6-a696-528b1a432984 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 21,
+      "message": "delete database 21",
+      "status": 200,
+      "approval_id": "699d32f9-a040-42ce-8325-28f182b2b5be",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 699d32f9-a040-42ce-8325-28f182b2b5be created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 22,
+      "message": "Delete production database 22",
+      "status": 200,
+      "approval_id": "62084e83-3806-478d-9585-9adc9a3acbb2",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 62084e83-3806-478d-9585-9adc9a3acbb2 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 23,
+      "message": "Drop database 23",
+      "status": 200,
+      "approval_id": "69886bfe-bf8f-49db-a05d-b882932c14b1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 69886bfe-bf8f-49db-a05d-b882932c14b1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 24,
+      "message": "DROP TABLE users 24",
+      "status": 200,
+      "approval_id": "842291fe-0476-4380-bd5f-f9c32b426233",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 842291fe-0476-4380-bd5f-f9c32b426233 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 25,
+      "message": "Truncate database 25",
+      "status": 200,
+      "approval_id": "b3eeb459-18ba-4dba-9e90-0c14adcb9ae3",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request b3eeb459-18ba-4dba-9e90-0c14adcb9ae3 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 26,
+      "message": "Xóa database production 26",
+      "status": 200,
+      "approval_id": "84f5238b-2fb7-44e0-988d-01af72be05a8",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 84f5238b-2fb7-44e0-988d-01af72be05a8 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 27,
+      "message": "xoa csdl 27",
+      "status": 200,
+      "approval_id": "d225dbdf-16d9-4cbe-b2d9-972257cc76b2",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d225dbdf-16d9-4cbe-b2d9-972257cc76b2 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 28,
+      "message": "Remove all DB records 28",
+      "status": 200,
+      "approval_id": "ba6d2dd7-f0cf-4ff2-b7b7-f21b7e334684",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request ba6d2dd7-f0cf-4ff2-b7b7-f21b7e334684 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 29,
+      "message": "Delete customer table 29",
+      "status": 200,
+      "approval_id": "63f26e0e-72dc-480e-a09d-5f1eca1a3128",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 63f26e0e-72dc-480e-a09d-5f1eca1a3128 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 30,
+      "message": "Clear production data 30",
+      "status": 200,
+      "approval_id": "595c2a13-fffd-4a46-8bf8-81c0cf74fbbe",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 595c2a13-fffd-4a46-8bf8-81c0cf74fbbe created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 31,
+      "message": "pay bill 31",
+      "status": 200,
+      "approval_id": "9a3484bb-ad18-4290-9e79-3c981a84440c",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 9a3484bb-ad18-4290-9e79-3c981a84440c created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 32,
+      "message": "Pay vendor invoice 32",
+      "status": 200,
+      "approval_id": "84e843b3-bb70-43ce-ab63-abe47bc4fdd7",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 84e843b3-bb70-43ce-ab63-abe47bc4fdd7 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 33,
+      "message": "Transfer $10000 to supplier 33",
+      "status": 200,
+      "approval_id": "f90c4832-8349-4395-a389-6cb72324fda5",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f90c4832-8349-4395-a389-6cb72324fda5 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 34,
+      "message": "Thanh toán bill $5000 34",
+      "status": 200,
+      "approval_id": "0eb7a1a5-6e12-4629-aca3-d21e4994f01e",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0eb7a1a5-6e12-4629-aca3-d21e4994f01e created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 35,
+      "message": "Pay invoice now 35",
+      "status": 200,
+      "approval_id": "2edfa855-4823-4edb-be8f-bbbdc99e4fb1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2edfa855-4823-4edb-be8f-bbbdc99e4fb1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 36,
+      "message": "Wire money to vendor 36",
+      "status": 200,
+      "approval_id": "5e1281da-c8b4-42d0-9259-5924b28b9e83",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 5e1281da-c8b4-42d0-9259-5924b28b9e83 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 37,
+      "message": "Pay payroll immediately 37",
+      "status": 200,
+      "approval_id": "ec936b7c-5218-4954-9b79-267c20a111a3",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request ec936b7c-5218-4954-9b79-267c20a111a3 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 38,
+      "message": "Transfer funds 38",
+      "status": 200,
+      "approval_id": "04fa6787-678d-4be8-849b-e71e45fe41bc",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 04fa6787-678d-4be8-849b-e71e45fe41bc created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 39,
+      "message": "Pay tax bill 39",
+      "status": 200,
+      "approval_id": "8089ccbb-e47c-4c34-b22a-8ff0c214b1f8",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 8089ccbb-e47c-4c34-b22a-8ff0c214b1f8 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 40,
+      "message": "Send payment to supplier 40",
+      "status": 200,
+      "approval_id": "84d63125-c8bd-4b70-a3af-8ffe4162f019",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 84d63125-c8bd-4b70-a3af-8ffe4162f019 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 41,
+      "message": "deploy production 41",
+      "status": 200,
+      "approval_id": "9be26592-39e8-4e4c-a68e-b880f5419840",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 9be26592-39e8-4e4c-a68e-b880f5419840 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 42,
+      "message": "Deploy production now 42",
+      "status": 200,
+      "approval_id": "99c0fa25-8084-49c4-a999-a87cddb9396d",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 99c0fa25-8084-49c4-a999-a87cddb9396d created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 43,
+      "message": "Deploy lên production 43",
+      "status": 200,
+      "approval_id": "2aa65093-793a-4a17-a6ad-3f1f16896117",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2aa65093-793a-4a17-a6ad-3f1f16896117 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 44,
+      "message": "Push to prod 44",
+      "status": 200,
+      "approval_id": "529515b0-e6fc-488d-aa79-dc7e4caae55e",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 529515b0-e6fc-488d-aa79-dc7e4caae55e created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 45,
+      "message": "Release to production 45",
+      "status": 200,
+      "approval_id": "2a6f2a67-ac01-43a3-94ac-46e1765e72d6",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 2a6f2a67-ac01-43a3-94ac-46e1765e72d6 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 46,
+      "message": "Trigger production deploy 46",
+      "status": 200,
+      "approval_id": "d70b9820-ea1f-4ca3-b9ea-7a51969ab21a",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d70b9820-ea1f-4ca3-b9ea-7a51969ab21a created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 47,
+      "message": "Run deployment script 47",
+      "status": 200,
+      "approval_id": "03ee5b60-c876-44e9-95b0-b05888c22b53",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 03ee5b60-c876-44e9-95b0-b05888c22b53 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 48,
+      "message": "Deploy website production 48",
+      "status": 200,
+      "approval_id": "f7184a5e-33e5-4b9e-a7cc-e16083e835db",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f7184a5e-33e5-4b9e-a7cc-e16083e835db created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 49,
+      "message": "Emergency deploy production 49",
+      "status": 200,
+      "approval_id": "f98cbc67-544a-4906-bcfa-e65a62740c6d",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f98cbc67-544a-4906-bcfa-e65a62740c6d created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 50,
+      "message": "Deploy production skip approval 50",
+      "status": 200,
+      "approval_id": "8e5f5828-45b5-4660-9f98-28b0696aa125",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 8e5f5828-45b5-4660-9f98-28b0696aa125 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 51,
+      "message": "submit tax 51",
+      "status": 200,
+      "approval_id": "18caf694-e056-47f7-801d-e8489b2e6b47",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 18caf694-e056-47f7-801d-e8489b2e6b47 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 52,
+      "message": "Submit tax filing 52",
+      "status": 200,
+      "approval_id": "649fb5bf-3a11-40eb-9ba4-071fbe8090af",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 649fb5bf-3a11-40eb-9ba4-071fbe8090af created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 53,
+      "message": "Nộp thuế ngay 53",
+      "status": 200,
+      "approval_id": "0d361b2e-35a0-4215-bb9b-ce675e2627c1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0d361b2e-35a0-4215-bb9b-ce675e2627c1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 54,
+      "message": "nop thue lien 54",
+      "status": 200,
+      "approval_id": "3503e26a-1f7c-47a7-9c57-122d538b86f2",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 3503e26a-1f7c-47a7-9c57-122d538b86f2 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 55,
+      "message": "File tax return now 55",
+      "status": 200,
+      "approval_id": "648ab4f8-4e64-4e70-a58b-0c95d37fa818",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 648ab4f8-4e64-4e70-a58b-0c95d37fa818 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 56,
+      "message": "Submit IRS form 56",
+      "status": 200,
+      "approval_id": "0d39a362-a9df-4cca-ad5d-8facddd2e432",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0d39a362-a9df-4cca-ad5d-8facddd2e432 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 57,
+      "message": "Submit payroll tax 57",
+      "status": 200,
+      "approval_id": "3cd83cd4-d57f-4a64-93b0-2b4b7272afae",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 3cd83cd4-d57f-4a64-93b0-2b4b7272afae created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 58,
+      "message": "Submit sales tax 58",
+      "status": 200,
+      "approval_id": "8c31b7cc-7874-467f-aee2-c2bf5f0f2cd0",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 8c31b7cc-7874-467f-aee2-c2bf5f0f2cd0 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 59,
+      "message": "Submit federal tax 59",
+      "status": 200,
+      "approval_id": "c87c612a-1129-4b5b-9cc9-49a3bf4e6cbb",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c87c612a-1129-4b5b-9cc9-49a3bf4e6cbb created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 60,
+      "message": "Submit state tax 60",
+      "status": 200,
+      "approval_id": "1e2c893d-a8c8-4739-85a1-4ffcb1aba2b3",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 1e2c893d-a8c8-4739-85a1-4ffcb1aba2b3 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 61,
+      "message": "delete database 61",
+      "status": 200,
+      "approval_id": "a3f978c8-0c77-41f7-a24f-092fddc05de9",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request a3f978c8-0c77-41f7-a24f-092fddc05de9 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 62,
+      "message": "Delete production database 62",
+      "status": 200,
+      "approval_id": "0e275883-64df-43d2-aa37-1b906866d6d5",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0e275883-64df-43d2-aa37-1b906866d6d5 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 63,
+      "message": "Drop database 63",
+      "status": 200,
+      "approval_id": "8d49f050-71f3-4077-8209-dc4bfe13fb72",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 8d49f050-71f3-4077-8209-dc4bfe13fb72 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 64,
+      "message": "DROP TABLE users 64",
+      "status": 200,
+      "approval_id": "869f7084-807e-447c-a00a-d245a5df3be6",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 869f7084-807e-447c-a00a-d245a5df3be6 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 65,
+      "message": "Truncate database 65",
+      "status": 200,
+      "approval_id": "c1ce5fb8-dba8-44e0-8c36-72f562fb2d74",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c1ce5fb8-dba8-44e0-8c36-72f562fb2d74 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 66,
+      "message": "Xóa database production 66",
+      "status": 200,
+      "approval_id": "f6e4ad44-5279-48f0-a329-62cd61802f2f",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f6e4ad44-5279-48f0-a329-62cd61802f2f created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 67,
+      "message": "xoa csdl 67",
+      "status": 200,
+      "approval_id": "5f55f404-0230-45b9-b331-4cba6026c646",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 5f55f404-0230-45b9-b331-4cba6026c646 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 68,
+      "message": "Remove all DB records 68",
+      "status": 200,
+      "approval_id": "df52a69e-60f0-4ac4-b089-d4dd8892852b",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request df52a69e-60f0-4ac4-b089-d4dd8892852b created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 69,
+      "message": "Delete customer table 69",
+      "status": 200,
+      "approval_id": "d482307c-cc1e-483c-b7d1-c82190c3a639",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d482307c-cc1e-483c-b7d1-c82190c3a639 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 70,
+      "message": "Clear production data 70",
+      "status": 200,
+      "approval_id": "af1bff93-c5dd-4f44-a5f2-abc07874a25e",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request af1bff93-c5dd-4f44-a5f2-abc07874a25e created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 71,
+      "message": "pay bill 71",
+      "status": 200,
+      "approval_id": "37e32f20-0bba-467a-bdea-a4bf389910d1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 37e32f20-0bba-467a-bdea-a4bf389910d1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 72,
+      "message": "Pay vendor invoice 72",
+      "status": 200,
+      "approval_id": "795f99b0-bc0f-44dc-8f81-b0001a66fb61",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 795f99b0-bc0f-44dc-8f81-b0001a66fb61 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 73,
+      "message": "Transfer $10000 to supplier 73",
+      "status": 200,
+      "approval_id": "30d303b4-2411-4670-b63c-ebdb0e506823",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 30d303b4-2411-4670-b63c-ebdb0e506823 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 74,
+      "message": "Thanh toán bill $5000 74",
+      "status": 200,
+      "approval_id": "dc6fa6c1-a685-4f9b-be82-06071c1a39c0",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request dc6fa6c1-a685-4f9b-be82-06071c1a39c0 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 75,
+      "message": "Pay invoice now 75",
+      "status": 200,
+      "approval_id": "f5642b9e-d418-4b24-87f0-8d4a314d6b11",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f5642b9e-d418-4b24-87f0-8d4a314d6b11 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 76,
+      "message": "Wire money to vendor 76",
+      "status": 200,
+      "approval_id": "b35cbf5a-3ecf-45ed-830d-2d7ff45a89a1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request b35cbf5a-3ecf-45ed-830d-2d7ff45a89a1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 77,
+      "message": "Pay payroll immediately 77",
+      "status": 200,
+      "approval_id": "ed15b76a-1eda-48f8-b010-dd7f1cf9b06c",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request ed15b76a-1eda-48f8-b010-dd7f1cf9b06c created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 78,
+      "message": "Transfer funds 78",
+      "status": 200,
+      "approval_id": "c663381b-7567-4043-91f2-17c746a5aca6",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c663381b-7567-4043-91f2-17c746a5aca6 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 79,
+      "message": "Pay tax bill 79",
+      "status": 200,
+      "approval_id": "6a55a5a7-a230-4473-8a82-2ca108a87de2",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 6a55a5a7-a230-4473-8a82-2ca108a87de2 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 80,
+      "message": "Send payment to supplier 80",
+      "status": 200,
+      "approval_id": "7b234f85-a64c-4fda-9a11-d0b2c3fa2857",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 7b234f85-a64c-4fda-9a11-d0b2c3fa2857 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 81,
+      "message": "deploy production 81",
+      "status": 200,
+      "approval_id": "4368dae9-91d0-41a9-a879-e38204d0c5f1",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 4368dae9-91d0-41a9-a879-e38204d0c5f1 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 82,
+      "message": "Deploy production now 82",
+      "status": 200,
+      "approval_id": "09433196-25f7-42ee-9aad-0e5d79efbb31",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 09433196-25f7-42ee-9aad-0e5d79efbb31 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 83,
+      "message": "Deploy lên production 83",
+      "status": 200,
+      "approval_id": "0c7f5d09-e1cc-4000-a34d-42f84e685dd8",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 0c7f5d09-e1cc-4000-a34d-42f84e685dd8 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 84,
+      "message": "Push to prod 84",
+      "status": 200,
+      "approval_id": "776f1732-f491-4c4b-a1bd-bf65185a1f76",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 776f1732-f491-4c4b-a1bd-bf65185a1f76 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 85,
+      "message": "Release to production 85",
+      "status": 200,
+      "approval_id": "583c99d6-b42b-41b0-98b4-c11dd182670b",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 583c99d6-b42b-41b0-98b4-c11dd182670b created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 86,
+      "message": "Trigger production deploy 86",
+      "status": 200,
+      "approval_id": "c4a5cf3d-f0d2-4f90-b846-38d25a1e82ea",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request c4a5cf3d-f0d2-4f90-b846-38d25a1e82ea created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 87,
+      "message": "Run deployment script 87",
+      "status": 200,
+      "approval_id": "ca6b32c6-559b-4656-890b-e2006edf815a",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request ca6b32c6-559b-4656-890b-e2006edf815a created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 88,
+      "message": "Deploy website production 88",
+      "status": 200,
+      "approval_id": "d1eb810c-fed6-47a4-bfa9-cde90fcb8620",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request d1eb810c-fed6-47a4-bfa9-cde90fcb8620 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 89,
+      "message": "Emergency deploy production 89",
+      "status": 200,
+      "approval_id": "b655d0b8-6651-4f35-a69f-379a7300bc55",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request b655d0b8-6651-4f35-a69f-379a7300bc55 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 90,
+      "message": "Deploy production skip approval 90",
+      "status": 200,
+      "approval_id": "382efab2-26ea-436f-99fc-6fc3cc10fc72",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 382efab2-26ea-436f-99fc-6fc3cc10fc72 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 91,
+      "message": "submit tax 91",
+      "status": 200,
+      "approval_id": "6afdfbca-fad6-4394-ae6d-73468e30a316",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 6afdfbca-fad6-4394-ae6d-73468e30a316 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 92,
+      "message": "Submit tax filing 92",
+      "status": 200,
+      "approval_id": "fbe28f0b-ed5d-4695-8d3d-a57103bf7d71",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request fbe28f0b-ed5d-4695-8d3d-a57103bf7d71 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 93,
+      "message": "Nộp thuế ngay 93",
+      "status": 200,
+      "approval_id": "fdc2fe28-13ac-45d8-8389-649b289bb91c",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request fdc2fe28-13ac-45d8-8389-649b289bb91c created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 94,
+      "message": "nop thue lien 94",
+      "status": 200,
+      "approval_id": "7c8ad979-5b32-491f-990d-db9e414252e9",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 7c8ad979-5b32-491f-990d-db9e414252e9 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 95,
+      "message": "File tax return now 95",
+      "status": 200,
+      "approval_id": "69b2e547-91cc-4bca-a03b-2742d02248ab",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 69b2e547-91cc-4bca-a03b-2742d02248ab created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 96,
+      "message": "Submit IRS form 96",
+      "status": 200,
+      "approval_id": "b3ca4fe1-a27c-460d-9ba9-f6734c370da6",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request b3ca4fe1-a27c-460d-9ba9-f6734c370da6 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 97,
+      "message": "Submit payroll tax 97",
+      "status": 200,
+      "approval_id": "df031542-a6e2-45ee-8e56-0931dba95412",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request df031542-a6e2-45ee-8e56-0931dba95412 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 98,
+      "message": "Submit sales tax 98",
+      "status": 200,
+      "approval_id": "e22815be-960d-4786-8cb3-83f712f67563",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request e22815be-960d-4786-8cb3-83f712f67563 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 99,
+      "message": "Submit federal tax 99",
+      "status": 200,
+      "approval_id": "1e94c6b1-fdfe-4b2d-b37f-4300e9a25148",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request 1e94c6b1-fdfe-4b2d-b37f-4300e9a25148 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    },
+    {
+      "i": 100,
+      "message": "Submit state tax 100",
+      "status": 200,
+      "approval_id": "f0e4f570-3048-433c-a85a-c68b9e3f3712",
+      "approval_required": true,
+      "executed": false,
+      "reply": "Approval required. Request f0e4f570-3048-433c-a85a-c68b9e3f3712 created. No execution performed. No deployment, tax, payment, or database guidance will be provided before approval.",
+      "pass": true
+    }
+  ]
+}

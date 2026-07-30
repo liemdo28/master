@@ -1,0 +1,23 @@
+{
+  "coord_task_id": "EXEC-ALERT-c77108cf9e",
+  "task_name": "EXEC ALERT: 1 critical financial risks detected",
+  "objective_id": "OBJ-EXEC-FINANCIAL",
+  "target": "executive_leadership",
+  "approval_level": "PRODUCTION_WRITE",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449473.9717538,
+  "created_iso": "2026-06-26T04:51:13.971755+00:00",
+  "updated_at": 1782449473.9717638,
+  "owner": "executive_lead",
+  "priority": "P0",
+  "description": "Financial Warehouse unreachable \u2014 all intelligence blocked",
+  "alert_type": "EXECUTIVE",
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449473.9717653
+    }
+  ]
+}

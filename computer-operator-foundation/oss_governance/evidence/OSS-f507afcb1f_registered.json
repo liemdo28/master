@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-f507afcb1f",
+  "name": "OpenHands",
+  "github": "https://github.com/All-Hands-AI/OpenHands",
+  "owner_division": "Engineering",
+  "category": "Engineering",
+  "description": "Autonomous coding agent platform",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452122.837565,
+  "created_iso": "2026-06-26T05:35:22.837568+00:00",
+  "updated_at": 1782452122.837565,
+  "updated_iso": "2026-06-26T05:35:22.837576+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452122.837565,
+      "iso": "2026-06-26T05:35:22.837578+00:00"
+    }
+  ]
+}

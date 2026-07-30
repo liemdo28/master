@@ -1,0 +1,13 @@
+﻿path,remote,branch,head_commit,dirty
+Agent\agent-coding-api-keys,https://github.com/liemdo28/master.git,n8n-workflow-fabric-fix,fa7805cd,dirty
+Agent\shared-workspace,,master,5f7f8b8,dirty
+Bakudan\bakudanramen.com-current,https://github.com/liemdo28/bakudanwebsite_sub.git,work/final-readiness,e541f9c,dirty
+Bakudan\integration-system,https://github.com/liemdo28/intergration-full.git,main,72ad8c5,dirty
+Bakudan\packing-list,https://github.com/liemdo28/packing-list.git,master,42b8b41a,dirty
+Bakudan\packing-list\packing-list,https://github.com/liemdo28/packing-list.git,master,42b8b41a,dirty
+Other\LinkTreeHL,https://github.com/liemdo28/LinkTreeHL.git,master,428225f,dirty
+Other\LinkTreeHL\LinkTreeHL,https://github.com/liemdo28/LinkTreeHL.git,master,428225f,dirty
+Other\phuyen-2026,https://github.com/liemdo28/phuyen-2026.git,main,c83e755,clean
+Other\phuyen-2026\phuyen-2026,https://github.com/liemdo28/phuyen-2026.git,main,7cfbb9e,dirty
+Other\VC\Format CV - NS South (web)\inform-resume,https://github.com/liemdo28/inform-resume.git,main,129c9b3,dirty
+RawSushi\RawWebsite\rawwebsite,https://github.com/liemdo28/rawwebsite,seo-fixes,f308e47,clean

@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp AI Gateway</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#0b1020;color:#e5e7eb;font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px}
+    header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid #1f2937;background:#111827;position:sticky;top:0;z-index:2}
+    h1{font-size:18px;margin:0}.sub{margin-left:auto;color:#94a3b8;font-size:12px}.build{color:#94a3b8;font-size:11px;line-height:1.35;text-align:right}
+    main{padding:20px 24px 32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+    .card,.section{background:#111827;border:1px solid #243044;border-radius:8px;padding:14px}
+    .section{margin-bottom:16px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    h2,h3{margin:0}h2{font-size:15px}h3{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8}
+    .val{font-size:22px;font-weight:700;margin-top:7px}.meta,.dim{color:#94a3b8;font-size:12px}.dim{word-break:break-word}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff}
+    .ok{background:#16a34a}.warn{background:#d97706}.bad{background:#dc2626}.off{background:#64748b}
+    table{width:100%;border-collapse:collapse}th,td{padding:8px 7px;border-bottom:1px solid #1f2937;text-align:left;vertical-align:top}th{color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+    input,select{background:#0f172a;border:1px solid #334155;color:#e5e7eb;border-radius:6px;padding:7px 9px;min-width:0}
+    button,.btn{background:#1e293b;border:1px solid #334155;color:#e5e7eb;border-radius:6px;padding:7px 10px;cursor:pointer;text-decoration:none;display:inline-block}
+    button:hover,.btn:hover{background:#334155}.primary{border-color:#2563eb;background:#1d4ed8}.danger{border-color:#7f1d1d;color:#fecaca}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .qr{display:flex;align-items:center;gap:12px;margin-top:10px}.qr img{width:150px;border:4px solid #fff;border-radius:6px;background:#fff}
+    .alert{background:#7f1d1d;border-bottom:1px solid #ef4444;color:#fecaca;padding:9px 24px}.small{font-size:12px}
+    @media (max-width:700px){
+      header{padding:12px;align-items:flex-start}.sub{margin-left:0}.build{text-align:left}main{padding:12px}
+      .section,.card{padding:10px;overflow-x:auto}.section-head{align-items:flex-start;flex-direction:column}.row{align-items:stretch}
+      input,select,button,.btn{max-width:100%}table{min-width:520px}.grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <h1>WhatsApp AI Gateway</h1>
+    <div class="sub build">Build: Admin Control Center v1<br>Build ID: 202606090438-e06e26c<br>Commit: e06e26c<br>Started: 2026-06-09T04:38:59.300Z<br>Rendered: 6/9/2026, 11:40:34 AM</div>
+  </header>
+  <main>
+    <div class="grid">
+      <div class="card"><h3>WhatsApp</h3><div class="val"><span class="badge warn">disconnected</span></div></div>
+      <div class="card"><h3>Telegram</h3><div class="val"><span class="badge off">OFF</span></div></div>
+      <div class="card"><h3>AI Engine</h3><div class="val"><span class="badge ok">ACTIVE</span></div></div>
+      <div class="card"><h3>Business Hours</h3><div class="val"><span class="badge ok">OPEN</span></div><div class="meta">Tuesday: 11:00 – 22:00</div></div>
+      <div class="card"><h3>Messages Today</h3><div class="val">0</div><div class="meta">0 incoming</div></div>
+      <div class="card"><h3>Last Message</h3><div class="val">Test User</div><div class="meta">Hello</div></div>
+    </div>
+
+    <section class="section">
+    <div class="section-head">
+      <h2>Admin Control Center</h2>
+      <span class="badge warn">NEEDS ACTION</span>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Template Sheet</h3><div class="val"><span class="badge ok">SET</span></div><div class="meta"><a class="btn small" href="https://docs.google.com/spreadsheets/d/12J9CRkTpDJ4boKClVaz0qiev9KV7dEyr-TK4KA1ugJs/edit" target="_blank" rel="noreferrer">Open Daily Entry Template</a></div></div>
+      <div class="card"><h3>Daily Log</h3><div class="val"><span class="badge ok">SET</span></div><div class="meta"><a class="btn small" href="https://docs.google.com/spreadsheets/d/1x_AhaoZhYgBX2zWOx6z78B9Fi8mcbaw4jZUq_PhSlnE/edit" target="_blank" rel="noreferrer">Open Daily Log</a></div></div>
+      <div class="card"><h3>Manager Alert</h3><div class="val"><span class="badge ok">ENABLED</span></div><div class="meta">Manager Test</div></div>
+      <div class="card"><h3>Sheet Queue</h3><div class="val">0 pending</div><div class="meta">0 failed</div></div>
+      <div class="card"><h3>Template Sync</h3><div class="val">19 items</div><div class="meta">not synced</div></div>
+    </div>
+    <h3>Google Sheet Settings</h3>
+    <div class="row" style="margin:8px 0 14px">
+      <input id="sheet-template-url" placeholder="Template sheet URL" value="https://docs.google.com/spreadsheets/d/12J9CRkTpDJ4boKClVaz0qiev9KV7dEyr-TK4KA1ugJs/edit" style="flex:1;min-width:260px">
+      <input id="sheet-log-url" placeholder="Daily log sheet URL" value="https://docs.google.com/spreadsheets/d/1x_AhaoZhYgBX2zWOx6z78B9Fi8mcbaw4jZUq_PhSlnE/edit" style="flex:1;min-width:260px">
+      <button class="primary" onclick="saveSheetLinks()">Save Sheet Links</button>
+      <button onclick="testSheetAccess('template')">Test Template Access</button>
+      <button onclick="testSheetWrite()">Test Sheet Write</button>
+    </div>
+    <h3>Printable Forms</h3>
+    <div class="row" style="margin:8px 0 14px">
+      <button onclick="window.open('/api/forms/daily-entry-test-form.pdf','_blank')">Open Daily Entry Test Form PDF</button>
+      <button onclick="window.open('/api/forms/daily-entry-test-form.xlsx','_blank')">Download Daily Entry Test Form XLSX</button>
+      <button class="primary" onclick="apiPost('/api/forms/regenerate',{})">Regenerate Form from Template</button>
+    </div>
+    <h3>Guides</h3>
+    <div class="row" style="margin:8px 0 14px">
+      <button onclick="window.open('/api/guides/staff-en','_blank')">Open Staff Guide</button>
+      <button onclick="window.open('/api/guides/manager-en','_blank')">Open Manager Guide</button>
+    </div>
+    <h3>WhatsApp Groups</h3>
+    <div class="row" style="margin:8px 0 14px">
+      <button class="primary" onclick="refreshWhatsAppGroups()">Refresh WhatsApp Groups</button>
+      <span class="dim">Use Store Mapping below to lock each group to the right store.</span>
+    </div>
+    <h3>Setup Checklist</h3>
+    <table><thead><tr><th>Check</th><th>Status</th><th>Note</th></tr></thead>
+    <tbody><tr><td>WhatsApp connected</td><td><span class="badge bad">FAIL</span></td><td class="dim">disconnected</td></tr><tr><td>Stone Oak group mapped</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Bandera group mapped</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Rim group mapped</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Manager alert group set</td><td><span class="badge ok">PASS</span></td><td class="dim">manager_test@g.us</td></tr><tr><td>Google Sheet links set</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Store mappings locked</td><td><span class="badge warn">NEEDS_ACTION</span></td><td class="dim">1/3 locked</td></tr><tr><td>Template sync OK</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head">
+      <h2>WhatsApp Diagnostics</h2>
+      <span class="badge warn">DISCONNECTED</span>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Current State</h3><div class="val"><span class="badge warn">DISCONNECTED</span></div><div class="meta">Client ID: bakudan-food-safety</div></div>
+      <div class="card"><h3>Last QR</h3><div class="val">-</div></div>
+      <div class="card"><h3>Authenticated</h3><div class="val">-</div></div>
+      <div class="card"><h3>Ready</h3><div class="val">-</div></div>
+      <div class="card"><h3>Restart Count</h3><div class="val">0</div></div>
+      <div class="card"><h3>Last Error</h3><div class="val">-</div></div>
+    </div>
+    <div class="row" style="margin:8px 0 12px">
+      <button onclick="whatsappAction('status')">Refresh Diagnostics</button>
+      <button class="primary" onclick="whatsappAction('restart')">Restart WhatsApp</button>
+      <button onclick="whatsappAction('restart')">Generate New QR / Re-Pair</button>
+      <button class="danger" onclick="if(confirm('Reset WhatsApp session and require a new QR scan?')) whatsappAction('reset-session')">Reset WhatsApp Session</button>
+    </div>
+    <pre id="whatsapp-diagnostics-output" class="dim" style="white-space:pre-wrap;background:#0f172a;border:1px solid #243044;border-radius:6px;padding:10px;margin:0">{
+  &quot;status&quot;: &quot;disconnected&quot;,
+  &quot;qrData&quot;: null,
+  &quot;readyAt&quot;: null,
+  &quot;state&quot;: &quot;DISCONNECTED&quot;,
+  &quot;last_error&quot;: &quot;&quot;,
+  &quot;last_qr_at&quot;: &quot;&quot;,
+  &quot;last_authenticated_at&quot;: &quot;&quot;,
+  &quot;last_ready_at&quot;: &quot;&quot;,
+  &quot;last_disconnected_at&quot;: &quot;&quot;,
+  &quot;restart_count&quot;: 0
+}</pre>
+  </section>
+    <section class="section">
+    <div class="section-head">
+      <h2>Runtime Control</h2>
+      <span class="badge ok">RUNNING</span>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Windows Runtime</h3><div class="val"><span class="badge ok">RUNNING</span></div><div class="meta">Hidden background process</div></div>
+      <div class="card"><h3>Port</h3><div class="val">3210</div><div class="meta"><a class="btn small" href="http://localhost:3210" target="_blank" rel="noreferrer">Open Dashboard</a></div></div>
+      <div class="card"><h3>Auto Start</h3><div class="val">Scheduled Task</div><div class="meta">WhatsApp AI Gateway</div></div>
+      <div class="card"><h3>Watchdog</h3><div class="val">Manual script</div><div class="meta">scripts/windows/watchdog.ps1</div></div>
+    </div>
+    <div class="row" style="margin:8px 0 12px">
+      <button onclick="runtimeControlAction('status')">Status</button>
+      <button class="primary" onclick="runtimeControlAction('start')">Start Hidden</button>
+      <button class="danger" onclick="runtimeControlAction('stop')">Stop</button>
+      <button onclick="runtimeControlAction('install_autostart')">Install Auto Start</button>
+      <button onclick="runtimeControlAction('uninstall_autostart')">Uninstall Auto Start</button>
+    </div>
+    <pre id="runtime-control-output" class="dim" style="white-space:pre-wrap;background:#0f172a;border:1px solid #243044;border-radius:6px;padding:10px;margin:0">Gateway status: RUNNING
+PID file: 
+Port 3210 PID: 12592
+Health: ok
+WhatsApp: disconnected
+Build ID: 202606090438-e06e26c
+Template Count: 19</pre>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Store Mapping</h2><span class="dim">8 mappings</span></div>
+    <div class="row" style="margin-bottom:12px">
+      <select id="new-store-select">
+        <option value="stone_oak">Stone Oak</option>
+        <option value="bandera">Bandera</option>
+        <option value="rim">Rim</option>
+        <option value="test">Test</option>
+      </select>
+      <input id="new-chat-id" placeholder="WhatsApp group chat_id" style="min-width:260px">
+      <input id="new-group-name" placeholder="Group name" style="min-width:180px">
+      <label class="small"><input id="new-store-locked" type="checkbox" checked> Locked</label>
+      <button class="primary" onclick="addStoreMapping()">Map Group to Store</button>
+    </div>
+    <table><thead><tr><th>Store</th><th>Group</th><th>Chat ID</th><th>Active</th><th>Locked</th></tr></thead>
+    <tbody><tr>
+    <td>Bandera</td>
+    <td class="dim"></td>
+    <td><code>store-bandera-test@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Rim</td>
+    <td class="dim"></td>
+    <td><code>store-rim-test@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim"></td>
+    <td><code>store-stone-oak-test@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Random Name No Store</td>
+    <td><code>stone@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Stone Oak Group</td>
+    <td><code>audit-stone-oak@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge ok">LOCKED</span></td>
+  </tr><tr>
+    <td>Test</td>
+    <td class="dim">LD Agent-Log</td>
+    <td><code>120363426386364543@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Test</td>
+    <td class="dim">Test Store Group</td>
+    <td><code>test_group_1780542846663@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr><tr>
+    <td>Test</td>
+    <td class="dim">Test Store Group 2</td>
+    <td><code>test_group_1780547001838@g.us</code></td>
+    <td><span class="badge ok">ACTIVE</span></td>
+    <td><span class="badge warn">UNLOCKED</span></td>
+  </tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Manager Alerts</h2><span class="badge ok">ENABLED</span></div>
+    <div class="grid">
+      <div class="card"><h3>Alert Group</h3><div class="val">Manager Test</div></div>
+      <div class="card"><h3>Sent Today</h3><div class="val">0</div></div>
+      <div class="card"><h3>Recent Alerts</h3><div class="val">0</div></div>
+    </div>
+    <div class="row" style="margin-bottom:12px">
+      <input id="manager-chat-id" placeholder="Manager alert chat_id" value="manager_test@g.us" style="min-width:260px">
+      <input id="manager-group-name" placeholder="Group name" value="Manager Test" style="min-width:180px">
+      <label class="small"><input id="manager-alert-enabled" type="checkbox" checked> Enabled</label>
+      <input id="manager-debounce" type="number" min="0" value="5" style="width:90px">
+      <input id="manager-escalation" type="number" min="0" value="30" style="width:90px">
+      <button class="primary" onclick="saveManagerAlert()">Save Manager Alert Group</button>
+      <button onclick="apiPost('/api/admin/manager-alert-group/test', {})">Test Alert</button>
+    </div>
+    <table><thead><tr><th>Time</th><th>Store</th><th>Status</th><th>Summary</th></tr></thead>
+    <tbody><tr><td colspan="4" class="dim" style="text-align:center;padding:16px">No manager alerts yet</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Daily Entry Template</h2><span class="badge ok">sqlite</span></div>
+    
+    <table><thead><tr><th>#</th><th>Item</th><th>Range</th></tr></thead>
+    <tbody><tr><td>1</td><td>Walk-in Cooler</td><td class="dim">30–45</td></tr><tr><td>2</td><td>Walk-in Freezer</td><td class="dim">-20–5</td></tr><tr><td>3</td><td>Prep Area Cooler</td><td class="dim">30–45</td></tr><tr><td>4</td><td>Ramen Refrigeration Top</td><td class="dim">30–45</td></tr><tr><td>5</td><td>Ramen Refrigeration Below</td><td class="dim">30–45</td></tr><tr><td>6</td><td>Line Freezer</td><td class="dim">≤ 0</td></tr><tr><td>7</td><td>Tapas Refrigeration Top</td><td class="dim">30–45</td></tr><tr><td>8</td><td>Tapas Refrigeration Below</td><td class="dim">30–45</td></tr><tr><td>9</td><td>Bowl Warmers</td><td class="dim">100–125</td></tr><tr><td>10</td><td>Pork Chashu</td><td class="dim">95–105</td></tr><tr><td>11</td><td>Chicken Chashu</td><td class="dim">30–40</td></tr><tr><td>12</td><td>Seasoned Eggs</td><td class="dim">95–105</td></tr><tr><td>13</td><td>Fryer 1</td><td class="dim">350–360</td></tr><tr><td>14</td><td>Fryer 2</td><td class="dim">350–360</td></tr><tr><td>15</td><td>Pasta Boiler 1</td><td class="dim">200–220</td></tr><tr><td>16</td><td>Pasta Boiler 2</td><td class="dim">200–220</td></tr><tr><td>17</td><td>Pork Broth</td><td class="dim">200–220</td></tr><tr><td>18</td><td>Chicken Broth</td><td class="dim">200–220</td></tr><tr><td>19</td><td>Veggie Broth</td><td class="dim"></td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>OCR Runtime</h2><span class="badge ok">READY</span></div>
+    <div class="grid">
+      <div class="card"><h3>Tesseract</h3><div class="val"><span class="badge ok">OK</span></div><div class="meta">tesseract v5.4.0.20240606</div></div>
+      <div class="card"><h3>OpenCV</h3><div class="val"><span class="badge ok">OK</span></div><div class="meta">4.13.0</div></div>
+      <div class="card"><h3>Sharp</h3><div class="val"><span class="badge ok">OK</span></div></div>
+      <div class="card"><h3>Total Runs</h3><div class="val">7</div></div>
+      <div class="card"><h3>Passed</h3><div class="val">0</div></div>
+      <div class="card"><h3>Needs Review</h3><div class="val">1</div></div>
+    </div>
+    <h3>OCR Records</h3>
+    <div class="dim small" style="margin-bottom:8px">Recent submissions across all stores. Records traceable from WhatsApp photo → OCR → Database → Google Sheet.</div>
+    <table><thead><tr>
+      <th>Submission Time</th>
+      <th>Store</th>
+      <th>Employee</th>
+      <th>Record Status</th>
+      <th>OCR Confidence</th>
+      <th>Google Sync</th>
+      <th>Original Form</th>
+      <th>OCR ID</th>
+    </tr></thead>
+    <tbody><tr><td colspan="8" class="dim" style="text-align:center;padding:16px">No OCR records yet — send a photo to a mapped store group</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Food Safety</h2><span class="badge ok">ENABLED</span></div>
+    <div class="grid">
+      <div class="card"><h3>Checks</h3><div class="val">0</div></div>
+      <div class="card"><h3>Last Check</h3><div class="val">-</div></div>
+      <div class="card"><h3>Sheet Queue</h3><div class="val">0 pending</div></div>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Form Photo Submissions</h2>
+      <div class="row">
+        <div class="card"><h3>Total</h3><div class="val">0</div></div>
+        <div class="card"><h3>Saved</h3><div class="val">0</div></div>
+        <div class="card"><h3>Needs Review</h3><div class="val">0</div></div>
+        <div class="card"><h3>Sync Failed</h3><div class="val">0</div></div>
+      </div>
+    </div>
+    <div class="dim small" style="margin-bottom:8px">
+      Employee sends photo → OCR reads form → Employee confirms → Saved to DB → Google Sheet sync
+    </div>
+    <table><thead><tr>
+      <th>Submitted</th><th>Store</th><th>Employee</th>
+      <th>Status</th><th>OCR Conf.</th><th>Sheet Sync</th>
+      <th>Image</th><th>Submission ID</th>
+    </tr></thead>
+    <tbody><tr><td colspan="8" class="dim">No submissions yet — use /form in WhatsApp to start</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Agent Sessions</h2><span class="dim">0 active</span></div>
+    <table><thead><tr><th>Chat</th><th>Owner</th><th>Store</th><th>State</th></tr></thead>
+    <tbody><tr><td colspan="4" class="dim" style="text-align:center;padding:16px">No active sessions</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>YoLink Devices</h2>
+      <div class="row">
+        <span class="badge off">API NOT CONFIGURED</span><span class="dim small">Human workflow remains active</span>
+      </div>
+    </div>
+    <table style="margin-bottom:12px"><tbody><tr><td>API</td><td><span class="badge off">NOT CONFIGURED</span></td><td class="dim">Add YOLINK_CLIENT_ID + YOLINK_CLIENT_SECRET to .env</td></tr></tbody></table>
+
+    <h3 style="margin-bottom:6px">Add Device</h3>
+    <div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:6px">
+      <input id="yolink-device-name" placeholder="Device name" style="flex:1;min-width:120px">
+      <input id="yolink-model" placeholder="Model" value="YS8017-UC" style="width:120px">
+      <input id="yolink-device-eui" placeholder="Device EUI *" style="width:140px">
+      <input id="yolink-serial" placeholder="Serial" style="width:100px">
+      <select id="yolink-store-id" style="width:110px"><option value="">Store *</option><option value="stone_oak">Stone Oak</option><option value="bandera">Bandera</option><option value="rim">Rim</option></select>
+      <select id="yolink-item-name" style="flex:1;min-width:130px"><option value="">Item/Location *</option><option value="Walk-in Cooler">Walk-in Cooler</option><option value="Walk-in Freezer">Walk-in Freezer</option><option value="Prep Area Cooler">Prep Area Cooler</option><option value="Ramen Refrigeration Top">Ramen Refrigeration Top</option><option value="Ramen Refrigeration Below">Ramen Refrigeration Below</option><option value="Line Freezer">Line Freezer</option><option value="Tapas Refrigeration Top">Tapas Refrigeration Top</option><option value="Tapas Refrigeration Below">Tapas Refrigeration Below</option><option value="Bowl Warmers">Bowl Warmers</option><option value="Pork Chashu">Pork Chashu</option><option value="Chicken Chashu">Chicken Chashu</option><option value="Seasoned Eggs">Seasoned Eggs</option><option value="Fryer 1">Fryer 1</option><option value="Fryer 2">Fryer 2</option><option value="Pasta Boiler 1">Pasta Boiler 1</option><option value="Pasta Boiler 2">Pasta Boiler 2</option><option value="Pork Broth">Pork Broth</option><option value="Chicken Broth">Chicken Broth</option><option value="Veggie Broth">Veggie Broth</option></select>
+      <select id="yolink-sensor-type" style="width:130px"><option value="temperature">Temperature</option><option value="temperature_humidity">Temp/Humidity</option><option value="door">Door</option><option value="other">Other</option></select>
+    </div>
+    <div class="row" style="margin-bottom:10px;gap:8px">
+      <label class="small"><input id="yolink-active" type="checkbox" checked> Active</label>
+      <label class="small"><input id="yolink-trust" type="checkbox" checked> Trust</label>
+      <button class="primary small" onclick="yolinkAddDevice()">Save Device</button>
+      <button class="small" onclick="yolinkSaveAndTest()">Save + Test</button>
+      <button class="small" onclick="yolinkClearForm()">Clear</button>
+    </div>
+
+    <h3 style="margin-bottom:6px">Devices (0)</h3>
+    <table><thead><tr><th>Device</th><th>Store / Item</th><th>Active</th><th>Reading</th><th>State</th><th>Actions</th></tr></thead>
+    <tbody><tr><td colspan="6" class="dim" style="text-align:center;padding:16px">No devices registered</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head">
+      <h2>YoLink API Settings</h2>
+      <div class="row"><span class="badge off">DISABLED</span> <span class="badge off">NOT CONFIGURED</span></div>
+    </div>
+    <div class="dim" style="margin-bottom:10px">YoLink API credentials are not configured. Manual Sensor Mode is active. Human workflow remains active. Pilot impact: Not Blocking.</div>
+    <div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px">
+      <input id="yolink-client-id" placeholder="Client ID" style="flex:1;min-width:160px">
+      <input id="yolink-client-secret" type="password" placeholder="Client Secret" style="flex:1;min-width:160px">
+      <button class="primary" onclick="yolinkSaveCredentials()">Save Credentials</button>
+    </div>
+    <div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px">
+      <button onclick="yolinkTestConnection()">Test Connection</button>
+      <button onclick="yolinkSyncDevices()">Sync Devices</button>
+      <button onclick="yolinkForcePoll()">Force Poll</button>
+      
+      <button onclick="yolinkSetEnabled('true')">Enable Polling</button>
+    </div>
+    <div class="row" style="gap:12px;flex-wrap:wrap">
+      <small class="dim">Client ID: —</small>
+      <small class="dim">Secret: not set</small>
+      <small class="dim">Last test: —</small>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Sensor Mapping</h2><span class="dim">0 active</span></div>
+    <div class="row" style="margin-bottom:10px;gap:8px;flex-wrap:wrap">
+      <span class="badge ok">YoLink Hardware: Verified</span>
+      <span class="badge off">YoLink API: Not Configured</span>
+      <span class="badge ok">Pilot Impact: Not Blocking</span>
+      <button class="primary" onclick="yolinkSeedRimDevices()">Seed Rim YoLink Devices</button>
+    </div>
+    <div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px">
+      <select id="yolink-map-sensor" style="flex:1;min-width:200px">
+        <option value="">Temperature Sensor *</option>
+      </select>
+      <select id="yolink-map-store" style="width:130px"><option value="">Store *</option>
+    <option value="stone_oak">Stone Oak</option>
+    <option value="bandera">Bandera</option>
+    <option value="rim">Rim</option></select>
+      <select id="yolink-map-item" style="flex:1;min-width:200px">
+        <option value="">Daily Entry Item *</option><option value="Walk-in Cooler">Walk-in Cooler</option><option value="Walk-in Freezer">Walk-in Freezer</option><option value="Prep Area Cooler">Prep Area Cooler</option><option value="Ramen Refrigeration Top">Ramen Refrigeration Top</option><option value="Ramen Refrigeration Below">Ramen Refrigeration Below</option><option value="Line Freezer">Line Freezer</option><option value="Tapas Refrigeration Top">Tapas Refrigeration Top</option><option value="Tapas Refrigeration Below">Tapas Refrigeration Below</option><option value="Bowl Warmers">Bowl Warmers</option><option value="Pork Chashu">Pork Chashu</option><option value="Chicken Chashu">Chicken Chashu</option><option value="Seasoned Eggs">Seasoned Eggs</option><option value="Fryer 1">Fryer 1</option><option value="Fryer 2">Fryer 2</option><option value="Pasta Boiler 1">Pasta Boiler 1</option><option value="Pasta Boiler 2">Pasta Boiler 2</option><option value="Pork Broth">Pork Broth</option><option value="Chicken Broth">Chicken Broth</option><option value="Veggie Broth">Veggie Broth</option>
+      </select>
+      <button class="primary" onclick="yolinkMapSensor()">Map Sensor → Item</button>
+    </div>
+    <table>
+      <thead><tr><th>Device</th><th>Store</th><th>Mapped Item</th><th>Verified</th><th>Type</th><th>Action</th></tr></thead>
+      <tbody><tr><td colspan="6" class="dim" style="text-align:center;padding:16px">No active sensor mappings yet. Add devices above, then map each temperature sensor to a Daily Entry item.</td></tr></tbody>
+    </table>
+  </section>
+    <section class="section">
+    <div class="section-head">
+      <h2>Human + YoLink Validation</h2>
+      <div class="row">
+        <span class="badge off">API NOT CONFIGURED</span>
+        <span class="dim">0 total records</span>
+      </div>
+    </div>
+    <div class="dim" style="margin-bottom:10px">YoLink API not configured. Human workflow remains active.</div>
+    <h3 style="margin-bottom:6px">Per-Item Comparison (last 10 min)</h3>
+    <table>
+      <thead><tr><th>Store</th><th>Item</th><th>Last Human</th><th>Last YoLink</th><th>Diff</th><th>Status</th><th>Updated</th><th>Alert</th></tr></thead>
+      <tbody id="yolink-validation-table"><tr><td colspan="8" class="dim" style="text-align:center;padding:16px">No active sensor mappings. Add sensors above and map them to items to enable Human + YoLink validation.</td></tr></tbody>
+    </table>
+    <h3 style="margin:14px 0 6px">Sensor Health</h3>
+    <div class="grid"><div class="card"><div class="dim">No temperature sensors registered</div></div></div>
+    <h3 style="margin:14px 0 6px">Manual Sensor Readings</h3>
+    <div class="dim" style="margin-bottom:8px">Enter verified YoLink readings manually when API credentials are unavailable. Manual readings are stored separately and used for cross-validation.</div>
+    <table>
+      <thead><tr><th>Device</th><th>Current Temperature</th><th>Unit</th><th>Reading Time</th><th>Entered By</th><th>Notes</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td colspan="7" class="dim" style="text-align:center;padding:16px">No active temperature sensors available for Manual Sensor Mode.</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <script>
+    // Fetch live pair data per row
+    (async () => {
+      const rows = document.querySelectorAll('#yolink-validation-table tr[data-store]');
+      for (const row of rows) {
+        const storeId = row.getAttribute('data-store');
+        const itemName = row.getAttribute('data-item');
+        try {
+          const r = await fetch('/api/admin/yolink/validation-panel?store_id=' + encodeURIComponent(storeId) + '&item_name=' + encodeURIComponent(itemName));
+          const data = await r.json();
+          const human = data.pair?.human;
+          const sensor = data.pair?.sensor;
+          row.querySelector('.yolink-human').textContent = human ? (human.value + '°' + (human.unit || 'F') + ' (' + (human.created_at || '').slice(11, 16) + ')') : '—';
+          row.querySelector('.yolink-sensor').textContent = sensor ? (sensor.value + '°' + (sensor.unit || 'F') + ' (' + (sensor.created_at || '').slice(11, 16) + ')') : '—';
+          const diff = (human && sensor) ? Math.abs(human.value - sensor.value).toFixed(1) + '°' : '—';
+          row.querySelector('.yolink-diff').textContent = diff;
+          // Compute status
+          let status = 'NO_SENSOR', badgeCls = 'off', alertText = '—';
+          if (!sensor) { status = 'NO_SENSOR'; badgeCls = 'off'; }
+          else if (!human) { status = 'API_NOT_CONFIGURED'; badgeCls = 'off'; }
+          else {
+            const d = Math.abs(human.value - sensor.value);
+            if (d <= 2) { status = 'MATCH'; badgeCls = 'ok'; }
+            else { status = 'MISMATCH'; badgeCls = 'bad'; alertText = '⚠ Mismatch'; }
+          }
+          row.querySelector('.yolink-status').innerHTML = '<span class="badge ' + badgeCls + '">' + status + '</span>';
+          row.querySelector('.yolink-updated').textContent = (sensor?.created_at || human?.created_at || '').slice(0, 16).replace('T', ' ');
+          row.querySelector('.yolink-alert').textContent = alertText;
+        } catch (e) {
+          row.querySelector('.yolink-status').innerHTML = '<span class="badge bad">ERROR</span>';
+        }
+      }
+    })();
+  </script>
+    <section class="section"><div class="section-head"><h2>Pilot Launch Status</h2><span class="badge warn">NEEDS ACTION</span></div><table><thead><tr><th>Check</th><th>Status</th><th>Note</th></tr></thead><tbody><tr><td colspan="3" class="dim" style="text-align:center;padding:16px">No checks available</td></tr></tbody></table><div style="margin-top:12px"><button class="primary" onclick="location.reload()">Refresh Status</button></div></section>
+    <section class="section">
+    <div class="section-head"><h2>Incidents</h2><span class="dim">0 total</span></div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Compliance</h2><span class="dim">0 pending audits</span></div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Top Unknown Messages</h2><span class="dim">e:\Project\Master\whatsapp-ai-gateway\logs\fallback-audit.json</span></div>
+    <table><thead><tr><th>Message</th><th>Count</th><th>Language</th><th>Last Seen</th></tr></thead>
+    <tbody><tr><td colspan="4" class="dim" style="text-align:center;padding:16px">No fallback messages recorded</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Conversations</h2><span class="dim">2 recent messages</span></div>
+    <h3>By Customer</h3>
+    <table><thead><tr><th>Customer</th><th>Last Message</th><th>Intent</th><th>#</th><th>Time</th></tr></thead>
+    <tbody><tr><td>Test User</td><td class="dim">Hi there!</td><td>greeting</td><td>2</td><td class="dim">2026-06-08T07:40:01.396Z</td></tr></tbody></table>
+    <h3 style="margin-top:16px">Raw Messages</h3>
+    <table><thead><tr><th>Time</th><th>Dir</th><th>Customer</th><th>Intent</th><th>Message</th></tr></thead>
+    <tbody><tr><td class="dim">2026-06-08T07:40:00.563Z</td><td>in</td><td>Test User</td><td>greeting</td><td class="dim">Hello</td></tr><tr><td class="dim">2026-06-08T07:40:01.396Z</td><td>out</td><td>Test User</td><td>greeting</td><td class="dim">Hi there!</td></tr></tbody></table>
+  </section>
+  </main>
+  <script>
+    async function apiPost(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        const d = await r.json();
+        if (d.ok === false || d.error) alert(d.error || JSON.stringify(d));
+        else location.reload();
+      } catch(e) { alert('Request failed: ' + e.message); }
+    }
+    async function apiDelete(url) {
+      try {
+        const r = await fetch(url, { method: 'DELETE' });
+        const d = await r.json();
+        if (d.ok === false || d.error) alert(d.error || JSON.stringify(d));
+        else location.reload();
+      } catch(e) { alert('Request failed: ' + e.message); }
+    }
+    async function apiNoReload(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        return r.json();
+      } catch(e) { return { error: e.message }; }
+    }
+    async function runtimeControlAction(action) {
+      const out = document.getElementById('runtime-control-output');
+      if (out) out.textContent = 'Running ' + action + '...';
+      const method = action === 'status' ? 'GET' : 'POST';
+      const url = action === 'status' ? '/api/runtime/control/status' : '/api/runtime/control/' + action;
+      try {
+        const r = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: method === 'POST' ? '{}' : undefined });
+        const d = await r.json();
+        if (out) out.textContent = [d.stdout, d.stderr, d.error].filter(Boolean).join('\n') || JSON.stringify(d, null, 2);
+      } catch(e) {
+        if (out) out.textContent = 'Request failed: ' + e.message;
+      }
+    }
+    async function whatsappAction(action) {
+      const out = document.getElementById('whatsapp-diagnostics-output');
+      if (out) out.textContent = 'Running ' + action + '...';
+      const url = action === 'status' ? '/api/whatsapp/status' : '/api/whatsapp/' + action;
+      try {
+        const r = await fetch(url, { method: action === 'status' ? 'GET' : 'POST', headers: { 'Content-Type': 'application/json' }, body: action === 'status' ? undefined : '{}' });
+        const d = await r.json();
+        if (out) out.textContent = JSON.stringify(d, null, 2);
+        if (action !== 'status') setTimeout(() => location.reload(), 1500);
+      } catch(e) {
+        if (out) out.textContent = 'Request failed: ' + e.message;
+      }
+    }
+    function addStoreMapping() {
+      apiPost('/api/admin/store-groups', {
+        store_id: document.getElementById('new-store-select').value,
+        chat_id: document.getElementById('new-chat-id').value.trim(),
+        group_name: document.getElementById('new-group-name').value.trim(),
+        locked: document.getElementById('new-store-locked').checked
+      });
+    }
+    function saveManagerAlert() {
+      const debounce = parseInt(document.getElementById('manager-debounce')?.value || '5');
+      const escalation = parseInt(document.getElementById('manager-escalation')?.value || '30');
+      apiPost('/api/admin/manager-alert-group', {
+        chat_id: document.getElementById('manager-chat-id').value.trim(),
+        group_name: document.getElementById('manager-group-name').value.trim(),
+        enabled: document.getElementById('manager-alert-enabled').checked,
+        debounce_minutes: debounce,
+        escalation_minutes: escalation,
+      });
+    }
+function saveSheetLinks() {
+      apiPost('/api/admin/google-sheet-links', {
+        template_sheet_url: document.getElementById('sheet-template-url').value.trim(),
+        log_sheet_url: document.getElementById('sheet-log-url').value.trim()
+      });
+    }
+    async function testSheetAccess(type) {
+      const r = await apiNoReload('/api/admin/google-sheet-links/test', {});
+      if (type === 'template') {
+        alert(
+          r.template_sheet_url === 'PASS'
+            ? 'Template access: PASS\n' + JSON.stringify({
+                item_count: r.template_item_count,
+                last_sync_at: r.timestamp,
+              }, null, 2)
+            : 'Template access: ' + (r.template_error || 'FAIL')
+        );
+        return;
+      }
+      alert(
+        r.log_sheet_url === 'PASS'
+          ? 'Log access: PASS\n' + JSON.stringify({
+              tab: r.log_tab || 'Dashboard_Test_Log',
+              range: r.log_range || 'A:I',
+              timestamp: r.timestamp,
+            }, null, 2)
+          : 'Log access: ' + (r.log_error || 'FAIL')
+      );
+    }
+    async function testSheetWrite() {
+      const r = await apiNoReload('/api/admin/google-sheet-links/test-write', {});
+      alert(r.ok ? 'Test write: PASS\n' + JSON.stringify(r, null, 2) : 'Test write: ' + (r.error || 'FAIL'));
+    }
+    // ── YoLink JS ─────────────────────────────────────────────────────────
+    async function yolinkApiNoReload(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        return r.json();
+      } catch(e) { return { error: e.message }; }
+    }
+    function yolinkAddDevice() {
+      const d = {
+        device_name: document.getElementById('yolink-device-name').value.trim(),
+        model: document.getElementById('yolink-model').value.trim(),
+        device_eui: document.getElementById('yolink-device-eui').value.trim(),
+        serial_number: document.getElementById('yolink-serial').value.trim(),
+        store_id: document.getElementById('yolink-store-id').value,
+        item_name: document.getElementById('yolink-item-name').value,
+        sensor_type: document.getElementById('yolink-sensor-type').value,
+        unit: 'F',
+        active: document.getElementById('yolink-active').checked,
+        trust_enabled: document.getElementById('yolink-trust').checked,
+      };
+      if (!d.device_eui) { alert('Device EUI is required'); return; }
+      if (!d.store_id) { alert('Store is required'); return; }
+      if (!d.item_name) { alert('Item/Location is required'); return; }
+      const storeNames = { stone_oak: 'Stone Oak', bandera: 'Bandera', rim: 'Rim' };
+      d.store_name = storeNames[d.store_id] || d.store_id;
+      apiPost('/api/admin/yolink/devices', d);
+    }
+    function yolinkSaveAndTest() { yolinkAddDevice(); }
+    function yolinkClearForm() {
+      ['yolink-device-name','yolink-device-eui','yolink-serial','yolink-store-id','yolink-item-name'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+    async function yolinkTestReading(id) {
+      const r = await yolinkApiNoReload('/api/admin/yolink/devices/' + id + '/test-reading', {});
+      if (r.status === 'NO_CREDENTIALS') alert('YoLink API not configured.\nHuman workflow remains active.');
+      else if (r.ok) alert('Reading: ' + r.value + '°' + (r.unit || 'F') + '\nBattery: ' + (r.battery_level || '-') + '\nSignal: ' + (r.signal_status || '-'));
+      else alert('Test failed: ' + (r.error || 'Unknown'));
+    }
+    async function yolinkRemap(id, currentStore, currentItem) {
+      const store_id = prompt('New store (stone_oak/bandera/rim):', currentStore || '');
+      if (!store_id) return;
+      const item_name = prompt('New item/location:', currentItem || '');
+      if (!item_name) return;
+      const r = await yolinkApiNoReload('/api/admin/yolink/devices/' + id + '/remap', { store_id, item_name });
+      if (r.ok) location.reload(); else alert(r.error || 'Failed');
+    }
+    function yolinkDisable(id) { apiPost('/api/admin/yolink/devices/' + id + '/disable', {}); }
+    function yolinkDelete(id) { if (confirm('Delete device?')) apiDelete('/api/admin/yolink/devices/' + id); }
+    function yolinkTestApi() { apiPost('/api/admin/yolink/test-api', {}); }
+    function yolinkSync() { apiPost('/api/admin/yolink/sync-devices', {}); }
+    function yolinkPoll() { apiPost('/api/admin/yolink/force-poll', {}); }
+    async function yolinkSeedDrafts() {
+      const r = await fetch('/api/admin/yolink/seed-drafts');
+      const data = await r.json();
+      const drafts = data.drafts || [];
+      if (!drafts.length) { alert('No YoLink devices found in YoLink account.\nAdd device EUI manually.'); return; }
+      const d = drafts[0];
+      document.getElementById('yolink-device-name').value = d.device_name || '';
+      document.getElementById('yolink-model').value = d.model || 'YS8017-UC';
+      document.getElementById('yolink-device-eui').value = d.device_eui || '';
+      document.getElementById('yolink-serial').value = d.serial_number || '';
+      document.getElementById('yolink-store-id').value = d.store_id || '';
+      document.getElementById('yolink-item-name').value = d.item_name || '';
+      alert('Draft loaded: ' + d.device_name + '\nEdit if needed, then Save Device.');
+    }
+    // ── YoLink API Settings (Phase C) ───────────────────────────────────────
+    async function yolinkSaveCredentials() {
+      const clientId = document.getElementById('yolink-client-id').value.trim();
+      const clientSecret = document.getElementById('yolink-client-secret').value.trim();
+      if (!clientId || !clientSecret) { alert('Both Client ID and Client Secret are required.'); return; }
+      const r = await yolinkApiNoReload('/api/admin/yolink/save-credentials', { client_id: clientId, client_secret: clientSecret });
+      if (r.ok) { alert('Credentials saved. Hash: ' + r.secret_hash); document.getElementById('yolink-client-secret').value = ''; location.reload(); }
+      else alert('Save failed: ' + (r.error || 'Unknown'));
+    }
+    async function yolinkTestConnection() {
+      const r = await yolinkApiNoReload('/api/admin/yolink/test-connection', {});
+      if (r.ok && r.status === 'PASS') alert('Test Connection: PASS\nToken acquired.');
+      else alert('Test Connection: ' + (r.status || 'FAIL') + '\n' + (r.error || ''));
+    }
+    async function yolinkClearCredentials() {
+      if (!confirm('Clear YoLink API credentials?')) return;
+      const r = await yolinkApiNoReload('/api/admin/yolink/clear-credentials', {});
+      if (r.ok) { alert('Credentials cleared.'); location.reload(); }
+      else alert('Failed: ' + (r.error || 'Unknown'));
+    }
+    async function yolinkSetEnabled(enabled) {
+      const r = await yolinkApiNoReload('/api/admin/yolink/set-enabled', { enabled: !!enabled });
+      if (r.ok) location.reload();
+      else alert('Failed: ' + (r.error || 'Unknown'));
+    }
+    // ── Sensor Mapping (Phase D) ────────────────────────────────────────────
+    async function yolinkMapSensor() {
+      const sensorId = document.getElementById('yolink-map-sensor').value;
+      const storeId = document.getElementById('yolink-map-store').value;
+      const itemName = document.getElementById('yolink-map-item').value;
+      if (!sensorId) { alert('Pick a temperature sensor.'); return; }
+      if (!storeId) { alert('Pick a store.'); return; }
+      if (!itemName) { alert('Pick a Daily Entry item.'); return; }
+      const r = await yolinkApiNoReload('/api/admin/yolink/mappings', { sensor_id: sensorId, store_id: storeId, item_name: itemName });
+      if (r.ok) location.reload();
+      else alert('Map failed: ' + (r.error || 'Unknown'));
+    }
+    async function yolinkUnmapSensor(mappingId) {
+      if (!confirm('Unmap this sensor?')) return;
+      const r = await fetch('/api/admin/yolink/mappings/' + mappingId, { method: 'DELETE' });
+      const data = await r.json();
+      if (data.ok) location.reload();
+      else alert('Failed: ' + (data.error || 'Unknown'));
+    }
+    // ── WhatsApp Group Discovery JS ───────────────────────────────────────
+    async function refreshWhatsAppGroups() {
+      let r;
+      try {
+        const resp = await fetch('/api/admin/whatsapp-groups/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        r = await resp.json();
+      } catch(e) {
+        alert('Request failed: ' + e.message);
+        return;
+      }
+      if (r.status === 'WA_NOT_READY') { alert('WhatsApp not connected. Scan QR first.'); return; }
+      if (!r.groups || !r.groups.length) { alert('No groups found.'); return; }
+      let msg = 'WhatsApp Groups:\n';
+      r.groups.forEach(g => {
+        msg += '\n' + g.name + '\n  ID: ' + g.chat_id + '\n  Members: ' + (g.participant_count || 0);
+        if (g.store_name || g.store_mapped) msg += '\n  Mapped: ' + (g.store_name || g.store_mapped);
+        msg += '\n';
+      });
+      msg += '\nCopy the chat ID you need.';
+      alert(msg);
+    }
+    async function testWhatsAppGroup(chatId, name) {
+      const r = await apiNoReload('/api/admin/whatsapp-groups/test', { chatId, group_name: name });
+      if (r.ok) alert('Test message sent to: ' + name);
+      else alert('Failed: ' + (r.error || 'Unknown'));
+    }
+  </script>
+</body>
+</html>

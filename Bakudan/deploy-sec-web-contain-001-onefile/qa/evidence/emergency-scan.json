@@ -1,0 +1,2066 @@
+{
+    "generated_at": "2026-06-12T01:26:25-07:00",
+    "today": "2026-06-12",
+    "php_version": "8.2.30",
+    "table_inventory": {
+        "bills": true,
+        "payments": false,
+        "tasks": true,
+        "task_recurrence": null,
+        "bill_recurrence": null,
+        "all_tables": [
+            "activity_log",
+            "api_tokens",
+            "approval_queue",
+            "asana_settings",
+            "asana_sync_runs",
+            "attachments",
+            "audit_log",
+            "autonomy_log",
+            "bill_categories",
+            "bill_evidence",
+            "bill_history",
+            "bills",
+            "budget_requests",
+            "businesses",
+            "comments",
+            "compliance_items",
+            "deadline_extensions",
+            "decision_feed",
+            "deploy_freezes",
+            "devices",
+            "districts",
+            "documents",
+            "duplicate_group_items",
+            "duplicate_groups",
+            "duplicate_resolution_log",
+            "email_logs",
+            "email_queue",
+            "goals",
+            "google_tokens",
+            "incidents",
+            "library_access_log",
+            "library_categories",
+            "library_files",
+            "mobile_push_queue",
+            "monthly_extension_usage",
+            "notification_deliveries",
+            "notifications",
+            "penalty_appeals",
+            "penalty_comments",
+            "penalty_config",
+            "penalty_log",
+            "penalty_rules",
+            "permissions",
+            "project_members",
+            "projects",
+            "rate_limits",
+            "regions",
+            "release_artifacts",
+            "release_audit_log",
+            "release_links",
+            "release_reviews",
+            "releases",
+            "risk_snapshots",
+            "risks",
+            "role_permissions",
+            "sections",
+            "store_checklists",
+            "store_health_scores",
+            "store_kpis",
+            "stores",
+            "sync_events",
+            "system_activity_feed",
+            "task_approval_events",
+            "task_approval_notes",
+            "task_comments",
+            "task_mentions",
+            "task_notifications",
+            "task_reviewer_notes",
+            "task_store_audit_logs",
+            "task_stores",
+            "task_verification_log",
+            "task_verification_steps",
+            "task_watchers",
+            "tasks",
+            "telegram_context",
+            "telegram_inbound_logs",
+            "telegram_link",
+            "telegram_link_token",
+            "telegram_message_log",
+            "telegram_notification_logs",
+            "telegram_preferences",
+            "telegram_users",
+            "usage_events",
+            "user_permissions",
+            "user_stores",
+            "users",
+            "vault_access_log",
+            "vault_items",
+            "vault_permissions",
+            "vendor_attachments",
+            "vendors"
+        ]
+    },
+    "bills_summary": {
+        "total": 347,
+        "active": 347,
+        "archived": 0,
+        "dup_groups": 20,
+        "dup_bills_to_archive": 307,
+        "max_dup_factor": 29,
+        "near_dup_count": 0,
+        "exact_dup_groups": [
+            {
+                "canonical_id": 25,
+                "duplicate_ids": [
+                    31,
+                    37,
+                    43,
+                    49,
+                    55,
+                    61,
+                    67,
+                    73,
+                    79,
+                    85,
+                    91,
+                    97,
+                    103,
+                    109,
+                    115,
+                    121,
+                    127,
+                    133,
+                    139,
+                    145,
+                    151,
+                    157,
+                    163,
+                    166,
+                    169,
+                    172,
+                    178,
+                    184
+                ],
+                "dup_count": 28,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 26,
+                "duplicate_ids": [
+                    32,
+                    38,
+                    44,
+                    50,
+                    56,
+                    62,
+                    68,
+                    74,
+                    80,
+                    86,
+                    92,
+                    98,
+                    104,
+                    110,
+                    116,
+                    122,
+                    128,
+                    134,
+                    140,
+                    146,
+                    152,
+                    158,
+                    164,
+                    167,
+                    170,
+                    173,
+                    179,
+                    185
+                ],
+                "dup_count": 28,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 27,
+                "duplicate_ids": [
+                    33,
+                    39,
+                    45,
+                    51,
+                    57,
+                    63,
+                    69,
+                    75,
+                    81,
+                    87,
+                    93,
+                    99,
+                    105,
+                    111,
+                    117,
+                    123,
+                    129,
+                    135,
+                    141,
+                    147,
+                    153,
+                    159,
+                    165,
+                    168,
+                    171,
+                    174,
+                    180,
+                    186
+                ],
+                "dup_count": 28,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 22,
+                "duplicate_ids": [
+                    28,
+                    34,
+                    40,
+                    46,
+                    52,
+                    58,
+                    64,
+                    70,
+                    76,
+                    82,
+                    88,
+                    94,
+                    100,
+                    106,
+                    112,
+                    118,
+                    124,
+                    130,
+                    136,
+                    142,
+                    148,
+                    154,
+                    160,
+                    175,
+                    181
+                ],
+                "dup_count": 25,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "store_id": 12,
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 23,
+                "duplicate_ids": [
+                    29,
+                    35,
+                    41,
+                    47,
+                    53,
+                    59,
+                    65,
+                    71,
+                    77,
+                    83,
+                    89,
+                    95,
+                    101,
+                    107,
+                    113,
+                    119,
+                    125,
+                    131,
+                    137,
+                    143,
+                    149,
+                    155,
+                    161,
+                    176,
+                    182
+                ],
+                "dup_count": 25,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "store_id": 8,
+                "amount": 0,
+                "due_date": "2026-05-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 24,
+                "duplicate_ids": [
+                    30,
+                    36,
+                    42,
+                    48,
+                    54,
+                    60,
+                    66,
+                    72,
+                    78,
+                    84,
+                    90,
+                    96,
+                    102,
+                    108,
+                    114,
+                    120,
+                    126,
+                    132,
+                    138,
+                    144,
+                    150,
+                    156,
+                    162,
+                    177,
+                    183
+                ],
+                "dup_count": 25,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "store_id": 11,
+                "amount": 0,
+                "due_date": "2026-05-23",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 190,
+                "duplicate_ids": [
+                    198,
+                    206,
+                    214,
+                    222,
+                    230,
+                    238,
+                    246,
+                    254,
+                    262,
+                    270,
+                    275,
+                    292,
+                    300,
+                    305,
+                    313,
+                    321,
+                    326,
+                    331,
+                    336,
+                    344
+                ],
+                "dup_count": 20,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-06-01",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 191,
+                "duplicate_ids": [
+                    199,
+                    207,
+                    215,
+                    223,
+                    231,
+                    239,
+                    247,
+                    255,
+                    263,
+                    271,
+                    276,
+                    293,
+                    301,
+                    306,
+                    314,
+                    322,
+                    327,
+                    332,
+                    337,
+                    345
+                ],
+                "dup_count": 20,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 192,
+                "duplicate_ids": [
+                    200,
+                    208,
+                    216,
+                    224,
+                    232,
+                    240,
+                    248,
+                    256,
+                    264,
+                    272,
+                    277,
+                    294,
+                    302,
+                    307,
+                    315,
+                    323,
+                    328,
+                    333,
+                    338,
+                    346
+                ],
+                "dup_count": 20,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-06-01",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 193,
+                "duplicate_ids": [
+                    201,
+                    209,
+                    217,
+                    225,
+                    233,
+                    241,
+                    249,
+                    257,
+                    265,
+                    273,
+                    278,
+                    295,
+                    303,
+                    308,
+                    316,
+                    324,
+                    329,
+                    334,
+                    339,
+                    347
+                ],
+                "dup_count": 20,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 194,
+                "duplicate_ids": [
+                    202,
+                    210,
+                    218,
+                    226,
+                    234,
+                    242,
+                    250,
+                    258,
+                    266,
+                    274,
+                    279,
+                    296,
+                    304,
+                    309,
+                    317,
+                    325,
+                    330,
+                    335,
+                    340,
+                    348
+                ],
+                "dup_count": 20,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 187,
+                "duplicate_ids": [
+                    195,
+                    203,
+                    211,
+                    219,
+                    227,
+                    235,
+                    243,
+                    251,
+                    259,
+                    267,
+                    297,
+                    310,
+                    318,
+                    341
+                ],
+                "dup_count": 14,
+                "title": "Heo Holding Sale Tax",
+                "store": "Heo Holding",
+                "store_id": 12,
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 188,
+                "duplicate_ids": [
+                    196,
+                    204,
+                    212,
+                    220,
+                    228,
+                    236,
+                    244,
+                    252,
+                    260,
+                    268,
+                    298,
+                    311,
+                    319,
+                    342
+                ],
+                "dup_count": 14,
+                "title": "IFT Sale Tax",
+                "store": "IFT",
+                "store_id": 8,
+                "amount": 0,
+                "due_date": "2026-06-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 189,
+                "duplicate_ids": [
+                    197,
+                    205,
+                    213,
+                    221,
+                    229,
+                    237,
+                    245,
+                    253,
+                    261,
+                    269,
+                    299,
+                    312,
+                    320,
+                    343
+                ],
+                "dup_count": 14,
+                "title": "Amtrust",
+                "store": "Modesto",
+                "store_id": 11,
+                "amount": 0,
+                "due_date": "2026-06-23",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Recurrence Engine (bulk)"
+            },
+            {
+                "canonical_id": 280,
+                "duplicate_ids": [
+                    286
+                ],
+                "dup_count": 1,
+                "title": "TEST DUPLICATE BILL",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 100,
+                "due_date": "2026-07-01",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            },
+            {
+                "canonical_id": 281,
+                "duplicate_ids": [
+                    287
+                ],
+                "dup_count": 1,
+                "title": "Raw General",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-07-01",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            },
+            {
+                "canonical_id": 282,
+                "duplicate_ids": [
+                    288
+                ],
+                "dup_count": 1,
+                "title": "Raw Sale Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            },
+            {
+                "canonical_id": 283,
+                "duplicate_ids": [
+                    289
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Prepayment",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-07-01",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            },
+            {
+                "canonical_id": 284,
+                "duplicate_ids": [
+                    290
+                ],
+                "dup_count": 1,
+                "title": "Raw QB Tax",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            },
+            {
+                "canonical_id": 285,
+                "duplicate_ids": [
+                    291
+                ],
+                "dup_count": 1,
+                "title": "Raw PGE",
+                "store": "Raw Stockton",
+                "store_id": 2,
+                "amount": 0,
+                "due_date": "2026-07-20",
+                "frequency": "monthly",
+                "confidence": 100,
+                "match_type": "EXACT",
+                "match_reason": "title + store_id + amount + due_date",
+                "source_guess": "Manual\/API"
+            }
+        ],
+        "near_dup_sample": []
+    },
+    "payments_summary": {
+        "exists": false,
+        "verdict": "TABLE_MISSING",
+        "dup_group_count": 0
+    },
+    "tasks_summary": {
+        "exists": true,
+        "total_tasks": 1670,
+        "active_tasks": 1670,
+        "dup_group_count": 97,
+        "total_dup_tasks": 102,
+        "verdict": "FAIL",
+        "status_distribution": [
+            {
+                "status": "done",
+                "cnt": 1045
+            },
+            {
+                "status": "todo",
+                "cnt": 620
+            },
+            {
+                "status": "",
+                "cnt": 5
+            }
+        ],
+        "dup_groups": [
+            {
+                "canonical_id": 18788,
+                "duplicate_ids": [
+                    20198,
+                    20201,
+                    20202,
+                    20205
+                ],
+                "dup_count": 4,
+                "title": "Confirm all three Bakudan locations have the new menu",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Import\/Sync"
+            },
+            {
+                "canonical_id": 20017,
+                "duplicate_ids": [
+                    20186,
+                    20187
+                ],
+                "dup_count": 2,
+                "title": "Follow up on Discover Merchant Class Action Settlement claim",
+                "store": null,
+                "due_date": "2026-07-09",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Import\/Sync"
+            },
+            {
+                "canonical_id": 20023,
+                "duplicate_ids": [
+                    20054,
+                    20194
+                ],
+                "dup_count": 2,
+                "title": "Draft promissory note and deed of trust for Louise Street, Westminster",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Import\/Sync"
+            },
+            {
+                "canonical_id": 106,
+                "duplicate_ids": [
+                    18226
+                ],
+                "dup_count": 1,
+                "title": "Pay Packinglist - B123",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 122,
+                "duplicate_ids": [
+                    18233
+                ],
+                "dup_count": 1,
+                "title": "Pay HEO Creditcard - B123",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 220,
+                "duplicate_ids": [
+                    18250
+                ],
+                "dup_count": 1,
+                "title": "Update Packing List",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 515,
+                "duplicate_ids": [
+                    18257
+                ],
+                "dup_count": 1,
+                "title": "JHT - Payroll Tax file\/EmployeeTip",
+                "store": null,
+                "due_date": "2026-01-03",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 558,
+                "duplicate_ids": [
+                    18264
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Pay Waste",
+                "store": null,
+                "due_date": "2026-01-09",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 654,
+                "duplicate_ids": [
+                    18278
+                ],
+                "dup_count": 1,
+                "title": "JHT - Update Withdraw Payroll",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 655,
+                "duplicate_ids": [
+                    18279
+                ],
+                "dup_count": 1,
+                "title": "JHT - Update Withdraw Payroll",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 752,
+                "duplicate_ids": [
+                    18294
+                ],
+                "dup_count": 1,
+                "title": "Cal Saver - Double check Raw Payroll",
+                "store": null,
+                "due_date": "2026-01-09",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 753,
+                "duplicate_ids": [
+                    18295
+                ],
+                "dup_count": 1,
+                "title": "Cal Saver - Double check Raw Payroll",
+                "store": null,
+                "due_date": "2026-01-23",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1370,
+                "duplicate_ids": [
+                    18323
+                ],
+                "dup_count": 1,
+                "title": "JHT - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1371,
+                "duplicate_ids": [
+                    18324
+                ],
+                "dup_count": 1,
+                "title": "JHT - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1372,
+                "duplicate_ids": [
+                    18325
+                ],
+                "dup_count": 1,
+                "title": "JHT - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1373,
+                "duplicate_ids": [
+                    18326
+                ],
+                "dup_count": 1,
+                "title": "JHT - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-26",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1517,
+                "duplicate_ids": [
+                    18354
+                ],
+                "dup_count": 1,
+                "title": "B3 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1518,
+                "duplicate_ids": [
+                    18355
+                ],
+                "dup_count": 1,
+                "title": "B3 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1519,
+                "duplicate_ids": [
+                    18356
+                ],
+                "dup_count": 1,
+                "title": "B3 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1520,
+                "duplicate_ids": [
+                    18357
+                ],
+                "dup_count": 1,
+                "title": "B3 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-26",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1678,
+                "duplicate_ids": [
+                    18385
+                ],
+                "dup_count": 1,
+                "title": "B2 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1679,
+                "duplicate_ids": [
+                    18386
+                ],
+                "dup_count": 1,
+                "title": "B2 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1680,
+                "duplicate_ids": [
+                    18387
+                ],
+                "dup_count": 1,
+                "title": "B2 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1681,
+                "duplicate_ids": [
+                    18388
+                ],
+                "dup_count": 1,
+                "title": "B2 - Labor Comparesion",
+                "store": null,
+                "due_date": "2026-01-26",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1738,
+                "duplicate_ids": [
+                    18395
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Sale Report",
+                "store": null,
+                "due_date": "2026-01-01",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1822,
+                "duplicate_ids": [
+                    18407
+                ],
+                "dup_count": 1,
+                "title": "Report - Raw Stockton",
+                "store": null,
+                "due_date": "2026-01-17",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1873,
+                "duplicate_ids": [
+                    18414
+                ],
+                "dup_count": 1,
+                "title": "Report - BackYard",
+                "store": null,
+                "due_date": "2026-01-14",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 1924,
+                "duplicate_ids": [
+                    18421
+                ],
+                "dup_count": 1,
+                "title": "Report - Domain",
+                "store": null,
+                "due_date": "2026-01-11",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2047,
+                "duplicate_ids": [
+                    18436
+                ],
+                "dup_count": 1,
+                "title": "JHT - Pay Gas and Electric",
+                "store": null,
+                "due_date": "2026-01-06",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2281,
+                "duplicate_ids": [
+                    18464
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Labor Tracking",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2282,
+                "duplicate_ids": [
+                    18465
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Labor Tracking",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2283,
+                "duplicate_ids": [
+                    18466
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Labor Tracking",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2284,
+                "duplicate_ids": [
+                    18467
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Labor Tracking",
+                "store": null,
+                "due_date": "2026-01-26",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2575,
+                "duplicate_ids": [
+                    18481
+                ],
+                "dup_count": 1,
+                "title": "JHT - Payroll - Double Check Tip",
+                "store": null,
+                "due_date": "2026-01-07",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 2576,
+                "duplicate_ids": [
+                    18482
+                ],
+                "dup_count": 1,
+                "title": "JHT - Payroll - Double Check Tip",
+                "store": null,
+                "due_date": "2026-01-21",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 3604,
+                "duplicate_ids": [
+                    18510
+                ],
+                "dup_count": 1,
+                "title": "JHT - Send Weekly Report to David",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 3605,
+                "duplicate_ids": [
+                    18511
+                ],
+                "dup_count": 1,
+                "title": "JHT - Send Weekly Report to David",
+                "store": null,
+                "due_date": "2026-01-12",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 3606,
+                "duplicate_ids": [
+                    18512
+                ],
+                "dup_count": 1,
+                "title": "JHT - Send Weekly Report to David",
+                "store": null,
+                "due_date": "2026-01-19",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 3607,
+                "duplicate_ids": [
+                    18513
+                ],
+                "dup_count": 1,
+                "title": "JHT - Send Weekly Report to David",
+                "store": null,
+                "due_date": "2026-01-26",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4448,
+                "duplicate_ids": [
+                    18542
+                ],
+                "dup_count": 1,
+                "title": "Stockton - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4449,
+                "duplicate_ids": [
+                    18543
+                ],
+                "dup_count": 1,
+                "title": "Stockton - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-11",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4450,
+                "duplicate_ids": [
+                    18544
+                ],
+                "dup_count": 1,
+                "title": "Stockton - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-18",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4451,
+                "duplicate_ids": [
+                    18545
+                ],
+                "dup_count": 1,
+                "title": "Stockton - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-25",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4745,
+                "duplicate_ids": [
+                    18573
+                ],
+                "dup_count": 1,
+                "title": "JHT - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4746,
+                "duplicate_ids": [
+                    18574
+                ],
+                "dup_count": 1,
+                "title": "JHT - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-11",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4747,
+                "duplicate_ids": [
+                    18575
+                ],
+                "dup_count": 1,
+                "title": "JHT - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-18",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 4748,
+                "duplicate_ids": [
+                    18576
+                ],
+                "dup_count": 1,
+                "title": "JHT - 3rd partners weekly",
+                "store": null,
+                "due_date": "2026-01-25",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 5691,
+                "duplicate_ids": [
+                    18589
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Prepayment - Sale and Use Tax",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 5985,
+                "duplicate_ids": [
+                    18616
+                ],
+                "dup_count": 1,
+                "title": "Weekly Report",
+                "store": null,
+                "due_date": "2026-01-02",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 5986,
+                "duplicate_ids": [
+                    18617
+                ],
+                "dup_count": 1,
+                "title": "Weekly Report",
+                "store": null,
+                "due_date": "2026-01-09",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 5987,
+                "duplicate_ids": [
+                    18618
+                ],
+                "dup_count": 1,
+                "title": "Weekly Report",
+                "store": null,
+                "due_date": "2026-01-16",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 5988,
+                "duplicate_ids": [
+                    18619
+                ],
+                "dup_count": 1,
+                "title": "Weekly Report",
+                "store": null,
+                "due_date": "2026-01-23",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 6058,
+                "duplicate_ids": [
+                    18626
+                ],
+                "dup_count": 1,
+                "title": "B1- Sale Tax\/ Mixed Beverage Tax",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 6105,
+                "duplicate_ids": [
+                    18633
+                ],
+                "dup_count": 1,
+                "title": "B2 - Sale Tax\/ Mixed Beverage Tax",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 6144,
+                "duplicate_ids": [
+                    18640
+                ],
+                "dup_count": 1,
+                "title": "B3 - Sale Tax",
+                "store": null,
+                "due_date": "2026-01-04",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 6892,
+                "duplicate_ids": [
+                    18654
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Payroll - Liem",
+                "store": null,
+                "due_date": "2026-01-08",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 6893,
+                "duplicate_ids": [
+                    18655
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Payroll - Liem",
+                "store": null,
+                "due_date": "2026-01-22",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7535,
+                "duplicate_ids": [
+                    18664
+                ],
+                "dup_count": 1,
+                "title": "AirBnb - Report",
+                "store": null,
+                "due_date": "2026-01-11",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7584,
+                "duplicate_ids": [
+                    18671
+                ],
+                "dup_count": 1,
+                "title": "Sunright - Tip Table",
+                "store": null,
+                "due_date": "2026-01-03",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7626,
+                "duplicate_ids": [
+                    18678
+                ],
+                "dup_count": 1,
+                "title": "Coppers - Follow Up File Sale Tax",
+                "store": null,
+                "due_date": "2026-01-05",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7706,
+                "duplicate_ids": [
+                    18693
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-01-02",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7707,
+                "duplicate_ids": [
+                    18694
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-01-16",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7708,
+                "duplicate_ids": [
+                    18695
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-01-30",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7709,
+                "duplicate_ids": [
+                    18696
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-02-13",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7710,
+                "duplicate_ids": [
+                    18697
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-02-27",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7711,
+                "duplicate_ids": [
+                    18698
+                ],
+                "dup_count": 1,
+                "title": "Bakudan 2 & 3 - CPS Energy",
+                "store": null,
+                "due_date": "2026-03-13",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7762,
+                "duplicate_ids": [
+                    18707
+                ],
+                "dup_count": 1,
+                "title": "Lowry & Associates, Inc.",
+                "store": null,
+                "due_date": "2026-11-27",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7831,
+                "duplicate_ids": [
+                    18710
+                ],
+                "dup_count": 1,
+                "title": "Fill De9 (UIC), De9C (UIC) and 941 Form - QB",
+                "store": null,
+                "due_date": "2026-01-08",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7837,
+                "duplicate_ids": [
+                    18711
+                ],
+                "dup_count": 1,
+                "title": "Fill Annually Form",
+                "store": null,
+                "due_date": "2026-01-30",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 7951,
+                "duplicate_ids": [
+                    18718
+                ],
+                "dup_count": 1,
+                "title": "Credit Card - Schedule to pay x5085, x 11007 and x 73005 card",
+                "store": null,
+                "due_date": "2026-01-09",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8020,
+                "duplicate_ids": [
+                    18725
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Pay Water",
+                "store": null,
+                "due_date": "2026-01-20",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8184,
+                "duplicate_ids": [
+                    18740
+                ],
+                "dup_count": 1,
+                "title": "Stockton - PGE",
+                "store": null,
+                "due_date": "2026-01-27",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8208,
+                "duplicate_ids": [
+                    18747
+                ],
+                "dup_count": 1,
+                "title": "Stockton - PGE",
+                "store": null,
+                "due_date": "2026-01-10",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8239,
+                "duplicate_ids": [
+                    18750
+                ],
+                "dup_count": 1,
+                "title": "Raw Venture - Fill Tax",
+                "store": null,
+                "due_date": "2026-01-08",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8282,
+                "duplicate_ids": [
+                    18762
+                ],
+                "dup_count": 1,
+                "title": "Stockton - Prepayment Tax",
+                "store": null,
+                "due_date": "2026-01-08",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 8369,
+                "duplicate_ids": [
+                    18778
+                ],
+                "dup_count": 1,
+                "title": "IFT - Fill and Pay Tax",
+                "store": null,
+                "due_date": "2026-01-08",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18186,
+                "duplicate_ids": [
+                    20189
+                ],
+                "dup_count": 1,
+                "title": "Complete steps for mega backdoor Roth contribution",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18187,
+                "duplicate_ids": [
+                    20190
+                ],
+                "dup_count": 1,
+                "title": "Send K1s for all Bakudan entities to all shareholders",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18193,
+                "duplicate_ids": [
+                    20197
+                ],
+                "dup_count": 1,
+                "title": "Follow up on Uber missing payout",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18210,
+                "duplicate_ids": [
+                    18211
+                ],
+                "dup_count": 1,
+                "title": "Pay HEO CC 2025",
+                "store": null,
+                "due_date": "2026-03-14",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18784,
+                "duplicate_ids": [
+                    20196
+                ],
+                "dup_count": 1,
+                "title": "Follow up on Uber missing payout response",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18786,
+                "duplicate_ids": [
+                    20199
+                ],
+                "dup_count": 1,
+                "title": "Check on third-party delivery issues (DoorDash, Uber Eats)",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18787,
+                "duplicate_ids": [
+                    20200
+                ],
+                "dup_count": 1,
+                "title": "Assign manager to lead Toast upsell training module",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18790,
+                "duplicate_ids": [
+                    20203
+                ],
+                "dup_count": 1,
+                "title": "Check on DoorDash and Uber Eats third-party delivery issues",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18791,
+                "duplicate_ids": [
+                    20204
+                ],
+                "dup_count": 1,
+                "title": "Assign manager to lead Toast upsell integration and training module",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18797,
+                "duplicate_ids": [
+                    20188
+                ],
+                "dup_count": 1,
+                "title": "Assign manager to lead Toast upsell training module for serving staff",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18881,
+                "duplicate_ids": [
+                    20191
+                ],
+                "dup_count": 1,
+                "title": "Research and execute mega backdoor Roth contribution steps",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 18930,
+                "duplicate_ids": [
+                    18932
+                ],
+                "dup_count": 1,
+                "title": "Confirm transactional funding for Myra sent from Heo Holding Chase",
+                "store": null,
+                "due_date": null,
+                "assignee": null,
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 19526,
+                "duplicate_ids": [
+                    19538
+                ],
+                "dup_count": 1,
+                "title": "Classify expenses - IFT",
+                "store": null,
+                "due_date": "2026-05-09",
+                "assignee": "NguyÃªÌƒn NguyÃªn",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 19806,
+                "duplicate_ids": [
+                    19807
+                ],
+                "dup_count": 1,
+                "title": "transfer money ",
+                "store": null,
+                "due_date": "2022-09-23",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20025,
+                "duplicate_ids": [
+                    20051
+                ],
+                "dup_count": 1,
+                "title": "Increase umbrella insurance for personnel to $2M with AAA",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20027,
+                "duplicate_ids": [
+                    20193
+                ],
+                "dup_count": 1,
+                "title": "Evaluate hard money deal potential funded by Benchmark and TryMark",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20048,
+                "duplicate_ids": [
+                    20192
+                ],
+                "dup_count": 1,
+                "title": "Follow up with Clint (Utah) on Chubby Group supply chain call re: beef deck",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20066,
+                "duplicate_ids": [
+                    20195
+                ],
+                "dup_count": 1,
+                "title": "Verify transactional funding for Myra was sent from Heo Holding Chase",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20083,
+                "duplicate_ids": [
+                    20206
+                ],
+                "dup_count": 1,
+                "title": "Reach out to Amex re Marriott Bonvoy Brilliant card annual fee â€” request fee waiver or credit",
+                "store": null,
+                "due_date": null,
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20169,
+                "duplicate_ids": [
+                    20185
+                ],
+                "dup_count": 1,
+                "title": "Pay HEO CC 2025",
+                "store": null,
+                "due_date": "2026-06-14",
+                "assignee": "admin",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            },
+            {
+                "canonical_id": 20208,
+                "duplicate_ids": [
+                    20209
+                ],
+                "dup_count": 1,
+                "title": "PHASE F ASSIGNMENT TEST",
+                "store": null,
+                "due_date": "2026-07-01",
+                "assignee": "NguyÃªÌƒn NguyÃªn",
+                "match_type": "EXACT",
+                "source_guess": "Manual"
+            }
+        ]
+    },
+    "task_recurrence_summary": {
+        "exists": false
+    },
+    "bill_recurrence_summary": {
+        "exists": false
+    },
+    "dashboard_recompute": {
+        "bills": {
+            "total_active": 347,
+            "overdue_by_status": 0,
+            "overdue_by_date_real": 28,
+            "pending": 148,
+            "paid": 199,
+            "total_amount_at_risk": 200,
+            "overdue_amount_real": 0,
+            "post_cleanup_estimate": {
+                "active_bills": 40,
+                "overdue_real": 28,
+                "note": "After archiving 307 duplicate bills"
+            }
+        },
+        "tasks": {
+            "total_active": 1670,
+            "dup_count": 102,
+            "post_cleanup_estimate": 1568
+        }
+    }
+}

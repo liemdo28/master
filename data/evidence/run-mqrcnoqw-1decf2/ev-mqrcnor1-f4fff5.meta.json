@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnor1-f4fff5",
+  "objectiveRunId": "run-mqrcnoqw-1decf2",
+  "sourceType": "intent_analysis",
+  "sourceRef": "executive-intent-engine",
+  "summary": "Primary intent: technology_concern (70%), Alternatives: 1, Ambiguous: false",
+  "sha256": "f634642f5f62cbca83aab0c55d29b392e54dce15a5dd4ea62b31b28cf0a0dc20",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnoqw-1decf2\\f634642f5f62cbca83aab0c55d29b392e54dce15a5dd4ea62b31b28cf0a0dc20.json",
+  "capturedAt": "2026-06-24T00:43:18.157Z",
+  "readOnly": true
+}

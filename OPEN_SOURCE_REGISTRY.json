@@ -1,0 +1,94 @@
+{
+  "generated": "2026-07-06T10:00:00+07:00",
+  "governance_policy": "No open-source repo may be embedded directly into mi-core. All integrations must use adapters in _adapters/ with: health endpoint, timeout, retry, circuit breaker, logging, metrics, permission control, test fixtures, graceful fallback, and documented uninstall/disable procedure.",
+  "integrations": [
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "type": "primary_ai_gateway",
+      "status": "approved_active",
+      "location": "C:/Users/liemdo/AppData/Local/Programs/Ollama/",
+      "models": ["qwen3:8b", "qwen3:14b", "nomic-embed-text"],
+      "url": "http://127.0.0.1:11434",
+      "adapter": "mi-core/server/src/providers/",
+      "replaceable": true,
+      "fallback": "External OpenAI/Anthropic API"
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "type": "browser_automation",
+      "status": "approved_active",
+      "location": "mi-core/node_modules/playwright",
+      "adapter": "mi-core/server/src/browser/",
+      "usage": "QA testing, browser agents",
+      "replaceable": true
+    }
+  ],
+  "evaluation_queue": [
+    {
+      "id": "spec-kit",
+      "name": "github/spec-kit",
+      "url": "https://github.com/github/spec-kit",
+      "category": "requirements_and_workflow",
+      "current_equivalent": "game-division/ specification.md + company-os/departments.ts",
+      "action": "EVALUATE — check if spec-kit adds unique workflow capability not already in game-orchestrator"
+    },
+    {
+      "id": "openai-skills",
+      "name": "openai/skills",
+      "url": "https://github.com/openai/skills",
+      "category": "skills",
+      "current_equivalent": "gstack/skills/",
+      "action": "EVALUATE"
+    },
+    {
+      "id": "cocoindex",
+      "name": "cocoindex-io/cocoindex",
+      "url": "https://github.com/cocoindex-io/cocoindex",
+      "category": "code_understanding",
+      "current_equivalent": "none",
+      "action": "EVALUATE"
+    },
+    {
+      "id": "engram",
+      "name": "Gentleman-Programming/engram",
+      "url": "https://github.com/Gentleman-Programming/engram",
+      "category": "memory",
+      "current_equivalent": "operational-memory/ + self-improving-memory/",
+      "action": "EVALUATE"
+    },
+    {
+      "id": "headroom",
+      "name": "chopratejas/headroom",
+      "url": "https://github.com/chopratejas/headroom",
+      "category": "ui_governance",
+      "current_equivalent": "none",
+      "action": "EVALUATE"
+    },
+    {
+      "id": "auto-browser",
+      "name": "LvcidPsyche/auto-browser",
+      "url": "https://github.com/LvcidPsyche/auto-browser",
+      "category": "browser_control",
+      "current_equivalent": "browser/ + Playwright",
+      "action": "EVALUATE"
+    },
+    {
+      "id": "goose",
+      "name": "aaif-goose/goose",
+      "url": "https://github.com/aaif-goose/goose",
+      "category": "coding_worker",
+      "current_equivalent": "none",
+      "action": "BENCHMARK ONLY — do not integrate without evidence of superiority to current approach"
+    },
+    {
+      "id": "openhands",
+      "name": "OpenHands/OpenHands",
+      "url": "https://github.com/OpenHands/OpenHands",
+      "category": "coding_worker",
+      "current_equivalent": "none",
+      "action": "BENCHMARK ONLY"
+    }
+  ]
+}

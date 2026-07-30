@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-3e99522112",
+  "name": "ERPNext",
+  "github": "https://github.com/frappe/erpnext",
+  "owner_division": "Finance",
+  "category": "Finance",
+  "description": "Open source ERP",
+  "license": "GPL-3.0",
+  "license_risk": "MEDIUM",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782451898.0529525,
+  "created_iso": "2026-06-26T05:31:38.052955+00:00",
+  "updated_at": 1782451898.0529525,
+  "updated_iso": "2026-06-26T05:31:38.052961+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782451898.0529525,
+      "iso": "2026-06-26T05:31:38.052963+00:00"
+    }
+  ]
+}

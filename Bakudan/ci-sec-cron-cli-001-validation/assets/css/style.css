@@ -1,0 +1,30 @@
+/* ============================================
+   BakudanRamen Dashboard – Main CSS entry
+   All rules live in the imported modules below.
+   ============================================ */
+@import url('tokens.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap');
+
+/* Base */
+@import url('base.css');
+
+/* Layout */
+@import url('layout.css');
+
+/* Components */
+@import url('components/buttons.css');
+@import url('components/forms.css');
+@import url('components/cards.css');
+@import url('components/modal.css');
+@import url('components/dropdown.css');
+@import url('components/badge.css');
+
+/* Pages */
+@import url('pages/dashboard.css');
+@import url('pages/tasks.css');
+@import url('pages/bills.css');
+@import url('pages/calendar.css');
+@import url('pages/inbox.css');
+
+/* Design System Bridge — must be LAST to override per-page rules */
+@import url('ux-unified.css');

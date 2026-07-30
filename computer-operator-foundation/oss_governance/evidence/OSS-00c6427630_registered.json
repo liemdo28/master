@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-00c6427630",
+  "name": "DuckDB",
+  "github": "https://github.com/duckdb/duckdb",
+  "owner_division": "Finance",
+  "category": "Finance",
+  "description": "In-process OLAP database (chosen for Phase 3A)",
+  "license": "MIT",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6674592,
+  "created_iso": "2026-06-26T05:33:33.667462+00:00",
+  "updated_at": 1782452013.6674592,
+  "updated_iso": "2026-06-26T05:33:33.667470+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6674592,
+      "iso": "2026-06-26T05:33:33.667471+00:00"
+    }
+  ]
+}

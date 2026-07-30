@@ -1,0 +1,1001 @@
+{
+    "audit_date": "2026-06-17 01:02:52",
+    "stores": [
+        {
+            "id": 7,
+            "name": "Bakudan - Bandera (B3)"
+        },
+        {
+            "id": 6,
+            "name": "Bakudan - Stone Oak (B2)"
+        },
+        {
+            "id": 5,
+            "name": "Bakudan - The Rim (B1)"
+        },
+        {
+            "id": 10,
+            "name": "Copper (C1, C2, C3)"
+        },
+        {
+            "id": 12,
+            "name": "Heo Holding"
+        },
+        {
+            "id": 8,
+            "name": "IFT"
+        },
+        {
+            "id": 11,
+            "name": "Modesto"
+        },
+        {
+            "id": 2,
+            "name": "Raw Stockton"
+        }
+    ],
+    "bills_by_store": [
+        {
+            "name": "B2",
+            "total": 3,
+            "pending": "0",
+            "overdue": "0",
+            "paid": "3",
+            "total_amount": "4233.48"
+        },
+        {
+            "name": "Bakudan - Bandera (B3)",
+            "total": 3,
+            "pending": "0",
+            "overdue": "0",
+            "paid": "3",
+            "total_amount": "3596.38"
+        },
+        {
+            "name": "Bakudan - The Rim (B1)",
+            "total": 3,
+            "pending": "0",
+            "overdue": "0",
+            "paid": "3",
+            "total_amount": "3951.85"
+        },
+        {
+            "name": "Heo Holding",
+            "total": 3,
+            "pending": "1",
+            "overdue": "0",
+            "paid": "2",
+            "total_amount": "0.00"
+        },
+        {
+            "name": "IFT",
+            "total": 3,
+            "pending": "1",
+            "overdue": "0",
+            "paid": "2",
+            "total_amount": "0.00"
+        },
+        {
+            "name": "JHT",
+            "total": 3,
+            "pending": "0",
+            "overdue": "0",
+            "paid": "3",
+            "total_amount": "2249.00"
+        },
+        {
+            "name": "Modesto",
+            "total": 3,
+            "pending": "1",
+            "overdue": "0",
+            "paid": "2",
+            "total_amount": "0.00"
+        },
+        {
+            "name": "Raw Stockton",
+            "total": 19,
+            "pending": "9",
+            "overdue": "0",
+            "paid": "10",
+            "total_amount": "100.00"
+        }
+    ],
+    "dups": [],
+    "dup_count": 0,
+    "uncategorized": [
+        {
+            "id": 1,
+            "title": "Water",
+            "store": "JHT",
+            "due_date": "2026-03-10"
+        },
+        {
+            "id": 2,
+            "title": "Test2",
+            "store": "JHT",
+            "due_date": "2026-03-09"
+        },
+        {
+            "id": 3,
+            "title": "Test3",
+            "store": "JHT",
+            "due_date": "2026-03-10"
+        },
+        {
+            "id": 5,
+            "title": "CPS Energy B1",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 6,
+            "title": "CPS Energy B1 #2",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 7,
+            "title": "CPS Energy B1 Monthly",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-05-10"
+        },
+        {
+            "id": 8,
+            "title": "CPS Energy B2",
+            "store": "B2",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 9,
+            "title": "CPS Energy B2 #2",
+            "store": "B2",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 10,
+            "title": "CPS Energy B2 Monthly",
+            "store": "B2",
+            "due_date": "2026-05-10"
+        },
+        {
+            "id": 11,
+            "title": "CPS Energy B3",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 12,
+            "title": "CPS Energy B3 #2",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-04-10"
+        },
+        {
+            "id": 13,
+            "title": "CPS Energy B3 Monthly",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-05-10"
+        },
+        {
+            "id": 22,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "due_date": "2026-05-20"
+        },
+        {
+            "id": 23,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "due_date": "2026-05-20"
+        },
+        {
+            "id": 24,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "due_date": "2026-05-23"
+        },
+        {
+            "id": 25,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20"
+        },
+        {
+            "id": 26,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20"
+        },
+        {
+            "id": 27,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20"
+        },
+        {
+            "id": 187,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "due_date": "2026-06-20"
+        },
+        {
+            "id": 188,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "due_date": "2026-06-20"
+        },
+        {
+            "id": 189,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "due_date": "2026-06-23"
+        },
+        {
+            "id": 190,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-01"
+        },
+        {
+            "id": 191,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20"
+        },
+        {
+            "id": 192,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-01"
+        },
+        {
+            "id": 193,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20"
+        },
+        {
+            "id": 194,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20"
+        },
+        {
+            "id": 280,
+            "title": "TEST DUPLICATE BILL",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01"
+        },
+        {
+            "id": 281,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01"
+        },
+        {
+            "id": 282,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20"
+        },
+        {
+            "id": 283,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01"
+        },
+        {
+            "id": 284,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20"
+        },
+        {
+            "id": 285,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20"
+        }
+    ],
+    "uncategorized_count": 32,
+    "no_owner": [],
+    "no_owner_count": 0,
+    "total_bills": 0,
+    "total_payments": 0,
+    "orphan_pay": [],
+    "orphan_pay_count": 0,
+    "overpaid": [],
+    "overpaid_count": 0,
+    "note": "payments table does not exist - auto-created by Payment model on first use",
+    "recurring": [
+        {
+            "id": 21,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "children": 2
+        },
+        {
+            "id": 20,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "children": 2
+        },
+        {
+            "id": 14,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-23",
+            "amount": null,
+            "children": 2
+        },
+        {
+            "id": 15,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "repeat_type": "monthly",
+            "due_date": "2026-05-01",
+            "amount": null,
+            "children": 2
+        },
+        {
+            "id": 19,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "children": 3
+        },
+        {
+            "id": 18,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "children": 3
+        },
+        {
+            "id": 16,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "repeat_type": "monthly",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "children": 3
+        },
+        {
+            "id": 17,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "repeat_type": "monthly",
+            "due_date": "2026-05-01",
+            "amount": null,
+            "children": 2
+        }
+    ],
+    "recurring_count": 8,
+    "cat_coverage": [
+        {
+            "store": "Bakudan - Bandera (B3)",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Bakudan - Stone Oak (B2)",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Bakudan - The Rim (B1)",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Copper (C1, C2, C3)",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Heo Holding",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "IFT",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Modesto",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        },
+        {
+            "store": "Raw Stockton",
+            "existing": [],
+            "missing": [
+                "rent",
+                "utility",
+                "insurance",
+                "tax",
+                "licensing",
+                "credit_card",
+                "loan",
+                "subscription",
+                "vendor"
+            ],
+            "coverage": "0\/9"
+        }
+    ],
+    "all_bills": [
+        {
+            "id": 8,
+            "title": "CPS Energy B2",
+            "store": "B2",
+            "due_date": "2026-04-10",
+            "amount": "2116.74",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 9,
+            "title": "CPS Energy B2 #2",
+            "store": "B2",
+            "due_date": "2026-04-10",
+            "amount": "2116.74",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 10,
+            "title": "CPS Energy B2 Monthly",
+            "store": "B2",
+            "due_date": "2026-05-10",
+            "amount": "0.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 11,
+            "title": "CPS Energy B3",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-04-10",
+            "amount": "1798.19",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 12,
+            "title": "CPS Energy B3 #2",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-04-10",
+            "amount": "1798.19",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 13,
+            "title": "CPS Energy B3 Monthly",
+            "store": "Bakudan - Bandera (B3)",
+            "due_date": "2026-05-10",
+            "amount": "0.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 5,
+            "title": "CPS Energy B1",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-04-10",
+            "amount": "2806.64",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 6,
+            "title": "CPS Energy B1 #2",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-04-10",
+            "amount": "1145.21",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 7,
+            "title": "CPS Energy B1 Monthly",
+            "store": "Bakudan - The Rim (B1)",
+            "due_date": "2026-05-10",
+            "amount": "0.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "CPS Energy",
+            "created_by": 1
+        },
+        {
+            "id": 21,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "status": "paid",
+            "category": "tax",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 22,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "due_date": "2026-05-20",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 4
+        },
+        {
+            "id": 187,
+            "title": "Heo Holding Sale Tax",
+            "store": "Heo Holding",
+            "due_date": "2026-06-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 20,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "status": "paid",
+            "category": "tax",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 23,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "due_date": "2026-05-20",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 4
+        },
+        {
+            "id": 188,
+            "title": "IFT Sale Tax",
+            "store": "IFT",
+            "due_date": "2026-06-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 2,
+            "title": "Test2",
+            "store": "JHT",
+            "due_date": "2026-03-09",
+            "amount": "0.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "JHT",
+            "created_by": 1
+        },
+        {
+            "id": 3,
+            "title": "Test3",
+            "store": "JHT",
+            "due_date": "2026-03-10",
+            "amount": "999.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "toast",
+            "created_by": 1
+        },
+        {
+            "id": 1,
+            "title": "Water",
+            "store": "JHT",
+            "due_date": "2026-03-10",
+            "amount": "1250.00",
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "LIEMDO",
+            "created_by": 1
+        },
+        {
+            "id": 14,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "due_date": "2026-04-23",
+            "amount": null,
+            "status": "paid",
+            "category": "insurance",
+            "repeat_type": "monthly",
+            "vendor": "Amtrust",
+            "created_by": 1
+        },
+        {
+            "id": 24,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "due_date": "2026-05-23",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "Amtrust",
+            "created_by": 4
+        },
+        {
+            "id": 189,
+            "title": "Amtrust",
+            "store": "Modesto",
+            "due_date": "2026-06-23",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "Amtrust",
+            "created_by": 1
+        },
+        {
+            "id": 19,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "status": "paid",
+            "category": "utilities",
+            "repeat_type": "monthly",
+            "vendor": "PG&E",
+            "created_by": 1
+        },
+        {
+            "id": 18,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "status": "paid",
+            "category": "tax",
+            "repeat_type": "monthly",
+            "vendor": "QuickBooks",
+            "created_by": 1
+        },
+        {
+            "id": 16,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-04-20",
+            "amount": null,
+            "status": "paid",
+            "category": "tax",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 15,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-01",
+            "amount": null,
+            "status": "paid",
+            "category": "general",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 17,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-01",
+            "amount": null,
+            "status": "paid",
+            "category": "rent",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 27,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "PG&E",
+            "created_by": 4
+        },
+        {
+            "id": 26,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "QuickBooks",
+            "created_by": 4
+        },
+        {
+            "id": 25,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-05-20",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 4
+        },
+        {
+            "id": 190,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-01",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 192,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-01",
+            "amount": null,
+            "status": "paid",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 194,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "PG&E",
+            "created_by": 1
+        },
+        {
+            "id": 193,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "QuickBooks",
+            "created_by": 1
+        },
+        {
+            "id": 191,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-06-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        },
+        {
+            "id": 281,
+            "title": "Raw General",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 283,
+            "title": "Stockton - Prepayment",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 280,
+            "title": "TEST DUPLICATE BILL",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-01",
+            "amount": "100.00",
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "none",
+            "vendor": "",
+            "created_by": 1
+        },
+        {
+            "id": 285,
+            "title": "Raw PGE",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "PG&E",
+            "created_by": 1
+        },
+        {
+            "id": 284,
+            "title": "Raw QB Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "QuickBooks",
+            "created_by": 1
+        },
+        {
+            "id": 282,
+            "title": "Raw Sale Tax",
+            "store": "Raw Stockton",
+            "due_date": "2026-07-20",
+            "amount": null,
+            "status": "pending",
+            "category": "NONE",
+            "repeat_type": "monthly",
+            "vendor": "CA CDTFA",
+            "created_by": 1
+        }
+    ],
+    "verdict": "PASS",
+    "blockers": [
+        "32 uncategorized bills",
+        "payments table missing"
+    ]
+}

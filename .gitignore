@@ -1,0 +1,49 @@
+node_modules
+
+# secrets — never publish real credentials to this public repo
+.env
+.env.*
+!.env.example
+!.env.*.example
+keys.env
+client_secret.json
+*.pem
+*.p12
+*.pfx
+*.ppk
+id_rsa
+id_rsa.*
+service-account*.json
+
+# build/dependency artifacts — never belong in git, regenerable via install
+node_modules/
+.venv/
+.mypy_cache/
+__pycache__/
+*.pyc
+.vs/
+dist/
+build/
+
+# vendored browser runtime installers
+**/installer/runtime/
+**/chrome-win64/
+
+# large generated/runtime/duplicate data — excluded, publishing source only
+Bakudan/packing-list/
+ai-video-guide-system/walkthrough_output/
+_archive/
+mi-core/.local-agent-global/reference-brain/
+mi-core/services/whatsapp-ai-gateway/data/
+mi-core/services/whatsapp-ai-gateway/releases/
+mi-core/services/whatsapp-ai-gateway/installer/
+mi-core/services/whatsapp-ai-gateway/logs/
+graphify-out/cache/
+**/Bakudan Photos 2026/
+
+# generated knowledge graph, runtime data stores, DBs, evidence artifacts — not source
+graphify-out/
+.local-agent-global/
+mi-core/.local-agent-global/
+mi-core/reports/evidence/
+*.db

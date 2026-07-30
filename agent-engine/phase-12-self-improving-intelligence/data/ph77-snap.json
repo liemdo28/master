@@ -1,0 +1,29 @@
+[
+  {
+    "id": "INV_1782656998077_qj5l7z",
+    "timestamp": 1782656998077,
+    "name": "Project-X",
+    "npv": 267.95,
+    "roi": 60,
+    "paybackPeriod": 2.5,
+    "decision": "INVEST"
+  },
+  {
+    "id": "INV_1782656989690_lxq616",
+    "timestamp": 1782656989690,
+    "name": "Project-X",
+    "npv": 267.95,
+    "roi": 60,
+    "paybackPeriod": 2.5,
+    "decision": "INVEST"
+  },
+  {
+    "id": "INV_1782656982244_2hxhtp",
+    "timestamp": 1782656982244,
+    "name": "Project-X",
+    "npv": 267.95,
+    "roi": 60,
+    "paybackPeriod": 2.5,
+    "decision": "INVEST"
+  }
+]

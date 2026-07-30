@@ -1,0 +1,77 @@
+[
+  {
+    "id": "PROC_1782656995885_tfabm4",
+    "timestamp": 1782656995885,
+    "items": [
+      {
+        "sku": "A",
+        "reorderPoint": 70,
+        "needsReorder": true,
+        "suggestedQty": 110,
+        "daysOfCover": 3,
+        "stockoutRisk": "HIGH"
+      },
+      {
+        "sku": "B",
+        "reorderPoint": 70,
+        "needsReorder": false,
+        "suggestedQty": 0,
+        "daysOfCover": 20,
+        "stockoutRisk": "LOW"
+      }
+    ],
+    "count": 2,
+    "reorderCount": 1,
+    "highRisk": 1
+  },
+  {
+    "id": "PROC_1782656987731_ja6slg",
+    "timestamp": 1782656987731,
+    "items": [
+      {
+        "sku": "A",
+        "reorderPoint": 70,
+        "needsReorder": true,
+        "suggestedQty": 110,
+        "daysOfCover": 3,
+        "stockoutRisk": "HIGH"
+      },
+      {
+        "sku": "B",
+        "reorderPoint": 70,
+        "needsReorder": false,
+        "suggestedQty": 0,
+        "daysOfCover": 20,
+        "stockoutRisk": "LOW"
+      }
+    ],
+    "count": 2,
+    "reorderCount": 1,
+    "highRisk": 1
+  },
+  {
+    "id": "PROC_1782656981752_bj42dc",
+    "timestamp": 1782656981752,
+    "items": [
+      {
+        "sku": "A",
+        "reorderPoint": 70,
+        "needsReorder": true,
+        "suggestedQty": 110,
+        "daysOfCover": 3,
+        "stockoutRisk": "HIGH"
+      },
+      {
+        "sku": "B",
+        "reorderPoint": 70,
+        "needsReorder": false,
+        "suggestedQty": 0,
+        "daysOfCover": 20,
+        "stockoutRisk": "LOW"
+      }
+    ],
+    "count": 2,
+    "reorderCount": 1,
+    "highRisk": 1
+  }
+]

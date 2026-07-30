@@ -1,0 +1,21 @@
+{
+  "workflow_id": "bakudan-seo-daily-audit",
+  "name": "Bakudan SEO Daily Audit",
+  "domain": "bakudan",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": true,
+  "brand_id": "bakudan",
+  "location_id": "all",
+  "schedule": "0 7 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Daily SEO audit specifically for Bakudan brand. Approval required before audit runs.",
+  "actions": [
+    {"order": 1, "type": "http_request", "name": "intake_event", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/intake/event", "body": {"source": "n8n", "domain": "bakudan", "event_type": "bakudan_seo_audit_request", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "started_at": "{{started_at}}"}},
+    {"order": 2, "type": "http_request", "name": "decision_request", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/decision/request", "body": {"workflow_id": "bakudan-seo-daily-audit", "domain": "bakudan", "action": "seo_audit", "brand_id": "{{brand_id}}", "decision_needed": "approve_bakudan_seo_audit"}},
+    {"order": 3, "type": "condition", "name": "check_approval", "condition": "{{decision_request.response.approved}} === true"},
+    {"order": 4, "type": "http_request", "name": "trigger_mi_core", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch", "body": {"domain": "bakudan", "action": "seo_audit", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}"}},
+    {"order": 5, "type": "http_request", "name": "log_result", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/workflows/log", "body": {"workflow_id": "bakudan-seo-daily-audit", "domain": "bakudan", "source": "n8n", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "status": "{{trigger_mi_core.status}}", "started_at": "{{started_at}}", "completed_at": "{{completed_at}}", "error": ""}}
+  ]
+}

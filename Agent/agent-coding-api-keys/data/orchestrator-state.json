@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "savedAt": 1784279608333,
+  "currentProviderIndex": 0,
+  "providers": {
+    "opusmax": {
+      "providerId": "opusmax",
+      "usedQuota": 0,
+      "currentBatchUsed": 0,
+      "firstRequestAt": null,
+      "consecutiveFailures": 0,
+      "lastFailureAt": null,
+      "lastError": null,
+      "totalRequests": 313,
+      "totalFailures": 0
+    },
+    "antigravity": {
+      "providerId": "antigravity",
+      "usedQuota": 0,
+      "currentBatchUsed": 0,
+      "firstRequestAt": null,
+      "consecutiveFailures": 0,
+      "lastFailureAt": 1784262089844,
+      "lastError": null,
+      "totalRequests": 4599,
+      "totalFailures": 72
+    }
+  }
+}

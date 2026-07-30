@@ -1,0 +1,304 @@
+{
+  "started_at": "2026-06-18T06:02:43.069Z",
+  "agents": {
+    "seo-local-maps-agent": {
+      "port": 4001,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-website-agent": {
+      "port": 4002,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-technical-agent": {
+      "port": 4003,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-schema-agent": {
+      "port": 4004,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-content-agent": {
+      "port": 4005,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-citation-agent": {
+      "port": 4006,
+      "healthy": true,
+      "stderr": ""
+    },
+    "seo-analytics-agent": {
+      "port": 4007,
+      "healthy": true,
+      "stderr": ""
+    }
+  },
+  "checks": {
+    "audits": {
+      "seo-local-maps-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "Audited 3 locations"
+      },
+      "seo-website-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "Audited 13 pages, mapped 9 keywords"
+      },
+      "seo-schema-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "Generated 3 restaurant schemas + 13 breadcrumbs + 1 FAQ"
+      },
+      "seo-technical-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "Ran 13 checks on 13 pages = 169 issue records"
+      },
+      "seo-citation-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "57 citation entries across 19 directories x 3 locations"
+      },
+      "seo-content-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "9 content briefs created"
+      },
+      "seo-analytics-agent": {
+        "status": 200,
+        "ok": true,
+        "summary": "Weekly KPI snapshot - 13 pages, 9 keywords, 169 technical issues"
+      }
+    },
+    "endpoints": {
+      "seo-local-maps-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-local-maps-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": "2026-06-18T06:02:43.121Z"
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-website-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-website-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": "2026-06-18T06:02:43.126Z"
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-technical-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-technical-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": null
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-schema-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-schema-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": "2026-06-18T06:02:43.158Z"
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-content-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-content-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": null
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-citation-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-citation-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": null
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      },
+      "seo-analytics-agent": {
+        "health": {
+          "status": 200,
+          "ok": true
+        },
+        "status": {
+          "status": 200,
+          "agent": "seo-analytics-agent",
+          "version": "1.0.0",
+          "uptime_s": 0,
+          "mi_last_sync": "2026-06-18T06:02:43.874Z"
+        },
+        "sync_mi": {
+          "status": 200,
+          "ok": true
+        },
+        "reports_latest": {
+          "status": 200,
+          "ok": true
+        }
+      }
+    },
+    "shared_db": {
+      "path": "e:\\Project\\Master\\SEO\\shared\\database\\seo-shared.db",
+      "tables": {
+        "locations": 3,
+        "gbp_profiles": 3,
+        "apple_profiles": 0,
+        "bing_profiles": 0,
+        "pages": 13,
+        "keywords": 9,
+        "schema_items": 17,
+        "content_briefs": 9,
+        "reviews": 0,
+        "citations": 57,
+        "technical_issues": 169,
+        "ranking_snapshots": 9,
+        "analytics_metrics": 1,
+        "utm_links": 3,
+        "agent_status": 7,
+        "agent_tasks": 22,
+        "mi_sync_logs": 12,
+        "reports": 7
+      },
+      "agent_status_rows": 7,
+      "mi_sync_logs_rows": 12,
+      "reports_rows": 7
+    },
+    "inter_agent": {
+      "local_maps_wrote_locations": true,
+      "website_wrote_pages": true,
+      "schema_wrote_items": true,
+      "technical_wrote_issues": true,
+      "citation_wrote_citations": true,
+      "content_wrote_briefs": true,
+      "analytics_wrote_metrics": true
+    },
+    "events": {
+      "total": 22,
+      "types": [
+        "location.data.updated",
+        "reviews.snapshot",
+        "audit.completed",
+        "pages.list",
+        "keyword.map",
+        "schema.implementation_notes",
+        "schema.validation",
+        "technical.issues",
+        "schema.findings",
+        "kpi.technical",
+        "citation.canonical_request",
+        "citation.status",
+        "content.published",
+        "content.performance_request",
+        "dashboard.payload"
+      ]
+    },
+    "logs": [
+      "seo-analytics-agent.log",
+      "seo-citation-agent.log",
+      "seo-content-agent.log",
+      "seo-local-maps-agent.log",
+      "seo-schema-agent.log",
+      "seo-technical-agent.log",
+      "seo-website-agent.log"
+    ],
+    "reports": [
+      "seo-analytics-agent",
+      "seo-citation-agent",
+      "seo-content-agent",
+      "seo-local-maps-agent",
+      "seo-schema-agent",
+      "seo-technical-agent",
+      "seo-website-agent",
+      "validation"
+    ]
+  },
+  "status": "PASS",
+  "finished_at": "2026-06-18T06:02:43.974Z"
+}

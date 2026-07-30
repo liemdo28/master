@@ -1,0 +1,38 @@
+[2026-07-06T05:38:41.428Z] Starting n8n wrapper...
+[2026-07-06T05:38:41.430Z] process.execPath: C:\Program Files\nodejs\node.exe
+[2026-07-06T05:38:41.431Z] process.argv: ["C:\\Program Files\\nodejs\\node.exe","C:\\Users\\liemdo\\AppData\\Roaming\\npm\\node_modules\\pm2\\lib\\ProcessContainerFork.js"]
+[2026-07-06T05:38:41.431Z] CWD: d:\Project\Master
+[2026-07-06T05:38:41.477Z] Spawned n8n PID: 21088
+[2026-07-06T05:38:41.478Z] Event handlers set up. Waiting for n8n...
+Initializing n8n process
+n8n ready on ::, port 5678
+n8n Task Broker ready on 127.0.0.1, port 5679
+Failed to start Python task runner in internal mode. because its virtual environment is missing from this system. Launching a Python runner in internal mode is intended only for debugging and is not recommended for production. Users are encouraged to deploy in external mode. See: https://docs.n8n.io/hosting/configuration/task-runners/#setting-up-external-mode
+[license SDK] Skipping renewal on init: license cert is not due for renewal
+Registered runner "JS Task Runner" (W7CSMi2SGISAA6f8SZx5E) 
+Instance registered
+Discovered 4 cluster checks
+Version: 2.27.3
+Building workflow dependency index...
+[ERR] [PostHog] `sendFeatureFlags` is deprecated and will be removed in a future major version. Pass a `flags` snapshot from `posthog.evaluateFlags(...)` instead — it avoids a second `/flags` request per capture and guarantees the event carries the exact flag values your code branched on.
+Start Active Workflows:
+Finished building workflow dependency index. Processed 0 draft workflows, 0 published workflows.
+Activated workflow "seo-daily-audit" (ID: tyo9YyRg7tsLDCLR)
+Activated workflow "seo-weekly-executive-report" (ID: vOT8BoqZhD3flsml)
+Activated workflow "seo-technical-health-check" (ID: tzP1elP8fJXibHCI)
+Activated workflow "seo-content-opportunity-scan" (ID: YuGiYN3ZQqClxoIE)
+Activated workflow "seo-schema-validation" (ID: 6PbvrfUXTfEIUoO9)
+Activated workflow "seo-review-summary" (ID: G23aM8msRDCwTZ6O)
+Activated workflow "seo-dashboard-sync" (ID: m4XB9jBgiOqWBBec)
+Activated workflow "career-job-board-monitor" (ID: 6BqZcPueDT48kOJT)
+Activated workflow "career-candidate-tracker" (ID: ZSMudOmhp4JRJgpX)
+Activated workflow "career-outreach-sequence" (ID: PDosfzhXsEVGSNr7)
+Activated workflow "bakudan-gsc-pull" (ID: U91NFmtfY9ESWD2G)
+Activated workflow "bakudan-seo-daily-audit" (ID: 5wC7un4wZipGqjpS)
+Activated workflow "review-monitoring" (ID: TtN4cMDNrVHacZTe)
+Activated workflow "food-safety-daily-reminder" (ID: EPBaLdmMaEPpVVAE)
+Activated workflow "quickbooks-daily-sync" (ID: oQDA5COP7RsV4rLy)
+Activated workflow "doordash-weekly-campaign-review" (ID: 5jMaaTTOO7EYO7WG)
+
+Editor is now accessible via:
+http://127.0.0.1:5678

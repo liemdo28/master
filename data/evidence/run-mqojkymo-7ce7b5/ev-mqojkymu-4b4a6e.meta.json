@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqojkymu-4b4a6e",
+  "objectiveRunId": "run-mqojkymo-7ce7b5",
+  "sourceType": "business_analysis",
+  "sourceRef": "business-reasoning-engine",
+  "summary": "Signal: revenue_drop (15%) | Hypotheses: 10",
+  "sha256": "d4def1ab58bf564ccf1be7faec1d3aa4547ff38e66ee1f70251877c80eaf3d49",
+  "artifactPath": "e:\\Project\\Master\\mi-core\\data\\evidence\\run-mqojkymo-7ce7b5\\d4def1ab58bf564ccf1be7faec1d3aa4547ff38e66ee1f70251877c80eaf3d49.json",
+  "capturedAt": "2026-06-22T01:33:49.782Z",
+  "readOnly": true
+}

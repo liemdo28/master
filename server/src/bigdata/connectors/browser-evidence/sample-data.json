@@ -1,0 +1,18 @@
+{
+  "store": "bakudan",
+  "platform": "doordash",
+  "action_type": "dispute_screenshot",
+  "captured_at": "2026-06-10T10:30:00Z",
+  "order_id": "DD-8829341",
+  "dispute_reason": "Order never delivered",
+  "screenshots": [
+    { "filename": "doordash_dispute_DD-8829341_1.png", "page": "dispute_form" },
+    { "filename": "doordash_dispute_DD-8829341_2.png", "page": "order_history" }
+  ],
+  "browser_log": {
+    "url": "https://merchant.doordash.com/disputes",
+    "status": "dispute_submitted",
+    "steps_completed": 3
+  },
+  "approval_id": "appr-001"
+}

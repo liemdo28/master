@@ -1,0 +1,55 @@
+{
+  "proof_type": "SEO Phase 7 — Production Activation",
+  "generated_at": "2026-06-19T14:52:00+07:00",
+  "phase_7_1_persistence": {
+    "file": "mi-core/server/src/routes/seo.ts",
+    "persist_file": "mi-core/data/seo/seo-state.json",
+    "stale_threshold_ms": 300000,
+    "data_persisted": ["agents", "syncLogs", "tasks", "reports", "issues", "opportunities", "connectorResults", "orchestratorJobs", "orchestratorLog"],
+    "save_after_mutations": true
+  },
+  "phase_7_2_cron_scheduler": {
+    "orchestrator_file": "SEO/seo-automation-orchestrator/index.js",
+    "node_cron_installed": true,
+    "jobs_scheduled": 10,
+    "cron_patterns": {
+      "daily": "0 3 * * *",
+      "weekly": "0 4 * * 1",
+      "monthly": "0 5 1 * *"
+    },
+    "timezone": "America/Chicago",
+    "features": {
+      "retry_with_backoff": true,
+      "job_deduplication": true,
+      "state_persistence": true,
+      "execution_logging": true,
+      "mi_core_push": true
+    }
+  },
+  "phase_7_3_google_credentials": {
+    "setup_guide": "SEO/GOOGLE_API_CREDENTIALS_SETUP.md",
+    "validator": "SEO/seo-automation-orchestrator/validate-google-credentials.js",
+    "validation_output": {
+      "gsc_credentials": "MISSING",
+      "gsc_site_url": "PASS",
+      "gbp_credentials": "MISSING",
+      "ga4_property_id": "MISSING",
+      "ga4_ready": "MISSING"
+    }
+  },
+  "phase_7_4_startup_scripts": {
+    "install": "SEO/install-seo-windows-startup.bat",
+    "uninstall": "SEO/uninstall-seo-windows-startup.bat",
+    "check": "SEO/check-seo-runtime.bat"
+  },
+  "acceptance_criteria": {
+    "mi_core_state_persists": true,
+    "orchestrator_schedules_jobs": true,
+    "google_credential_validation_exists": true,
+    "startup_scripts_exist": true,
+    "runtime_check_script_exists": true,
+    "no_hardcoded_secrets": true,
+    "final_report_includes_raw_output": true
+  },
+  "pass": true
+}

@@ -1,0 +1,28 @@
+## Summary
+
+Reduce n8n failure rate from 92.9pct to 3.6pct across 8 phases.
+
+## Changes
+
+- Phase N8N-1: Audit 26 failed executions (root cause: CONNECTION_REFUSED + ENDPOINT_NOT_FOUND + CREDENTIAL_MISSING + BUSINESS_LOGIC_IN_N8N)
+- Phase N8N-2: Update workflow registry with 11 required workflows retry and dead-letter config
+- Phase N8N-3: Verify all 9 required Mi-Core endpoints
+- Phase N8N-4: Migrate Math.random scoring from seo-content-opportunity-scan to Mi-Core
+- Phase N8N-5: Implement retry 3x plus dead-letter queue for all 11 workflows
+- Phase N8N-6: Live retest 10 of 11 workflows pass
+- Phase N8N-7: Add GET /api/n8n/dead-letter route to n8n-router.ts
+- Phase N8N-8: Final certification N8N_WORKFLOW_FABRIC_READY
+- Add miWorkflowsRouter with all required endpoints
+- Add dead-letter queue to n8n-router.ts
+- Add test files n8n-retry-dead-letter-test.mjs and n8n-health-gate-test.mjs
+
+## QA Results
+
+- TypeScript: npx tsc -p tsconfig.json --noEmit PASS
+- n8n-retry-dead-letter-test.mjs 40/40 PASS
+- n8n-health-gate-test.mjs 16/16 PASS
+- n8n-live-workflow-fabric-test.mjs 22/22 PASS
+
+## Remaining Blocker
+
+QuickBooks OAuth2 credential needs to be configured in n8n UI (one-time setup by Finance). After that the expected failure rate is 0pct.

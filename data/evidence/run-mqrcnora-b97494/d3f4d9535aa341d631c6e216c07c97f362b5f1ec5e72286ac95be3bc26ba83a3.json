@@ -1,0 +1,93 @@
+{
+  "plan_id": "plan-1782261798169-16",
+  "created_at": "2026-06-24T00:43:18.169Z",
+  "intent": "strategic_question",
+  "title": "Kế hoạch phân tích chiến lược",
+  "description": "Phân tích bối cảnh, dữ liệu, và đề xuất quyết định chiến lược",
+  "total_steps": 4,
+  "estimated_total_seconds": 120,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Thu thập bối cảnh",
+      "description": "Gather relevant business data, market context, goals",
+      "engine": "context-gatherer",
+      "required_data": [
+        "business_goals",
+        "market_data"
+      ],
+      "outputs": [
+        "strategic_context"
+      ],
+      "estimated_seconds": 45,
+      "dependencies": [],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Phân tích lựa chọn",
+      "description": "Evaluate possible courses of action with pros/cons",
+      "engine": "option-analyzer",
+      "required_data": [
+        "strategic_context"
+      ],
+      "outputs": [
+        "options_analysis"
+      ],
+      "estimated_seconds": 40,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "Đề xuất quyết định",
+      "description": "Rank options by expected value, risk, and alignment with goals",
+      "engine": "decision-support",
+      "required_data": [
+        "options_analysis"
+      ],
+      "outputs": [
+        "recommendation"
+      ],
+      "estimated_seconds": 20,
+      "dependencies": [
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-3",
+      "status": "pending"
+    },
+    {
+      "order": 4,
+      "title": "QA và tạo brief",
+      "description": "Validate analysis quality, generate executive summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "recommendation"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "3"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-4",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.7,
+  "requires_ceo_approval": false
+}

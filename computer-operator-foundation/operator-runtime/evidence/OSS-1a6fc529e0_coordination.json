@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-1a6fc529e0",
+  "task_name": "Advance Stagehand past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782451898.0779598,
+  "created_iso": "2026-06-26T05:31:38.077961+00:00",
+  "updated_at": 1782451898.0779686,
+  "owner": "operator_lead",
+  "priority": "MEDIUM",
+  "description": "Stagehand has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-eca9104512",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782451898.0779696
+    }
+  ]
+}

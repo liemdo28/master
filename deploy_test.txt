@@ -1,0 +1,96 @@
+=== PRE-DEPLOY VALIDATION ===
+
+✓ .env file present and contains required variables
+
+✓ .env loads correctly — DB_PASS detected
+
+=== SCHEMA VERIFICATION GATE ===
+
+DB connection: OK
+Table check: 41/41 OK
+Column check: 51/51 OK
+
+✓ SCHEMA GATE: PASS — all checks passed
+
+=== TRANSLATION VERIFICATION GATE ===
+
+=== Translation Verification Gate ===
+
+Loaded en-US: 871 keys
+Loaded es-US: 871 keys
+Loaded vi-VN: 871 keys
+
+=== Key Parity Check ===
+Missing keys: 0
+Extra keys: 0
+
+=== Duplicate Key Check ===
+en-US: 0 duplicates
+es-US: 0 duplicates
+vi-VN: 0 duplicates
+
+=== Placeholder Text Check ===
+Placeholder warnings: 1
+
+=== Hardcoded String Check (Views) ===
+Hardcoded strings found: 283 (showing first 20)
+
+=== SUMMARY ===
+Errors: 0
+Warnings: 21
+
+--- WARNINGS ---
+  ⚠ PLACEHOLDER: 'inbox.mark_all_read' in es-US contains: Marcar todo como leido
+  ⚠ HARDCODED: views/admin/penalties/index.php:182 — <label>Min Overdue Days</label>
+  ⚠ HARDCODED: views/admin/penalties/index.php:292 — <thead><tr><th>User</th><th>Penalties</th><th>VND Total</th><th>USD Tota
+  ⚠ HARDCODED: views/admin/compliance/index.php:37 — <div class="text-sm text-gray-500">Overdue Filings</div>
+  ⚠ HARDCODED: views/admin/compliance/index.php:54 — <!-- Overdue Alert -->
+  ⚠ HARDCODED: views/admin/compliance/index.php:56 — <h3 class="font-semibold text-red-800 mb-2">⚠️ Overdue Filings</h3>
+  ⚠ HARDCODED: views/admin/compliance/index.php:88 — $isOverdue = $f['due_date'] < $today;
+  ⚠ HARDCODED: views/admin/compliance/index.php:89 — $statusColor = $isOverdue ? 'bg-red-100 text-red-700' :
+  ⚠ HARDCODED: views/admin/digital_twin/index.php:26 — <div class="text-sm text-gray-500">Active Tasks</div>
+  ⚠ HARDCODED: views/admin/documents/index.php:16 — <div class="text-sm text-gray-500">Active Documents</div>
+  ⚠ HARDCODED: views/admin/employees/index.php:20 — <div class="text-sm text-gray-500">Active</div>
+  ⚠ HARDCODED: views/admin/employees/index.php:28 — <div class="text-sm text-gray-500">Inactive</div>
+  ⚠ HARDCODED: views/admin/releases/ceo-review.php:321 — <div class="crw-card__title" style="color:#f87171">Active Known
+  ⚠ HARDCODED: views/admin/store_command/index.php:90 — $taskOverdue = (int)($store['task_overdue'] ?? 0);
+  ⚠ HARDCODED: views/admin/task_audit/all_tasks.php:8 — $statusLabels = ['todo'=>'To Do','in_progress'=>'In Progress','done'=>'Done','bl
+  ⚠ HARDCODED: views/admin/task_audit/workflow.php:29 — $isActive = ($stage ?? 'submitted') === $s;
+  ⚠ HARDCODED: views/admin/training/index.php:32 — <div class="text-sm text-gray-500">Completed</div>
+  ⚠ HARDCODED: views/admin/_task_row_partial.php:17 — $isOverdue = !empty($t['due_date']) && $t['due_date'] < $today && empty(
+  ⚠ HARDCODED: views/admin/_task_row_partial.php:21 — elseif ($isOverdue) $classes .= ' ad-task-overdue';
+  ⚠ HARDCODED: views/admin/release_dashboard.php:46 — <h3 class="font-semibold text-red-800">Deploy Freeze Active</h3>
+  ⚠ HARDCODED: views/admin/store_detail.php:63 — <div class="text-lg font-semibold text-gray-900">Store Health Sc
+
+RESULT: PASS (exit code 0)
+✓ TRANSLATION GATE: PASSED (warnings allowed)
+
+=== DEPLOYING FILES ===
+
+Exit code: 0
+
+From https://github.com/liemdo28/dashboard.bakudanramen.com
+ * branch            main       -> FETCH_HEAD
+HEAD is now at e66db74 fix(pay-now): replace inline onclick with data-* + event delegation
+
+DEPLOY_OK
+
+=== POST-DEPLOY DIAGNOSTICS ===
+
+✓ ping.php (814 bytes)
+✓ preview_db_health.php (9566 bytes)
+✓ validate_preview_workflow.php (20511 bytes)
+✓ repair_preview.php (2107 bytes)
+✓ models/Section.php (3647 bytes)
+✓ models/User.php (10603 bytes)
+✓ models/Task.php (75447 bytes)
+✓ config/database.php (12814 bytes)
+✓ index.php (147246 bytes)
+✓ .htaccess (4300 bytes)
+
+auto_prepend_file: (none)
+git HEAD: e66db74 fix(pay-now): replace inline onclick with data-* + event delegation
+git status: ?? .env.asana-sync.bak
+?? c123.php
+__DIR__: /home/liemdo0208/releases/dashboard-a40f8e7
+cwd: /home/liemdo0208/releases/dashboard-a40f8e7

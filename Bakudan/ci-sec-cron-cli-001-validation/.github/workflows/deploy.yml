@@ -1,0 +1,279 @@
+name: Deploy to DreamHost
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ PRODUCTION DEPLOY LOCKED — 2026-06-03                                       │
+# │ Auto-deploy on push DISABLED after P0 incident (unfinished code deployed).  │
+# │ Production deploys now require MANUAL trigger only (workflow_dispatch).      │
+# │ All changes must pass QA on preview before production deploy.               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+on:
+  # push:              # DISABLED — do not auto-deploy on push to main
+  #   branches:
+  #     - main
+  workflow_dispatch:   # Manual trigger only — requires Admin approval
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install SSH keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/known_hosts << 'EOF'
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFeH7+zp7F4iYI1FUXetzrE4gRoZSigkqW7trL+i0xbFsxWDz+C9SWYhZmiwtqIlLVDIXJFPJbvA52/MKSv9UXA=
+          pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPa5+IX4bwHJnNvhO0hll6+uYM7Zc0kzEXiZ2OyzXPxQ
+          EOF
+
+      - name: P0 public document-root artifact gate
+        run: |
+          set -euo pipefail
+          FORBIDDEN=(
+            ".git/"
+            "ops/"
+            "db_query.php"
+            "check2.php"
+            "probe_schema.php"
+            "duplicate-scan-run.php"
+            "migrate.php"
+            "create_qa_user.php"
+            "cron.php"
+          )
+
+          rsync -an --checksum --delete \
+            --exclude ".git" \
+            --exclude "ops" \
+            --exclude ".github" \
+            --exclude ".gitignore" \
+            --exclude ".claude" \
+            --exclude ".env" \
+            --exclude "node_modules" \
+            --exclude "vendor" \
+            --exclude "uploads" \
+            --exclude "storage" \
+            --exclude "tmp" \
+            --exclude "NUL" \
+            --exclude "db_query.php" \
+            --exclude "check2.php" \
+            --exclude "probe_schema.php" \
+            --exclude "duplicate-scan-run.php" \
+            --exclude "migrate.php" \
+            --exclude "create_qa_user.php" \
+            --exclude "cron.php" \
+            --out-format="%n" \
+            ./ "${RUNNER_TEMP}/public-artifact-check/" > "${RUNNER_TEMP}/public-artifact-manifest.txt"
+
+          FAIL=0
+          for path in "${FORBIDDEN[@]}"; do
+            pattern="${path%/}"
+            if grep -Fxq "$pattern" "${RUNNER_TEMP}/public-artifact-manifest.txt" || grep -Fq "$path" "${RUNNER_TEMP}/public-artifact-manifest.txt"; then
+              echo "::error::Forbidden public artifact path would be deployed: $path"
+              FAIL=1
+            fi
+          done
+
+          if [ "$FAIL" != "0" ]; then
+            exit 1
+          fi
+          echo "P0 artifact gate passed: forbidden public-root resources are absent from the deploy artifact."
+
+      - name: Deploy via SSH key (rsync)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          rsync -avz --checksum --delete \
+            --exclude ".git" \
+            --exclude "ops" \
+            --exclude ".github" \
+            --exclude ".gitignore" \
+            --exclude ".claude" \
+            --exclude ".env" \
+            --exclude "node_modules" \
+            --exclude "vendor" \
+            --exclude "uploads" \
+            --exclude "storage" \
+            --exclude "tmp" \
+            --exclude "NUL" \
+            --exclude "db_query.php" \
+            --exclude "check2.php" \
+            --exclude "probe_schema.php" \
+            --exclude "duplicate-scan-run.php" \
+            --exclude "migrate.php" \
+            --exclude "create_qa_user.php" \
+            --exclude "cron.php" \
+            -e "ssh" \
+            ./ "${DH_USER}@${DH_HOST}:${DH_PATH}/"
+
+      - name: Clear PHP opcache
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" "php -r 'if(function_exists(\"opcache_reset\")){opcache_reset();echo \"opcache cleared\n\";}else{echo \"no opcache\n\";}'" || true
+
+      - name: Run DB migrations
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/run_migrations_p0.php" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_01_users_preferred_locale.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_06_12_dashboard_requirements.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_06_15_remember_tokens.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_06_16_deduplicate_bills.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_06_16_reviewer_due_date.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_deduplicate_bills.php" || true
+          ssh "${DH_USER}@${DH_HOST}" "php ${DH_PATH}/scripts/cli_delete_test_tasks.php" || true
+
+      - name: Configure Asana sync environment
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+          ASANA_ACCESS_TOKEN: ${{ secrets.ASANA_ACCESS_TOKEN }}
+          ASANA_WORKSPACE_GID: ${{ secrets.ASANA_WORKSPACE_GID }}
+        run: |
+          if [ -z "${ASANA_ACCESS_TOKEN}" ]; then
+            echo "ASANA_ACCESS_TOKEN not configured; skipping Asana environment update."
+            exit 0
+          fi
+
+          tmp_env="$(mktemp)"
+          {
+            printf 'ASANA_SYNC_MODE=my_tasks\n'
+            printf 'ASANA_DASHBOARD_USER_NAME=Hoang Le\n'
+            printf 'ASANA_COMPLETED_SINCE=1970-01-01T00:00:00.000Z\n'
+            printf 'ASANA_ACCESS_TOKEN=%s\n' "${ASANA_ACCESS_TOKEN}"
+            if [ -n "${ASANA_WORKSPACE_GID}" ]; then
+              printf 'ASANA_WORKSPACE_GID=%s\n' "${ASANA_WORKSPACE_GID}"
+            fi
+          } > "${tmp_env}"
+
+          ssh "${DH_USER}@${DH_HOST}" "cd '${DH_PATH}' && touch .env && cp .env .env.asana-sync.bak && grep -vE '^(ASANA_SYNC_MODE|ASANA_DASHBOARD_USER_NAME|ASANA_COMPLETED_SINCE|ASANA_ACCESS_TOKEN|ASANA_WORKSPACE_GID)=' .env > .env.next || true"
+          scp "${tmp_env}" "${DH_USER}@${DH_HOST}:${DH_PATH}/.env.asana"
+          ssh "${DH_USER}@${DH_HOST}" "cd '${DH_PATH}' && cat .env.asana >> .env.next && mv .env.next .env && rm -f .env.asana && chmod 600 .env"
+          rm -f "${tmp_env}"
+
+      - name: Run Asana My Tasks smoke sync
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+          ASANA_ACCESS_TOKEN: ${{ secrets.ASANA_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${ASANA_ACCESS_TOKEN}" ]; then
+            echo "ASANA_ACCESS_TOKEN not configured; skipping Asana smoke sync."
+            exit 0
+          fi
+
+          ssh "${DH_USER}@${DH_HOST}" \
+            "cd '${DH_PATH}' && php scripts/smoke-asana-my-tasks.php"
+
+      - name: Clear stale Action Center escalations
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_clear_action_center_escalations.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_clear_exception_queue_stale_items.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_merge_raw_pge_duplicate_bill.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_ensure_bakudan_cps_and_rent_category.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_admin_calendar_finance_cleanup.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_store_resolution_and_tax_fixes.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_b123_monthly_tax_tasks.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_review_gate_tasks_bills_payments.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_multi_task_categories_and_utility_vendor_cleanup.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_multi_bill_categories_and_bill_task_edit.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/2026_07_10_finance_task_help_instructions.sql"
+          ssh "${DH_USER}@${DH_HOST}" \
+            "cd ${DH_PATH} && php scripts/cli_seed_nguyen_recurring_tasks.php"
+
+      - name: Ensure credential encryption key
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+          CREDENTIAL_ENCRYPTION_KEY: ${{ secrets.CREDENTIAL_ENCRYPTION_KEY }}
+        run: |
+          if [ -z "${CREDENTIAL_ENCRYPTION_KEY}" ]; then
+            echo "CREDENTIAL_ENCRYPTION_KEY not configured; skipping (password encryption will fail)."
+            exit 0
+          fi
+
+          tmp_env="$(mktemp)"
+          printf 'CREDENTIAL_ENCRYPTION_KEY=%s\n' "${CREDENTIAL_ENCRYPTION_KEY}" > "${tmp_env}"
+
+          ssh "${DH_USER}@${DH_HOST}" "cd '${DH_PATH}' && touch .env && cp .env .env.cred-key.bak && grep -vE '^CREDENTIAL_ENCRYPTION_KEY=' .env > .env.next || true"
+          scp "${tmp_env}" "${DH_USER}@${DH_HOST}:${DH_PATH}/.env.credkey"
+          ssh "${DH_USER}@${DH_HOST}" "cd '${DH_PATH}' && cat .env.credkey >> .env.next && mv .env.next .env && rm -f .env.credkey && chmod 600 .env"
+          rm -f "${tmp_env}"
+
+      - name: Run one-off 2026-07-10 credential import
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+          FIN_CRED_B3_RENTPAYMENT_PASSWORD: ${{ secrets.FIN_CRED_B3_RENTPAYMENT_PASSWORD }}
+          FIN_CRED_SECURECAFE_PASSWORD: ${{ secrets.FIN_CRED_SECURECAFE_PASSWORD }}
+          FIN_CRED_TX_COMPTROLLER_PASSWORD: ${{ secrets.FIN_CRED_TX_COMPTROLLER_PASSWORD }}
+          FIN_CRED_AMTRUST_MODESTO_PASSWORD: ${{ secrets.FIN_CRED_AMTRUST_MODESTO_PASSWORD }}
+          FIN_CRED_CDTFA_RAW_PASSWORD: ${{ secrets.FIN_CRED_CDTFA_RAW_PASSWORD }}
+          FIN_CRED_CPS_ENERGY_PASSWORD: ${{ secrets.FIN_CRED_CPS_ENERGY_PASSWORD }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_run_migration.php ${DH_PATH}/database/migrations/014_create_credentials_tables.sql" || true
+          ssh "${DH_USER}@${DH_HOST}" \
+            "cd ${DH_PATH} && FIN_CRED_B3_RENTPAYMENT_PASSWORD='${FIN_CRED_B3_RENTPAYMENT_PASSWORD}' FIN_CRED_SECURECAFE_PASSWORD='${FIN_CRED_SECURECAFE_PASSWORD}' FIN_CRED_TX_COMPTROLLER_PASSWORD='${FIN_CRED_TX_COMPTROLLER_PASSWORD}' FIN_CRED_AMTRUST_MODESTO_PASSWORD='${FIN_CRED_AMTRUST_MODESTO_PASSWORD}' FIN_CRED_CDTFA_RAW_PASSWORD='${FIN_CRED_CDTFA_RAW_PASSWORD}' FIN_CRED_CPS_ENERGY_PASSWORD='${FIN_CRED_CPS_ENERGY_PASSWORD}' php scripts/cli_upsert_finance_credentials.php"
+
+      - name: Run Phase 13.5 Bill Audit (CLI)
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" \
+            "php ${DH_PATH}/scripts/cli_bill_audit.php 2>/dev/null" \
+            > /tmp/bill-audit.json || true
+          echo "=== BILL_AUDIT_START ==="
+          cat /tmp/bill-audit.json
+          echo ""
+          echo "=== BILL_AUDIT_END ==="
+
+      - name: Verify deployment
+        env:
+          DH_HOST: ${{ secrets.DH_HOST }}
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PATH: ${{ secrets.DH_PATH }}
+        run: |
+          ssh "${DH_USER}@${DH_HOST}" \
+            "date && ls -la ${DH_PATH}/index.php 2>/dev/null | tail -1"

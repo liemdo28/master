@@ -1,0 +1,17 @@
+{
+  "id": "MKT-015",
+  "objectiveId": "OBJ-027",
+  "title": "Build SEO content queue",
+  "description": "Create content briefs from local SEO evidence.",
+  "division": "marketing",
+  "owner": "content-factory",
+  "priority": "P1",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:39.774Z",
+  "updatedAt": "2026-06-27T04:36:39.774Z",
+  "completedAt": null
+}

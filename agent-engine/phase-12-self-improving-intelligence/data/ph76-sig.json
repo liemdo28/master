@@ -1,0 +1,86 @@
+[
+  {
+    "id": "S76_1782656640189_smyy8y",
+    "timestamp": 1782656640189,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656640189,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S76_1782656640188_ka5dgp",
+    "timestamp": 1782656640188,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656640188
+  },
+  {
+    "id": "S76_1782656640187_e9pztq",
+    "timestamp": 1782656640187,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656640188
+  },
+  {
+    "id": "S76_1782656111501_7n8zos",
+    "timestamp": 1782656111501,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782656111502,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S76_1782656111500_k377w1",
+    "timestamp": 1782656111500,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782656111501
+  },
+  {
+    "id": "S76_1782656111499_0r5pl2",
+    "timestamp": 1782656111499,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782656111500
+  },
+  {
+    "id": "S76_1782655883127_jqorhv",
+    "timestamp": 1782655883127,
+    "signal": "esc-test",
+    "status": "escalated",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "escalatedAt": 1782655883128,
+    "reason": "threshold exceeded"
+  },
+  {
+    "id": "S76_1782655883126_1l9abd",
+    "timestamp": 1782655883126,
+    "signal": "approval-required-action",
+    "status": "rejected",
+    "approvalRequired": true,
+    "assignedTo": null,
+    "rejectedAt": 1782655883127
+  },
+  {
+    "id": "S76_1782655883125_u8amz8",
+    "timestamp": 1782655883125,
+    "signal": "test-signal",
+    "status": "approved",
+    "approvalRequired": false,
+    "assignedTo": null,
+    "approvedAt": 1782655883126
+  }
+]

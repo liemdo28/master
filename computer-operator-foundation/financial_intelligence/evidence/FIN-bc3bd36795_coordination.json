@@ -1,0 +1,28 @@
+{
+  "coord_task_id": "FIN-bc3bd36795",
+  "task_name": "Build connector: DoorDash Merchant",
+  "objective_id": "OBJ-FIN-DATA-GOVERNANCE",
+  "target": "financial_warehouse",
+  "approval_level": "READ_ONLY",
+  "operator_type": "financial_intelligence",
+  "state": "CREATED",
+  "created_at": 1782449671.9185567,
+  "created_iso": "2026-06-26T04:54:31.918558+00:00",
+  "updated_at": 1782449671.9185646,
+  "owner": "data_engineering",
+  "priority": "MEDIUM",
+  "description": "No connector for DoorDash Merchant.",
+  "source_signals": [
+    {
+      "source": "doordash",
+      "status": "MISSING"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449671.9185653
+    }
+  ]
+}

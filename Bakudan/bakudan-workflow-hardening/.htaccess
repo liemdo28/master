@@ -1,0 +1,31 @@
+# ── SEO 404 Fix — Phase 23E (2026-06-24) ─────────────────────────────────────
+# Redirect clean URLs → .html files (Apache DirectoryIndex doesn't handle these)
+Options +FollowSymlinks
+RewriteEngine On
+
+# Shortlinks / QR destinations
+RewriteRule ^go/([^/?#]+)/?$ /api/public/shortlinks/$1 [QSA,L]
+
+# Clean URL rewrites — /about → /about.html
+RewriteRule ^about/?$         /about.html         [R=301,L]
+RewriteRule ^privacy/?$       /privacy.html       [R=301,L]
+RewriteRule ^privacy-policy/?$ /privacy.html      [R=301,L]
+RewriteRule ^terms/?$         /terms.html         [R=301,L]
+RewriteRule ^terms-of-service/?$ /terms.html      [R=301,L]
+RewriteRule ^happy-hour/?$    /happy-hour.html    [R=301,L]
+RewriteRule ^menu/?$          /menu.html          [R=301,L]
+RewriteRule ^blog/?$          /blog.html          [R=301,L]
+
+# Temporary production gate — remove this one block only during the controlled Broth Log release.
+RewriteRule ^broth-log(-b[123])?(\.html)?/?$ - [R=404,L]
+
+# Broth Log single-page clean routes — ready under the temporary gate above.
+RewriteRule ^broth-log-b1/?$ /broth-log.html [L]
+RewriteRule ^broth-log-b2/?$ /broth-log.html [L]
+RewriteRule ^broth-log-b3/?$ /broth-log.html [L]
+RewriteRule ^broth-log/?$ /broth-log.html [L]
+
+# Missing pages — redirect to nearest equivalent
+RewriteRule ^gift-cards?/?$   /order              [R=301,L]
+RewriteRule ^loyalty/?$       /order              [R=301,L]
+RewriteRule ^drinks/?$        /menu.html          [R=301,L]

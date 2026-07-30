@@ -1,0 +1,41 @@
+[
+  {
+    "id": "STG_1782656997018_cuodeb",
+    "timestamp": 1782656997018,
+    "store": "Bakudan-1",
+    "slope": 10,
+    "projection": [
+      140,
+      150,
+      160
+    ],
+    "growthRate": 8.7,
+    "classification": "GROWING"
+  },
+  {
+    "id": "STG_1782656988735_h1na3s",
+    "timestamp": 1782656988735,
+    "store": "Bakudan-1",
+    "slope": 10,
+    "projection": [
+      140,
+      150,
+      160
+    ],
+    "growthRate": 8.7,
+    "classification": "GROWING"
+  },
+  {
+    "id": "STG_1782656981887_x6q5bb",
+    "timestamp": 1782656981887,
+    "store": "Bakudan-1",
+    "slope": 10,
+    "projection": [
+      140,
+      150,
+      160
+    ],
+    "growthRate": 8.7,
+    "classification": "GROWING"
+  }
+]

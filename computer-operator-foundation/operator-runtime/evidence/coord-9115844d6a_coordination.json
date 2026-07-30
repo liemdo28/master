@@ -1,0 +1,40 @@
+{
+  "coord_task_id": "coord-9115844d6a",
+  "task_name": "Demo4-LocalSiteCrawl-3pages",
+  "objective_id": "obj-2fb15e4b",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html",
+  "approval_level": "READ_ONLY",
+  "operator_type": "web",
+  "state": "DONE",
+  "created_at": 1782449495.3129315,
+  "updated_at": 1782449496.1469755,
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449495.312932
+    },
+    {
+      "state": "DISPATCHED",
+      "timestamp": 1782449495.3129354
+    },
+    {
+      "state": "IN_PROGRESS",
+      "timestamp": 1782449495.3129373
+    },
+    {
+      "state": "DONE",
+      "timestamp": 1782449496.146976
+    }
+  ],
+  "evidence_ids": [
+    "ev-819c1e0f7e",
+    "ev-838490c9f1",
+    "ev-531e3da8ce",
+    "ev-3a07dd9675",
+    "ev-38bfc2df1b"
+  ],
+  "run_ids": [
+    "run-44db3454fb4a"
+  ],
+  "error": null
+}

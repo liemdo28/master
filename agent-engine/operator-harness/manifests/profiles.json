@@ -1,0 +1,74 @@
+{
+  "profiles": {
+    "core": {
+      "description": "Default mi-core operator profile for safe build, review, test, and patch work.",
+      "modules": [
+        "executive-context",
+        "safe-coding",
+        "qa-security",
+        "release-readiness"
+      ]
+    },
+    "coding": {
+      "description": "Focused autonomous coding profile for agent-engine patch planning and implementation.",
+      "modules": [
+        "executive-context",
+        "safe-coding",
+        "qa-security"
+      ]
+    },
+    "ops": {
+      "description": "Operational profile for visibility, connectors, remote control, and production readiness.",
+      "modules": [
+        "executive-context",
+        "connector-ops",
+        "release-readiness"
+      ]
+    },
+    "whatsapp": {
+      "description": "WhatsApp integration profile for API contracts, approvals, key safety, and gateway runtime checks.",
+      "modules": [
+        "executive-context",
+        "whatsapp-runtime",
+        "qa-security",
+        "release-readiness"
+      ]
+    },
+    "visibility": {
+      "description": "Universal Visibility profile for connector health, cache freshness, sync errors, and dashboard signals.",
+      "modules": [
+        "executive-context",
+        "connector-ops",
+        "visibility-runtime",
+        "qa-security"
+      ]
+    },
+    "daily-work": {
+      "description": "Daily Work automation profile for read/write actions, approval gates, rollback, and daily operating evidence.",
+      "modules": [
+        "executive-context",
+        "daily-work-automation",
+        "connector-ops",
+        "qa-security"
+      ]
+    },
+    "compliance": {
+      "description": "Compliance knowledge profile for US compliance DB, retrieval quality, source boundaries, and evidence reports.",
+      "modules": [
+        "executive-context",
+        "compliance-knowledge",
+        "qa-security",
+        "release-readiness"
+      ]
+    },
+    "remote-control": {
+      "description": "Remote control profile for trusted devices, auth gateway, command audit, and remote execution safety.",
+      "modules": [
+        "executive-context",
+        "remote-control-runtime",
+        "qa-security",
+        "release-readiness"
+      ]
+    }
+  }
+}

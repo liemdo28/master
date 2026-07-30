@@ -1,0 +1,47 @@
+[
+  {
+    "id": "BSW_1782657000806_a9czgi",
+    "timestamp": 1782657000806,
+    "anomalies": [
+      {
+        "index": 9,
+        "value": 40,
+        "z": 3
+      }
+    ],
+    "maxAbsZ": 3,
+    "posture": "ALERT",
+    "mean": 13,
+    "std": 9
+  },
+  {
+    "id": "BSW_1782656991763_hcvho6",
+    "timestamp": 1782656991763,
+    "anomalies": [
+      {
+        "index": 9,
+        "value": 40,
+        "z": 3
+      }
+    ],
+    "maxAbsZ": 3,
+    "posture": "ALERT",
+    "mean": 13,
+    "std": 9
+  },
+  {
+    "id": "BSW_1782656982373_2qu9y9",
+    "timestamp": 1782656982373,
+    "anomalies": [
+      {
+        "index": 9,
+        "value": 40,
+        "z": 3
+      }
+    ],
+    "maxAbsZ": 3,
+    "posture": "ALERT",
+    "mean": 13,
+    "std": 9
+  }
+]

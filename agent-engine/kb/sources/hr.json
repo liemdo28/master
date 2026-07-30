@@ -1,0 +1,11 @@
+{
+  "domain": "hr",
+  "domainName": "Human Resources",
+  "sources": [
+    { "name": "ILO Knowledge Gateway", "url": "https://www.ilo.org/global/topics", "license": "ILO Open Access", "attribution": "International Labour Organization", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "US DOL — FLSA Guides", "url": "https://www.dol.gov/agencies/whd/flsa", "license": "Public Domain", "attribution": "US Department of Labor", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Wikipedia — Human Resources", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" },
+    { "name": "SHRM Resources", "url": "https://www.shrm.org", "license": "© Proprietary", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "ToS prohibits scraping; member-only content" }
+  ],
+  "seedDocuments": []
+}

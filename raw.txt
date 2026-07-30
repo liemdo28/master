@@ -1,0 +1,5 @@
+BOM:b'<!D'
+tb-left in:True
+logo in:True
+tb-left pos:966
+snippet:'tb-left{display:flex;align-items:center;gap:10px;flex-shrink:0}\r\n.logo{font-size:17px;font-weight:70'

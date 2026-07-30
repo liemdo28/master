@@ -1,0 +1,86 @@
+[
+  {
+    "test": "La Cantera manager edits La Cantera page (headline)",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager edits Stone Oak page",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager rolls back La Cantera page (v1, harmless no-op target)",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager rolls back Stone Oak page",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager creates La Cantera-scoped campaign",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager creates Stone-Oak-scoped campaign",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager edits global settings",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager manages users",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager edits own location (La Cantera)",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager edits Stone Oak location",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager creates La Cantera-scoped notice",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "La Cantera manager creates Stone-Oak-scoped notice",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  },
+  {
+    "test": "Stone Oak manager edits Stone Oak page",
+    "status": 200,
+    "expected": 200,
+    "pass": true
+  },
+  {
+    "test": "Stone Oak manager edits La Cantera page",
+    "status": 403,
+    "expected": 403,
+    "pass": true
+  }
+]

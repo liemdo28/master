@@ -1,0 +1,11 @@
+{
+  "store": "Medical Center",
+  "date": "2026-06-03",
+  "time": "AM",
+  "readings": [
+    { "item": "Walk-in Cooler", "value": 38, "unit": "F", "confidence": 0.55 },
+    { "item": "Fryer 1", "value": null, "unit": "F", "confidence": 0.30 }
+  ],
+  "unclear_fields": ["Walk-in Cooler (blurry)"],
+  "needs_review": ["Walk-in Cooler", "Fryer 1", "Unknown Freezer Item"]
+}

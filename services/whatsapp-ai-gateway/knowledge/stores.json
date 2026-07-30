@@ -1,0 +1,59 @@
+{
+  "_comment": "Store locations and hours — update here to reflect changes",
+  "stores": [
+    {
+      "id": "bandera",
+      "name": "Bandera",
+      "full_name": "Bakudan Ramen — Bandera",
+      "address": "11075 Bandera Rd, San Antonio, TX 78250",
+      "phone": "(210) 555-0101",
+      "hours": {
+        "monday":    { "open": "11:00 AM", "close": "10:00 PM" },
+        "tuesday":   { "open": "11:00 AM", "close": "10:00 PM" },
+        "wednesday": { "open": "11:00 AM", "close": "10:00 PM" },
+        "thursday":  { "open": "11:00 AM", "close": "10:00 PM" },
+        "friday":    { "open": "11:00 AM", "close": "11:00 PM" },
+        "saturday":  { "open": "10:00 AM", "close": "11:00 PM" },
+        "sunday":    { "open": "10:00 AM", "close": "10:00 PM" }
+      },
+      "google_maps": "https://maps.google.com/?q=11075+Bandera+Rd+San+Antonio+TX",
+      "aliases": ["bandera", "bandera rd", "bandera road", "northwest"]
+    },
+    {
+      "id": "stone-oak",
+      "name": "Stone Oak",
+      "full_name": "Bakudan Ramen — Stone Oak",
+      "address": "19141 Stone Oak Pkwy, San Antonio, TX 78258",
+      "phone": "(210) 555-0202",
+      "hours": {
+        "monday":    { "open": "11:00 AM", "close": "10:00 PM" },
+        "tuesday":   { "open": "11:00 AM", "close": "10:00 PM" },
+        "wednesday": { "open": "11:00 AM", "close": "10:00 PM" },
+        "thursday":  { "open": "11:00 AM", "close": "10:00 PM" },
+        "friday":    { "open": "11:00 AM", "close": "11:00 PM" },
+        "saturday":  { "open": "10:00 AM", "close": "11:00 PM" },
+        "sunday":    { "open": "10:00 AM", "close": "10:00 PM" }
+      },
+      "google_maps": "https://maps.google.com/?q=19141+Stone+Oak+Pkwy+San+Antonio+TX",
+      "aliases": ["stone oak", "stone oak pkwy", "north", "northside"]
+    },
+    {
+      "id": "medical-center",
+      "name": "Medical Center",
+      "full_name": "Bakudan Ramen — Medical Center",
+      "address": "4531 Fredericksburg Rd, San Antonio, TX 78201",
+      "phone": "(210) 555-0303",
+      "hours": {
+        "monday":    { "open": "11:00 AM", "close": "10:00 PM" },
+        "tuesday":   { "open": "11:00 AM", "close": "10:00 PM" },
+        "wednesday": { "open": "11:00 AM", "close": "10:00 PM" },
+        "thursday":  { "open": "11:00 AM", "close": "10:00 PM" },
+        "friday":    { "open": "11:00 AM", "close": "11:00 PM" },
+        "saturday":  { "open": "10:00 AM", "close": "11:00 PM" },
+        "sunday":    { "open": "10:00 AM", "close": "10:00 PM" }
+      },
+      "google_maps": "https://maps.google.com/?q=4531+Fredericksburg+Rd+San+Antonio+TX",
+      "aliases": ["medical center", "med center", "fredericksburg", "central"]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+    "latestVersion":  "1.0.0",
+    "build":  "2026.06.09.001",
+    "channel":  "stable",
+    "downloadUrl":  "https://github.com/liemdo28/bakudan-releases/releases/download/v1.0.0/BakudanFoodSafety-1.0.0.zip",
+    "sha256":  "ed57c387ce2bc494ce1a6fa7154d676b72fcc863f02d0c6ae56d695d9ebf6f46",
+    "releaseNotes":  [
+                         "Release 1.0.0"
+                     ],
+    "requiredMigration":  false,
+    "minSupportedVersion":  "1.0.0",
+    "fileSize":  315598275
+}

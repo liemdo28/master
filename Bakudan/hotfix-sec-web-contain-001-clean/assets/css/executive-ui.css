@@ -1,0 +1,369 @@
+/**
+ * Executive UI Design System — Phase 12
+ * Unified card, spacing, typography, and action patterns
+ * for: Control Tower, Manager Command, Operations Today, CEO Boardroom, Store Command
+ */
+
+/* ═══════════════════════════════════════════════════
+   EXECUTIVE PAGE LAYOUT
+   ═══════════════════════════════════════════════════ */
+.exec-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 20px;
+}
+
+.exec-page__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.exec-page__title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary, #f4f4f5);
+    margin: 0;
+}
+
+.exec-page__subtitle {
+    font-size: 13px;
+    color: var(--text-muted, #71717a);
+    margin-top: 4px;
+}
+
+.exec-page__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════
+   STAT CARDS (top row KPIs)
+   ═══════════════════════════════════════════════════ */
+.exec-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.exec-stat {
+    background: var(--bg-secondary, #18181b);
+    border: 1px solid var(--border, #27272a);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.exec-stat__value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary, #f4f4f5);
+}
+
+.exec-stat__label {
+    font-size: 11px;
+    color: var(--text-muted, #71717a);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.exec-stat--danger .exec-stat__value {
+    color: #f87171;
+}
+
+.exec-stat--success .exec-stat__value {
+    color: #4ade80;
+}
+
+.exec-stat--warning .exec-stat__value {
+    color: #fbbf24;
+}
+
+.exec-stat--info .exec-stat__value {
+    color: #60a5fa;
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTENT CARDS
+   ═══════════════════════════════════════════════════ */
+.exec-card {
+    background: var(--bg-secondary, #18181b);
+    border: 1px solid var(--border, #27272a);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.exec-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border, #27272a);
+}
+
+.exec-card__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary, #f4f4f5);
+}
+
+.exec-card__action {
+    font-size: 12px;
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.exec-card__action:hover {
+    text-decoration: underline;
+}
+
+.exec-card__body {
+    padding: 16px 18px;
+}
+
+.exec-card__empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted, #52525b);
+    font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════
+   LIST ITEMS (tasks, team members, activity)
+   ═══════════════════════════════════════════════════ */
+.exec-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.exec-list__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border, #1f1f23);
+    transition: background .1s;
+}
+
+.exec-list__item:last-child {
+    border-bottom: none;
+}
+
+.exec-list__item:hover {
+    background: rgba(255, 255, 255, .02);
+}
+
+.exec-list__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+.exec-list__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.exec-list__title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary, #d4d4d8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.exec-list__meta {
+    font-size: 11px;
+    color: var(--text-muted, #71717a);
+    margin-top: 2px;
+}
+
+.exec-list__badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.exec-list__badge--urgent {
+    background: #450a0a;
+    color: #f87171;
+}
+
+.exec-list__badge--high {
+    background: #451a03;
+    color: #fbbf24;
+}
+
+.exec-list__badge--overdue {
+    background: #450a0a;
+    color: #f87171;
+}
+
+.exec-list__badge--today {
+    background: #1e3a5f;
+    color: #60a5fa;
+}
+
+/* ═══════════════════════════════════════════════════
+   GRID LAYOUTS
+   ═══════════════════════════════════════════════════ */
+.exec-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.exec-grid-3 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+
+    .exec-grid-2,
+    .exec-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS (unified)
+   ═══════════════════════════════════════════════════ */
+.exec-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: opacity .15s;
+}
+
+.exec-btn:hover {
+    opacity: .85;
+}
+
+.exec-btn--primary {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.exec-btn--secondary {
+    background: var(--border, #27272a);
+    color: var(--text-primary, #d4d4d8);
+}
+
+.exec-btn--danger {
+    background: #450a0a;
+    color: #f87171;
+    border: 1px solid #7f1d1d;
+}
+
+.exec-btn--ghost {
+    background: transparent;
+    color: var(--text-muted, #a1a1aa);
+    border: 1px solid var(--border, #27272a);
+}
+
+.exec-btn--sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* ═══════════════════════════════════════════════════
+   AVATAR
+   ═══════════════════════════════════════════════════ */
+.exec-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #27272a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #d4d4d8;
+    flex-shrink: 0;
+}
+
+.exec-avatar--sm {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+}
+
+.exec-avatar--lg {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════════════ */
+.exec-progress {
+    height: 6px;
+    background: #27272a;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.exec-progress__bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width .3s;
+}
+
+.exec-progress__bar--success {
+    background: #4ade80;
+}
+
+.exec-progress__bar--warning {
+    background: #fbbf24;
+}
+
+.exec-progress__bar--danger {
+    background: #f87171;
+}
+
+.exec-progress__bar--info {
+    background: #60a5fa;
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION DIVIDER
+   ═══════════════════════════════════════════════════ */
+.exec-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted, #71717a);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin: 24px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border, #27272a);
+}

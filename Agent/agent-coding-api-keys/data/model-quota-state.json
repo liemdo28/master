@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "savedAt": 1784397626438,
+  "entries": {
+    "antigravity:db-15:claude-opus-4-6": {
+      "providerId": "antigravity",
+      "keyId": "db-15",
+      "model": "claude-opus-4-6",
+      "used": 0,
+      "limit": 300,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1783304020528,
+      "lastError": null
+    },
+    "antigravity:db-15:claude-opus-4-7": {
+      "providerId": "antigravity",
+      "keyId": "db-15",
+      "model": "claude-opus-4-7",
+      "used": 0,
+      "limit": 500,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1783304020528,
+      "lastError": null
+    },
+    "antigravity:db-1:claude-opus-4-6": {
+      "providerId": "antigravity",
+      "keyId": "db-1",
+      "model": "claude-opus-4-6",
+      "used": 0,
+      "limit": 250,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1783304020528,
+      "lastError": null
+    },
+    "antigravity:db-1:claude-opus-4-7": {
+      "providerId": "antigravity",
+      "keyId": "db-1",
+      "model": "claude-opus-4-7",
+      "used": 0,
+      "limit": 500,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1783304020528,
+      "lastError": null
+    },
+    "antigravity:db-20:claude-opus-4-7": {
+      "providerId": "antigravity",
+      "keyId": "db-20",
+      "model": "claude-opus-4-7",
+      "used": 0,
+      "limit": 500,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1784397626436,
+      "lastError": null
+    },
+    "antigravity:db-20:claude-opus-4-6": {
+      "providerId": "antigravity",
+      "keyId": "db-20",
+      "model": "claude-opus-4-6",
+      "used": 0,
+      "limit": 300,
+      "exhausted": false,
+      "firstUsedAt": null,
+      "updatedAt": 1784397626438,
+      "lastError": null
+    }
+  }
+}

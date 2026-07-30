@@ -1,0 +1,92 @@
+[
+  {
+    "id": "ALR_1782656994505_b5zldz",
+    "timestamp": 1782656994505,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782656994502_4xiu06",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656994505
+  },
+  {
+    "id": "ALR_1782656985609_pcy0ik",
+    "timestamp": 1782656985609,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782656985606_cfyneh",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656985609
+  },
+  {
+    "id": "ALR_1782656636644_94p6vx",
+    "timestamp": 1782656636644,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782656636640_v8ugt7",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656636644
+  },
+  {
+    "id": "ALR_1782656107718_mj0pas",
+    "timestamp": 1782656107718,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782656107716_ylpo0c",
+    "acknowledged": true,
+    "acknowledgedAt": 1782656107719
+  },
+  {
+    "id": "ALR_1782655879257_n6a51y",
+    "timestamp": 1782655879257,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782655879254_8ypyhs",
+    "acknowledged": true,
+    "acknowledgedAt": 1782655879257
+  },
+  {
+    "id": "ALR_1782655633037_2y36r9",
+    "timestamp": 1782655633037,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782655633035_e9712z",
+    "acknowledged": true,
+    "acknowledgedAt": 1782655633038
+  },
+  {
+    "id": "ALR_1782655628118_c7j2s6",
+    "timestamp": 1782655628118,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782655628114_9n95pc",
+    "acknowledged": true,
+    "acknowledgedAt": 1782655628118
+  },
+  {
+    "id": "ALR_1782655589627_5p3bgs",
+    "timestamp": 1782655589627,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782655589624_ilpoaw",
+    "acknowledged": true,
+    "acknowledgedAt": 1782655589627
+  },
+  {
+    "id": "ALR_1782648363246_gnjr8w",
+    "timestamp": 1782648363246,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782648363243_o5zwz8",
+    "acknowledged": true,
+    "acknowledgedAt": 1782648363246
+  },
+  {
+    "id": "ALR_1782648090558_z4h25i",
+    "timestamp": 1782648090558,
+    "level": "warning",
+    "message": "threshold",
+    "ref": "S39_1782648090555_0dlpad",
+    "acknowledged": true,
+    "acknowledgedAt": 1782648090559
+  }
+]

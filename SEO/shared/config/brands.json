@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-06-24T12:00:00.000Z",
+  "brands": [
+    {
+      "brand_id": "bakudan",
+      "name": "Bakudan Ramen",
+      "domain": "https://bakudanramen.com",
+      "status": "active",
+      "industry": "restaurant",
+      "cuisine": "japanese_ramen",
+      "created_at": "2026-06-19T00:00:00.000Z",
+      "connectors": {
+        "crawler": { "status": "ready", "credentials_configured": true },
+        "gsc": { "status": "ready", "credentials_configured": true, "gsc_site_url": "sc-domain:bakudanramen.com", "last_success_at": "2026-06-26T08:11:37.521Z" },
+        "ga4": { "status": "ready", "credentials_configured": true, "ga4_property_id": "properties/543110659", "measurement_id": "G-3GZ2RYDR6M", "last_success_at": "2026-06-26T08:11:42.217Z" },
+        "gbp": { "status": "quota_limited", "credentials_configured": true, "gbp_account_id": "needs_config", "last_error": "Google Business Profile API quota exceeded during live run on 2026-06-26." },
+        "citation_scan": { "status": "ready", "credentials_configured": true }
+      },
+      "platforms": {
+        "website": "https://bakudanramen.com",
+        "order_online": "https://order.bakudanramen.com",
+        "facebook": "needs_config",
+        "instagram": "needs_config",
+        "yelp": "needs_config"
+      }
+    },
+    {
+      "brand_id": "raw_sushi",
+      "name": "Raw Sushi",
+      "domain": "https://www.rawsushibar.com",
+      "status": "active",
+      "industry": "restaurant",
+      "cuisine": "japanese_sushi",
+      "created_at": "2026-06-24T00:00:00.000Z",
+      "connectors": {
+        "crawler": { "status": "ready", "credentials_configured": true },
+        "gsc": { "status": "ready", "credentials_configured": true, "gsc_site_url": "sc-domain:rawsushibar.com" },
+        "ga4": { "status": "ready", "credentials_configured": true, "measurement_id": "G-WNHH66NT41", "ga4_property_id": "properties/532604616" },
+        "gbp": { "status": "quota_limited", "credentials_configured": true, "gbp_account_id": "needs_config", "last_error": "Google Business Profile API quota exceeded during live run on 2026-06-26." },
+        "citation_scan": { "status": "ready", "credentials_configured": true }
+      },
+      "platforms": {
+        "website": "https://www.rawsushibar.com",
+        "order_online": "needs_config",
+        "facebook": "needs_config",
+        "instagram": "needs_config",
+        "yelp": "needs_config"
+      }
+    }
+  ]
+}

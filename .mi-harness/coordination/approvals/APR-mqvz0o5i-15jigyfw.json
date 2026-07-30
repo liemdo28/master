@@ -1,0 +1,16 @@
+{
+  "id": "APR-mqvz0o5i-15jigyfw",
+  "objectiveId": "OBJ-063",
+  "taskId": "ENG-016",
+  "requestedBy": "system",
+  "approvalType": "website_content_publish",
+  "riskLevel": "medium",
+  "status": "REQUESTED",
+  "approver": null,
+  "reason": "Phase 10 approval gate for Plan website conversion improvements",
+  "evidenceIds": [],
+  "createdAt": "2026-06-27T06:20:20.166Z",
+  "approvedAt": null,
+  "rejectedAt": null,
+  "expiresAt": null
+}

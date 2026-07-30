@@ -1,0 +1,19 @@
+{
+  "workflow_id": "mi-sandbox-failure-test",
+  "name": "Mi Sandbox Failure Test",
+  "domain": "system",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 */6 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Controlled failure injection test for sandbox environments. Routes directly to DLQ for safe testing.",
+  "actions": [
+    {"order": 1, "type": "http_request", "name": "intake_event", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/intake/event", "body": {"source": "n8n", "domain": "system", "event_type": "sandbox_failure_test", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "started_at": "{{started_at}}"}},
+    {"order": 2, "type": "http_request", "name": "trigger_dlq", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/workflows/dead-letter", "body": {"workflow_id": "mi-sandbox-failure-test", "domain": "system", "source": "n8n", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "error": "sandbox_failure_injection_test", "skip_retry": true}},
+    {"order": 3, "type": "http_request", "name": "log_result", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/workflows/log", "body": {"workflow_id": "mi-sandbox-failure-test", "domain": "system", "source": "n8n", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "status": "completed", "started_at": "{{started_at}}", "completed_at": "{{completed_at}}", "error": ""}}
+  ]
+}

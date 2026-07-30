@@ -1,0 +1,74 @@
+RewriteEngine On
+RewriteBase /
+
+# ── Pass custom headers to PHP ────────────────────────────────────────
+SetEnvIf Request_URI "." HTTP_X_MI_TOKEN=$HTTP:x-mi-token
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP:x-mi-token} .+
+    RewriteRule .* - [E=HTTP_X_MI_TOKEN:%{HTTP:x-mi-token}]
+</IfModule>
+
+# ── Security: disable directory listings ──────────────────────────────
+Options -Indexes
+
+# ── Security headers ──────────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ── Gzip compression ──────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json text/plain text/xml
+</IfModule>
+
+# ── Browser caching for static assets ────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 1 hour"
+    ExpiresByType application/javascript    "access plus 1 hour"
+    ExpiresByType image/png                 "access plus 1 year"
+    ExpiresByType image/jpeg                "access plus 1 year"
+    ExpiresByType image/svg+xml             "access plus 1 year"
+    ExpiresByType image/x-icon              "access plus 1 year"
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType application/font-woff2    "access plus 1 year"
+</IfModule>
+<IfModule mod_headers.c>
+    # Static assets: `immutable` is only safe with content-hashed filenames.
+    # Since filenames are plain (app.js, layout.js…), use a 1-hour TTL so
+    # deploys propagate within 1 hour rather than being stuck for 1 year.
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico|woff2)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+    # Prevent caching on HTML/PHP pages
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+    </FilesMatch>
+    # Service worker must never be immutably cached — browsers must always be
+    # able to detect a new SW version on the next page load.
+    <FilesMatch "^sw\.js$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# ── Pass Authorization header to PHP (required for Bearer token auth) ─
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+# ── Force HTTPS ───────────────────────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^(127\.0\.0\.1|localhost)(:[0-9]+)?$ [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ── Explicit pass-through for standalone utility scripts ─────────────
+RewriteRule ^(migrate\.php|migrate_v5\.php|cron\.php|dl-migrations\.php|preview_db_health\.php|repair_preview\.php|deploy_preview\.php|validate_preview_workflow\.php|run_p0_verification\.php|run_p0_migration_bill\.php|verify_schema_api\.php|run_missing_migrations\.php|probe_tasks_col\.php|ping\.php|db_query\.php|p0\.php|p0_backup\.php|p0_cleanup\.php|duplicate-scan-run\.php|recurring-bills-run\.php|migrate_recurring_bills\.php|p0_task_cleanup\.php)$ - [L]
+
+# ── Router: rewrite every non-existent path to index.php?route=xxx ───
+# index.php dispatches /api/v1/* to the v1 bootstrap and /api/* session routes
+# through its own switch, so we do NOT exclude /api/ any more.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
+RewriteRule ^$ index.php?route= [L]

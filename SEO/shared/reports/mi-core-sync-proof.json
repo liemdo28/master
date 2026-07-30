@@ -1,0 +1,52 @@
+{
+  "proof_type": "SEO Phase 2 — Real Mi-Core Integration",
+  "generated_at": "2026-06-18T18:34:00+07:00",
+  "mi_core_url": "http://localhost:4001",
+  "mi_core_seo_endpoints": {
+    "GET /api/seo/agents": "lists all 7 agents",
+    "GET /api/seo/agents/:agentId/status": "returns agent status",
+    "POST /api/seo/agents/:agentId/sync": "triggers sync",
+    "POST /api/seo/tasks": "dispatch task to agent",
+    "POST /api/seo/tasks/:taskId/complete": "agent reports task completion",
+    "GET /api/seo/reports/latest": "latest reports per agent",
+    "GET /api/seo/dashboard": "full dashboard payload"
+  },
+  "agents_registered": [
+    { "id": "seo-local-maps-agent", "port": 4011, "status": "online", "health": "healthy" },
+    { "id": "seo-website-agent", "port": 4012, "status": "online", "health": "healthy" },
+    { "id": "seo-technical-agent", "port": 4013, "status": "online", "health": "healthy" },
+    { "id": "seo-schema-agent", "port": 4014, "status": "online", "health": "healthy" },
+    { "id": "seo-content-agent", "port": 4015, "status": "online", "health": "healthy" },
+    { "id": "seo-citation-agent", "port": 4016, "status": "online", "health": "healthy" },
+    { "id": "seo-analytics-agent", "port": 4017, "status": "online", "health": "healthy" }
+  ],
+  "validation_results": {
+    "sync_mi_4011": { "ok": true, "status": 200, "agent": "seo-local-maps-agent" },
+    "sync_mi_4012": { "ok": true, "status": 200, "agent": "seo-website-agent" },
+    "sync_mi_4013": { "ok": true, "status": 200, "agent": "seo-technical-agent" },
+    "sync_mi_4014": { "ok": true, "status": 200, "agent": "seo-schema-agent" },
+    "sync_mi_4015": { "ok": true, "status": 200, "agent": "seo-content-agent" },
+    "sync_mi_4016": { "ok": true, "status": 200, "agent": "seo-citation-agent" },
+    "sync_mi_4017": { "ok": true, "status": 200, "agent": "seo-analytics-agent" }
+  },
+  "dashboard_payload": {
+    "agents_total": 7,
+    "agents_online": 7,
+    "agents_target": 7,
+    "all_online": true,
+    "seo_score_summary": { "overall": "operational", "agents_reporting": 7 },
+    "sync_logs_count": 170
+  },
+  "task_dispatch_proof": {
+    "task_id": "task_1781782464569_7b7j13",
+    "assignee": "seo-local-maps-agent",
+    "type": "audit",
+    "status": "completed",
+    "created_at": "2026-06-18T11:34:24.569Z",
+    "completed_at": "2026-06-18T11:34:41.053Z",
+    "result": { "status": "success", "locations_audited": 3 }
+  },
+  "heartbeat_interval_s": 30,
+  "sync_logs_sample_count": 170,
+  "pass": true
+}

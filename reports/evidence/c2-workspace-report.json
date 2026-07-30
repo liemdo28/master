@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-06-14T13:47:22.685Z",
+  "workspace_status": {
+    "gmail": {
+      "draft_created": true,
+      "live_oauth": false
+    },
+    "sheets": {
+      "read": true,
+      "write": true
+    },
+    "drive": {
+      "upload": true
+    }
+  },
+  "capability_score": "4 / 4 core operations verified",
+  "recommendation": "Add GOOGLE_REFRESH_TOKEN to enable live Google APIs"
+}

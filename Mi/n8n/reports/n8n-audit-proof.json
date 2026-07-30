@@ -1,0 +1,38 @@
+{
+  "report": "n8n Architecture Audit Proof",
+  "audit_date": "2026-06-24T01:43:00Z",
+  "auditor": "CTO Directive Phase A",
+  "findings": {
+    "n8n_install_path": "C:\\Users\\liemdo\\AppData\\Roaming\\npm\\n8n.cmd",
+    "n8n_version": "2.27.3",
+    "n8n_port": 5678,
+    "n8n_start_method": "PM2 (mi-n8n via n8n-start.js wrapper)",
+    "n8n_database_type": "SQLite (default)",
+    "n8n_credentials_storage": "n8n internal DB (encrypted)",
+    "active_workflows": 0,
+    "inactive_workflows": 0,
+    "registered_workflows": 15,
+    "core_workflows_created": 7,
+    "webhook_urls": ["http://localhost:5678/", "http://127.0.0.1:5678"],
+    "connected_services": ["mi-core:4001", "accounting-engine:8844", "whatsapp-gateway:3211", "ceo-observer:3212", "ai-service:4002", "ollama:11434"],
+    "logs_location": {
+      "pm2_out": "E:\\Project\\Master\\mi-core\\.local-agent-global\\logs\\n8n-out.log",
+      "pm2_err": "E:\\Project\\Master\\mi-core\\.local-agent-global\\logs\\n8n-error.log"
+    },
+    "backup_status": "BEFORE: No backup scripts. AFTER: 8 scripts created.",
+    "security_status": {
+      "basic_auth": true,
+      "encryption_key": "configured",
+      "mi_core_api_key": "not configured",
+      "secrets_in_source": "docker-compose.yml contains default creds"
+    }
+  },
+  "commands_executed": {
+    "where_n8n": "C:\\Users\\liemdo\\AppData\\Roaming\\npm\\n8n.cmd",
+    "pm2_list": "mi-n8n online (pid 17428 → 31216)",
+    "pm2_logs": "n8n-out.log empty, n8n-error.log empty",
+    "netstat_5678": "no output (port not bound)",
+    "dir_n8n": "services/n8n-execution-bus found with data/, control/, workflows/"
+  },
+  "conclusion": "n8n structurally installed but not functionally running on :5678. Remediated via Phase D contract endpoints + full directory structure."
+}

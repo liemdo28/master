@@ -1,0 +1,74 @@
+{
+  "plan_id": "plan-1782261798550-30",
+  "created_at": "2026-06-24T00:43:18.550Z",
+  "intent": "marketing_concern",
+  "title": "Kế hoạch phân tích marketing",
+  "description": "Đánh giá hiệu quả marketing, đề xuất chiến lược",
+  "total_steps": 3,
+  "estimated_total_seconds": 85,
+  "steps": [
+    {
+      "order": 1,
+      "title": "Thu thập dữ liệu marketing",
+      "description": "Gather campaign data, traffic, reviews, social metrics",
+      "engine": "marketing-data",
+      "required_data": [
+        "campaign_data",
+        "traffic_data",
+        "reviews"
+      ],
+      "outputs": [
+        "marketing_snapshot"
+      ],
+      "estimated_seconds": 40,
+      "dependencies": [],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-1",
+      "status": "pending"
+    },
+    {
+      "order": 2,
+      "title": "Phân tích hiệu quả",
+      "description": "Analyze ROI, conversion, channel performance",
+      "engine": "marketing-analysis",
+      "required_data": [
+        "marketing_snapshot"
+      ],
+      "outputs": [
+        "marketing_analysis"
+      ],
+      "estimated_seconds": 30,
+      "dependencies": [
+        "1"
+      ],
+      "can_parallel": false,
+      "qa_gate": false,
+      "step_id": "step-2",
+      "status": "pending"
+    },
+    {
+      "order": 3,
+      "title": "QA và tạo brief",
+      "description": "Validate analysis, generate CEO summary",
+      "engine": "qa-and-brief",
+      "required_data": [
+        "marketing_analysis"
+      ],
+      "outputs": [
+        "ceo_brief"
+      ],
+      "estimated_seconds": 15,
+      "dependencies": [
+        "2"
+      ],
+      "can_parallel": false,
+      "qa_gate": true,
+      "step_id": "step-3",
+      "status": "pending"
+    }
+  ],
+  "status": "ready",
+  "confidence": 0.7,
+  "requires_ceo_approval": false
+}

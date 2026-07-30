@@ -1,0 +1,17 @@
+{
+  "id": "IT-013",
+  "objectiveId": "OBJ-034",
+  "title": "Clarify executive objective",
+  "description": "Collect objective scope, metric, owner, and approval risk.",
+  "division": "it",
+  "owner": "company-os-operational",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T04:36:40.416Z",
+  "updatedAt": "2026-06-27T04:36:40.416Z",
+  "completedAt": null
+}

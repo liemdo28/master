@@ -1,0 +1,17 @@
+{
+  "id": "OPS-032",
+  "objectiveId": "OBJ-060",
+  "title": "Create cross-division routing proposal",
+  "description": "Route likely divisions while waiting for CEO clarification.",
+  "division": "operations",
+  "owner": "executive-coordinator",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [],
+  "duplicateOf": null,
+  "createdAt": "2026-06-27T06:19:11.285Z",
+  "updatedAt": "2026-06-27T06:19:11.285Z",
+  "completedAt": null
+}

@@ -1,0 +1,55 @@
+name: Restore Production .env
+
+on:
+  workflow_dispatch:
+
+jobs:
+  restore-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DH_SSH_KEY || secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          echo "pdx1-shared-a3-05.dreamhost.com,69.163.140.5 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChfro3lxfy+/cxSd0YjGgxaENfuosq3u9BWp1rzhU27RTub839iweCf9Pp0ez3XzXrz+3vaYRuiZ5MLcTjqRLi8JNLXMZKfZcM4vonRpBHMWbg5NxAvAJVOieSFfkU8OkTQq3a84Cu1mtsdzwj9nakq8d/ywarhVEaHPGbg/k5LwH8TyktCkNmg/MXv0wtatgpGoyKEwON4dbsSmPDbthwlib0uajmJxyVSMf/ejzb/xJynUB/+vxZMCtgCnqc4tj8kcI0zWYfPKzYNuQbp6M1auNhGfmiHFBlxe1lAyTbHHRkRornstqGjW3Ksgrwwe/uR1Wo6PiLGRjal9dysWpDHXrovuLT7CsKg897AdL95SqcHTC+AR07KuHPcB1Dl+Lo654Bd9DY+1LyZHo21KiBES+SiUFKOEzQQvcxuAV+MXisjVtiZdg3mIKQ4uOjDPEwljABdNvbRvJcbQuZM3igZuJWQk0RBwEMoyJr1eJfPgTOBJ7OHG9Cq+1ohhDVnUc=" >> ~/.ssh/known_hosts
+
+      - name: Create .env locally
+        env:
+          DB_USER: ${{ secrets.DH_DB_USER }}
+          DB_PASS: ${{ secrets.DH_DB_PASSWORD }}
+        run: |
+          printf '%s\n' \
+            "DB_HOST=mysql-taskflow.bakudanramen.com" \
+            "DB_NAME=taskflow_db" \
+            "DB_USER=${DB_USER}" \
+            "DB_PASS=${DB_PASS}" \
+            "DB_CHARSET=utf8mb4" > .env
+          echo "Wrote .env (contents not printed to log)"
+
+      - name: Upload .env to production
+        run: |
+          echo "=== UPLOADING .env TO PRODUCTION ==="
+          DH_HOST="${{ secrets.DH_HOST }}"
+          DH_USER="${{ secrets.DH_USER }}"
+          DH_PATH="${{ secrets.DH_PATH }}"
+          echo "DH_HOST: ${DH_HOST}"
+          echo "DH_PATH: ${DH_PATH}"
+
+          echo "Uploading .env..."
+          cat .env | ssh -o StrictHostKeyChecking=no "${DH_USER}@${DH_HOST}" "cat > ${DH_PATH}/.env && chmod 600 ${DH_PATH}/.env && ls -la ${DH_PATH}/.env"
+          rm -f .env
+
+          echo ""
+          echo "=== TESTING PRODUCTION ==="
+          sleep 3
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 https://dashboard.bakudanramen.com)
+          echo "HTTP Status: ${HTTP_CODE}"
+          if [ "${HTTP_CODE}" = "200" ]; then
+            echo "SUCCESS: Production is UP!"
+          else
+            echo "WARNING: Production returned ${HTTP_CODE}"
+          fi

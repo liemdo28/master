@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-0a45a8b812",
+  "task_name": "Advance PostHog past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452013.699424,
+  "created_iso": "2026-06-26T05:33:33.699424+00:00",
+  "updated_at": 1782452013.6994307,
+  "owner": "marketing_lead",
+  "priority": "MEDIUM",
+  "description": "PostHog has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-79fed4df69",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452013.6994314
+    }
+  ]
+}

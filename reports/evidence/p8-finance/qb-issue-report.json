@@ -1,0 +1,9 @@
+{
+  "machine_id": "laptop-01",
+  "sync_status": "error",
+  "last_error": "Checksum mismatch — expected 98c199d4a7536727029020419cd4230b7eea4c3b43dcc8dbc997284bf500585b got 35522619cb48e89f33f375443f86f7d9bdbb0cc98d227d59d1db887d89ddb9cb",
+  "last_sync_at": "2026-06-10T16:19:06.766Z",
+  "failure_count": 10,
+  "diagnosis": "Checksum mismatch — QB desktop file may have been updated by another process. Requires QB Connector restart on Windows PC with QB open.",
+  "recommended_action": "Restart QB Connector service on LIEMDO-PC, ensure QuickBooks is open, then trigger manual sync."
+}

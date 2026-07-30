@@ -1,0 +1,24 @@
+{
+  "name": "dashboard-bakudanramen-qa",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Automated QA test suite for dashboard.bakudanramen.com",
+  "scripts": {
+    "qa": "npx playwright test --config=qa/playwright.config.ts && npx ts-node qa/scripts/generate-report.ts",
+    "qa:run": "npx playwright test --config=qa/playwright.config.ts",
+    "qa:report": "npx ts-node qa/scripts/generate-report.ts",
+    "qa:headed": "npx playwright test --config=qa/playwright.config.ts --headed",
+    "qa:debug": "npx playwright test --config=qa/playwright.config.ts --debug",
+    "qa:show-report": "npx playwright show-report qa/reports/html",
+    "qa:install": "npx playwright install chromium",
+    "db:safety-check": "php scripts/db-safety-check.php",
+    "db:backup": "php scripts/db-backup.php",
+    "test:qa": "playwright test --config=qa/playwright.config.js",
+    "record:walkthrough": "node qa/walkthrough/record.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.0"
+  }
+}

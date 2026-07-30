@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp AI Gateway</title>
+  <meta http-equiv="refresh" content="10">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#0b1020;color:#e5e7eb;font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px}
+    header{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid #1f2937;background:#111827;position:sticky;top:0;z-index:2}
+    h1{font-size:18px;margin:0}.sub{margin-left:auto;color:#94a3b8;font-size:12px}.build{color:#94a3b8;font-size:11px;line-height:1.35;text-align:right}
+    main{padding:20px 24px 32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+    .card,.section{background:#111827;border:1px solid #243044;border-radius:8px;padding:14px}
+    .section{margin-bottom:16px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    h2,h3{margin:0}h2{font-size:15px}h3{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8}
+    .val{font-size:22px;font-weight:700;margin-top:7px}.meta,.dim{color:#94a3b8;font-size:12px}.dim{word-break:break-word}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff}
+    .ok{background:#16a34a}.warn{background:#d97706}.bad{background:#dc2626}.off{background:#64748b}
+    table{width:100%;border-collapse:collapse}th,td{padding:8px 7px;border-bottom:1px solid #1f2937;text-align:left;vertical-align:top}th{color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+    input,select{background:#0f172a;border:1px solid #334155;color:#e5e7eb;border-radius:6px;padding:7px 9px;min-width:0}
+    button,.btn{background:#1e293b;border:1px solid #334155;color:#e5e7eb;border-radius:6px;padding:7px 10px;cursor:pointer;text-decoration:none;display:inline-block}
+    button:hover,.btn:hover{background:#334155}.primary{border-color:#2563eb;background:#1d4ed8}.danger{border-color:#7f1d1d;color:#fecaca}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .qr{display:flex;align-items:center;gap:12px;margin-top:10px}.qr img{width:150px;border:4px solid #fff;border-radius:6px;background:#fff}
+    .alert{background:#7f1d1d;border-bottom:1px solid #ef4444;color:#fecaca;padding:9px 24px}.small{font-size:12px}
+  </style>
+</head>
+<body>
+  
+  <header>
+    <h1>WhatsApp AI Gateway</h1>
+    <div class="sub build">Build: Admin Control Center v1<br>Commit: e06e26c<br>Started: 2026-06-04T06:25:32.611Z<br>Rendered: 6/4/2026, 1:28:14 PM</div>
+  </header>
+  <main>
+    <div class="grid">
+      <div class="card"><h3>WhatsApp</h3><div class="val"><span class="badge ok">READY</span></div></div>
+      <div class="card"><h3>Telegram</h3><div class="val"><span class="badge off">OFF</span></div></div>
+      <div class="card"><h3>AI Engine</h3><div class="val"><span class="badge ok">ACTIVE</span></div></div>
+      <div class="card"><h3>Business Hours</h3><div class="val"><span class="badge ok">OPEN</span></div><div class="meta">Thursday: 11:00 – 22:00</div></div>
+      <div class="card"><h3>Messages Today</h3><div class="val">57</div><div class="meta">28 incoming</div></div>
+      <div class="card"><h3>Last Message</h3><div class="val">Test User</div><div class="meta">Hello</div></div>
+    </div>
+
+    <section class="section">
+    <div class="section-head"><h2>Admin Control Center</h2><span class="badge warn">NEEDS SETUP</span></div>
+
+    <h3 style="margin-bottom:8px">Setup Checklist</h3>
+    <table style="margin-bottom:14px"><thead><tr><th>Check</th><th>Status</th><th>Note</th></tr></thead><tbody><tr><td>WhatsApp connected</td><td><span class="badge ok">PASS</span></td><td class="dim">ready</td></tr><tr><td>Stone Oak group mapped</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Bandera group mapped</td><td><span class="badge warn">NEEDS_ACTION</span></td><td class="dim"></td></tr><tr><td>Rim group mapped</td><td><span class="badge warn">NEEDS_ACTION</span></td><td class="dim"></td></tr><tr><td>Manager alert group set</td><td><span class="badge ok">PASS</span></td><td class="dim">manager_test@g.us</td></tr><tr><td>Google Sheet links set</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr><tr><td>Store mappings locked</td><td><span class="badge warn">NEEDS_ACTION</span></td><td class="dim">1/3 locked</td></tr><tr><td>Template sync OK</td><td><span class="badge ok">PASS</span></td><td class="dim"></td></tr></tbody></table>
+
+    <!-- Store Mapping Quick Add -->
+    <h3 style="margin-bottom:8px">WhatsApp Groups</h3>
+    <div class="row" style="margin-bottom:14px;padding-top:12px;border-top:1px solid #1f2937">
+      <input id="new-chat-id" placeholder="Group chat ID" style="flex:2">
+      <input id="new-group-name" placeholder="Group name" style="flex:1">
+      <select id="new-store-select"><option value="">Select store</option><option value="stone_oak">Stone Oak</option><option value="bandera">Bandera</option><option value="rim">Rim</option><option value="test">Test</option></select>
+      <label class="small"><input id="new-store-locked" type="checkbox" checked> Lock</label>
+      <button class="primary" onclick="addStoreMapping()">Map Group to Store</button>
+      <button onclick="refreshWhatsAppGroups()">Refresh WhatsApp Groups</button>
+    </div>
+
+    <!-- Google Sheets Quick Access -->
+    <div style="padding-top:12px;border-top:1px solid #1f2937">
+      <h3 style="margin-bottom:8px">Google Sheets</h3>
+      <div class="row" style="margin-bottom:6px">
+        <input id="sheet-template-url" placeholder="Template Sheet URL" value="https://docs.google.com/test" style="flex:2;min-width:160px">
+        <button onclick="window.open(document.getElementById('sheet-template-url').value,'_blank')">Open Daily Entry Template</button>
+        <button onclick="testSheetAccess('template')">Test Template Access</button>
+      </div>
+      <div class="row" style="margin-bottom:6px">
+        <input id="sheet-log-url" placeholder="Daily Log URL" value="https://docs.google.com/log" style="flex:2;min-width:160px">
+        <button onclick="window.open(document.getElementById('sheet-log-url').value,'_blank')">Open Daily Log</button>
+        <button onclick="testSheetAccess('log')">Test Log Access</button>
+      </div>
+      <div class="row">
+        <button class="primary" onclick="saveSheetLinks()">Save URLs</button>
+        <button onclick="apiPost('/api/admin/google-sheet-links/sync-template',{})">Force Sync Template</button>
+        <button onclick="testSheetWrite()">Test Sheet Write</button>
+        <button onclick="apiPost('/api/admin/sheet-queue/retry',{})">Retry Queue</button>
+      </div>
+      <div class="row" style="margin-top:6px;gap:4px">
+        <span class="dim small">Sync: 2026-06-04T06:25:33.226Z | Items: 5</span>
+        <span class="dim small">Queue: 0 pending</span>
+        
+      </div>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Store Mapping</h2><a class="btn" href="/api/admin/store-groups" target="_blank">API</a></div>
+    <table><thead><tr><th>Store</th><th>Group</th><th>Lock</th><th>Actions</th></tr></thead>
+    <tbody><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Random Name No Store<br>stone@g.us</td>
+    <td><span class="badge off">OPEN</span></td>
+    <td>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/1/lock',{})">Lock</button>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/1/unlock',{})">Unlock</button>
+      <button class="small" onclick="testWhatsAppGroup('stone@g.us','Random Name No Store')">Test</button>
+      <button class="small danger" onclick="apiDelete('/api/admin/store-groups/1')">Remove</button>
+    </td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Stone Oak Group<br>audit-stone-oak@g.us</td>
+    <td><span class="badge bad">LOCKED</span></td>
+    <td>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/3/lock',{})">Lock</button>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/3/unlock',{})">Unlock</button>
+      <button class="small" onclick="testWhatsAppGroup('audit-stone-oak@g.us','Stone Oak Group')">Test</button>
+      <button class="small danger" onclick="apiDelete('/api/admin/store-groups/3')">Remove</button>
+    </td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Test Store Group<br>test_group_1780542846663@g.us</td>
+    <td><span class="badge off">OPEN</span></td>
+    <td>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/2/lock',{})">Lock</button>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/2/unlock',{})">Unlock</button>
+      <button class="small" onclick="testWhatsAppGroup('test_group_1780542846663@g.us','Test Store Group')">Test</button>
+      <button class="small danger" onclick="apiDelete('/api/admin/store-groups/2')">Remove</button>
+    </td>
+  </tr><tr>
+    <td>Stone Oak</td>
+    <td class="dim">Test Store Group<br>test_group_1780547001838@g.us</td>
+    <td><span class="badge off">OPEN</span></td>
+    <td>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/4/lock',{})">Lock</button>
+      <button class="small" onclick="apiPost('/api/admin/store-groups/4/unlock',{})">Unlock</button>
+      <button class="small" onclick="testWhatsAppGroup('test_group_1780547001838@g.us','Test Store Group')">Test</button>
+      <button class="small danger" onclick="apiDelete('/api/admin/store-groups/4')">Remove</button>
+    </td>
+  </tr></tbody>
+    </table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Manager Alerts</h2><span class="dim">1 total</span></div>
+    <div class="row" style="margin-bottom:12px">
+      <input id="manager-chat-id" placeholder="Manager group chat ID" value="manager_test@g.us" style="flex:2">
+      <input id="manager-group-name" placeholder="Group name" value="Manager Test" style="flex:1">
+      <label class="small"><input id="manager-alert-enabled" type="checkbox" checked> Enabled</label>
+      <button class="primary" onclick="saveManagerAlert()">Save Manager Alert Group</button>
+      <button onclick="apiPost('/api/admin/manager-alert-group/test',{})">Test Alert</button>
+      <button onclick="apiPost('/api/admin/manager-alert-group/disable',{})">Disable</button>
+    </div>
+    <table><thead><tr><th>Store</th><th>Workflow</th><th>Status</th><th>Time</th></tr></thead>
+    <tbody><tr><td>Rim</td><td>daily_entry</td><td>DISABLED</td><td class="dim">2026-06-04 01:33:02</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Daily Entry Template</h2><span class="badge ok">sqlite</span></div>
+    
+    <table><thead><tr><th>#</th><th>Item</th><th>Range</th></tr></thead>
+    <tbody><tr><td>1</td><td>Walk-in Cooler</td><td class="dim">30–40</td></tr><tr><td>2</td><td>Walk-in Freezer</td><td class="dim">-10–0</td></tr><tr><td>3</td><td>Prep Area</td><td class="dim">34–40</td></tr><tr><td>4</td><td>Fryer</td><td class="dim">350–375</td></tr><tr><td>5</td><td>Pork Broth</td><td class="dim">185–212</td></tr></tbody></table>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>OCR Runtime</h2><span class="badge ok">READY</span></div>
+    <div class="grid">
+      <div class="card"><h3>Tesseract</h3><div class="val"><span class="badge ok">OK</span></div><div class="meta">tesseract v5.4.0.20240606</div></div>
+      <div class="card"><h3>OpenCV</h3><div class="val"><span class="badge ok">OK</span></div><div class="meta">4.13.0</div></div>
+      <div class="card"><h3>Sharp</h3><div class="val"><span class="badge ok">OK</span></div></div>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Food Safety</h2><span class="badge ok">ENABLED</span></div>
+    <div class="grid">
+      <div class="card"><h3>Checks</h3><div class="val">0</div></div>
+      <div class="card"><h3>Last Check</h3><div class="val">-</div></div>
+      <div class="card"><h3>Sheet Queue</h3><div class="val">0 pending</div></div>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Agent Sessions</h2><span class="dim">0 active</span></div>
+    <table><thead><tr><th>Chat</th><th>Owner</th><th>Store</th><th>State</th></tr></thead>
+    <tbody><tr><td colspan="4" class="dim" style="text-align:center;padding:16px">No active sessions</td></tr></tbody></table>
+  </section>
+    
+    <section class="section">
+    <div class="section-head"><h2>Pilot Metrics</h2><span class="badge ok">ACTIVE</span></div>
+    <div class="grid">
+      <div class="card"><h3>Completion</h3><div class="val">0%</div></div>
+      <div class="card"><h3>Entries</h3><div class="val">0</div></div>
+      <div class="card"><h3>Warnings</h3><div class="val">0</div></div>
+    </div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Incidents</h2><span class="dim">0 total</span></div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Compliance</h2><span class="dim">0 pending audits</span></div>
+  </section>
+    <section class="section">
+    <div class="section-head"><h2>Conversations</h2><span class="dim">50 recent messages</span></div>
+    <h3>By Customer</h3>
+    <table><thead><tr><th>Customer</th><th>Last Message</th><th>Intent</th><th>#</th><th>Time</th></tr></thead>
+    <tbody><tr><td>Test User</td><td class="dim">Hi there!</td><td>greeting</td><td>5</td><td class="dim">2026-06-04T04:24:19.709Z</td></tr><tr><td>During Hours</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td><td>greeting</td><td>28</td><td class="dim">2026-06-04T01:42:04.354Z</td></tr><tr><td>Unblocked User</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td><td>greeting</td><td>2</td><td class="dim">2026-06-04T01:42:02.923Z</td></tr><tr><td>Takeover Customer</td><td class="dim">Hi there! Thanks for reaching out to Bakudan Ramen. What can I do for you? 🍜</td><td>greeting</td><td>3</td><td class="dim">2026-06-04T01:42:01.682Z</td></tr><tr><td>Escalation Test</td><td class="dim">Hi there! Thanks for reaching out to Bakudan Ramen. What can I do for you? 🍜</td><td>greeting</td><td>12</td><td class="dim">2026-06-04T01:41:49.158Z</td></tr></tbody></table>
+    <h3 style="margin-top:16px">Raw Messages</h3>
+    <table><thead><tr><th>Time</th><th>Dir</th><th>Customer</th><th>Intent</th><th>Message</th></tr></thead>
+    <tbody><tr><td class="dim">2026-06-04T04:23:36.690Z</td><td>in</td><td>Test User</td><td>greeting</td><td class="dim">Hello</td></tr><tr><td class="dim">2026-06-04T04:24:19.709Z</td><td>out</td><td>Test User</td><td>greeting</td><td class="dim">Hi there!</td></tr><tr><td class="dim">2026-06-04T03:11:14.712Z</td><td>out</td><td>Test User</td><td>greeting</td><td class="dim">Hi there!</td></tr><tr><td class="dim">2026-06-04T02:29:34.948Z</td><td>in</td><td>Test User</td><td>greeting</td><td class="dim">Hello</td></tr><tr><td class="dim">2026-06-04T02:29:38.669Z</td><td>out</td><td>Test User</td><td>greeting</td><td class="dim">Hi there!</td></tr><tr><td class="dim">2026-06-04T01:42:04.354Z</td><td>out</td><td>During Hours</td><td>greeting</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td></tr><tr><td class="dim">2026-06-04T01:42:03.225Z</td><td>in</td><td>Off Hours</td><td>greeting</td><td class="dim">Hello at 3am</td></tr><tr><td class="dim">2026-06-04T01:42:03.543Z</td><td>out</td><td>Off Hours</td><td>closed</td><td class="dim">Thank you for your message! 🙏
+
+We're currently closed. Our team will respond when we reopen tomorrow (Friday) at 11:00.
+
+For urgent matters</td></tr><tr><td class="dim">2026-06-04T01:42:03.958Z</td><td>in</td><td>During Hours</td><td>greeting</td><td class="dim">Hello during hours</td></tr><tr><td class="dim">2026-06-04T01:42:02.067Z</td><td>in</td><td>Unblocked User</td><td>greeting</td><td class="dim">Hello after unblock</td></tr><tr><td class="dim">2026-06-04T01:42:02.923Z</td><td>out</td><td>Unblocked User</td><td>greeting</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td></tr><tr><td class="dim">2026-06-04T01:42:01.100Z</td><td>out</td><td>Other Customer</td><td>greeting</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td></tr><tr><td class="dim">2026-06-04T01:42:01.341Z</td><td>in</td><td>Takeover Customer</td><td>greeting</td><td class="dim">Hello after takeover cleared</td></tr><tr><td class="dim">2026-06-04T01:42:01.682Z</td><td>out</td><td>Takeover Customer</td><td>greeting</td><td class="dim">Hi there! Thanks for reaching out to Bakudan Ramen. What can I do for you? 🍜</td></tr><tr><td class="dim">2026-06-04T01:42:00.037Z</td><td>out</td><td>After Resume</td><td>greeting</td><td class="dim">Hello! 👋 Welcome to Bakudan Ramen. How can I help you today?</td></tr><tr><td class="dim">2026-06-04T01:42:00.383Z</td><td>in</td><td>Takeover Customer</td><td>greeting</td><td class="dim">Hello with takeover active</td></tr><tr><td class="dim">2026-06-04T01:42:00.725Z</td><td>in</td><td>Other Customer</td><td>greeting</td><td class="dim">Hi</td></tr><tr><td class="dim">2026-06-04T01:41:59.338Z</td><td>in</td><td>After Resume</td><td>greeting</td><td class="dim">Hello after resume</td></tr><tr><td class="dim">2026-06-04T01:41:58.572Z</td><td>in</td><td>Pause Test</td><td>greeting</td><td class="dim">Hello during pause</td></tr><tr><td class="dim">2026-06-04T01:41:49.030Z</td><td>in</td><td>Escalation Test</td><td>greeting</td><td class="dim">Good morning</td></tr><tr><td class="dim">2026-06-04T01:41:49.158Z</td><td>out</td><td>Escalation Test</td><td>greeting</td><td class="dim">Hi there! Thanks for reaching out to Bakudan Ramen. What can I do for you? 🍜</td></tr><tr><td class="dim">2026-06-04T01:41:48.018Z</td><td>in</td><td>Test Customer</td><td>unknown</td><td class="dim">Do you do delivery?</td></tr><tr><td class="dim">2026-06-04T01:41:48.084Z</td><td>out</td><td>Test Customer</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:48.150Z</td><td>in</td><td>Escalation Test</td><td>complaint</td><td class="dim">I want a refund</td></tr><tr><td class="dim">2026-06-04T01:41:48.216Z</td><td>out</td><td>Escalation Test</td><td>complaint</td><td class="dim">We're really sorry to hear about your experience. 😔 Our team will reach out to you shortly.</td></tr><tr><td class="dim">2026-06-04T01:41:48.282Z</td><td>in</td><td>Escalation Test</td><td>unknown</td><td class="dim">I need the manager</td></tr><tr><td class="dim">2026-06-04T01:41:48.370Z</td><td>out</td><td>Escalation Test</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:48.458Z</td><td>in</td><td>Escalation Test</td><td>complaint</td><td class="dim">I have a complaint</td></tr><tr><td class="dim">2026-06-04T01:41:48.569Z</td><td>out</td><td>Escalation Test</td><td>complaint</td><td class="dim">We're really sorry to hear about your experience. 😔 Our team will reach out to you shortly.</td></tr><tr><td class="dim">2026-06-04T01:41:48.711Z</td><td>in</td><td>Escalation Test</td><td>unknown</td><td class="dim">I am very angry with you</td></tr><tr><td class="dim">2026-06-04T01:41:48.810Z</td><td>out</td><td>Escalation Test</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:48.887Z</td><td>in</td><td>Escalation Test</td><td>unknown</td><td class="dim">asdfqwert12345</td></tr><tr><td class="dim">2026-06-04T01:41:48.953Z</td><td>out</td><td>Escalation Test</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:47.049Z</td><td>in</td><td>Test Customer</td><td>rewards</td><td class="dim">How do I earn loyalty points?</td></tr><tr><td class="dim">2026-06-04T01:41:47.227Z</td><td>out</td><td>Test Customer</td><td>rewards</td><td class="dim">⭐ *Bakudan Rewards*
+1 point per $1 spent
+
+*Tiers*
+  • *Regular* (0+ pts): Standard earning rate
+  • *Gold* (200+ pts): 1.25x points, Priorit</td></tr><tr><td class="dim">2026-06-04T01:41:47.452Z</td><td>in</td><td>Test Customer</td><td>reservation</td><td class="dim">I want to book a table for 4</td></tr><tr><td class="dim">2026-06-04T01:41:47.529Z</td><td>out</td><td>Test Customer</td><td>reservation</td><td class="dim">📅 To reserve a table, please let us know:
+1. Location (Bandera / Stone Oak / Medical Center)
+2. Date &amp; time
+3. Number of guests
+4. Your nam</td></tr><tr><td class="dim">2026-06-04T01:41:47.640Z</td><td>in</td><td>Test Customer</td><td>address</td><td class="dim">Where is the Medical Center location?</td></tr><tr><td class="dim">2026-06-04T01:41:47.719Z</td><td>out</td><td>Test Customer</td><td>address</td><td class="dim">📍 *Bakudan Ramen — Medical Center*
+4531 Fredericksburg Rd, San Antonio, TX 78201
+📞 (210) 555-0303
+
+Google Maps: https://maps.google.com/?q</td></tr><tr><td class="dim">2026-06-04T01:41:47.786Z</td><td>in</td><td>Test Customer</td><td>unknown</td><td class="dim">Do you sell gift cards?</td></tr><tr><td class="dim">2026-06-04T01:41:47.852Z</td><td>out</td><td>Test Customer</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:42.103Z</td><td>in</td><td>Test Customer</td><td>greeting</td><td class="dim">Hello</td></tr><tr><td class="dim">2026-06-04T01:41:46.127Z</td><td>out</td><td>Test Customer</td><td>greeting</td><td class="dim">Hi there! Thanks for reaching out to Bakudan Ramen. What can I do for you? 🍜</td></tr><tr><td class="dim">2026-06-04T01:41:46.193Z</td><td>in</td><td>Test Customer</td><td>hours</td><td class="dim">What time does Stone Oak open?</td></tr><tr><td class="dim">2026-06-04T01:41:46.301Z</td><td>out</td><td>Test Customer</td><td>hours</td><td class="dim">🕐 *Bakudan Ramen — Stone Oak* hours:
+  • Monday: 11:00 AM – 10:00 PM
+  • Tuesday: 11:00 AM – 10:00 PM
+  • Wednesday: 11:00 AM – 10:00 PM
+  </td></tr><tr><td class="dim">2026-06-04T01:41:46.424Z</td><td>in</td><td>Test Customer</td><td>address</td><td class="dim">Where is Bandera?</td></tr><tr><td class="dim">2026-06-04T01:41:46.534Z</td><td>out</td><td>Test Customer</td><td>address</td><td class="dim">📍 *Bakudan Ramen — Bandera*
+11075 Bandera Rd, San Antonio, TX 78250
+📞 (210) 555-0101
+
+Google Maps: https://maps.google.com/?q=11075+Bander</td></tr><tr><td class="dim">2026-06-04T01:41:46.644Z</td><td>in</td><td>Test Customer</td><td>unknown</td><td class="dim">Do you have vegan options?</td></tr><tr><td class="dim">2026-06-04T01:41:46.797Z</td><td>out</td><td>Test Customer</td><td>unknown</td><td class="dim">Thank you for your message! Our team will get back to you shortly. 🙏</td></tr><tr><td class="dim">2026-06-04T01:41:46.916Z</td><td>in</td><td>Test Customer</td><td>menu</td><td class="dim">What food do you serve?</td></tr></tbody></table>
+  </section>
+  </main>
+  <script>
+    async function apiPost(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        const d = await r.json();
+        if (d.ok === false || d.error) alert(d.error || JSON.stringify(d));
+        else location.reload();
+      } catch(e) { alert('Request failed: ' + e.message); }
+    }
+    async function apiDelete(url) {
+      try {
+        const r = await fetch(url, { method: 'DELETE' });
+        const d = await r.json();
+        if (d.ok === false || d.error) alert(d.error || JSON.stringify(d));
+        else location.reload();
+      } catch(e) { alert('Request failed: ' + e.message); }
+    }
+    async function apiNoReload(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        return r.json();
+      } catch(e) { return { error: e.message }; }
+    }
+    function addStoreMapping() {
+      apiPost('/api/admin/store-groups', {
+        store_id: document.getElementById('new-store-select').value,
+        chat_id: document.getElementById('new-chat-id').value.trim(),
+        group_name: document.getElementById('new-group-name').value.trim(),
+        locked: document.getElementById('new-store-locked').checked
+      });
+    }
+    function saveManagerAlert() {
+      apiPost('/api/admin/manager-alert-group', {
+        chat_id: document.getElementById('manager-chat-id').value.trim(),
+        group_name: document.getElementById('manager-group-name').value.trim(),
+        enabled: document.getElementById('manager-alert-enabled').checked
+      });
+    }
+    function saveSheetLinks() {
+      apiPost('/api/admin/google-sheet-links', {
+        template_sheet_url: document.getElementById('sheet-template-url').value.trim(),
+        log_sheet_url: document.getElementById('sheet-log-url').value.trim()
+      });
+    }
+    async function testSheetAccess(type) {
+      const r = await apiNoReload('/api/admin/google-sheet-links/test', {});
+      if (type === 'template') {
+        alert(
+          r.template_sheet_url === 'PASS'
+            ? 'Template access: PASS
+' + JSON.stringify({
+                item_count: r.template_item_count,
+                last_sync_at: r.timestamp,
+              }, null, 2)
+            : 'Template access: ' + (r.template_error || 'FAIL')
+        );
+        return;
+      }
+      alert(
+        r.log_sheet_url === 'PASS'
+          ? 'Log access: PASS
+' + JSON.stringify({
+              tab: r.log_tab || 'Dashboard_Test_Log',
+              range: r.log_range || 'A:I',
+              timestamp: r.timestamp,
+            }, null, 2)
+          : 'Log access: ' + (r.log_error || 'FAIL')
+      );
+    }
+    async function testSheetWrite() {
+      const r = await apiNoReload('/api/admin/google-sheet-links/test-write', {});
+      alert(r.ok ? 'Test write: PASS
+' + JSON.stringify(r, null, 2) : 'Test write: ' + (r.error || 'FAIL'));
+    }
+    // ── YoLink JS ─────────────────────────────────────────────────────────
+    async function yolinkApiNoReload(url, body) {
+      try {
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+        return r.json();
+      } catch(e) { return { error: e.message }; }
+    }
+    function yolinkAddDevice() {
+      const d = {
+        device_name: document.getElementById('yolink-device-name').value.trim(),
+        model: document.getElementById('yolink-model').value.trim(),
+        device_eui: document.getElementById('yolink-device-eui').value.trim(),
+        serial_number: document.getElementById('yolink-serial').value.trim(),
+        store_id: document.getElementById('yolink-store-id').value,
+        item_name: document.getElementById('yolink-item-name').value,
+        sensor_type: document.getElementById('yolink-sensor-type').value,
+        unit: 'F',
+        active: document.getElementById('yolink-active').checked,
+        trust_enabled: document.getElementById('yolink-trust').checked,
+      };
+      if (!d.device_eui) { alert('Device EUI is required'); return; }
+      if (!d.store_id) { alert('Store is required'); return; }
+      if (!d.item_name) { alert('Item/Location is required'); return; }
+      const storeNames = { stone_oak: 'Stone Oak', bandera: 'Bandera', rim: 'Rim' };
+      d.store_name = storeNames[d.store_id] || d.store_id;
+      apiPost('/api/admin/yolink/devices', d);
+    }
+    function yolinkSaveAndTest() { yolinkAddDevice(); }
+    function yolinkClearForm() {
+      ['yolink-device-name','yolink-device-eui','yolink-serial','yolink-store-id','yolink-item-name'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+    async function yolinkTestReading(id) {
+      const r = await yolinkApiNoReload('/api/admin/yolink/devices/' + id + '/test-reading', {});
+      if (r.status === 'NO_CREDENTIALS') alert('YoLink API not configured.
+Human workflow remains active.');
+      else if (r.ok) alert('Reading: ' + r.value + '°' + (r.unit || 'F') + '
+Battery: ' + (r.battery_level || '-') + '
+Signal: ' + (r.signal_status || '-'));
+      else alert('Test failed: ' + (r.error || 'Unknown'));
+    }
+    async function yolinkRemap(id, currentStore, currentItem) {
+      const store_id = prompt('New store (stone_oak/bandera/rim):', currentStore || '');
+      if (!store_id) return;
+      const item_name = prompt('New item/location:', currentItem || '');
+      if (!item_name) return;
+      const r = await yolinkApiNoReload('/api/admin/yolink/devices/' + id + '/remap', { store_id, item_name });
+      if (r.ok) location.reload(); else alert(r.error || 'Failed');
+    }
+    function yolinkDisable(id) { apiPost('/api/admin/yolink/devices/' + id + '/disable', {}); }
+    function yolinkDelete(id) { if (confirm('Delete device?')) apiDelete('/api/admin/yolink/devices/' + id); }
+    function yolinkTestApi() { apiPost('/api/admin/yolink/test-api', {}); }
+    function yolinkSync() { apiPost('/api/admin/yolink/sync-devices', {}); }
+    function yolinkPoll() { apiPost('/api/admin/yolink/force-poll', {}); }
+    async function yolinkSeedDrafts() {
+      const r = await fetch('/api/admin/yolink/seed-drafts');
+      const data = await r.json();
+      const drafts = data.drafts || [];
+      if (!drafts.length) { alert('No YoLink devices found in YoLink account.
+Add device EUI manually.'); return; }
+      const d = drafts[0];
+      document.getElementById('yolink-device-name').value = d.device_name || '';
+      document.getElementById('yolink-model').value = d.model || 'YS8017-UC';
+      document.getElementById('yolink-device-eui').value = d.device_eui || '';
+      document.getElementById('yolink-serial').value = d.serial_number || '';
+      document.getElementById('yolink-store-id').value = d.store_id || '';
+      document.getElementById('yolink-item-name').value = d.item_name || '';
+      alert('Draft loaded: ' + d.device_name + '
+Edit if needed, then Save Device.');
+    }
+    // ── WhatsApp Group Discovery JS ───────────────────────────────────────
+    async function refreshWhatsAppGroups() {
+      let r;
+      try {
+        const resp = await fetch('/api/admin/whatsapp-groups/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        r = await resp.json();
+      } catch(e) {
+        alert('Request failed: ' + e.message);
+        return;
+      }
+      if (r.status === 'WA_NOT_READY') { alert('WhatsApp not connected. Scan QR first.'); return; }
+      if (!r.groups || !r.groups.length) { alert('No groups found.'); return; }
+      let msg = 'WhatsApp Groups:
+';
+      r.groups.forEach(g => {
+        msg += '
+' + g.name + '
+  ID: ' + g.chat_id + '
+  Members: ' + (g.participant_count || 0);
+        if (g.store_name || g.store_mapped) msg += '
+  Mapped: ' + (g.store_name || g.store_mapped);
+        msg += '
+';
+      });
+      msg += '
+Copy the chat ID you need.';
+      alert(msg);
+    }
+    async function testWhatsAppGroup(chatId, name) {
+      const r = await apiNoReload('/api/admin/whatsapp-groups/test', { chatId, group_name: name });
+      if (r.ok) alert('Test message sent to: ' + name);
+      else alert('Failed: ' + (r.error || 'Unknown'));
+    }
+  </script>
+</body>
+</html>

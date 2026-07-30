@@ -1,0 +1,7 @@
+{
+  "working_hours": "flexible",
+  "priority_system": "top 3 daily",
+  "preferred_tools": ["Claude Code", "GitHub", "Dashboard"],
+  "active_companies": ["Bakudan Ramen", "Raw Sushi Bar"],
+  "focus_areas": ["product", "operations", "tech"]
+}

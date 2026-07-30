@@ -1,0 +1,85 @@
+{
+  "phase": "P1",
+  "target": "REAL_BROWSER_CERTIFIED",
+  "steps": [
+    {
+      "name": "Browser launched (headless Chromium)",
+      "status": "PASS",
+      "ms": 0,
+      "browser_version": "148.0.7778.96",
+      "headless": true
+    },
+    {
+      "name": "Navigate to httpbin.org/html",
+      "status": "PASS",
+      "ms": 4456,
+      "title": "",
+      "url": "https://httpbin.org/html",
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step2-navigate.png"
+    },
+    {
+      "name": "Login to httpbin.org/basic-auth",
+      "status": "PASS",
+      "ms": 4950,
+      "authenticated": true,
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step3-login.png",
+      "url": "https://httpbin.org/basic-auth/admin/secret"
+    },
+    {
+      "name": "Navigate to Google (complex SPA)",
+      "status": "PASS",
+      "ms": 789,
+      "title": "Google",
+      "url": "https://www.google.com/",
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step4-google.png"
+    },
+    {
+      "name": "Upload file via httpbin /post multipart",
+      "status": "PASS",
+      "ms": 1427,
+      "uploaded": true,
+      "file": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\upload-test.txt",
+      "response_url": "https://httpbin.org/post",
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step5-upload.png"
+    },
+    {
+      "name": "Submit form data to httpbin",
+      "status": "PASS",
+      "ms": 3716,
+      "submitted": true,
+      "echo": {
+        "action": "submit_draft",
+        "author": "JARVIS_COO_V4",
+        "status": "draft",
+        "title": "P1 Cert Draft"
+      },
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step6-submit-draft.png"
+    },
+    {
+      "name": "Screenshot bakudanramen.com (dashboard target)",
+      "status": "PASS",
+      "ms": 20583,
+      "title": "Bakudan Ramen | Bold Flavor. Modern Japanese Soul. Texas Spirit.",
+      "url": "https://www.bakudanramen.com/",
+      "screenshot": "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step7-bakudanramen.png"
+    },
+    {
+      "name": "Clear cookies and close session",
+      "status": "PASS",
+      "ms": 7,
+      "cookies_cleared": true,
+      "remaining_cookies": 0
+    }
+  ],
+  "generated_at": "2026-06-14T14:03:17.480Z",
+  "passed": 8,
+  "failed": 0,
+  "screenshots": [
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step2-navigate.png",
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step3-login.png",
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step4-google.png",
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step5-upload.png",
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step6-submit-draft.png",
+    "E:\\Project\\Master\\mi-core\\reports\\evidence\\p1-browser\\step7-bakudanramen.png"
+  ]
+}

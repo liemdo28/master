@@ -1,0 +1,203 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 2115 >>
+stream
+/F1 18 Tf 48 744 Td (Bakudan WhatsApp Daily Entry Guide) Tj
+/F1 9 Tf 48 722 Td () Tj
+/F1 13 Tf 48 707 Td (1. What this system does) Tj
+/F1 9 Tf 48 692 Td () Tj
+/F1 9 Tf 48 677 Td (This system helps staff submit daily temperature and operations readings in WhatsApp.) Tj
+/F1 9 Tf 48 662 Td (The bot asks for each item from the current Daily Entry Template, checks the target) Tj
+/F1 9 Tf 48 647 Td (range, shows warnings when needed, and saves the final confirmed log.) Tj
+/F1 9 Tf 48 632 Td () Tj
+/F1 13 Tf 48 617 Td (2. How to start) Tj
+/F1 9 Tf 48 602 Td () Tj
+/F1 9 Tf 48 587 Td (Open the store WhatsApp group and type:) Tj
+/F1 9 Tf 48 572 Td () Tj
+/F1 9 Tf 48 557 Td () Tj
+/F1 9 Tf 48 542 Td (/ldagent) Tj
+/F1 9 Tf 48 527 Td () Tj
+/F1 9 Tf 48 512 Td () Tj
+/F1 9 Tf 48 497 Td (Choose Daily Entry Log when the bot asks what you want to do.) Tj
+/F1 9 Tf 48 482 Td () Tj
+/F1 13 Tf 48 467 Td (3. How to enter daily readings) Tj
+/F1 9 Tf 48 452 Td () Tj
+/F1 9 Tf 48 437 Td (The bot asks one item at a time. Reply with the number you measured. Use a clear number) Tj
+/F1 9 Tf 48 422 Td (like `38`, `40.5`, or `-5`.) Tj
+/F1 9 Tf 48 407 Td () Tj
+/F1 13 Tf 48 392 Td (4. What to do if a number is outside range) Tj
+/F1 9 Tf 48 377 Td () Tj
+/F1 9 Tf 48 362 Td (If the value is outside the target range, the bot will ask you to confirm the real) Tj
+/F1 9 Tf 48 347 Td (reading, re-enter the value, or skip the item if unavailable. Confirm only if the number) Tj
+/F1 9 Tf 48 332 Td (is the actual measured value.) Tj
+/F1 9 Tf 48 317 Td () Tj
+/F1 13 Tf 48 302 Td (5. How to edit a mistake) Tj
+/F1 9 Tf 48 287 Td () Tj
+/F1 9 Tf 48 272 Td (Use:) Tj
+/F1 9 Tf 48 257 Td () Tj
+/F1 9 Tf 48 242 Td () Tj
+/F1 9 Tf 48 227 Td (EDIT 1 40) Tj
+/F1 9 Tf 48 212 Td () Tj
+/F1 9 Tf 48 197 Td () Tj
+/F1 9 Tf 48 182 Td (This changes item 1 to 40. You can also follow the bot prompt if it asks you to re-enter) Tj
+/F1 9 Tf 48 167 Td (a value.) Tj
+/F1 9 Tf 48 152 Td () Tj
+/F1 13 Tf 48 137 Td (6. How to cancel) Tj
+/F1 9 Tf 48 122 Td () Tj
+/F1 9 Tf 48 107 Td (Use:) Tj
+/F1 9 Tf 48 92 Td () Tj
+/F1 9 Tf 48 77 Td () Tj
+/F1 9 Tf 48 62 Td (CANCEL) Tj
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2048 >>
+stream
+/F1 9 Tf 48 744 Td () Tj
+/F1 9 Tf 48 729 Td () Tj
+/F1 9 Tf 48 714 Td (Cancel stops the current entry. Nothing is saved until you reply CONFIRM at the final) Tj
+/F1 9 Tf 48 699 Td (summary.) Tj
+/F1 9 Tf 48 684 Td () Tj
+/F1 13 Tf 48 669 Td (7. How to submit) Tj
+/F1 9 Tf 48 654 Td () Tj
+/F1 9 Tf 48 639 Td (Review the final summary. If everything is correct, reply:) Tj
+/F1 9 Tf 48 624 Td () Tj
+/F1 9 Tf 48 609 Td () Tj
+/F1 9 Tf 48 594 Td (CONFIRM) Tj
+/F1 9 Tf 48 579 Td () Tj
+/F1 9 Tf 48 564 Td () Tj
+/F1 9 Tf 48 549 Td (Only CONFIRM saves the log.) Tj
+/F1 9 Tf 48 534 Td () Tj
+/F1 13 Tf 48 519 Td (8. How to use printed form OCR) Tj
+/F1 9 Tf 48 504 Td () Tj
+/F1 9 Tf 48 489 Td (Print the Daily Entry Test Form. Fill every reading by hand. Take a clear photo of the) Tj
+/F1 9 Tf 48 474 Td (full page with all four corner markers visible. Send the photo to the WhatsApp test) Tj
+/F1 9 Tf 48 459 Td (group and wait for the bot summary. Reply CONFIRM if correct, or EDIT if needed.) Tj
+/F1 9 Tf 48 444 Td () Tj
+/F1 13 Tf 48 429 Td (9. What manager alerts mean) Tj
+/F1 9 Tf 48 414 Td () Tj
+/F1 9 Tf 48 399 Td (Manager alerts mean a reading may need attention, such as an out-of-range value, a) Tj
+/F1 9 Tf 48 384 Td (missing entry, or a value that needs review. Follow store policy and manager) Tj
+/F1 9 Tf 48 369 Td (instructions.) Tj
+/F1 9 Tf 48 354 Td () Tj
+/F1 13 Tf 48 339 Td (10. Supported languages) Tj
+/F1 9 Tf 48 324 Td () Tj
+/F1 9 Tf 48 309 Td (The bot supports English, Spanish, Vietnamese, and French for the main guided workflow.) Tj
+/F1 9 Tf 48 294 Td () Tj
+/F1 13 Tf 48 279 Td (11. Common commands) Tj
+/F1 9 Tf 48 264 Td () Tj
+/F1 9 Tf 48 249 Td () Tj
+/F1 9 Tf 48 234 Td (/ldagent) Tj
+/F1 9 Tf 48 219 Td (/help) Tj
+/F1 9 Tf 48 204 Td (/status) Tj
+/F1 9 Tf 48 189 Td (/cancel) Tj
+/F1 9 Tf 48 174 Td (/language en) Tj
+/F1 9 Tf 48 159 Td (/language es) Tj
+/F1 9 Tf 48 144 Td (/language vi) Tj
+/F1 9 Tf 48 129 Td (/language fr) Tj
+/F1 9 Tf 48 114 Td () Tj
+/F1 9 Tf 48 99 Td () Tj
+/F1 9 Tf 48 84 Td (Common replies:) Tj
+/F1 9 Tf 48 69 Td () Tj
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 1932 >>
+stream
+/F1 9 Tf 48 744 Td () Tj
+/F1 9 Tf 48 729 Td (CONFIRM) Tj
+/F1 9 Tf 48 714 Td (EDIT 1 40) Tj
+/F1 9 Tf 48 699 Td (CANCEL) Tj
+/F1 9 Tf 48 684 Td (STATUS) Tj
+/F1 9 Tf 48 669 Td (SKIP) Tj
+/F1 9 Tf 48 654 Td () Tj
+/F1 9 Tf 48 639 Td () Tj
+/F1 13 Tf 48 624 Td (12. Troubleshooting) Tj
+/F1 9 Tf 48 609 Td () Tj
+/F1 9 Tf 48 594 Td (- If the bot does not answer, check that the gateway is running.) Tj
+/F1 9 Tf 48 579 Td (- If you entered the wrong value, use EDIT before CONFIRM.) Tj
+/F1 9 Tf 48 564 Td (- If the item is unavailable, use SKIP or write N/A on the printed form.) Tj
+/F1 9 Tf 48 549 Td (- If a photo is blurry, retake it with better lighting.) Tj
+/F1 9 Tf 48 534 Td (- If the bot summary looks wrong, do not CONFIRM. Use EDIT or ask a manager.) Tj
+/F1 9 Tf 48 519 Td () Tj
+/F1 13 Tf 48 504 Td (Quick Guide) Tj
+/F1 9 Tf 48 489 Td () Tj
+/F1 9 Tf 48 474 Td (How to use WhatsApp Daily Entry:) Tj
+/F1 9 Tf 48 459 Td () Tj
+/F1 9 Tf 48 444 Td (1. Open the store WhatsApp group.) Tj
+/F1 9 Tf 48 429 Td (2. Type:) Tj
+/F1 9 Tf 48 414 Td (/ldagent) Tj
+/F1 9 Tf 48 399 Td () Tj
+/F1 9 Tf 48 384 Td (3. Choose:) Tj
+/F1 9 Tf 48 369 Td (1 - Daily Entry Log) Tj
+/F1 9 Tf 48 354 Td () Tj
+/F1 9 Tf 48 339 Td (4. The bot will ask one item at a time.) Tj
+/F1 9 Tf 48 324 Td () Tj
+/F1 9 Tf 48 309 Td (Example:) Tj
+/F1 9 Tf 48 294 Td (Walk-in Cooler) Tj
+/F1 9 Tf 48 279 Td (Target: 30\260F - 45\260F) Tj
+/F1 9 Tf 48 264 Td (Reply with temperature:) Tj
+/F1 9 Tf 48 249 Td () Tj
+/F1 9 Tf 48 234 Td (5. Type the reading:) Tj
+/F1 9 Tf 48 219 Td (38) Tj
+/F1 9 Tf 48 204 Td () Tj
+/F1 9 Tf 48 189 Td (6. If the value is outside range, the bot will ask:) Tj
+/F1 9 Tf 48 174 Td () Tj
+/F1 9 Tf 48 159 Td (1 - Confirm actual reading) Tj
+/F1 9 Tf 48 144 Td (2 - Re-enter value) Tj
+/F1 9 Tf 48 129 Td (3 - Skip this item) Tj
+/F1 9 Tf 48 114 Td () Tj
+/F1 9 Tf 48 99 Td (7. At the end, review the summary.) Tj
+/F1 9 Tf 48 84 Td () Tj
+/F1 9 Tf 48 69 Td (8. Reply:) Tj
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 133 >>
+stream
+/F1 9 Tf 48 744 Td (CONFIRM) Tj
+/F1 9 Tf 48 729 Td () Tj
+/F1 9 Tf 48 714 Td (Only CONFIRM saves the log.) Tj
+/F1 9 Tf 48 699 Td () Tj
+endstream
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000000155 00000 n 
+0000000204 00000 n 
+0000000330 00000 n 
+0000002497 00000 n 
+0000002623 00000 n 
+0000004723 00000 n 
+0000004849 00000 n 
+0000006833 00000 n 
+0000006961 00000 n 
+trailer
+<< /Size 12 /Root 3 0 R >>
+startxref
+7146
+%%EOF

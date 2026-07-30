@@ -1,0 +1,23 @@
+{
+  "id": "COP-002",
+  "objectiveId": "OBJ-122",
+  "title": "Create Business Operators",
+  "description": "CEO, Ops, Finance, Marketing, Engineering business operators on top of Phase 2B Operator Runtime.",
+  "division": "computer-operator",
+  "owner": "business-operators",
+  "priority": "P2",
+  "status": "pending",
+  "dependencies": [],
+  "approvalRequired": "none",
+  "evidenceRefs": [
+    {
+      "type": "api-output",
+      "url": "business-operators:operators:5;tasks:5;status:PARTIAL",
+      "capturedAt": "2026-06-28T03:08:06.856Z"
+    }
+  ],
+  "duplicateOf": null,
+  "createdAt": "2026-06-28T03:08:06.855Z",
+  "updatedAt": "2026-06-28T03:08:06.856Z",
+  "completedAt": null
+}

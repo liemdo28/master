@@ -1,0 +1,1 @@
+import os,base64\nBASE="d:/Project/Master/ai-video-guide-system/apps/api-server"\ndef w(t,c):\n    d=os.path.dirname(os.path.join(BASE,t))\n    os.makedirs(d,exist_ok=True)\n    with open(os.path.join(BASE,t),"w",encoding="utf-8") as f:\n        f.write(c)\n    print("Written:",t)\n

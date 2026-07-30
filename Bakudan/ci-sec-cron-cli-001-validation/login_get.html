@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sign In - TaskFlow</title>
+<meta name="description" content="Sign in to TaskFlow — Bakudan Ramen operations dashboard.">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Open Graph -->
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="TaskFlow">
+<meta property="og:title"       content="Sign In - TaskFlow">
+<meta property="og:description" content="Sign in to TaskFlow — Bakudan Ramen operations dashboard.">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://dashboard.bakudanramen.com/login">
+
+<link rel="stylesheet" href="https://dashboard.bakudanramen.com/assets/css/style.css">
+<link rel="stylesheet" href="https://dashboard.bakudanramen.com/assets/css/pages/auth.css">
+<link rel="manifest" href="https://dashboard.bakudanramen.com/manifest.json">
+
+<meta name="theme-color" content="#0a0a0a">
+</head>
+
+<body class="login-page">
+<div class="login-stage">
+    <div class="login-lang-switcher">
+        <a href="https://dashboard.bakudanramen.com/language/vi?redirect=%2Flogin" class="login-lang-chip ">VI</a>
+        <a href="https://dashboard.bakudanramen.com/language/en?redirect=%2Flogin" class="login-lang-chip active">EN</a>
+    </div>
+    <div class="login-card">
+        <div class="login-top">
+            <div class="login-mark">TF</div>
+            <div class="login-brandline">
+                <h1>Task<span>Flow</span></h1>
+                <p>Bakudan Ramen</p>
+            </div>
+        </div>
+
+        <div class="login-copy">
+            <div class="eyebrow">Secure Access</div>
+            <h2>Sign in to continue</h2>
+        </div>
+
+        
+        
+        <div class="login-form-wrap">
+            <form method="POST" action="https://dashboard.bakudanramen.com/login">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="you@company.com"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+
+                <div class="form-group" style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                    <input type="checkbox" id="remember_me" name="remember_me" value="1"
+                           style="width:16px;height:16px;accent-color:#3b82f6;cursor:pointer;flex-shrink:0">
+                    <label for="remember_me" style="margin:0;font-size:14px;color:#a1a1aa;cursor:pointer;font-weight:400">
+                        Giữ đăng nhập trong 30 ngày
+                    </label>
+                </div>
+
+                <input type="hidden" name="csrf" value="67e24d7f0f01735e73cb555b186d5ba6eb892a58fb39d84039531e90350295e3">
+                <button type="submit" class="btn login-submit">Sign In</button>
+            </form>
+        </div>
+
+        <div class="login-bottom">
+            <span>Don&#039;t have an account?</span>
+            <a href="https://dashboard.bakudanramen.com/register">Register now</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "domain": "logistics",
+  "domainName": "Logistics & Supply Chain",
+  "sources": [
+    { "name": "US DOT / Bureau of Transportation Statistics", "url": "https://www.bts.gov", "license": "Public Domain", "attribution": "Bureau of Transportation Statistics (US Government)", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "World Bank Logistics Performance Index", "url": "https://lpi.worldbank.org", "license": "CC BY 4.0", "attribution": "The World Bank", "robotsOk": true, "ingestMethod": "fetch", "recommend": "include" },
+    { "name": "Wikipedia — Supply Chain & Logistics", "url": "https://en.wikipedia.org", "license": "CC BY-SA 4.0", "attribution": "Wikipedia contributors", "robotsOk": false, "ingestMethod": "dump-api", "recommend": "include" },
+    { "name": "Incoterms 2020 (ICC)", "url": "https://iccwbo.org/resources-for-business/incoterms-rules", "license": "© ICC", "attribution": null, "robotsOk": false, "ingestMethod": "none", "recommend": "reference", "notes": "Purchase required; summaries only from Wikipedia" }
+  ],
+  "seedDocuments": []
+}

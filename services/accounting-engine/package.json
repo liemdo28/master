@@ -1,0 +1,35 @@
+{
+  "name": "accounting-engine",
+  "version": "1.0.0",
+  "description": "Local offline accounting DB system with WAL SQLite, hash-chain audit ledger, and resource monitoring",
+  "type": "module",
+  "bin": {
+    "accounting": "./bin/accounting.js"
+  },
+  "scripts": {
+    "start": "node bin/accounting.js",
+    "api": "node api/server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit --runInBand",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration --runInBand",
+    "test:security": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/security --runInBand",
+    "test:stress": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/stress --runInBand",
+    "accounting:api": "node api/server.js",
+    "accounting:stress": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/stress --runInBand",
+    "accounting:verify": "node bin/accounting.js verify-ledger",
+    "accounting:cert": "node tests/stress/live-24h-certification.js --duration=2m",
+    "accounting:cert:30m": "node tests/stress/live-24h-certification.js --duration=30m",
+    "accounting:cert:24h": "node tests/stress/live-24h-certification.js --duration=24h"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ora": "^8.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

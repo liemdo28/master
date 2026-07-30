@@ -1,0 +1,19 @@
+{
+  "workflow_id": "bakudan-gsc-pull",
+  "name": "Bakudan GSC Pull",
+  "domain": "bakudan",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": false,
+  "brand_id": "bakudan",
+  "location_id": "all",
+  "schedule": "0 8 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Pulls Google Search Console analytics for Bakudan. Data aggregation done in Mi-Core.",
+  "actions": [
+    {"order": 1, "type": "http_request", "name": "intake_event", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/intake/event", "body": {"source": "n8n", "domain": "bakudan", "event_type": "bakudan_gsc_pull_request", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "started_at": "{{started_at}}"}},
+    {"order": 2, "type": "http_request", "name": "trigger_mi_core", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch", "body": {"domain": "bakudan", "action": "gsc_pull", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}"}},
+    {"order": 3, "type": "http_request", "name": "log_result", "method": "POST", "url": "{{MI_CORE_URL}}/api/mi/workflows/log", "body": {"workflow_id": "bakudan-gsc-pull", "domain": "bakudan", "source": "n8n", "brand_id": "{{brand_id}}", "location_id": "{{location_id}}", "status": "{{trigger_mi_core.status}}", "started_at": "{{started_at}}", "completed_at": "{{completed_at}}", "error": ""}}
+  ]
+}

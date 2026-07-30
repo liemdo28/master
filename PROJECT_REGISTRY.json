@@ -1,0 +1,205 @@
+{
+  "generated": "2026-07-06T10:00:00+07:00",
+  "machine": "LIEMDO-PC",
+  "git_branch": "n8n-workflow-fabric-fix",
+  "projects": [
+    {
+      "id": "mi-core",
+      "name": "Mi Company OS Core",
+      "path": "mi-core/",
+      "type": "platform",
+      "status": "active",
+      "runtime": "Node.js / TypeScript",
+      "port": 4001,
+      "database": "graph.db, memory.db, knowledge.db",
+      "pm2_name": "mi-core",
+      "git_remote": "https://github.com/liemdo28/master.git",
+      "notes": "Primary platform — CLAUDE.md lives here. DO NOT MOVE OR DELETE."
+    },
+    {
+      "id": "whatsapp-gateway",
+      "name": "WhatsApp AI Gateway",
+      "path": "mi-core/services/whatsapp-ai-gateway/",
+      "type": "gateway",
+      "status": "needs_restart",
+      "runtime": "Python/Flask",
+      "port": 3211,
+      "git_remote": null,
+      "notes": "Requires WhatsApp auth session. Status DOWN."
+    },
+    {
+      "id": "ollama",
+      "name": "Local AI (Ollama)",
+      "path": "C:/Users/liemdo/AppData/Local/Programs/Ollama/",
+      "type": "ai_provider",
+      "status": "active",
+      "runtime": "Ollama",
+      "port": 11434,
+      "models": ["qwen3:8b", "qwen3:14b", "nomic-embed-text"],
+      "notes": "STATUS: LISTENING. Primary AI provider."
+    },
+    {
+      "id": "bakudan",
+      "name": "Bakudan Ramen Website",
+      "path": "Bakudan/",
+      "type": "web_project",
+      "status": "active",
+      "sub_projects": [
+        { "name": "bakudanramen.com", "path": "Bakudan/bakudanramen.com-current/", "branch": "work/final-readiness" },
+        { "name": "dashboard.bakudanramen.com", "path": "Bakudan/dashboard.bakudanramen.com/" },
+        { "name": "integration-system", "path": "Bakudan/integration-system/" },
+        { "name": "review-management-mcp", "path": "Bakudan/review-management-mcp/" },
+        { "name": "Agent-Coding", "path": "Bakudan/Agent-Coding/" }
+      ],
+      "git_remote": "https://github.com/liemdo28/bakudanwebsite_sub.git",
+      "notes": "Multiple sub-projects. Stale: _codex_bakudanwebsite_deploy_main/"
+    },
+    {
+      "id": "rawsushi",
+      "name": "Raw Sushi Bistro",
+      "path": "RawSushi/",
+      "type": "web_project",
+      "status": "active",
+      "sub_projects": [
+        { "name": "RawWebsite", "path": "RawSushi/RawWebsite/", "branch": "seo-fixes" }
+      ],
+      "git_remote": "https://github.com/liemdo28/rawwebsite",
+      "notes": "Raw Sushi website. Games published to RawWebsite/public/games/"
+    },
+    {
+      "id": "doordash-agent",
+      "name": "DoorDash Campaign Agent",
+      "path": "Agent/doordash-compaigns/",
+      "type": "automation",
+      "status": "active",
+      "git_remote": null,
+      "notes": "SEO agents at root level"
+    },
+    {
+      "id": "seo-agents",
+      "name": "SEO Automation Suite",
+      "path": "SEO/",
+      "type": "automation",
+      "status": "active",
+      "agents": [
+        "seo-analytics-agent",
+        "seo-citation-agent",
+        "seo-content-agent",
+        "seo-local-maps-agent",
+        "seo-schema-agent",
+        "seo-technical-agent",
+        "seo-website-agent",
+        "seo-automation-orchestrator"
+      ],
+      "notes": "Running via Node.js. Logs in SEO/shared/logs/"
+    },
+    {
+      "id": "review-automation",
+      "name": "Review Automation System",
+      "path": "Bakudan/review-automation-system/",
+      "type": "automation",
+      "status": "active",
+      "git_remote": null,
+      "notes": "GBP client at mi-core/server/src/bigdata/connectors/review-automation/"
+    },
+    {
+      "id": "quickbooks-ops",
+      "name": "QuickBooks Operations Agent",
+      "path": "mi-core/services/qb-ops-agent/",
+      "type": "connector",
+      "status": "active",
+      "runtime": "Node.js",
+      "git_remote": null,
+      "notes": "QB XML/SOAP integration. Mirror DB at mi-core/server/src/quickbooks/"
+    },
+    {
+      "id": "payroll-system",
+      "name": "Payroll System",
+      "path": "Raw/payroll/",
+      "type": "business_logic",
+      "status": "active",
+      "runtime": "Python",
+      "git_remote": null,
+      "notes": "OAuth Google Sheets. Token stored at Raw/payroll/token.json (UNTRACKED — ok)."
+    },
+    {
+      "id": "phuen",
+      "name": "Phuyen 2026 Project",
+      "path": "Other/phuyen-2026/",
+      "type": "web_project",
+      "status": "active",
+      "git_remote": "https://github.com/liemdo28/phuyen-2026.git",
+      "notes": "WARNING: nested repo at Other/phuyen-2026/phuyen-2026/"
+    },
+    {
+      "id": "linktreehl",
+      "name": "LinkTree HL",
+      "path": "Other/LinkTreeHL/",
+      "type": "web_project",
+      "status": "active",
+      "git_remote": "https://github.com/liemdo28/LinkTreeHL.git",
+      "notes": "WARNING: nested repo at Other/LinkTreeHL/LinkTreeHL/"
+    },
+    {
+      "id": "packing-list",
+      "name": "Packing List",
+      "path": "Bakudan/packing-list/",
+      "type": "utility",
+      "status": "active",
+      "git_remote": "https://github.com/liemdo28/packing-list.git",
+      "notes": "WARNING: nested repo at Bakudan/packing-list/packing-list/"
+    },
+    {
+      "id": "n8n-workflows",
+      "name": "N8N Workflow Automation",
+      "path": "Mi/n8n/",
+      "type": "automation",
+      "status": "active",
+      "workflow_count": 13,
+      "notes": "Workflows for Bakudan, Career, DoorDash, Food Safety, QB, Reviews, SEO, System"
+    },
+    {
+      "id": "food-safety-gateway",
+      "name": "Food Safety Gateway",
+      "path": "mi-core/services/food-safety-gateway/",
+      "type": "connector",
+      "status": "active",
+      "notes": "Cron-triggered reminders"
+    },
+    {
+      "id": "agent-coding",
+      "name": "Agent Coding Tools",
+      "path": "Agent/agent-coding-api-keys/",
+      "type": "utility",
+      "status": "active",
+      "notes": "API keys for agent coding. Check .gitignore."
+    },
+    {
+      "id": "ai-video-guide",
+      "name": "AI Video Guide System",
+      "path": "ai-video-guide-system/",
+      "type": "media",
+      "status": "unknown"
+    },
+    {
+      "id": "docker-compose",
+      "name": "Docker Compose Services",
+      "path": "docker-compose.yml",
+      "type": "infrastructure",
+      "status": "present",
+      "notes": "Check which services are defined"
+    }
+  ],
+  "stale_dirs_to_archive": [
+    "server/",
+    "ui/",
+    "mi-core/mi-core/",
+    "company-os-phases/"
+  ],
+  "requires_investigation": [
+    "mi-core/",
+    "computer-operator-foundation/",
+    "ai-service/",
+    "creative-preview/"
+  ]
+}

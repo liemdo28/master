@@ -1,0 +1,48 @@
+{
+  "evidence_id": "ev-3d0098116e",
+  "type": "execution_log",
+  "run_id": "run-2379e9d6e5ca",
+  "task_id": "task-cab5c7b5f955",
+  "file_path": null,
+  "content": {
+    "base": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/",
+    "pages": [
+      {
+        "seq": 1,
+        "name": "home",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/index.html",
+        "title": "Operator Crawl \u2014 Homepage",
+        "screenshot": "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page1_home.png",
+        "extracted_links": [
+          "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/about.html",
+          "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/products.html"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "about",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/about.html",
+        "title": "Operator Crawl \u2014 About",
+        "screenshot": "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page2_about.png"
+      },
+      {
+        "seq": 3,
+        "name": "products",
+        "url": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/multi-page/products.html",
+        "title": "Operator Crawl \u2014 Products",
+        "screenshot": "D:\\Project\\computer-operator-foundation\\operator-runtime\\evidence\\demo4_page3_products.png"
+      }
+    ],
+    "errors": [],
+    "pages_visited": 3,
+    "titles": [
+      "Operator Crawl \u2014 Homepage",
+      "Operator Crawl \u2014 About",
+      "Operator Crawl \u2014 Products"
+    ],
+    "duration_seconds": 1.009
+  },
+  "description": "Demo4 execution log",
+  "registered_at": 1782448821.1407487,
+  "registered_iso": "2026-06-26T04:40:21Z"
+}

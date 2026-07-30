@@ -1,0 +1,68 @@
+[
+  {
+    "id": "ACQ_1782656997995_sj4ssx",
+    "timestamp": 1782656997995,
+    "name": "T2",
+    "fairValue": 500,
+    "askingPrice": 600,
+    "gapPct": -16.67,
+    "verdict": "OVERVALUED",
+    "paybackYears": 12,
+    "recommendation": "PASS"
+  },
+  {
+    "id": "ACQ_1782656997995_7om4lv",
+    "timestamp": 1782656997995,
+    "name": "T1",
+    "fairValue": 500,
+    "askingPrice": 400,
+    "gapPct": 25,
+    "verdict": "UNDERVALUED",
+    "paybackYears": 4,
+    "recommendation": "PURSUE"
+  },
+  {
+    "id": "ACQ_1782656989612_myhcj0",
+    "timestamp": 1782656989612,
+    "name": "T2",
+    "fairValue": 500,
+    "askingPrice": 600,
+    "gapPct": -16.67,
+    "verdict": "OVERVALUED",
+    "paybackYears": 12,
+    "recommendation": "PASS"
+  },
+  {
+    "id": "ACQ_1782656989611_yrmh5c",
+    "timestamp": 1782656989611,
+    "name": "T1",
+    "fairValue": 500,
+    "askingPrice": 400,
+    "gapPct": 25,
+    "verdict": "UNDERVALUED",
+    "paybackYears": 4,
+    "recommendation": "PURSUE"
+  },
+  {
+    "id": "ACQ_1782656982114_hizgrw",
+    "timestamp": 1782656982114,
+    "name": "T2",
+    "fairValue": 500,
+    "askingPrice": 600,
+    "gapPct": -16.67,
+    "verdict": "OVERVALUED",
+    "paybackYears": 12,
+    "recommendation": "PASS"
+  },
+  {
+    "id": "ACQ_1782656982113_f1x0yr",
+    "timestamp": 1782656982113,
+    "name": "T1",
+    "fairValue": 500,
+    "askingPrice": 400,
+    "gapPct": 25,
+    "verdict": "UNDERVALUED",
+    "paybackYears": 4,
+    "recommendation": "PURSUE"
+  }
+]

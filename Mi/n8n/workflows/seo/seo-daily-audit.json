@@ -1,0 +1,83 @@
+{
+  "workflow_id": "seo-daily-audit",
+  "name": "SEO Daily Audit Trigger",
+  "domain": "seo",
+  "trigger_type": "schedule",
+  "source": "n8n",
+  "mi_required": true,
+  "approval_required": true,
+  "brand_id": "all",
+  "location_id": "all",
+  "schedule": "0 7 * * *",
+  "schedule_tz": "Asia/Ho_Chi_Minh",
+  "description": "Daily SEO audit trigger. Calls Mi-Core decision endpoint first. If approved, triggers SEO orchestrator. Logs result.",
+  "actions": [
+    {
+      "order": 1,
+      "type": "http_request",
+      "name": "intake_event",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/intake/event",
+      "body": {
+        "source": "n8n",
+        "domain": "seo",
+        "event_type": "seo_daily_audit_request",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "started_at": "{{started_at}}"
+      }
+    },
+    {
+      "order": 2,
+      "type": "http_request",
+      "name": "decision_request",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/decision/request",
+      "body": {
+        "workflow_id": "seo-daily-audit",
+        "domain": "seo",
+        "action": "daily_audit",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "decision_needed": "approve_seo_audit_execution"
+      }
+    },
+    {
+      "order": 3,
+      "type": "condition",
+      "name": "check_approval",
+      "condition": "{{decision_request.response.approved}} === true"
+    },
+    {
+      "order": 4,
+      "type": "http_request",
+      "name": "trigger_seo_orchestrator",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/tasks/dispatch",
+      "body": {
+        "domain": "seo",
+        "action": "daily_audit",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}"
+      }
+    },
+    {
+      "order": 5,
+      "type": "http_request",
+      "name": "log_result",
+      "method": "POST",
+      "url": "{{MI_CORE_URL}}/api/mi/workflows/log",
+      "body": {
+        "workflow_id": "seo-daily-audit",
+        "domain": "seo",
+        "source": "n8n",
+        "brand_id": "{{brand_id}}",
+        "location_id": "{{location_id}}",
+        "status": "{{trigger_seo_orchestrator.status}}",
+        "started_at": "{{started_at}}",
+        "completed_at": "{{completed_at}}",
+        "error": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "primary_intent": {
+    "intent": "operational_concern",
+    "label_vi": "Lo ngại vận hành",
+    "confidence": 0.8,
+    "evidence_keywords": [
+      "wrong"
+    ],
+    "suggested_investigation": [
+      "Check PM2 process health",
+      "Review error logs",
+      "Check connector status",
+      "Verify service uptime"
+    ]
+  },
+  "alternatives": [
+    {
+      "intent": "general_status_check",
+      "label_vi": "Kiểm tra tổng quát",
+      "confidence": 0.5,
+      "evidence_keywords": [
+        "ổn"
+      ],
+      "suggested_investigation": [
+        "Run health check",
+        "Review active priorities",
+        "Check pending actions",
+        "Summarize current state"
+      ]
+    }
+  ],
+  "is_ambiguous": true,
+  "confidence_threshold_met": true
+}

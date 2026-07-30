@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-fb87678f59",
+  "name": "Portainer",
+  "github": "https://github.com/portainer/portainer",
+  "owner_division": "IT",
+  "category": "IT",
+  "description": "Container management UI",
+  "license": "Proprietary",
+  "license_risk": "HIGH",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6771936,
+  "created_iso": "2026-06-26T05:33:33.677196+00:00",
+  "updated_at": 1782452013.6771936,
+  "updated_iso": "2026-06-26T05:33:33.677204+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6771936,
+      "iso": "2026-06-26T05:33:33.677205+00:00"
+    }
+  ]
+}

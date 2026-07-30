@@ -1,0 +1,14 @@
+{
+  "name": "mi-phase-12-self-improving-intelligence",
+  "version": "1.0.0",
+  "description": "Phase 12 — Self-Improving Company Intelligence. Real executable learning engines: outcome-memory, failure-memory, approval-memory, decision-replay, recommendation, root-cause, playbook.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": {
+    "test": "node test/runtime-proof.mjs",
+    "smoke": "node src/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

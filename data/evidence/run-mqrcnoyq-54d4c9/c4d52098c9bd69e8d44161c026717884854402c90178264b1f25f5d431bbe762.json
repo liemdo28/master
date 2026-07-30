@@ -1,0 +1,20 @@
+{
+  "primary_intent": {
+    "intent": "marketing_concern",
+    "label_vi": "Lo ngại marketing",
+    "confidence": 0.7,
+    "evidence_keywords": [
+      "campaign",
+      "campaign"
+    ],
+    "suggested_investigation": [
+      "Review campaign performance",
+      "Check review scores",
+      "Analyze traffic sources",
+      "Assess brand sentiment"
+    ]
+  },
+  "alternatives": [],
+  "is_ambiguous": false,
+  "confidence_threshold_met": true
+}

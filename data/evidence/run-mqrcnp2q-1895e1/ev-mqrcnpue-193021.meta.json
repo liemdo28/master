@@ -1,0 +1,11 @@
+{
+  "id": "ev-mqrcnpue-193021",
+  "objectiveRunId": "run-mqrcnp2q-1895e1",
+  "sourceType": "execution_plan",
+  "sourceRef": "executive-planner",
+  "summary": "Plan: Kế hoạch kiểm tra tuân thủ | 4 steps, ~2min | Risk: undefined",
+  "sha256": "958d14ac42146356d753b1269837c30930d4bd3548b71362aba2514aa2487482",
+  "artifactPath": "E:\\Project\\Master\\mi-core\\data\\evidence\\run-mqrcnp2q-1895e1\\958d14ac42146356d753b1269837c30930d4bd3548b71362aba2514aa2487482.json",
+  "capturedAt": "2026-06-24T00:43:19.574Z",
+  "readOnly": true
+}

@@ -1,0 +1,9 @@
+{
+  "name": "mi-phase-28-workflow-fabric-os",
+  "version": "1.0.0",
+  "description": "Phase 28 — N8N / Workflow Fabric 2.0. Governed workflow automation with dedupe, ownership, replay, evidence, and approval gates.",
+  "type": "module",
+  "main": "src/orchestrator.js",
+  "scripts": { "test": "node test/runtime-proof.mjs" },
+  "engines": { "node": ">=20.0.0" }
+}

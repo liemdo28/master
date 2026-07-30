@@ -1,0 +1,17 @@
+📊 *7-Day Burn-In Summary — 2026-06-14 → 2026-06-20*
+
+*Progress:* 1/7 days recorded
+*Trend:*    📊 INSUFFICIENT_DATA
+
+*Weekly Totals:*
+• Total actions: 16
+• Success:       13
+• Failure:       1
+• Retry:         1
+• Orphans:       0
+
+*Weekly Averages:*
+• Success rate:  81%
+• Failure rate:  6%
+• Retry rate:    6%
+• Avg runtime:   1592ms

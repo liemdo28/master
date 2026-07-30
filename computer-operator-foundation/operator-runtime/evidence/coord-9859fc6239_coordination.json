@@ -1,0 +1,38 @@
+{
+  "coord_task_id": "coord-9859fc6239",
+  "task_name": "Demo2-LocalForm-FillSubmit",
+  "objective_id": "obj-76e396e3",
+  "target": "file:///D:/Project/computer-operator-foundation/operator-runtime/static/test-form.html",
+  "approval_level": "SAFE_WRITE",
+  "operator_type": "web",
+  "state": "DONE",
+  "created_at": 1782449489.7312732,
+  "updated_at": 1782449490.5210383,
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782449489.7312734
+    },
+    {
+      "state": "DISPATCHED",
+      "timestamp": 1782449489.7312768
+    },
+    {
+      "state": "IN_PROGRESS",
+      "timestamp": 1782449489.731279
+    },
+    {
+      "state": "DONE",
+      "timestamp": 1782449490.5210397
+    }
+  ],
+  "evidence_ids": [
+    "ev-28b0c214f2",
+    "ev-b80e1bd3a5",
+    "ev-4503b4037f"
+  ],
+  "run_ids": [
+    "run-d31b365fad39"
+  ],
+  "error": null
+}

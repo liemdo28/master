@@ -1,0 +1,27 @@
+{
+  "project_id": "OSS-8b008b6ccc",
+  "name": "Prometheus",
+  "github": "https://github.com/prometheus/prometheus",
+  "owner_division": "IT",
+  "category": "IT",
+  "description": "Metrics monitoring and alerting",
+  "license": "Apache-2.0",
+  "license_risk": "LOW",
+  "lifecycle_stage": "DISCOVERY",
+  "status": "ACTIVE",
+  "roi": null,
+  "maintenance_cost": null,
+  "risk": null,
+  "scorecard": null,
+  "created_at": 1782452013.6753724,
+  "created_iso": "2026-06-26T05:33:33.675375+00:00",
+  "updated_at": 1782452013.6753724,
+  "updated_iso": "2026-06-26T05:33:33.675381+00:00",
+  "stage_history": [
+    {
+      "stage": "DISCOVERY",
+      "timestamp": 1782452013.6753724,
+      "iso": "2026-06-26T05:33:33.675382+00:00"
+    }
+  ]
+}

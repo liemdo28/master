@@ -1,0 +1,42 @@
+{"ts":"2026-06-24T00:59:08.642Z","level":"info","message":"Job scheduled","jobId":"daily-website-crawl","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.643Z","level":"info","message":"Job scheduled","jobId":"daily-gbp-sync","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.645Z","level":"info","message":"Job scheduled","jobId":"daily-gsc-sync","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.646Z","level":"info","message":"Job scheduled","jobId":"daily-ga4-sync","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.647Z","level":"info","message":"Job scheduled","jobId":"daily-schema-validation","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.655Z","level":"info","message":"Job scheduled","jobId":"daily-technical-audit","cron":"0 3 * * *","schedule":"daily"}
+{"ts":"2026-06-24T00:59:08.658Z","level":"info","message":"Job scheduled","jobId":"weekly-citation-scan","cron":"0 4 * * 1","schedule":"weekly"}
+{"ts":"2026-06-24T00:59:08.660Z","level":"info","message":"Job scheduled","jobId":"weekly-content-plan","cron":"0 4 * * 1","schedule":"weekly"}
+{"ts":"2026-06-24T00:59:08.664Z","level":"info","message":"Job scheduled","jobId":"weekly-executive-seo-report","cron":"0 4 * * 1","schedule":"weekly"}
+{"ts":"2026-06-24T00:59:08.667Z","level":"info","message":"Job scheduled","jobId":"monthly-full-seo-audit","cron":"0 5 1 * *","schedule":"monthly"}
+{"ts":"2026-06-24T00:59:08.668Z","level":"info","message":"Scheduler started","jobs":10}
+{"ts":"2026-06-24T00:59:08.668Z","level":"info","message":"SEO Automation Orchestrator started","port":4020,"jobs":10,"scheduled":10}
+{"ts":"2026-06-24T07:50:04.621Z","level":"info","message":"Job started","jobId":"daily-website-crawl","runId":"daily-website-crawl-1782287404621","attempt":1}
+{"ts":"2026-06-24T07:50:37.564Z","level":"info","message":"Job started","jobId":"daily-technical-audit","runId":"daily-technical-audit-1782287437564","attempt":1}
+{"ts":"2026-06-24T07:50:37.788Z","level":"info","message":"Job completed","jobId":"daily-technical-audit","status":"completed","attempts":1,"duration_ms":224}
+{"ts":"2026-06-24T07:50:39.595Z","level":"info","message":"Job started","jobId":"daily-schema-validation","runId":"daily-schema-validation-1782287439595","attempt":1}
+{"ts":"2026-06-24T07:50:39.726Z","level":"info","message":"Job completed","jobId":"daily-schema-validation","status":"completed","attempts":1,"duration_ms":131}
+{"ts":"2026-06-24T07:50:40.435Z","level":"info","message":"Job completed","jobId":"daily-website-crawl","status":"completed","attempts":1,"duration_ms":35814}
+{"ts":"2026-06-24T07:51:02.535Z","level":"info","message":"Job started","jobId":"weekly-content-plan","runId":"weekly-content-plan-1782287462535","attempt":1}
+{"ts":"2026-06-24T07:51:02.899Z","level":"info","message":"Job completed","jobId":"weekly-content-plan","status":"completed","attempts":1,"duration_ms":364}
+{"ts":"2026-06-24T07:51:04.711Z","level":"info","message":"Job started","jobId":"weekly-citation-scan","runId":"weekly-citation-scan-1782287464711","attempt":1}
+{"ts":"2026-06-24T07:51:12.314Z","level":"info","message":"Job completed","jobId":"weekly-citation-scan","status":"completed","attempts":1,"duration_ms":7601}
+{"ts":"2026-06-24T07:51:14.082Z","level":"info","message":"Job started","jobId":"weekly-executive-seo-report","runId":"weekly-executive-seo-report-1782287474082","attempt":1}
+{"ts":"2026-06-24T07:51:14.227Z","level":"info","message":"Job completed","jobId":"weekly-executive-seo-report","status":"completed","attempts":1,"duration_ms":144}
+{"ts":"2026-06-24T08:00:00.018Z","level":"info","message":"Cron triggered","jobId":"daily-gbp-sync","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.018Z","level":"info","message":"Job started","jobId":"daily-gbp-sync","runId":"daily-gbp-sync-1782288000018","attempt":1}
+{"ts":"2026-06-24T08:00:00.019Z","level":"info","message":"Cron triggered","jobId":"daily-gsc-sync","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.020Z","level":"info","message":"Job started","jobId":"daily-gsc-sync","runId":"daily-gsc-sync-1782288000020","attempt":1}
+{"ts":"2026-06-24T08:00:00.020Z","level":"info","message":"Cron triggered","jobId":"daily-ga4-sync","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.021Z","level":"info","message":"Job started","jobId":"daily-ga4-sync","runId":"daily-ga4-sync-1782288000021","attempt":1}
+{"ts":"2026-06-24T08:00:00.021Z","level":"info","message":"Cron triggered","jobId":"daily-schema-validation","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.022Z","level":"info","message":"Job started","jobId":"daily-schema-validation","runId":"daily-schema-validation-1782288000022","attempt":1}
+{"ts":"2026-06-24T08:00:00.022Z","level":"info","message":"Cron triggered","jobId":"daily-technical-audit","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.023Z","level":"info","message":"Job started","jobId":"daily-technical-audit","runId":"daily-technical-audit-1782288000023","attempt":1}
+{"ts":"2026-06-24T08:00:00.023Z","level":"info","message":"Cron triggered","jobId":"daily-website-crawl","schedule":"daily"}
+{"ts":"2026-06-24T08:00:00.024Z","level":"info","message":"Job started","jobId":"daily-website-crawl","runId":"daily-website-crawl-1782288000023","attempt":1}
+{"ts":"2026-06-24T08:00:00.027Z","level":"info","message":"Job completed","jobId":"daily-gbp-sync","status":"completed","attempts":1,"duration_ms":9}
+{"ts":"2026-06-24T08:00:00.029Z","level":"info","message":"Job completed","jobId":"daily-gsc-sync","status":"completed","attempts":1,"duration_ms":8}
+{"ts":"2026-06-24T08:00:00.030Z","level":"info","message":"Job completed","jobId":"daily-ga4-sync","status":"completed","attempts":1,"duration_ms":9}
+{"ts":"2026-06-24T08:00:00.285Z","level":"info","message":"Job completed","jobId":"daily-schema-validation","status":"completed","attempts":1,"duration_ms":262}
+{"ts":"2026-06-24T08:00:00.374Z","level":"info","message":"Job completed","jobId":"daily-technical-audit","status":"completed","attempts":1,"duration_ms":350}
+{"ts":"2026-06-24T08:00:10.320Z","level":"info","message":"Job completed","jobId":"daily-website-crawl","status":"completed","attempts":1,"duration_ms":10297}

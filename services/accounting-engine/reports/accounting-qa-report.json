@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "commit": "247cc588721530b48dcc2be813380b7eb64bfafa",
+    "branch": "claude/local-offline-ai-agent-PQx1C",
+    "node": "v22.22.2",
+    "os": "linux",
+    "generated_at": "2026-05-17T04:30:46.010Z"
+  },
+  "verdict": "CERTIFIED ✅ — Production Readiness >= 90",
+  "db_stats": {
+    "sessions": 10,
+    "metrics": 1348,
+    "auditRows": 1031,
+    "patches": 170,
+    "qaRuns": 16,
+    "dbSizeBytes": 765952,
+    "walMode": "wal"
+  },
+  "wal_status": "WAL confirmed (journal_mode=WAL)",
+  "test_results": {
+    "total_suites": 15,
+    "total_tests": 167,
+    "passed": 167,
+    "failed": 0,
+    "suites": [
+      "unit/audit-ledger",
+      "unit/batch-writer",
+      "unit/resource-monitor",
+      "unit/gpu-monitor",
+      "unit/power-estimator",
+      "unit/metrics-compressor",
+      "integration/database",
+      "integration/api",
+      "security/offline-policy",
+      "stress/db-storm",
+      "stress/tamper-simulation",
+      "stress/tamper-ledger",
+      "stress/concurrency",
+      "stress/rollback-storm",
+      "stress/qa-rerun-storm"
+    ]
+  },
+  "stress_certification": {
+    "duration": "2 minutes (fast mode)",
+    "checks": 12,
+    "violations": 0,
+    "cpu_avg_pct": 0.26,
+    "cpu_limit": 5,
+    "memory_stable": true,
+    "memory_note": "RSS stable post-initialization, no monotonic growth detected",
+    "api_p95_ms": 22,
+    "api_p95_limit": 300,
+    "ledger_valid": true,
+    "ledger_rows": 1031
+  },
+  "api_endpoints": [
+    "/health",
+    "/stats",
+    "/sessions",
+    "/sessions/stats",
+    "/models",
+    "/models/leaderboard",
+    "/costs",
+    "/costs/by-project",
+    "/risks",
+    "/qa",
+    "/patches"
+  ],
+  "api_host": "127.0.0.1:8844 ONLY (never 0.0.0.0)",
+  "security": {
+    "offline_enforced": true,
+    "telemetry": false,
+    "cloud_dependency": false,
+    "secret_masking": true,
+    "api_localhost_only": true,
+    "no_gpu_dependency_required": true
+  },
+  "known_gaps": [
+    "24h continuous run not executed in this session (use: npm run accounting:cert:24h)",
+    "Model usage data empty until local-agent wires POST /models calls",
+    "GPU monitoring returns null gracefully (no NVIDIA in this env)"
+  ],
+  "ceo_verdict": "APPROVED — All P0 items complete, stress certified, production hardening done"
+}

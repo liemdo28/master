@@ -1,0 +1,109 @@
+/* ============================================
+   BakudanRamen Design Tokens — v5 Unified
+   Single source of truth for all pages.
+   ============================================ */
+
+:root {
+    /* ── Brand scale ── */
+    --brand-50:  #fff1f3;
+    --brand-100: #ffe0e5;
+    --brand-200: #ffc0ca;
+    --brand-300: #ff9aaa;
+    --brand-400: #ff6580;
+    --brand-500: #ff304f;
+    --brand-600: #e02040;
+    --brand-700: #b81030;
+    --brand-800: #8c0820;
+    --brand-900: #5c0012;
+
+    /* ── Surface scale (canonical) ── */
+    --surface-0: #000000;
+    --surface-1: #09090b;   /* page bg */
+    --surface-2: #18181b;   /* card bg */
+    --surface-3: #27272a;   /* border / hover */
+    --surface-4: #3f3f46;   /* active border */
+
+    /* ── Semantic surface aliases ──
+       Used by CEO + new pages as var(--surface), var(--border) etc.
+       Maps cleanly onto existing base.css values.              */
+    --surface:      var(--surface-2);       /* = --bg-card   */
+    --surface-raised: #1E293B;              /* slightly lighter surface */
+    --border-subtle: rgba(255,255,255,.06);
+    --border-default: rgba(255,255,255,.1);
+
+    /* ── Status / semantic colors ── */
+    --status-critical: #EF4444;
+    --status-warning:  #F59E0B;
+    --status-ok:       #22C55E;
+    --status-info:     #3B82F6;
+    --status-neutral:  #94A3B8;
+
+    --status-critical-bg: rgba(239,68,68,.1);
+    --status-warning-bg:  rgba(245,158,11,.1);
+    --status-ok-bg:       rgba(34,197,94,.1);
+    --status-info-bg:     rgba(59,130,246,.1);
+
+    /* ── CEO design tokens (now global) ──
+       Old CEO pages used --ceo-* inline. They still work via
+       the fallback. New code should use the status tokens above.  */
+    --ceo-red:    var(--status-critical);
+    --ceo-amber:  var(--status-warning);
+    --ceo-green:  var(--status-ok);
+    --ceo-blue:   var(--status-info);
+    --ceo-gray:   var(--status-neutral);
+    --ceo-bg:     var(--surface-1);
+    --ceo-surface: var(--surface-2);
+    --ceo-border: var(--border-default);
+    --ceo-text:   #F1F5F9;
+    --ceo-muted:  #94A3B8;
+
+    /* ── Text ── */
+    --text-primary:   #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted:     #8b8b94;
+
+    /* ── Spacing (4px base) ── */
+    --space-1:  4px;
+    --space-2:  8px;
+    --space-3:  12px;
+    --space-4:  16px;
+    --space-5:  20px;
+    --space-6:  24px;
+    --space-8:  32px;
+    --space-10: 40px;
+    --space-12: 48px;
+
+    /* ── Typography scale ── */
+    --text-xs:   12px;
+    --text-sm:   13px;
+    --text-base: 14px;  /* upgraded from 15 → 14px body per spec */
+    --text-md:   15px;
+    --text-lg:   18px;
+    --text-xl:   20px;
+    --text-2xl:  24px;
+    --text-3xl:  28px;  /* page titles per spec */
+    --text-4xl:  32px;  /* KPI numbers per spec */
+
+    /* ── Font families ── */
+    --font-display: 'Space Grotesk', 'Inter', sans-serif;
+    --font-body:    'Inter', sans-serif;
+
+    /* ── Border radius ──
+       Upgraded from 8/12/20 → 10/16/20 per CEO spec (16px for cards). */
+    --radius-sm:   8px;
+    --radius-md:   12px;
+    --radius-card: 16px;   /* NEW — primary card radius */
+    --radius-lg:   20px;
+    --radius-full: 999px;
+
+    /* ── Shadows ── */
+    --shadow-sm:         0 1px 3px rgba(0,0,0,.35);
+    --shadow-md:         0 4px 16px rgba(0,0,0,.45);
+    --shadow-lg:         0 8px 32px rgba(0,0,0,.55);
+    --shadow-hover:      0 8px 24px rgba(0,0,0,.4);
+    --shadow-glow-brand: 0 0 20px rgba(255,48,79,.25);
+
+    /* ── Transition ── */
+    --transition-fast: all .12s ease;
+    --transition:      all .18s ease;
+}

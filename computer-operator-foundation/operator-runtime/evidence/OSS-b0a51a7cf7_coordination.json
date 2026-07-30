@@ -1,0 +1,29 @@
+{
+  "coord_task_id": "OSS-b0a51a7cf7",
+  "task_name": "Advance Skyvern past DISCOVERY",
+  "objective_id": "OBJ-OSS-GOVERNANCE",
+  "target": "oss_registry",
+  "approval_level": "READ_ONLY",
+  "operator_type": "oss_governance",
+  "state": "CREATED",
+  "created_at": 1782452013.6939275,
+  "created_iso": "2026-06-26T05:33:33.693928+00:00",
+  "updated_at": 1782452013.6939373,
+  "owner": "operator_lead",
+  "priority": "MEDIUM",
+  "description": "Skyvern has been in DISCOVERY \u2014 advance gate.",
+  "source_signals": [
+    {
+      "project_id": "OSS-6c3fa4efce",
+      "stage": "DISCOVERY",
+      "days_in_stage": "unknown"
+    }
+  ],
+  "evidence_ids": [],
+  "state_history": [
+    {
+      "state": "CREATED",
+      "timestamp": 1782452013.6939423
+    }
+  ]
+}
