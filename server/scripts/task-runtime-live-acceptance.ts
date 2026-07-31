@@ -24,7 +24,7 @@ async function main() {
     baseUrl,
     auth: authHeaders.authSummary,
     checks: [],
-    knownLimitations: ['command execution uses synchronous execFileSync with timeout and maxBuffer controls'],
+    execution: 'commands use async spawn with no shell, timeout, max output, and cancellation controls',
   };
 
   try {

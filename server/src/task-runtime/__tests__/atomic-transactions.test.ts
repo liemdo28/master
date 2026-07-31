@@ -7,7 +7,7 @@ import assert from 'assert';
 import { TaskStore } from '../store';
 import { TaskEngine } from '../engine';
 
-function run() {
+async function run() {
   const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-task-runtime-atomic-'));
   const store = new TaskStore(dataDir);
   const engine = new TaskEngine(store);
@@ -23,13 +23,13 @@ function run() {
     engine.transition(task.id, 'PLANNING');
     engine.transition(task.id, 'READY');
     engine.transition(task.id, 'RUNNING');
-    const firstRun = engine.runCommandStep(task.id, 'node', ['--version']);
+    const firstRun = await engine.runCommandStep(task.id, 'node', ['--version']);
     assert.strictEqual(firstRun.exitCode, 0);
     events = store.listEvents(task.id);
     assert.strictEqual(events.filter(e => e.type === 'command.completed').length, 1);
 
     engine.transition(task.id, 'VALIDATING');
-    assert.throws(() => engine.runCommandStep(task.id, 'node', ['--version']), /must be RUNNING|current/);
+    await assert.rejects(() => engine.runCommandStep(task.id, 'node', ['--version']), /must be RUNNING|current/);
     events = store.listEvents(task.id);
     assert.strictEqual(events.filter(e => e.type === 'command.completed').length, 1);
     const completed = engine.completeTask(task.id, 'Atomic completion');
@@ -64,11 +64,12 @@ function run() {
   }
 }
 
-try {
-  run();
-  console.log('[atomic-transactions] PASS');
-  process.exit(0);
-} catch (err) {
-  console.error('[atomic-transactions] FAIL:', err);
-  process.exit(1);
-}
+run()
+  .then(() => {
+    console.log('[atomic-transactions] PASS');
+    process.exit(0);
+  })
+  .catch(err => {
+    console.error('[atomic-transactions] FAIL:', err);
+    process.exit(1);
+  });
