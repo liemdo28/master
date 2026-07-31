@@ -40,7 +40,10 @@ export interface TaskRecord {
   parentTaskId: string | null;
   userRequest: string;
   normalizedIntent: string | null;
+  taskKind: 'general' | 'coding';
   projectId: string | null;
+  mapVersion: string | null;
+  contextPackId: string | null;
   repository: string | null;
   workingDirectory: string | null;
   branch: string | null;
@@ -68,7 +71,10 @@ export interface TaskEvent {
 export interface CreateTaskInput {
   userRequest: string;
   parentTaskId?: string | null;
+  taskKind?: TaskRecord['taskKind'];
   projectId?: string | null;
+  mapVersion?: string | null;
+  contextPackId?: string | null;
   repository?: string | null;
   workingDirectory?: string | null;
   branch?: string | null;

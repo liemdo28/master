@@ -32,7 +32,10 @@ export class TaskStore {
         parentTaskId TEXT,
         userRequest TEXT NOT NULL,
         normalizedIntent TEXT,
+        taskKind TEXT NOT NULL DEFAULT 'general',
         projectId TEXT,
+        mapVersion TEXT,
+        contextPackId TEXT,
         repository TEXT,
         workingDirectory TEXT,
         branch TEXT,
@@ -60,6 +63,9 @@ export class TaskStore {
 
       CREATE INDEX IF NOT EXISTS idx_task_events_taskId ON task_events(taskId);
     `);
+    this.ensureColumn('tasks', 'taskKind', `TEXT NOT NULL DEFAULT 'general'`);
+    this.ensureColumn('tasks', 'mapVersion', `TEXT`);
+    this.ensureColumn('tasks', 'contextPackId', `TEXT`);
   }
 
   runInTransaction<T>(fn: () => T): T {
@@ -70,10 +76,10 @@ export class TaskStore {
     this.db
       .prepare(
         `INSERT INTO tasks (
-          id, parentTaskId, userRequest, normalizedIntent, projectId, repository,
+          id, parentTaskId, userRequest, normalizedIntent, taskKind, projectId, mapVersion, contextPackId, repository,
           workingDirectory, branch, status, riskLevel, approvalState, executionEngine,
           selectedModel, plan, currentStep, createdAt, updatedAt, completedAt, resultSummary
-        ) VALUES (@id, @parentTaskId, @userRequest, @normalizedIntent, @projectId, @repository,
+        ) VALUES (@id, @parentTaskId, @userRequest, @normalizedIntent, @taskKind, @projectId, @mapVersion, @contextPackId, @repository,
           @workingDirectory, @branch, @status, @riskLevel, @approvalState, @executionEngine,
           @selectedModel, @plan, @currentStep, @createdAt, @updatedAt, @completedAt, @resultSummary)`
       )
@@ -141,5 +147,12 @@ export class TaskStore {
 
   close(): void {
     this.db.close();
+  }
+
+  private ensureColumn(table: string, column: string, definition: string): void {
+    const columns = this.db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>;
+    if (!columns.some(c => c.name === column)) {
+      this.db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    }
   }
 }
