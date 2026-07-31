@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { listTasks } from './engineering-queue';
 import { listAvailableModels } from './model-registry';
+import type { TaskClassification } from './task-classifier';
 
 const SCORECARD_PATH = path.join(
   process.env.MI_CORE_ROOT || 'E:/Project/Master/mi-core',
@@ -26,7 +27,7 @@ export interface ModelStats {
 }
 
 export function computeScorecard(): ModelStats[] {
-  const tasks = listTasks(500);
+  const tasks = listTasks({ limit: 500 });
   const models = listAvailableModels();
 
   const stats: Record<string, ModelStats> = {};
@@ -49,7 +50,7 @@ export function computeScorecard(): ModelStats[] {
     if (t.status === 'FAILED') stats[mid].failed++;
     if (t.review_score)        (scores[mid] = scores[mid] || []).push(t.review_score);
 
-    const domain = t.classification?.domain || 'general';
+    const domain = parseJson<Partial<TaskClassification>>(t.classification)?.domain || 'general';
     stats[mid].domains[domain] = (stats[mid].domains[domain] || 0) + 1;
 
     if (!stats[mid].last_used || t.created_at > stats[mid].last_used!) {
@@ -70,6 +71,15 @@ export function computeScorecard(): ModelStats[] {
   }
 
   return Object.values(stats).sort((a, b) => b.dispatched - a.dispatched);
+}
+
+function parseJson<T>(value: string | null): T | null {
+  if (!value) return null;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return null;
+  }
 }
 
 export function generateScorecardMd(): string {

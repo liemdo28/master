@@ -6,6 +6,8 @@
 import { sendToCeo, queueToCeo } from '../services/whatsapp-sender';
 import { getTask } from './engineering-queue';
 import { getEvidence } from './evidence-engine';
+import type { RoutingDecision } from './routing-engine';
+import type { TaskClassification } from './task-classifier';
 
 export interface EscalationPayload {
   task_id:        string;
@@ -50,16 +52,19 @@ export async function escalateToHuman(taskId: string, reason: string): Promise<b
     return false;
   }
 
+  const routing = parseJson<Partial<RoutingDecision>>(task.routing);
+  const classification = parseJson<Partial<TaskClassification>>(task.classification);
+
   const payload: EscalationPayload = {
     task_id:        taskId,
     reason,
     objective:      task.objective,
-    model:          task.routing?.model_name || task.selected_model || 'unknown',
-    complexity:     task.classification?.complexity || 'unknown',
-    domain:         task.classification?.domain || 'unknown',
-    is_p0:          task.classification?.is_p0 || false,
+    model:          routing?.model_name || task.selected_model || 'unknown',
+    complexity:     classification?.complexity || 'unknown',
+    domain:         classification?.domain || 'unknown',
+    is_p0:          classification?.is_p0 || false,
     evidence_count: evidence.length,
-    review_score:   task.review_score,
+    review_score:   task.review_score ?? undefined,
   };
 
   const message = buildMessage(payload);
@@ -85,7 +90,7 @@ export async function notifyTaskComplete(taskId: string, status: 'DONE' | 'FAILE
     `${icon} *Engineering Task ${status}*`,
     `Task: \`${taskId}\``,
     `Objective: ${task.objective.slice(0, 100)}`,
-    `Model: ${task.routing?.model_name || task.selected_model}`,
+    `Model: ${parseJson<Partial<RoutingDecision>>(task.routing)?.model_name || task.selected_model}`,
   ].join('\n');
 
   queueToCeo(msg);
@@ -103,5 +108,14 @@ export async function notifyP0(taskId: string, objective: string): Promise<void>
     await sendToCeo(msg);
   } catch {
     queueToCeo(msg);
+  }
+}
+
+function parseJson<T>(value: string | null): T | null {
+  if (!value) return null;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return null;
   }
 }
