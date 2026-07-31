@@ -1,6 +1,6 @@
 /**
  * Phase 25A — Objective Engine (Main Entry)
- * 
+ *
  * Pipeline: CEO Objective → Intent Analysis → Goal Classification → Department Mapping
  *          → Task Decomposition → Execution Plan → Approval Gates → Execute → Verify → Report
  */

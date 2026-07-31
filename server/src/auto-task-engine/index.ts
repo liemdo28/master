@@ -1,9 +1,9 @@
 /**
  * Phase 25C — Auto Task Generation Engine
- * 
+ *
  * Every degraded signal becomes a task — no manual task creation.
  * Signals: QB stale, website down, 404 spike, traffic drop, review drop, email failure, calendar failure
- * 
+ *
  * Pipeline: detectSignal → createTask → assignOwner → trackStatus → escalate
  */
 

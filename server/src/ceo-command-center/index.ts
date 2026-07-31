@@ -1,6 +1,6 @@
 /**
  * Phase 25D — CEO Command Center
- * 
+ *
  * Endpoints:
  *   POST /api/ceo/objective
  *   GET  /api/ceo/objectives
@@ -9,7 +9,7 @@
  *   POST /api/ceo/objectives/:id/execute
  *   GET  /api/ceo/objectives/:id/progress
  *   GET  /api/ceo/objectives/:id/report
- * 
+ *
  * CEO submits a single message; Mi handles the rest.
  */
 

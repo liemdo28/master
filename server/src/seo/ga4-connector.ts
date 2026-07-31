@@ -1,12 +1,12 @@
 /**
  * Phase 33 — GA4 Revenue Intelligence Connector
- * 
+ *
  * Live Google Analytics 4 Data API v1 connector.
  * Uses shared OAuth tokens (same flow as GSC/Gmail).
- * 
+ *
  * Metrics: users, sessions, pageviews, engagementRate, conversions
  * Dimensions: date, pagePath, sessionDefaultChannelGroup
- * 
+ *
  * Requires GA4 property ID in env: GA4_PROPERTY_ID
  * Requires Google OAuth credentials (same as GSC).
  */
@@ -120,11 +120,11 @@ export function getStatus() {
   const hasClientSecret = !!CLIENT_SECRET;
   const hasTokens = fs.existsSync(TOKEN_PATH);
   const hasPropertyId = !!(GA4_PROPERTY_ID || GA4_BAKUDAN_PROPERTY_ID);
-  
+
   let configured = false;
   let status = 'NOT_CONFIGURED';
   let nextStep = '';
-  
+
   if (!hasClientId || !hasClientSecret) {
     status = 'MISSING_GOOGLE_CREDENTIALS';
     nextStep = 'Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env';
@@ -138,7 +138,7 @@ export function getStatus() {
     configured = true;
     status = 'GA4_CONNECTOR_READY';
   }
-  
+
   return {
     configured,
     status,
@@ -222,7 +222,7 @@ function dateRange(days: number): { startDate: string; endDate: string } {
  */
 export async function getTrafficOverview(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['date'],
@@ -239,16 +239,16 @@ export async function getTrafficOverview(days: number = 30): Promise<any> {
     1000,
     [{ dimension: { dimensionName: 'date' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return {
     period: { startDate: range.startDate, endDate: range.endDate },
     total: {
       users: rows.reduce((sum: number, r: any) => sum + r.metric_0, 0),
       sessions: rows.reduce((sum: number, r: any) => sum + r.metric_1, 0),
       pageviews: rows.reduce((sum: number, r: any) => sum + r.metric_2, 0),
-      avg_engagement_rate: rows.length > 0 
+      avg_engagement_rate: rows.length > 0
         ? Math.round((rows.reduce((sum: number, r: any) => sum + r.metric_3, 0) / rows.length) * 1000) / 10
         : 0,
       avg_bounce_rate: rows.length > 0
@@ -277,7 +277,7 @@ export async function getTrafficOverview(days: number = 30): Promise<any> {
  */
 export async function getTrafficByChannel(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['sessionDefaultChannelGroup'],
@@ -286,9 +286,9 @@ export async function getTrafficByChannel(days: number = 30): Promise<any> {
     20,
     [{ metric: { metricName: 'sessions' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return {
     period: { startDate: range.startDate, endDate: range.endDate },
     channels: rows.map((r: any) => ({
@@ -305,7 +305,7 @@ export async function getTrafficByChannel(days: number = 30): Promise<any> {
  */
 export async function getTopPages(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['pagePath'],
@@ -314,9 +314,9 @@ export async function getTopPages(days: number = 30): Promise<any> {
     50,
     [{ metric: { metricName: 'screenPageViews' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return {
     period: { startDate: range.startDate, endDate: range.endDate },
     pages: rows.map((r: any) => ({
@@ -334,7 +334,7 @@ export async function getTopPages(days: number = 30): Promise<any> {
  */
 export async function getConversions(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['eventName'],
@@ -343,9 +343,9 @@ export async function getConversions(days: number = 30): Promise<any> {
     50,
     [{ metric: { metricName: 'conversions' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return {
     period: { startDate: range.startDate, endDate: range.endDate },
     conversions: rows.map((r: any) => ({
@@ -362,7 +362,7 @@ export async function getConversions(days: number = 30): Promise<any> {
  */
 export async function getDailyTraffic(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['date'],
@@ -371,9 +371,9 @@ export async function getDailyTraffic(days: number = 30): Promise<any> {
     1000,
     [{ dimension: { dimensionName: 'date' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return rows.map((r: any) => ({
     date: r.dim_0,
     users: r.metric_0,
@@ -391,7 +391,7 @@ export async function getDailyTraffic(days: number = 30): Promise<any> {
  */
 export async function getDailyPages(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['date', 'pagePath'],
@@ -400,9 +400,9 @@ export async function getDailyPages(days: number = 30): Promise<any> {
     1000,
     [{ metric: { metricName: 'screenPageViews' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return rows.map((r: any) => ({
     date: r.dim_0,
     page_path: r.dim_1,
@@ -418,7 +418,7 @@ export async function getDailyPages(days: number = 30): Promise<any> {
  */
 export async function getDailyConversions(days: number = 30): Promise<any> {
   const range = dateRange(days);
-  
+
   const response = await runReport(
     [{ startDate: range.startDate, endDate: range.endDate }],
     ['date', 'eventName'],
@@ -427,9 +427,9 @@ export async function getDailyConversions(days: number = 30): Promise<any> {
     1000,
     [{ metric: { metricName: 'conversions' }, desc: true }]
   );
-  
+
   const rows = parseRows(response.rows || []);
-  
+
   return rows.map((r: any) => ({
     date: r.dim_0,
     event_name: r.dim_1,
@@ -444,72 +444,72 @@ export async function storeDailySnapshots(): Promise<any> {
   if (!snapshotDb) {
     throw new Error('Snapshot DB not initialized');
   }
-  
+
   const today = new Date().toISOString().slice(0, 10);
-  
+
   // Fetch all data
   const traffic = await getDailyTraffic(30);
   const pages = await getDailyPages(30);
   const conversionsData = await getDailyConversions(30);
   const channels = await getTrafficByChannel(30);
-  
+
   const insertTraffic = snapshotDb.prepare(`
-    INSERT OR REPLACE INTO ga4_daily_traffic 
+    INSERT OR REPLACE INTO ga4_daily_traffic
     (snapshot_date, users, sessions, pageviews, engagement_rate, conversions, bounce_rate, avg_session_duration)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
-  
+
   const insertPage = snapshotDb.prepare(`
-    INSERT OR REPLACE INTO ga4_daily_pages 
+    INSERT OR REPLACE INTO ga4_daily_pages
     (snapshot_date, page_path, pageviews, users, avg_time_on_page, bounce_rate)
     VALUES (?, ?, ?, ?, ?, ?)
   `);
-  
+
   const insertConversion = snapshotDb.prepare(`
-    INSERT OR REPLACE INTO ga4_daily_conversions 
+    INSERT OR REPLACE INTO ga4_daily_conversions
     (snapshot_date, event_name, conversions, users)
     VALUES (?, ?, ?, ?)
   `);
-  
+
   const insertChannel = snapshotDb.prepare(`
-    INSERT OR REPLACE INTO ga4_daily_channels 
+    INSERT OR REPLACE INTO ga4_daily_channels
     (snapshot_date, channel, sessions, users, conversions)
     VALUES (?, ?, ?, ?, ?)
   `);
-  
+
   let trafficRows = 0;
   let pageRows = 0;
   let conversionRows = 0;
   let channelRows = 0;
-  
+
   const transaction = snapshotDb.transaction(() => {
     // Store traffic
     for (const row of traffic) {
       insertTraffic.run(row.date, row.users, row.sessions, row.pageviews, row.engagement_rate, row.conversions, row.bounce_rate, row.avg_session_duration);
       trafficRows++;
     }
-    
+
     // Store pages
     for (const row of pages) {
       insertPage.run(row.date, row.page_path, row.pageviews, row.users, row.avg_time_on_page, row.bounce_rate);
       pageRows++;
     }
-    
+
     // Store conversions
     for (const row of conversionsData) {
       insertConversion.run(row.date, row.event_name, row.conversions, row.users);
       conversionRows++;
     }
-    
+
     // Store channels (per-day aggregate)
     for (const ch of channels.channels) {
       insertChannel.run(today, ch.channel, ch.sessions, ch.users, ch.conversions);
       channelRows++;
     }
   });
-  
+
   transaction();
-  
+
   return {
     snapshot_date: today,
     traffic_rows: trafficRows,
@@ -524,60 +524,60 @@ export async function storeDailySnapshots(): Promise<any> {
 
 export function getLatestTraffic(): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT * FROM ga4_daily_traffic ORDER BY snapshot_date DESC LIMIT 30'
   ).all();
-  
+
   return { rows, count: rows.length };
 }
 
 export function getLatestPages(limit: number = 20): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT * FROM ga4_daily_pages WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM ga4_daily_pages) ORDER BY pageviews DESC LIMIT ?'
   ).all(limit);
-  
+
   return { rows, count: rows.length };
 }
 
 export function getLatestConversions(): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT * FROM ga4_daily_conversions WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM ga4_daily_conversions) ORDER BY conversions DESC'
   ).all();
-  
+
   return { rows, count: rows.length };
 }
 
 export function getLatestChannels(): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT * FROM ga4_daily_channels WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM ga4_daily_channels) ORDER BY sessions DESC'
   ).all();
-  
+
   return { rows, count: rows.length };
 }
 
 export function getSnapshotDates(): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT DISTINCT snapshot_date FROM ga4_daily_traffic ORDER BY snapshot_date DESC LIMIT 30'
   ).all();
-  
+
   return { dates: rows.map((r: any) => r.snapshot_date), count: rows.length };
 }
 
 export function getHistoricalTraffic(days: number = 90): any {
   if (!snapshotDb) return { error: 'Snapshot DB not initialized' };
-  
+
   const rows = snapshotDb.prepare(
     'SELECT * FROM ga4_daily_traffic ORDER BY snapshot_date DESC LIMIT ?'
   ).all(days);
-  
+
   return { rows, count: rows.length };
 }

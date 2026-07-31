@@ -1,6 +1,6 @@
 /**
  * Phase 33 — GA4 Revenue Intelligence Router
- * 
+ *
  * GET /api/analytics/traffic    — Live traffic from GA4
  * GET /api/analytics/pages      — Top pages from GA4
  * GET /api/analytics/conversions — Conversions from GA4
