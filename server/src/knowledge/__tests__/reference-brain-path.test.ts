@@ -3,6 +3,7 @@
  */
 
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import path from 'node:path';
 import { describe, test } from 'node:test';
 import {
@@ -17,10 +18,10 @@ import {
 
 describe('Reference Brain Path Resolver', () => {
 
-  test('getMiCoreRoot returns a valid path containing mi-core', () => {
+  test('getMiCoreRoot returns the repository root', () => {
     const root = getMiCoreRoot();
     assert.ok(root);
-    assert.ok(root.toLowerCase().includes('mi-core'));
+    assert.ok(fs.existsSync(path.join(root, 'server', 'package.json')));
   });
 
   test('getWorkspaceRoot returns parent of mi-core', () => {
@@ -119,11 +120,9 @@ describe('Reference Brain Path Resolver', () => {
     assert.ok(health.last_indexed);
   });
 
-  test('checked_paths always includes mi-core candidate', () => {
+  test('checked_paths always includes repository-root candidate', () => {
     const health = checkUSComplianceDBHealth();
-    const miCorePath = health.checked_paths.find(p =>
-      p.toLowerCase().includes('mi-core')
-    );
-    assert.ok(miCorePath);
+    const repoRootCandidate = path.join(getMiCoreRoot(), '.local-agent-global', 'reference-brain', 'us-business-compliance').replace(/\\/g, '/');
+    assert.ok(health.checked_paths.includes(repoRootCandidate));
   });
 });
