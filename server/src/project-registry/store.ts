@@ -76,6 +76,11 @@ export class ProjectRegistryStore {
     return rows.map(rowToProject);
   }
 
+  getProjectByCanonicalRoot(canonicalRoot: string): ProjectRecord | null {
+    const row = this.db.prepare(`SELECT * FROM projects WHERE canonicalRoot = ?`).get(canonicalRoot) as ProjectRow | undefined;
+    return row ? rowToProject(row) : null;
+  }
+
   markVerified(id: string, status: ProjectRecord['status'], verifiedAt: string): void {
     this.db.prepare(`UPDATE projects SET status = ?, lastVerifiedAt = ?, updatedAt = ? WHERE id = ?`)
       .run(status, verifiedAt, verifiedAt, id);
@@ -155,16 +160,25 @@ export class ProjectRegistryStore {
     return row ? rowToResume(row) : null;
   }
 
+  latestResumeContext(projectId: string): ResumeContext | null {
+    const row = this.db.prepare(`
+      SELECT * FROM resume_contexts WHERE projectId = ? ORDER BY updatedAt DESC LIMIT 1
+    `).get(projectId) as ResumeContextRow | undefined;
+    return row ? rowToResume(row) : null;
+  }
+
   saveContextPack(pack: ContextPack): ContextPack {
     this.db.prepare(`
       INSERT INTO context_packs (
-        id, projectId, mapVersion, policy, summary, includedPathsJson,
-        relevanceHintsJson, resumeContextId, createdAt
-      ) VALUES (@id, @projectId, @mapVersion, @policy, @summary, @includedPathsJson,
-        @relevanceHintsJson, @resumeContextId, @createdAt)
+        id, projectId, mapVersion, sourceSha, mapStatus, policy, summary, moduleSummariesJson,
+        includedPathsJson, excludedPathsJson, relevanceHintsJson, resumeContextId, createdAt
+      ) VALUES (@id, @projectId, @mapVersion, @sourceSha, @mapStatus, @policy, @summary, @moduleSummariesJson,
+        @includedPathsJson, @excludedPathsJson, @relevanceHintsJson, @resumeContextId, @createdAt)
     `).run({
       ...pack,
+      moduleSummariesJson: JSON.stringify(pack.moduleSummaries),
       includedPathsJson: JSON.stringify(pack.includedPaths),
+      excludedPathsJson: JSON.stringify(pack.excludedPaths),
       relevanceHintsJson: JSON.stringify(pack.relevanceHints),
     });
     return pack;
@@ -244,9 +258,13 @@ export class ProjectRegistryStore {
         id TEXT PRIMARY KEY,
         projectId TEXT NOT NULL,
         mapVersion TEXT,
+        sourceSha TEXT,
+        mapStatus TEXT NOT NULL DEFAULT 'NOT_GENERATED',
         policy TEXT NOT NULL,
         summary TEXT NOT NULL,
+        moduleSummariesJson TEXT NOT NULL DEFAULT '[]',
         includedPathsJson TEXT NOT NULL,
+        excludedPathsJson TEXT NOT NULL DEFAULT '[]',
         relevanceHintsJson TEXT NOT NULL,
         resumeContextId TEXT,
         createdAt TEXT NOT NULL,
@@ -256,6 +274,18 @@ export class ProjectRegistryStore {
       INSERT OR IGNORE INTO schema_migrations (id, appliedAt)
       VALUES ('001_project_registry', datetime('now'));
     `);
+    this.db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_canonicalRoot ON projects(canonicalRoot);`);
+    this.ensureColumn('context_packs', 'sourceSha', 'TEXT');
+    this.ensureColumn('context_packs', 'mapStatus', `TEXT NOT NULL DEFAULT 'NOT_GENERATED'`);
+    this.ensureColumn('context_packs', 'moduleSummariesJson', `TEXT NOT NULL DEFAULT '[]'`);
+    this.ensureColumn('context_packs', 'excludedPathsJson', `TEXT NOT NULL DEFAULT '[]'`);
+  }
+
+  private ensureColumn(table: string, column: string, definition: string): void {
+    const columns = this.db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>;
+    if (!columns.some(c => c.name === column)) {
+      this.db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    }
   }
 }
 
@@ -273,9 +303,13 @@ interface ContextPackRow {
   id: string;
   projectId: string;
   mapVersion: string | null;
+  sourceSha: string | null;
+  mapStatus: ContextPack['mapStatus'];
   policy: ContextPack['policy'];
   summary: string;
+  moduleSummariesJson: string;
   includedPathsJson: string;
+  excludedPathsJson: string;
   relevanceHintsJson: string;
   resumeContextId: string | null;
   createdAt: string;
@@ -339,9 +373,13 @@ function rowToContextPack(row: ContextPackRow): ContextPack {
     id: row.id,
     projectId: row.projectId,
     mapVersion: row.mapVersion,
+    sourceSha: row.sourceSha,
+    mapStatus: row.mapStatus,
     policy: row.policy,
     summary: row.summary,
+    moduleSummaries: parseJson(row.moduleSummariesJson, []),
     includedPaths: parseJson(row.includedPathsJson, []),
+    excludedPaths: parseJson(row.excludedPathsJson, []),
     relevanceHints: parseJson(row.relevanceHintsJson, []),
     resumeContextId: row.resumeContextId,
     createdAt: row.createdAt,

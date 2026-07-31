@@ -25,6 +25,7 @@ Runtime database files are intentionally not committed.
 
 - Bounded context payload metadata for task starts.
 - References the map version it was derived from.
+- Stores source SHA, freshness status, module summaries, included relative paths, and excluded path classes.
 
 `schema_migrations`
 

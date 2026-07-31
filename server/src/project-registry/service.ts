@@ -3,7 +3,7 @@ import * as path from 'path';
 import { execFileSync } from 'child_process';
 import { randomUUID, createHash } from 'crypto';
 import { ProjectRegistryStore } from './store';
-import { assertInsideRoot, normalizePath, realPathIfExists, toPosixRelative } from './paths';
+import { assertInsideAllowedRegistryRoots, assertInsideRoot, realPathIfExists, toPosixRelative } from './paths';
 import type {
   ContextPack,
   ProjectMap,
@@ -23,17 +23,22 @@ export class ProjectRegistryService {
     if (!input.displayName?.trim()) throw new Error('displayName is required');
     if (!input.canonicalRoot?.trim()) throw new Error('canonicalRoot is required');
 
-    const canonicalRoot = realPathIfExists(input.canonicalRoot);
+    const canonicalRoot = assertInsideAllowedRegistryRoots(input.canonicalRoot);
     if (!fs.existsSync(canonicalRoot) || !fs.statSync(canonicalRoot).isDirectory()) {
       throw new Error('canonicalRoot must be an existing directory');
     }
 
-    const git = detectGit(canonicalRoot);
+    const git = detectGit(canonicalRoot) ?? detectSingleNestedGitRoot(canonicalRoot);
     const projectRoot = git.gitRoot ?? canonicalRoot;
+    assertInsideAllowedRegistryRoots(projectRoot);
     const detected = detectProjectShape(projectRoot);
     const now = new Date().toISOString();
     const existing = input.id ? this.store.getProject(input.id) : null;
     const id = input.id ?? slugify(input.displayName);
+    const rootOwner = this.store.getProjectByCanonicalRoot(projectRoot);
+    if (rootOwner && rootOwner.id !== id) {
+      throw new Error(`canonicalRoot is already registered to project ${rootOwner.id}`);
+    }
     const project: ProjectRecord = {
       id,
       displayName: input.displayName.trim(),
@@ -106,6 +111,9 @@ export class ProjectRegistryService {
     const generatedAt = new Date().toISOString();
     try {
       const root = realPathIfExists(project.canonicalRoot);
+      if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
+        throw new Error('canonical project root is missing');
+      }
       assertInsideRoot(root, project.canonicalRoot, 'map root');
       const sourceSha = gitOutput(root, ['rev-parse', 'HEAD']);
       const modules = discoverModules(root);
@@ -151,10 +159,7 @@ export class ProjectRegistryService {
 
   getMapStatus(id: string): { projectId: string; mapStatus: ProjectRecord['mapStatus']; mapVersion: string | null; sourceSha: string | null; generatedAt: string | null } {
     const project = this.mustGetProject(id);
-    const currentSha = gitOutput(project.canonicalRoot, ['rev-parse', 'HEAD']);
-    const mapStatus = project.mapStatus === 'FRESH' && project.mapSourceSha && currentSha && project.mapSourceSha !== currentSha
-      ? 'STALE'
-      : project.mapStatus;
+    const mapStatus = this.effectiveMapStatus(project);
     return {
       projectId: id,
       mapStatus,
@@ -175,9 +180,21 @@ export class ProjectRegistryService {
     });
   }
 
+  getLatestResumeContext(projectId: string): ResumeContext | null {
+    this.mustGetProject(projectId);
+    return this.store.latestResumeContext(projectId);
+  }
+
   buildContextPack(projectId: string, userRequest = '', resumeContextId: string | null = null): ContextPack {
     const project = this.mustGetProject(projectId);
+    if (resumeContextId) {
+      const resume = this.store.getResumeContext(resumeContextId);
+      if (!resume || resume.projectId !== projectId) {
+        throw new Error('resumeContextId must belong to the same project');
+      }
+    }
     const map = project.mapVersion ? this.store.getProjectMap(projectId, project.mapVersion) : this.store.latestProjectMap(projectId);
+    const mapStatus = this.effectiveMapStatus(project);
     const hints = tokenize(userRequest);
     const matchedPaths = new Set<string>();
     if (map) {
@@ -189,18 +206,31 @@ export class ProjectRegistryService {
       }
     }
     const includedPaths = [...matchedPaths].slice(0, 40);
+    const moduleSummaries = map?.modules.map(module => `${module.name}: ${module.purpose}`).slice(0, 20) ?? [];
+    const excludedPaths = ['node_modules', 'dist', 'build', '.git', '.local-agent-global', '.env', 'server/.env'];
     const pack: ContextPack = {
       id: `ctx-${randomUUID()}`,
       projectId,
       mapVersion: map?.mapVersion ?? null,
-      policy: !map ? 'REMAP_REQUIRED' : includedPaths.length ? 'MAP_PLUS_TARGETED_READ' : 'MAP_ONLY',
+      sourceSha: map?.sourceSha ?? null,
+      mapStatus,
+      policy: !map || mapStatus !== 'FRESH' ? 'REMAP_REQUIRED' : includedPaths.length ? 'MAP_PLUS_TARGETED_READ' : 'MAP_ONLY',
       summary: map ? map.summary : 'No valid project map is available yet.',
+      moduleSummaries,
       includedPaths,
+      excludedPaths,
       relevanceHints: hints.slice(0, 20),
       resumeContextId,
       createdAt: new Date().toISOString(),
     };
     return this.store.saveContextPack(pack);
+  }
+
+  getContextPack(projectId: string, contextPackId: string): ContextPack | null {
+    this.mustGetProject(projectId);
+    const pack = this.store.getContextPack(contextPackId);
+    if (!pack || pack.projectId !== projectId) return null;
+    return pack;
   }
 
   validateCodingTaskStart(input: ValidateCodingTaskInput): void {
@@ -211,7 +241,7 @@ export class ProjectRegistryService {
 
     const project = this.mustGetProject(input.projectId);
     if (project.status !== 'ACTIVE') throw new Error(`project ${project.id} is not ACTIVE`);
-    if (project.mapStatus !== 'FRESH' || project.mapVersion !== input.mapVersion) {
+    if (this.effectiveMapStatus(project) !== 'FRESH' || project.mapVersion !== input.mapVersion) {
       throw new Error('coding task mapVersion must match the active fresh project map');
     }
     const pack = this.store.getContextPack(input.contextPackId);
@@ -237,6 +267,14 @@ export class ProjectRegistryService {
     if (!project) throw new Error(`project not found: ${id}`);
     return project;
   }
+
+  private effectiveMapStatus(project: ProjectRecord): ProjectRecord['mapStatus'] {
+    const currentSha = gitOutput(project.canonicalRoot, ['rev-parse', 'HEAD']);
+    if (project.mapStatus === 'FRESH' && project.mapSourceSha && currentSha && project.mapSourceSha !== currentSha) {
+      return 'STALE';
+    }
+    return project.mapStatus;
+  }
 }
 
 export function seedMiCoreProject(root: string): RegisterProjectInput {
@@ -244,7 +282,7 @@ export function seedMiCoreProject(root: string): RegisterProjectInput {
     id: 'mi-core',
     displayName: 'Mi Core System',
     canonicalRoot: root,
-    repositoryUrl: 'https://github.com/Liem0208/Mi-core-system.git',
+    repositoryUrl: 'https://github.com/liemdo28/master.git',
     defaultBranch: 'master',
     owner: 'Liem',
     businessPurpose: 'Canonical personal operating system backend and task runtime.',
@@ -258,13 +296,43 @@ export function seedMiCoreProject(root: string): RegisterProjectInput {
   };
 }
 
-function detectGit(root: string): { gitRoot: string | null; repositoryUrl: string | null; defaultBranch: string | null } {
+function detectGit(root: string): { gitRoot: string | null; repositoryUrl: string | null; defaultBranch: string | null } | null {
   const gitRoot = gitOutput(root, ['rev-parse', '--show-toplevel']);
+  if (!gitRoot) return null;
+  const realRoot = realPathIfExists(root);
+  const realGitRoot = realPathIfExists(gitRoot);
+  if (!isInside(realGitRoot, realRoot)) return null;
   return {
-    gitRoot: gitRoot ? realPathIfExists(gitRoot) : null,
+    gitRoot: realGitRoot,
     repositoryUrl: gitOutput(root, ['remote', 'get-url', 'origin']),
     defaultBranch: gitOutput(root, ['rev-parse', '--abbrev-ref', 'HEAD']),
   };
+}
+
+function detectSingleNestedGitRoot(root: string): { gitRoot: string | null; repositoryUrl: string | null; defaultBranch: string | null } {
+  const candidates: string[] = [];
+  const queue: Array<{ dir: string; depth: number }> = [{ dir: root, depth: 0 }];
+  let visited = 0;
+  while (queue.length && visited < 200) {
+    const { dir, depth } = queue.shift() as { dir: string; depth: number };
+    visited += 1;
+    if (fs.existsSync(path.join(dir, '.git'))) {
+      candidates.push(dir);
+      continue;
+    }
+    if (depth >= 4) continue;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory() || IGNORE_DIRS.has(entry.name)) continue;
+      queue.push({ dir: path.join(dir, entry.name), depth: depth + 1 });
+    }
+  }
+  if (candidates.length > 1) {
+    throw new Error(`canonicalRoot contains multiple nested Git roots: ${candidates.length}`);
+  }
+  if (candidates.length === 0) {
+    return { gitRoot: null, repositoryUrl: null, defaultBranch: null };
+  }
+  return detectGit(candidates[0]) ?? { gitRoot: realPathIfExists(candidates[0]), repositoryUrl: null, defaultBranch: null };
 }
 
 function detectProjectShape(root: string): Pick<ProjectRecord, 'runtimeHints' | 'packageManagers' | 'frameworks' | 'testCommands' | 'buildCommands'> {
@@ -381,7 +449,13 @@ function inferPurpose(dir: string): string {
 
 function gitOutput(cwd: string, args: string[]): string | null {
   try {
-    return execFileSync('git', args, { cwd, encoding: 'utf8', windowsHide: true, timeout: 5000 }).trim() || null;
+    return execFileSync('git', args, {
+      cwd,
+      encoding: 'utf8',
+      windowsHide: true,
+      timeout: 5000,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim() || null;
   } catch {
     return null;
   }

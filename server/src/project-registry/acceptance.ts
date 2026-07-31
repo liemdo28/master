@@ -9,6 +9,7 @@ async function main(): Promise<boolean> {
   const repoRoot = process.env.MI_PROJECT_REGISTRY_ACCEPTANCE_ROOT ?? path.resolve(process.cwd(), '..');
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-project-registry-'));
   process.env.MI_PROJECT_REGISTRY_DIR = path.join(tempDir, 'registry');
+  process.env.MI_PROJECT_REGISTRY_WORKSPACE_ROOTS = repoRoot;
   process.env.MI_TASK_RUNTIME_DIR = path.join(tempDir, 'tasks');
   process.env.MI_TASK_RUNTIME_WORKSPACE_ROOTS = repoRoot;
 

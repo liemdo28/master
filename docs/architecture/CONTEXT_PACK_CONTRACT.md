@@ -6,9 +6,13 @@ It includes:
 
 - `projectId`
 - `mapVersion`
+- source SHA
+- map freshness status
 - context policy
 - summary
+- module summaries
 - included relative paths
+- excluded path classes
 - relevance hints
 - optional resume context ID
 

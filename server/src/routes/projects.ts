@@ -23,6 +23,15 @@ import path from 'path';
 export const projectsRouter = Router();
 
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const registryProjectIdPattern = /^[a-z0-9][a-z0-9_-]{0,80}$/i;
+
+function requireRegistryProjectId(req: Request, res: Response): boolean {
+  if (!registryProjectIdPattern.test(req.params.id)) {
+    res.status(400).json({ error: 'invalid project id' });
+    return false;
+  }
+  return true;
+}
 
 // GET /api/projects — canonical project registry
 projectsRouter.get('/', async (_req: Request, res: Response) => {
@@ -139,6 +148,7 @@ projectsRouter.get('/registry', (_req: Request, res: Response) => {
 });
 
 projectsRouter.get('/:id/map', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     const map = service.getProjectMap(req.params.id);
@@ -152,6 +162,7 @@ projectsRouter.get('/:id/map', (req: Request, res: Response) => {
 });
 
 projectsRouter.post('/:id/map', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     const map = service.generateProjectMap(req.params.id);
@@ -164,6 +175,7 @@ projectsRouter.post('/:id/map', (req: Request, res: Response) => {
 });
 
 projectsRouter.get('/:id/map/status', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     res.json(service.getMapStatus(req.params.id));
@@ -175,6 +187,7 @@ projectsRouter.get('/:id/map/status', (req: Request, res: Response) => {
 });
 
 projectsRouter.post('/:id/context-pack', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     const pack = service.buildContextPack(
@@ -190,7 +203,22 @@ projectsRouter.post('/:id/context-pack', (req: Request, res: Response) => {
   }
 });
 
+projectsRouter.get('/:id/context-pack/:contextPackId', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const pack = service.getContextPack(req.params.id, req.params.contextPackId);
+    if (!pack) return res.status(404).json({ error: 'context pack not found' });
+    res.json(pack);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
 projectsRouter.post('/:id/resume', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     const resume = service.buildResumeContext(
@@ -206,7 +234,22 @@ projectsRouter.post('/:id/resume', (req: Request, res: Response) => {
   }
 });
 
+projectsRouter.get('/:id/resume', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const resume = service.getLatestResumeContext(req.params.id);
+    if (!resume) return res.status(404).json({ error: 'resume context not found' });
+    res.json(resume);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
 projectsRouter.post('/:id/verify', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     res.json(service.verifyProject(req.params.id));
@@ -218,6 +261,7 @@ projectsRouter.post('/:id/verify', (req: Request, res: Response) => {
 });
 
 projectsRouter.patch('/:id', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
   const service = new ProjectRegistryService();
   try {
     res.json(service.updateProject(req.params.id, req.body ?? {}));

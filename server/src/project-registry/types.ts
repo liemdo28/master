@@ -99,9 +99,13 @@ export interface ContextPack {
   id: string;
   projectId: string;
   mapVersion: string | null;
+  sourceSha: string | null;
+  mapStatus: MapStatus;
   policy: ContextPolicy;
   summary: string;
+  moduleSummaries: string[];
   includedPaths: string[];
+  excludedPaths: string[];
   relevanceHints: string[];
   resumeContextId: string | null;
   createdAt: string;
