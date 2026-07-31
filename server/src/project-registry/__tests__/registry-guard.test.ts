@@ -184,7 +184,15 @@ async function run() {
     }), /contextPackId/);
     log('rejected context pack from another project');
 
-    const previousVersion = freshMap.mapVersion;
+    const deployedSha = '0123456789abcdef0123456789abcdef01234567';
+    process.env.MI_DEPLOYED_SOURCE_SHA = deployedSha;
+    const deployedMap = service.generateProjectMap(fixture.id);
+    assert.strictEqual(deployedMap.sourceSha, deployedSha);
+    assert.strictEqual(service.getMapStatus(fixture.id).sourceSha, deployedSha);
+    delete process.env.MI_DEPLOYED_SOURCE_SHA;
+    log('used deployed source SHA override when configured');
+
+    const previousVersion = deployedMap.mapVersion;
     fs.rmSync(fixtureRoot, { recursive: true, force: true });
     assert.throws(() => service.generateProjectMap(fixture.id), /missing/);
     const afterFailure = service.getMapStatus(fixture.id);

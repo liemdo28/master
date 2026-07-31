@@ -115,7 +115,7 @@ export class ProjectRegistryService {
         throw new Error('canonical project root is missing');
       }
       assertInsideRoot(root, project.canonicalRoot, 'map root');
-      const sourceSha = gitOutput(root, ['rev-parse', 'HEAD']);
+      const sourceSha = currentSourceSha(root);
       const modules = discoverModules(root);
       const routes = discoverRoutes(root);
       const commands = discoverCommands(root);
@@ -269,7 +269,7 @@ export class ProjectRegistryService {
   }
 
   private effectiveMapStatus(project: ProjectRecord): ProjectRecord['mapStatus'] {
-    const currentSha = gitOutput(project.canonicalRoot, ['rev-parse', 'HEAD']);
+    const currentSha = currentSourceSha(project.canonicalRoot);
     if (project.mapStatus === 'FRESH' && project.mapSourceSha && currentSha && project.mapSourceSha !== currentSha) {
       return 'STALE';
     }
@@ -459,6 +459,12 @@ function gitOutput(cwd: string, args: string[]): string | null {
   } catch {
     return null;
   }
+}
+
+function currentSourceSha(cwd: string): string | null {
+  const deployedSha = process.env.MI_DEPLOYED_SOURCE_SHA || process.env.MI_PROJECT_REGISTRY_SOURCE_SHA;
+  if (deployedSha && /^[0-9a-f]{40}$/i.test(deployedSha)) return deployedSha;
+  return gitOutput(cwd, ['rev-parse', 'HEAD']);
 }
 
 function slugify(value: string): string {
