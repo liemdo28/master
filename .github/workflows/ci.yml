@@ -1,0 +1,105 @@
+name: Mi Core CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      run_external_integration_tests:
+        description: Run PostgreSQL, MinIO, and Qdrant-gated integration tests
+        required: false
+        default: 'false'
+
+jobs:
+  server:
+    name: Server build and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: CI tests
+        run: npm run test:ci
+
+      - name: Task runtime tests
+        run: npm run test:task-runtime
+
+  repository-scans:
+    name: Repository scans
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conflict marker scan
+        run: |
+          if grep -RInE '^(<<<<<<< |=======$|>>>>>>> )' \
+            --exclude-dir=.git \
+            --exclude-dir=node_modules \
+            --exclude-dir=dist \
+            --exclude-dir=.local-agent-global \
+            .; then
+            echo "Conflict markers found"
+            exit 1
+          fi
+
+      - name: Secret pattern scan
+        run: |
+          if grep -RInE "(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|MI_CORE_API_KEY[[:space:]]*=[[:space:]]*['\"][^'\"]+)" \
+            --exclude=package-lock.json \
+            --exclude='*.test.ts' \
+            --exclude-dir=node_modules \
+            --exclude-dir=dist \
+            server .github; then
+            echo "Potential secret found"
+            exit 1
+          fi
+
+  external-integration:
+    name: External integration tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.run_external_integration_tests == 'true'
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run credential-gated integration tests
+        env:
+          RUN_EXTERNAL_INTEGRATION_TESTS: 'true'
+          PGHOST: ${{ secrets.PGHOST }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: npm run test:integration
