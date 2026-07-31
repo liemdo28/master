@@ -82,6 +82,7 @@ import { operationalKnowledgeRouter } from './routes/operational-knowledge';
 import { graphRouter } from './graph/graph-router';
 import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
 import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-router';
+import { taskRuntimeRouter } from './routes/task-runtime';
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
@@ -241,6 +242,7 @@ app.use('/api/models',          modelsRegistryRouter);
 app.use('/api/mi',              miReviewApprovalsRouter);
 app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
 app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
+app.use('/api/task-runtime',    requireAuth, taskRuntimeRouter);
 app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
 app.use('/api/agenview',        agenviewRouter);           // Phase 19: AgenView Dashboard
 app.use('/api/seo',             seoRouter);                // SEO Phase 2: 7 SEO Agent Integration
