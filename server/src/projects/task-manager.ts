@@ -63,7 +63,7 @@ export function createTaskDraft(params: {
 
   if (normalizedStores.length > 1) {
     const parentTaskId = params.parent_task_id || generateId();
-    const drafts = normalizedStores.map(store => ({
+    const drafts: TaskDraft[] = normalizedStores.map(store => ({
       id: generateId(),
       title: params.title,
       description: params.description,
