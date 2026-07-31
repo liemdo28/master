@@ -19,7 +19,7 @@ function log(msg: string) {
   console.log(`[acceptance] ${msg}`);
 }
 
-function run() {
+async function run() {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-task-runtime-acceptance-'));
   log(`using isolated data dir: ${tmpDir}`);
 
@@ -44,7 +44,7 @@ function run() {
   engine.transition(task.id, 'READY');
   engine.transition(task.id, 'RUNNING');
 
-  const { evidenceId, relativePath, exitCode } = engine.runCommandStep(task.id, 'node', ['--version']);
+  const { evidenceId, relativePath, exitCode } = await engine.runCommandStep(task.id, 'node', ['--version']);
   assert.strictEqual(exitCode, 0, 'node --version should exit 0');
   const evidencePath = path.join(tmpDir, 'evidence', relativePath);
   assert.ok(fs.existsSync(evidencePath), 'evidence file should exist on disk');
@@ -87,10 +87,9 @@ function run() {
   fs.rmSync(tmpDir, { recursive: true, force: true });
 }
 
-try {
-  run();
-  process.exit(0);
-} catch (err) {
-  console.error('[acceptance] FAIL:', err);
-  process.exit(1);
-}
+run()
+  .then(() => process.exit(0))
+  .catch(err => {
+    console.error('[acceptance] FAIL:', err);
+    process.exit(1);
+  });

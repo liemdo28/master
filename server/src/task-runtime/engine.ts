@@ -3,7 +3,7 @@
 // It does not call gstack/, council/, or autonomous/ (Approval Engine) — those are
 // out of scope for this slice per docs/architecture/MIGRATION_PLAN.md.
 
-import { execFileSync } from 'child_process';
+import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import { randomUUID } from 'crypto';
@@ -12,8 +12,8 @@ import { ALLOWED_TRANSITIONS } from './types';
 import type { CreateTaskInput, TaskRecord, TaskStatus } from './types';
 
 const ARG_METACHARS = /[;&|`$<>\\\r\n]/;
-const COMMAND_TIMEOUT_MS = 10_000;
-const COMMAND_MAX_BUFFER_BYTES = 128 * 1024;
+const DEFAULT_COMMAND_TIMEOUT_MS = 10_000;
+const DEFAULT_COMMAND_MAX_BUFFER_BYTES = 128 * 1024;
 const SAFE_COMMAND_ARGS = new Map<string, ReadonlyArray<ReadonlyArray<string>>>([
   ['node', [['--version'], ['--task-runtime-intentional-failure']]],
   ['git', [['status', '--short'], ['status', '--short', '--branch'], ['rev-parse', '--show-toplevel'], ['rev-parse', '--abbrev-ref', 'HEAD']]],
@@ -59,6 +59,8 @@ export function validateCommandInvocation(command: string, args: string[]): void
 }
 
 export class TaskEngine {
+  private runningProcesses = new Map<string, ChildProcessWithoutNullStreams>();
+
   constructor(private store: TaskStore) {}
 
   createTask(input: CreateTaskInput): TaskRecord {
@@ -117,10 +119,10 @@ export class TaskEngine {
   /**
    * Runs a single read-only, allowlisted command as a task step and stores its
    * stdout/stderr as an evidence file. This intentionally does not accept a raw
-   * shell string (execFileSync with an argv array) to avoid command injection,
+   * shell string (spawn with an argv array) to avoid command injection,
    * and only allows commands present in SAFE_COMMANDS.
    */
-  runCommandStep(taskId: string, command: string, args: string[]): { evidenceId: string; relativePath: string; exitCode: number } {
+  async runCommandStep(taskId: string, command: string, args: string[]): Promise<{ evidenceId: string; relativePath: string; exitCode: number; signal: string | null }> {
     validateCommandInvocation(command, args);
     const task = this.mustGetTask(taskId);
     if (task.status !== 'RUNNING') {
@@ -128,31 +130,13 @@ export class TaskEngine {
     }
 
     const startedAt = new Date().toISOString();
-    let stdout = '';
-    let stderr = '';
-    let exitCode = 0;
-    let signal: string | null = null;
-    try {
-      stdout = execFileSync(command, args, {
-        encoding: 'utf8',
-        cwd: resolveWorkingDirectory(task.workingDirectory) ?? process.cwd(),
-        shell: false,
-        timeout: COMMAND_TIMEOUT_MS,
-        maxBuffer: COMMAND_MAX_BUFFER_BYTES,
-        env: minimalCommandEnv(),
-        windowsHide: true,
-      });
-    } catch (err: any) {
-      exitCode = typeof err.status === 'number' ? err.status : 1;
-      signal = typeof err.signal === 'string' ? err.signal : null;
-      stdout = String(err.stdout ?? '');
-      stderr = String(err.stderr ?? err.message ?? '');
-    }
+    const result = await this.spawnCommand(taskId, command, args, resolveWorkingDirectory(task.workingDirectory) ?? process.cwd());
     const finishedAt = new Date().toISOString();
 
-    task.currentStep += 1;
-    task.updatedAt = finishedAt;
-    const evidenceId = `step-${task.currentStep}-command`;
+    const latestTask = this.mustGetTask(taskId);
+    latestTask.currentStep += 1;
+    latestTask.updatedAt = finishedAt;
+    const evidenceId = `step-${latestTask.currentStep}-command`;
     const { relativePath, absolutePath } = this.store.evidencePathFor(taskId, evidenceId);
     fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
     fs.writeFileSync(
@@ -160,22 +144,138 @@ export class TaskEngine {
       JSON.stringify({
         command,
         args,
-        exitCode,
-        signal,
-        stdout,
-        stderr,
+        exitCode: result.exitCode,
+        signal: result.signal,
+        stdout: result.stdout,
+        stderr: result.stderr,
         startedAt,
         finishedAt,
-        timeoutMs: COMMAND_TIMEOUT_MS,
-        maxBufferBytes: COMMAND_MAX_BUFFER_BYTES,
+        timeoutMs: commandTimeoutMs(),
+        maxBufferBytes: commandMaxBufferBytes(),
+        timedOut: result.timedOut,
+        outputLimitExceeded: result.outputLimitExceeded,
+        cancelled: result.cancelled,
       }, null, 2)
     );
 
     this.store.runInTransaction(() => {
-      this.store.updateTask(task);
-      this.store.appendEvent(taskId, 'command.completed', { command, args, exitCode, evidenceId, relativePath });
+      this.store.updateTask(latestTask);
+      this.store.appendEvent(taskId, 'command.completed', {
+        command,
+        args,
+        exitCode: result.exitCode,
+        signal: result.signal,
+        evidenceId,
+        relativePath,
+        timedOut: result.timedOut,
+        outputLimitExceeded: result.outputLimitExceeded,
+        cancelled: result.cancelled,
+      });
     });
-    return { evidenceId, relativePath, exitCode };
+    return { evidenceId, relativePath, exitCode: result.exitCode, signal: result.signal };
+  }
+
+  cancelTask(taskId: string, reason = 'Task execution cancelled.'): TaskRecord {
+    const child = this.runningProcesses.get(taskId);
+    if (child && !child.killed) child.kill();
+    const task = this.mustGetTask(taskId);
+    if (task.status !== 'RUNNING') {
+      return this.transition(taskId, 'CANCELLED', reason);
+    }
+    const now = new Date().toISOString();
+    task.status = 'CANCELLED';
+    task.updatedAt = now;
+    task.completedAt = now;
+    task.resultSummary = reason;
+    this.store.runInTransaction(() => {
+      this.store.updateTask(task);
+      this.store.appendEvent(taskId, 'task.status_changed', { from: 'RUNNING', to: 'CANCELLED', reason });
+      this.store.appendEvent(taskId, 'task.cancelled', { reason });
+    });
+    return task;
+  }
+
+  getRunningTaskIds(): string[] {
+    return [...this.runningProcesses.keys()];
+  }
+
+  private spawnCommand(taskId: string, command: string, args: string[], cwd: string): Promise<{
+    stdout: string;
+    stderr: string;
+    exitCode: number;
+    signal: string | null;
+    timedOut: boolean;
+    outputLimitExceeded: boolean;
+    cancelled: boolean;
+  }> {
+    return new Promise(resolve => {
+      const commandSpec = resolveCommandForSpawn(command, args);
+      const child = spawn(commandSpec.file, commandSpec.args, {
+        cwd,
+        shell: false,
+        env: minimalCommandEnv(),
+        windowsHide: true,
+      });
+      this.runningProcesses.set(taskId, child);
+
+      let stdout = '';
+      let stderr = '';
+      let outputBytes = 0;
+      let settled = false;
+      let timedOut = false;
+      let outputLimitExceeded = false;
+      let cancelled = false;
+      let exitCode = 1;
+      let signal: string | null = null;
+      const maxBuffer = commandMaxBufferBytes();
+
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        this.runningProcesses.delete(taskId);
+        resolve({ stdout, stderr, exitCode, signal, timedOut, outputLimitExceeded, cancelled });
+      };
+
+      const stopChild = (reason: 'TIMEOUT' | 'OUTPUT_LIMIT') => {
+        if (reason === 'TIMEOUT') timedOut = true;
+        if (reason === 'OUTPUT_LIMIT') outputLimitExceeded = true;
+        signal = reason;
+        exitCode = 1;
+        if (!child.killed) child.kill();
+      };
+
+      const appendOutput = (target: 'stdout' | 'stderr', chunk: Buffer) => {
+        const remaining = Math.max(0, maxBuffer - outputBytes);
+        const accepted = chunk.subarray(0, remaining).toString('utf8');
+        if (target === 'stdout') stdout += accepted;
+        else stderr += accepted;
+        outputBytes += chunk.length;
+        if (outputBytes > maxBuffer && !outputLimitExceeded) stopChild('OUTPUT_LIMIT');
+      };
+
+      const timer = setTimeout(() => stopChild('TIMEOUT'), commandTimeoutMs());
+
+      child.stdout.on('data', chunk => appendOutput('stdout', Buffer.from(chunk)));
+      child.stderr.on('data', chunk => appendOutput('stderr', Buffer.from(chunk)));
+      child.on('error', err => {
+        stderr += String(err.message ?? err);
+        exitCode = 1;
+        finish();
+      });
+      child.on('close', (code, sig) => {
+        const latestTask = this.store.getTask(taskId);
+        cancelled = latestTask?.status === 'CANCELLED';
+        if (cancelled) {
+          exitCode = 1;
+          signal = signal ?? 'CANCELLED';
+        } else if (!timedOut && !outputLimitExceeded) {
+          exitCode = typeof code === 'number' ? code : 1;
+          signal = typeof sig === 'string' ? sig : null;
+        }
+        finish();
+      });
+    });
   }
 
   completeTask(taskId: string, resultSummary: string): TaskRecord {
@@ -242,7 +342,25 @@ function minimalCommandEnv(): NodeJS.ProcessEnv {
 }
 
 export const TASK_RUNTIME_COMMAND_LIMITS = {
-  timeoutMs: COMMAND_TIMEOUT_MS,
-  maxBufferBytes: COMMAND_MAX_BUFFER_BYTES,
-  usesSynchronousExecFile: true,
+  timeoutMs: DEFAULT_COMMAND_TIMEOUT_MS,
+  maxBufferBytes: DEFAULT_COMMAND_MAX_BUFFER_BYTES,
+  executionMode: 'spawn',
 };
+
+function commandTimeoutMs(): number {
+  const raw = Number(process.env.MI_TASK_RUNTIME_COMMAND_TIMEOUT_MS);
+  return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_COMMAND_TIMEOUT_MS;
+}
+
+function resolveCommandForSpawn(command: string, args: string[]): { file: string; args: string[] } {
+  const nodeShim = process.env.MI_TASK_RUNTIME_TEST_NODE_SHIM_SCRIPT;
+  if (command === 'node' && nodeShim) {
+    return { file: process.execPath, args: [nodeShim, ...args] };
+  }
+  return { file: command, args };
+}
+
+function commandMaxBufferBytes(): number {
+  const raw = Number(process.env.MI_TASK_RUNTIME_COMMAND_MAX_BUFFER_BYTES);
+  return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_COMMAND_MAX_BUFFER_BYTES;
+}

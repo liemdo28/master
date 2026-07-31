@@ -77,8 +77,8 @@ export function createTaskRuntimeRouter(store: TaskStore = new TaskStore()): Rou
   // over HTTP: walk the task through CONTEXT_BUILDING -> PLANNING -> READY ->
   // RUNNING, execute one allowlisted read-only command, capture evidence,
   // then VALIDATING -> COMPLETED. Intentionally narrow (allowlisted commands
-  // only, execFileSync argv array, no shell interpolation) — see engine.ts.
-  router.post('/tasks/:id/inspect', (req: Request, res: Response) => {
+  // only, spawn argv array, no shell interpolation) — see engine.ts.
+  router.post('/tasks/:id/inspect', async (req: Request, res: Response) => {
     const task = store.getTask(req.params.id);
     if (!task) return res.status(404).json({ error: 'task not found' });
 
@@ -94,7 +94,11 @@ export function createTaskRuntimeRouter(store: TaskStore = new TaskStore()): Rou
       engine.transition(task.id, 'PLANNING');
       engine.transition(task.id, 'READY');
       engine.transition(task.id, 'RUNNING');
-      const { evidenceId, relativePath, exitCode } = engine.runCommandStep(task.id, command, argv);
+      const { evidenceId, relativePath, exitCode, signal } = await engine.runCommandStep(task.id, command, argv);
+      const latestTask = store.getTask(task.id);
+      if (latestTask?.status === 'CANCELLED') {
+        return res.status(409).json({ task: publicTask(latestTask), evidenceId, relativePath, exitCode, signal, error: 'task cancelled' });
+      }
       if (exitCode === 0) {
         engine.transition(task.id, 'VALIDATING');
         const completed = engine.completeTask(task.id, `Ran ${command} ${argv.join(' ')} (exit ${exitCode})`);
@@ -102,6 +106,16 @@ export function createTaskRuntimeRouter(store: TaskStore = new TaskStore()): Rou
       }
       const failed = engine.failTask(task.id, `Command failed: ${command} ${argv.join(' ')} (exit ${exitCode})`);
       return res.status(422).json({ task: publicTask(failed), evidenceId, relativePath, exitCode, error: 'command execution failed' });
+    } catch (err: any) {
+      res.status(409).json({ error: err.message ?? String(err) });
+    }
+  });
+
+  router.post('/tasks/:id/cancel', (req: Request, res: Response) => {
+    if (!store.getTask(req.params.id)) return res.status(404).json({ error: 'task not found' });
+    try {
+      const cancelled = engine.cancelTask(req.params.id, typeof req.body?.reason === 'string' ? req.body.reason : undefined);
+      res.json({ task: publicTask(cancelled) });
     } catch (err: any) {
       res.status(409).json({ error: err.message ?? String(err) });
     }
