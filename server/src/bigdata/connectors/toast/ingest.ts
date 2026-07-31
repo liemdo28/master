@@ -23,10 +23,34 @@ interface ToastSalesData extends Record<string, unknown> {
   captured_at: string;
 }
 
+interface ToastBrowser {
+  close(): Promise<void>;
+  newContext(options: {
+    userAgent: string;
+    viewport: { width: number; height: number };
+  }): Promise<{
+    newPage(): Promise<ToastPage>;
+  }>;
+}
+
+interface ToastPage {
+  goto(url: string, options: { waitUntil: string; timeout: number }): Promise<unknown>;
+  fill(selector: string, value: string): Promise<void>;
+  click(selector: string): Promise<void>;
+  waitForURL(selector: string, options: { timeout: number }): Promise<unknown>;
+  evaluate<T>(fn: () => T): Promise<T>;
+}
+
+interface ToastPlaywrightModule {
+  chromium: {
+    launch(options: { headless: boolean }): Promise<ToastBrowser>;
+  };
+}
+
 async function scrapeToast(): Promise<ToastSalesData | null> {
-  let chromium: typeof import('playwright').chromium;
+  let chromium: ToastPlaywrightModule['chromium'];
   try {
-    const playwright = await import('playwright');
+    const playwright = await importOptionalPlaywright();
     chromium = playwright.chromium;
   } catch {
     console.warn('[Toast] playwright not installed — run: npm install playwright');
@@ -84,6 +108,11 @@ async function scrapeToast(): Promise<ToastSalesData | null> {
   } finally {
     await browser.close();
   }
+}
+
+async function importOptionalPlaywright(): Promise<ToastPlaywrightModule> {
+  const dynamicImport = new Function('specifier', 'return import(specifier)') as (specifier: string) => Promise<ToastPlaywrightModule>;
+  return dynamicImport('playwright');
 }
 
 export async function ingestToast(): Promise<void> {
