@@ -17,6 +17,11 @@ import { hybridSearch } from './search-service';
 import { answerOperationalQuestion } from './ceo-query-service';
 import { runAllChecks } from './data-quality';
 
+if (process.env.RUN_EXTERNAL_INTEGRATION_TESTS !== 'true') {
+  console.log('Mi Big Data Foundation integration tests skipped. Set RUN_EXTERNAL_INTEGRATION_TESTS=true to require PostgreSQL, MinIO, and Qdrant.');
+  process.exit(0);
+}
+
 interface TestResult { name: string; status: 'PASS' | 'FAIL' | 'SKIP'; detail: string; }
 
 const results: TestResult[] = [];
