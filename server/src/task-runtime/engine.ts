@@ -10,6 +10,7 @@ import { randomUUID } from 'crypto';
 import { TaskStore } from './store';
 import { ALLOWED_TRANSITIONS } from './types';
 import type { CreateTaskInput, TaskRecord, TaskStatus } from './types';
+import { validateCodingTaskStart } from '../project-registry/guard';
 
 const ARG_METACHARS = /[;&|`$<>\\\r\n]/;
 const DEFAULT_COMMAND_TIMEOUT_MS = 10_000;
@@ -66,12 +67,27 @@ export class TaskEngine {
   createTask(input: CreateTaskInput): TaskRecord {
     const now = new Date().toISOString();
     const workingDirectory = resolveWorkingDirectory(input.workingDirectory);
+    const taskKind = input.taskKind ?? 'general';
+    if (taskKind !== 'general' && taskKind !== 'coding') {
+      throw new Error('taskKind must be either general or coding.');
+    }
+    if (taskKind === 'coding') {
+      validateCodingTaskStart({
+        projectId: input.projectId,
+        workingDirectory,
+        mapVersion: input.mapVersion,
+        contextPackId: input.contextPackId,
+      });
+    }
     const task: TaskRecord = {
       id: `task-${randomUUID()}`,
       parentTaskId: input.parentTaskId ?? null,
       userRequest: input.userRequest,
       normalizedIntent: null,
+      taskKind,
       projectId: input.projectId ?? null,
+      mapVersion: input.mapVersion ?? null,
+      contextPackId: input.contextPackId ?? null,
       repository: input.repository ?? null,
       workingDirectory,
       branch: input.branch ?? null,
@@ -89,7 +105,13 @@ export class TaskEngine {
     };
     this.store.runInTransaction(() => {
       this.store.insertTask(task);
-      this.store.appendEvent(task.id, 'task.created', { userRequest: task.userRequest });
+      this.store.appendEvent(task.id, 'task.created', {
+        userRequest: task.userRequest,
+        taskKind: task.taskKind,
+        projectId: task.projectId,
+        mapVersion: task.mapVersion,
+        contextPackId: task.contextPackId,
+      });
     });
     return task;
   }

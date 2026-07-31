@@ -16,20 +16,62 @@ import { syncBakudanWebsite, runBakudanQA } from '../projects/connectors/bakudan
 import { syncDashboardProject, runDashboardQA } from '../projects/connectors/dashboard-connector';
 import { syncRemoteProject, checkRemoteAgent, getAllRemoteStatuses, runRemoteQA } from '../projects/connectors/remote-proxy-connector';
 import { enqueue, approve, getPending } from '../approval/gate';
+import { ProjectRegistryService, seedMiCoreProject } from '../project-registry/service';
 import fs from 'fs';
 import path from 'path';
 
 export const projectsRouter = Router();
 
 const GLOBAL_DIR = process.env.GLOBAL_DIR || 'E:/Project/Master/.local-agent-global';
+const registryProjectIdPattern = /^[a-z0-9][a-z0-9_-]{0,80}$/i;
 
-// GET /api/projects — list all projects
+function requireRegistryProjectId(req: Request, res: Response): boolean {
+  if (!registryProjectIdPattern.test(req.params.id)) {
+    res.status(400).json({ error: 'invalid project id' });
+    return false;
+  }
+  return true;
+}
+
+// GET /api/projects — canonical project registry
 projectsRouter.get('/', async (_req: Request, res: Response) => {
   try {
-    const projects = scanAllProjects();
-    res.json({ total: projects.length, projects });
+    const service = new ProjectRegistryService();
+    try {
+      const projects = service.listProjects();
+      res.json({ total: projects.length, projects });
+    } finally {
+      service.close();
+    }
   } catch (e: unknown) {
     res.status(500).json({ error: (e as Error).message });
+  }
+});
+
+// POST /api/projects — explicit project registration only, no broad scanning.
+projectsRouter.post('/', (req: Request, res: Response) => {
+  const service = new ProjectRegistryService();
+  try {
+    const project = service.registerProject(req.body ?? {});
+    res.status(201).json(project);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+// POST /api/projects/mi-core/seed — operator shortcut for canonical Mi registration.
+projectsRouter.post('/mi-core/seed', (req: Request, res: Response) => {
+  const service = new ProjectRegistryService();
+  try {
+    const root = typeof req.body?.root === 'string' ? req.body.root : process.cwd();
+    const project = service.registerProject(seedMiCoreProject(root));
+    res.status(201).json(project);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
   }
 });
 
@@ -38,6 +80,16 @@ projectsRouter.get('/scan', async (_req: Request, res: Response) => {
   try {
     const projects = scanAllProjects(true);
     res.json({ scanned: true, total: projects.length, summary: getProjectSummary(), projects });
+  } catch (e: unknown) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+});
+
+// GET /api/projects/legacy — legacy scanner inventory retained for audit.
+projectsRouter.get('/legacy', async (_req: Request, res: Response) => {
+  try {
+    const projects = scanAllProjects();
+    res.json({ total: projects.length, projects });
   } catch (e: unknown) {
     res.status(500).json({ error: (e as Error).message });
   }
@@ -56,6 +108,34 @@ projectsRouter.get('/health', async (_req: Request, res: Response) => {
   }
 });
 
+// POST /api/projects/sync-all — sync all local connectors
+projectsRouter.post('/sync-all', async (_req: Request, res: Response) => {
+  try {
+    const results: Record<string, string> = {};
+
+    const [raw, bakudan, dash, integration, whatsapp] = await Promise.allSettled([
+      Promise.resolve(syncRawWebsite()),
+      syncBakudanWebsite(),
+      syncDashboardProject(),
+      syncRemoteProject('integration-system'),
+      syncRemoteProject('whatsapp-api'),
+    ]);
+
+    results['raw-website']         = raw.status         === 'fulfilled' ? 'ok' : 'error';
+    results['bakudan-website']     = bakudan.status     === 'fulfilled' ? 'ok' : 'error';
+    results['dashboard']           = dash.status        === 'fulfilled' ? 'ok' : 'error';
+    results['integration-system']  = integration.status === 'fulfilled' ? 'ok' : (integration as PromiseRejectedResult).reason;
+    results['whatsapp-api']        = whatsapp.status    === 'fulfilled' ? 'ok' : (whatsapp as PromiseRejectedResult).reason;
+
+    const projects = scanAllProjects(true);
+    results['project-scan'] = `${projects.length} projects`;
+
+    res.json({ synced_at: new Date().toISOString(), results });
+  } catch (e: unknown) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+});
+
 // GET /api/projects/registry — project-connectors.json
 projectsRouter.get('/registry', (_req: Request, res: Response) => {
   try {
@@ -64,6 +144,131 @@ projectsRouter.get('/registry', (_req: Request, res: Response) => {
     res.json(JSON.parse(fs.readFileSync(file, 'utf-8')));
   } catch (e: unknown) {
     res.status(500).json({ error: (e as Error).message });
+  }
+});
+
+projectsRouter.get('/:id/map', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const map = service.getProjectMap(req.params.id);
+    if (!map) return res.status(404).json({ error: 'project map not found' });
+    res.json(map);
+  } catch (e: unknown) {
+    res.status(500).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.post('/:id/map', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const map = service.generateProjectMap(req.params.id);
+    res.status(201).json(map);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.get('/:id/map/status', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    res.json(service.getMapStatus(req.params.id));
+  } catch (e: unknown) {
+    res.status(404).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.post('/:id/context-pack', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const pack = service.buildContextPack(
+      req.params.id,
+      typeof req.body?.userRequest === 'string' ? req.body.userRequest : '',
+      typeof req.body?.resumeContextId === 'string' ? req.body.resumeContextId : null
+    );
+    res.status(201).json(pack);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.get('/:id/context-pack/:contextPackId', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const pack = service.getContextPack(req.params.id, req.params.contextPackId);
+    if (!pack) return res.status(404).json({ error: 'context pack not found' });
+    res.json(pack);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.post('/:id/resume', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const resume = service.buildResumeContext(
+      req.params.id,
+      typeof req.body?.taskId === 'string' ? req.body.taskId : null,
+      typeof req.body?.summary === 'string' ? req.body.summary : undefined
+    );
+    res.status(201).json(resume);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.get('/:id/resume', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    const resume = service.getLatestResumeContext(req.params.id);
+    if (!resume) return res.status(404).json({ error: 'resume context not found' });
+    res.json(resume);
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.post('/:id/verify', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    res.json(service.verifyProject(req.params.id));
+  } catch (e: unknown) {
+    res.status(404).json({ error: (e as Error).message });
+  } finally {
+    service.close();
+  }
+});
+
+projectsRouter.patch('/:id', (req: Request, res: Response) => {
+  if (!requireRegistryProjectId(req, res)) return;
+  const service = new ProjectRegistryService();
+  try {
+    res.json(service.updateProject(req.params.id, req.body ?? {}));
+  } catch (e: unknown) {
+    res.status(400).json({ error: (e as Error).message });
+  } finally {
+    service.close();
   }
 });
 
@@ -82,6 +287,13 @@ projectsRouter.post('/command', async (req: Request, res: Response) => {
 // GET /api/projects/:id — single project info
 projectsRouter.get('/:id', (req: Request, res: Response) => {
   try {
+    const service = new ProjectRegistryService();
+    try {
+      const registryProject = service.getProject(req.params.id);
+      if (registryProject) return res.json(registryProject);
+    } finally {
+      service.close();
+    }
     const project = getProjectById(req.params.id);
     if (!project) return res.status(404).json({ error: `Project "${req.params.id}" not found` });
     res.json(project);
@@ -176,31 +388,3 @@ projectsRouter.post('/:id/command', async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/projects/sync-all — sync all local connectors
-projectsRouter.post('/sync-all', async (_req: Request, res: Response) => {
-  try {
-    const results: Record<string, string> = {};
-
-    const [raw, bakudan, dash, integration, whatsapp] = await Promise.allSettled([
-      Promise.resolve(syncRawWebsite()),
-      syncBakudanWebsite(),
-      syncDashboardProject(),
-      syncRemoteProject('integration-system'),
-      syncRemoteProject('whatsapp-api'),
-    ]);
-
-    results['raw-website']         = raw.status         === 'fulfilled' ? 'ok' : 'error';
-    results['bakudan-website']     = bakudan.status     === 'fulfilled' ? 'ok' : 'error';
-    results['dashboard']           = dash.status        === 'fulfilled' ? 'ok' : 'error';
-    results['integration-system']  = integration.status === 'fulfilled' ? 'ok' : (integration as PromiseRejectedResult).reason;
-    results['whatsapp-api']        = whatsapp.status    === 'fulfilled' ? 'ok' : (whatsapp as PromiseRejectedResult).reason;
-
-    // Also rescan projects
-    const projects = scanAllProjects(true);
-    results['project-scan'] = `${projects.length} projects`;
-
-    res.json({ synced_at: new Date().toISOString(), results });
-  } catch (e: unknown) {
-    res.status(500).json({ error: (e as Error).message });
-  }
-});

@@ -32,12 +32,12 @@ export function createTaskRuntimeRouter(store: TaskStore = new TaskStore()): Rou
   // POST /tasks — create a task record only (CREATED state). Callers that just
   // want to track something without executing a command use this.
   router.post('/tasks', (req: Request, res: Response) => {
-    const { userRequest, repository, workingDirectory, projectId } = req.body ?? {};
+    const { userRequest, repository, workingDirectory, projectId, taskKind, mapVersion, contextPackId } = req.body ?? {};
     if (typeof userRequest !== 'string' || !userRequest.trim()) {
       return res.status(400).json({ error: 'userRequest (string) is required' });
     }
     try {
-      const task = engine.createTask({ userRequest, repository, workingDirectory, projectId });
+      const task = engine.createTask({ userRequest, repository, workingDirectory, projectId, taskKind, mapVersion, contextPackId });
       res.status(201).json(publicTask(task));
     } catch (err: any) {
       res.status(400).json({ error: err.message ?? String(err) });

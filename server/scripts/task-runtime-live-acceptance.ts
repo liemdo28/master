@@ -105,13 +105,13 @@ async function main() {
     summary.finishedAt = new Date().toISOString();
     writeReport(summary);
     console.log(JSON.stringify(summary, null, 2));
-    process.exit(summary.ok ? 0 : 1);
+    return summary.ok;
   } catch (err) {
     summary.error = err instanceof Error ? err.message : String(err);
     summary.finishedAt = new Date().toISOString();
     writeReport(summary);
     console.error(JSON.stringify(summary, null, 2));
-    process.exit(1);
+    return false;
   }
 }
 
@@ -179,4 +179,6 @@ function writeReport(summary: unknown) {
   fs.writeFileSync(reportPath, JSON.stringify(summary, null, 2));
 }
 
-main();
+main().then(ok => {
+  if (!ok) process.exitCode = 1;
+});
