@@ -82,6 +82,7 @@ import { operationalKnowledgeRouter } from './routes/operational-knowledge';
 import { graphRouter } from './graph/graph-router';
 import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
 import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-router';
+import { taskRuntimeJsonErrorHandler, taskRuntimeJsonParser, taskRuntimeRouter } from './routes/task-runtime';
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
@@ -172,15 +173,26 @@ app.use(cors({
   credentials: true,
 }));
 
+function applyIpGuard(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (req.path === '/api/remote/health' || req.path === '/api/remote/login') return next();
+  ipGuard(req, res, next);
+}
+
+function requireTaskRuntimeAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
+  const supplied = String(req.headers['x-api-key'] || '');
+  const expected = process.env.MI_CORE_API_KEY || process.env.AGENT_CODING_API_KEY || '';
+  if (supplied && expected && supplied === expected) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
+
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
 
 // ── IP Guard — block non-LAN/Tailscale (skip for remote/health, applied globally) ─
 // /api/remote/health is intentionally public (returns server info, no sensitive data)
-app.use((req, res, next) => {
-  if (req.path === '/api/remote/health' || req.path === '/api/remote/login') return next();
-  ipGuard(req, res, next);
-});
+app.use(applyIpGuard);
 
 // ── Static UI ───────────────────────────────────────────────────────────────
 app.use(express.static(path.resolve(__dirname, '../../ui')));
