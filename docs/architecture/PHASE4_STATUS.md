@@ -28,7 +28,11 @@ Intel i5-13400F (10C/16T) · 31.9 GB RAM · AMD RX 7600 **8 GB VRAM** (ROCm
 working) · Ollama 0.32.0. 8 GB fits exactly one 7-8B Q4 model, which is why
 inference is serialised to a single slot.
 
-## Benchmark
+## Benchmark (first pass — superseded, see "Recovery batch")
+
+> These numbers were taken while fixtures B and E were broken and could not
+> pass. They understate every model. The corrected table is in the recovery
+> section; both are kept so the correction is auditable.
 
 Four models, five fixtures, real engine, one model at a time. Round 1 measured
 a constraint rather than the models (the writable set was bound to the model's
@@ -81,7 +85,7 @@ accurately enough. Independence therefore comes from a fresh diff-only
 invocation plus the deterministic layer, and is reported as
 `independentModel: false` rather than overstated.
 
-## Acceptance — 3/5
+## Acceptance — 3/5 (first pass — superseded by 5/5, see "Recovery batch")
 
 Through the real control plane (registry, fresh map, context pack, ranked
 candidates, isolated worktree, validation, review, local commit):
@@ -98,7 +102,7 @@ Both failures are `VALIDATION_FAILED`: the model produced a well-formed,
 in-scope patch that did not actually make the tests pass. Every guard behaved
 correctly — no commit was created, and the base checkout was untouched.
 
-## Mi Core pilot — FAILED (4 attempts)
+## Mi Core pilot — FAILED (first pass; later completed once, see "Recovery batch")
 
 The pilot task was a narrow read-only API improvement in one existing file.
 It failed every time, with a consistent and diagnosable cause.
@@ -141,7 +145,7 @@ expansion, and non-loopback endpoints including the cloud metadata address.
 `git push` is not a registered command and the engine contains no push, merge
 or deploy capability.
 
-## Privacy — 30 assertions
+## Privacy — 32 assertions
 
 Global `fetch` is instrumented, a real model-backed task is run, and every
 observed request is asserted loopback. Zero requests reached any cloud provider.
@@ -170,7 +174,7 @@ emits `abort`, so a cancelled task could start one more inference.
 | `npm run test:agentic-coding` | exit 0 (64 + 23 assertions) |
 | `npm run test:agentic-coding-privacy` | exit 0 (30 assertions) |
 | `npm run agentic-coding:fixtures` | exit 0 (5/5 baselines correct) |
-| `npm run agentic-coding:acceptance` | **exit 1 — 3/5** |
+| `npm run agentic-coding:acceptance` | exit 0 — 5/5 (after recovery) |
 | conflict-marker scan | clean |
 | secret scan | clean (only the deliberate fixture secret the boundary test refuses) |
 
