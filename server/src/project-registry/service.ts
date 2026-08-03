@@ -468,8 +468,14 @@ function gitOutput(cwd: string, args: string[]): string | null {
 
 function currentSourceSha(cwd: string): string | null {
   const deployedSha = process.env.MI_DEPLOYED_SOURCE_SHA || process.env.MI_PROJECT_REGISTRY_SOURCE_SHA;
-  if (deployedSha && /^[0-9a-f]{40}$/i.test(deployedSha)) return deployedSha;
+  if (deployedSha && /^[0-9a-f]{40}$/i.test(deployedSha) && isDeployedSourceRoot(cwd)) return deployedSha;
   return gitOutput(cwd, ['rev-parse', 'HEAD']);
+}
+
+function isDeployedSourceRoot(cwd: string): boolean {
+  const configuredRoot = process.env.MI_DEPLOYED_SOURCE_ROOT;
+  const deployedRoot = realPathIfExists(configuredRoot || process.cwd());
+  return realPathIfExists(cwd) === deployedRoot;
 }
 
 function slugify(value: string): string {

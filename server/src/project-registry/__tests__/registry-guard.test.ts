@@ -186,10 +186,12 @@ async function run() {
 
     const deployedSha = '0123456789abcdef0123456789abcdef01234567';
     process.env.MI_DEPLOYED_SOURCE_SHA = deployedSha;
+    process.env.MI_DEPLOYED_SOURCE_ROOT = fixtureRoot;
     const deployedMap = service.generateProjectMap(fixture.id);
     assert.strictEqual(deployedMap.sourceSha, deployedSha);
     assert.strictEqual(service.getMapStatus(fixture.id).sourceSha, deployedSha);
     delete process.env.MI_DEPLOYED_SOURCE_SHA;
+    delete process.env.MI_DEPLOYED_SOURCE_ROOT;
     log('used deployed source SHA override when configured');
 
     const previousVersion = deployedMap.mapVersion;
