@@ -12,14 +12,14 @@ export const CODING_ENGINE_REGISTRY: CodingEngineRegistryEntry[] = [
     id: 'openhands',
     label: 'OpenHands',
     purpose: 'Repo-scale coding engine candidate retained as a future wrapped adapter.',
-    status: 'OPTIONAL',
+    status: 'WRAP_LATER',
     repositoryScale: true,
   },
   {
     id: 'aider',
     label: 'Aider',
     purpose: 'Small-edit/review engine candidate retained as a future wrapped adapter.',
-    status: 'OPTIONAL',
+    status: 'WRAP_LATER',
     repositoryScale: false,
   },
 ];

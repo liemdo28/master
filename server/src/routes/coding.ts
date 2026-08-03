@@ -19,6 +19,11 @@ export function createCodingRouter(store: TaskStore = new TaskStore()): Router {
     res.json({ modelRoles });
   });
 
+  router.get('/models', async (_req: Request, res: Response) => {
+    const modelRoles = await selectCodingModelRoles();
+    res.json({ modelRoles });
+  });
+
   router.post('/tasks', async (req: Request, res: Response) => {
     const workflow = new CodingWorkflow(store);
     try {

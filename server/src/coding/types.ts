@@ -44,6 +44,7 @@ export interface CandidateSelection {
   candidates: CandidateFile[];
   excluded: string[];
   hardLimit: number;
+  maxBytesPerFile: number;
   source: 'context-pack';
 }
 
@@ -107,6 +108,6 @@ export interface CodingEngineRegistryEntry {
   id: string;
   label: string;
   purpose: string;
-  status: 'ACTIVE' | 'OPTIONAL' | 'DEPRECATED';
+  status: 'ACTIVE' | 'WRAP_LATER' | 'DEPRECATED';
   repositoryScale: boolean;
 }

@@ -14,7 +14,7 @@ export class InternalPatchEngine implements CodingEngineAdapter {
   async plan(input: { worktreePath: string; candidates: { candidates: Array<{ path: string }> }; userRequest: string; modelRoles: CodingModelRoles }): Promise<EnginePlan> {
     const wantsRegistryEndpoint = /engine registry|model roles|coding engine/i.test(input.userRequest);
     const files = wantsRegistryEndpoint
-      ? ['server/src/routes/coding.ts', 'server/src/coding/__tests__/coding-workflow.test.ts']
+      ? ['server/src/routes/coding.ts']
       : input.candidates.candidates.slice(0, 4).map(candidate => candidate.path);
     return {
       engineId: this.id,
@@ -36,27 +36,20 @@ export class InternalPatchEngine implements CodingEngineAdapter {
     if (!fs.existsSync(routePath)) throw new Error('coding route file is missing in worktree');
     let route = fs.readFileSync(routePath, 'utf8');
     if (!route.includes("router.get('/registry'")) {
-      route = route.replace(
-        "  router.get('/model-roles', async (_req: Request, res: Response) => {\n",
-        "  router.get('/registry', async (_req: Request, res: Response) => {\n    const modelRoles = await selectCodingModelRoles();\n    res.json({ engines: CODING_ENGINE_REGISTRY, modelRoles });\n  });\n\n  router.get('/model-roles', async (_req: Request, res: Response) => {\n"
-      );
-      fs.writeFileSync(routePath, route);
-    }
-    const testPath = path.join(input.worktreePath, 'server', 'src', 'coding', '__tests__', 'coding-workflow.test.ts');
-    if (fs.existsSync(testPath)) {
-      let test = fs.readFileSync(testPath, 'utf8');
-      if (!test.includes('registry endpoint exposes engines and model roles')) {
-        test = test.replace(
-          "  log('PASS');\n",
-          "  await assertRegistryEndpoint();\n  log('PASS');\n"
-        );
-        test += "\nasync function assertRegistryEndpoint(): Promise<void> {\n  const { createCodingRouter } = await import('../../routes/coding');\n  const router = createCodingRouter();\n  assert.ok(router, 'coding router should be constructible for registry endpoint');\n  log('registry endpoint exposes engines and model roles');\n}\n";
-        fs.writeFileSync(testPath, test);
+      const registryRoute = "  router.get('/registry', async (_req: Request, res: Response) => {\n    const modelRoles = await selectCodingModelRoles();\n    res.json({ engines: CODING_ENGINE_REGISTRY, modelRoles });\n  });\n\n";
+      if (route.includes("  router.get('/model-roles'")) {
+        route = route.replace("  router.get('/model-roles'", `${registryRoute}  router.get('/model-roles'`);
+      } else if (route.includes('  return router;')) {
+        route = route.replace('  return router;', `${registryRoute}  return router;`);
+      } else {
+        throw new Error('coding route insertion point not found');
       }
+      if (!route.includes("router.get('/registry'")) throw new Error('coding registry endpoint patch did not apply');
+      fs.writeFileSync(routePath, route);
     }
     return {
       engineId: this.id,
-      changedFiles: ['server/src/routes/coding.ts', 'server/src/coding/__tests__/coding-workflow.test.ts'].filter(file => fs.existsSync(path.join(input.worktreePath, file))),
+      changedFiles: ['server/src/routes/coding.ts'].filter(file => fs.existsSync(path.join(input.worktreePath, file))),
       evidence: { deterministicPatch: 'phase3-registry-endpoint' },
     };
   }

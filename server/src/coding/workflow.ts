@@ -2,7 +2,7 @@ import { ProjectRegistryService } from '../project-registry/service';
 import { TaskEngine } from '../task-runtime/engine';
 import { TaskStore } from '../task-runtime/store';
 import type { TaskRecord } from '../task-runtime/types';
-import { selectCandidateFiles } from './candidate-selector';
+import { assertPlanWithinCandidates, enforceCandidateFileLimits, selectCandidateFiles } from './candidate-selector';
 import { enforceCodingContext } from './context-enforcer';
 import { InternalPatchEngine } from './engines/internal-patch-engine';
 import { git } from './git';
@@ -69,7 +69,7 @@ export class CodingWorkflow {
     this.event(task.id, 'coding.worktree.created', worktree);
 
     this.taskEngine.transition(task.id, 'PLANNING');
-    const candidates = selectCandidateFiles(context.contextPack, input.userRequest);
+    const candidates = enforceCandidateFileLimits(worktree.worktreePath, selectCandidateFiles(context.contextPack, input.userRequest));
     this.taskStore.updateCodingFields(task.id, { candidateFiles: JSON.stringify(candidates) });
     this.evidence(task.id, 'coding-candidates', candidates);
     this.event(task.id, 'coding.candidates.selected', { count: candidates.candidates.length, hardLimit: candidates.hardLimit });
@@ -84,6 +84,7 @@ export class CodingWorkflow {
 
     const inspected = await this.adapter.inspect({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest });
     const plan = await this.adapter.plan({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest, modelRoles });
+    assertPlanWithinCandidates(plan.filesToChange, candidates);
     this.taskStore.updateCodingFields(task.id, {
       filesRead: JSON.stringify(inspected.filesRead),
       plan: JSON.stringify(plan),

@@ -5,6 +5,7 @@ import * as path from 'path';
 import { execFileSync } from 'child_process';
 import { CODING_ENGINE_REGISTRY } from '../engine-registry';
 import { InternalPatchEngine } from '../engines/internal-patch-engine';
+import { assertPlanWithinCandidates, enforceCandidateFileLimits, selectCandidateFiles } from '../candidate-selector';
 import { buildValidationPlan } from '../validation-runner';
 import { CodingWorkflow } from '../workflow';
 import { ProjectRegistryService } from '../../project-registry/service';
@@ -79,6 +80,78 @@ async function run() {
     const validationPlan = buildValidationPlan(a, String(resultA.task.worktreePath), ['npm run external:integration']);
     assert.ok(validationPlan.some(command => command.name === 'npm run external:integration' && !command.configured));
     log('unregistered validation commands are marked NOT_CONFIGURED');
+
+    const rawCandidates = selectCandidateFiles({
+      id: 'ctx-test',
+      projectId: 'project-a',
+      mapVersion: mapA.mapVersion,
+      sourceSha: mapA.sourceSha,
+      mapStatus: 'FRESH',
+      policy: 'MAP_PLUS_TARGETED_READ',
+      summary: 'test',
+      moduleSummaries: [],
+      includedPaths: ['server/src/routes/coding.ts', 'missing.ts'],
+      excludedPaths: [],
+      relevanceHints: [],
+      resumeContextId: null,
+      createdAt: new Date().toISOString(),
+    }, 'coding endpoint');
+    const limited = enforceCandidateFileLimits(String(resultA.task.worktreePath), rawCandidates);
+    assert.ok(limited.candidates.some(candidate => candidate.path === 'server/src/routes/coding.ts'));
+    assert.ok(limited.excluded.some(item => item.includes('missing.ts')));
+    assert.throws(() => assertPlanWithinCandidates(['outside.ts'], limited), /outside context candidates/);
+    log('candidate existence and plan-boundary checks are enforced');
+
+    const largeFile = path.join(String(resultA.task.worktreePath), 'server', 'src', 'routes', 'large.ts');
+    fs.writeFileSync(largeFile, 'x'.repeat(300 * 1024));
+    const largeSelection = selectCandidateFiles({
+      id: 'ctx-large',
+      projectId: 'project-a',
+      mapVersion: mapA.mapVersion,
+      sourceSha: mapA.sourceSha,
+      mapStatus: 'FRESH',
+      policy: 'MAP_PLUS_TARGETED_READ',
+      summary: 'test',
+      moduleSummaries: [],
+      includedPaths: ['server/src/routes/large.ts'],
+      excludedPaths: [],
+      relevanceHints: [],
+      resumeContextId: null,
+      createdAt: new Date().toISOString(),
+    }, 'large route');
+    const largeLimited = enforceCandidateFileLimits(String(resultA.task.worktreePath), largeSelection);
+    assert.strictEqual(largeLimited.candidates.length, 0);
+    assert.ok(largeLimited.excluded.some(item => item.includes('exceeds byte limit')));
+    log('candidate byte limit is enforced');
+
+    const outsideDir = path.join(tmpDir, 'outside');
+    fs.mkdirSync(outsideDir, { recursive: true });
+    fs.writeFileSync(path.join(outsideDir, 'escape.ts'), 'export const escape = true;\n');
+    const linkPath = path.join(String(resultA.task.worktreePath), 'server', 'src', 'routes', 'escape-link.ts');
+    try {
+      fs.symlinkSync(path.join(outsideDir, 'escape.ts'), linkPath, 'file');
+      const symlinkSelection = selectCandidateFiles({
+        id: 'ctx-symlink',
+        projectId: 'project-a',
+        mapVersion: mapA.mapVersion,
+        sourceSha: mapA.sourceSha,
+        mapStatus: 'FRESH',
+        policy: 'MAP_PLUS_TARGETED_READ',
+        summary: 'test',
+        moduleSummaries: [],
+        includedPaths: ['server/src/routes/escape-link.ts'],
+        excludedPaths: [],
+        relevanceHints: [],
+        resumeContextId: null,
+        createdAt: new Date().toISOString(),
+      }, 'escape route');
+      const symlinkLimited = enforceCandidateFileLimits(String(resultA.task.worktreePath), symlinkSelection);
+      assert.strictEqual(symlinkLimited.candidates.length, 0);
+      assert.ok(symlinkLimited.excluded.some(item => item.includes('symlink escape')));
+      log('candidate symlink escape is rejected');
+    } catch {
+      log('candidate symlink escape test skipped because symlink creation is unavailable');
+    }
     workflowA.close();
     workflowB.close();
   } finally {

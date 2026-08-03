@@ -40,10 +40,11 @@ export async function prepareWorktree(input: {
   const shortTask = input.taskId.replace(/^task-/, '').slice(0, 8);
   const taskBranch = `codex/task-${shortTask}-${slugifyBranchPart(input.userRequest)}`;
   const root = defaultWorktreeRoot(input.projectId);
-  const worktreePath = path.resolve(root, input.taskId);
-  if (!isInside(worktreePath, root)) throw new Error('coding worktree path escaped configured root');
-  if (fs.existsSync(worktreePath)) throw new Error(`coding worktree already exists: ${worktreePath}`);
   fs.mkdirSync(root, { recursive: true });
+  const realRoot = fs.realpathSync.native(root);
+  const worktreePath = path.resolve(realRoot, input.taskId);
+  if (!isInside(worktreePath, realRoot)) throw new Error('coding worktree path escaped configured root');
+  if (fs.existsSync(worktreePath)) throw new Error(`coding worktree already exists: ${worktreePath}`);
 
   const existingBranch = await gitMaybe(sourceRoot, ['rev-parse', '--verify', taskBranch]);
   if (existingBranch) throw new Error(`task branch already exists: ${taskBranch}`);

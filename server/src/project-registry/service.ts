@@ -200,7 +200,11 @@ export class ProjectRegistryService {
     if (map) {
       for (const module of map.modules) {
         const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
-        if (hints.length === 0 || hints.some(hint => haystack.includes(hint))) {
+        const endpointNeedsRoutes = hints.includes('endpoint') && module.name === 'routes';
+        if (endpointNeedsRoutes) {
+          module.paths.filter(p => p.includes('/coding.') || p.includes('/coding/')).slice(0, 8).forEach(p => matchedPaths.add(p));
+        }
+        if (hints.length === 0 || endpointNeedsRoutes || hints.some(hint => haystack.includes(hint))) {
           module.paths.slice(0, 8).forEach(p => matchedPaths.add(p));
         }
       }
