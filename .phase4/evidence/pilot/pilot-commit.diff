@@ -1,0 +1,11 @@
+diff --git a/server/src/routes/coding.ts b/server/src/routes/coding.ts
+index 0ac58768..d10e4e6d 100644
+--- a/server/src/routes/coding.ts
++++ b/server/src/routes/coding.ts
+@@ -154,6 +154,7 @@ export function createCodingRouter(store: TaskStore = new TaskStore()): Router {
+       plan: task.plan ? JSON.parse(task.plan) : null,
+       candidates: task.candidateFiles ? JSON.parse(task.candidateFiles) : null,
+       modelRoles: task.modelRoles ? JSON.parse(task.modelRoles) : null,
++      engineId: task.codingEngine,
+     });
+   });

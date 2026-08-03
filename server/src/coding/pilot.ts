@@ -94,6 +94,13 @@ async function main(): Promise<void> {
     console.log(`  filesChanged  ${result.apply.changedFiles.join(', ')}`);
     console.log(`  validation    ${result.validation.map(v => `${v.name}=${v.configured ? v.exitCode : 'n/a'}`).join(' ')}`);
     console.log(`  review        ${result.review.status} ${(result.review.findings ?? []).join('; ')}`);
+    for (const v of result.validation) {
+      if (v.configured && v.exitCode !== 0) {
+        console.log(`\n[pilot] FAILING VALIDATION: ${v.name}`);
+        const lines = `${v.stdout}${v.stderr}`.split(/\r?\n/);
+        console.log(lines.filter(line => /error|Error|✖|not ok/.test(line)).slice(0, 12).join('\n'));
+      }
+    }
     console.log(`  commitSha     ${result.commitSha}`);
 
     if (result.commitSha && result.task.worktreePath) {

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-03T10:28:44.634Z",
-  "taskId": "task-35fc8700-ca92-4466-9064-6da17a48030f",
+  "generatedAt": "2026-08-03T11:02:53.440Z",
+  "taskId": "task-c788296b-24e0-41c2-9fd8-16ccaf4b044b",
   "projectId": "mi-core",
   "mapVersion": "map-fa0152737c98",
   "sourceSha": "6b70cc6e0012d7ea083b93632eb33d5e0b585588",
-  "contextPackId": "ctx-9b8c9393-33b6-493b-9c6e-4902be6b0fca",
+  "contextPackId": "ctx-5c04e302-5a4f-47c8-9bb8-8a67a30aaf61",
   "includedPaths": [
     "server/src/project-registry/acceptance.ts",
     "server/src/project-registry/cli.ts",
@@ -140,5 +140,5 @@
     "reasoning": "The change adds the engineId to the task response as required, edits only the allowed file, does not disable or weaken tests, and does not introduce secrets or suspicious code."
   },
   "commitSha": null,
-  "taskBranch": "codex/task-35fc8700-the-read-only-coding-task-plan-endpoint-does-not"
+  "taskBranch": "codex/task-c788296b-the-read-only-coding-task-plan-endpoint-does-not"
 }

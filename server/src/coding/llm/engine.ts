@@ -43,6 +43,7 @@ import {
   type PromptContext,
 } from './prompts';
 import { applyPatch } from './patch';
+import { resolveWithinWorktree } from './tools';
 import {
   CodingEngineError,
   EXPANSION_SCHEMA,
@@ -53,6 +54,26 @@ import {
   type ModelPatch,
   type ModelPlan,
 } from './types';
+
+/**
+ * Timeout for a patch or repair call.
+ *
+ * Derived from the output budget and the slowest model this host supports
+ * (~5.5 tok/s for a 14B spilling out of 8 GB VRAM), not chosen separately.
+ * A 300 s limit against a 4096-token budget turned truncation into
+ * MODEL_TIMEOUT, which is the same failure wearing a different name.
+ */
+export const PATCH_TIMEOUT_MS = 600_000;
+
+/**
+ * Output budget for a patch or repair call.
+ *
+ * A behaviour-preserving refactor legitimately rewrites a whole function, so
+ * 2400 tokens truncated the patch mid-JSON and surfaced as CONTEXT_INSUFFICIENT
+ * rather than as anything the model could act on. With a 32k window and ~17k
+ * spent on context there is ample room for this.
+ */
+export const PATCH_OUTPUT_TOKENS = 3072;
 
 export const LLM_ENGINE_ID = 'local-llm-engine';
 
@@ -222,8 +243,8 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         system: PATCH_SYSTEM,
         prompt: buildPatchPrompt(session.promptContext, modelPlan, editable, previousError),
         schema: PATCH_SCHEMA,
-        timeoutMs: this.options.patchTimeoutMs ?? 300_000,
-        numPredict: 2400,
+        timeoutMs: this.options.patchTimeoutMs ?? PATCH_TIMEOUT_MS,
+        numPredict: PATCH_OUTPUT_TOKENS,
         signal,
         label: attempt ? `patch-retry-${attempt}` : 'patch',
       });
@@ -275,6 +296,64 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     return writable;
   }
 
+  /**
+   * Pulls in the files a failing build or test run points at.
+   *
+   * A type error like "Property 'engineId' does not exist on type 'TaskRecord'"
+   * or "Module '../task-runtime/engine' declares 'TaskRecord' locally, but it is
+   * not exported" names the definition the model never saw. Without this the
+   * repair loop re-runs against the same partial view and reproduces the same
+   * mistake. Every candidate still passes the normal expansion boundary, so this
+   * widens what is read, never what is permitted.
+   */
+  private expandForValidationErrors(session: EngineSession, validationOutput: string): string[] {
+    if (!validationOutput) return [];
+
+    const symbols = new Set<string>();
+    const modules = new Set<string>();
+    for (const match of validationOutput.matchAll(/'([^']+)'/g)) {
+      const value = match[1];
+      if (/^[./]/.test(value) || value.includes('/')) modules.add(value.replace(/^["']|["']$/g, ''));
+      else if (/^[A-Z][A-Za-z0-9_]{2,}$/.test(value)) symbols.add(value);
+    }
+    if (!symbols.size && !modules.size) return [];
+
+    const granted: string[] = [];
+    for (const candidatePath of session.policy.packPaths) {
+      if (granted.length >= 3) break;
+      if (session.state.files.has(candidatePath)) continue;
+
+      const resolved = resolveWithinWorktree(session.worktreePath, candidatePath);
+      if (!resolved.ok || !fs.existsSync(resolved.absolute!)) continue;
+
+      const moduleHit = [...modules].some(specifier => {
+        const base = path.posix.basename(specifier).replace(/\.[cm]?[jt]sx?$/, '');
+        return base.length > 2 && candidatePath.includes(base);
+      });
+
+      let symbolHit = false;
+      if (!moduleHit && symbols.size) {
+        try {
+          const stat = fs.statSync(resolved.absolute!);
+          if (!stat.isFile() || stat.size > 256 * 1024) continue;
+          const text = fs.readFileSync(resolved.absolute!, 'utf8');
+          symbolHit = [...symbols].some(symbol =>
+            new RegExp(`export\\s+(interface|type|class|enum|const|function)\\s+${symbol}\\b`).test(text)
+          );
+        } catch {
+          continue;
+        }
+      }
+      if (!moduleHit && !symbolHit) continue;
+
+      const reason = `validation output referenced ${symbolHit ? [...symbols].join(', ') : [...modules].join(', ')}`;
+      const outcome = evaluateExpansion(session.state, session.policy, { path: candidatePath, reason });
+      if (outcome.granted) granted.push(candidatePath);
+      else recordDeniedExpansion(session.state, outcome);
+    }
+    return granted;
+  }
+
   /** Bounded repair pass. The workflow supplies the real validation output. */
   async continue(input: {
     worktreePath: string;
@@ -293,6 +372,10 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     if (this.cancelled.has(input.worktreePath)) throw new Error('coding task cancelled');
 
     refreshContextFiles(session.state);
+    // The compiler names exactly what the model was missing. Treat that as the
+    // concrete symbol/import justification for widening context, so the repair
+    // is not attempted blind against the same insufficient view that caused it.
+    this.expandForValidationErrors(session, input.validationOutput ?? input.validationSummary);
     session.promptContext = this.renderPromptContext(session, userRequest);
 
     let previousError: string | undefined;
@@ -310,8 +393,8 @@ export class LlmCodingEngine implements CodingEngineAdapter {
           editableFiles: [...this.writableSet(session, input.plan)],
         }),
         schema: PATCH_SCHEMA,
-        timeoutMs: this.options.patchTimeoutMs ?? 300_000,
-        numPredict: 2400,
+        timeoutMs: this.options.patchTimeoutMs ?? PATCH_TIMEOUT_MS,
+        numPredict: PATCH_OUTPUT_TOKENS,
         signal,
         label: `repair-${input.attempt}`,
       });
