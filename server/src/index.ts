@@ -83,6 +83,7 @@ import { graphRouter } from './graph/graph-router';
 import { operationalMemoryRouter } from './operational-memory/operational-memory-router';
 import { taskIntelligenceRouter } from './task-intelligence/task-intelligence-router';
 import { taskRuntimeJsonErrorHandler, taskRuntimeJsonParser, taskRuntimeRouter } from './routes/task-runtime';
+import { codingJsonParser, codingRouter } from './routes/coding';
 import { briefingRouter } from './executive-briefing/briefing-router';
 import { strategicMemoryRouter } from './strategic-memory/strategic-memory-router';
 import { autonomousRouter } from './autonomous/autonomous-router';
@@ -186,6 +187,7 @@ function requireTaskRuntimeAuth(req: express.Request, res: express.Response, nex
 }
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
+app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);

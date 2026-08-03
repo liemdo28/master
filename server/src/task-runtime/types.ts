@@ -47,6 +47,23 @@ export interface TaskRecord {
   repository: string | null;
   workingDirectory: string | null;
   branch: string | null;
+  baseBranch: string | null;
+  baseCommit: string | null;
+  taskBranch: string | null;
+  worktreePath: string | null;
+  codingEngine: string | null;
+  modelRoles: string | null;
+  candidateFiles: string | null;
+  filesRead: string | null;
+  filesChanged: string | null;
+  validationPlan: string | null;
+  validationResults: string | null;
+  retryCount: number;
+  maxRetries: number;
+  reviewStatus: string | null;
+  commitPolicy: string | null;
+  commitSha: string | null;
+  rollbackState: string | null;
   status: TaskStatus;
   riskLevel: 'read-only' | 'local-reversible' | 'reversible-external' | 'approved-external';
   approvalState: 'not-required' | 'requested' | 'granted' | 'rejected';
@@ -79,4 +96,7 @@ export interface CreateTaskInput {
   workingDirectory?: string | null;
   branch?: string | null;
   riskLevel?: TaskRecord['riskLevel'];
+  baseBranch?: string | null;
+  baseCommit?: string | null;
+  maxRetries?: number;
 }
