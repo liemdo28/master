@@ -205,11 +205,12 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       confidence: input.plan.confidence,
     };
 
+    const editable = [...this.writableSet(session, input.plan)];
     const result = await this.callModel({
       session,
       model,
       system: PATCH_SYSTEM,
-      prompt: buildPatchPrompt(session.promptContext, modelPlan),
+      prompt: buildPatchPrompt(session.promptContext, modelPlan, editable),
       schema: PATCH_SCHEMA,
       timeoutMs: this.options.patchTimeoutMs ?? 300_000,
       numPredict: 2400,
@@ -285,6 +286,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
           failureSummary: input.validationSummary,
           validationOutput: input.validationOutput ?? input.validationSummary,
           previousError,
+          editableFiles: [...this.writableSet(session, input.plan)],
         }),
         schema: PATCH_SCHEMA,
         timeoutMs: this.options.patchTimeoutMs ?? 300_000,

@@ -1,0 +1,4 @@
+Round 1 ran with writablePaths bound to the model plan only.
+POLICY_DENIED was the dominant failure (7 of 20 runs), which measured the
+constraint rather than the model. Round 2 re-runs with the enforced boundary
+set to the approved candidate set. Both rounds are retained.

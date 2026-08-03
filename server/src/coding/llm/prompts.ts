@@ -132,14 +132,17 @@ export const PATCH_SYSTEM = `You are a precise software engineer producing minim
 You use exact anchored search/replace edits. The search text must be copied character-for-character from the file.
 ${SHARED_RULES}`;
 
-export function buildPatchPrompt(ctx: PromptContext, plan: ModelPlan): string {
+export function buildPatchPrompt(ctx: PromptContext, plan: ModelPlan, editableFiles: string[] = plan.filesToChange): string {
   return `${renderHeader(ctx)}
 
 APPROVED PLAN:
 ${plan.summary}
 ${plan.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}
 
-FILES YOU MAY EDIT: ${plan.filesToChange.join(', ') || '(none)'}
+FILES YOU PLANNED TO CHANGE: ${plan.filesToChange.join(', ') || '(none)'}
+
+FILES YOU ARE ALLOWED TO EDIT (any write outside this list is rejected):
+${editableFiles.map(file => `- ${file}`).join('\n') || '(none)'}
 
 FILE CONTENTS:
 ${renderFileBlock(ctx.files)}
@@ -172,12 +175,13 @@ export function buildRepairPrompt(input: {
   failureSummary: string;
   validationOutput: string;
   previousError?: string;
+  editableFiles?: string[];
 }): string {
-  const { ctx, attempt, failureSummary, validationOutput, previousError } = input;
+  const { ctx, attempt, failureSummary, validationOutput, previousError, editableFiles } = input;
   return `${renderHeader(ctx)}
 
 REPAIR ATTEMPT ${attempt}.
-
+${editableFiles?.length ? `\nFILES YOU ARE ALLOWED TO EDIT (any write outside this list is rejected):\n${editableFiles.map(f => `- ${f}`).join('\n')}\n` : ''}
 WHAT FAILED: ${failureSummary}
 
 VALIDATION OUTPUT:
