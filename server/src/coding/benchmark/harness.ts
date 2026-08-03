@@ -250,7 +250,7 @@ export async function runFixtureWithModel(fixture: Fixture, model: string): Prom
       });
       outcome.patchValid = true;
       outcome.filesChanged = applied.changedFiles;
-      const allowed = new Set(plan.filesToChange);
+      const allowed = new Set([...plan.filesToChange, ...candidates.candidates.map(c => c.path)]);
       outcome.outOfScopeEdits = applied.changedFiles.filter(f => !allowed.has(f));
     } catch (err) {
       recordFailure(outcome, err);

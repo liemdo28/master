@@ -16,7 +16,7 @@
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
     "coding:acceptance": "tsx src/coding/acceptance.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -24,7 +24,12 @@
     "bigdata:quality": "node ../scripts/bigdata-run-quality-checks.js",
     "bigdata:search": "node ../scripts/bigdata-search.js",
     "bigdata:export": "node ../scripts/bigdata-export-report.js",
-    "bigdata:test": "tsx src/bigdata/bigdata.test.ts"
+    "bigdata:test": "tsx src/bigdata/bigdata.test.ts",
+    "test:agentic-coding": "tsx src/coding/__tests__/agentic-coding.test.ts && tsx src/coding/__tests__/coding-resume.test.ts",
+    "test:agentic-coding-privacy": "tsx src/coding/__tests__/coding-privacy.test.ts",
+    "agentic-coding:acceptance": "tsx src/coding/agentic-acceptance.ts",
+    "agentic-coding:benchmark": "tsx src/coding/benchmark/harness.ts",
+    "agentic-coding:fixtures": "tsx src/coding/__fixtures__/baseline-check.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

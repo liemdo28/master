@@ -295,7 +295,10 @@ export class CodingWorkflow {
             worktreePath,
             userRequest: task.userRequest,
             validation,
-            allowedFiles: plan.filesToChange,
+            // The approved boundary is the candidate set, which is what the
+            // patch layer enforces; reviewing against the plan alone would flag
+            // legitimate edits the model simply failed to predict.
+            allowedFiles: candidates.candidates.map(candidate => candidate.path),
             modelRoles,
           })
         )

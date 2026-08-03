@@ -38,7 +38,9 @@ const NODE_TEST_PKG = (name: string, extra: Record<string, string> = {}) =>
       version: '1.0.0',
       private: true,
       type: 'commonjs',
-      scripts: { test: 'node --test', ...extra },
+      // test:coding mirrors test so the real workflow's validation plan,
+      // which always runs that script, resolves against these fixtures too.
+      scripts: { test: 'node --test', 'test:coding': 'node --test', ...extra },
     },
     null,
     2
@@ -147,7 +149,7 @@ const FIXTURE_B: Fixture = {
   excludedPaths: ['node_modules', '.git'],
   validationCommands: ['npm test'],
   files: [
-    { path: 'package.json', content: NODE_TEST_PKG('inventory-api', { test: 'node --test spec' }) },
+    { path: 'package.json', content: NODE_TEST_PKG('inventory-api', { test: 'node --test spec', 'test:coding': 'node --test spec' }) },
     {
       path: 'src/services/inventory-service.js',
       content: `'use strict';
@@ -256,7 +258,7 @@ const FIXTURE_C: Fixture = {
             name: 'pricing-module',
             version: '1.0.0',
             private: true,
-            scripts: { build: 'tsc --noEmit -p tsconfig.json' },
+            scripts: { build: 'tsc --noEmit -p tsconfig.json', 'test:coding': 'tsc --noEmit -p tsconfig.json' },
           },
           null,
           2
@@ -457,7 +459,7 @@ const FIXTURE_E: Fixture = {
   excludedPaths: ['node_modules', '.git', 'vendor'],
   validationCommands: ['npm test'],
   files: [
-    { path: 'package.json', content: NODE_TEST_PKG('etl-pipeline', { test: 'node --test t' }) },
+    { path: 'package.json', content: NODE_TEST_PKG('etl-pipeline', { test: 'node --test t', 'test:coding': 'node --test t' }) },
     {
       path: 'pipeline/registry.js',
       content: `'use strict';

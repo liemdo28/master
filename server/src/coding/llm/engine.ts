@@ -218,8 +218,10 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     });
 
     const patch = parseJsonObject<ModelPatch>(result.response, 'patch');
-    const writable = new Set(input.plan.filesToChange.map(normalizePath));
+    const writable = this.writableSet(session, input.plan);
     const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
+    const planned = new Set(input.plan.filesToChange.map(normalizePath));
+    const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
 
     this.persist(session);
     return {
@@ -229,11 +231,26 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         model,
         summary: patch.summary,
         edits: outcome.applied,
+        beyondPlan,
         telemetry: session.telemetry.at(-1),
         contextFiles: [...session.state.files.keys()],
         expansions: session.state.expansions,
       },
     };
+  }
+
+  /**
+   * Files the patch may write. The enforced boundary is the approved candidate
+   * set, not the model's own predicted file list: a plan that under-names one
+   * file is a forecasting miss, not a policy breach, and failing the task for it
+   * makes multi-file work near-impossible while protecting nothing — every
+   * candidate is already inside the context pack. Edits beyond the plan are
+   * recorded as `beyondPlan` and surface to review.
+   */
+  private writableSet(session: EngineSession, plan: EnginePlan): Set<string> {
+    const writable = new Set(plan.filesToChange.map(normalizePath));
+    for (const candidate of session.candidates.candidates) writable.add(normalizePath(candidate.path));
+    return writable;
   }
 
   /** Bounded repair pass. The workflow supplies the real validation output. */
@@ -278,7 +295,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 
       try {
         const patch = parseJsonObject<ModelPatch>(result.response, 'repair patch');
-        const writable = new Set(input.plan.filesToChange.map(normalizePath));
+        const writable = this.writableSet(session, input.plan);
         const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
         this.persist(session);
         return {

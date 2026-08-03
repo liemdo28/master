@@ -384,9 +384,19 @@ function detectPm2Processes(root: string): ProjectRecord['runtimeProcesses'] {
   }
 }
 
+const KNOWN_MI_MODULE_DIRS = [
+  'server/src/project-registry',
+  'server/src/task-runtime',
+  'server/src/coding',
+  'server/src/routes',
+  'server/src/projects',
+  'server/src/company-os',
+  'server/src/graph',
+];
+
 function discoverModules(root: string): ProjectMapModule[] {
   const modules: ProjectMapModule[] = [];
-  for (const dir of ['server/src/project-registry', 'server/src/task-runtime', 'server/src/coding', 'server/src/routes', 'server/src/projects', 'server/src/company-os', 'server/src/graph']) {
+  for (const dir of KNOWN_MI_MODULE_DIRS) {
     const abs = path.join(root, dir);
     if (!fs.existsSync(abs)) continue;
     modules.push({
@@ -396,7 +406,66 @@ function discoverModules(root: string): ProjectMapModule[] {
       signals: moduleSignals(abs),
     });
   }
+  // The named list above only matches Mi's own layout. Any other repository —
+  // which is precisely what a general-purpose coding engine has to handle —
+  // would otherwise map to zero modules and produce an empty context pack, so
+  // fall back to discovering the repository's actual source directories.
+  if (!modules.length) modules.push(...discoverGenericModules(root));
   return modules;
+}
+
+/** Structure-agnostic discovery for repositories that are not Mi Core. */
+function discoverGenericModules(root: string): ProjectMapModule[] {
+  const modules: ProjectMapModule[] = [];
+  const rootFiles: string[] = [];
+  let entries: fs.Dirent[] = [];
+  try {
+    entries = fs.readdirSync(root, { withFileTypes: true });
+  } catch {
+    return modules;
+  }
+
+  for (const entry of entries) {
+    if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
+    const abs = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      const paths = listFiles(abs, root, 25);
+      if (!paths.length) continue;
+      modules.push({
+        name: entry.name,
+        purpose: inferGenericPurpose(entry.name),
+        paths,
+        signals: moduleSignals(abs),
+      });
+    } else if (/\.(ts|tsx|js|json|md|yml|yaml)$/.test(entry.name)) {
+      rootFiles.push(toPosixRelative(root, abs));
+    }
+  }
+
+  if (rootFiles.length) {
+    modules.push({
+      name: 'root',
+      purpose: 'Top-level project files including manifests and configuration.',
+      paths: rootFiles.slice(0, 25),
+      signals: rootFiles.slice(0, 20).map(file => path.posix.basename(file)),
+    });
+  }
+  return modules.slice(0, 20);
+}
+
+function inferGenericPurpose(name: string): string {
+  const lower = name.toLowerCase();
+  if (/^(test|tests|spec|specs|__tests__|t)$/.test(lower)) return 'Automated tests and specifications.';
+  if (/^(src|lib|app|source)$/.test(lower)) return 'Primary application source.';
+  if (/^(routes?|controllers?|api|handlers?)$/.test(lower)) return 'Request handling and API surface.';
+  if (/^(services?|domain|core|business)$/.test(lower)) return 'Business and domain logic.';
+  if (/^(models?|entities|schema|types?)$/.test(lower)) return 'Data models and type definitions.';
+  if (/^(utils?|helpers?|common|shared)$/.test(lower)) return 'Shared utilities and helpers.';
+  if (/^(config|configuration|settings)$/.test(lower)) return 'Configuration.';
+  if (/^(scripts?|bin|tools?)$/.test(lower)) return 'Operational scripts and tooling.';
+  if (/^(docs?|documentation)$/.test(lower)) return 'Documentation.';
+  if (/^(pipeline|stages?|jobs?|workers?)$/.test(lower)) return 'Processing pipeline stages.';
+  return `Source module: ${name}.`;
 }
 
 function discoverRoutes(root: string): string[] {

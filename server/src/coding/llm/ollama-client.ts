@@ -92,6 +92,10 @@ export interface LoadedModelInfo {
 
 export async function generate(options: GenerateOptions): Promise<GenerateResult> {
   const endpoint = resolveOllamaEndpoint();
+  // An already-aborted signal never emits 'abort', so a listener alone would let
+  // a cancelled task start one more inference before noticing.
+  if (options.signal?.aborted) throw new Error('coding task cancelled');
+
   const timeoutMs = options.timeoutMs ?? 180_000;
   const controller = new AbortController();
   const onAbort = () => controller.abort();
