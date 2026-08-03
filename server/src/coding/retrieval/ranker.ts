@@ -62,6 +62,12 @@ export const EVIDENCE_WEIGHTS: Record<EvidenceKind, number> = {
   NEGATIVE_DIRECTORY_ONLY: -2,
 };
 
+/**
+ * Below this many candidate files, structural isolation says nothing useful:
+ * a small project legitimately has leaf modules with no inbound imports.
+ */
+const ISOLATION_MIN_FILES = 12;
+
 /** Roles a request about a given artifact is actually asking for. */
 const ROLE_AFFINITY: Record<string, StructuralRole[]> = {
   HTTP_RESPONSE: ['ROUTE', 'HANDLER', 'CONTROLLER'],
@@ -353,7 +359,13 @@ export function rankCandidates(input: RankInput): RetrievalResult {
   // API-surface reachability rule to every intent, and is what separates
   // `validation/assignment-rules.ts` (imported by a handler, has a test) from
   // `lib/assignment.ts` (imported by nothing).
-  for (const candidate of candidates) {
+  //
+  // Only applied once the candidate set is large enough for decoys to be a real
+  // risk. In a small repository the leaf module nothing imports is frequently
+  // the very file being asked about — a two-file TypeScript fixture has no
+  // inbound edges at all, and penalising it excluded the only file that needed
+  // fixing.
+  for (const candidate of nodes.length >= ISOLATION_MIN_FILES ? candidates : []) {
     const node = graph.files.get(candidate.path);
     if (!node) continue;
     // A symbol whose name the request fully accounts for is real evidence,

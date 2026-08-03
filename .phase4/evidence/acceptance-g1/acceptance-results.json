@@ -1,0 +1,460 @@
+{
+  "generatedAt": "2026-08-03T16:45:51.291Z",
+  "reports": [
+    {
+      "fixtureId": "task-a-bug-fix",
+      "category": "bug-fix",
+      "taskId": "task-af57f190-2d34-43c5-acef-02ab2b0ecb2a",
+      "commitSha": "bf9f81fb45a6d1324eb84bf3064336004b166c8c",
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-e71567d2dd05"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=2"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "2 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Fix the overlap logic to allow back-to-back slots by adjusting the condition in the overlaps function."
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-3chqFN\\worktrees\\task-a-bug-fix\\task-af57f190-2d34-43c5-acef-02ab2b0ecb2a"
+        },
+        {
+          "name": "validation passed",
+          "ok": true,
+          "detail": "npm run build=n/a npm run test:coding=0 git diff --check=0 npm test=n/a"
+        },
+        {
+          "name": "independent review passed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "local commit created",
+          "ok": true,
+          "detail": "bf9f81fb45a6d1324eb84bf3064336004b166c8c"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-af57f190-the-booking-availability-check-rejects-a-slot-th * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": true,
+      "failureCategory": null,
+      "seconds": 56.161
+    },
+    {
+      "fixtureId": "task-b-multi-file-feature",
+      "category": "multi-file-feature",
+      "taskId": "task-b2bbf189-9d59-40b5-b805-a43603bb1d7a",
+      "commitSha": "a56611bcd404fbfa332bdc5b75fda71d91b4c75e",
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-a2f71c623dcb"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=4"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "4 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Add support for filtering inventory by minimum quantity in the service and update the route and test to handle it."
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-3chqFN\\worktrees\\task-b-multi-file-feature\\task-b2bbf189-9d59-40b5-b805-a43603bb1d7a"
+        },
+        {
+          "name": "validation passed",
+          "ok": true,
+          "detail": "npm run build=n/a npm run test:coding=0 git diff --check=0 npm test=n/a"
+        },
+        {
+          "name": "independent review passed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "local commit created",
+          "ok": true,
+          "detail": "a56611bcd404fbfa332bdc5b75fda71d91b4c75e"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-b2bbf189-add-support-for-filtering-the-inventory-list-by- * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": true,
+      "failureCategory": null,
+      "seconds": 98.561
+    },
+    {
+      "fixtureId": "task-c-type-repair",
+      "category": "type-repair",
+      "taskId": "task-8197d021-0b92-460d-9266-cc38fb5e4927",
+      "commitSha": null,
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-f4d34adfaed2"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=2"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "2 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Fix TypeScript errors by adding the missing 'currency' member to the PricedOrder interface"
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-3chqFN\\worktrees\\task-c-type-repair\\task-8197d021-0b92-460d-9266-cc38fb5e4927"
+        },
+        {
+          "name": "validation passed",
+          "ok": false,
+          "detail": "npm run build=2 npm run test:coding=2 git diff --check=0"
+        },
+        {
+          "name": "independent review passed",
+          "ok": false,
+          "detail": "validation failed: npm run build; validation failed: npm run test:coding"
+        },
+        {
+          "name": "local commit created",
+          "ok": false,
+          "detail": "null"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-8197d021-the-pricing-module-no-longer-compiles-diagnose-t * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": false,
+      "failureCategory": "VALIDATION_FAILED",
+      "seconds": 86.187
+    },
+    {
+      "fixtureId": "task-d-refactor",
+      "category": "refactor",
+      "taskId": "task-dee63f2b-c2d5-4ecc-aa11-d04049819307",
+      "commitSha": null,
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-d327a3813fa4"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=1"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "1 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Refactor the formatReport function to extract column-padding logic into smaller, clearly named helper functions while preserving all observable behaviour."
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-3chqFN\\worktrees\\task-d-refactor\\task-dee63f2b-c2d5-4ecc-aa11-d04049819307"
+        },
+        {
+          "name": "validation passed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "independent review passed",
+          "ok": false,
+          "detail": "ollama unreachable at http://127.0.0.1:11434: fetch failed"
+        },
+        {
+          "name": "local commit created",
+          "ok": false,
+          "detail": "null"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-dee63f2b-the-report-formatter-has-grown-one-long-function * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": false,
+      "failureCategory": "MODEL_UNAVAILABLE",
+      "seconds": 331.12
+    },
+    {
+      "fixtureId": "task-e-unfamiliar-repo",
+      "category": "unfamiliar-repo",
+      "taskId": "task-42b7e494-bfe3-4d11-8111-785998cbba34",
+      "commitSha": "4f82ff95b0460d4411a7111e9d2328411856aff7",
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-2eb6c5c4fc28"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=4"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "4 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Modify the normalise function to drop records with blank identifiers during normalisation"
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-3chqFN\\worktrees\\task-e-unfamiliar-repo\\task-42b7e494-bfe3-4d11-8111-785998cbba34"
+        },
+        {
+          "name": "validation passed",
+          "ok": true,
+          "detail": "npm run build=n/a npm run test:coding=0 git diff --check=0 npm test=n/a"
+        },
+        {
+          "name": "independent review passed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "local commit created",
+          "ok": true,
+          "detail": "4f82ff95b0460d4411a7111e9d2328411856aff7"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-42b7e494-records-with-a-blank-identifier-are-silently-kep * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": true,
+      "failureCategory": null,
+      "seconds": 51.765
+    }
+  ]
+}

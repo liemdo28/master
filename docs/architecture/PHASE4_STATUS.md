@@ -392,3 +392,129 @@ symbol and route definitions the request names (an exact route string like
 `/tasks/:id/plan` should dominate a filename token collision), or use local
 embeddings for candidate selection. Both are larger design changes than this
 batch, and neither is prompt tuning.
+
+---
+
+# Phase 4.5 — semantic retrieval
+
+**The retrieval blocker is solved. The Mi Core pilot went from 0/5 to 5/5.**
+Fixture acceptance is not consistently 5/5, so the PR gate is not met and
+nothing was pushed.
+
+## Architecture
+
+Layered evidence, not one flat keyword score. Every contribution carries a
+kind, a weight and an explanation, so a ranking can be audited.
+
+| layer | signals | weight range |
+|---|---|---|
+| 1 exact structural | explicit path, exact route, exact symbol, response key, operational string | 25–100 |
+| 2 framework structure | route definition, CLI registration, artifact-role affinity | 15–30 |
+| 3 dependency graph | direct import, one-hop import, related test | 5–16 |
+| 4 symbol graph | symbol definition (scaled by name coverage), type reference | 8–14 |
+| 5 lexical | filename token, directory token | 1–3 |
+| 6 embeddings | **not implemented — structural retrieval was sufficient** | — |
+
+A filename token is worth 3. An exact route is worth 60. That ratio is the
+whole point: no accumulation of weak name matches can outvote one structural
+match.
+
+## Why the pilot was failing
+
+`llm/engine.ts` scored 4 and `routes/coding.ts` scored 3 under lexical ranking,
+because the request's word "engine" named a *value*. Under retrieval:
+
+| file | rank | score | evidence |
+|---|---|---|---|
+| `server/src/routes/coding.ts` | **1** | 925 | response keys `plan`, `engine`, `task`; route segment matches |
+| `server/src/coding/llm/engine.ts` | 36 | 47 | filename token only; not reachable from a route handler |
+
+## Three rules that earn their place
+
+Each fixed an observed failure rather than an intuition:
+
+1. **Route evidence only counts when the request is about routes.** Crediting it
+   unconditionally made any multi-route file the top hit for *every* request —
+   including a test-only change — because response keys collide with ordinary
+   nouns like "status" or "task".
+2. **A module nothing imports, serving no route, matched only by name, is a
+   decoy.** This separates `validation/assignment-rules.ts` (imported by a
+   handler, has a test) from `lib/assignment.ts` (imported by nothing). Applied
+   only above 12 files: in a small repository the leaf module nothing imports is
+   frequently the file being asked about, and penalising it excluded the only
+   file a two-file TypeScript fixture needed.
+3. **Symbol evidence scales with name coverage.** `normaliseTonnage` against
+   "normalise the tonnage" covers both parts and is real; `assignmentLabel`
+   against a request that merely says "assignment" shares one generic word.
+
+## Retrieval evaluation — PASS
+
+Ten tasks, two synthetic repositories with deliberately different conventions
+(TypeScript/camelCase/`src`, and CommonJS/snake_case/no-`src`).
+
+| metric | measured | target |
+|---|---|---|
+| Top-1 accuracy | 90% | — |
+| **Top-3 recall** | **100%** | ≥ 90% |
+| Mean reciprocal rank | 0.950 | — |
+| **Unrelated candidate rate** | **3.7%** | < 10% |
+| Average candidates | 4.2 | — |
+| Average context | 1,147 bytes | — |
+| Retrieval latency | 22 ms (2.5 s cold graph build over 819 files) | — |
+| Path violations | 0 | 0 |
+| Deterministic | yes | yes |
+
+Two defects were found by the evaluation rather than by inspection: intent
+patterns requiring exact base words classified "configured"/"settings" as
+UNKNOWN and left retrieval selecting *nothing*; and treating "returns" as an
+HTTP signal misclassified any function description as an API request.
+
+## Mi Core pilot — 5/5
+
+| run | status | commit | file changed |
+|---|---|---|---|
+| 1 | COMPLETED | `b48bccad4d8d` | `server/src/routes/coding.ts` |
+| 2 | COMPLETED | `4ab3fdb224c8` | `server/src/routes/coding.ts` |
+| 3 | COMPLETED | `b406e15854a0` | `server/src/routes/coding.ts` |
+| 4 | COMPLETED | `702069f5df24` | `server/src/routes/coding.ts` |
+| 5 | COMPLETED | `5fa34372791f` | `server/src/routes/coding.ts` |
+
+Task wording unchanged from the failing Phase 4 runs. Validation and review
+passed on every run; base checkout untouched; no push.
+
+## What is still not met
+
+**Fixture acceptance is not reliably 5/5.** Measured across four rounds:
+5/5, 3/5, 5/5, 3/5.
+
+The failures are `task-c-type-repair` (VALIDATION_FAILED — a well-formed patch
+that does not fix the compile error) and `task-d-refactor`
+(CONTEXT_INSUFFICIENT — the patch exceeds the output budget on a whole-function
+rewrite). Both are **model reasoning**, not retrieval: retrieval selects the
+correct files in every round, and the patch applies.
+
+The output budget was re-measured now that retrieval halves the context: 4096
+gave 3/5 and 3072 gave 5/5 and 3/5. The budget is not the lever.
+
+## PR gate
+
+| gate | status |
+|---|---|
+| retrieval evaluation meets target | PASS |
+| **fixture acceptance 5/5 in two consecutive rounds** | **NOT MET (5/5, 3/5)** |
+| Mi Core pilot ≥ 4/5 | PASS (5/5) |
+| build / test:ci | PASS |
+| test:agentic-coding (72 + 51 + 36 + 23 assertions) | PASS |
+| privacy (31 assertions, 4 requests, all loopback) | PASS |
+| no task-specific retrieval or patch logic | PASS |
+| no cloud transfer, no production change | PASS |
+
+Not pushed. Embeddings were not implemented, because structural retrieval met
+the target on its own.
+
+## Remaining blocker
+
+**Model reasoning**, specifically on type-error repair and whole-function
+refactor at 8B. Not retrieval, not patch application, not validation, not
+review. Closing it means a stronger local coding model, which needs more VRAM
+than the 8 GB available.

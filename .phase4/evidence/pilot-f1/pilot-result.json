@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-08-03T16:14:52.975Z",
+  "taskId": "task-18e19fff-c85e-424e-8740-2428fd8ab9bb",
+  "projectId": "mi-core",
+  "mapVersion": "map-13c827e6b0a0",
+  "sourceSha": "9bbc568f99a3ba0d908ec3ca76e2ceaac11376f5",
+  "contextPackId": "ctx-16ab5bb0-fcc3-402e-827e-fd0962b9eb35",
+  "includedPaths": [
+    "server/src/routes/coding.ts",
+    "agent-engine/bridge.mjs",
+    "server/src/ceo-command-center/index.ts",
+    "server/src/routes/actions.ts",
+    "server/src/routes/data-analyst.ts",
+    "server/src/routes/task-runtime.ts",
+    "agent-engine/phase-82-self-healing-projects/test/execution-workflow-e2e.mjs"
+  ],
+  "candidates": [
+    {
+      "path": "server/src/routes/coding.ts",
+      "confidence": 0.6300000000000001
+    },
+    {
+      "path": "server/src/routes/task-runtime.ts",
+      "confidence": 0.6300000000000001
+    },
+    {
+      "path": "agent-engine/phase-82-self-healing-projects/test/execution-workflow-e2e.mjs",
+      "confidence": 0.54
+    },
+    {
+      "path": "agent-engine/bridge.mjs",
+      "confidence": 0.51
+    },
+    {
+      "path": "server/src/ceo-command-center/index.ts",
+      "confidence": 0.45
+    },
+    {
+      "path": "server/src/routes/actions.ts",
+      "confidence": 0.45
+    },
+    {
+      "path": "server/src/routes/data-analyst.ts",
+      "confidence": 0.45
+    }
+  ],
+  "engine": "local-llm-engine",
+  "model": "qwen3:8b",
+  "plan": {
+    "engineId": "local-llm-engine",
+    "summary": "Add the engine id to the plan response in the coding task route to identify which coding engine produced the plan.",
+    "filesToRead": [],
+    "filesToChange": [
+      "server/src/routes/coding.ts"
+    ],
+    "confidence": 0.95,
+    "hallucinatedPaths": [],
+    "steps": [
+      "Locate the '/tasks/:id/plan' route in the coding.ts file.",
+      "Identify the response object being sent for the plan endpoint.",
+      "Add the 'codingEngine' field from the TaskRecord to the response object.",
+      "Ensure the 'codingEngine' field is included in the JSON response.",
+      "Verify that the 'codingEngine' field is correctly populated from the task record."
+    ]
+  },
+  "filesChanged": [
+    "server/src/routes/coding.ts"
+  ],
+  "validation": [
+    {
+      "name": "npm ci",
+      "configured": true,
+      "exitCode": 0
+    },
+    {
+      "name": "npm run build",
+      "configured": true,
+      "exitCode": 0
+    },
+    {
+      "name": "npm run test:coding",
+      "configured": true,
+      "exitCode": 0
+    },
+    {
+      "name": "git diff --check",
+      "configured": true,
+      "exitCode": 0
+    }
+  ],
+  "review": {
+    "status": "PASS",
+    "findings": [],
+    "deterministicFindings": [],
+    "modelFindings": [],
+    "modelStatus": "PASS",
+    "reviewModel": "qwen3:8b",
+    "independentModel": false,
+    "reasoning": "The change adds the codingEngine field to the task response, fulfilling the task. It only modifies the allowed file and does not introduce any security issues or disable tests."
+  },
+  "commitSha": "b48bccad4d8da399415555d1e0dbdb6766469703",
+  "taskBranch": "codex/task-18e19fff-the-read-only-coding-task-plan-endpoint-does-not"
+}

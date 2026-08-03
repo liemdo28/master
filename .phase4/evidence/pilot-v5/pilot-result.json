@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-08-03T15:06:19.892Z",
+  "taskId": "task-f33896f7-034f-4064-8c4f-f1903d582ba6",
+  "projectId": "mi-core",
+  "mapVersion": "map-e9f25ecfac6d",
+  "sourceSha": "2d3a697b69e968c9bc248e76238b90775c062380",
+  "contextPackId": "ctx-bc998ac4-f394-4b2b-bb50-70058bffd0bb",
+  "includedPaths": [
+    "server/src/project-registry/__tests__/registry-guard.test.ts",
+    "server/src/project-registry/acceptance.ts",
+    "server/src/project-registry/cli.ts",
+    "server/src/project-registry/guard.ts",
+    "server/src/project-registry/paths.ts",
+    "server/src/project-registry/service.ts",
+    "server/src/project-registry/store.ts",
+    "server/src/project-registry/types.ts",
+    "server/src/task-runtime/engine.ts",
+    "server/src/task-runtime/__tests__/acceptance.test.ts",
+    "server/src/task-runtime/__tests__/async-execution.test.ts",
+    "server/src/task-runtime/__tests__/atomic-transactions.test.ts",
+    "server/src/task-runtime/__tests__/body-auth-path.test.ts",
+    "server/src/task-runtime/__tests__/execution-failure.test.ts",
+    "server/src/task-runtime/__tests__/http-integration.test.ts",
+    "server/src/task-runtime/__tests__/state-machine.test.ts",
+    "server/src/coding/engine-registry.ts",
+    "server/src/coding/engines/internal-patch-engine.ts",
+    "server/src/coding/llm/engine.ts",
+    "server/src/coding/engines/adapter.ts",
+    "server/src/coding/acceptance.ts",
+    "server/src/coding/agentic-acceptance.ts",
+    "server/src/coding/benchmark/diagnose.ts",
+    "server/src/coding/benchmark/harness.ts",
+    "server/src/routes/agent-engine.ts",
+    "server/src/routes/coding.ts",
+    "server/src/routes/engineering.ts",
+    "server/src/routes/actions.ts",
+    "server/src/routes/ai-platform.ts",
+    "server/src/routes/approval.ts",
+    "server/src/routes/auth.ts",
+    "server/src/routes/bigdata.ts",
+    "server/src/projects/task-manager.ts",
+    "server/src/projects/connector-router.ts",
+    "server/src/projects/connectors/bakudan-website-connector.ts",
+    "server/src/projects/connectors/dashboard-connector.ts",
+    "server/src/projects/connectors/raw-website-connector.ts",
+    "server/src/projects/connectors/remote-proxy-connector.ts",
+    "server/src/projects/content-scheduler.ts",
+    "server/src/projects/project-scanner.ts"
+  ],
+  "candidates": [
+    {
+      "path": "server/src/coding/engine-registry.ts",
+      "confidence": 0.6900000000000001
+    },
+    {
+      "path": "server/src/coding/engines/internal-patch-engine.ts",
+      "confidence": 0.6900000000000001
+    },
+    {
+      "path": "server/src/coding/llm/engine.ts",
+      "confidence": 0.6900000000000001
+    },
+    {
+      "path": "server/src/task-runtime/engine.ts",
+      "confidence": 0.6900000000000001
+    },
+    {
+      "path": "server/src/projects/task-manager.ts",
+      "confidence": 0.6300000000000001
+    },
+    {
+      "path": "server/src/routes/agent-engine.ts",
+      "confidence": 0.6300000000000001
+    },
+    {
+      "path": "server/src/routes/coding.ts",
+      "confidence": 0.6300000000000001
+    },
+    {
+      "path": "server/src/routes/engineering.ts",
+      "confidence": 0.6300000000000001
+    }
+  ],
+  "engine": "local-llm-engine",
+  "model": "qwen3:8b",
+  "plan": {
+    "engineId": "local-llm-engine",
+    "summary": "Add engine id to the read-only coding task plan response to identify which engine produced the plan",
+    "filesToRead": [],
+    "filesToChange": [
+      "server/src/coding/llm/engine.ts",
+      "server/src/coding/engines/internal-patch-engine.ts"
+    ],
+    "confidence": 0.95,
+    "hallucinatedPaths": [],
+    "steps": [
+      "Identify where the plan response is constructed in the LLM coding engine",
+      "Add the engine id to the plan response object",
+      "Repeat the same modification in the internal patch engine",
+      "Verify the engine id is included in the final plan response"
+    ]
+  },
+  "filesChanged": [
+    "server/src/coding/llm/engine.ts",
+    "server/src/coding/engines/internal-patch-engine.ts"
+  ],
+  "validation": [
+    {
+      "name": "npm ci",
+      "configured": true,
+      "exitCode": 0
+    },
+    {
+      "name": "npm run build",
+      "configured": true,
+      "exitCode": 2
+    },
+    {
+      "name": "npm run test:coding",
+      "configured": true,
+      "exitCode": 1
+    },
+    {
+      "name": "git diff --check",
+      "configured": true,
+      "exitCode": 0
+    }
+  ],
+  "review": {
+    "status": "FAIL",
+    "findings": [
+      "validation failed: npm run build",
+      "validation failed: npm run test:coding",
+      "review model: The change does not accomplish the task"
+    ],
+    "deterministicFindings": [
+      "validation failed: npm run build",
+      "validation failed: npm run test:coding"
+    ],
+    "modelFindings": [
+      "The change does not accomplish the task"
+    ],
+    "modelStatus": "FAIL",
+    "reviewModel": "qwen3:8b",
+    "independentModel": false,
+    "reasoning": "The diff shows a typo in 'filesToChang' instead of 'filesToChange', which is a syntax error and does not address the original task of including the engine ID in the response."
+  },
+  "commitSha": null,
+  "taskBranch": "codex/task-f33896f7-the-read-only-coding-task-plan-endpoint-does-not"
+}

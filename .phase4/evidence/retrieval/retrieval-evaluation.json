@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-03T15:18:53.124Z",
+  "generatedAt": "2026-08-03T16:58:33.772Z",
   "report": {
     "tasks": [
       {
@@ -11,7 +11,7 @@
         "unrelatedRate": 0,
         "candidateCount": 6,
         "contextBytes": 1643,
-        "latencyMs": 46,
+        "latencyMs": 47,
         "forbiddenSelected": [],
         "selected": [
           "src/routes/berth-routes.ts",
@@ -58,7 +58,7 @@
         "unrelatedRate": 0,
         "candidateCount": 4,
         "contextBytes": 1368,
-        "latencyMs": 22,
+        "latencyMs": 24,
         "forbiddenSelected": [],
         "selected": [
           "src/services/berth-service.ts",
@@ -103,7 +103,7 @@
         "unrelatedRate": 0,
         "candidateCount": 4,
         "contextBytes": 1368,
-        "latencyMs": 18,
+        "latencyMs": 21,
         "forbiddenSelected": [],
         "selected": [
           "src/domain/berth-types.ts",
@@ -148,7 +148,7 @@
         "unrelatedRate": 0.2,
         "candidateCount": 5,
         "contextBytes": 1432,
-        "latencyMs": 18,
+        "latencyMs": 20,
         "forbiddenSelected": [],
         "selected": [
           "src/cli/harbour-cli.ts",
@@ -194,7 +194,7 @@
         "unrelatedRate": 0,
         "candidateCount": 4,
         "contextBytes": 1368,
-        "latencyMs": 18,
+        "latencyMs": 20,
         "forbiddenSelected": [],
         "selected": [
           "src/models/berth-table.ts",
@@ -239,7 +239,7 @@
         "unrelatedRate": 0,
         "candidateCount": 2,
         "contextBytes": 286,
-        "latencyMs": 18,
+        "latencyMs": 20,
         "forbiddenSelected": [],
         "selected": [
           "src/validation/assignment-rules.ts",
@@ -329,7 +329,7 @@
         "unrelatedRate": 0,
         "candidateCount": 1,
         "contextBytes": 69,
-        "latencyMs": 17,
+        "latencyMs": 18,
         "forbiddenSelected": [],
         "selected": [
           "src/config/harbour-settings.ts"
@@ -450,7 +450,7 @@
           {
             "rank": 5,
             "path": "lib/entries.js",
-            "score": -69
+            "score": -45
           }
         ]
       }
@@ -461,7 +461,7 @@
     "unrelatedCandidateRate": 0.03666666666666667,
     "averageCandidateCount": 4.2,
     "averageContextBytes": 1147.2,
-    "averageLatencyMs": 20.9,
+    "averageLatencyMs": 22.2,
     "pathViolations": [],
     "deterministic": true
   }
