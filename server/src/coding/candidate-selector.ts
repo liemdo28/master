@@ -53,10 +53,20 @@ export function selectCandidateFiles(pack: ContextPack, userRequest: string): Ca
         confidence: Math.min(0.95, 0.4 + score * 0.06 + (testGuess.length ? 0.05 : 0)),
       };
     })
-    .sort((a, b) => b.confidence - a.confidence || a.path.localeCompare(b.path))
-    .slice(0, MAX_CANDIDATES);
+    .sort((a, b) => b.confidence - a.confidence || a.path.localeCompare(b.path));
 
-  return { candidates, excluded, hardLimit: MAX_CANDIDATES, maxBytesPerFile: MAX_BYTES_PER_FILE, source: 'context-pack' };
+  // Drop files that matched nothing in the request, provided something did
+  // match. On a small repository every file is plausibly relevant and the pack
+  // is already the answer; on a repository the size of Mi Core, padding to the
+  // cap buries the request under a wall of unrelated modules and a local 8B
+  // model starts describing whatever it was shown instead of what was asked.
+  const relevant = candidates.filter(candidate => !candidate.reason.startsWith('included by'));
+  const chosen = (relevant.length ? relevant : candidates).slice(0, MAX_CANDIDATES);
+  for (const candidate of candidates) {
+    if (!chosen.includes(candidate)) excluded.push(`${candidate.path}: no request-hint match`);
+  }
+
+  return { candidates: chosen, excluded, hardLimit: MAX_CANDIDATES, maxBytesPerFile: MAX_BYTES_PER_FILE, source: 'context-pack' };
 }
 
 export function enforceCandidateFileLimits(worktreePath: string, selection: CandidateSelection): CandidateSelection {
