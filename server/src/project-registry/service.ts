@@ -5,6 +5,8 @@ import { randomUUID, createHash } from 'crypto';
 import { ProjectRegistryStore } from './store';
 import { assertInsideAllowedRegistryRoots, assertInsideRoot, realPathIfExists, toPosixRelative } from './paths';
 import { scorePathAgainstHints } from '../coding/candidate-selector';
+import { retrieve } from '../coding/retrieval';
+import type { RetrievalResult } from '../coding/retrieval/types';
 import type {
   ContextPack,
   ProjectMap,
@@ -18,6 +20,13 @@ import type {
 const IGNORE_DIRS = new Set(['node_modules', 'dist', 'build', '.git', '.next', '.local-agent-global', 'coverage', 'logs']);
 
 export class ProjectRegistryService {
+  /** Retrieval result behind the most recent context pack, for evidence and events. */
+  private lastRetrieval: RetrievalResult | null = null;
+
+  getLastRetrieval(): RetrievalResult | null {
+    return this.lastRetrieval;
+  }
+
   constructor(private store = new ProjectRegistryStore()) {}
 
   registerProject(input: RegisterProjectInput): ProjectRecord {
@@ -197,27 +206,65 @@ export class ProjectRegistryService {
     const map = project.mapVersion ? this.store.getProjectMap(projectId, project.mapVersion) : this.store.latestProjectMap(projectId);
     const mapStatus = this.effectiveMapStatus(project);
     const hints = tokenize(userRequest);
-    const matchedPaths = new Set<string>();
-    if (map) {
+
+    // Structural retrieval chooses the pack contents.
+    //
+    // Lexical ranking over module paths could not tell a request's vocabulary
+    // from a filename: a request about "the engine id in a plan response"
+    // ranked an engine implementation above the route that serves the plan.
+    // Retrieval ranks by route, symbol, response-shape and dependency evidence
+    // instead, and returns a small explainable set rather than a fixed slice.
+    // Retrieval enumerates source files itself rather than reading the map's
+    // module lists. The map is deliberately a bounded *summary* (25 paths per
+    // module), which is the right contract for a map and the wrong input for
+    // retrieval: a file past that bound would be unreachable however exactly
+    // it matched.
+    const universe = [
+      ...new Set([
+        ...listProjectSourceFiles(project.canonicalRoot, 4000),
+        ...(map?.modules ?? []).flatMap(module => module.paths),
+      ]),
+    ];
+    let includedPaths: string[] = [];
+    let retrieval: RetrievalResult | null = null;
+
+    if (map && universe.length && userRequest.trim()) {
+      try {
+        retrieval = retrieve({
+          projectId,
+          sourceSha: map.sourceSha,
+          worktreePath: project.canonicalRoot,
+          userRequest,
+          filePaths: universe,
+        });
+        includedPaths = retrieval.selected.map(candidate => candidate.path);
+        for (const candidate of retrieval.selected) {
+          for (const test of candidate.relatedTests) {
+            if (!includedPaths.includes(test)) includedPaths.push(test);
+          }
+        }
+      } catch {
+        // Retrieval is an improvement over lexical ranking, not a dependency.
+        retrieval = null;
+      }
+    }
+
+    if (!includedPaths.length && map) {
+      // Fallback: relevance-ranked module paths, as before retrieval existed.
+      const matchedPaths = new Set<string>();
       for (const module of map.modules) {
         const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
         if (hints.length && !hints.some(hint => haystack.includes(hint))) continue;
-
-        // Rank a module's files by relevance before taking the top slice.
-        // Taking the first 8 alphabetically silently dropped the ninth file
-        // onward, so a request naming an exact route could be answered with a
-        // pack that did not contain it — the model planned the right change and
-        // was rejected for planning outside the candidate set. Ranking also
-        // removes the previous hardcoded "if the request says endpoint, pull the
-        // coding routes" special case, which was task-specific by construction.
         [...module.paths]
           .map(modulePath => ({ modulePath, score: scorePathAgainstHints(modulePath, hints) }))
           .sort((a, b) => b.score - a.score || a.modulePath.localeCompare(b.modulePath))
           .slice(0, 8)
           .forEach(entry => matchedPaths.add(entry.modulePath));
       }
+      includedPaths = [...matchedPaths].slice(0, 40);
     }
-    const includedPaths = [...matchedPaths].slice(0, 40);
+
+    this.lastRetrieval = retrieval;
     const moduleSummaries = map?.modules.map(module => `${module.name}: ${module.purpose}`).slice(0, 20) ?? [];
     const excludedPaths = ['node_modules', 'dist', 'build', '.git', '.local-agent-global', '.env', 'server/.env'];
     const pack: ContextPack = {
@@ -496,6 +543,34 @@ function discoverRisks(root: string): string[] {
   if (fs.existsSync(path.join(root, 'server', '.env'))) risks.push('Server .env exists; API must keep secrets out of generated context.');
   risks.push('Project maps are summaries only; targeted reads are required before editing source.');
   return risks;
+}
+
+/**
+ * Bounded repository-wide source enumeration for retrieval.
+ *
+ * Separate from listFiles so the project map keeps its summary bound while
+ * retrieval still sees the whole tree.
+ */
+function listProjectSourceFiles(root: string, limit: number): string[] {
+  const out: string[] = [];
+  const walk = (dir: string): void => {
+    if (out.length >= limit) return;
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      if (out.length >= limit) return;
+      if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
+      const abs = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(abs);
+      else if (/.[cm]?[jt]sx?$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+    }
+  };
+  walk(root);
+  return out;
 }
 
 function listFiles(start: string, root: string, limit: number): string[] {

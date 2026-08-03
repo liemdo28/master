@@ -133,6 +133,48 @@ export class CodingWorkflow {
     this.event(task.id, 'coding.worktree.created', worktree);
 
     this.taskEngine.transition(task.id, 'PLANNING');
+
+    // Retrieval evidence explains why each candidate is in the pack. Recorded
+    // per task so a ranking can be audited after the fact rather than inferred.
+    const retrieval = this.registry.getLastRetrieval();
+    if (retrieval) {
+      this.event(task.id, 'coding.retrieval.completed', {
+        intent: {
+          action: retrieval.intent.action,
+          artifactType: retrieval.intent.artifactType,
+          routePaths: retrieval.intent.routePaths,
+          symbols: retrieval.intent.symbols.slice(0, 10),
+          confidence: retrieval.intent.confidence,
+        },
+        stats: retrieval.stats,
+      });
+      for (const candidate of retrieval.selected) {
+        this.event(task.id, 'coding.retrieval.candidate.selected', {
+          path: candidate.path,
+          rank: candidate.rank,
+          score: candidate.score,
+          structuralRole: candidate.structuralRole,
+          matchedRoutes: candidate.matchedRoutes,
+          matchedSymbols: candidate.matchedSymbols,
+          evidence: candidate.evidence.map(item => ({ kind: item.kind, value: item.value, weight: item.weight })),
+        });
+      }
+      for (const candidate of retrieval.excluded.slice(0, 10)) {
+        this.event(task.id, 'coding.retrieval.candidate.excluded', {
+          path: candidate.path,
+          rank: candidate.rank,
+          score: candidate.score,
+          exclusionReasons: candidate.exclusionReasons,
+        });
+      }
+      this.evidence(task.id, 'coding-retrieval', {
+        intent: retrieval.intent,
+        selected: retrieval.selected,
+        excluded: retrieval.excluded.slice(0, 20),
+        stats: retrieval.stats,
+      });
+    }
+
     const candidates = enforceCandidateFileLimits(worktree.worktreePath, selectCandidateFiles(context.contextPack, input.userRequest));
     this.taskStore.updateCodingFields(task.id, { candidateFiles: JSON.stringify(candidates) });
     this.evidence(task.id, 'coding-candidates', candidates);
