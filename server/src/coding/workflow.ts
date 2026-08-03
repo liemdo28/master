@@ -8,7 +8,7 @@ import { InternalPatchEngine } from './engines/internal-patch-engine';
 import { git } from './git';
 import { selectCodingModelRoles } from './model-router';
 import { reviewWorktree } from './reviewer';
-import type { CodingRunResult, CodingWorkflowInput, ValidationResult } from './types';
+import type { CandidateSelection, CodingModelRoles, CodingRunResult, CodingWorkflowInput, EngineApplyResult, EnginePlan, ValidationResult } from './types';
 import { buildValidationPlan, runValidationPlan } from './validation-runner';
 import { prepareWorktree } from './worktree-manager';
 
@@ -22,6 +22,11 @@ export class CodingWorkflow {
   ) {}
 
   async run(input: CodingWorkflowInput): Promise<CodingRunResult> {
+    const planned = await this.planTask(input);
+    return this.resumeTask(planned.task.id, input.validationCommands ?? []);
+  }
+
+  async planTask(input: CodingWorkflowInput): Promise<Pick<CodingRunResult, 'task' | 'context' | 'candidates' | 'modelRoles' | 'plan'>> {
     const context = await enforceCodingContext({
       service: this.registry,
       projectId: input.projectId,
@@ -91,37 +96,80 @@ export class CodingWorkflow {
     });
     this.evidence(task.id, 'coding-plan', plan);
     this.taskEngine.transition(task.id, 'READY');
-    this.taskEngine.transition(task.id, 'RUNNING');
+    const plannedTask = this.taskStore.getTask(task.id) as TaskRecord;
+    return { task: plannedTask, context, candidates, modelRoles, plan };
+  }
 
-    const apply = await this.adapter.apply({ worktreePath: worktree.worktreePath, plan, userRequest: input.userRequest });
-    this.taskStore.updateCodingFields(task.id, { filesChanged: JSON.stringify(apply.changedFiles) });
-    this.evidence(task.id, 'coding-apply', apply);
-    this.event(task.id, 'coding.engine.applied', { engineId: apply.engineId, changedFiles: apply.changedFiles });
+  async resumeTask(taskId: string, validationCommands: string[] = []): Promise<CodingRunResult> {
+    const task = this.mustGetCodingTask(taskId);
+    const project = this.registry.getProject(task.projectId as string);
+    if (!project) throw new Error(`project not found: ${task.projectId}`);
+    const contextPack = this.registry.getContextPack(project.id, task.contextPackId as string);
+    if (!contextPack) throw new Error('context pack not found for project');
+    const context = { project, contextPack, baseCommit: task.baseCommit as string, baseBranch: task.baseBranch as string };
+    const candidates = parseJson<CandidateSelection>(task.candidateFiles, 'candidateFiles');
+    const modelRoles = parseJson<CodingModelRoles>(task.modelRoles, 'modelRoles');
+    const plan = parseJson<EnginePlan>(task.plan, 'plan');
+    const worktreePath = task.worktreePath as string;
+    if (!worktreePath) throw new Error('coding task has no worktree path');
 
-    this.taskEngine.transition(task.id, 'VALIDATING');
-    const validationPlan = buildValidationPlan(context.project, worktree.worktreePath, input.validationCommands ?? []);
+    if (task.status === 'READY') {
+      await enforceCodingContext({
+        service: this.registry,
+        projectId: project.id,
+        contextPackId: contextPack.id,
+        mapVersion: task.mapVersion,
+        baseCommit: task.baseCommit,
+      });
+      this.taskEngine.transition(task.id, 'RUNNING');
+    } else if (task.status !== 'RUNNING' && task.status !== 'VALIDATING' && task.status !== 'RECOVERING') {
+      throw new Error(`coding task cannot resume from ${task.status}`);
+    }
+
+    let apply: EngineApplyResult | null = parseJsonOrNull(task.filesChanged)
+      ? { engineId: this.adapter.id, changedFiles: parseJson<string[]>(task.filesChanged, 'filesChanged'), evidence: { resumed: true } }
+      : null;
+    if (!apply) {
+      apply = await this.adapter.apply({ worktreePath, plan, userRequest: task.userRequest });
+      this.taskStore.updateCodingFields(task.id, { filesChanged: JSON.stringify(apply.changedFiles) });
+      this.evidence(task.id, 'coding-apply', apply);
+      this.event(task.id, 'coding.engine.applied', { engineId: apply.engineId, changedFiles: apply.changedFiles });
+    } else {
+      this.event(task.id, 'coding.engine.apply_skipped_on_resume', { changedFiles: apply.changedFiles });
+    }
+
+    const latestBeforeValidation = this.mustGetCodingTask(task.id);
+    if (latestBeforeValidation.status !== 'VALIDATING') this.taskEngine.transition(task.id, 'VALIDATING');
+    const validationPlan = buildValidationPlan(context.project, worktreePath, validationCommands);
     this.taskStore.updateCodingFields(task.id, { validationPlan: JSON.stringify(validationPlan) });
-    let validation = await runValidationPlan(validationPlan);
+    let validation = await runValidationPlan(validationPlan, { isCancelled: () => this.taskStore.getTask(task.id)?.status === 'CANCELLED' });
+    if (this.taskStore.getTask(task.id)?.status === 'CANCELLED') {
+      return { task: this.mustGetCodingTask(task.id), context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['task cancelled'] }, commitSha: null };
+    }
     let attempts = 0;
-    while (!validationPassed(validation) && attempts < (input.maxRetries ?? 3)) {
+    const maxRetries = this.mustGetCodingTask(task.id).maxRetries;
+    while (!validationPassed(validation) && attempts < maxRetries) {
       attempts += 1;
       this.taskStore.updateCodingFields(task.id, { retryCount: attempts, validationResults: JSON.stringify(validation) });
       this.event(task.id, 'coding.repair.attempted', { attempt: attempts, failed: failedValidationNames(validation) });
       this.taskEngine.transition(task.id, 'RECOVERING');
       this.taskEngine.transition(task.id, 'RUNNING');
       await this.adapter.continue({
-        worktreePath: worktree.worktreePath,
+        worktreePath,
         plan,
         attempt: attempts,
         validationSummary: failedValidationNames(validation).join(', '),
       });
       this.taskEngine.transition(task.id, 'VALIDATING');
-      validation = await runValidationPlan(validationPlan);
+      validation = await runValidationPlan(validationPlan, { isCancelled: () => this.taskStore.getTask(task.id)?.status === 'CANCELLED' });
+      if (this.taskStore.getTask(task.id)?.status === 'CANCELLED') {
+        return { task: this.mustGetCodingTask(task.id), context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['task cancelled'] }, commitSha: null };
+      }
     }
     this.taskStore.updateCodingFields(task.id, { validationResults: JSON.stringify(validation) });
     this.evidence(task.id, 'coding-validation', validation);
 
-    const review = await reviewWorktree(worktree.worktreePath, validation);
+    const review = await reviewWorktree(worktreePath, validation);
     this.taskStore.updateCodingFields(task.id, { reviewStatus: review.status });
     this.evidence(task.id, 'coding-review', review);
     this.event(task.id, 'coding.review.completed', review);
@@ -130,15 +178,21 @@ export class CodingWorkflow {
       return { task: failed, context, candidates, modelRoles, plan, apply, validation, review, commitSha: null };
     }
 
-    const commitSha = input.commitPolicy === 'no-commit' ? null : await this.commitLocal(worktree.worktreePath, input.userRequest);
+    const commitSha = task.commitPolicy === 'no-commit' ? null : await this.commitLocal(worktreePath, task.userRequest);
     this.taskStore.updateCodingFields(task.id, { commitSha });
-    this.event(task.id, 'coding.commit.created', { commitSha, policy: input.commitPolicy ?? 'local-only' });
+    this.event(task.id, 'coding.commit.created', { commitSha, policy: task.commitPolicy ?? 'local-only' });
     const completed = this.taskEngine.completeTask(task.id, 'Coding workflow completed with local validation and review.');
     return { task: completed, context, candidates, modelRoles, plan, apply, validation, review, commitSha };
   }
 
   getTask(id: string): TaskRecord | null {
     return this.taskStore.getTask(id);
+  }
+
+  private mustGetCodingTask(taskId: string): TaskRecord {
+    const task = this.taskStore.getTask(taskId);
+    if (!task || task.taskKind !== 'coding') throw new Error(`coding task not found: ${taskId}`);
+    return task;
   }
 
   close(): void {
@@ -159,6 +213,20 @@ export class CodingWorkflow {
   private evidence(taskId: string, evidenceId: string, payload: unknown): void {
     const evidence = this.taskStore.writeEvidence(taskId, evidenceId, payload);
     this.taskStore.appendEvent(taskId, 'coding.evidence.written', { evidenceId, relativePath: evidence.relativePath });
+  }
+}
+
+function parseJson<T>(value: string | null, label: string): T {
+  if (!value) throw new Error(`coding task missing ${label}`);
+  return JSON.parse(value) as T;
+}
+
+function parseJsonOrNull(value: string | null): unknown {
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
   }
 }
 

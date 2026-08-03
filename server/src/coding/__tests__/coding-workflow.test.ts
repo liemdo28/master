@@ -9,6 +9,7 @@ import { assertPlanWithinCandidates, enforceCandidateFileLimits, selectCandidate
 import { buildValidationPlan } from '../validation-runner';
 import { CodingWorkflow } from '../workflow';
 import { ProjectRegistryService } from '../../project-registry/service';
+import { TaskEngine } from '../../task-runtime/engine';
 import { TaskStore } from '../../task-runtime/store';
 
 function log(message: string) {
@@ -76,6 +77,51 @@ async function run() {
     assert.ok(restartedStore.listEvents(resultA.task.id).some(event => event.type === 'coding.commit.created'));
     restartedStore.close();
     log('recovered completed coding task after store restart');
+
+    const planner = new CodingWorkflow();
+    const planned = await planner.planTask({
+      projectId: a.id,
+      contextPackId: packA.id,
+      mapVersion: mapA.mapVersion,
+      userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
+      maxRetries: 1,
+    });
+    assert.strictEqual(planned.task.status, 'READY');
+    planner.close();
+    const resumer = new CodingWorkflow();
+    const resumed = await resumer.resumeTask(planned.task.id);
+    assert.strictEqual(resumed.task.status, 'COMPLETED');
+    assert.ok(resumed.commitSha);
+    const resumeStore = new TaskStore();
+    const resumeEvents = resumeStore.listEvents(planned.task.id);
+    assert.ok(resumeEvents.some(event => event.type === 'coding.engine.applied'));
+    assert.ok(resumeEvents.some(event => event.type === 'coding.commit.created'));
+    resumeStore.close();
+    resumer.close();
+    log('resumed a READY coding task after workflow restart');
+
+    const slowRoot = createFixtureProject(path.join(tmpDir, 'project-cancel'), 'project-cancel', true);
+    const slowProject = service.registerProject({ id: 'project-cancel', displayName: 'Project Cancel', canonicalRoot: slowRoot, testCommands: ['npm run test:coding'], buildCommands: ['npm run build'] });
+    const slowMap = service.generateProjectMap(slowProject.id);
+    const slowPack = service.buildContextPack(slowProject.id, 'coding engine registry model roles endpoint');
+    const slowWorkflow = new CodingWorkflow();
+    const slowPlanned = await slowWorkflow.planTask({
+      projectId: slowProject.id,
+      contextPackId: slowPack.id,
+      mapVersion: slowMap.mapVersion,
+      userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
+      maxRetries: 0,
+    });
+    const running = slowWorkflow.resumeTask(slowPlanned.task.id);
+    await waitForStatus(slowPlanned.task.id, 'VALIDATING');
+    const cancelStore = new TaskStore();
+    const cancelEngine = new TaskEngine(cancelStore);
+    cancelEngine.cancelTask(slowPlanned.task.id, 'test cancellation during validation');
+    cancelStore.close();
+    const cancelled = await running;
+    assert.strictEqual(cancelled.task.status, 'CANCELLED');
+    slowWorkflow.close();
+    log('cancelled active validation process and preserved task state');
 
     const validationPlan = buildValidationPlan(a, String(resultA.task.worktreePath), ['npm run external:integration']);
     assert.ok(validationPlan.some(command => command.name === 'npm run external:integration' && !command.configured));
@@ -174,13 +220,27 @@ run().catch(err => {
   process.exit(1);
 });
 
-function createFixtureProject(root: string, name: string): string {
+async function waitForStatus(taskId: string, status: string): Promise<void> {
+  const store = new TaskStore();
+  try {
+    const deadline = Date.now() + 10_000;
+    while (Date.now() < deadline) {
+      if (store.getTask(taskId)?.status === status) return;
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    throw new Error(`task did not reach ${status}`);
+  } finally {
+    store.close();
+  }
+}
+
+function createFixtureProject(root: string, name: string, slowTest = false): string {
   fs.mkdirSync(path.join(root, 'server', 'src', 'routes'), { recursive: true });
   fs.mkdirSync(path.join(root, 'server', 'src', 'coding', '__tests__'), { recursive: true });
   fs.writeFileSync(path.join(root, 'server', 'package.json'), JSON.stringify({
     scripts: {
       build: 'node -e "process.exit(0)"',
-      'test:coding': 'node -e "process.exit(0)"',
+      'test:coding': slowTest ? 'node -e "setTimeout(()=>process.exit(0), 10000)"' : 'node -e "process.exit(0)"',
     },
   }, null, 2));
   fs.writeFileSync(path.join(root, 'server', 'src', 'routes', 'coding.ts'), [

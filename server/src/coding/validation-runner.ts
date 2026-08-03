@@ -21,14 +21,18 @@ export function buildValidationPlan(project: ProjectRecord, worktreePath: string
     });
 }
 
-export async function runValidationPlan(plan: ValidationCommand[]): Promise<ValidationResult[]> {
+export async function runValidationPlan(plan: ValidationCommand[], options: { isCancelled?: () => boolean } = {}): Promise<ValidationResult[]> {
   const results: ValidationResult[] = [];
   for (const command of plan) {
+    if (options.isCancelled?.()) {
+      results.push({ name: command.name, configured: command.configured, exitCode: 1, timedOut: false, stdout: '', stderr: 'CANCELLED' });
+      break;
+    }
     if (!command.configured) {
       results.push({ name: command.name, configured: false, exitCode: null, timedOut: false, stdout: '', stderr: 'NOT_CONFIGURED' });
       continue;
     }
-    results.push(await runCommand(command));
+    results.push(await runCommand(command, options));
   }
   return results;
 }
@@ -61,7 +65,7 @@ function resolveNpmInvocation(): { command: string; args: string[]; configured: 
   return { command: '', args: [], configured: false };
 }
 
-function runCommand(spec: ValidationCommand): Promise<ValidationResult> {
+function runCommand(spec: ValidationCommand, options: { isCancelled?: () => boolean }): Promise<ValidationResult> {
   return new Promise(resolve => {
     const child = spawn(spec.command, spec.args, {
       cwd: spec.cwd,
@@ -73,6 +77,7 @@ function runCommand(spec: ValidationCommand): Promise<ValidationResult> {
     let stderr = '';
     let outputBytes = 0;
     let timedOut = false;
+    let cancelled = false;
     const append = (target: 'stdout' | 'stderr', chunk: Buffer) => {
       const remaining = Math.max(0, MAX_OUTPUT - outputBytes);
       const accepted = chunk.subarray(0, remaining).toString('utf8');
@@ -85,15 +90,23 @@ function runCommand(spec: ValidationCommand): Promise<ValidationResult> {
       timedOut = true;
       if (!child.killed) child.kill();
     }, TIMEOUT_MS);
+    const cancelTimer = setInterval(() => {
+      if (options.isCancelled?.()) {
+        cancelled = true;
+        if (!child.killed) child.kill();
+      }
+    }, 250);
     child.stdout.on('data', chunk => append('stdout', Buffer.from(chunk)));
     child.stderr.on('data', chunk => append('stderr', Buffer.from(chunk)));
     child.on('error', err => {
       clearTimeout(timer);
+      clearInterval(cancelTimer);
       resolve({ name: spec.name, configured: true, exitCode: 1, timedOut, stdout, stderr: stderr + String(err.message ?? err) });
     });
     child.on('close', code => {
       clearTimeout(timer);
-      resolve({ name: spec.name, configured: true, exitCode: typeof code === 'number' ? code : 1, timedOut, stdout, stderr });
+      clearInterval(cancelTimer);
+      resolve({ name: spec.name, configured: true, exitCode: cancelled ? 1 : typeof code === 'number' ? code : 1, timedOut, stdout, stderr: cancelled ? `${stderr}\nCANCELLED`.trim() : stderr });
     });
   });
 }
