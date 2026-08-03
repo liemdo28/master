@@ -115,12 +115,6 @@ export function applyPatch(options: ApplyOptions): ApplyOutcome {
       const needle = normalizeEol(edit.search as string);
       const occurrences = countOccurrences(normalizedBefore, needle);
 
-      if (occurrences === 0) {
-        throw new CodingEngineError('INVALID_PATCH', `search anchor not found in ${relative}`, {
-          path: relative,
-          anchorPreview: needle.slice(0, 200),
-        });
-      }
       if (occurrences > 1) {
         throw new CodingEngineError('INVALID_PATCH', `search anchor is ambiguous in ${relative} (${occurrences} matches)`, {
           path: relative,
@@ -128,7 +122,34 @@ export function applyPatch(options: ApplyOptions): ApplyOutcome {
         });
       }
 
-      const updated = normalizedBefore.replace(needle, () => normalizeEol(edit.replace as string));
+      let updated: string;
+      if (occurrences === 1) {
+        updated = normalizedBefore.replace(needle, () => normalizeEol(edit.replace as string));
+      } else {
+        // Exact matching failed. Local models routinely reproduce a block with
+        // the right lines but reconstructed indentation, and this is the single
+        // most common patch failure across every model benchmarked. Retry
+        // comparing lines by their trimmed content, still requiring exactly one
+        // match so an ambiguous anchor is never silently applied to the wrong
+        // place, and re-indent the replacement to the file's actual indentation.
+        const fuzzy = matchByTrimmedLines(normalizedBefore, needle);
+        if (fuzzy.count === 0) {
+          throw new CodingEngineError(
+            'INVALID_PATCH',
+            `search anchor not found in ${relative}. Anchor was: ${JSON.stringify(needle.slice(0, 300))}`,
+            { path: relative, anchorPreview: needle.slice(0, 300) }
+          );
+        }
+        if (fuzzy.count > 1) {
+          throw new CodingEngineError(
+            'INVALID_PATCH',
+            `search anchor is ambiguous in ${relative} (${fuzzy.count} whitespace-insensitive matches)`,
+            { path: relative, anchorPreview: needle.slice(0, 200) }
+          );
+        }
+        updated = replaceLineRange(normalizedBefore, fuzzy.startLine!, fuzzy.endLine!, normalizeEol(edit.replace as string), fuzzy.indentDelta);
+      }
+
       const finalText = restoreEol(before, updated);
       fs.writeFileSync(absolute, finalText);
       changed.add(relative);
@@ -157,6 +178,75 @@ export function applyPatch(options: ApplyOptions): ApplyOutcome {
   }
 
   return { applied, changedFiles: [...changed] };
+}
+
+interface FuzzyMatch {
+  count: number;
+  startLine?: number;
+  endLine?: number;
+  /** Spaces to add to (positive) or strip from (negative) the replacement. */
+  indentDelta: number;
+}
+
+function indentOf(line: string): number {
+  return line.length - line.trimStart().length;
+}
+
+/**
+ * Finds a line-sequence match ignoring leading and trailing whitespace.
+ * Blank lines in the anchor are skipped so a model that adds or drops one does
+ * not miss. Requires the caller to enforce uniqueness.
+ */
+function matchByTrimmedLines(haystack: string, needle: string): FuzzyMatch {
+  const anchorLines = needle.split('\n').map(line => line.trim()).filter(line => line !== '');
+  if (!anchorLines.length) return { count: 0, indentDelta: 0 };
+
+  const fileLines = haystack.split('\n');
+  const matches: Array<{ start: number; end: number; indentDelta: number }> = [];
+
+  for (let start = 0; start < fileLines.length; start += 1) {
+    if (fileLines[start].trim() !== anchorLines[0]) continue;
+
+    let cursor = start;
+    let matched = 0;
+    while (matched < anchorLines.length && cursor < fileLines.length) {
+      const current = fileLines[cursor].trim();
+      if (current === '') {
+        cursor += 1;
+        continue;
+      }
+      if (current !== anchorLines[matched]) break;
+      matched += 1;
+      cursor += 1;
+    }
+
+    if (matched === anchorLines.length) {
+      const firstAnchorLine = needle.split('\n').find(line => line.trim() !== '') ?? '';
+      matches.push({
+        start,
+        end: cursor - 1,
+        indentDelta: indentOf(fileLines[start]) - indentOf(firstAnchorLine),
+      });
+    }
+  }
+
+  if (matches.length !== 1) return { count: matches.length, indentDelta: 0 };
+  return { count: 1, startLine: matches[0].start, endLine: matches[0].end, indentDelta: matches[0].indentDelta };
+}
+
+/** Replaces an inclusive line range, re-indenting the replacement by `indentDelta`. */
+function replaceLineRange(haystack: string, startLine: number, endLine: number, replacement: string, indentDelta: number): string {
+  const lines = haystack.split('\n');
+  const reindented = replacement.split('\n').map(line => {
+    if (line.trim() === '') return line;
+    if (indentDelta > 0) return ' '.repeat(indentDelta) + line;
+    if (indentDelta < 0) {
+      const strip = Math.min(-indentDelta, indentOf(line));
+      return line.slice(strip);
+    }
+    return line;
+  });
+  return [...lines.slice(0, startLine), ...reindented, ...lines.slice(endLine + 1)].join('\n');
 }
 
 function countOccurrences(haystack: string, needle: string): number {

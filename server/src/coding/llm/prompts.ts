@@ -12,6 +12,7 @@
 
 import type { CandidateFile } from '../types';
 import type { ContextExpansionOutcome, ModelPlan } from './types';
+import { renderSymbolContext, type SymbolSummary } from './symbols';
 
 export interface RepoSnapshotFile {
   path: string;
@@ -29,6 +30,24 @@ export interface PromptContext {
   candidates: CandidateFile[];
   files: RepoSnapshotFile[];
   expansions?: ContextExpansionOutcome[];
+  /** Compact API surface of the types the candidates declare and import. */
+  symbols?: SymbolSummary[];
+}
+
+/**
+ * Renders the exact API the model is allowed to assume. This exists because a
+ * model handed a file will infer member names from the request wording rather
+ * than from the type — writing `task.engineId` because the request said
+ * "engine id" — and a whole extra file costs thousands of tokens to convey what
+ * a member list conveys in a few dozen.
+ */
+function renderSymbols(symbols: SymbolSummary[] | undefined): string {
+  if (!symbols?.length) return '';
+  return `
+
+KNOWN TYPES AND THEIR EXACT MEMBERS.
+Use these names verbatim. Do not invent a member that is not listed here.
+${renderSymbolContext(symbols)}`;
 }
 
 const SHARED_RULES = [
@@ -90,7 +109,7 @@ export function buildPlanPrompt(ctx: PromptContext): string {
   return `${renderHeader(ctx)}
 
 RANKED CANDIDATE FILES:
-${renderCandidateList(ctx.candidates)}
+${renderCandidateList(ctx.candidates)}${renderSymbols(ctx.symbols)}
 
 FILE CONTENTS:
 ${renderFileBlock(ctx.files)}
@@ -100,6 +119,10 @@ Produce a JSON implementation plan with this shape:
   "summary": "one sentence describing the change",
   "filesToRead": ["path/actually/needed.ts"],
   "filesToChange": ["path/you/will/edit.ts"],
+  "targetFile": "the one file the change centres on",
+  "targetSymbol": "the type, class or function you will use or modify",
+  "targetMember": "the exact existing member or API you will read or call, if any",
+  "relatedTest": "the test that proves this works, if one exists",
   "steps": ["ordered, concrete steps"],
   "confidence": 0.0
 }
@@ -108,6 +131,11 @@ Rules for filesToChange:
 - every entry MUST be copied exactly from the candidate list above
 - list only files you will actually edit
 - if the task cannot be done with these files, return an empty filesToChange and say why in summary
+
+Rules for targetSymbol and targetMember:
+- copy both from the KNOWN TYPES section verbatim
+- targetMember must be a member that section actually lists
+- if you need a member that does not exist yet, say so explicitly in summary
 
 Reply with JSON only.`;
 }
@@ -173,7 +201,12 @@ Critical rules for "search":
 - it must appear EXACTLY ONCE in that file; include surrounding lines if needed to make it unique
 - do not use "..." or placeholders
 - keep each search block small (3-15 lines)
-
+${ctx.symbols?.length ? `
+Reference only — when your replacement touches one of these types, use its
+member names exactly as listed. Never take a "search" anchor from this block;
+anchors come from FILE CONTENTS above.
+${renderSymbolContext(ctx.symbols)}
+` : ''}
 Reply with JSON only.`;
 }
 
@@ -197,7 +230,7 @@ ${editableFiles?.length ? `\nFILES YOU ARE ALLOWED TO EDIT (any write outside th
 WHAT FAILED: ${failureSummary}
 
 VALIDATION OUTPUT:
-${validationOutput.slice(0, 6000)}
+${validationOutput.slice(0, 6000)}${renderSymbols(ctx.symbols)}
 ${previousError ? `\nYOUR PREVIOUS EDIT WAS REJECTED: ${previousError}\nDo not repeat it.\n` : ''}
 CURRENT FILE CONTENTS (already includes your earlier changes):
 ${renderFileBlock(ctx.files)}

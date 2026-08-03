@@ -261,7 +261,7 @@ export class CodingWorkflow {
       this.taskEngine.transition(task.id, 'RECOVERING');
       this.taskEngine.transition(task.id, 'RUNNING');
       try {
-        await codingResourceController.withModelSlot(() =>
+        const repaired = await codingResourceController.withModelSlot(() =>
           this.adapter.continue({
             worktreePath,
             plan,
@@ -272,6 +272,10 @@ export class CodingWorkflow {
             modelRoles,
           } as never)
         );
+        const symbolsExpanded = (repaired.evidence as { symbolsExpanded?: unknown[] } | undefined)?.symbolsExpanded ?? [];
+        if (symbolsExpanded.length) {
+          this.event(task.id, 'coding.context.symbols.expanded', { attempt: attempts, symbols: symbolsExpanded });
+        }
       } catch (err) {
         this.recordFailure(task.id, err);
         this.event(task.id, 'coding.repair.failed', { attempt: attempts, message: err instanceof Error ? err.message : String(err) });

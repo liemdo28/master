@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-08-03T13:56:30.921Z",
+  "generatedAt": "2026-08-03T14:19:07.028Z",
   "reports": [
     {
       "fixtureId": "task-a-bug-fix",
       "category": "bug-fix",
-      "taskId": "task-56f44020-a8ca-4d11-aaa3-0391ce6d0f13",
-      "commitSha": "af2174fe3c009bb8ef078d5e8471303fef3f2468",
+      "taskId": "task-ec368354-4a50-4ed6-bdd3-94de8d4c3331",
+      "commitSha": "729ff3d38760860fb601c191f86c5f75fe4cef5d",
       "criteria": [
         {
           "name": "fresh map generated",
           "ok": true,
-          "detail": "status=FRESH version=map-4626dac526d0"
+          "detail": "status=FRESH version=map-8bd4445bf8ce"
         },
         {
           "name": "context pack built",
@@ -40,7 +40,7 @@
         {
           "name": "isolated worktree used",
           "ok": true,
-          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-wABH3X\\worktrees\\task-a-bug-fix\\task-56f44020-a8ca-4d11-aaa3-0391ce6d0f13"
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-kmdd9L\\worktrees\\task-a-bug-fix\\task-ec368354-4a50-4ed6-bdd3-94de8d4c3331"
         },
         {
           "name": "validation passed",
@@ -55,12 +55,12 @@
         {
           "name": "local commit created",
           "ok": true,
-          "detail": "af2174fe3c009bb8ef078d5e8471303fef3f2468"
+          "detail": "729ff3d38760860fb601c191f86c5f75fe4cef5d"
         },
         {
           "name": "task branch is local only",
           "ok": true,
-          "detail": "+ codex/task-56f44020-the-booking-availability-check-rejects-a-slot-th * master"
+          "detail": "+ codex/task-ec368354-the-booking-availability-check-rejects-a-slot-th * master"
         },
         {
           "name": "base checkout HEAD unchanged",
@@ -90,18 +90,18 @@
       ],
       "passed": true,
       "failureCategory": null,
-      "seconds": 52.909
+      "seconds": 54.008
     },
     {
       "fixtureId": "task-b-multi-file-feature",
       "category": "multi-file-feature",
-      "taskId": "task-02171f24-3f0f-43d8-8bab-de65ab2d2db5",
-      "commitSha": "d8b79b75a7bf5c82434409623685e5e428e9b4da",
+      "taskId": "task-609cfd7e-0ebc-43f3-a894-d73c058d294f",
+      "commitSha": "760b8c4d89c5789715edaa4c6be76123afa6a08f",
       "criteria": [
         {
           "name": "fresh map generated",
           "ok": true,
-          "detail": "status=FRESH version=map-b00f3cc5f1bf"
+          "detail": "status=FRESH version=map-dca22e9c1ad9"
         },
         {
           "name": "context pack built",
@@ -131,7 +131,7 @@
         {
           "name": "isolated worktree used",
           "ok": true,
-          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-wABH3X\\worktrees\\task-b-multi-file-feature\\task-02171f24-3f0f-43d8-8bab-de65ab2d2db5"
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-kmdd9L\\worktrees\\task-b-multi-file-feature\\task-609cfd7e-0ebc-43f3-a894-d73c058d294f"
         },
         {
           "name": "validation passed",
@@ -146,12 +146,12 @@
         {
           "name": "local commit created",
           "ok": true,
-          "detail": "d8b79b75a7bf5c82434409623685e5e428e9b4da"
+          "detail": "760b8c4d89c5789715edaa4c6be76123afa6a08f"
         },
         {
           "name": "task branch is local only",
           "ok": true,
-          "detail": "+ codex/task-02171f24-add-support-for-filtering-the-inventory-list-by- * master"
+          "detail": "+ codex/task-609cfd7e-add-support-for-filtering-the-inventory-list-by- * master"
         },
         {
           "name": "base checkout HEAD unchanged",
@@ -181,18 +181,18 @@
       ],
       "passed": true,
       "failureCategory": null,
-      "seconds": 100.734
+      "seconds": 91.519
     },
     {
       "fixtureId": "task-c-type-repair",
       "category": "type-repair",
-      "taskId": "task-daf43cb9-590e-4dc1-baa6-a70e394614ba",
-      "commitSha": null,
+      "taskId": "task-f1975b48-325b-4441-8840-315215f19028",
+      "commitSha": "e8e79f4cc5d2c2548ed93e1c7f1466ffeef45fbb",
       "criteria": [
         {
           "name": "fresh map generated",
           "ok": true,
-          "detail": "status=FRESH version=map-d8377597721c"
+          "detail": "status=FRESH version=map-aed67269ded6"
         },
         {
           "name": "context pack built",
@@ -207,7 +207,7 @@
         {
           "name": "plan produced before apply",
           "ok": true,
-          "detail": "Fix TypeScript errors by properly handling optional properties and ensuring type correctness."
+          "detail": "Fix TypeScript errors by properly handling optional properties and ensuring type correctness in the pricing module."
         },
         {
           "name": "engine is the local LLM engine",
@@ -222,27 +222,27 @@
         {
           "name": "isolated worktree used",
           "ok": true,
-          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-wABH3X\\worktrees\\task-c-type-repair\\task-daf43cb9-590e-4dc1-baa6-a70e394614ba"
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-kmdd9L\\worktrees\\task-c-type-repair\\task-f1975b48-325b-4441-8840-315215f19028"
         },
         {
           "name": "validation passed",
-          "ok": false,
-          "detail": "npm run build=2 npm run test:coding=2 git diff --check=0"
+          "ok": true,
+          "detail": "npm run build=0 npm run test:coding=0 git diff --check=0"
         },
         {
           "name": "independent review passed",
-          "ok": false,
-          "detail": "validation failed: npm run build; validation failed: npm run test:coding"
+          "ok": true,
+          "detail": ""
         },
         {
           "name": "local commit created",
-          "ok": false,
-          "detail": "null"
+          "ok": true,
+          "detail": "e8e79f4cc5d2c2548ed93e1c7f1466ffeef45fbb"
         },
         {
           "name": "task branch is local only",
           "ok": true,
-          "detail": "+ codex/task-daf43cb9-the-pricing-module-no-longer-compiles-diagnose-t * master"
+          "detail": "+ codex/task-f1975b48-the-pricing-module-no-longer-compiles-diagnose-t * master"
         },
         {
           "name": "base checkout HEAD unchanged",
@@ -270,20 +270,20 @@
           "detail": ""
         }
       ],
-      "passed": false,
-      "failureCategory": "VALIDATION_FAILED",
-      "seconds": 90.451
+      "passed": true,
+      "failureCategory": null,
+      "seconds": 86.067
     },
     {
       "fixtureId": "task-d-refactor",
       "category": "refactor",
-      "taskId": "task-626e5912-e3f5-4719-86af-81126fc40bed",
-      "commitSha": null,
+      "taskId": "task-8726f762-776b-472a-8674-265a603965fb",
+      "commitSha": "0474d8c1730ae009fb1a0d43dca4088126be1f7c",
       "criteria": [
         {
           "name": "fresh map generated",
           "ok": true,
-          "detail": "status=FRESH version=map-be9c8c6daf95"
+          "detail": "status=FRESH version=map-434c8ae86593"
         },
         {
           "name": "context pack built",
@@ -313,98 +313,7 @@
         {
           "name": "isolated worktree used",
           "ok": true,
-          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-wABH3X\\worktrees\\task-d-refactor\\task-626e5912-e3f5-4719-86af-81126fc40bed"
-        },
-        {
-          "name": "validation passed",
-          "ok": true,
-          "detail": ""
-        },
-        {
-          "name": "independent review passed",
-          "ok": false,
-          "detail": "search anchor not found in src/report-formatter.js. Anchor was: \"  let widest = 0;\\n  for (const row of rows) {\\n    if (row.label.length > widest) widest = row.label.length;\\n  }\\n\\n  let total = 0;\\n  for (const row of rows) {\\n    let label = row.label;\\n    while (label.length < widest) label = label + ' ';\\n    let amount = row.amount.toFixed(2);\\n    while (amount.le\""
-        },
-        {
-          "name": "local commit created",
-          "ok": false,
-          "detail": "null"
-        },
-        {
-          "name": "task branch is local only",
-          "ok": true,
-          "detail": "+ codex/task-626e5912-the-report-formatter-has-grown-one-long-function * master"
-        },
-        {
-          "name": "base checkout HEAD unchanged",
-          "ok": true,
-          "detail": ""
-        },
-        {
-          "name": "base checkout tree unchanged",
-          "ok": true,
-          "detail": ""
-        },
-        {
-          "name": "base checkout is clean",
-          "ok": true,
-          "detail": ""
-        },
-        {
-          "name": "no remote configured, so no push occurred",
-          "ok": true,
-          "detail": ""
-        },
-        {
-          "name": "engine invocation recorded in events",
-          "ok": true,
-          "detail": ""
-        }
-      ],
-      "passed": false,
-      "failureCategory": "INVALID_PATCH",
-      "seconds": 334.16
-    },
-    {
-      "fixtureId": "task-e-unfamiliar-repo",
-      "category": "unfamiliar-repo",
-      "taskId": "task-1a44a890-990d-4727-9528-cebb7a0c9eb5",
-      "commitSha": "be595eaa1241ccea085c1c416324e3a09a07201e",
-      "criteria": [
-        {
-          "name": "fresh map generated",
-          "ok": true,
-          "detail": "status=FRESH version=map-fd06cda550cc"
-        },
-        {
-          "name": "context pack built",
-          "ok": true,
-          "detail": "policy=MAP_PLUS_TARGETED_READ paths=5"
-        },
-        {
-          "name": "candidate ranking produced",
-          "ok": true,
-          "detail": "5 candidates"
-        },
-        {
-          "name": "plan produced before apply",
-          "ok": true,
-          "detail": "Modify the normalise function to drop records with blank identifiers during normalisation."
-        },
-        {
-          "name": "engine is the local LLM engine",
-          "ok": true,
-          "detail": "local-llm-engine"
-        },
-        {
-          "name": "a local model was actually invoked",
-          "ok": true,
-          "detail": "qwen3:8b"
-        },
-        {
-          "name": "isolated worktree used",
-          "ok": true,
-          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-wABH3X\\worktrees\\task-e-unfamiliar-repo\\task-1a44a890-990d-4727-9528-cebb7a0c9eb5"
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-kmdd9L\\worktrees\\task-d-refactor\\task-8726f762-776b-472a-8674-265a603965fb"
         },
         {
           "name": "validation passed",
@@ -419,12 +328,12 @@
         {
           "name": "local commit created",
           "ok": true,
-          "detail": "be595eaa1241ccea085c1c416324e3a09a07201e"
+          "detail": "0474d8c1730ae009fb1a0d43dca4088126be1f7c"
         },
         {
           "name": "task branch is local only",
           "ok": true,
-          "detail": "+ codex/task-1a44a890-records-with-a-blank-identifier-are-silently-kep * master"
+          "detail": "+ codex/task-8726f762-the-report-formatter-has-grown-one-long-function * master"
         },
         {
           "name": "base checkout HEAD unchanged",
@@ -454,7 +363,98 @@
       ],
       "passed": true,
       "failureCategory": null,
-      "seconds": 52.062
+      "seconds": 97.327
+    },
+    {
+      "fixtureId": "task-e-unfamiliar-repo",
+      "category": "unfamiliar-repo",
+      "taskId": "task-a0df0d19-f49c-4440-bfcd-d6d129868532",
+      "commitSha": "691b13bfbf556d8b7091db7269bdb00b90603da9",
+      "criteria": [
+        {
+          "name": "fresh map generated",
+          "ok": true,
+          "detail": "status=FRESH version=map-40ee7bcde8e4"
+        },
+        {
+          "name": "context pack built",
+          "ok": true,
+          "detail": "policy=MAP_PLUS_TARGETED_READ paths=5"
+        },
+        {
+          "name": "candidate ranking produced",
+          "ok": true,
+          "detail": "5 candidates"
+        },
+        {
+          "name": "plan produced before apply",
+          "ok": true,
+          "detail": "Modify the normalise function to drop records with blank identifiers during normalisation."
+        },
+        {
+          "name": "engine is the local LLM engine",
+          "ok": true,
+          "detail": "local-llm-engine"
+        },
+        {
+          "name": "a local model was actually invoked",
+          "ok": true,
+          "detail": "qwen3:8b"
+        },
+        {
+          "name": "isolated worktree used",
+          "ok": true,
+          "detail": "C:\\Users\\liemdo\\AppData\\Local\\Temp\\mi-phase4-acceptance-kmdd9L\\worktrees\\task-e-unfamiliar-repo\\task-a0df0d19-f49c-4440-bfcd-d6d129868532"
+        },
+        {
+          "name": "validation passed",
+          "ok": true,
+          "detail": "npm run build=n/a npm run test:coding=0 git diff --check=0 npm test=n/a"
+        },
+        {
+          "name": "independent review passed",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "local commit created",
+          "ok": true,
+          "detail": "691b13bfbf556d8b7091db7269bdb00b90603da9"
+        },
+        {
+          "name": "task branch is local only",
+          "ok": true,
+          "detail": "+ codex/task-a0df0d19-records-with-a-blank-identifier-are-silently-kep * master"
+        },
+        {
+          "name": "base checkout HEAD unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout tree unchanged",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "base checkout is clean",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "no remote configured, so no push occurred",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "name": "engine invocation recorded in events",
+          "ok": true,
+          "detail": ""
+        }
+      ],
+      "passed": true,
+      "failureCategory": null,
+      "seconds": 62.863
     }
   ]
 }

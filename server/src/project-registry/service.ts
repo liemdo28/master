@@ -4,6 +4,7 @@ import { execFileSync } from 'child_process';
 import { randomUUID, createHash } from 'crypto';
 import { ProjectRegistryStore } from './store';
 import { assertInsideAllowedRegistryRoots, assertInsideRoot, realPathIfExists, toPosixRelative } from './paths';
+import { scorePathAgainstHints } from '../coding/candidate-selector';
 import type {
   ContextPack,
   ProjectMap,
@@ -200,13 +201,20 @@ export class ProjectRegistryService {
     if (map) {
       for (const module of map.modules) {
         const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
-        const endpointNeedsRoutes = hints.includes('endpoint') && module.name === 'routes';
-        if (endpointNeedsRoutes) {
-          module.paths.filter(p => p.includes('/coding.') || p.includes('/coding/')).slice(0, 8).forEach(p => matchedPaths.add(p));
-        }
-        if (hints.length === 0 || endpointNeedsRoutes || hints.some(hint => haystack.includes(hint))) {
-          module.paths.slice(0, 8).forEach(p => matchedPaths.add(p));
-        }
+        if (hints.length && !hints.some(hint => haystack.includes(hint))) continue;
+
+        // Rank a module's files by relevance before taking the top slice.
+        // Taking the first 8 alphabetically silently dropped the ninth file
+        // onward, so a request naming an exact route could be answered with a
+        // pack that did not contain it — the model planned the right change and
+        // was rejected for planning outside the candidate set. Ranking also
+        // removes the previous hardcoded "if the request says endpoint, pull the
+        // coding routes" special case, which was task-specific by construction.
+        [...module.paths]
+          .map(modulePath => ({ modulePath, score: scorePathAgainstHints(modulePath, hints) }))
+          .sort((a, b) => b.score - a.score || a.modulePath.localeCompare(b.modulePath))
+          .slice(0, 8)
+          .forEach(entry => matchedPaths.add(entry.modulePath));
       }
     }
     const includedPaths = [...matchedPaths].slice(0, 40);

@@ -291,3 +291,104 @@ pilot task is what the directive forbids.
    members of types it edits) rather than more prompt tuning.
 2. Optionally re-evaluate a larger model for `coding_primary` once more VRAM is
    available; 14B currently spills to CPU at ~5.5 tok/s.
+
+---
+
+# Symbol-level context batch
+
+Implemented as approved. Outcome: **the original blocker is fixed and fixture
+acceptance holds at 5/5, but the Mi Core pilot is still 0/5 — now for a
+different, deterministic reason.** Stop condition reached; not pushed.
+
+## What was built
+
+`server/src/coding/llm/symbols.ts` — TypeScript compiler API extraction of
+exported interfaces, type aliases, classes, enums, functions and consts, with
+member names, types and optionality. Resolved across import edges, plus one
+transitive hop (a candidate importing `TaskStore` never imports `TaskRecord`,
+yet `store.getTask()` returns one — so the type whose members the model most
+needs is exactly the one a single import hop cannot reach).
+
+- **Contract**: `symbolName`, `kind`, `sourcePath`, `signature`, `members`,
+  `importedBy`, `relevanceReason`, `bytes`.
+- **Limits**: symbol count, total bytes, members per symbol; every inclusion
+  records why.
+- **Compiler-error-driven expansion**: missing property, missing export, wrong
+  import and incompatible type are parsed for symbol and member names, the
+  definitions resolved and added to the next repair prompt. Emits
+  `coding.context.symbols.expanded`.
+- **Plan gate**: the plan must name `targetFile`, `targetSymbol`,
+  `targetMember`, `relatedTest`. A plan whose target member does not exist on
+  its target symbol is rejected with the real member list. Silent when the
+  symbol is not in context (no opinion) or when the request is additive.
+- **Secrets**: credential-shaped literals and names are redacted; private class
+  members are never emitted.
+
+51 assertions in `symbol-context.test.ts`, all on synthetic types
+(`VesselRecord`, `BerthRegistry`, `HullClass`). No Mi Core symbol appears in the
+tests, so the layer cannot be passing by accident.
+
+## Did it work?
+
+**Yes, for what it targeted.** The `Property 'engineId' does not exist on type
+'TaskRecord'` failure that blocked the previous batch is gone from every
+subsequent run. The model now uses real member names.
+
+Two further defects were found and fixed along the way:
+
+| Defect | Effect |
+|---|---|
+| Exact-only anchor matching | "search anchor not found" was the top failure for *every* model in the benchmark. Local models reproduce the right lines with reconstructed indentation. Now falls back to whitespace-insensitive line matching, still requiring exactly one match, re-indenting the replacement by a uniform delta. 8 new boundary assertions cover apply, ambiguity, absence and non-interference. |
+| Context pack took the first 8 paths per module **alphabetically** | `routes/coding.ts` is the 9th route file, so a request naming it exactly produced a pack that did not contain it — the model planned the right change and was rejected for planning "outside the candidate set". Paths are now ranked by relevance before slicing. This also removed a pre-existing hardcoded `if the request says "endpoint", pull the coding routes` special case in Phase 3, which was task-specific by construction. |
+
+## Why the pilot still fails
+
+Not the field name, and not anchors. **Lexical candidate ranking selects the
+wrong file, deterministically.**
+
+The request contains the word "engine" as a *value* ("include the engine id").
+Ranking scores a filename match at 3 and a directory match at 1:
+
+| file | score | why |
+|---|---|---|
+| `server/src/coding/llm/engine.ts` | 4 | filename "engine" + directory "coding" |
+| `server/src/routes/coding.ts` | 3 | filename "coding" only |
+
+So the engine's own source outranks the route the task is about, and the model
+edits `llm/engine.ts` in 3 of 3 observed runs. Lexical matching cannot tell
+"the engine id" (a value) from "engine.ts" (a file); that needs semantic or
+embedding-based retrieval, which is a materially different design.
+
+Given the instruction not to tune indefinitely, tuning stopped here.
+
+## Output budget: measured, not guessed
+
+Raising `PATCH_OUTPUT_TOKENS` to 4096 regressed fixture acceptance to 3/5
+(a truncation trade for anchor and validation failures). At 3072 acceptance is
+5/5 on two consecutive runs. 3072 is the value in the branch.
+
+Acceptance has genuine run-to-run variance; single runs are not evidence. The
+5/5 figure is from repeated measurement.
+
+## Gate status
+
+| gate | result |
+|---|---|
+| fixture acceptance | **5/5, exit 0** (two consecutive runs at final settings) |
+| `npm run build` | exit 0 |
+| `npm run test:ci` | exit 0 |
+| boundary assertions | 72 |
+| symbol-context assertions | 51 |
+| resume assertions | 23 |
+| fixture baselines | 5/5 correct |
+| **Mi Core pilot** | **0/5 — below the 4/5 gate** |
+
+PR gate not met. Nothing pushed.
+
+## Honest next step
+
+Candidate retrieval, not the model and not the prompt. Concretely: rank by
+symbol and route definitions the request names (an exact route string like
+`/tasks/:id/plan` should dominate a filename token collision), or use local
+embeddings for candidate selection. Both are larger design changes than this
+batch, and neither is prompt tuning.

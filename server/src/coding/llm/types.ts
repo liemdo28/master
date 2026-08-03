@@ -42,6 +42,11 @@ export interface ModelPlan {
   filesToChange: string[];
   steps: string[];
   confidence: number;
+  /** Plan-gate fields: what the change centres on, in the model's own words. */
+  targetFile?: string;
+  targetSymbol?: string;
+  targetMember?: string;
+  relatedTest?: string;
 }
 
 export interface ModelPatch {
@@ -88,10 +93,14 @@ export const PLAN_SCHEMA = {
     summary: { type: 'string' },
     filesToRead: { type: 'array', items: { type: 'string' } },
     filesToChange: { type: 'array', items: { type: 'string' } },
+    targetFile: { type: 'string' },
+    targetSymbol: { type: 'string' },
+    targetMember: { type: 'string' },
+    relatedTest: { type: 'string' },
     steps: { type: 'array', items: { type: 'string' } },
     confidence: { type: 'number' },
   },
-  required: ['summary', 'filesToChange', 'steps', 'confidence'],
+  required: ['summary', 'filesToChange', 'targetFile', 'steps', 'confidence'],
 } as const;
 
 /** JSON schema handed to Ollama structured output for the patch call. */

@@ -45,6 +45,14 @@ import {
 import { applyPatch } from './patch';
 import { resolveWithinWorktree } from './tools';
 import {
+  buildSymbolContext,
+  memberExists,
+  membersOf,
+  requestAddsNewMember,
+  symbolsFromCompilerErrors,
+  type SymbolSummary,
+} from './symbols';
+import {
   CodingEngineError,
   EXPANSION_SCHEMA,
   PATCH_SCHEMA,
@@ -69,7 +77,7 @@ export const PATCH_TIMEOUT_MS = 600_000;
  * Output budget for a patch or repair call.
  *
  * A behaviour-preserving refactor legitimately rewrites a whole function, so
- * 2400 tokens truncated the patch mid-JSON and surfaced as CONTEXT_INSUFFICIENT
+ * A smaller budget truncated the patch mid-JSON and surfaced as CONTEXT_INSUFFICIENT
  * rather than as anything the model could act on. With a 32k window and ~17k
  * spent on context there is ample room for this.
  */
@@ -97,6 +105,10 @@ interface EngineSession {
   promptContext: PromptContext;
   telemetry: EngineTelemetry[];
   modelRoles?: CodingModelRoles;
+  /** Compact API surface of what the candidates declare and import. */
+  symbols: SymbolSummary[];
+  /** Symbol names newly pulled in by a compiler error, for event reporting. */
+  symbolsExpanded: Array<{ symbolName: string; sourcePath: string; relevanceReason: string }>;
 }
 
 interface PersistedSession {
@@ -132,6 +144,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
   }): Promise<{ filesRead: string[]; expansions?: ContextExpansionOutcome[] }> {
     const session = this.openSession(input.worktreePath, input.candidates, input.userRequest, input.modelRoles);
     loadCandidateFiles(session.state, input.candidates.candidates);
+    this.refreshSymbols(session, input.userRequest);
 
     const model = this.pickModel(input.modelRoles, 'fast');
     if (model) {
@@ -157,6 +170,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
   }): Promise<EnginePlan> {
     const session = this.openSession(input.worktreePath, input.candidates, input.userRequest, input.modelRoles);
     if (!session.state.files.size) loadCandidateFiles(session.state, input.candidates.candidates);
+    if (!session.symbols.length) this.refreshSymbols(session, input.userRequest);
     session.promptContext = this.renderPromptContext(session, input.userRequest);
 
     const model = this.requireModel(input.modelRoles, 'primary');
@@ -189,6 +203,8 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         { hallucinated, summary: parsed.summary }
       );
     }
+
+    this.assertPlanUsesKnownApi(session, parsed, input.userRequest);
 
     const enginePlan: EnginePlan = {
       engineId: this.id,
@@ -297,6 +313,79 @@ export class LlmCodingEngine implements CodingEngineAdapter {
   }
 
   /**
+   * Rebuilds the symbol context for the current candidate set.
+   *
+   * Symbols are extracted from what the candidates declare and from the
+   * definitions they import. No type, file or project is named here; the set is
+   * entirely a function of the candidates and, on repair, of the compiler
+   * diagnostics.
+   */
+  private refreshSymbols(session: EngineSession, userRequest: string, errors?: { symbols: string[]; members: string[] }): void {
+    try {
+      session.symbols = buildSymbolContext({
+        worktreePath: session.worktreePath,
+        candidatePaths: [...session.state.files.keys()],
+        requestHints: tokenizeRequest(userRequest),
+        errorSymbols: errors?.symbols,
+        errorMembers: errors?.members,
+      });
+    } catch {
+      // Symbol extraction is an enrichment. Malformed or unparseable source must
+      // degrade to "no symbol context", never fail the task.
+      session.symbols = [];
+    }
+  }
+
+  /**
+   * Plan gate.
+   *
+   * Rejects a plan whose declared target member does not exist on its declared
+   * target symbol — the model inventing API before anything is written. Silent
+   * when the symbol is not in context (no opinion) or when the request is asking
+   * to add new surface, in which case an absent member is the point of the task.
+   */
+  private assertPlanUsesKnownApi(session: EngineSession, plan: ModelPlan, userRequest: string): void {
+    const symbolName = String(plan.targetSymbol ?? '').trim();
+    const memberName = String(plan.targetMember ?? '').trim();
+    if (!symbolName || !memberName) return;
+    if (requestAddsNewMember(userRequest)) return;
+
+    const exists = memberExists(session.symbols, symbolName, memberName);
+    if (exists !== false) return;
+
+    const available = membersOf(session.symbols, symbolName);
+    throw new CodingEngineError(
+      'INVALID_PLAN',
+      `plan targets ${symbolName}.${memberName}, which does not exist. ${symbolName} declares: ${available.join(', ')}`,
+      { symbolName, memberName, available }
+    );
+  }
+
+  /**
+   * Widens symbol context using the compiler's own diagnostics.
+   *
+   * A missing property, missing export, bad import or incompatible type names
+   * exactly the definition the model never saw. Feeding that back is what stops
+   * the repair loop reproducing the same mistake against the same partial view.
+   */
+  private expandSymbolsForErrors(session: EngineSession, userRequest: string, validationOutput: string): SymbolSummary[] {
+    const extracted = symbolsFromCompilerErrors(validationOutput);
+    if (!extracted.symbols.length && !extracted.members.length) return [];
+
+    const before = new Set(session.symbols.map(s => `${s.sourcePath}#${s.symbolName}`));
+    this.refreshSymbols(session, userRequest, extracted);
+    const added = session.symbols.filter(s => !before.has(`${s.sourcePath}#${s.symbolName}`));
+    for (const summary of added) {
+      session.symbolsExpanded.push({
+        symbolName: summary.symbolName,
+        sourcePath: summary.sourcePath,
+        relevanceReason: summary.relevanceReason,
+      });
+    }
+    return added;
+  }
+
+  /**
    * Pulls in the files a failing build or test run points at.
    *
    * A type error like "Property 'engineId' does not exist on type 'TaskRecord'"
@@ -376,6 +465,9 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     // concrete symbol/import justification for widening context, so the repair
     // is not attempted blind against the same insufficient view that caused it.
     this.expandForValidationErrors(session, input.validationOutput ?? input.validationSummary);
+    // Symbol-level expansion: the compiler names the exact type and member the
+    // model got wrong, which is more actionable than another file of source.
+    this.expandSymbolsForErrors(session, userRequest, input.validationOutput ?? input.validationSummary);
     session.promptContext = this.renderPromptContext(session, userRequest);
 
     let previousError: string | undefined;
@@ -412,6 +504,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
             attempt: input.attempt,
             summary: patch.summary,
             edits: outcome.applied,
+            symbolsExpanded: session.symbolsExpanded,
             telemetry: session.telemetry.at(-1),
           },
         };
@@ -448,6 +541,8 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       contextFiles: session ? [...session.state.files.keys()] : [],
       contextBytes: session?.state.usedBytes ?? 0,
       expansions: session?.state.expansions ?? [],
+      symbols: session?.symbols.map(sym => ({ symbolName: sym.symbolName, kind: sym.kind, sourcePath: sym.sourcePath, members: sym.members.length, relevanceReason: sym.relevanceReason })) ?? [],
+      symbolsExpanded: session?.symbolsExpanded ?? [],
       telemetry: session?.telemetry ?? [],
       lastFailure: this.lastFailure,
     };
@@ -479,6 +574,8 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       candidates,
       telemetry: [],
       modelRoles,
+      symbols: [],
+      symbolsExpanded: [],
       promptContext: {
         userRequest,
         projectSummary: this.options.project?.displayName ?? 'unknown project',
@@ -514,7 +611,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 
   private renderPromptContext(session: EngineSession, userRequest: string): PromptContext {
     if (this.options.project && this.options.contextPack) {
-      return buildPromptContext({
+      const base = buildPromptContext({
         state: session.state,
         project: this.options.project,
         contextPack: this.options.contextPack,
@@ -523,8 +620,9 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         candidates: session.candidates,
         validationCommands: this.options.validationCommands ?? [],
       });
+      return { ...base, symbols: session.symbols };
     }
-    return { ...session.promptContext, userRequest, files: [...session.state.files.values()], expansions: session.state.expansions };
+    return { ...session.promptContext, userRequest, files: [...session.state.files.values()], expansions: session.state.expansions, symbols: session.symbols };
   }
 
   private async runExpansionPass(
@@ -672,6 +770,11 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 }
 
 // ── helpers ────────────────────────────────────────────────────────────────
+
+/** Word tokens from a request, used to score symbol relevance. */
+export function tokenizeRequest(value: string): string[] {
+  return [...new Set(String(value).toLowerCase().split(/[^a-z0-9]+/).filter(part => part.length > 2))];
+}
 
 export function normalizePath(value: string): string {
   return String(value).replace(/\\/g, '/').replace(/^\.\//, '').trim();

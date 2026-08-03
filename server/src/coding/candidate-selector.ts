@@ -50,6 +50,30 @@ function words(value: string): string[] {
   return value.split(/[^a-z0-9]+/i).filter(part => part.length > 1);
 }
 
+/**
+ * Relevance of one repo path to a set of request hints.
+ *
+ * Exported so the context pack can rank a module's files by the same rule the
+ * candidate selector uses. A filename match counts for more than a directory
+ * match, because every file in a module shares its directory name.
+ */
+export function scorePathAgainstHints(filePath: string, hints: string[]): number {
+  const lower = filePath.replace(/\\/g, '/').toLowerCase();
+  const baseWords = words(path.posix.basename(lower));
+  const dirWords = words(path.posix.dirname(lower));
+  let score = 0;
+  for (const hint of hints) {
+    if (baseWords.some(word => matchesHint(word, hint))) score += 3;
+    else if (dirWords.some(word => matchesHint(word, hint))) score += 1;
+  }
+  return score;
+}
+
+/** Tokenises a request the same way candidate selection does. */
+export function requestHints(userRequest: string): string[] {
+  return tokenize(userRequest);
+}
+
 export function selectCandidateFiles(pack: ContextPack, userRequest: string): CandidateSelection {
   const hints = tokenize(userRequest);
   const excluded: string[] = [];

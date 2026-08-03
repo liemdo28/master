@@ -245,6 +245,88 @@ async function run(): Promise<void> {
   });
   check('legitimate anchored edit applies', good.changedFiles.includes('src/util.js'));
 
+  // Whitespace-tolerant anchoring. Local models reproduce the right lines with
+  // reconstructed indentation; this must still apply, and must still refuse an
+  // anchor that is genuinely absent or genuinely ambiguous.
+  fs.writeFileSync(
+    path.join(worktree, 'src', 'indent.js'),
+    'function build(rows) {\n    const out = [];\n    for (const row of rows) {\n        out.push(row);\n    }\n    return out;\n}\n'
+  );
+  const indentWritable = new Set(['src/indent.js']);
+
+  const reindented = applyPatch({
+    worktreePath: worktree,
+    writablePaths: indentWritable,
+    patch: {
+      summary: 'wrong indentation in anchor',
+      edits: [
+        {
+          path: 'src/indent.js',
+          op: 'replace',
+          // Same lines, two-space indentation instead of the file's four.
+          search: '  for (const row of rows) {\n    out.push(row);\n  }',
+          replace: '  for (const row of rows) {\n    if (row) out.push(row);\n  }',
+        },
+      ],
+    },
+  });
+  const reindentedText = fs.readFileSync(path.join(worktree, 'src', 'indent.js'), 'utf8');
+  check('anchor with reconstructed indentation still applies', reindented.changedFiles.includes('src/indent.js'));
+  check('the intended change is present', reindentedText.includes('if (row) out.push(row);'), reindentedText);
+  // Re-indentation shifts the replacement by a uniform delta, which restores the
+  // block's own base indent. It does not rewrite the model's indent *step*, so a
+  // 2-space-step replacement stays 2-space-step inside a 4-space-step file. That
+  // is cosmetic; the guarantee is that the block is nested under its opener and
+  // the surrounding lines are untouched.
+  check(
+    'replacement block is indented under its opening line',
+    /\n    for \(const row of rows\) \{\n(\s+)if \(row\)/.test(reindentedText) &&
+      (reindentedText.match(/\n    for \(const row of rows\) \{\n(\s+)if/)?.[1].length ?? 0) > 4,
+    reindentedText
+  );
+  check('surrounding lines are untouched', reindentedText.startsWith('function build(rows) {\n    const out = [];'));
+  check('trailing lines are untouched', reindentedText.endsWith('    return out;\n}\n'), reindentedText);
+
+  fs.writeFileSync(
+    path.join(worktree, 'src', 'dup.js'),
+    'function a() {\n  doWork();\n}\n\nfunction b() {\n  doWork();\n}\n'
+  );
+  let fuzzyAmbiguous = false;
+  try {
+    applyPatch({
+      worktreePath: worktree,
+      writablePaths: new Set(['src/dup.js']),
+      patch: { summary: 'ambiguous', edits: [{ path: 'src/dup.js', op: 'replace', search: '    doWork();', replace: '    doWork(1);' }] },
+    });
+  } catch (err) {
+    fuzzyAmbiguous = err instanceof CodingEngineError && err.category === 'INVALID_PATCH';
+  }
+  check('whitespace-insensitive match that is ambiguous is refused', fuzzyAmbiguous);
+
+  let fuzzyAbsent = false;
+  try {
+    applyPatch({
+      worktreePath: worktree,
+      writablePaths: indentWritable,
+      patch: { summary: 'absent', edits: [{ path: 'src/indent.js', op: 'replace', search: 'nothing like this exists', replace: 'x' }] },
+    });
+  } catch (err) {
+    fuzzyAbsent = err instanceof CodingEngineError && /not found/.test(err.message);
+  }
+  check('genuinely absent anchor is still rejected', fuzzyAbsent);
+  check('rejection message includes the attempted anchor', (() => {
+    try {
+      applyPatch({
+        worktreePath: worktree,
+        writablePaths: indentWritable,
+        patch: { summary: 'absent', edits: [{ path: 'src/indent.js', op: 'replace', search: 'zzz-not-present', replace: 'x' }] },
+      });
+      return false;
+    } catch (err) {
+      return err instanceof Error && err.message.includes('zzz-not-present');
+    }
+  })());
+
   // ── 8. review catches secrets, weakened tests and out-of-scope edits ───────
   fs.writeFileSync(
     path.join(worktree, 'src', 'app.js'),
