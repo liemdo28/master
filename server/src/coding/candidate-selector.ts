@@ -21,14 +21,36 @@ export function selectCandidateFiles(pack: ContextPack, userRequest: string): Ca
     })
     .map((file): CandidateFile => {
       const normalized = file.replace(/\\/g, '/');
-      const haystack = normalized.toLowerCase();
-      const score = hints.reduce((acc, hint) => acc + (haystack.includes(hint) ? 1 : 0), 0);
+      const lower = normalized.toLowerCase();
+      const base = path.posix.basename(lower);
+      const dir = path.posix.dirname(lower);
+
+      // A hint matching the filename is a far stronger signal than one matching
+      // a directory, because every file in a module shares its directory name.
+      // Scoring them equally made whole modules tie on confidence and fall back
+      // to alphabetical order, which on a large repository buried the relevant
+      // file underneath unrelated siblings.
+      let score = 0;
+      let filenameHit = false;
+      for (const hint of hints) {
+        if (base.includes(hint)) {
+          score += 3;
+          filenameHit = true;
+        } else if (dir.includes(hint)) {
+          score += 1;
+        }
+      }
+
       const testGuess = guessRelatedTests(normalized);
       return {
         path: normalized,
-        reason: score > 0 ? 'matched request hints from context pack' : 'included by active context pack',
+        reason: filenameHit
+          ? 'filename matches request hints'
+          : score > 0
+            ? 'module path matches request hints'
+            : 'included by active context pack',
         relatedTests: testGuess,
-        confidence: Math.min(0.95, 0.45 + score * 0.12 + (testGuess.length ? 0.1 : 0)),
+        confidence: Math.min(0.95, 0.4 + score * 0.06 + (testGuess.length ? 0.05 : 0)),
       };
     })
     .sort((a, b) => b.confidence - a.confidence || a.path.localeCompare(b.path))
