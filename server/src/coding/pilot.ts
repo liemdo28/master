@@ -20,8 +20,9 @@ import { ProjectRegistryService } from '../project-registry/service';
 import { TaskStore } from '../task-runtime/store';
 
 const PILOT_REQUEST =
+  process.env.MI_PILOT_REQUEST ||
   'The read-only coding task plan endpoint does not report which engine produced the plan. ' +
-  'Include the engine id in that response so callers can tell which coding engine was used.';
+    'Include the engine id in that response so callers can tell which coding engine was used.';
 
 function git(cwd: string, args: string[]): string {
   return execFileSync('git', args, { cwd, encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] }).trim();

@@ -1,0 +1,193 @@
+# Phase 4 Status — Local Agentic Coding Engine
+
+**Result: PARTIALLY DONE.** A real local LLM coding engine is ACTIVE and passes
+3 of 5 fixture categories end to end with real local commits. The two remaining
+fixture categories and the Mi Core pilot do not pass. Details below, unrounded.
+
+## Corrections to the stated baseline
+
+Three premises in the Phase 4 directive did not match the machine:
+
+1. **Model roles.** The directive stated all roles used `qwen2.5-coder:7b`. That
+   model was not installed. `model-registry.ts` declared it and
+   `ollama-router.ts` ranked it first, but `selectModel()` fell through its
+   priority list to "first available non-embedding model" — `qwen3:8b`.
+   Configuration and runtime disagreed.
+2. **Engines.** None of OpenHands, Aider, Qwen Code or OpenCode is installed.
+   There was nothing to wrap.
+3. **Repository state.** The canonical checkout sat on
+   `codex/phase10-2-reality-closure`, which shares **no common ancestor** with
+   `origin/master`, carrying 314 modified and 4,768 untracked files. Phase 4 was
+   built in a separate clean worktree from `origin/master` (`6c61e548`); that
+   checkout was never touched.
+
+## Hardware
+
+Intel i5-13400F (10C/16T) · 31.9 GB RAM · AMD RX 7600 **8 GB VRAM** (ROCm
+working) · Ollama 0.32.0. 8 GB fits exactly one 7-8B Q4 model, which is why
+inference is serialised to a single slot.
+
+## Benchmark
+
+Four models, five fixtures, real engine, one model at a time. Round 1 measured
+a constraint rather than the models (the writable set was bound to the model's
+own plan, producing `POLICY_DENIED` in 7 of 20 runs) and was re-run. Round 2:
+
+| model | passed | plan valid | patch valid | hallucinated paths | tok/s | mean s | peak VRAM |
+|---|---|---|---|---|---|---|---|
+| **qwen3:8b** | **3/5** | 100% | 100% | 0% | 23.1 | 48 | 7.22 GB |
+| qwen2.5-coder:7b | 1/5 | 80% | 60% | 0% | 45.3 | 24 | 5.62 GB |
+| qwen2.5-coder:14b | 1/5 | 100% | 100% | 0% | 7.0 | 103 | 7.30 GB |
+| deepseek-coder-v2:lite | 2/5 | 100% | 80% | 0% | 11.1 | 118 | 7.23 GB |
+
+| model | bug-fix | multi-file | type-repair | refactor | unfamiliar-repo |
+|---|---|---|---|---|---|
+| qwen3:8b | PASS | fail | PASS | PASS | fail |
+| qwen2.5-coder:7b | PASS | fail | fail | fail | fail |
+| qwen2.5-coder:14b | PASS | fail | fail | fail | fail |
+| deepseek-coder-v2:lite | PASS | fail | PASS | fail | fail |
+
+A general model beat every dedicated coder model. Larger was not better:
+`qwen2.5-coder:14b` spills out of 8 GB VRAM to ~7 tok/s and still scored 1/5,
+which makes it impractical for interactive use on this host.
+
+### Review quality (measured separately)
+
+Writing a change and judging one are different skills, so review roles were
+chosen from diffs with known verdicts rather than from task scores.
+
+| model | correct | false PASS (unsafe) | false FAIL | mean s |
+|---|---|---|---|---|
+| **qwen3:8b** | **6/6** | **0** | 0 | 4 |
+| deepseek-coder-v2:lite | 5/6 | **1** | 0 | 8 |
+| qwen2.5-coder:7b | 4/6 | 0 | 2 | 3 |
+| qwen2.5-coder:14b | 4/6 | 0 | 2 | 16 |
+
+`deepseek-coder-v2:lite` **approved a diff containing a hardcoded API key**. A
+false approval is the one error a reviewer must not make, so it is excluded from
+the review role despite ranking second on tasks.
+
+### Selected roles
+
+| role | model | basis |
+|---|---|---|
+| `coding_primary` | `qwen3:8b` | highest task success, 100% plan and patch validity |
+| `coding_fast` | `qwen2.5-coder:7b` | fastest (45 tok/s), only model with real VRAM headroom |
+| `coding_review` | `qwen3:8b` | 6/6 with zero false approvals |
+
+Primary and review share weights because no other installed model reviews
+accurately enough. Independence therefore comes from a fresh diff-only
+invocation plus the deterministic layer, and is reported as
+`independentModel: false` rather than overstated.
+
+## Acceptance — 3/5
+
+Through the real control plane (registry, fresh map, context pack, ranked
+candidates, isolated worktree, validation, review, local commit):
+
+| fixture | category | result | local commit |
+|---|---|---|---|
+| task-a-bug-fix | bug-fix | **PASS** | `33256252c85e` |
+| task-b-multi-file-feature | multi-file-feature | FAIL | — |
+| task-c-type-repair | type-repair | **PASS** | `f53a9ce5f827` |
+| task-d-refactor | refactor | **PASS** | `b401b879f150` |
+| task-e-unfamiliar-repo | unfamiliar-repo | FAIL | — |
+
+Both failures are `VALIDATION_FAILED`: the model produced a well-formed,
+in-scope patch that did not actually make the tests pass. Every guard behaved
+correctly — no commit was created, and the base checkout was untouched.
+
+## Mi Core pilot — FAILED (4 attempts)
+
+The pilot task was a narrow read-only API improvement in one existing file.
+It failed every time, with a consistent and diagnosable cause.
+
+| attempt | candidates | model's plan | outcome |
+|---|---|---|---|
+| 1 | 24 | "enforce coding context based on project metadata" | build failed |
+| 2 | 24 | "benchmark coding models" | invalid patch |
+| 3 | 19 | "benchmark coding models for review quality" | invalid patch |
+| 4 (narrower request) | 20 | "add a read-only endpoint returning the engine registry" | no net change |
+
+**The engine is not the bottleneck; context packing is.** On Mi Core the context
+pack spans ~20 files across a dozen unrelated modules. An 8B model reads that
+wall of source and describes *what it was shown* instead of what was asked — in
+attempt 4 it echoed a task description it found verbatim inside
+`acceptance.ts`. The same engine, on focused repositories with 3-5 candidates,
+plans and patches correctly.
+
+Two ranking fixes were made and kept because they are general improvements, not
+pilot-specific tuning:
+
+- filename matches now outrank directory matches (previously every file under
+  `server/src/coding/` tied and broke alphabetically, burying the target)
+- candidates matching nothing in the request are dropped rather than padding the
+  list to the cap
+
+Neither was sufficient. Tuning further would mean fitting the system to one
+task, which the directive explicitly rules out. **Closing this gap needs a
+sharper context pack for large repositories** — the honest next step, not a
+prompt adjustment.
+
+## Security — 64 boundary assertions
+
+Path traversal, absolute and UNC paths, Windows device names, null bytes,
+junction escape, `.env` and key material, unregistered commands, command
+chaining (`&&`, `;`, `|` — inert because there is no shell), writes outside the
+plan and outside the worktree, ambiguous and missing anchors, partial-batch
+rollback, secrets and weakened tests in the diff, cross-project context
+expansion, and non-loopback endpoints including the cloud metadata address.
+`git push` is not a registered command and the engine contains no push, merge
+or deploy capability.
+
+## Privacy — 30 assertions
+
+Global `fetch` is instrumented, a real model-backed task is run, and every
+observed request is asserted loopback. Zero requests reached any cloud provider.
+No provider credential is read; spawned processes get a minimal env with
+telemetry disabled. Models were fetched once from ollama.com under explicit
+approval; all inference since is local.
+
+## Resume — 23 assertions
+
+Interruption after plan, after apply before validation, mid-validation, on
+double resume and after cancellation. On restart the workflow rebuilds the
+adapter the task was *planned* with, skips an already-completed apply, and
+creates **at most one commit** in every case. Engine session state lives outside
+the worktree so it never enters the diff.
+
+One real bug was found and fixed here: an already-aborted `AbortSignal` never
+emits `abort`, so a cancelled task could start one more inference.
+
+## Validation
+
+| command | result |
+|---|---|
+| `npm ci` | exit 0 |
+| `npm run build` | exit 0 |
+| `npm run test:ci` | exit 0 |
+| `npm run test:agentic-coding` | exit 0 (64 + 23 assertions) |
+| `npm run test:agentic-coding-privacy` | exit 0 (30 assertions) |
+| `npm run agentic-coding:fixtures` | exit 0 (5/5 baselines correct) |
+| `npm run agentic-coding:acceptance` | **exit 1 — 3/5** |
+| conflict-marker scan | clean |
+| secret scan | clean (only the deliberate fixture secret the boundary test refuses) |
+
+## Engine status
+
+| engine | status |
+|---|---|
+| `local-llm-engine` | **ACTIVE** |
+| `internal-patch-engine` | ACTIVE — deterministic fallback |
+| OpenHands, Aider | WRAP_LATER — not installed |
+| Qwen Code, OpenCode | INACTIVE — not installed |
+
+## Not started
+
+UI redesign · autonomous push, merge or deploy · cloud coding · Phase 5.
+
+## What remains for full Phase 4
+
+1. Multi-file feature and unfamiliar-repo fixture categories (model capability).
+2. A context pack narrow enough for a repository the size of Mi Core, then the
+   real pilot.
