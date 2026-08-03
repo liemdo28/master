@@ -8,18 +8,53 @@ import { InternalPatchEngine } from './engines/internal-patch-engine';
 import { git } from './git';
 import { selectCodingModelRoles } from './model-router';
 import { reviewWorktree } from './reviewer';
+import { LlmCodingEngine, LLM_ENGINE_ID } from './llm/engine';
+import { reviewIndependently } from './llm/reviewer';
+import { CodingEngineError } from './llm/types';
+import { codingResourceController } from './resource-control';
+import type { CodingEngineAdapter } from './engines/adapter';
 import type { CandidateSelection, CodingModelRoles, CodingRunResult, CodingWorkflowInput, EngineApplyResult, EnginePlan, ValidationResult } from './types';
 import { buildValidationPlan, runValidationPlan } from './validation-runner';
 import { prepareWorktree } from './worktree-manager';
 
+export const INTERNAL_ENGINE_ID = 'internal-patch-engine';
+
+/**
+ * Engine selection is explicit rather than implicit. `MI_CODING_ENGINE` pins it
+ * globally; a per-task `engineId` overrides that. The deterministic Phase 3
+ * engine stays reachable as a fallback for tasks that must not involve a model.
+ */
+export function resolveEngineId(requested?: string | null): string {
+  return requested || process.env.MI_CODING_ENGINE || LLM_ENGINE_ID;
+}
+
 export class CodingWorkflow {
-  private adapter = new InternalPatchEngine();
+  private adapter: CodingEngineAdapter = new InternalPatchEngine();
+  private engineId = INTERNAL_ENGINE_ID;
 
   constructor(
     private taskStore = new TaskStore(),
     private registry = new ProjectRegistryService(),
     private taskEngine = new TaskEngine(taskStore)
   ) {}
+
+  /** Builds the adapter for this task, giving the LLM engine its context bridge. */
+  private buildAdapter(
+    engineId: string,
+    context: { project: CodingRunResult['context']['project']; contextPack: CodingRunResult['context']['contextPack']; baseCommit: string },
+    validationCommands: string[]
+  ): CodingEngineAdapter {
+    if (engineId === INTERNAL_ENGINE_ID) return new InternalPatchEngine();
+    if (engineId === LLM_ENGINE_ID) {
+      return new LlmCodingEngine({
+        project: context.project,
+        contextPack: context.contextPack,
+        sourceSha: context.baseCommit,
+        validationCommands,
+      });
+    }
+    throw new Error(`unknown coding engine: ${engineId}`);
+  }
 
   async run(input: CodingWorkflowInput): Promise<CodingRunResult> {
     const planned = await this.planTask(input);
@@ -47,6 +82,30 @@ export class CodingWorkflow {
       maxRetries: input.maxRetries ?? 3,
       riskLevel: 'local-reversible',
     });
+
+    this.engineId = resolveEngineId(input.engineId);
+    this.adapter = this.buildAdapter(this.engineId, context, input.validationCommands ?? []);
+    this.event(task.id, 'coding.engine.selected', { engineId: this.engineId });
+
+    // Admission control exists to stop concurrent model loads from thrashing an
+    // 8 GB GPU. The deterministic engine loads no weights, so gating it would
+    // only serialise work that costs nothing to run in parallel.
+    if (this.engineId !== INTERNAL_ENGINE_ID) {
+      const admission = await codingResourceController.admit(task.id, { diskPath: context.project.canonicalRoot });
+      this.event(task.id, 'coding.resources.checked', {
+        admitted: admission.admitted,
+        reason: admission.reason ?? null,
+        freeRamGb: Number(admission.snapshot.freeRamGb.toFixed(2)),
+        freeDiskGb: admission.snapshot.freeDiskGb === null ? null : Number(admission.snapshot.freeDiskGb.toFixed(2)),
+        residentVramGb: Number(admission.snapshot.residentVramGb.toFixed(2)),
+      });
+      if (!admission.admitted) {
+        this.event(task.id, 'coding.failure.classified', { category: 'RESOURCE_EXHAUSTED', message: admission.reason });
+        this.taskEngine.failTask(task.id, admission.reason ?? 'resource limits exceeded');
+        throw new CodingEngineError('RESOURCE_EXHAUSTED', admission.reason ?? 'resource limits exceeded');
+      }
+    }
+
     this.event(task.id, 'coding.context.accepted', {
       projectId: context.project.id,
       mapVersion: context.contextPack.mapVersion,
@@ -87,9 +146,27 @@ export class CodingWorkflow {
     });
     this.event(task.id, 'coding.models.selected', modelRoles);
 
-    const inspected = await this.adapter.inspect({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest });
-    const plan = await this.adapter.plan({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest, modelRoles });
+    let inspected: { filesRead: string[] };
+    let plan: EnginePlan;
+    try {
+      inspected = await codingResourceController.withModelSlot(() =>
+        this.adapter.inspect({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest, modelRoles } as never)
+      );
+      const expansions = (inspected as { expansions?: unknown[] }).expansions ?? [];
+      if (expansions.length) this.event(task.id, 'coding.context.expanded', { expansions });
+
+      plan = await codingResourceController.withModelSlot(() =>
+        this.adapter.plan({ worktreePath: worktree.worktreePath, candidates, userRequest: input.userRequest, modelRoles })
+      );
+    } catch (err) {
+      codingResourceController.release(task.id);
+      this.recordFailure(task.id, err);
+      this.taskEngine.failTask(task.id, err instanceof Error ? err.message : String(err));
+      throw err;
+    }
     assertPlanWithinCandidates(plan.filesToChange, candidates);
+    const hallucinated = (plan as EnginePlan & { hallucinatedPaths?: string[] }).hallucinatedPaths ?? [];
+    if (hallucinated.length) this.event(task.id, 'coding.plan.hallucinated_paths', { paths: hallucinated });
     this.taskStore.updateCodingFields(task.id, {
       filesRead: JSON.stringify(inspected.filesRead),
       plan: JSON.stringify(plan),
@@ -113,6 +190,11 @@ export class CodingWorkflow {
     const worktreePath = task.worktreePath as string;
     if (!worktreePath) throw new Error('coding task has no worktree path');
 
+    // A resume may land in a fresh process, so rebuild the adapter the task was
+    // planned with rather than whatever the current default happens to be.
+    this.engineId = task.codingEngine || resolveEngineId(null);
+    this.adapter = this.buildAdapter(this.engineId, context, validationCommands);
+
     if (task.status === 'READY') {
       await enforceCodingContext({
         service: this.registry,
@@ -130,7 +212,20 @@ export class CodingWorkflow {
       ? { engineId: this.adapter.id, changedFiles: parseJson<string[]>(task.filesChanged, 'filesChanged'), evidence: { resumed: true } }
       : null;
     if (!apply) {
-      apply = await this.adapter.apply({ worktreePath, plan, userRequest: task.userRequest });
+      try {
+        apply = await codingResourceController.withModelSlot(() =>
+          this.adapter.apply({ worktreePath, plan, userRequest: task.userRequest, modelRoles } as never)
+        );
+      } catch (err) {
+        codingResourceController.release(task.id);
+        this.recordFailure(task.id, err);
+        const failed = this.taskEngine.failTask(task.id, err instanceof Error ? err.message : String(err));
+        return {
+          task: failed, context, candidates, modelRoles, plan,
+          apply: { engineId: this.adapter.id, changedFiles: [], evidence: {} },
+          validation: [], review: { status: 'FAIL', findings: [String(err instanceof Error ? err.message : err)] }, commitSha: null,
+        };
+      }
       this.taskStore.updateCodingFields(task.id, { filesChanged: JSON.stringify(apply.changedFiles) });
       this.evidence(task.id, 'coding-apply', apply);
       this.event(task.id, 'coding.engine.applied', { engineId: apply.engineId, changedFiles: apply.changedFiles });
@@ -148,32 +243,72 @@ export class CodingWorkflow {
     }
     let attempts = 0;
     const maxRetries = this.mustGetCodingTask(task.id).maxRetries;
+    // Stop after the same failure signature repeats: a third identical run is
+    // evidence the model cannot see the cause, not that it needs another go.
+    const failureSignatures = new Map<string, number>();
     while (!validationPassed(validation) && attempts < maxRetries) {
+      const signature = failureSignature(validation);
+      const seen = (failureSignatures.get(signature) ?? 0) + 1;
+      failureSignatures.set(signature, seen);
+      if (seen > 2) {
+        this.event(task.id, 'coding.repair.abandoned', { reason: 'identical failure repeated', signature, attempts });
+        break;
+      }
+
       attempts += 1;
       this.taskStore.updateCodingFields(task.id, { retryCount: attempts, validationResults: JSON.stringify(validation) });
-      this.event(task.id, 'coding.repair.attempted', { attempt: attempts, failed: failedValidationNames(validation) });
+      this.event(task.id, 'coding.repair.attempted', { attempt: attempts, failed: failedValidationNames(validation), signature });
       this.taskEngine.transition(task.id, 'RECOVERING');
       this.taskEngine.transition(task.id, 'RUNNING');
-      await this.adapter.continue({
-        worktreePath,
-        plan,
-        attempt: attempts,
-        validationSummary: failedValidationNames(validation).join(', '),
-      });
+      try {
+        await codingResourceController.withModelSlot(() =>
+          this.adapter.continue({
+            worktreePath,
+            plan,
+            attempt: attempts,
+            validationSummary: failedValidationNames(validation).join(', '),
+            validationOutput: validationOutputText(validation),
+            userRequest: task.userRequest,
+            modelRoles,
+          } as never)
+        );
+      } catch (err) {
+        this.recordFailure(task.id, err);
+        this.event(task.id, 'coding.repair.failed', { attempt: attempts, message: err instanceof Error ? err.message : String(err) });
+        break;
+      }
       this.taskEngine.transition(task.id, 'VALIDATING');
       validation = await runValidationPlan(validationPlan, { isCancelled: () => this.taskStore.getTask(task.id)?.status === 'CANCELLED' });
       if (this.taskStore.getTask(task.id)?.status === 'CANCELLED') {
+        codingResourceController.release(task.id);
         return { task: this.mustGetCodingTask(task.id), context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['task cancelled'] }, commitSha: null };
       }
     }
     this.taskStore.updateCodingFields(task.id, { validationResults: JSON.stringify(validation) });
     this.evidence(task.id, 'coding-validation', validation);
 
-    const review = await reviewWorktree(worktreePath, validation);
+    // The deterministic engine keeps the Phase 3 reviewer. A model-authored diff
+    // gets the stricter two-layer review with an independent model pass.
+    const review = this.engineId === LLM_ENGINE_ID
+      ? await codingResourceController.withModelSlot(() =>
+          reviewIndependently({
+            worktreePath,
+            userRequest: task.userRequest,
+            validation,
+            allowedFiles: plan.filesToChange,
+            modelRoles,
+          })
+        )
+      : await reviewWorktree(worktreePath, validation);
+
     this.taskStore.updateCodingFields(task.id, { reviewStatus: review.status });
     this.evidence(task.id, 'coding-review', review);
     this.event(task.id, 'coding.review.completed', review);
     if (!validationPassed(validation) || review.status !== 'PASS') {
+      if (!validationPassed(validation)) {
+        this.event(task.id, 'coding.failure.classified', { category: 'VALIDATION_FAILED', message: failedValidationNames(validation).join(', ') });
+      }
+      codingResourceController.release(task.id);
       const failed = this.taskEngine.failTask(task.id, 'Coding workflow failed validation or review.');
       return { task: failed, context, candidates, modelRoles, plan, apply, validation, review, commitSha: null };
     }
@@ -181,8 +316,16 @@ export class CodingWorkflow {
     const commitSha = task.commitPolicy === 'no-commit' ? null : await this.commitLocal(worktreePath, task.userRequest);
     this.taskStore.updateCodingFields(task.id, { commitSha });
     this.event(task.id, 'coding.commit.created', { commitSha, policy: task.commitPolicy ?? 'local-only' });
+    codingResourceController.release(task.id);
     const completed = this.taskEngine.completeTask(task.id, 'Coding workflow completed with local validation and review.');
     return { task: completed, context, candidates, modelRoles, plan, apply, validation, review, commitSha };
+  }
+
+  /** Classifies and records an engine failure so the API can report a category. */
+  private recordFailure(taskId: string, err: unknown): void {
+    const category = err instanceof CodingEngineError ? err.category : 'ENGINE_CRASHED';
+    const message = err instanceof Error ? err.message : String(err);
+    this.event(taskId, 'coding.failure.classified', { category, message });
   }
 
   getTask(id: string): TaskRecord | null {
@@ -236,4 +379,33 @@ function validationPassed(results: ValidationResult[]): boolean {
 
 function failedValidationNames(results: ValidationResult[]): string[] {
   return results.filter(result => result.configured && result.exitCode !== 0).map(result => result.name);
+}
+
+/** Concatenated output of the failing commands, for the repair prompt. */
+function validationOutputText(results: ValidationResult[]): string {
+  return results
+    .filter(result => result.configured && result.exitCode !== 0)
+    .map(result => `$ ${result.name}\n${result.stdout}\n${result.stderr}`)
+    .join('\n\n')
+    .slice(0, 12000);
+}
+
+/**
+ * A stable fingerprint of a failure. Absolute paths, line/column numbers and
+ * durations are stripped so the same underlying error compares equal across runs.
+ */
+function failureSignature(results: ValidationResult[]): string {
+  return results
+    .filter(result => result.configured && result.exitCode !== 0)
+    .map(result => {
+      const normalized = `${result.stdout}\n${result.stderr}`
+        .replace(/[A-Za-z]:\\[^\s:]+|\/[^\s:]+\//g, '<path>')
+        .replace(/:\d+:\d+/g, ':<pos>')
+        .replace(/\d+(\.\d+)?\s*ms\b/gi, '<ms>')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 600);
+      return `${result.name}::${normalized}`;
+    })
+    .join('||');
 }

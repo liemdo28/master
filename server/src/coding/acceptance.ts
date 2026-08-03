@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as path from 'path';
 import assert from 'assert';
 import { ProjectRegistryService, seedMiCoreProject } from '../project-registry/service';
-import { CodingWorkflow } from './workflow';
+import { CodingWorkflow, INTERNAL_ENGINE_ID } from './workflow';
 
 async function run() {
   const repoRoot = path.resolve(process.cwd(), '..');
@@ -27,6 +27,7 @@ async function run() {
       userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
       commitPolicy: 'local-only',
       maxRetries: 1,
+      engineId: INTERNAL_ENGINE_ID,
     });
     if (result.task.status !== 'COMPLETED') {
       console.error(JSON.stringify({

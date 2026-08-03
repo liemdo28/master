@@ -7,7 +7,7 @@ import { CODING_ENGINE_REGISTRY } from '../engine-registry';
 import { InternalPatchEngine } from '../engines/internal-patch-engine';
 import { assertPlanWithinCandidates, enforceCandidateFileLimits, selectCandidateFiles } from '../candidate-selector';
 import { buildValidationPlan } from '../validation-runner';
-import { CodingWorkflow } from '../workflow';
+import { CodingWorkflow, INTERNAL_ENGINE_ID } from '../workflow';
 import { ProjectRegistryService } from '../../project-registry/service';
 import { TaskEngine } from '../../task-runtime/engine';
 import { TaskStore } from '../../task-runtime/store';
@@ -52,6 +52,7 @@ async function run() {
         mapVersion: mapA.mapVersion,
         userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
         maxRetries: 1,
+        engineId: INTERNAL_ENGINE_ID,
       }),
       workflowB.run({
         projectId: b.id,
@@ -59,6 +60,7 @@ async function run() {
         mapVersion: mapB.mapVersion,
         userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
         maxRetries: 1,
+        engineId: INTERNAL_ENGINE_ID,
       }),
     ]);
     assert.strictEqual(resultA.task.status, 'COMPLETED');
@@ -85,6 +87,7 @@ async function run() {
       mapVersion: mapA.mapVersion,
       userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
       maxRetries: 1,
+      engineId: INTERNAL_ENGINE_ID,
     });
     assert.strictEqual(planned.task.status, 'READY');
     planner.close();
@@ -111,6 +114,7 @@ async function run() {
       mapVersion: slowMap.mapVersion,
       userRequest: 'Add a read-only endpoint that returns the active coding engine registry and model roles',
       maxRetries: 0,
+      engineId: INTERNAL_ENGINE_ID,
     });
     const running = slowWorkflow.resumeTask(slowPlanned.task.id);
     await waitForStatus(slowPlanned.task.id, 'VALIDATING');
