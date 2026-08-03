@@ -138,8 +138,14 @@ export const PATCH_SYSTEM = `You are a precise software engineer producing minim
 You use exact anchored search/replace edits. The search text must be copied character-for-character from the file.
 ${SHARED_RULES}`;
 
-export function buildPatchPrompt(ctx: PromptContext, plan: ModelPlan, editableFiles: string[] = plan.filesToChange): string {
+export function buildPatchPrompt(
+  ctx: PromptContext,
+  plan: ModelPlan,
+  editableFiles: string[] = plan.filesToChange,
+  previousError?: string
+): string {
   return `${renderHeader(ctx)}
+${previousError ? `\nYOUR PREVIOUS EDIT WAS REJECTED: ${previousError}\nThe "search" text must be copied character-for-character from the file below. Do not retype it from memory.\n` : ''}
 
 APPROVED PLAN:
 ${plan.summary}

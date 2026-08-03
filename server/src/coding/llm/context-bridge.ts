@@ -14,8 +14,25 @@ import { isBinaryPath, resolveWithinWorktree, TOOL_LIMITS } from './tools';
 import type { ContextExpansionOutcome, ContextExpansionRequest } from './types';
 import type { PromptContext, RepoSnapshotFile } from './prompts';
 
-/** Total bytes of source the engine may hold at once, across all files. */
-export const DEFAULT_CONTEXT_BUDGET_BYTES = 96 * 1024;
+/**
+ * Model context window, in tokens, requested for every engine call.
+ * qwen3:8b supports 40960; 32768 leaves headroom without inflating the KV cache
+ * beyond what 8 GB of VRAM tolerates.
+ */
+export const DEFAULT_NUM_CTX = 32_768;
+
+/**
+ * Bytes of source the engine may hold at once, across all files.
+ *
+ * This is derived from DEFAULT_NUM_CTX rather than chosen independently. The
+ * two were previously unrelated constants — a 96 KB budget against a 16,384
+ * token window — so a large context silently overflowed and Ollama truncated
+ * the prompt from the left. The model then received source without the
+ * instructions that explained what to do with it, and produced search anchors
+ * that matched nothing. Roughly 3 bytes per token for source code, with ~40%
+ * of the window reserved for instructions and generated output.
+ */
+export const DEFAULT_CONTEXT_BUDGET_BYTES = Math.floor(DEFAULT_NUM_CTX * 0.6 * 3);
 export const MAX_TOTAL_CONTEXT_FILES = 32;
 export const MAX_EXPANSIONS_PER_TASK = 8;
 

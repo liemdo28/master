@@ -14,6 +14,20 @@ const FORBIDDEN = [/^node_modules\//, /^dist\//, /^build\//, /^\.git\//, /\.env$
  */
 const PRUNE_ABOVE = 8;
 
+/**
+ * Hard cap on the *initial* candidate set.
+ *
+ * MAX_CANDIDATES bounds what the context pack may ever offer; this bounds what
+ * the engine starts with. On Mi Core the pack legitimately matches ~20 files
+ * across a dozen modules, and handing all of them to an 8B model reliably
+ * derailed it — in one pilot run it invented a path and a task about
+ * factorials. Progressive expansion (llm/context-bridge) remains available for
+ * anything genuinely needed beyond the top slice, with a recorded justification.
+ */
+const INITIAL_TOP_K = Number(process.env.MI_CODING_INITIAL_CANDIDATES) > 0
+  ? Number(process.env.MI_CODING_INITIAL_CANDIDATES)
+  : 8;
+
 /** Test files are the specification; they are never pruned for lack of a hint. */
 function isTestPath(relative: string): boolean {
   return /(^|\/)(tests?|spec|specs|__tests__|t)\//.test(relative) || /[._-](test|spec)\.[cm]?[jt]sx?$/.test(relative);
@@ -95,13 +109,13 @@ export function selectCandidateFiles(pack: ContextPack, userRequest: string): Ca
   // below the threshold every file is plausibly relevant, and dropping one
   // starves the engine of the file the task actually needs.
   const keepAll = candidates.length <= PRUNE_ABOVE;
-  const chosen = (keepAll
-    ? candidates
-    : candidates.filter(candidate => !candidate.reason.startsWith('included by'))
-  ).slice(0, MAX_CANDIDATES);
+  const pruned = keepAll ? candidates : candidates.filter(candidate => !candidate.reason.startsWith('included by'));
+  const chosen = pruned.slice(0, Math.min(INITIAL_TOP_K, MAX_CANDIDATES));
 
   for (const candidate of candidates) {
-    if (!chosen.includes(candidate)) excluded.push(`${candidate.path}: no request-hint match`);
+    if (chosen.includes(candidate)) continue;
+    const reason = pruned.includes(candidate) ? 'outside the initial top-k' : 'no request-hint match';
+    excluded.push(`${candidate.path}: ${reason}`);
   }
 
   return { candidates: chosen, excluded, hardLimit: MAX_CANDIDATES, maxBytesPerFile: MAX_BYTES_PER_FILE, source: 'context-pack' };

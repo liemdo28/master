@@ -21,6 +21,7 @@ import {
   buildExpansionPolicy,
   buildPromptContext,
   createContextState,
+  DEFAULT_NUM_CTX,
   evaluateExpansion,
   expandablePaths,
   loadCandidateFiles,
@@ -205,39 +206,59 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       confidence: input.plan.confidence,
     };
 
-    const editable = [...this.writableSet(session, input.plan)];
-    const result = await this.callModel({
-      session,
-      model,
-      system: PATCH_SYSTEM,
-      prompt: buildPatchPrompt(session.promptContext, modelPlan, editable),
-      schema: PATCH_SCHEMA,
-      timeoutMs: this.options.patchTimeoutMs ?? 300_000,
-      numPredict: 2400,
-      signal,
-      label: 'patch',
-    });
-
-    const patch = parseJsonObject<ModelPatch>(result.response, 'patch');
     const writable = this.writableSet(session, input.plan);
-    const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
-    const planned = new Set(input.plan.filesToChange.map(normalizePath));
-    const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
+    const editable = [...writable];
 
-    this.persist(session);
-    return {
-      engineId: this.id,
-      changedFiles: outcome.changedFiles,
-      evidence: {
+    // A missed search anchor is the most common patch failure for a local
+    // model: it paraphrases the surrounding code instead of copying it. The
+    // repair path already retries with the rejection fed back, so the first
+    // attempt gets the same treatment rather than failing the whole task on a
+    // recoverable formatting mistake.
+    let previousError: string | undefined;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const result = await this.callModel({
+        session,
         model,
-        summary: patch.summary,
-        edits: outcome.applied,
-        beyondPlan,
-        telemetry: session.telemetry.at(-1),
-        contextFiles: [...session.state.files.keys()],
-        expansions: session.state.expansions,
-      },
-    };
+        system: PATCH_SYSTEM,
+        prompt: buildPatchPrompt(session.promptContext, modelPlan, editable, previousError),
+        schema: PATCH_SCHEMA,
+        timeoutMs: this.options.patchTimeoutMs ?? 300_000,
+        numPredict: 2400,
+        signal,
+        label: attempt ? `patch-retry-${attempt}` : 'patch',
+      });
+
+      try {
+        const patch = parseJsonObject<ModelPatch>(result.response, 'patch');
+        const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
+        const planned = new Set(input.plan.filesToChange.map(normalizePath));
+        const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
+
+        this.persist(session);
+        return {
+          engineId: this.id,
+          changedFiles: outcome.changedFiles,
+          evidence: {
+            model,
+            summary: patch.summary,
+            edits: outcome.applied,
+            beyondPlan,
+            patchAttempts: attempt + 1,
+            telemetry: session.telemetry.at(-1),
+            contextFiles: [...session.state.files.keys()],
+            expansions: session.state.expansions,
+          },
+        };
+      } catch (err) {
+        const recoverable = err instanceof CodingEngineError && (err.category === 'INVALID_PATCH' || err.category === 'INVALID_PLAN');
+        if (!recoverable || attempt === 2) throw err;
+        previousError = err.message;
+        // Re-read from disk so the retry anchors against current content.
+        refreshContextFiles(session.state);
+        session.promptContext = this.renderPromptContext(session, input.userRequest);
+      }
+    }
+    throw new CodingEngineError('INVALID_PATCH', 'model produced no applicable edit after 3 attempts');
   }
 
   /**
@@ -480,7 +501,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         format: input.schema as Record<string, unknown>,
         temperature: 0,
         numPredict: input.numPredict,
-        numCtx: this.options.numCtx ?? 16384,
+        numCtx: this.options.numCtx ?? DEFAULT_NUM_CTX,
         timeoutMs: input.timeoutMs,
         signal: input.signal,
         think: false,
