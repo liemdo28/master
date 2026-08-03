@@ -7,6 +7,35 @@ const MAX_CANDIDATES = 24;
 const MAX_BYTES_PER_FILE = 256 * 1024;
 const FORBIDDEN = [/^node_modules\//, /^dist\//, /^build\//, /^\.git\//, /\.env$/];
 
+/**
+ * Only prune unmatched candidates once the set is large enough for noise to be
+ * the bigger risk. On a small repository every file is plausibly relevant and
+ * dropping one starves the engine of the file it actually needs.
+ */
+const PRUNE_ABOVE = 8;
+
+/** Test files are the specification; they are never pruned for lack of a hint. */
+function isTestPath(relative: string): boolean {
+  return /(^|\/)(tests?|spec|specs|__tests__|t)\//.test(relative) || /[._-](test|spec)\.[cm]?[jt]sx?$/.test(relative);
+}
+
+/**
+ * Word-level match tolerant of morphological variants. `normalisation` in a
+ * request must match `stage_normalise.js`; exact substring matching does not,
+ * and that miss is enough to exclude the one file a task needs.
+ */
+function matchesHint(word: string, hint: string): boolean {
+  if (word === hint) return true;
+  if (word.length >= 4 && hint.includes(word)) return true;
+  if (hint.length >= 4 && word.includes(hint)) return true;
+  const shared = Math.min(word.length, hint.length);
+  return shared >= 5 && word.slice(0, 5) === hint.slice(0, 5);
+}
+
+function words(value: string): string[] {
+  return value.split(/[^a-z0-9]+/i).filter(part => part.length > 1);
+}
+
 export function selectCandidateFiles(pack: ContextPack, userRequest: string): CandidateSelection {
   const hints = tokenize(userRequest);
   const excluded: string[] = [];
@@ -30,38 +59,47 @@ export function selectCandidateFiles(pack: ContextPack, userRequest: string): Ca
       // Scoring them equally made whole modules tie on confidence and fall back
       // to alphabetical order, which on a large repository buried the relevant
       // file underneath unrelated siblings.
+      const baseWords = words(base);
+      const dirWords = words(dir);
       let score = 0;
       let filenameHit = false;
       for (const hint of hints) {
-        if (base.includes(hint)) {
+        if (baseWords.some(word => matchesHint(word, hint))) {
           score += 3;
           filenameHit = true;
-        } else if (dir.includes(hint)) {
+        } else if (dirWords.some(word => matchesHint(word, hint))) {
           score += 1;
         }
       }
 
       const testGuess = guessRelatedTests(normalized);
+      const isTest = isTestPath(normalized);
       return {
         path: normalized,
         reason: filenameHit
           ? 'filename matches request hints'
           : score > 0
             ? 'module path matches request hints'
-            : 'included by active context pack',
+            : isTest
+              ? 'test file for the requested behaviour'
+              : 'included by active context pack',
         relatedTests: testGuess,
-        confidence: Math.min(0.95, 0.4 + score * 0.06 + (testGuess.length ? 0.05 : 0)),
+        confidence: Math.min(0.95, 0.4 + score * 0.06 + (testGuess.length ? 0.05 : 0) + (isTest ? 0.03 : 0)),
       };
     })
     .sort((a, b) => b.confidence - a.confidence || a.path.localeCompare(b.path));
 
-  // Drop files that matched nothing in the request, provided something did
-  // match. On a small repository every file is plausibly relevant and the pack
-  // is already the answer; on a repository the size of Mi Core, padding to the
-  // cap buries the request under a wall of unrelated modules and a local 8B
-  // model starts describing whatever it was shown instead of what was asked.
-  const relevant = candidates.filter(candidate => !candidate.reason.startsWith('included by'));
-  const chosen = (relevant.length ? relevant : candidates).slice(0, MAX_CANDIDATES);
+  // On a repository the size of Mi Core, padding to the cap buries the request
+  // under a wall of unrelated modules and a local 8B model starts describing
+  // whatever it was shown instead of what was asked. Pruning only helps there:
+  // below the threshold every file is plausibly relevant, and dropping one
+  // starves the engine of the file the task actually needs.
+  const keepAll = candidates.length <= PRUNE_ABOVE;
+  const chosen = (keepAll
+    ? candidates
+    : candidates.filter(candidate => !candidate.reason.startsWith('included by'))
+  ).slice(0, MAX_CANDIDATES);
+
   for (const candidate of candidates) {
     if (!chosen.includes(candidate)) excluded.push(`${candidate.path}: no request-hint match`);
   }

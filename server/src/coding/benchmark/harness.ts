@@ -446,12 +446,19 @@ function pct(value: number): string {
 }
 
 if (require.main === module) {
-  const models = process.argv.slice(2);
+  const models = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
   if (!models.length) {
-    console.error('Usage: benchmark <model> [model...]');
+    console.error('Usage: benchmark <model> [model...] [--fixtures=a,b] [--repeat=N]');
     process.exit(1);
   }
-  runBenchmark(models)
+  // Repeated runs matter for the categories that sit near the model's limit;
+  // a single sample there says very little about whether a fix actually held.
+  const only = process.argv.find(arg => arg.startsWith('--fixtures='))?.split('=')[1]?.split(',') ?? [];
+  const repeat = Number(process.argv.find(arg => arg.startsWith('--repeat='))?.split('=')[1] ?? 1) || 1;
+  const selected = only.length ? FIXTURES.filter(f => only.some(id => f.id.includes(id))) : FIXTURES;
+  const expanded = Array.from({ length: repeat }, () => selected).flat();
+
+  runBenchmark(models, expanded)
     .then(reports => {
       const dir = process.env.MI_BENCHMARK_OUT ?? path.join(os.tmpdir(), 'mi-phase4-benchmark');
       const jsonPath = writeReport(reports, dir);

@@ -149,7 +149,7 @@ const FIXTURE_B: Fixture = {
   excludedPaths: ['node_modules', '.git'],
   validationCommands: ['npm test'],
   files: [
-    { path: 'package.json', content: NODE_TEST_PKG('inventory-api', { test: 'node --test spec', 'test:coding': 'node --test spec' }) },
+    { path: 'package.json', content: NODE_TEST_PKG('inventory-api', { test: 'node --test "spec/*.js"', 'test:coding': 'node --test "spec/*.js"' }) },
     {
       path: 'src/services/inventory-service.js',
       content: `'use strict';
@@ -459,7 +459,7 @@ const FIXTURE_E: Fixture = {
   excludedPaths: ['node_modules', '.git', 'vendor'],
   validationCommands: ['npm test'],
   files: [
-    { path: 'package.json', content: NODE_TEST_PKG('etl-pipeline', { test: 'node --test t', 'test:coding': 'node --test t' }) },
+    { path: 'package.json', content: NODE_TEST_PKG('etl-pipeline', { test: 'node --test "t/*.js"', 'test:coding': 'node --test "t/*.js"' }) },
     {
       path: 'pipeline/registry.js',
       content: `'use strict';

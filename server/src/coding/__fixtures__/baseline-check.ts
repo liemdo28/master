@@ -11,6 +11,17 @@ import { FIXTURES } from './fixtures';
 import { materializeFixture } from './materialize';
 import { resolveNpmInvocation } from '../validation-runner';
 
+/** Signals that the fixture's own harness failed to start, rather than a test failing. */
+const HARNESS_ERRORS: RegExp[] = [
+  /Cannot find module/,
+  /MODULE_NOT_FOUND/,
+  /Missing script/,
+  /npm ERR! Missing/,
+  /command not found/,
+  /is not recognized as an internal or external command/,
+  /spawn error:/,
+];
+
 const EXPECTED_BASELINE: Record<string, 'FAIL' | 'PASS'> = {
   'task-a-bug-fix': 'FAIL',
   'task-b-multi-file-feature': 'FAIL',
@@ -81,9 +92,21 @@ async function main(): Promise<void> {
       }
       const actual = worst === 0 ? 'PASS' : 'FAIL';
       const expected = EXPECTED_BASELINE[fixture.id];
-      const ok = actual === expected;
+
+      // A fixture that "fails" because its own test harness cannot start is
+      // useless: it fails identically no matter what the engine does, so every
+      // model scores zero on it for a reason that has nothing to do with the
+      // task. This caught `node --test spec` resolving as a module path rather
+      // than a directory, which made two fixtures permanently unpassable.
+      const harnessBroken = HARNESS_ERRORS.find(pattern => pattern.test(combined));
+      const ranRealTests = /(^|\n)\s*(ℹ\s*pass|# pass)\s+\d+/.test(combined) || /error TS\d+/.test(combined);
+
+      const ok = actual === expected && !harnessBroken && ranRealTests;
       if (!ok) failures += 1;
-      console.log(`${ok ? 'OK  ' : 'BAD '} ${fixture.id.padEnd(28)} baseline=${actual} expected=${expected}`);
+      console.log(
+        `${ok ? 'OK  ' : 'BAD '} ${fixture.id.padEnd(28)} baseline=${actual} expected=${expected}` +
+          `${harnessBroken ? ` HARNESS-ERROR(${harnessBroken.source})` : ''}${ranRealTests ? '' : ' NO-TESTS-RAN'}`
+      );
       if (!ok) console.log(combined.split('\n').slice(0, 25).join('\n'));
     } finally {
       materialized.cleanup();

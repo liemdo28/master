@@ -32,9 +32,15 @@ export interface PromptContext {
 }
 
 const SHARED_RULES = [
+  'The files you are shown are candidates for reading, not targets to be edited. Edit only what the task requires.',
   'Work only on the files provided. Never invent a path that is not listed.',
   'Do not add dependencies, run migrations, or introduce new commands.',
   'Do not weaken, skip, or delete tests to make validation pass.',
+  // Without this, a model handed a failing test frequently "helps" by pasting a
+  // copy of that test back into the spec file. Validation then passes and the
+  // reviewer correctly rejects the diff as adding nothing.
+  'Do not add, duplicate, or rewrite tests unless the task explicitly asks for new test coverage.',
+  'If a test already exists and is failing, change the source code so it passes. Leave the test file alone.',
   'Do not embed secrets, API keys, or credentials.',
 ].join('\n');
 
