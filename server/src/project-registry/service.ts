@@ -200,7 +200,11 @@ export class ProjectRegistryService {
     if (map) {
       for (const module of map.modules) {
         const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
-        if (hints.length === 0 || hints.some(hint => haystack.includes(hint))) {
+        const endpointNeedsRoutes = hints.includes('endpoint') && module.name === 'routes';
+        if (endpointNeedsRoutes) {
+          module.paths.filter(p => p.includes('/coding.') || p.includes('/coding/')).slice(0, 8).forEach(p => matchedPaths.add(p));
+        }
+        if (hints.length === 0 || endpointNeedsRoutes || hints.some(hint => haystack.includes(hint))) {
           module.paths.slice(0, 8).forEach(p => matchedPaths.add(p));
         }
       }
@@ -382,7 +386,7 @@ function detectPm2Processes(root: string): ProjectRecord['runtimeProcesses'] {
 
 function discoverModules(root: string): ProjectMapModule[] {
   const modules: ProjectMapModule[] = [];
-  for (const dir of ['server/src/project-registry', 'server/src/task-runtime', 'server/src/routes', 'server/src/projects', 'server/src/company-os', 'server/src/graph']) {
+  for (const dir of ['server/src/project-registry', 'server/src/task-runtime', 'server/src/coding', 'server/src/routes', 'server/src/projects', 'server/src/company-os', 'server/src/graph']) {
     const abs = path.join(root, dir);
     if (!fs.existsSync(abs)) continue;
     modules.push({
@@ -440,6 +444,7 @@ function moduleSignals(dir: string): string[] {
 function inferPurpose(dir: string): string {
   if (dir.includes('project-registry')) return 'Canonical project metadata, map, resume, and context-pack services.';
   if (dir.includes('task-runtime')) return 'Durable task lifecycle and read-only command evidence runtime.';
+  if (dir.includes('coding')) return 'Context-enforced offline coding workflow, worktree, adapter, validation, and review services.';
   if (dir.includes('routes')) return 'Express API surface mounted by server/src/index.ts.';
   if (dir.includes('projects')) return 'Legacy local project scanner and connector routing evidence.';
   if (dir.includes('company-os')) return 'Static company operating inventory and dashboards.';

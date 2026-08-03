@@ -66,6 +66,15 @@ export class TaskStore {
     this.ensureColumn('tasks', 'taskKind', `TEXT NOT NULL DEFAULT 'general'`);
     this.ensureColumn('tasks', 'mapVersion', `TEXT`);
     this.ensureColumn('tasks', 'contextPackId', `TEXT`);
+    for (const column of [
+      'baseBranch', 'baseCommit', 'taskBranch', 'worktreePath', 'codingEngine', 'modelRoles',
+      'candidateFiles', 'filesRead', 'filesChanged', 'validationPlan', 'validationResults',
+      'reviewStatus', 'commitPolicy', 'commitSha', 'rollbackState',
+    ]) {
+      this.ensureColumn('tasks', column, `TEXT`);
+    }
+    this.ensureColumn('tasks', 'retryCount', `INTEGER NOT NULL DEFAULT 0`);
+    this.ensureColumn('tasks', 'maxRetries', `INTEGER NOT NULL DEFAULT 3`);
   }
 
   runInTransaction<T>(fn: () => T): T {
@@ -77,10 +86,14 @@ export class TaskStore {
       .prepare(
         `INSERT INTO tasks (
           id, parentTaskId, userRequest, normalizedIntent, taskKind, projectId, mapVersion, contextPackId, repository,
-          workingDirectory, branch, status, riskLevel, approvalState, executionEngine,
+          workingDirectory, branch, baseBranch, baseCommit, taskBranch, worktreePath, codingEngine, modelRoles,
+          candidateFiles, filesRead, filesChanged, validationPlan, validationResults, retryCount, maxRetries,
+          reviewStatus, commitPolicy, commitSha, rollbackState, status, riskLevel, approvalState, executionEngine,
           selectedModel, plan, currentStep, createdAt, updatedAt, completedAt, resultSummary
         ) VALUES (@id, @parentTaskId, @userRequest, @normalizedIntent, @taskKind, @projectId, @mapVersion, @contextPackId, @repository,
-          @workingDirectory, @branch, @status, @riskLevel, @approvalState, @executionEngine,
+          @workingDirectory, @branch, @baseBranch, @baseCommit, @taskBranch, @worktreePath, @codingEngine, @modelRoles,
+          @candidateFiles, @filesRead, @filesChanged, @validationPlan, @validationResults, @retryCount, @maxRetries,
+          @reviewStatus, @commitPolicy, @commitSha, @rollbackState, @status, @riskLevel, @approvalState, @executionEngine,
           @selectedModel, @plan, @currentStep, @createdAt, @updatedAt, @completedAt, @resultSummary)`
       )
       .run(task);
@@ -93,7 +106,13 @@ export class TaskStore {
           status = @status, approvalState = @approvalState, executionEngine = @executionEngine,
           selectedModel = @selectedModel, plan = @plan, currentStep = @currentStep,
           updatedAt = @updatedAt, completedAt = @completedAt, resultSummary = @resultSummary,
-          normalizedIntent = @normalizedIntent
+          normalizedIntent = @normalizedIntent,
+          baseBranch = @baseBranch, baseCommit = @baseCommit, taskBranch = @taskBranch, worktreePath = @worktreePath,
+          codingEngine = @codingEngine, modelRoles = @modelRoles, candidateFiles = @candidateFiles,
+          filesRead = @filesRead, filesChanged = @filesChanged, validationPlan = @validationPlan,
+          validationResults = @validationResults, retryCount = @retryCount, maxRetries = @maxRetries,
+          reviewStatus = @reviewStatus, commitPolicy = @commitPolicy, commitSha = @commitSha,
+          rollbackState = @rollbackState
         WHERE id = @id`
       )
       .run(task);
@@ -118,6 +137,34 @@ export class TaskStore {
       .prepare(`INSERT INTO task_events (taskId, type, detail, createdAt) VALUES (?, ?, ?, ?)`)
       .run(taskId, type, detailJson, createdAt);
     return { id: Number(info.lastInsertRowid), taskId, type, detail: detailJson, createdAt };
+  }
+
+  updateCodingFields(taskId: string, patch: Partial<TaskRecord>): TaskRecord {
+    const allowed = new Set<keyof TaskRecord>([
+      'baseBranch', 'baseCommit', 'taskBranch', 'worktreePath', 'codingEngine', 'modelRoles',
+      'candidateFiles', 'filesRead', 'filesChanged', 'validationPlan', 'validationResults',
+      'retryCount', 'maxRetries', 'reviewStatus', 'commitPolicy', 'commitSha', 'rollbackState',
+      'executionEngine', 'selectedModel', 'plan', 'currentStep', 'resultSummary',
+    ]);
+    const keys = Object.keys(patch).filter((key): key is keyof TaskRecord => allowed.has(key as keyof TaskRecord));
+    if (!keys.length) return this.getTask(taskId) as TaskRecord;
+    const now = new Date().toISOString();
+    const assignments = [...keys.map(key => `${key} = @${key}`), 'updatedAt = @updatedAt'].join(', ');
+    this.db.prepare(`UPDATE tasks SET ${assignments} WHERE id = @id`).run({ ...patch, id: taskId, updatedAt: now });
+    return this.getTask(taskId) as TaskRecord;
+  }
+
+  writeEvidence(taskId: string, evidenceId: string, payload: unknown): { relativePath: string; absolutePath: string } {
+    if (!/^task-[0-9a-f-]{36}$/i.test(taskId)) throw new Error('invalid task id');
+    if (!/^coding-[a-z0-9-]+$/i.test(evidenceId)) throw new Error('invalid coding evidence id');
+    const relativePath = path.join(taskId, `${evidenceId}.json`);
+    const absolutePath = path.resolve(this.evidenceDir, relativePath);
+    const evidenceRoot = path.resolve(this.evidenceDir);
+    const rel = path.relative(evidenceRoot, absolutePath);
+    if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) throw new Error('invalid evidence path');
+    fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
+    fs.writeFileSync(absolutePath, JSON.stringify(payload, null, 2));
+    return { relativePath: relativePath.replace(/\\/g, '/'), absolutePath };
   }
 
   listEvents(taskId: string): TaskEvent[] {
