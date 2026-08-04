@@ -104,9 +104,12 @@ function parseAllowedCommand(command: string, cwd: string, worktreePath: string,
     const flutter = resolveFlutterInvocation();
     return { command: flutter.command, args: [...flutter.args, 'analyze'], cwd, configured: configured && flutter.configured };
   }
-  if (command === 'flutter test') {
+  if (command === 'flutter test' || command.startsWith('flutter test ')) {
     const flutter = resolveFlutterInvocation();
-    return { command: flutter.command, args: [...flutter.args, 'test'], cwd, configured: configured && flutter.configured };
+    const testArgs = command.slice('flutter test'.length).trim();
+    const extraArgs = testArgs ? testArgs.split(/\s+/).filter(Boolean) : [];
+    const safeArgs = extraArgs.every(isSafeRelativeArg);
+    return { command: flutter.command, args: [...flutter.args, 'test', ...extraArgs], cwd, configured: configured && flutter.configured && safeArgs };
   }
   if (command === 'pytest') return { command: 'pytest', args: [], cwd, configured };
   if (command === 'ruff check .') return { command: 'ruff', args: ['check', '.'], cwd, configured };
@@ -164,6 +167,10 @@ function normalizePrefix(value: string): string {
 
 function hasShellSyntax(command: string): boolean {
   return /[;&|`<>]/.test(command);
+}
+
+function isSafeRelativeArg(value: string): boolean {
+  return !value.startsWith('-') && !path.isAbsolute(value) && !value.includes('..') && /^[A-Za-z0-9_./-]+$/.test(value);
 }
 
 function npmScriptExists(cwd: string, script: string): boolean {

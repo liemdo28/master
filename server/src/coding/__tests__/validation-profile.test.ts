@@ -103,7 +103,7 @@ async function run(): Promise<void> {
     framework: 'flutter',
     installCommands: ['flutter pub get'],
     buildCommands: [],
-    testCommands: ['flutter test'],
+    testCommands: ['flutter test test/api_paths_test.dart'],
     lintCommands: ['flutter analyze'],
     artifactPaths: [],
     generatedOutputPaths: ['.dart_tool', 'build'],
@@ -113,7 +113,8 @@ async function run(): Promise<void> {
   write(root, 'apps/mobile/pubspec.yaml', 'name: fixture\n');
   const flutterPlan = buildValidationPlan(project(root, flutterProfile), root);
   check('Flutter profile uses Flutter cwd', flutterPlan.every(item => item.cwd.endsWith(path.join('apps', 'mobile')) || item.name === 'git diff --check'));
-  check('Flutter profile emits flutter commands', flutterPlan.map(item => item.name).join('|') === 'flutter pub get|flutter analyze|flutter test|git diff --check');
+  check('Flutter profile emits flutter commands', flutterPlan.map(item => item.name).join('|') === 'flutter pub get|flutter analyze|flutter test test/api_paths_test.dart|git diff --check');
+  check('Flutter focused test path is passed as an argv argument', flutterPlan.some(item => item.args.includes('test/api_paths_test.dart')));
 
   const missingPlan = buildValidationPlan(project(root, tsProfile), root, ['npm run external:integration', 'rm -rf .']);
   check('missing npm script is marked unconfigured', missingPlan.some(item => item.name === 'npm run external:integration' && !item.configured));
