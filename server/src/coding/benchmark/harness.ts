@@ -48,6 +48,8 @@ export interface TaskOutcome {
   evalTokens: number;
   tokensPerSecond: number;
   peakVramBytes: number;
+  peakRamUsedGb: number;
+  outputTruncated: boolean;
   testsWeakened: boolean;
   succeeded: boolean;
 }
@@ -185,6 +187,8 @@ export async function runFixtureWithModel(fixture: Fixture, model: string): Prom
     evalTokens: 0,
     tokensPerSecond: 0,
     peakVramBytes: 0,
+    peakRamUsedGb: 0,
+    outputTruncated: false,
     testsWeakened: false,
     succeeded: false,
   };
@@ -326,6 +330,10 @@ async function finish(
   const rates = telemetry.map(t => t.tokensPerSecond ?? 0).filter(v => v > 0);
   outcome.tokensPerSecond = rates.length ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   outcome.peakVramBytes = await peakVram();
+  // Resident set of the whole host while the model was loaded; the useful
+  // number for 'does this model fit', since a spilled model lives in RAM.
+  outcome.peakRamUsedGb = (os.totalmem() - os.freemem()) / 1e9;
+  outcome.outputTruncated = /truncated/i.test(outcome.failureMessage ?? '');
   return outcome;
 }
 
@@ -392,6 +400,8 @@ export async function runBenchmark(models: string[], fixtures: Fixture[] = FIXTU
           evalTokens: 0,
           tokensPerSecond: 0,
           peakVramBytes: 0,
+          peakRamUsedGb: 0,
+          outputTruncated: false,
           testsWeakened: false,
           succeeded: false,
         };
