@@ -96,9 +96,18 @@ function parseAllowedCommand(command: string, cwd: string, worktreePath: string,
     const npm = resolveNpmInvocation();
     return { command: npm.command, args: [...npm.args, 'test'], cwd, configured: configured && npm.configured && npmScriptExists(cwd, 'test') };
   }
-  if (command === 'flutter pub get') return { command: 'flutter', args: ['pub', 'get'], cwd, configured };
-  if (command === 'flutter analyze') return { command: 'flutter', args: ['analyze'], cwd, configured };
-  if (command === 'flutter test') return { command: 'flutter', args: ['test'], cwd, configured };
+  if (command === 'flutter pub get') {
+    const flutter = resolveFlutterInvocation();
+    return { command: flutter.command, args: ['pub', 'get'], cwd, configured: configured && flutter.configured };
+  }
+  if (command === 'flutter analyze') {
+    const flutter = resolveFlutterInvocation();
+    return { command: flutter.command, args: ['analyze'], cwd, configured: configured && flutter.configured };
+  }
+  if (command === 'flutter test') {
+    const flutter = resolveFlutterInvocation();
+    return { command: flutter.command, args: ['test'], cwd, configured: configured && flutter.configured };
+  }
   if (command === 'pytest') return { command: 'pytest', args: [], cwd, configured };
   if (command === 'ruff check .') return { command: 'ruff', args: ['check', '.'], cwd, configured };
   if (command === 'mypy .') return { command: 'mypy', args: ['.'], cwd, configured };
@@ -182,6 +191,18 @@ export function resolveNpmInvocation(): { command: string; args: string[]; confi
     return { command: process.execPath, args: [localNpmCli], configured: true };
   }
   return { command: '', args: [], configured: false };
+}
+
+export function resolveFlutterInvocation(): { command: string; configured: boolean } {
+  const candidates = [
+    process.env.FLUTTER_BIN,
+    'C:\\flutter\\bin\\flutter',
+    'C:\\src\\flutter\\bin\\flutter',
+  ].filter(Boolean) as string[];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return { command: candidate, configured: true };
+  }
+  return { command: 'flutter', configured: true };
 }
 
 function runCommand(spec: ValidationCommand, options: { isCancelled?: () => boolean }): Promise<ValidationResult> {
