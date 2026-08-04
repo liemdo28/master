@@ -8,10 +8,11 @@ import { InternalPatchEngine } from './engines/internal-patch-engine';
 import { git } from './git';
 import { selectCodingModelRoles } from './model-router';
 import { reviewWorktree } from './reviewer';
-import { LlmCodingEngine, LLM_ENGINE_ID } from './llm/engine';
+import { LlmCodingEngine, LLM_ENGINE_ID, shouldUseAstEditPlan } from './llm/engine';
 import { reviewIndependently } from './llm/reviewer';
 import { CodingEngineError } from './llm/types';
 import { codingResourceController } from './resource-control';
+import { classifyTask } from './strategy';
 import type { CodingEngineAdapter } from './engines/adapter';
 import type { CandidateSelection, CodingModelRoles, CodingRunResult, CodingWorkflowInput, EngineApplyResult, EnginePlan, ValidationResult } from './types';
 import { buildValidationPlan, runValidationPlan } from './validation-runner';
@@ -86,6 +87,17 @@ export class CodingWorkflow {
     this.engineId = resolveEngineId(input.engineId);
     this.adapter = this.buildAdapter(this.engineId, context, input.validationCommands ?? []);
     this.event(task.id, 'coding.engine.selected', { engineId: this.engineId });
+    const classification = classifyTask(input.userRequest);
+    this.event(task.id, 'coding.strategy.selected', {
+      taskClass: classification.taskClass,
+      strategy: classification.strategy,
+      astFirst: this.engineId === LLM_ENGINE_ID && shouldUseAstEditPlan(classification),
+      patchFallback: this.engineId === LLM_ENGINE_ID,
+      diagnosticGuided: classification.strategy === 'DIAGNOSTIC_GUIDED',
+      maxChangedLines: classification.maxChangedLines,
+      maxOutputTokens: classification.maxOutputTokens,
+      reasoning: classification.reasoning,
+    });
 
     // Admission control exists to stop concurrent model loads from thrashing an
     // 8 GB GPU. The deterministic engine loads no weights, so gating it would

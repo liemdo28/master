@@ -1186,7 +1186,15 @@ export function normalizePath(value: string): string {
 }
 
 export function shouldUseAstEditPlan(classification: TaskClassification): boolean {
-  return classification.strategy === 'DECOMPOSED' || classification.strategy === 'COORDINATED_PATCH';
+  if (classification.strategy === 'DECOMPOSED' || classification.strategy === 'COORDINATED_PATCH') return true;
+  if (classification.taskClass !== 'TARGETED_EDIT') return false;
+  return (
+    (classification.intent.action === 'ADD' || classification.intent.action === 'CHANGE') &&
+    (classification.intent.artifactType === 'HTTP_RESPONSE' ||
+      classification.intent.artifactType === 'HTTP_ROUTE' ||
+      classification.intent.artifactType === 'TYPE' ||
+      classification.intent.artifactType === 'SERVICE')
+  );
 }
 
 function escapeRegExp(value: string): string {

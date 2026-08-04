@@ -85,7 +85,10 @@ function run(): void {
 
   const editTask = classifyTask('The overlap check rejects a slot that ends exactly when the next begins. Fix the boundary.');
   check('a narrow bug fix is a targeted edit', editTask.taskClass === 'TARGETED_EDIT', editTask.taskClass);
-  check('targeted edit stays on the anchored patch path', !shouldUseAstEditPlan(editTask));
+  check('targeted bug fix stays on the anchored patch path', !shouldUseAstEditPlan(editTask));
+
+  const safeTargetedTask = classifyTask('Add pilotName to the berth manifest endpoint response.');
+  check('safe targeted response edits use the AST edit plan path', shouldUseAstEditPlan(safeTargetedTask));
 
   const configTask = classifyTask('Raise the configured maximum number of workers in the settings file.');
   check('configuration requests classify as CONFIG_CHANGE', configTask.taskClass === 'CONFIG_CHANGE', configTask.taskClass);
