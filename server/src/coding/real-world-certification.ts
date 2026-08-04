@@ -166,7 +166,7 @@ async function main(): Promise<void> {
       displayName: 'Mi Core Real Certification',
       root: repoRoot,
       profile: nodeProfile,
-      request: 'In server/src/project-registry/types.ts, add the exported alias `ValidationProfileLanguage = string` immediately above `export interface ValidationProfile`. Do not change behavior.',
+      request: 'In server/src/project-registry/types.ts, add a concise comment immediately above `export interface ValidationProfile` saying the profile owns validation commands and generated artifact policy. Do not change behavior.',
     },
     {
       id: 'mi-academy-real-cert',
