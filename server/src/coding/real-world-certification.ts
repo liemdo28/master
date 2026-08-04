@@ -166,21 +166,21 @@ async function main(): Promise<void> {
       displayName: 'Mi Core Real Certification',
       root: repoRoot,
       profile: nodeProfile,
-      request: 'In server/src/coding/types.ts and docs/architecture/PHASE4_STATUS.md, add concise comments documenting that validation profiles describe command and artifact policy. Do not change behavior.',
+      request: 'In server/src/project-registry/types.ts, add the exported alias `ValidationProfileLanguage = string` immediately above `export interface ValidationProfile`. Do not change behavior.',
     },
     {
       id: 'mi-academy-real-cert',
       displayName: 'Mi Academy Real Certification',
       root: miAcademyRoot,
       profile: flutterProfile,
-      request: 'In apps/mobile/lib/services/api_service.dart and apps/mobile/test/api_paths_test.dart, add concise comments documenting that API path constants mirror the FastAPI route contract. Do not change behavior.',
+      request: 'In apps/mobile/lib/services/api_service.dart, change the comment `/// API service — handles all HTTP communication with the FastAPI backend.` to `/// API service — centralizes HTTP communication with the FastAPI backend.` Do not change behavior.',
     },
     {
       id: 'healthy-ld-real-cert',
       displayName: 'Healthy-LD Real Certification',
       root: healthyLdRoot,
       profile: healthyProfile,
-      request: 'In js/dashboard.js and tests/unit/planner.test.mjs, add concise comments documenting that dashboard planner summaries rely on deterministic planner fixtures. Do not change behavior.',
+      request: 'In js/dashboard.js, add a concise comment above `function plannedSlots(planner)` explaining that dashboard summaries derive from planner slots. Do not change behavior.',
     },
   ];
 
