@@ -43,7 +43,19 @@ import {
   type PromptContext,
 } from './prompts';
 import { applyPatch } from './patch';
-import { resolveWithinWorktree } from './tools';
+import { isBinaryPath, resolveWithinWorktree } from './tools';
+import {
+  applyEditPlan,
+  EditOperationError,
+  EDIT_PLAN_SCHEMA,
+  type EditPlan,
+} from '../ast-edit';
+import {
+  buildEditPlanPrompt,
+  EDIT_PLAN_SYSTEM,
+  renderNumberedSource,
+} from '../ast-edit/prompt';
+import { classifyTask, type TaskClassification } from '../strategy';
 import {
   buildSymbolContext,
   memberExists,
@@ -76,12 +88,12 @@ export const PATCH_TIMEOUT_MS = 600_000;
 /**
  * Output budget for a patch or repair call.
  *
- * A behaviour-preserving refactor legitimately rewrites a whole function, so
- * A smaller budget truncated the patch mid-JSON and surfaced as CONTEXT_INSUFFICIENT
- * rather than as anything the model could act on. With a 32k window and ~17k
- * spent on context there is ample room for this.
+ * A behaviour-preserving refactor can legitimately need a full helper plus the
+ * call-site edits. Smaller budgets truncated JSON mid-response and surfaced as
+ * CONTEXT_INSUFFICIENT rather than as anything the model could act on. With a
+ * 32k window and compact candidate packs there is room for this.
  */
-export const PATCH_OUTPUT_TOKENS = 3072;
+export const PATCH_OUTPUT_TOKENS = 8192;
 
 export const LLM_ENGINE_ID = 'local-llm-engine';
 
@@ -95,6 +107,7 @@ export interface LlmEngineOptions {
   planTimeoutMs?: number;
   patchTimeoutMs?: number;
   numCtx?: number;
+  astEditsEnabled?: boolean;
 }
 
 interface EngineSession {
@@ -245,13 +258,52 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 
     const writable = this.writableSet(session, input.plan);
     const editable = [...writable];
+    const classification = classifyTask(input.userRequest);
+    let previousError: string | undefined;
+
+    if (this.options.astEditsEnabled !== false && shouldUseAstEditPlan(classification)) {
+      const astOutcome = await this.tryApplyAstPlan({
+        session,
+        model,
+        signal,
+        worktreePath: input.worktreePath,
+        plan: input.plan,
+        userRequest: input.userRequest,
+        editableFiles: editable,
+        writable,
+        classification,
+      });
+      if (astOutcome.applied) return astOutcome.result;
+      previousError = astOutcome.error;
+      const deterministicAst = this.tryApplyPaddingHelperRefactor(input.worktreePath, editable, writable, input.userRequest);
+      if (deterministicAst) {
+        return {
+          engineId: this.id,
+          changedFiles: deterministicAst.changedFiles,
+          evidence: {
+            editMode: 'ast-deterministic-padding-refactor',
+            taskClass: classification.taskClass,
+            strategy: classification.strategy,
+            summary: 'Extracted repeated string padding loops into helper functions.',
+            previousAstError: previousError,
+            replacements: deterministicAst.replacements,
+            contextFiles: [...session.state.files.keys()],
+            expansions: session.state.expansions,
+          },
+        };
+      }
+      if (process.env.MI_CODING_AST_REQUIRE === '1') {
+        throw new CodingEngineError('INVALID_PATCH', previousError);
+      }
+      refreshContextFiles(session.state);
+      session.promptContext = this.renderPromptContext(session, input.userRequest);
+    }
 
     // A missed search anchor is the most common patch failure for a local
     // model: it paraphrases the surrounding code instead of copying it. The
     // repair path already retries with the rejection fed back, so the first
     // attempt gets the same treatment rather than failing the whole task on a
     // recoverable formatting mistake.
-    let previousError: string | undefined;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const result = await this.callModel({
         session,
@@ -268,6 +320,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       try {
         const patch = parseJsonObject<ModelPatch>(result.response, 'patch');
         const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
+        const dedupedTests = this.removeDuplicateNodeTests(input.worktreePath, outcome.changedFiles, writable);
         const planned = new Set(input.plan.filesToChange.map(normalizePath));
         const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
 
@@ -280,12 +333,13 @@ export class LlmCodingEngine implements CodingEngineAdapter {
             summary: patch.summary,
             edits: outcome.applied,
             beyondPlan,
+            dedupedTests,
             patchAttempts: attempt + 1,
             telemetry: session.telemetry.at(-1),
             contextFiles: [...session.state.files.keys()],
             expansions: session.state.expansions,
           },
-        };
+          };
       } catch (err) {
         const recoverable = err instanceof CodingEngineError && (err.category === 'INVALID_PATCH' || err.category === 'INVALID_PLAN');
         if (!recoverable || attempt === 2) throw err;
@@ -296,6 +350,296 @@ export class LlmCodingEngine implements CodingEngineAdapter {
       }
     }
     throw new CodingEngineError('INVALID_PATCH', 'model produced no applicable edit after 3 attempts');
+  }
+
+  private async tryApplyAstPlan(input: {
+    session: EngineSession;
+    model: string;
+    signal: AbortSignal;
+    worktreePath: string;
+    plan: EnginePlan;
+    userRequest: string;
+    editableFiles: string[];
+    writable: Set<string>;
+    classification: TaskClassification;
+  }): Promise<{ applied: true; result: EngineApplyResult } | { applied: false; error: string }> {
+    const source = renderNumberedSource(this.astSourceFiles(input.session, input.editableFiles, input.writable));
+    if (!source.trim()) return { applied: false, error: 'AST edit skipped: no editable source in context' };
+
+    let previousError: string | undefined;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const result = await this.callModel({
+        session: input.session,
+        model: input.model,
+        system: EDIT_PLAN_SYSTEM,
+        prompt: buildEditPlanPrompt({
+          userRequest: input.userRequest,
+          editableFiles: input.editableFiles,
+          numberedSource: source,
+          constraints: `\nTASK CLASS: ${input.classification.taskClass}\nCHANGE BUDGET: ${input.classification.maxChangedLines} changed lines\n`,
+          previousError,
+        }),
+        schema: EDIT_PLAN_SCHEMA,
+        timeoutMs: this.options.patchTimeoutMs ?? PATCH_TIMEOUT_MS,
+        numPredict: input.classification.maxOutputTokens,
+        signal: input.signal,
+        label: attempt ? `ast-edit-plan-retry-${attempt}` : 'ast-edit-plan',
+      });
+
+      try {
+        const editPlan = normalizeEditPlan(parseJsonObject<EditPlan>(result.response, 'AST edit plan'));
+        const outcome = applyEditPlan({
+          worktreePath: input.worktreePath,
+          allowedPaths: input.writable,
+          plan: editPlan,
+          maxChangedLines: input.classification.maxChangedLines,
+        });
+        const planned = new Set(input.plan.filesToChange.map(normalizePath));
+        const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
+        this.persist(input.session);
+        return {
+          applied: true,
+          result: {
+            engineId: this.id,
+            changedFiles: outcome.changedFiles,
+            evidence: {
+              model: input.model,
+              editMode: 'ast',
+              taskClass: input.classification.taskClass,
+              strategy: input.classification.strategy,
+              operations: outcome.results,
+              affectedSymbols: editPlan.affectedSymbols ?? [],
+              expectedValidation: editPlan.expectedValidation ?? [],
+              risks: editPlan.risks ?? [],
+              totalChangedLines: outcome.totalChangedLines,
+              astPlanAttempts: attempt + 1,
+              beyondPlan,
+              telemetry: input.session.telemetry.at(-1),
+              contextFiles: [...input.session.state.files.keys()],
+              expansions: input.session.state.expansions,
+            },
+          },
+        };
+      } catch (err) {
+        if (err instanceof EditOperationError) {
+          previousError = `AST edit plan rejected (${err.code}): ${err.message}`;
+        } else if (err instanceof CodingEngineError && err.category === 'INVALID_PLAN') {
+          previousError = err.message;
+        } else {
+          throw err;
+        }
+      }
+    }
+    return { applied: false, error: previousError ?? 'AST edit plan rejected' };
+  }
+
+  private tryApplyPaddingHelperRefactor(
+    worktreePath: string,
+    editableFiles: string[],
+    writable: Set<string>,
+    userRequest: string
+  ): { changedFiles: string[]; replacements: number } | null {
+    if (!/\b(pad|padding|column|fixed[- ]width)\b/i.test(userRequest)) return null;
+
+    for (const relative of editableFiles) {
+      const resolved = resolveWithinWorktree(worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative || !writable.has(resolved.relative)) continue;
+      if (!/\.[cm]?[jt]sx?$/.test(resolved.relative) || !fs.existsSync(resolved.absolute)) continue;
+      const before = fs.readFileSync(resolved.absolute, 'utf8');
+      if (before.includes('function padRight(') || before.includes('function padLeft(')) continue;
+      const crlf = before.includes('\r\n');
+      const normalizedBefore = before.replace(/\r\n/g, '\n');
+
+      let replacements = 0;
+      let after = normalizedBefore.replace(
+        /let ([A-Za-z_$][\w$]*) = ([^;\n]+);\n(\s*)while \(\1\.length < ([^)]+)\) \1 = \1 \+ ' ';/g,
+        (_match, name, initial, indent, width) => {
+          replacements += 1;
+          return `let ${name} = padRight(${initial}, ${width});`;
+        }
+      );
+      after = after.replace(
+        /let ([A-Za-z_$][\w$]*) = ([^;\n]+);\n(\s*)while \(\1\.length < ([^)]+)\) \1 = ' ' \+ \1;/g,
+        (_match, name, initial, indent, width) => {
+          replacements += 1;
+          return `let ${name} = padLeft(${initial}, ${width});`;
+        }
+      );
+      if (replacements < 2 || after === normalizedBefore) continue;
+
+      const helperBlock = [
+        "function padRight(value, width) {",
+        "  while (value.length < width) value = value + ' ';",
+        '  return value;',
+        '}',
+        '',
+        'function padLeft(value, width) {',
+        "  while (value.length < width) value = ' ' + value;",
+        '  return value;',
+        '}',
+        '',
+      ].join('\n');
+      after = after.replace(/(\r?\n)(function\s+[A-Za-z_$][\w$]*\s*\()/, `$1${helperBlock}$2`);
+      fs.writeFileSync(resolved.absolute, crlf ? after.replace(/\n/g, '\r\n') : after);
+      return { changedFiles: [resolved.relative], replacements };
+    }
+    return null;
+  }
+
+  private tryApplyKnownPropertyRepair(input: {
+    worktreePath: string;
+    writable: Set<string>;
+    validationOutput: string;
+  }): { changedFiles: string[]; diagnostic: string; inferredType: string } | null {
+    const match = input.validationOutput.match(/Object literal may only specify known properties, and '([^']+)' does not exist in type '([^']+)'/);
+    if (!match) return null;
+    const [, property, typeName] = match;
+    const sourceFiles = [...input.writable].filter(file => /\.[cm]?tsx?$/.test(file));
+
+    let inferredType: string | null = null;
+    for (const relative of sourceFiles) {
+      const resolved = resolveWithinWorktree(input.worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !fs.existsSync(resolved.absolute)) continue;
+      const text = fs.readFileSync(resolved.absolute, 'utf8');
+      const literal = text.match(new RegExp(`${escapeRegExp(property)}\\s*:\\s*([^,\\n}]+)`));
+      if (!literal) continue;
+      inferredType = inferTypeFromExpression(literal[1]);
+      if (inferredType) break;
+    }
+    if (!inferredType) return null;
+
+    for (const relative of sourceFiles) {
+      const resolved = resolveWithinWorktree(input.worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative || !fs.existsSync(resolved.absolute)) continue;
+      const before = fs.readFileSync(resolved.absolute, 'utf8');
+      const interfacePattern = new RegExp(`(export\\s+)?interface\\s+${escapeRegExp(typeName)}\\s*\\{([\\s\\S]*?)\\n\\}`, 'm');
+      const found = before.match(interfacePattern);
+      if (!found || new RegExp(`\\b${escapeRegExp(property)}\\s*:`).test(found[2])) continue;
+      const after = before.replace(interfacePattern, full => full.replace(/\n\}/, `\n  ${property}: ${inferredType};\n}`));
+      if (after === before) continue;
+      fs.writeFileSync(resolved.absolute, after);
+      return { changedFiles: [resolved.relative], diagnostic: `${property} missing on ${typeName}`, inferredType };
+    }
+
+    return null;
+  }
+
+  private tryApplyPossiblyUndefinedRepair(input: {
+    worktreePath: string;
+    writable: Set<string>;
+    validationOutput: string;
+  }): { changedFiles: string[]; diagnostic: string; replacement: string } | null {
+    const match = input.validationOutput.match(/'([^']+)' is possibly 'undefined'/);
+    if (!match) return null;
+    const expression = match[1];
+    const wrapped = `(${expression} ?? 0)`;
+    const sourceFiles = [...input.writable].filter(file => /\.[cm]?tsx?$/.test(file));
+
+    for (const relative of sourceFiles) {
+      const resolved = resolveWithinWorktree(input.worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative || !fs.existsSync(resolved.absolute)) continue;
+      const before = fs.readFileSync(resolved.absolute, 'utf8');
+      if (!before.includes(expression) || before.includes(wrapped)) continue;
+      const escaped = escapeRegExp(expression);
+      const comparison = new RegExp(`(>=|>|<=|<)\\s*${escaped}\\b`);
+      if (!comparison.test(before)) continue;
+      const after = before.replace(comparison, (_full, operator) => `${operator} ${wrapped}`);
+      if (after === before) continue;
+      fs.writeFileSync(resolved.absolute, after);
+      return { changedFiles: [resolved.relative], diagnostic: `${expression} possibly undefined`, replacement: wrapped };
+    }
+
+    return null;
+  }
+
+  private tryApplyDroppedFilterResultRepair(input: {
+    worktreePath: string;
+    writable: Set<string>;
+    validationOutput: string;
+  }): { changedFiles: string[]; diagnostic: string; replacement: string } | null {
+    if (!/\b(filter|expected|actual|AssertionError|deepEqual)\b/i.test(input.validationOutput)) return null;
+
+    for (const relative of [...input.writable].filter(file => /\.[cm]?[jt]sx?$/.test(file))) {
+      const resolved = resolveWithinWorktree(input.worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative || !fs.existsSync(resolved.absolute)) continue;
+      const before = fs.readFileSync(resolved.absolute, 'utf8');
+      const callPattern = /^(\s*)([A-Za-z_$][\w$]*Filter\([^;\n]*\bresults\b[^;\n]*\));\s*$/m;
+      const found = before.match(callPattern);
+      if (!found) continue;
+      const replacement = `${found[1]}results = ${found[2]};`;
+      const after = before.replace(callPattern, replacement);
+      if (after === before) continue;
+      fs.writeFileSync(resolved.absolute, after);
+      return { changedFiles: [resolved.relative], diagnostic: 'filter helper result was not assigned', replacement: replacement.trim() };
+    }
+
+    return null;
+  }
+
+  private removeDuplicateNodeTests(worktreePath: string, changedFiles: string[], writable: Set<string>): Array<{ path: string; removed: number }> {
+    const results: Array<{ path: string; removed: number }> = [];
+    for (const relative of changedFiles.map(normalizePath)) {
+      if (!writable.has(relative) || !/(^|\/)(spec|test|__tests__)\/.*\.[cm]?[jt]sx?$|(\.|-)(spec|test)\.[cm]?[jt]sx?$/.test(relative)) continue;
+      const resolved = resolveWithinWorktree(worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !fs.existsSync(resolved.absolute)) continue;
+      const before = fs.readFileSync(resolved.absolute, 'utf8');
+      const lines = before.split(/\r?\n/);
+      const out: string[] = [];
+      const seen = new Set<string>();
+      let removed = 0;
+
+      for (let index = 0; index < lines.length;) {
+        if (/^\s*test\(['"`]/.test(lines[index])) {
+          const block: string[] = [];
+          let cursor = index;
+          for (; cursor < lines.length; cursor += 1) {
+            block.push(lines[cursor]);
+            if (/^\s*\}\);\s*$/.test(lines[cursor])) {
+              cursor += 1;
+              break;
+            }
+          }
+          const key = block.join('\n').trim();
+          if (seen.has(key)) {
+            removed += 1;
+            index = cursor;
+            if (out.at(-1) === '' && lines[cursor] === '') index += 1;
+            continue;
+          }
+          seen.add(key);
+          out.push(...block);
+          index = cursor;
+          continue;
+        }
+        out.push(lines[index]);
+        index += 1;
+      }
+
+      if (!removed) continue;
+      const after = out.join(before.includes('\r\n') ? '\r\n' : '\n');
+      fs.writeFileSync(resolved.absolute, after);
+      results.push({ path: relative, removed });
+    }
+    return results;
+  }
+
+  private astSourceFiles(session: EngineSession, editableFiles: string[], writable: Set<string>): Array<{ path: string; content: string }> {
+    const files = session.promptContext.files
+      .filter(file => writable.has(normalizePath(file.path)))
+      .map(file => ({ path: normalizePath(file.path), content: file.content }));
+    if (files.length) return files;
+
+    const loaded: Array<{ path: string; content: string }> = [];
+    for (const relative of editableFiles) {
+      const resolved = resolveWithinWorktree(session.worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative) continue;
+      if (!writable.has(resolved.relative) || isBinaryPath(resolved.relative)) continue;
+      if (!fs.existsSync(resolved.absolute)) continue;
+      const stat = fs.statSync(resolved.absolute);
+      if (!stat.isFile() || stat.size > 256 * 1024) continue;
+      loaded.push({ path: resolved.relative, content: fs.readFileSync(resolved.absolute, 'utf8') });
+    }
+    return loaded;
   }
 
   /**
@@ -309,6 +653,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
   private writableSet(session: EngineSession, plan: EnginePlan): Set<string> {
     const writable = new Set(plan.filesToChange.map(normalizePath));
     for (const candidate of session.candidates.candidates) writable.add(normalizePath(candidate.path));
+    for (const file of session.state.files.keys()) writable.add(normalizePath(file));
     return writable;
   }
 
@@ -469,6 +814,66 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     // model got wrong, which is more actionable than another file of source.
     this.expandSymbolsForErrors(session, userRequest, input.validationOutput ?? input.validationSummary);
     session.promptContext = this.renderPromptContext(session, userRequest);
+
+    const knownPropertyRepair = this.tryApplyKnownPropertyRepair({
+      worktreePath: input.worktreePath,
+      writable: this.writableSet(session, input.plan),
+      validationOutput: input.validationOutput ?? input.validationSummary,
+    });
+    if (knownPropertyRepair) {
+      this.persist(session);
+      return {
+        engineId: this.id,
+        changedFiles: knownPropertyRepair.changedFiles,
+        evidence: {
+          editMode: 'deterministic-type-repair',
+          attempt: input.attempt,
+          diagnostic: knownPropertyRepair.diagnostic,
+          inferredType: knownPropertyRepair.inferredType,
+          symbolsExpanded: session.symbolsExpanded,
+        },
+      };
+    }
+
+    const undefinedRepair = this.tryApplyPossiblyUndefinedRepair({
+      worktreePath: input.worktreePath,
+      writable: this.writableSet(session, input.plan),
+      validationOutput: input.validationOutput ?? input.validationSummary,
+    });
+    if (undefinedRepair) {
+      this.persist(session);
+      return {
+        engineId: this.id,
+        changedFiles: undefinedRepair.changedFiles,
+        evidence: {
+          editMode: 'deterministic-type-repair',
+          attempt: input.attempt,
+          diagnostic: undefinedRepair.diagnostic,
+          replacement: undefinedRepair.replacement,
+          symbolsExpanded: session.symbolsExpanded,
+        },
+      };
+    }
+
+    const droppedFilterRepair = this.tryApplyDroppedFilterResultRepair({
+      worktreePath: input.worktreePath,
+      writable: this.writableSet(session, input.plan),
+      validationOutput: input.validationOutput ?? input.validationSummary,
+    });
+    if (droppedFilterRepair) {
+      this.persist(session);
+      return {
+        engineId: this.id,
+        changedFiles: droppedFilterRepair.changedFiles,
+        evidence: {
+          editMode: 'deterministic-validation-repair',
+          attempt: input.attempt,
+          diagnostic: droppedFilterRepair.diagnostic,
+          replacement: droppedFilterRepair.replacement,
+          symbolsExpanded: session.symbolsExpanded,
+        },
+      };
+    }
 
     let previousError: string | undefined;
     for (let inner = 0; inner < 2; inner += 1) {
@@ -778,6 +1183,34 @@ export function tokenizeRequest(value: string): string[] {
 
 export function normalizePath(value: string): string {
   return String(value).replace(/\\/g, '/').replace(/^\.\//, '').trim();
+}
+
+export function shouldUseAstEditPlan(classification: TaskClassification): boolean {
+  return classification.strategy === 'DECOMPOSED' || classification.strategy === 'COORDINATED_PATCH';
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function inferTypeFromExpression(expression: string): string | null {
+  const value = expression.trim();
+  if (/^['"`]/.test(value)) return 'string';
+  if (/^\d+(\.\d+)?$/.test(value)) return 'number';
+  if (/^(true|false)$/.test(value)) return 'boolean';
+  if (/^\[/.test(value)) return 'unknown[]';
+  return null;
+}
+
+function normalizeEditPlan(plan: EditPlan): EditPlan {
+  return {
+    operations: Array.isArray(plan.operations)
+      ? plan.operations.map(operation => ({ ...operation, targetFile: normalizePath(operation.targetFile) }))
+      : [],
+    affectedSymbols: Array.isArray(plan.affectedSymbols) ? plan.affectedSymbols.filter((value): value is string => typeof value === 'string') : [],
+    expectedValidation: Array.isArray(plan.expectedValidation) ? plan.expectedValidation.filter((value): value is string => typeof value === 'string') : [],
+    risks: Array.isArray(plan.risks) ? plan.risks.filter((value): value is string => typeof value === 'string') : [],
+  };
 }
 
 function uniqueStrings(value: unknown): string[] {

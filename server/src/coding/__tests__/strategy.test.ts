@@ -21,6 +21,7 @@ import {
   parseDiagnostics,
   policyFor,
 } from '../strategy';
+import { shouldUseAstEditPlan } from '../llm/engine';
 import type { ModelPatch } from '../llm/types';
 
 let checks = 0;
@@ -72,6 +73,7 @@ function run(): void {
   const refactorTask = classifyTask('The report formatter has one long function with duplicated logic. Refactor it into smaller helpers without changing behaviour.');
   check('refactor requests classify as BEHAVIOR_REFACTOR', refactorTask.taskClass === 'BEHAVIOR_REFACTOR', refactorTask.taskClass);
   check('refactor uses the decomposed strategy', refactorTask.strategy === 'DECOMPOSED');
+  check('refactor uses the AST edit plan path', shouldUseAstEditPlan(refactorTask));
   check(
     'refactor budget is smaller than the unknown-class budget',
     refactorTask.maxChangedLines < policyFor('UNKNOWN').maxChangedLines
@@ -79,9 +81,11 @@ function run(): void {
 
   const featureTask = classifyTask('Add minimum quantity filtering to the route and the service, and make the pending test pass.');
   check('multi-layer requests classify as MULTI_FILE_FEATURE', featureTask.taskClass === 'MULTI_FILE_FEATURE', featureTask.taskClass);
+  check('multi-layer work can use the AST edit plan path', shouldUseAstEditPlan(featureTask));
 
   const editTask = classifyTask('The overlap check rejects a slot that ends exactly when the next begins. Fix the boundary.');
   check('a narrow bug fix is a targeted edit', editTask.taskClass === 'TARGETED_EDIT', editTask.taskClass);
+  check('targeted edit stays on the anchored patch path', !shouldUseAstEditPlan(editTask));
 
   const configTask = classifyTask('Raise the configured maximum number of workers in the settings file.');
   check('configuration requests classify as CONFIG_CHANGE', configTask.taskClass === 'CONFIG_CHANGE', configTask.taskClass);
