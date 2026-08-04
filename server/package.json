@@ -31,6 +31,7 @@
     "agentic-coding:benchmark": "tsx src/coding/benchmark/harness.ts",
     "agentic-coding:fixtures": "tsx src/coding/__fixtures__/baseline-check.ts",
     "agentic-coding:pilot": "tsx src/coding/pilot.ts",
+    "agentic-coding:real-certification": "tsx src/coding/real-world-certification.ts",
     "agentic-coding:retrieval-eval": "tsx src/coding/retrieval/evaluate.ts"
   },
   "dependencies": {
