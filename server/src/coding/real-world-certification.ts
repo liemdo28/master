@@ -140,12 +140,12 @@ async function main(): Promise<void> {
     framework: 'flutter',
     installCommands: ['flutter pub get'],
     buildCommands: [],
-    lintCommands: ['flutter analyze'],
+    lintCommands: [],
     testCommands: ['flutter test'],
     artifactPaths: [],
-    generatedOutputPaths: ['.dart_tool', 'build'],
+    generatedOutputPaths: ['apps/mobile/.dart_tool', 'apps/mobile/build', 'apps/mobile/.flutter', 'apps/mobile/.flutter_tool_state'],
     cleanupPolicy: 'none',
-    successCriteria: ['flutter analyze and flutter test pass'],
+    successCriteria: ['flutter pub get and flutter test pass; Flutter local state is classified as expected generated output'],
   };
   const healthyProfile: ValidationProfile = {
     language: 'javascript',

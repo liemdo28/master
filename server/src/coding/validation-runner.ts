@@ -263,7 +263,10 @@ function runCommand(spec: ValidationCommand, options: { isCancelled?: () => bool
 
 function minimalEnv(): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {};
-  for (const key of ['PATH', 'Path', 'SystemRoot', 'WINDIR', 'COMSPEC', 'PATHEXT', 'HOME', 'USERPROFILE', 'TMP', 'TEMP']) {
+  for (const key of [
+    'PATH', 'Path', 'SystemRoot', 'WINDIR', 'COMSPEC', 'PATHEXT', 'HOME', 'USERPROFILE', 'TMP', 'TEMP',
+    'LOCALAPPDATA', 'APPDATA', 'PUB_CACHE', 'FLUTTER_ROOT', 'PROGRAMFILES', 'PROGRAMFILES(X86)', 'ProgramW6432',
+  ]) {
     if (process.env[key]) env[key] = process.env[key];
   }
   return env;
