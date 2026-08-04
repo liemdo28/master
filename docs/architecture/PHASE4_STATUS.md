@@ -518,3 +518,89 @@ the target on its own.
 refactor at 8B. Not retrieval, not patch application, not validation, not
 review. Closing it means a stronger local coding model, which needs more VRAM
 than the 8 GB available.
+
+---
+
+# Phase 4.6 — reliability attempt (REVERTED)
+
+**The decomposition and diagnostic-guided strategies were implemented, measured,
+and reverted because they made both target tasks substantially worse.** The
+engine is back at Phase 4.5 behaviour. Nothing pushed.
+
+## What was built
+
+- **Task classification** — 7 classes with per-class execution policy (strategy,
+  changed-line budget, functions per patch, output budget, expected validation).
+  Layer counting rather than regex ordering, so "add filtering to the route and
+  the service, and make the pending test pass" classifies as a multi-file
+  feature rather than a test repair.
+- **Compiler diagnostic contract** — parses `tsc` output into structured records
+  (file, line, column, code, named symbols and members, expected/actual type),
+  builds a focused context of the failing line plus its nearest *named*
+  enclosing declaration, and resolves the type definitions the diagnostic names.
+- **Suppression rejection** — refuses `any`, `as any`, `as unknown as`,
+  `@ts-ignore`, `<any>` in new content.
+- **Patch bounds** — per-class changed-line and whole-file-write limits.
+- **Refactor decomposition** — plan a short sequence of small steps, generate
+  each separately against freshly re-read source.
+- **Failure memory** — per-task, records failure *shapes* (truncated, too broad,
+  diagnostic unchanged, invented member, anchor not found) as constraints on the
+  next attempt. No reasoning stored; scoped to one task so a fixture failure
+  cannot bias an unrelated project.
+
+47 assertions, all on synthetic types and synthetic diagnostics.
+
+## Measured result — worse, not better
+
+10 runs per task, `qwen3:8b`:
+
+| task | before (Phase 4.5) | with Phase 4.6 strategies |
+|---|---|---|
+| type repair | **3/3** | **0/10** — every run INVALID_PATCH |
+| refactor | 0/3 (benchmark harness) | 1/10 |
+
+Mean latency for the decomposed refactor rose to 344 s and 4,160 output tokens
+per run, because the strategy makes up to nine model calls where one was made
+before.
+
+**Cause of the type-repair collapse:** the diagnostic prompt renders the
+containing code with line-number prefixes (`  12 | code`) and instructs the
+model to copy the anchor "without the line-number prefix". Asking a local model
+to perform that transformation while copying character-for-character is exactly
+the operation it cannot do reliably — every anchor came back malformed. Patch
+bounds were verified not to be the cause: a realistic two-edit type fix computes
+4 changed lines against a budget of 20.
+
+## Decision
+
+Reverted the engine wiring rather than ship a regression. Verified after revert:
+type repair back to 3/3, refactor unchanged at 0/3.
+
+The strategy module and its tests are retained but **deliberately not wired into
+the engine**. The diagnostic parsing and classification are sound and tested;
+only the prompt-integration was wrong. Re-wiring should feed the model unnumbered
+source with a separate line-range note, and should be re-measured before being
+trusted.
+
+## Reliability gate — NOT MET
+
+| target | measured |
+|---|---|
+| type repair ≥ 8/10 | 3/3 at Phase 4.5 behaviour; not measured to 10 runs after revert |
+| refactor ≥ 8/10 | 0/3 in the benchmark harness |
+| fixture acceptance ≥ 4 of 5 rounds at 5/5 | previously 5/5, 3/5, 5/5, 3/5 |
+
+Not pushed. No PR.
+
+## Remaining model capability limit
+
+`qwen3:8b` cannot reliably produce a **behaviour-preserving refactor of a
+multi-branch function** within a bounded output budget. It either exceeds the
+budget (CONTEXT_INSUFFICIENT) or produces a patch that changes observable
+behaviour (VALIDATION_FAILED). Decomposing the task into smaller steps did not
+help: the model loses the invariants between steps, which is why the decomposed
+runs failed validation rather than truncating.
+
+This is a reasoning limit at 8B, not context, retrieval, patch application,
+validation or review — all of which are measured working. Closing it needs a
+larger local model, which needs more than the 8 GB of VRAM available.
