@@ -166,7 +166,7 @@ async function main(): Promise<void> {
       displayName: 'Mi Core Real Certification',
       root: repoRoot,
       profile: nodeProfile,
-      request: 'In server/src/coding/validation-runner.ts and server/src/coding/__tests__/validation-profile.test.ts, add concise comments documenting that validation profiles own command selection. Do not change behavior.',
+      request: 'In server/src/coding/types.ts and docs/architecture/PHASE4_STATUS.md, add concise comments documenting that validation profiles describe command and artifact policy. Do not change behavior.',
     },
     {
       id: 'mi-academy-real-cert',
