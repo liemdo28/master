@@ -98,15 +98,15 @@ function parseAllowedCommand(command: string, cwd: string, worktreePath: string,
   }
   if (command === 'flutter pub get') {
     const flutter = resolveFlutterInvocation();
-    return { command: flutter.command, args: ['pub', 'get'], cwd, configured: configured && flutter.configured };
+    return { command: flutter.command, args: [...flutter.args, 'pub', 'get'], cwd, configured: configured && flutter.configured };
   }
   if (command === 'flutter analyze') {
     const flutter = resolveFlutterInvocation();
-    return { command: flutter.command, args: ['analyze'], cwd, configured: configured && flutter.configured };
+    return { command: flutter.command, args: [...flutter.args, 'analyze'], cwd, configured: configured && flutter.configured };
   }
   if (command === 'flutter test') {
     const flutter = resolveFlutterInvocation();
-    return { command: flutter.command, args: ['test'], cwd, configured: configured && flutter.configured };
+    return { command: flutter.command, args: [...flutter.args, 'test'], cwd, configured: configured && flutter.configured };
   }
   if (command === 'pytest') return { command: 'pytest', args: [], cwd, configured };
   if (command === 'ruff check .') return { command: 'ruff', args: ['check', '.'], cwd, configured };
@@ -193,16 +193,26 @@ export function resolveNpmInvocation(): { command: string; args: string[]; confi
   return { command: '', args: [], configured: false };
 }
 
-export function resolveFlutterInvocation(): { command: string; configured: boolean } {
-  const candidates = [
+export function resolveFlutterInvocation(): { command: string; args: string[]; configured: boolean } {
+  const snapshotCandidates = [
+    process.env.FLUTTER_ROOT ? path.join(process.env.FLUTTER_ROOT, 'bin', 'cache', 'flutter_tools.snapshot') : null,
+    'C:\\flutter\\bin\\cache\\flutter_tools.snapshot',
+    'C:\\src\\flutter\\bin\\cache\\flutter_tools.snapshot',
+  ].filter(Boolean) as string[];
+  for (const snapshot of snapshotCandidates) {
+    const root = path.resolve(snapshot, '..', '..');
+    const dart = path.join(root, 'cache', 'dart-sdk', 'bin', process.platform === 'win32' ? 'dart.exe' : 'dart');
+    if (fs.existsSync(snapshot) && fs.existsSync(dart)) return { command: dart, args: [snapshot], configured: true };
+  }
+  const executableCandidates = [
     process.env.FLUTTER_BIN,
     'C:\\flutter\\bin\\flutter',
     'C:\\src\\flutter\\bin\\flutter',
   ].filter(Boolean) as string[];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) return { command: candidate, configured: true };
+  for (const candidate of executableCandidates) {
+    if (fs.existsSync(candidate)) return { command: candidate, args: [], configured: true };
   }
-  return { command: 'flutter', configured: true };
+  return { command: 'flutter', args: [], configured: true };
 }
 
 function runCommand(spec: ValidationCommand, options: { isCancelled?: () => boolean }): Promise<ValidationResult> {
