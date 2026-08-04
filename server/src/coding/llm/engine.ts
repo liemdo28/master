@@ -50,6 +50,7 @@ import {
   EDIT_PLAN_SCHEMA,
   type EditPlan,
 } from '../ast-edit';
+import { analyzeChangeImpact, type ImpactReport } from '../impact-graph';
 import {
   buildEditPlanPrompt,
   EDIT_PLAN_SYSTEM,
@@ -122,6 +123,8 @@ interface EngineSession {
   symbols: SymbolSummary[];
   /** Symbol names newly pulled in by a compiler error, for event reporting. */
   symbolsExpanded: Array<{ symbolName: string; sourcePath: string; relevanceReason: string }>;
+  /** Last computed relationship impact report for coordinated work. */
+  impactReport?: ImpactReport;
 }
 
 interface PersistedSession {
@@ -230,6 +233,15 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     this.persist(session, { ...parsed, filesToChange });
     (enginePlan as EnginePlan & { hallucinatedPaths?: string[]; steps?: string[] }).hallucinatedPaths = hallucinated;
     (enginePlan as EnginePlan & { steps?: string[] }).steps = uniqueStrings(parsed.steps);
+    const classification = classifyTask(input.userRequest);
+    if (classification.taskClass === 'MULTI_FILE_FEATURE') {
+      const impactReport = this.computeImpactReport(session, enginePlan, filesToChange, false);
+      session.impactReport = impactReport;
+      session.promptContext = { ...session.promptContext, impactReport };
+      if (impactReport.rejectionReasons.length) {
+        throw new CodingEngineError('INVALID_PLAN', `multi-file plan missed impact analysis: ${impactReport.rejectionReasons.join('; ')}`, { impactReport });
+      }
+    }
     return enginePlan;
   }
 
@@ -259,6 +271,13 @@ export class LlmCodingEngine implements CodingEngineAdapter {
     const writable = this.writableSet(session, input.plan);
     const editable = [...writable];
     const classification = classifyTask(input.userRequest);
+    const plannedImpact = classification.taskClass === 'MULTI_FILE_FEATURE'
+      ? this.computeImpactReport(session, input.plan, input.plan.filesToChange, false)
+      : undefined;
+    if (plannedImpact) {
+      session.impactReport = plannedImpact;
+      session.promptContext = { ...session.promptContext, impactReport: plannedImpact };
+    }
     let previousError: string | undefined;
 
     if (this.options.astEditsEnabled !== false && shouldUseAstEditPlan(classification)) {
@@ -319,10 +338,18 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 
       try {
         const patch = parseJsonObject<ModelPatch>(result.response, 'patch');
+        const snapshot = this.snapshotFiles(input.worktreePath, writable);
         const outcome = applyPatch({ worktreePath: input.worktreePath, writablePaths: writable, patch });
         const dedupedTests = this.removeDuplicateNodeTests(input.worktreePath, outcome.changedFiles, writable);
         const planned = new Set(input.plan.filesToChange.map(normalizePath));
         const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
+        const impactReport = classification.taskClass === 'MULTI_FILE_FEATURE'
+          ? this.computeImpactReport(session, input.plan, outcome.changedFiles, true)
+          : undefined;
+        if (impactReport?.rejectionReasons.length) {
+          this.restoreFiles(input.worktreePath, snapshot);
+          throw new CodingEngineError('INVALID_PATCH', `multi-file patch missed impact: ${impactReport.rejectionReasons.join('; ')}`, { impactReport });
+        }
 
         this.persist(session);
         return {
@@ -334,6 +361,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
             edits: outcome.applied,
             beyondPlan,
             dedupedTests,
+            impactReport,
             patchAttempts: attempt + 1,
             telemetry: session.telemetry.at(-1),
             contextFiles: [...session.state.files.keys()],
@@ -388,6 +416,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
 
       try {
         const editPlan = normalizeEditPlan(parseJsonObject<EditPlan>(result.response, 'AST edit plan'));
+        const snapshot = this.snapshotFiles(input.worktreePath, input.writable);
         const outcome = applyEditPlan({
           worktreePath: input.worktreePath,
           allowedPaths: input.writable,
@@ -396,6 +425,14 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         });
         const planned = new Set(input.plan.filesToChange.map(normalizePath));
         const beyondPlan = outcome.changedFiles.filter(file => !planned.has(file));
+        const impactReport = input.classification.taskClass === 'MULTI_FILE_FEATURE'
+          ? this.computeImpactReport(input.session, input.plan, outcome.changedFiles, true, editPlan.affectedSymbols ?? [])
+          : undefined;
+        if (impactReport?.rejectionReasons.length) {
+          previousError = `AST edit plan missed impact analysis: ${impactReport.rejectionReasons.join('; ')}`;
+          this.restoreFiles(input.worktreePath, snapshot);
+          continue;
+        }
         this.persist(input.session);
         return {
           applied: true,
@@ -414,6 +451,7 @@ export class LlmCodingEngine implements CodingEngineAdapter {
               totalChangedLines: outcome.totalChangedLines,
               astPlanAttempts: attempt + 1,
               beyondPlan,
+              impactReport,
               telemetry: input.session.telemetry.at(-1),
               contextFiles: [...input.session.state.files.keys()],
               expansions: input.session.state.expansions,
@@ -1025,9 +1063,64 @@ export class LlmCodingEngine implements CodingEngineAdapter {
         candidates: session.candidates,
         validationCommands: this.options.validationCommands ?? [],
       });
-      return { ...base, symbols: session.symbols };
+      return { ...base, symbols: session.symbols, impactReport: session.impactReport };
     }
-    return { ...session.promptContext, userRequest, files: [...session.state.files.values()], expansions: session.state.expansions, symbols: session.symbols };
+    return { ...session.promptContext, userRequest, files: [...session.state.files.values()], expansions: session.state.expansions, symbols: session.symbols, impactReport: session.impactReport };
+  }
+
+  private computeImpactReport(
+    session: EngineSession,
+    plan: EnginePlan,
+    changedFiles: string[],
+    requireConsumerEdits: boolean,
+    affectedSymbols: string[] = []
+  ): ImpactReport {
+    const candidatePaths = [
+      ...session.candidates.candidates.map(candidate => candidate.path),
+      ...session.state.files.keys(),
+      ...plan.filesToRead,
+      ...plan.filesToChange,
+    ];
+    return analyzeChangeImpact({
+      worktreePath: session.worktreePath,
+      candidatePaths,
+      plannedFiles: [...new Set([...plan.filesToRead, ...plan.filesToChange].map(normalizePath))],
+      changedFiles,
+      affectedSymbols,
+      requireConsumerEdits,
+    });
+  }
+
+  private snapshotFiles(worktreePath: string, files: Set<string>): Map<string, string | null> {
+    const snapshots = new Map<string, string | null>();
+    for (const relative of files) {
+      const resolved = resolveWithinWorktree(worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute || !resolved.relative) continue;
+      if (!fs.existsSync(resolved.absolute)) {
+        snapshots.set(resolved.relative, null);
+        continue;
+      }
+      try {
+        const stat = fs.statSync(resolved.absolute);
+        if (stat.isFile() && stat.size <= 512 * 1024) snapshots.set(resolved.relative, fs.readFileSync(resolved.absolute, 'utf8'));
+      } catch {
+        // Snapshotting is best-effort; unreadable files will not be restored.
+      }
+    }
+    return snapshots;
+  }
+
+  private restoreFiles(worktreePath: string, snapshots: Map<string, string | null>): void {
+    for (const [relative, content] of snapshots) {
+      const resolved = resolveWithinWorktree(worktreePath, relative);
+      if (!resolved.ok || !resolved.absolute) continue;
+      if (content === null) {
+        fs.rmSync(resolved.absolute, { force: true });
+        continue;
+      }
+      fs.mkdirSync(path.dirname(resolved.absolute), { recursive: true });
+      fs.writeFileSync(resolved.absolute, content);
+    }
   }
 
   private async runExpansionPass(

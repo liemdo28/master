@@ -25,7 +25,7 @@
     "bigdata:search": "node ../scripts/bigdata-search.js",
     "bigdata:export": "node ../scripts/bigdata-export-report.js",
     "bigdata:test": "tsx src/bigdata/bigdata.test.ts",
-    "test:agentic-coding": "tsx src/coding/__tests__/agentic-coding.test.ts && tsx src/coding/__tests__/symbol-context.test.ts && tsx src/coding/__tests__/retrieval.test.ts && tsx src/coding/__tests__/strategy.test.ts && tsx src/coding/__tests__/ast-edit.test.ts && tsx src/coding/__tests__/coding-resume.test.ts",
+    "test:agentic-coding": "tsx src/coding/__tests__/agentic-coding.test.ts && tsx src/coding/__tests__/symbol-context.test.ts && tsx src/coding/__tests__/retrieval.test.ts && tsx src/coding/__tests__/strategy.test.ts && tsx src/coding/__tests__/impact-graph.test.ts && tsx src/coding/__tests__/ast-edit.test.ts && tsx src/coding/__tests__/coding-resume.test.ts",
     "test:agentic-coding-privacy": "tsx src/coding/__tests__/coding-privacy.test.ts",
     "agentic-coding:acceptance": "tsx src/coding/agentic-acceptance.ts",
     "agentic-coding:benchmark": "tsx src/coding/benchmark/harness.ts",

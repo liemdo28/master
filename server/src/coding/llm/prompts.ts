@@ -13,6 +13,7 @@
 import type { CandidateFile } from '../types';
 import type { ContextExpansionOutcome, ModelPlan } from './types';
 import { renderSymbolContext, type SymbolSummary } from './symbols';
+import type { ImpactReport } from '../impact-graph';
 
 export interface RepoSnapshotFile {
   path: string;
@@ -32,6 +33,8 @@ export interface PromptContext {
   expansions?: ContextExpansionOutcome[];
   /** Compact API surface of the types the candidates declare and import. */
   symbols?: SymbolSummary[];
+  /** Multi-file relationship analysis for coordinated changes. */
+  impactReport?: ImpactReport;
 }
 
 /**
@@ -48,6 +51,28 @@ function renderSymbols(symbols: SymbolSummary[] | undefined): string {
 KNOWN TYPES AND THEIR EXACT MEMBERS.
 Use these names verbatim. Do not invent a member that is not listed here.
 ${renderSymbolContext(symbols)}`;
+}
+
+function renderImpactReport(report: ImpactReport | undefined): string {
+  if (!report) return '';
+  const lines = [
+    '',
+    'CHANGE IMPACT REPORT.',
+    `Risk: ${report.riskLevel}`,
+    `Required files: ${report.requiredFiles.join(', ') || '(none)'}`,
+    `Impacted consumers: ${report.impactedConsumers.join(', ') || '(none)'}`,
+    `Impacted tests: ${report.impactedTests.join(', ') || '(none)'}`,
+  ];
+  if (report.edges.length) {
+    lines.push('Edges:');
+    for (const edge of report.edges.slice(0, 12)) {
+      lines.push(`- ${edge.from.file} ${edge.kind} ${edge.to.file}: ${edge.evidence}`);
+    }
+  }
+  if (report.rejectionReasons.length) {
+    lines.push('Plan/application gaps that must be corrected:', ...report.rejectionReasons.map(reason => `- ${reason}`));
+  }
+  return lines.join('\n');
 }
 
 const SHARED_RULES = [
@@ -109,7 +134,7 @@ export function buildPlanPrompt(ctx: PromptContext): string {
   return `${renderHeader(ctx)}
 
 RANKED CANDIDATE FILES:
-${renderCandidateList(ctx.candidates)}${renderSymbols(ctx.symbols)}
+${renderCandidateList(ctx.candidates)}${renderSymbols(ctx.symbols)}${renderImpactReport(ctx.impactReport)}
 
 FILE CONTENTS:
 ${renderFileBlock(ctx.files)}
@@ -131,6 +156,8 @@ Rules for filesToChange:
 - every entry MUST be copied exactly from the candidate list above
 - list only files you will actually edit
 - if the task cannot be done with these files, return an empty filesToChange and say why in summary
+- for multi-file work, include producer files plus required consumers from the CHANGE IMPACT REPORT
+- include impacted tests in filesToRead/relatedTest or filesToChange when the task explicitly asks to update tests
 
 Rules for targetSymbol and targetMember:
 - copy both from the KNOWN TYPES section verbatim
@@ -180,6 +207,7 @@ ${plan.summary}
 ${plan.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}
 
 FILES YOU PLANNED TO CHANGE: ${plan.filesToChange.join(', ') || '(none)'}
+${renderImpactReport(ctx.impactReport)}
 
 FILES YOU ARE ALLOWED TO EDIT (any write outside this list is rejected):
 ${editableFiles.map(file => `- ${file}`).join('\n') || '(none)'}
@@ -230,7 +258,7 @@ ${editableFiles?.length ? `\nFILES YOU ARE ALLOWED TO EDIT (any write outside th
 WHAT FAILED: ${failureSummary}
 
 VALIDATION OUTPUT:
-${validationOutput.slice(0, 6000)}${renderSymbols(ctx.symbols)}
+${validationOutput.slice(0, 6000)}${renderSymbols(ctx.symbols)}${renderImpactReport(ctx.impactReport)}
 ${previousError ? `\nYOUR PREVIOUS EDIT WAS REJECTED: ${previousError}\nDo not repeat it.\n` : ''}
 CURRENT FILE CONTENTS (already includes your earlier changes):
 ${renderFileBlock(ctx.files)}
