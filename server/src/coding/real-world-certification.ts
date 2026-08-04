@@ -60,11 +60,9 @@ async function runCase(item: RealProjectCase, service: ProjectRegistryService): 
     maxRetries: 2,
     engineId: LLM_ENGINE_ID,
   });
-  planner.close();
 
   const resumer = new CodingWorkflow(undefined, service);
   const result = await resumer.resumeTask(planned.task.id);
-  resumer.close();
 
   const store = new TaskStore();
   const events = store.listEvents(planned.task.id);
