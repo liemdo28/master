@@ -15,7 +15,7 @@ import { codingResourceController } from './resource-control';
 import { classifyTask } from './strategy';
 import type { CodingEngineAdapter } from './engines/adapter';
 import type { CandidateSelection, CodingModelRoles, CodingRunResult, CodingWorkflowInput, EngineApplyResult, EnginePlan, ValidationResult } from './types';
-import { buildValidationPlan, runValidationPlan } from './validation-runner';
+import { buildValidationPlan, captureValidationArtifactBaseline, classifyValidationArtifacts, runValidationPlan } from './validation-runner';
 import { prepareWorktree } from './worktree-manager';
 
 export const INTERNAL_ENGINE_ID = 'internal-patch-engine';
@@ -289,6 +289,7 @@ export class CodingWorkflow {
 
     const latestBeforeValidation = this.mustGetCodingTask(task.id);
     if (latestBeforeValidation.status !== 'VALIDATING') this.taskEngine.transition(task.id, 'VALIDATING');
+    const artifactBaseline = captureValidationArtifactBaseline(worktreePath);
     const validationPlan = buildValidationPlan(context.project, worktreePath, validationCommands);
     this.taskStore.updateCodingFields(task.id, { validationPlan: JSON.stringify(validationPlan) });
     let validation = await runValidationPlan(validationPlan, { isCancelled: () => this.taskStore.getTask(task.id)?.status === 'CANCELLED' });
@@ -344,6 +345,18 @@ export class CodingWorkflow {
     }
     this.taskStore.updateCodingFields(task.id, { validationResults: JSON.stringify(validation) });
     this.evidence(task.id, 'coding-validation', validation);
+    const artifactReport = classifyValidationArtifacts({ project: context.project, worktreePath, before: artifactBaseline });
+    this.evidence(task.id, 'coding-validation-artifacts', artifactReport);
+    this.event(task.id, 'coding.validation.artifacts.classified', artifactReport);
+    if (!artifactReport.baseCheckoutUnchanged) {
+      this.event(task.id, 'coding.failure.classified', {
+        category: 'VALIDATION_ARTIFACTS_UNEXPECTED',
+        message: artifactReport.unexpectedChanges.join(', '),
+      });
+      codingResourceController.release(task.id);
+      const failed = this.taskEngine.failTask(task.id, 'Validation produced unexpected workspace changes.');
+      return { task: failed, context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['validation produced unexpected workspace changes'] }, commitSha: null };
+    }
 
     // The deterministic engine keeps the Phase 3 reviewer. A model-authored diff
     // gets the stricter two-layer review with an independent model pass.

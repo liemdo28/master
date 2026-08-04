@@ -1,24 +1,65 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn } from 'child_process';
-import type { ProjectRecord } from '../project-registry/types';
-import type { ValidationCommand, ValidationResult } from './types';
+import { spawn, execFileSync } from 'child_process';
+import type { ProjectRecord, ValidationProfile } from '../project-registry/types';
+import type { ValidationArtifactReport, ValidationCommand, ValidationResult } from './types';
 
 const MAX_OUTPUT = 128 * 1024;
 const TIMEOUT_MS = 120_000;
 
 export function buildValidationPlan(project: ProjectRecord, worktreePath: string, requested: string[] = []): ValidationCommand[] {
-  const serverDir = path.join(worktreePath, 'server');
-  const cwd = fs.existsSync(path.join(serverDir, 'package.json')) ? serverDir : worktreePath;
-  const needsInstall = fs.existsSync(path.join(cwd, 'package-lock.json')) && !fs.existsSync(path.join(cwd, 'node_modules'));
-  const allowed = new Set([...project.buildCommands, ...project.testCommands, 'npm ci', 'npm run test:coding', 'git diff --check']);
-  return [...(needsInstall ? ['npm ci'] : []), 'npm run build', 'npm run test:coding', 'git diff --check', ...requested]
-    .filter((command, index, all) => all.indexOf(command) === index)
-    .map(command => {
-      const configured = allowed.has(command) || command === 'npm run test:coding';
-      const parsed = parseAllowedCommand(command, cwd, worktreePath, configured);
-      return { name: command, ...parsed };
+  const profile = project.validationProfile ?? legacyNpmProfile(project, worktreePath);
+  const cwd = validationCwd(profile, worktreePath);
+  const commands = [
+    ...profile.installCommands.map(command => ({ command, category: 'install' as const })),
+    ...profile.buildCommands.map(command => ({ command, category: 'build' as const })),
+    ...profile.lintCommands.map(command => ({ command, category: 'lint' as const })),
+    ...profile.testCommands.map(command => ({ command, category: 'test' as const })),
+    { command: 'git diff --check', category: 'diff' as const },
+    ...requested.map(command => ({ command, category: 'requested' as const })),
+  ];
+  const allowed = new Set([...commands.map(item => item.command), ...project.buildCommands, ...project.testCommands]);
+  return commands
+    .filter((item, index, all) => all.findIndex(other => other.command === item.command) === index)
+    .map(item => {
+      const configured = allowed.has(item.command);
+      const parsed = parseAllowedCommand(item.command, cwd, worktreePath, configured);
+      return { name: item.command, category: item.category, ...parsed };
     });
+}
+
+export function captureValidationArtifactBaseline(worktreePath: string): { status: string[]; diff: string } {
+  return {
+    status: gitStatus(worktreePath),
+    diff: gitMaybe(worktreePath, ['diff', '--binary']),
+  };
+}
+
+export function classifyValidationArtifacts(input: {
+  project: ProjectRecord;
+  worktreePath: string;
+  before: { status: string[]; diff: string };
+}): ValidationArtifactReport {
+  const profile = input.project.validationProfile ?? legacyNpmProfile(input.project, input.worktreePath);
+  const before = new Set(input.before.status);
+  const after = gitStatus(input.worktreePath);
+  const generated = [...profile.generatedOutputPaths, ...profile.artifactPaths].map(normalizePrefix);
+  const expectedGeneratedArtifacts: string[] = [];
+  const unexpectedChanges: string[] = [];
+  for (const entry of after) {
+    if (before.has(entry)) continue;
+    const file = entry.slice(3).replace(/\\/g, '/');
+    if (generated.some(prefix => file === prefix || file.startsWith(`${prefix}/`))) expectedGeneratedArtifacts.push(entry);
+    else unexpectedChanges.push(entry);
+  }
+  return {
+    baseCheckoutUnchanged: unexpectedChanges.length === 0,
+    expectedGeneratedArtifacts,
+    unexpectedChanges,
+    beforeStatus: input.before.status,
+    afterStatus: after,
+    cleanupPolicy: profile.cleanupPolicy,
+  };
 }
 
 export async function runValidationPlan(plan: ValidationCommand[], options: { isCancelled?: () => boolean } = {}): Promise<ValidationResult[]> {
@@ -37,11 +78,12 @@ export async function runValidationPlan(plan: ValidationCommand[], options: { is
   return results;
 }
 
-function parseAllowedCommand(command: string, cwd: string, worktreePath: string, configured: boolean): Omit<ValidationCommand, 'name'> {
+function parseAllowedCommand(command: string, cwd: string, worktreePath: string, configured: boolean): Omit<ValidationCommand, 'name' | 'category'> {
+  if (hasShellSyntax(command)) return { command: '', args: [], cwd, configured: false };
   if (command.startsWith('npm run ')) {
     const script = command.slice('npm run '.length).trim();
     const npm = resolveNpmInvocation();
-    return { command: npm.command, args: [...npm.args, 'run', script], cwd, configured: configured && npm.configured };
+    return { command: npm.command, args: [...npm.args, 'run', script], cwd, configured: configured && npm.configured && npmScriptExists(cwd, script) };
   }
   if (command === 'npm ci') {
     const npm = resolveNpmInvocation();
@@ -50,7 +92,78 @@ function parseAllowedCommand(command: string, cwd: string, worktreePath: string,
   if (command === 'git diff --check') {
     return { command: 'git', args: ['diff', '--check'], cwd: worktreePath, configured };
   }
+  if (command === 'npm test') {
+    const npm = resolveNpmInvocation();
+    return { command: npm.command, args: [...npm.args, 'test'], cwd, configured: configured && npm.configured && npmScriptExists(cwd, 'test') };
+  }
+  if (command === 'flutter pub get') return { command: 'flutter', args: ['pub', 'get'], cwd, configured };
+  if (command === 'flutter analyze') return { command: 'flutter', args: ['analyze'], cwd, configured };
+  if (command === 'flutter test') return { command: 'flutter', args: ['test'], cwd, configured };
+  if (command === 'pytest') return { command: 'pytest', args: [], cwd, configured };
+  if (command === 'ruff check .') return { command: 'ruff', args: ['check', '.'], cwd, configured };
+  if (command === 'mypy .') return { command: 'mypy', args: ['.'], cwd, configured };
   return { command: '', args: [], cwd, configured: false };
+}
+
+function legacyNpmProfile(project: ProjectRecord, worktreePath: string): ValidationProfile {
+  const serverDir = path.join(worktreePath, 'server');
+  const cwd = fs.existsSync(path.join(serverDir, 'package.json')) ? serverDir : worktreePath;
+  const needsInstall = fs.existsSync(path.join(cwd, 'package-lock.json')) && !fs.existsSync(path.join(cwd, 'node_modules'));
+  return {
+    language: 'javascript',
+    framework: 'node',
+    installCommands: needsInstall ? ['npm ci'] : [],
+    buildCommands: project.buildCommands,
+    testCommands: project.testCommands,
+    lintCommands: [],
+    artifactPaths: [],
+    generatedOutputPaths: ['dist', 'build', 'coverage'],
+    cleanupPolicy: 'none',
+    successCriteria: ['legacy configured commands exit 0'],
+  };
+}
+
+function validationCwd(profile: ValidationProfile, worktreePath: string): string {
+  if (profile.framework === 'flutter') {
+    for (const candidate of [worktreePath, path.join(worktreePath, 'apps', 'mobile'), path.join(worktreePath, 'apps', 'admin')]) {
+      if (fs.existsSync(path.join(candidate, 'pubspec.yaml'))) return candidate;
+    }
+  }
+  const serverDir = path.join(worktreePath, 'server');
+  if (fs.existsSync(path.join(serverDir, 'package.json'))) return serverDir;
+  return worktreePath;
+}
+
+function gitStatus(worktreePath: string): string[] {
+  return gitMaybe(worktreePath, ['status', '--porcelain'])
+    .split(/\r?\n/)
+    .map(line => line.trimEnd())
+    .filter(Boolean);
+}
+
+function gitMaybe(worktreePath: string, args: string[]): string {
+  try {
+    return execFileSync('git', args, { cwd: worktreePath, encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+  } catch {
+    return '';
+  }
+}
+
+function normalizePrefix(value: string): string {
+  return value.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+}
+
+function hasShellSyntax(command: string): boolean {
+  return /[;&|`<>]/.test(command);
+}
+
+function npmScriptExists(cwd: string, script: string): boolean {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf8')) as { scripts?: Record<string, string> };
+    return Boolean(pkg.scripts?.[script]);
+  } catch {
+    return false;
+  }
 }
 
 /**
