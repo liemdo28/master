@@ -67,7 +67,7 @@ export enum HullClass {
 import { VesselRecord, BerthStatus } from './types';
 
 export class BerthRegistry {
-  private secretKey = 'sk-live-abcdefghijklmnop';
+  private secretKey = 'fake-secret-value-for-symbol-test';
   public capacity = 12;
 
   assign(vessel: VesselRecord, status: BerthStatus): boolean {
@@ -95,7 +95,7 @@ export function handleAssign(vessel: VesselRecord): { ok: boolean } {
 `);
 
   write(root, 'src/config/credentials.ts', `
-export const API_KEY = 'sk-live-0123456789abcdefghij';
+export const API_KEY = 'fake-secret-value-for-symbol-context-test';
 export interface CredentialBundle {
   apiKey: string;
   password: string;
@@ -155,10 +155,10 @@ function run(): void {
   // ── 3. secret exclusion ───────────────────────────────────────────────────
   const credentials = extractSymbols('src/config/credentials.ts', path.join(root, 'src/config/credentials.ts'));
   const rendered = renderSymbolContext(credentials);
-  check('credential literal is not surfaced', !rendered.includes('sk-live-0123456789abcdefghij'), rendered);
+  check('credential literal is not surfaced', !rendered.includes('fake-secret-value-for-symbol-context-test'), rendered);
   check('redaction marker is used instead', rendered.includes('<redacted>'), rendered);
   const registryRendered = renderSymbolContext(registrySymbols);
-  check('private credential field never reaches output', !registryRendered.includes('sk-live-abcdefghijklmnop'));
+  check('private credential field never reaches output', !registryRendered.includes('fake-secret-value-for-symbol-test'));
 
   // ── 4. malformed source degrades quietly ──────────────────────────────────
   let malformed: unknown;

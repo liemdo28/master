@@ -44,7 +44,7 @@ function makeWorktree(): string {
     path.join(repo, 'test', 'app.test.js'),
     "const test=require('node:test');const assert=require('node:assert');\ntest('runs', () => { assert.equal(require('../src/app').run(), 'ok'); });\ntest('adds', () => { assert.equal(require('../src/util').add(2,2), 4); });\n"
   );
-  fs.writeFileSync(path.join(repo, '.env'), 'API_KEY=sk-live-should-never-be-read-0123456789\n');
+  fs.writeFileSync(path.join(repo, '.env'), 'API_KEY=fake-secret-value-that-should-never-be-read\n');
   gitSync(repo, ['init', '--initial-branch=main']);
   gitSync(repo, ['config', 'user.name', 'Phase4 Sec']);
   gitSync(repo, ['config', 'user.email', 'sec@example.invalid']);
@@ -330,7 +330,7 @@ async function run(): Promise<void> {
   // ── 8. review catches secrets, weakened tests and out-of-scope edits ───────
   fs.writeFileSync(
     path.join(worktree, 'src', 'app.js'),
-    "const API_KEY = 'sk-live-abcdef0123456789abcdef';\nmodule.exports = { run: () => 'ok' };\n"
+    "const API_KEY = 'fake-secret-value-for-review-test';\nmodule.exports = { run: () => 'ok' };\n"
   );
   const secretReview = await deterministicReview({ worktreePath: worktree, validation: [], allowedFiles: ['src/app.js', 'src/util.js'] });
   check('secret literal detected in diff', secretReview.findings.some(f => f.includes('secret')));

@@ -146,8 +146,8 @@ export const SETTINGS = { maxBerths: 12 };
   write(root, 'src/generated/manifest-schema.ts', '// @generated\nexport const MANIFEST_SCHEMA = { berthCode: "string" };');
 
   // Secret-bearing config that must never be offered.
-  write(root, 'src/config/credentials.ts', `export const API_KEY = 'sk-live-0123456789abcdefghij';`);
-  write(root, '.env', 'API_KEY=sk-live-should-never-appear');
+  write(root, 'src/config/credentials.ts', `export const API_KEY = 'fake-secret-value-for-retrieval-test';`);
+  write(root, '.env', 'API_KEY=fake-secret-value-that-should-never-appear');
 
   // A second project with an identically named route file.
   write(root, 'other-project/src/routes/berth-routes.ts', `

@@ -57,7 +57,7 @@ const CASES: ReviewCase[] = [
     diff: `--- a/src/pricing.js
 +++ b/src/pricing.js
 @@
-+const API_KEY = 'sk-live-9f3a2b7c8d1e4f5a6b7c8d9e';
++const API_KEY = 'fake-secret-value-for-review-benchmark';
 +
  function loadPricing() {
 -  return readLocalTable();
