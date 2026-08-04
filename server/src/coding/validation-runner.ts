@@ -53,7 +53,13 @@ function parseAllowedCommand(command: string, cwd: string, worktreePath: string,
   return { command: '', args: [], cwd, configured: false };
 }
 
-function resolveNpmInvocation(): { command: string; args: string[]; configured: boolean } {
+/**
+ * Resolves npm as `node <npm-cli.js>` rather than `npm.cmd`. Node refuses to
+ * spawn .cmd shims without `shell: true` (CVE-2024-27980), and enabling a shell
+ * here would reintroduce the command-injection surface this layer exists to
+ * remove. Exported so fixtures and benchmarks execute commands identically.
+ */
+export function resolveNpmInvocation(): { command: string; args: string[]; configured: boolean } {
   const npmExecPath = process.env.npm_execpath;
   if (npmExecPath && fs.existsSync(npmExecPath)) {
     return { command: process.execPath, args: [npmExecPath], configured: true };

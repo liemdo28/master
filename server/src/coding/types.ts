@@ -24,6 +24,8 @@ export interface CodingWorkflowInput {
   commitPolicy?: 'local-only' | 'no-commit';
   maxRetries?: number;
   validationCommands?: string[];
+  /** Overrides the configured coding engine for this task only. */
+  engineId?: string | null;
 }
 
 export interface CodingContext {

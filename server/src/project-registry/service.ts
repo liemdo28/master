@@ -4,6 +4,9 @@ import { execFileSync } from 'child_process';
 import { randomUUID, createHash } from 'crypto';
 import { ProjectRegistryStore } from './store';
 import { assertInsideAllowedRegistryRoots, assertInsideRoot, realPathIfExists, toPosixRelative } from './paths';
+import { scorePathAgainstHints } from '../coding/candidate-selector';
+import { retrieve } from '../coding/retrieval';
+import type { RetrievalResult } from '../coding/retrieval/types';
 import type {
   ContextPack,
   ProjectMap,
@@ -17,6 +20,13 @@ import type {
 const IGNORE_DIRS = new Set(['node_modules', 'dist', 'build', '.git', '.next', '.local-agent-global', 'coverage', 'logs']);
 
 export class ProjectRegistryService {
+  /** Retrieval result behind the most recent context pack, for evidence and events. */
+  private lastRetrieval: RetrievalResult | null = null;
+
+  getLastRetrieval(): RetrievalResult | null {
+    return this.lastRetrieval;
+  }
+
   constructor(private store = new ProjectRegistryStore()) {}
 
   registerProject(input: RegisterProjectInput): ProjectRecord {
@@ -196,20 +206,65 @@ export class ProjectRegistryService {
     const map = project.mapVersion ? this.store.getProjectMap(projectId, project.mapVersion) : this.store.latestProjectMap(projectId);
     const mapStatus = this.effectiveMapStatus(project);
     const hints = tokenize(userRequest);
-    const matchedPaths = new Set<string>();
-    if (map) {
-      for (const module of map.modules) {
-        const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
-        const endpointNeedsRoutes = hints.includes('endpoint') && module.name === 'routes';
-        if (endpointNeedsRoutes) {
-          module.paths.filter(p => p.includes('/coding.') || p.includes('/coding/')).slice(0, 8).forEach(p => matchedPaths.add(p));
+
+    // Structural retrieval chooses the pack contents.
+    //
+    // Lexical ranking over module paths could not tell a request's vocabulary
+    // from a filename: a request about "the engine id in a plan response"
+    // ranked an engine implementation above the route that serves the plan.
+    // Retrieval ranks by route, symbol, response-shape and dependency evidence
+    // instead, and returns a small explainable set rather than a fixed slice.
+    // Retrieval enumerates source files itself rather than reading the map's
+    // module lists. The map is deliberately a bounded *summary* (25 paths per
+    // module), which is the right contract for a map and the wrong input for
+    // retrieval: a file past that bound would be unreachable however exactly
+    // it matched.
+    const universe = [
+      ...new Set([
+        ...listProjectSourceFiles(project.canonicalRoot, 4000),
+        ...(map?.modules ?? []).flatMap(module => module.paths),
+      ]),
+    ];
+    let includedPaths: string[] = [];
+    let retrieval: RetrievalResult | null = null;
+
+    if (map && universe.length && userRequest.trim()) {
+      try {
+        retrieval = retrieve({
+          projectId,
+          sourceSha: map.sourceSha,
+          worktreePath: project.canonicalRoot,
+          userRequest,
+          filePaths: universe,
+        });
+        includedPaths = retrieval.selected.map(candidate => candidate.path);
+        for (const candidate of retrieval.selected) {
+          for (const test of candidate.relatedTests) {
+            if (!includedPaths.includes(test)) includedPaths.push(test);
+          }
         }
-        if (hints.length === 0 || endpointNeedsRoutes || hints.some(hint => haystack.includes(hint))) {
-          module.paths.slice(0, 8).forEach(p => matchedPaths.add(p));
-        }
+      } catch {
+        // Retrieval is an improvement over lexical ranking, not a dependency.
+        retrieval = null;
       }
     }
-    const includedPaths = [...matchedPaths].slice(0, 40);
+
+    if (!includedPaths.length && map) {
+      // Fallback: relevance-ranked module paths, as before retrieval existed.
+      const matchedPaths = new Set<string>();
+      for (const module of map.modules) {
+        const haystack = `${module.name} ${module.purpose} ${module.paths.join(' ')}`.toLowerCase();
+        if (hints.length && !hints.some(hint => haystack.includes(hint))) continue;
+        [...module.paths]
+          .map(modulePath => ({ modulePath, score: scorePathAgainstHints(modulePath, hints) }))
+          .sort((a, b) => b.score - a.score || a.modulePath.localeCompare(b.modulePath))
+          .slice(0, 8)
+          .forEach(entry => matchedPaths.add(entry.modulePath));
+      }
+      includedPaths = [...matchedPaths].slice(0, 40);
+    }
+
+    this.lastRetrieval = retrieval;
     const moduleSummaries = map?.modules.map(module => `${module.name}: ${module.purpose}`).slice(0, 20) ?? [];
     const excludedPaths = ['node_modules', 'dist', 'build', '.git', '.local-agent-global', '.env', 'server/.env'];
     const pack: ContextPack = {
@@ -384,9 +439,19 @@ function detectPm2Processes(root: string): ProjectRecord['runtimeProcesses'] {
   }
 }
 
+const KNOWN_MI_MODULE_DIRS = [
+  'server/src/project-registry',
+  'server/src/task-runtime',
+  'server/src/coding',
+  'server/src/routes',
+  'server/src/projects',
+  'server/src/company-os',
+  'server/src/graph',
+];
+
 function discoverModules(root: string): ProjectMapModule[] {
   const modules: ProjectMapModule[] = [];
-  for (const dir of ['server/src/project-registry', 'server/src/task-runtime', 'server/src/coding', 'server/src/routes', 'server/src/projects', 'server/src/company-os', 'server/src/graph']) {
+  for (const dir of KNOWN_MI_MODULE_DIRS) {
     const abs = path.join(root, dir);
     if (!fs.existsSync(abs)) continue;
     modules.push({
@@ -396,7 +461,66 @@ function discoverModules(root: string): ProjectMapModule[] {
       signals: moduleSignals(abs),
     });
   }
+  // The named list above only matches Mi's own layout. Any other repository —
+  // which is precisely what a general-purpose coding engine has to handle —
+  // would otherwise map to zero modules and produce an empty context pack, so
+  // fall back to discovering the repository's actual source directories.
+  if (!modules.length) modules.push(...discoverGenericModules(root));
   return modules;
+}
+
+/** Structure-agnostic discovery for repositories that are not Mi Core. */
+function discoverGenericModules(root: string): ProjectMapModule[] {
+  const modules: ProjectMapModule[] = [];
+  const rootFiles: string[] = [];
+  let entries: fs.Dirent[] = [];
+  try {
+    entries = fs.readdirSync(root, { withFileTypes: true });
+  } catch {
+    return modules;
+  }
+
+  for (const entry of entries) {
+    if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
+    const abs = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      const paths = listFiles(abs, root, 25);
+      if (!paths.length) continue;
+      modules.push({
+        name: entry.name,
+        purpose: inferGenericPurpose(entry.name),
+        paths,
+        signals: moduleSignals(abs),
+      });
+    } else if (/\.(ts|tsx|js|json|md|yml|yaml)$/.test(entry.name)) {
+      rootFiles.push(toPosixRelative(root, abs));
+    }
+  }
+
+  if (rootFiles.length) {
+    modules.push({
+      name: 'root',
+      purpose: 'Top-level project files including manifests and configuration.',
+      paths: rootFiles.slice(0, 25),
+      signals: rootFiles.slice(0, 20).map(file => path.posix.basename(file)),
+    });
+  }
+  return modules.slice(0, 20);
+}
+
+function inferGenericPurpose(name: string): string {
+  const lower = name.toLowerCase();
+  if (/^(test|tests|spec|specs|__tests__|t)$/.test(lower)) return 'Automated tests and specifications.';
+  if (/^(src|lib|app|source)$/.test(lower)) return 'Primary application source.';
+  if (/^(routes?|controllers?|api|handlers?)$/.test(lower)) return 'Request handling and API surface.';
+  if (/^(services?|domain|core|business)$/.test(lower)) return 'Business and domain logic.';
+  if (/^(models?|entities|schema|types?)$/.test(lower)) return 'Data models and type definitions.';
+  if (/^(utils?|helpers?|common|shared)$/.test(lower)) return 'Shared utilities and helpers.';
+  if (/^(config|configuration|settings)$/.test(lower)) return 'Configuration.';
+  if (/^(scripts?|bin|tools?)$/.test(lower)) return 'Operational scripts and tooling.';
+  if (/^(docs?|documentation)$/.test(lower)) return 'Documentation.';
+  if (/^(pipeline|stages?|jobs?|workers?)$/.test(lower)) return 'Processing pipeline stages.';
+  return `Source module: ${name}.`;
 }
 
 function discoverRoutes(root: string): string[] {
@@ -419,6 +543,34 @@ function discoverRisks(root: string): string[] {
   if (fs.existsSync(path.join(root, 'server', '.env'))) risks.push('Server .env exists; API must keep secrets out of generated context.');
   risks.push('Project maps are summaries only; targeted reads are required before editing source.');
   return risks;
+}
+
+/**
+ * Bounded repository-wide source enumeration for retrieval.
+ *
+ * Separate from listFiles so the project map keeps its summary bound while
+ * retrieval still sees the whole tree.
+ */
+function listProjectSourceFiles(root: string, limit: number): string[] {
+  const out: string[] = [];
+  const walk = (dir: string): void => {
+    if (out.length >= limit) return;
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      if (out.length >= limit) return;
+      if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
+      const abs = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(abs);
+      else if (/.[cm]?[jt]sx?$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+    }
+  };
+  walk(root);
+  return out;
 }
 
 function listFiles(start: string, root: string, limit: number): string[] {

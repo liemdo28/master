@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import { git, gitMaybe, slugifyBranchPart } from './git';
 
@@ -14,7 +15,7 @@ export interface WorktreePlan {
 
 function defaultWorktreeRoot(projectId: string): string {
   const configured = process.env.MI_CODING_WORKTREE_ROOT;
-  return configured ? path.resolve(configured, projectId) : path.resolve(path.join('D:\\MiWorktrees', projectId));
+  return configured ? path.resolve(configured, projectId) : path.resolve(path.join(os.tmpdir(), 'mi-coding-worktrees', projectId));
 }
 
 function isInside(target: string, root: string): boolean {
