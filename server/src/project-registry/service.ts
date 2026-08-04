@@ -606,6 +606,9 @@ function discoverRisks(root: string): string[] {
   return risks;
 }
 
+const SOURCE_FILE_PATTERN = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|dart|py)$/;
+const MAP_FILE_PATTERN = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|dart|py|json|md|yml|yaml)$/;
+
 /**
  * Bounded repository-wide source enumeration for retrieval.
  *
@@ -627,7 +630,7 @@ function listProjectSourceFiles(root: string, limit: number): string[] {
       if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
       const abs = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(abs);
-      else if (/.[cm]?[jt]sx?$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+      else if (SOURCE_FILE_PATTERN.test(entry.name)) out.push(toPosixRelative(root, abs));
     }
   };
   walk(root);
@@ -642,7 +645,7 @@ function listFiles(start: string, root: string, limit: number): string[] {
       if (out.length >= limit || IGNORE_DIRS.has(entry.name)) continue;
       const abs = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(abs);
-      else if (/\.(ts|tsx|js|json|md|yml|yaml)$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+      else if (MAP_FILE_PATTERN.test(entry.name)) out.push(toPosixRelative(root, abs));
     }
   };
   walk(start);
