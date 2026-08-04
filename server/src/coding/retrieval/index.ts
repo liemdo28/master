@@ -7,7 +7,10 @@
  * nothing, which matches how the project registry treats a failed remap.
  */
 
-import { buildRepoGraph, type RepoGraph } from './graph';
+import * as fs from 'fs';
+
+import { buildRepoGraph, isGeneratedPath, isTestPath, type FileNode, type RepoGraph } from './graph';
+import { isBinaryPath, resolveWithinWorktree } from '../llm/tools';
 import { parseCodingIntent } from './intent';
 import { rankCandidates } from './ranker';
 import {
@@ -88,6 +91,13 @@ export function retrieve(input: RetrieveInput): RetrievalResult {
   }
 
   const intent = parseCodingIntent(input.userRequest);
+  includeExplicitPathNodes({
+    graph,
+    worktreePath: input.worktreePath,
+    intentSymbols: intent.symbols,
+    allowedPaths: input.allowedPaths ?? input.filePaths,
+    filePaths: input.filePaths,
+  });
   const result = rankCandidates({
     graph,
     intent,
@@ -96,4 +106,53 @@ export function retrieve(input: RetrieveInput): RetrievalResult {
   });
   result.stats.cacheHit = cacheHit;
   return result;
+}
+
+function includeExplicitPathNodes(input: {
+  graph: RepoGraph;
+  worktreePath: string;
+  intentSymbols: string[];
+  allowedPaths: string[];
+  filePaths: string[];
+}): void {
+  const allowed = new Set(input.allowedPaths);
+  const universe = new Set(input.filePaths);
+  for (const raw of input.intentSymbols) {
+    const relative = raw.replace(/\\/g, '/').replace(/^\.\//, '');
+    if (!relative.includes('/') || pathLooksUnsafe(relative)) continue;
+    if (!universe.has(relative) || (allowed.size > 0 && !allowed.has(relative))) continue;
+    if (isGeneratedPath(relative) || isBinaryPath(relative)) continue;
+    if (input.graph.files.has(relative)) continue;
+
+    const resolved = resolveWithinWorktree(input.worktreePath, relative);
+    if (!resolved.ok || !resolved.absolute) continue;
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(resolved.absolute);
+    } catch {
+      continue;
+    }
+    if (!stat.isFile()) continue;
+
+    const node: FileNode = {
+      path: relative,
+      role: isTestPath(relative) ? 'TEST' : 'UNKNOWN',
+      symbols: [],
+      imports: [],
+      importBindings: {},
+      mounts: [],
+      importedBy: [],
+      routes: [],
+      cliCommands: [],
+      stringLiterals: [],
+      bytes: stat.size,
+      isTest: isTestPath(relative),
+      isGenerated: false,
+    };
+    input.graph.files.set(relative, node);
+  }
+}
+
+function pathLooksUnsafe(relative: string): boolean {
+  return relative.startsWith('/') || /^[A-Za-z]:/.test(relative) || relative.split('/').some(part => part === '..' || part === '');
 }

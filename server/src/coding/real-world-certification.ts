@@ -187,7 +187,8 @@ async function main(): Promise<void> {
   const service = new ProjectRegistryService();
   try {
     const results = [];
-    for (const item of cases) {
+    const selectedIds = new Set((process.env.MI_REAL_CERT_PROJECTS ?? '').split(',').map(value => value.trim()).filter(Boolean));
+    for (const item of selectedIds.size ? cases.filter(entry => selectedIds.has(entry.id)) : cases) {
       console.log(`\n[real-certification] running ${item.id}`);
       const result = await runCase(item, service);
       results.push(result);
