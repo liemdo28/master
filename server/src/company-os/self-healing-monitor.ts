@@ -1,6 +1,6 @@
 /**
  * Mi Company OS — Self-Healing Monitor (Phase 12)
- * Monitors 11 services every 60 seconds.
+ * Monitors the registered services every 60 seconds.
  * Auto-restarts failed PM2 services.
  * Alerts CEO via WhatsApp if unresolved after 2 attempts.
  * Target: NO_SILENT_FAILURE
@@ -64,14 +64,11 @@ const SERVICES_TO_MONITOR: ServiceCheck[] = [
   { id: 'mi-core-http',         name: 'Mi Core HTTP',          type: 'http', health_url: miCoreUrl('/api/health'), authenticated: true, critical: true },
   { id: 'accounting-http',      name: 'Accounting HTTP',       type: 'http', health_url: 'http://localhost:8844/health', critical: false },
   { id: 'ollama',               name: 'Ollama AI',             type: 'http', health_url: 'http://localhost:11434/api/tags', critical: true },
-  // Kept under monitoring on purpose: no food-safety-gateway PM2 process exists, and
-  // hiding that would defeat NO_SILENT_FAILURE. Note for whoever triages it — the
-  // standalone services/food-safety-gateway/ directory has no package.json and appears
-  // in no ecosystem config, while the food-safety logic now lives inside
-  // mi-whatsapp-gateway (food-safety-agent, food-safety-command-center-routes). The
-  // entry most likely needs retiring rather than the service starting, but that is a
-  // product decision, not a probe fix.
-  { id: 'food-safety-gw',       name: 'Food Safety Gateway',   type: 'pm2',  pm2_name: 'food-safety-gateway', critical: false },
+  // The standalone food-safety-gateway PM2 entry was retired here. It is superseded:
+  // food-safety now runs inside mi-whatsapp-gateway (monitored above), which mounts
+  // /api/food-safety and initialises the food-safety pipeline at boot. Monitoring a
+  // process that is never meant to exist is a permanent false alarm, not a safety net —
+  // see docs/operations/FOOD_SAFETY_GATEWAY_RETIREMENT.md for the full evidence.
   { id: 'qb-ops-agent',         name: 'QB Ops Agent',          type: 'pm2',  pm2_name: 'qb-ops-agent',        critical: false },
   { id: 'evidence-db',          name: 'Evidence DB',           type: 'http', health_url: miCoreUrl('/api/company-os/health'), authenticated: true, critical: true },
   // Personal OS integrity is a genuine readiness signal and, unlike /api/knowledge/health,
