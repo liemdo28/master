@@ -11,7 +11,7 @@
     "test:integration": "tsx src/bigdata/bigdata.test.ts",
     "test:task-runtime": "tsx src/task-runtime/__tests__/state-machine.test.ts && tsx src/task-runtime/__tests__/http-integration.test.ts && tsx src/task-runtime/__tests__/execution-failure.test.ts && tsx src/task-runtime/__tests__/body-auth-path.test.ts && tsx src/task-runtime/__tests__/atomic-transactions.test.ts && tsx src/task-runtime/__tests__/acceptance.test.ts && tsx src/task-runtime/__tests__/async-execution.test.ts",
     "test:project-registry": "tsx src/project-registry/__tests__/registry-guard.test.ts",
-    "test:coding": "tsx src/coding/__tests__/coding-workflow.test.ts",
+    "test:coding": "tsx src/coding/__tests__/coding-workflow.test.ts && tsx src/coding/__tests__/validation-profile.test.ts",
     "project-registry": "tsx src/project-registry/cli.ts",
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
@@ -31,6 +31,7 @@
     "agentic-coding:benchmark": "tsx src/coding/benchmark/harness.ts",
     "agentic-coding:fixtures": "tsx src/coding/__fixtures__/baseline-check.ts",
     "agentic-coding:pilot": "tsx src/coding/pilot.ts",
+    "agentic-coding:real-certification": "tsx src/coding/real-world-certification.ts",
     "agentic-coding:retrieval-eval": "tsx src/coding/retrieval/evaluate.ts"
   },
   "dependencies": {

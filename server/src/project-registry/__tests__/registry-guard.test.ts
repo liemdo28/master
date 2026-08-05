@@ -150,6 +150,20 @@ async function run() {
     assert.strictEqual(nonGit.status, 'ACTIVE');
     log('accepted explicit non-Git project root');
 
+    const flutterRoot = path.join(tmpDir, 'flutter-project');
+    createFlutterFixture(flutterRoot);
+    const flutterProject = service.registerProject({
+      id: 'flutter-project',
+      displayName: 'Flutter Project',
+      canonicalRoot: flutterRoot,
+    });
+    assert.strictEqual(flutterProject.validationProfile?.framework, 'flutter');
+    const flutterMap = service.generateProjectMap(flutterProject.id);
+    assert.ok(flutterMap.modules.some(module => module.paths.some(file => file.endsWith('api_service.dart'))));
+    const flutterPack = service.buildContextPack(flutterProject.id, 'change api_service.dart comment');
+    assert.ok(flutterPack.includedPaths.some(file => file.endsWith('api_service.dart')));
+    log('included Flutter/Dart source in project map and context pack');
+
     const fixture = service.registerProject({
       id: 'fixture',
       displayName: 'Fixture Project',
@@ -226,6 +240,15 @@ function createGitFixture(root: string): void {
   fs.writeFileSync(path.join(root, 'server', 'src', 'task-runtime', 'index.ts'), 'export const fixture = true;\n');
   fs.writeFileSync(path.join(root, 'node_modules', 'ignored', 'secret.ts'), 'fixture-secret');
   execFileSync('git', ['init', '-b', 'master'], { cwd: root, stdio: 'ignore' });
+  execFileSync('git', ['add', '.'], { cwd: root, stdio: 'ignore' });
+  execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'init'], { cwd: root, stdio: 'ignore' });
+}
+
+function createFlutterFixture(root: string): void {
+  fs.mkdirSync(path.join(root, 'apps', 'mobile', 'lib', 'services'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'apps', 'mobile', 'pubspec.yaml'), 'name: flutter_fixture\n');
+  fs.writeFileSync(path.join(root, 'apps', 'mobile', 'lib', 'services', 'api_service.dart'), 'class ApiService {}\n');
+  execFileSync('git', ['init', '-b', 'main'], { cwd: root, stdio: 'ignore' });
   execFileSync('git', ['add', '.'], { cwd: root, stdio: 'ignore' });
   execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'init'], { cwd: root, stdio: 'ignore' });
 }

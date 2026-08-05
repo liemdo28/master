@@ -16,6 +16,7 @@ export interface ProjectRecord {
   frameworks: string[];
   testCommands: string[];
   buildCommands: string[];
+  validationProfile: ValidationProfile | null;
   deploymentNotes: string | null;
   runtimeProcesses: ProjectRuntimeProcess[];
   importantPaths: Record<string, string>;
@@ -27,6 +28,19 @@ export interface ProjectRecord {
   lastVerifiedAt: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ValidationProfile {
+  language: string;
+  framework: string | null;
+  installCommands: string[];
+  buildCommands: string[];
+  testCommands: string[];
+  lintCommands: string[];
+  artifactPaths: string[];
+  generatedOutputPaths: string[];
+  cleanupPolicy: 'none' | 'remove-generated' | 'restore-generated';
+  successCriteria: string[];
 }
 
 export interface ProjectRuntimeProcess {
@@ -47,6 +61,7 @@ export interface RegisterProjectInput {
   runtimeHints?: string[];
   testCommands?: string[];
   buildCommands?: string[];
+  validationProfile?: ValidationProfile | null;
   deploymentNotes?: string | null;
   importantPaths?: Record<string, string>;
 }

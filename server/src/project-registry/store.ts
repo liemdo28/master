@@ -6,13 +6,14 @@ import { resolveRegistryDataDir } from './paths';
 import type { ContextPack, ProjectMap, ProjectMapRecord, ProjectRecord, ResumeContext } from './types';
 
 type ProjectRow = Omit<ProjectRecord,
-  'runtimeHints' | 'packageManagers' | 'frameworks' | 'testCommands' | 'buildCommands' | 'runtimeProcesses' | 'importantPaths'
+  'runtimeHints' | 'packageManagers' | 'frameworks' | 'testCommands' | 'buildCommands' | 'validationProfile' | 'runtimeProcesses' | 'importantPaths'
 > & {
   runtimeHints: string;
   packageManagers: string;
   frameworks: string;
   testCommands: string;
   buildCommands: string;
+  validationProfile: string | null;
   runtimeProcesses: string;
   importantPaths: string;
 };
@@ -35,12 +36,12 @@ export class ProjectRegistryStore {
       INSERT INTO projects (
         id, displayName, canonicalRoot, gitRoot, repositoryUrl, defaultBranch, owner,
         businessPurpose, runtimeHints, packageManagers, frameworks, testCommands,
-        buildCommands, deploymentNotes, runtimeProcesses, importantPaths, status,
+        buildCommands, validationProfile, deploymentNotes, runtimeProcesses, importantPaths, status,
         mapStatus, mapVersion, mapGeneratedAt, mapSourceSha, lastVerifiedAt, createdAt, updatedAt
       ) VALUES (
         @id, @displayName, @canonicalRoot, @gitRoot, @repositoryUrl, @defaultBranch, @owner,
         @businessPurpose, @runtimeHints, @packageManagers, @frameworks, @testCommands,
-        @buildCommands, @deploymentNotes, @runtimeProcesses, @importantPaths, @status,
+        @buildCommands, @validationProfile, @deploymentNotes, @runtimeProcesses, @importantPaths, @status,
         @mapStatus, @mapVersion, @mapGeneratedAt, @mapSourceSha, @lastVerifiedAt, @createdAt, @updatedAt
       )
       ON CONFLICT(id) DO UPDATE SET
@@ -56,6 +57,7 @@ export class ProjectRegistryStore {
         frameworks = excluded.frameworks,
         testCommands = excluded.testCommands,
         buildCommands = excluded.buildCommands,
+        validationProfile = excluded.validationProfile,
         deploymentNotes = excluded.deploymentNotes,
         runtimeProcesses = excluded.runtimeProcesses,
         importantPaths = excluded.importantPaths,
@@ -214,6 +216,7 @@ export class ProjectRegistryStore {
         frameworks TEXT NOT NULL,
         testCommands TEXT NOT NULL,
         buildCommands TEXT NOT NULL,
+        validationProfile TEXT,
         deploymentNotes TEXT,
         runtimeProcesses TEXT NOT NULL,
         importantPaths TEXT NOT NULL,
@@ -279,6 +282,7 @@ export class ProjectRegistryStore {
     this.ensureColumn('context_packs', 'mapStatus', `TEXT NOT NULL DEFAULT 'NOT_GENERATED'`);
     this.ensureColumn('context_packs', 'moduleSummariesJson', `TEXT NOT NULL DEFAULT '[]'`);
     this.ensureColumn('context_packs', 'excludedPathsJson', `TEXT NOT NULL DEFAULT '[]'`);
+    this.ensureColumn('projects', 'validationProfile', 'TEXT');
   }
 
   private ensureColumn(table: string, column: string, definition: string): void {
@@ -323,6 +327,7 @@ function projectToRow(project: ProjectRecord): ProjectRow {
     frameworks: JSON.stringify(project.frameworks),
     testCommands: JSON.stringify(project.testCommands),
     buildCommands: JSON.stringify(project.buildCommands),
+    validationProfile: project.validationProfile ? JSON.stringify(project.validationProfile) : null,
     runtimeProcesses: JSON.stringify(project.runtimeProcesses),
     importantPaths: JSON.stringify(project.importantPaths),
   };
@@ -336,6 +341,7 @@ function rowToProject(row: ProjectRow): ProjectRecord {
     frameworks: parseJson(row.frameworks, []),
     testCommands: parseJson(row.testCommands, []),
     buildCommands: parseJson(row.buildCommands, []),
+    validationProfile: row.validationProfile ? parseJson(row.validationProfile, null) : null,
     runtimeProcesses: parseJson(row.runtimeProcesses, []),
     importantPaths: parseJson(row.importantPaths, {}),
   };

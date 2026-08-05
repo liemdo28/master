@@ -149,6 +149,11 @@ export const SETTINGS = { maxBerths: 12 };
   write(root, 'src/config/credentials.ts', `export const API_KEY = 'fake-secret-value-for-retrieval-test';`);
   write(root, '.env', 'API_KEY=fake-secret-value-that-should-never-appear');
 
+  write(root, 'apps/mobile/lib/services/harbour_api.dart', `
+/// API service handles all HTTP communication.
+class HarbourApi {}
+`);
+
   // A second project with an identically named route file.
   write(root, 'other-project/src/routes/berth-routes.ts', `
 import { Router } from 'express';
@@ -169,6 +174,7 @@ otherRouter.get('/:code/manifest', (req: any, res: any) => res.json({ berthCode:
     'src/cli/harbour-cli.ts',
     'src/config/settings.ts',
     'src/config/credentials.ts',
+    'apps/mobile/lib/services/harbour_api.dart',
     'dist/manifest.js',
     'src/generated/manifest-schema.ts',
     'other-project/src/routes/berth-routes.ts',
@@ -365,6 +371,13 @@ function run(): void {
     'Q. .env is never a candidate',
     !secretAsk.candidates.some(candidate => candidate.path.includes('.env')),
     secretAsk.candidates.map(c => c.path).join(',')
+  );
+
+  const explicitDart = ask('In apps/mobile/lib/services/harbour_api.dart, change the service comment only.');
+  check(
+    'Q2. explicit project-relative Dart path is selected',
+    explicitDart.selected.some(candidate => candidate.path === 'apps/mobile/lib/services/harbour_api.dart'),
+    explicitDart.selected.map(c => c.path).join(',')
   );
 
   // ── R. determinism ────────────────────────────────────────────────────────

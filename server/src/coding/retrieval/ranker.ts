@@ -67,6 +67,7 @@ export const EVIDENCE_WEIGHTS: Record<EvidenceKind, number> = {
  * a small project legitimately has leaf modules with no inbound imports.
  */
 const ISOLATION_MIN_FILES = 12;
+const EXPLICIT_SOURCE_PATH_PATTERN = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|dart|py)$/;
 
 /** Roles a request about a given artifact is actually asking for. */
 const ROLE_AFFINITY: Record<string, StructuralRole[]> = {
@@ -132,7 +133,7 @@ export function rankCandidates(input: RankInput): RetrievalResult {
   const normalizedRequestRoutes = new Set(intent.routePaths.map(normalizeRoute));
   const targetNameSet = new Set(intent.targetNames.map(name => name.toLowerCase()));
   const symbolSet = new Set(intent.symbols);
-  const explicitPaths = intent.symbols.filter(symbol => symbol.includes('/') || /\.[cm]?[jt]sx?$/.test(symbol));
+  const explicitPaths = intent.symbols.filter(symbol => symbol.includes('/') || EXPLICIT_SOURCE_PATH_PATTERN.test(symbol));
 
   const affinity = ROLE_AFFINITY[intent.artifactType] ?? [];
   const wantsApiSurface = intent.artifactType === 'HTTP_RESPONSE' || intent.artifactType === 'HTTP_ROUTE';

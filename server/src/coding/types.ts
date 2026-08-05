@@ -78,6 +78,7 @@ export interface ValidationCommand {
   args: string[];
   cwd: string;
   configured: boolean;
+  category?: 'install' | 'build' | 'lint' | 'test' | 'diff' | 'requested';
 }
 
 export interface ValidationResult {
@@ -87,6 +88,15 @@ export interface ValidationResult {
   timedOut: boolean;
   stdout: string;
   stderr: string;
+}
+
+export interface ValidationArtifactReport {
+  baseCheckoutUnchanged: boolean;
+  expectedGeneratedArtifacts: string[];
+  unexpectedChanges: string[];
+  beforeStatus: string[];
+  afterStatus: string[];
+  cleanupPolicy: string;
 }
 
 export interface ReviewResult {

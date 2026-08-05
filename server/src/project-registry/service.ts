@@ -63,6 +63,7 @@ export class ProjectRegistryService {
       frameworks: detected.frameworks,
       testCommands: input.testCommands ?? detected.testCommands,
       buildCommands: input.buildCommands ?? detected.buildCommands,
+      validationProfile: input.validationProfile ?? detected.validationProfile,
       deploymentNotes: input.deploymentNotes ?? null,
       runtimeProcesses: detectPm2Processes(projectRoot),
       importantPaths: {
@@ -103,6 +104,7 @@ export class ProjectRegistryService {
       runtimeHints: patch.runtimeHints ?? existing.runtimeHints,
       testCommands: patch.testCommands ?? existing.testCommands,
       buildCommands: patch.buildCommands ?? existing.buildCommands,
+      validationProfile: patch.validationProfile ?? existing.validationProfile,
       deploymentNotes: patch.deploymentNotes ?? existing.deploymentNotes,
       importantPaths: patch.importantPaths ?? existing.importantPaths,
     });
@@ -348,6 +350,18 @@ export function seedMiCoreProject(root: string): RegisterProjectInput {
     runtimeHints: ['pm2:mi-core', 'node', 'express', 'typescript'],
     testCommands: ['npm run test:ci', 'npm run test:task-runtime'],
     buildCommands: ['npm run build'],
+    validationProfile: {
+      language: 'typescript',
+      framework: 'node',
+      installCommands: ['npm ci'],
+      buildCommands: ['npm run build'],
+      testCommands: ['npm run test:ci'],
+      lintCommands: [],
+      artifactPaths: [],
+      generatedOutputPaths: [],
+      cleanupPolicy: 'none',
+      successCriteria: ['all configured commands exit 0', 'no unexpected validation artifacts'],
+    },
     importantPaths: {
       workspaceRoot: path.resolve(root, '..', '..'),
       server: path.join(root, 'server'),
@@ -394,12 +408,13 @@ function detectSingleNestedGitRoot(root: string): { gitRoot: string | null; repo
   return detectGit(candidates[0]) ?? { gitRoot: realPathIfExists(candidates[0]), repositoryUrl: null, defaultBranch: null };
 }
 
-function detectProjectShape(root: string): Pick<ProjectRecord, 'runtimeHints' | 'packageManagers' | 'frameworks' | 'testCommands' | 'buildCommands'> {
+function detectProjectShape(root: string): Pick<ProjectRecord, 'runtimeHints' | 'packageManagers' | 'frameworks' | 'testCommands' | 'buildCommands' | 'validationProfile'> {
   const packageManagers: string[] = [];
   const frameworks: string[] = [];
   const runtimeHints: string[] = [];
   const testCommands: string[] = [];
   const buildCommands: string[] = [];
+  let validationProfile: ProjectRecord['validationProfile'] = null;
   const packageJsonPath = findFirstExisting([path.join(root, 'package.json'), path.join(root, 'server', 'package.json')]);
   if (fs.existsSync(path.join(root, 'package-lock.json')) || fs.existsSync(path.join(root, 'server', 'package-lock.json'))) packageManagers.push('npm');
   if (packageJsonPath) {
@@ -412,9 +427,55 @@ function detectProjectShape(root: string): Pick<ProjectRecord, 'runtimeHints' | 
     for (const script of ['test:ci', 'test:unit', 'test:task-runtime', 'test:project-registry']) {
       if (pkg.scripts?.[script]) testCommands.push(`npm run ${script}`);
     }
+    validationProfile = {
+      language: deps.typescript || pkg.scripts?.build ? 'typescript' : 'javascript',
+      framework: ['vite', 'next', 'express', 'astro'].find(name => deps[name]) ?? 'node',
+      installCommands: fs.existsSync(path.join(path.dirname(packageJsonPath), 'package-lock.json')) ? ['npm ci'] : [],
+      buildCommands,
+      testCommands: testCommands.length ? testCommands : pkg.scripts?.test ? ['npm test'] : [],
+      lintCommands: pkg.scripts?.lint ? ['npm run lint'] : [],
+      artifactPaths: [],
+      generatedOutputPaths: ['dist', 'build', 'coverage'],
+      cleanupPolicy: 'none',
+      successCriteria: ['all configured commands exit 0', 'no unexpected validation artifacts'],
+    };
+  }
+  const pubspecPath = findFirstExisting([path.join(root, 'pubspec.yaml'), path.join(root, 'apps', 'mobile', 'pubspec.yaml'), path.join(root, 'apps', 'admin', 'pubspec.yaml')]);
+  if (pubspecPath && !validationProfile) {
+    const flutterRoot = path.dirname(pubspecPath);
+    packageManagers.push('flutter');
+    frameworks.push('flutter');
+    runtimeHints.push(path.relative(root, flutterRoot).replace(/\\/g, '/') || 'flutter-root');
+    validationProfile = {
+      language: 'dart',
+      framework: 'flutter',
+      installCommands: ['flutter pub get'],
+      buildCommands: [],
+      testCommands: ['flutter test'],
+      lintCommands: ['flutter analyze'],
+      artifactPaths: [],
+      generatedOutputPaths: ['.dart_tool', 'build'],
+      cleanupPolicy: 'none',
+      successCriteria: ['flutter analyze exits 0', 'flutter test exits 0', 'no unexpected validation artifacts'],
+    };
+  }
+  if (fs.existsSync(path.join(root, 'pyproject.toml')) && !validationProfile) {
+    frameworks.push('python');
+    validationProfile = {
+      language: 'python',
+      framework: 'python',
+      installCommands: [],
+      buildCommands: [],
+      testCommands: ['pytest'],
+      lintCommands: ['ruff check .', 'mypy .'],
+      artifactPaths: [],
+      generatedOutputPaths: ['.pytest_cache', '.ruff_cache', '.mypy_cache', '__pycache__'],
+      cleanupPolicy: 'none',
+      successCriteria: ['all configured commands exit 0', 'no unexpected validation artifacts'],
+    };
   }
   if (fs.existsSync(path.join(root, 'server', 'src', 'index.ts'))) runtimeHints.push('express-api');
-  return { runtimeHints, packageManagers, frameworks, testCommands, buildCommands };
+  return { runtimeHints, packageManagers, frameworks, testCommands, buildCommands, validationProfile };
 }
 
 function detectPm2Processes(root: string): ProjectRecord['runtimeProcesses'] {
@@ -545,6 +606,9 @@ function discoverRisks(root: string): string[] {
   return risks;
 }
 
+const SOURCE_FILE_PATTERN = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|dart|py)$/;
+const MAP_FILE_PATTERN = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|dart|py|json|md|yml|yaml)$/;
+
 /**
  * Bounded repository-wide source enumeration for retrieval.
  *
@@ -566,7 +630,7 @@ function listProjectSourceFiles(root: string, limit: number): string[] {
       if (entry.name.startsWith('.') || IGNORE_DIRS.has(entry.name)) continue;
       const abs = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(abs);
-      else if (/.[cm]?[jt]sx?$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+      else if (SOURCE_FILE_PATTERN.test(entry.name)) out.push(toPosixRelative(root, abs));
     }
   };
   walk(root);
@@ -581,7 +645,7 @@ function listFiles(start: string, root: string, limit: number): string[] {
       if (out.length >= limit || IGNORE_DIRS.has(entry.name)) continue;
       const abs = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(abs);
-      else if (/\.(ts|tsx|js|json|md|yml|yaml)$/.test(entry.name)) out.push(toPosixRelative(root, abs));
+      else if (MAP_FILE_PATTERN.test(entry.name)) out.push(toPosixRelative(root, abs));
     }
   };
   walk(start);
