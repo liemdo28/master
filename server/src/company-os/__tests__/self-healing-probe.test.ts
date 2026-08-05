@@ -167,13 +167,21 @@ async function run() {
   assert.ok(typeof knowledgeCheck.validateBody === 'function',
     'Knowledge DB validates the integrity body, not just the status code');
 
-  assert.strictEqual(byId.get('whatsapp-gateway')!.pm2_name, 'mi-whatsapp-gateway',
-    'WhatsApp Gateway is monitored under its real PM2 process name');
+  // The standalone food-safety-gateway entry is retired — superseded, not missing.
+  assert.ok(!byId.has('food-safety-gw'),
+    'the retired standalone Food Safety Gateway entry is gone');
+  assert.ok(!MONITORED_SERVICES.some(s => s.pm2_name === 'food-safety-gateway'),
+    'nothing monitors the standalone food-safety-gateway process any more');
 
-  // Food Safety Gateway stays monitored: if the process is absent that is a real
-  // outage, and hiding it would defeat the NO_SILENT_FAILURE goal.
-  assert.strictEqual(byId.get('food-safety-gw')!.pm2_name, 'food-safety-gateway',
-    'Food Safety Gateway remains monitored under its own process name');
+  // ...but the process that actually runs food-safety must stay monitored, and stay
+  // critical. This is the guard that stops the retirement from silencing real coverage.
+  const gateway = byId.get('whatsapp-gateway')!;
+  assert.strictEqual(gateway.pm2_name, 'mi-whatsapp-gateway',
+    'food-safety now runs inside mi-whatsapp-gateway, which remains monitored');
+  assert.strictEqual(gateway.type, 'pm2',
+    'the food-safety host is monitored as a PM2 process, so a stopped gateway is detected');
+  assert.strictEqual(gateway.critical, true,
+    'the process hosting food-safety is monitored as critical');
 
   // Third-party endpoints must stay unauthenticated — Mi Core's key is not theirs.
   assert.ok(!byId.get('ollama')!.authenticated, 'Ollama probe stays unauthenticated');
