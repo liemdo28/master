@@ -79,6 +79,31 @@ function run() {
   assert.strictEqual(store.getKnowledge(oldRule.id)?.status, 'SUPERSEDED');
   assert.strictEqual(replacement.supersedesId, oldRule.id);
 
+  // Regression: superseding without changing the hashed content must still leave an
+  // active replacement behind. Previously the content-hash dedupe matched the record
+  // that supersedeKnowledge had just marked SUPERSEDED and returned it unchanged,
+  // silently removing the knowledge from active retrieval.
+  const reconfirmed = store.createKnowledge({
+    kind: 'PROJECT_CONVENTION',
+    title: 'Branch naming',
+    summary: 'Feature branches use the codex/ prefix.',
+    content: 'Feature branches use the codex/ prefix.',
+    provenance: 'original note',
+    sourceType: 'PROJECT_DECISION',
+    projectIds: ['mi-core'],
+    tags: ['branch'],
+  });
+  const sameContentReplacement = store.supersedeKnowledge(reconfirmed.id, { provenance: 'reconfirmed by owner' });
+  assert.notStrictEqual(sameContentReplacement.id, reconfirmed.id, 'supersede must create a new record even when content is unchanged');
+  assert.strictEqual(sameContentReplacement.status, 'ACTIVE');
+  assert.strictEqual(sameContentReplacement.supersedesId, reconfirmed.id);
+  assert.strictEqual(store.getKnowledge(reconfirmed.id)?.status, 'SUPERSEDED');
+  assert.ok(
+    store.searchKnowledge({ query: 'branch naming codex prefix', projectIds: ['mi-core'] })
+      .some(result => result.record.id === sameContentReplacement.id),
+    'the replacement record stays in active retrieval',
+  );
+
   const expired = store.createKnowledge({
     kind: 'REFERENCE',
     title: 'Old temporary fact',

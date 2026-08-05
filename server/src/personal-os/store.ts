@@ -317,7 +317,7 @@ export class PersonalOsStore {
       kind: record.kind, title: record.title, summary: record.summary, content: record.content,
       scope: record.scope, projectIds: record.projectIds, goalIds: record.goalIds, taskIds: record.taskIds,
     });
-    const existing = this.db.prepare(`SELECT * FROM knowledge_records WHERE contentHash = ? AND status != 'DELETED' LIMIT 1`)
+    const existing = this.db.prepare(`SELECT * FROM knowledge_records WHERE contentHash = ? AND status IN ('ACTIVE', 'NEEDS_CONFIRMATION') LIMIT 1`)
       .get(record.contentHash) as any;
     if (existing) return parseKnowledge(existing);
     this.db.prepare(`
@@ -443,6 +443,9 @@ export class PersonalOsStore {
       if (!allowedStatuses.includes(record.status)) return false;
       if (input.kinds?.length && !input.kinds.includes(record.kind)) return false;
       if (record.status === 'EXPIRED' || record.status === 'DELETED' || record.status === 'SUPERSEDED') return false;
+      if (record.scope === 'NO_MEMORY') return false;
+      if (input.policy === 'PROJECT_ONLY' && record.scope === 'PERSONAL_ONLY') return false;
+      if (input.policy === 'PERSONAL_ONLY' && record.scope === 'PROJECT_ONLY') return false;
       if (input.policy === 'PROJECT_ONLY' && !record.projectIds.length) return false;
       if (input.policy === 'PERSONAL_ONLY' && record.projectIds.length) return false;
       if (projectIds.size && record.projectIds.length && !record.projectIds.some(id => projectIds.has(id))) return false;

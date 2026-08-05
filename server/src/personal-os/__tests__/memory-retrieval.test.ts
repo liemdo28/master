@@ -125,6 +125,45 @@ function run() {
   assert.ok(!projectOnly.confirmedPreferences.some(record => record.id === preference.id));
   assert.ok(projectOnly.relevantProjectConventions.some(record => record.id === convention.id));
 
+  // Regression: a record the owner scoped PERSONAL_ONLY must never reach a PROJECT_ONLY
+  // pack, even when it carries projectIds. Retrieval previously filtered on projectIds
+  // alone and ignored the record's own scope field entirely.
+  const privateFact = store.createKnowledge({
+    kind: 'USER_FACT',
+    title: 'Owner personal availability',
+    summary: 'The owner is unavailable on weekends for deployment work.',
+    content: 'The owner is unavailable on weekends for deployment work.',
+    provenance: 'private owner statement',
+    sourceType: 'USER_STATEMENT',
+    scope: 'PERSONAL_ONLY',
+    projectIds: ['mi-core'],
+    tags: ['availability'],
+  });
+  const projectOnlyAfterPrivate = store.buildMemoryPack({
+    query: 'deployment work for mi-core',
+    projectIds: ['mi-core'],
+    policy: 'PROJECT_ONLY',
+    includeUnconfirmed: true,
+  });
+  assert.ok(
+    ![
+      ...projectOnlyAfterPrivate.relevantUserFacts,
+      ...projectOnlyAfterPrivate.confirmedPreferences,
+      ...projectOnlyAfterPrivate.relevantProjectConventions,
+      ...projectOnlyAfterPrivate.uncertainRecords,
+    ].some(record => record.id === privateFact.id),
+    'PERSONAL_ONLY records must not leak into PROJECT_ONLY memory packs',
+  );
+  assert.ok(
+    store.buildMemoryPack({
+      query: 'owner availability for deployment work',
+      projectIds: ['mi-core'],
+      policy: 'PERSONAL_AND_PROJECT',
+      includeUnconfirmed: true,
+    }).relevantUserFacts.some(record => record.id === privateFact.id),
+    'PERSONAL_ONLY records remain available to personal packs',
+  );
+
   const goal = store.createGoal({ title: 'Prepare deployment validation for Mi Core', projectIds: ['mi-core'] });
   const planned = service.planGoal(goal.id);
   assert.ok(planned.plan.memoryReferences?.includes(convention.id));
