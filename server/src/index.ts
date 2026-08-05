@@ -128,6 +128,7 @@ import { engineeringRouter }  from './routes/engineering';
 import { aiPlatformRouter }   from './routes/ai-platform';
 import { connectorsRouter }   from './routes/connectors';
 import ceoObjectiveRouter from './ceo-command-center';
+import { personalOsJsonParser, personalOsRouter } from './personal-os/router';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -188,6 +189,7 @@ function requireTaskRuntimeAuth(req: express.Request, res: express.Response, nex
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
+app.use('/api', personalOsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, personalOsRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
