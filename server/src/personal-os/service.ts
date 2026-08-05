@@ -3,7 +3,7 @@ import { TaskEngine } from '../task-runtime/engine';
 import { TaskStore } from '../task-runtime/store';
 import { ProjectRegistryService } from '../project-registry/service';
 import { PersonalOsStore } from './store';
-import type { DailyBrief, Goal, GoalPlan, UserPreference } from './types';
+import type { DailyBrief, Goal, GoalPlan, KnowledgeRecord, KnowledgeSearchInput, MemoryPack, UserPreference } from './types';
 
 function today(): string {
   return (process.env.MI_TEST_TODAY || new Date().toISOString().slice(0, 10));
@@ -58,6 +58,15 @@ export class PersonalOsService {
       return { goal, plan: existing.plan, childTaskIds: existing.childTaskIds };
     }
     const operationId = this.store.startPlanOperation(goalId);
+    const memoryPack = this.store.buildMemoryPack({
+      query: goal.title,
+      projectIds: goal.projectIds,
+      goalId,
+      policy: 'PROJECT_ONLY',
+      maxRecords: 8,
+      maxBytes: 5000,
+      includeUnconfirmed: true,
+    });
     const childTaskIds: string[] = [];
     const projects = goal.projectIds.slice(0, 3);
     const milestones = [
@@ -94,6 +103,12 @@ export class PersonalOsService {
       ],
       estimatedResourceClass: 'small',
       nextRecommendedAction: 'Review and approve only the next bounded child task.',
+      memoryReferences: [
+        ...memoryPack.relevantProjectConventions,
+        ...memoryPack.relevantArchitectureDecisions,
+        ...memoryPack.previousLessons,
+      ].map(record => record.id),
+      conflicts: memoryPack.conflicts,
       createdAt: new Date().toISOString(),
     };
 
@@ -188,6 +203,14 @@ export class PersonalOsService {
     const unknowns = [];
     if (!process.env.GOOGLE_CLIENT_ID) unknowns.push('Calendar and email facts are unknown because Google connectors are not configured in this environment.');
     if (!projects.length) unknowns.push('Project registry has no registered projects in this environment.');
+    const memoryPack = this.store.buildMemoryPack({
+      query: 'daily brief active goals pending approvals recurring lessons unresolved issues',
+      projectIds: activeGoals.flatMap(goal => goal.projectIds),
+      policy: 'PERSONAL_AND_PROJECT',
+      maxRecords: 8,
+      maxBytes: 6000,
+      includeUnconfirmed: true,
+    });
     const brief: DailyBrief = {
       id: `brief-${randomUUID()}`,
       date: today(),
@@ -210,7 +233,51 @@ export class PersonalOsService {
       ],
       suggestions: ['Approve one small next task only after reviewing scope and evidence.'],
       unknowns,
+      confirmedMemory: [
+        ...memoryPack.confirmedPreferences,
+        ...memoryPack.previousLessons,
+        ...memoryPack.recurringIssues,
+      ].map(record => ({ id: record.id, kind: record.kind, title: record.title, summary: record.summary })),
+      confirmationRequests: memoryPack.uncertainRecords.map(record => ({ id: record.id, title: record.title, kind: record.kind })),
     };
     return this.store.saveDailyBrief(brief);
+  }
+
+  createKnowledge(input: Parameters<PersonalOsStore['createKnowledge']>[0]): KnowledgeRecord {
+    return this.store.createKnowledge(input);
+  }
+
+  searchKnowledge(input: KnowledgeSearchInput) {
+    return this.store.searchKnowledge(input);
+  }
+
+  buildMemoryPack(input: KnowledgeSearchInput): MemoryPack {
+    return this.store.buildMemoryPack(input);
+  }
+
+  extractKnowledgeFromTask(taskId: string): KnowledgeRecord {
+    const task = this.taskStore.getTask(taskId);
+    if (!task) throw new Error('task not found');
+    if (!['COMPLETED', 'FAILED'].includes(task.status)) throw new Error('task must be completed or failed before extraction');
+    const source = sanitizeUntrustedText(`${task.userRequest}\n${task.resultSummary || ''}`);
+    const kind = task.status === 'FAILED' ? 'RECURRING_ISSUE' : 'LESSON_LEARNED';
+    const summary = task.status === 'FAILED'
+      ? `Unresolved issue from task ${taskId}: ${source.slice(0, 300)}`
+      : `Lesson from task ${taskId}: ${source.slice(0, 300)}`;
+    return this.store.createKnowledge({
+      kind,
+      title: task.status === 'FAILED' ? 'Task failure needs follow-up' : 'Completed task lesson',
+      summary,
+      content: summary,
+      scope: task.projectId ? 'PROJECT_ONLY' : 'PERSONAL_AND_PROJECT',
+      projectIds: task.projectId ? [task.projectId] : [],
+      taskIds: [taskId],
+      tags: task.status === 'FAILED' ? ['task', 'failure', 'recurring-issue'] : ['task', 'lesson'],
+      sourceType: 'TASK_SUMMARY',
+      provenance: `extracted from task ${taskId} summary`,
+      confidence: task.status === 'FAILED' ? 0.7 : 0.8,
+      status: 'NEEDS_CONFIRMATION',
+      evidenceReferences: [`task:${taskId}`],
+    });
   }
 }

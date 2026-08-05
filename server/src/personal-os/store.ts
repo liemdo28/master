@@ -1,8 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import Database from 'better-sqlite3';
-import type { DailyBrief, Goal, GoalPlan, GoalStatus, PreferenceStatus, PriorityItem, UserPreference } from './types';
+import type {
+  DailyBrief, Goal, GoalPlan, GoalStatus, KnowledgeKind, KnowledgeRecord, KnowledgeSearchInput,
+  KnowledgeSearchResult, KnowledgeSensitivity, KnowledgeSourceType, KnowledgeStatus, MemoryPack,
+  MemoryPolicy, PreferenceStatus, PriorityItem, UserPreference
+} from './types';
 
 function dataDir(): string {
   return process.env.MI_PERSONAL_OS_DIR
@@ -20,13 +24,26 @@ function readJson<T>(value: string | null, fallback: T): T {
 }
 
 function assertId(id: string, label = 'id'): void {
-  if (!/^(pref|goal|priority|brief|plan)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) throw new Error(`invalid ${label}`);
+  if (!/^(pref|goal|priority|brief|plan|knowledge|memorypack)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) throw new Error(`invalid ${label}`);
 }
 
 function rejectSecret(value: string): void {
   if (/(BEGIN (RSA|OPENSSH|PRIVATE) KEY|bearer\s+[A-Za-z0-9._-]{20,}|sk-[A-Za-z0-9]{20,}|password\s*=|token\s*=|api[_-]?key\s*=|postgres:\/\/|mysql:\/\/|mongodb(\+srv)?:\/\/|\.env\s*(contents|file)?)/i.test(value)) {
     throw new Error('secret-like content is not allowed in personal memory');
   }
+}
+
+function sanitizeKnowledgeText(value: string): string {
+  return value
+    .replace(/ignore previous instructions|system prompt|developer message/gi, '[untrusted-instruction]')
+    .replace(/BEGIN (RSA|OPENSSH|PRIVATE) KEY[\s\S]*?END \1 KEY/gi, '[REDACTED_SECRET]')
+    .replace(/bearer\s+[A-Za-z0-9._-]{20,}/gi, 'bearer [REDACTED_SECRET]')
+    .replace(/(password|token|api[_-]?key)\s*=\s*\S+/gi, '$1=[REDACTED_SECRET]')
+    .replace(/(postgres|mysql|mongodb(\+srv)?):\/\/\S+/gi, '[REDACTED_CONNECTION_STRING]');
+}
+
+function hashContent(value: unknown): string {
+  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
 }
 
 function assertText(value: string, label: string, max: number): string {
@@ -41,6 +58,17 @@ function assertArray(values: unknown, label: string, maxItems: number, maxText: 
   if (!Array.isArray(values)) throw new Error(`${label} must be an array`);
   if (values.length > maxItems) throw new Error(`${label} has too many items`);
   return values.map((value, index) => assertText(String(value), `${label}[${index}]`, maxText));
+}
+
+function assertEnum<T extends string>(value: unknown, allowed: readonly T[], label: string): T {
+  if (typeof value !== 'string' || !allowed.includes(value as T)) throw new Error(`invalid ${label}`);
+  return value as T;
+}
+
+function assertOptionalDate(value: unknown, label: string): string | null {
+  if (value == null || value === '') return null;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(`${label} must be YYYY-MM-DD`);
+  return value;
 }
 
 export function assertPlainPayload(input: unknown): void {
@@ -157,10 +185,41 @@ export class PersonalOsStore {
         FOREIGN KEY (goalId) REFERENCES goals(id)
       );
       CREATE INDEX IF NOT EXISTS idx_plan_operations_goal ON plan_operations(goalId);
+
+      CREATE TABLE IF NOT EXISTS knowledge_records (
+        id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL,
+        title TEXT NOT NULL,
+        summary TEXT NOT NULL,
+        content TEXT NOT NULL,
+        scope TEXT NOT NULL,
+        projectIds TEXT NOT NULL,
+        goalIds TEXT NOT NULL,
+        taskIds TEXT NOT NULL,
+        tags TEXT NOT NULL,
+        sourceType TEXT NOT NULL,
+        provenance TEXT NOT NULL,
+        confidence REAL NOT NULL,
+        sensitivity TEXT NOT NULL,
+        status TEXT NOT NULL,
+        validFrom TEXT,
+        validUntil TEXT,
+        lastConfirmedAt TEXT,
+        createdAt TEXT NOT NULL,
+        updatedAt TEXT NOT NULL,
+        supersedesId TEXT,
+        evidenceReferences TEXT NOT NULL,
+        contentHash TEXT NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS idx_knowledge_status ON knowledge_records(status);
+      CREATE INDEX IF NOT EXISTS idx_knowledge_kind ON knowledge_records(kind);
+      CREATE INDEX IF NOT EXISTS idx_knowledge_hash ON knowledge_records(contentHash);
+      CREATE INDEX IF NOT EXISTS idx_knowledge_updated ON knowledge_records(updatedAt);
     `);
     this.ensureColumn('goals', 'completedAt', `TEXT`);
     this.ensureColumn('goals', 'planVersion', `INTEGER NOT NULL DEFAULT 0`);
     this.db.prepare(`INSERT OR IGNORE INTO schema_migrations (version, appliedAt) VALUES (1, ?)`).run(now());
+    this.db.prepare(`INSERT OR IGNORE INTO schema_migrations (version, appliedAt) VALUES (2, ?)`).run(now());
   }
 
   close(): void {
@@ -218,6 +277,231 @@ export class PersonalOsStore {
       ? `SELECT * FROM preferences ORDER BY updatedAt DESC`
       : `SELECT * FROM preferences WHERE status != 'DELETED' ORDER BY updatedAt DESC`;
     return this.db.prepare(sql).all() as UserPreference[];
+  }
+
+  createKnowledge(input: Partial<KnowledgeRecord> & {
+    kind: KnowledgeKind; title: string; summary: string; content: string; provenance: string; sourceType?: KnowledgeSourceType;
+  }): KnowledgeRecord {
+    assertPlainPayload(input);
+    const kind = assertEnum(input.kind, KNOWLEDGE_KINDS, 'knowledge kind');
+    const sourceType = assertEnum(input.sourceType ?? 'USER_STATEMENT', KNOWLEDGE_SOURCE_TYPES, 'knowledge sourceType');
+    const status = assertEnum(input.status ?? (sourceType === 'INFERRED' ? 'NEEDS_CONFIRMATION' : 'ACTIVE'), KNOWLEDGE_STATUSES, 'knowledge status');
+    const sensitivity = classifySensitivity(`${input.title}\n${input.summary}\n${input.content}\n${input.provenance}`);
+    if (sensitivity === 'SECRET_REJECTED') throw new Error('secret-like content is not allowed in knowledge');
+    const record: KnowledgeRecord = {
+      id: `knowledge-${randomUUID()}`,
+      kind,
+      title: sanitizeKnowledgeText(assertText(input.title, 'title', 240)),
+      summary: sanitizeKnowledgeText(assertText(input.summary, 'summary', 1000)),
+      content: sanitizeKnowledgeText(assertText(input.content, 'content', 5000)),
+      scope: assertEnum(input.scope ?? 'PERSONAL_AND_PROJECT', MEMORY_POLICIES, 'knowledge scope'),
+      projectIds: assertArray(input.projectIds, 'projectIds', 10, 120),
+      goalIds: assertArray(input.goalIds, 'goalIds', 10, 120),
+      taskIds: assertArray(input.taskIds, 'taskIds', 20, 120),
+      tags: assertArray(input.tags, 'tags', 20, 80).map(tag => tag.toLowerCase()),
+      sourceType,
+      provenance: sanitizeKnowledgeText(assertText(input.provenance, 'provenance', 1000)),
+      confidence: Math.max(0, Math.min(1, input.confidence ?? (status === 'NEEDS_CONFIRMATION' ? 0.45 : 1))),
+      sensitivity,
+      status,
+      validFrom: assertOptionalDate(input.validFrom, 'validFrom'),
+      validUntil: assertOptionalDate(input.validUntil, 'validUntil'),
+      lastConfirmedAt: status === 'ACTIVE' ? (input.lastConfirmedAt ?? now()) : null,
+      createdAt: now(),
+      updatedAt: now(),
+      supersedesId: input.supersedesId ?? null,
+      evidenceReferences: assertArray(input.evidenceReferences, 'evidenceReferences', 20, 200),
+      contentHash: '',
+    };
+    record.contentHash = hashContent({
+      kind: record.kind, title: record.title, summary: record.summary, content: record.content,
+      scope: record.scope, projectIds: record.projectIds, goalIds: record.goalIds, taskIds: record.taskIds,
+    });
+    const existing = this.db.prepare(`SELECT * FROM knowledge_records WHERE contentHash = ? AND status IN ('ACTIVE', 'NEEDS_CONFIRMATION') LIMIT 1`)
+      .get(record.contentHash) as any;
+    if (existing) return parseKnowledge(existing);
+    this.db.prepare(`
+      INSERT INTO knowledge_records (
+        id, kind, title, summary, content, scope, projectIds, goalIds, taskIds, tags, sourceType,
+        provenance, confidence, sensitivity, status, validFrom, validUntil, lastConfirmedAt,
+        createdAt, updatedAt, supersedesId, evidenceReferences, contentHash
+      ) VALUES (
+        @id, @kind, @title, @summary, @content, @scope, @projectIds, @goalIds, @taskIds, @tags, @sourceType,
+        @provenance, @confidence, @sensitivity, @status, @validFrom, @validUntil, @lastConfirmedAt,
+        @createdAt, @updatedAt, @supersedesId, @evidenceReferences, @contentHash
+      )
+    `).run(serializeKnowledge(record));
+    return record;
+  }
+
+  getKnowledge(id: string): KnowledgeRecord | null {
+    assertId(id, 'knowledge id');
+    const row = this.db.prepare(`SELECT * FROM knowledge_records WHERE id = ?`).get(id) as any;
+    return row ? parseKnowledge(row) : null;
+  }
+
+  listKnowledge(includeInactive = false): KnowledgeRecord[] {
+    const rows = includeInactive
+      ? this.db.prepare(`SELECT * FROM knowledge_records ORDER BY updatedAt DESC`).all() as any[]
+      : this.db.prepare(`SELECT * FROM knowledge_records WHERE status IN ('ACTIVE', 'NEEDS_CONFIRMATION') ORDER BY updatedAt DESC`).all() as any[];
+    return rows.map(parseKnowledge);
+  }
+
+  updateKnowledge(id: string, patch: Partial<KnowledgeRecord>): KnowledgeRecord {
+    assertPlainPayload(patch);
+    const current = this.getKnowledge(id);
+    if (!current) throw new Error('knowledge not found');
+    const updated: KnowledgeRecord = {
+      ...current,
+      kind: patch.kind ? assertEnum(patch.kind, KNOWLEDGE_KINDS, 'knowledge kind') : current.kind,
+      title: patch.title ? sanitizeKnowledgeText(assertText(patch.title, 'title', 240)) : current.title,
+      summary: patch.summary ? sanitizeKnowledgeText(assertText(patch.summary, 'summary', 1000)) : current.summary,
+      content: patch.content ? sanitizeKnowledgeText(assertText(patch.content, 'content', 5000)) : current.content,
+      scope: patch.scope ? assertEnum(patch.scope, MEMORY_POLICIES, 'knowledge scope') : current.scope,
+      projectIds: patch.projectIds ? assertArray(patch.projectIds, 'projectIds', 10, 120) : current.projectIds,
+      goalIds: patch.goalIds ? assertArray(patch.goalIds, 'goalIds', 10, 120) : current.goalIds,
+      taskIds: patch.taskIds ? assertArray(patch.taskIds, 'taskIds', 20, 120) : current.taskIds,
+      tags: patch.tags ? assertArray(patch.tags, 'tags', 20, 80).map(tag => tag.toLowerCase()) : current.tags,
+      sourceType: patch.sourceType ? assertEnum(patch.sourceType, KNOWLEDGE_SOURCE_TYPES, 'knowledge sourceType') : current.sourceType,
+      provenance: patch.provenance ? sanitizeKnowledgeText(assertText(patch.provenance, 'provenance', 1000)) : current.provenance,
+      confidence: patch.confidence == null ? current.confidence : Math.max(0, Math.min(1, patch.confidence)),
+      sensitivity: patch.sensitivity ? assertEnum(patch.sensitivity, KNOWLEDGE_SENSITIVITIES, 'knowledge sensitivity') : current.sensitivity,
+      status: patch.status ? assertEnum(patch.status, KNOWLEDGE_STATUSES, 'knowledge status') : current.status,
+      validFrom: patch.validFrom !== undefined ? assertOptionalDate(patch.validFrom, 'validFrom') : current.validFrom,
+      validUntil: patch.validUntil !== undefined ? assertOptionalDate(patch.validUntil, 'validUntil') : current.validUntil,
+      lastConfirmedAt: patch.status === 'ACTIVE' ? now() : current.lastConfirmedAt,
+      supersedesId: patch.supersedesId !== undefined ? patch.supersedesId : current.supersedesId,
+      evidenceReferences: patch.evidenceReferences ? assertArray(patch.evidenceReferences, 'evidenceReferences', 20, 200) : current.evidenceReferences,
+      updatedAt: now(),
+      contentHash: current.contentHash,
+    };
+    if (`${updated.title}${updated.summary}${updated.content}${updated.provenance}` !== `${current.title}${current.summary}${current.content}${current.provenance}`) {
+      const sensitivity = classifySensitivity(`${updated.title}\n${updated.summary}\n${updated.content}\n${updated.provenance}`);
+      if (sensitivity === 'SECRET_REJECTED') throw new Error('secret-like content is not allowed in knowledge');
+      updated.sensitivity = sensitivity;
+    }
+    updated.contentHash = hashContent({
+      kind: updated.kind, title: updated.title, summary: updated.summary, content: updated.content,
+      scope: updated.scope, projectIds: updated.projectIds, goalIds: updated.goalIds, taskIds: updated.taskIds,
+    });
+    this.db.prepare(`
+      UPDATE knowledge_records SET kind=@kind, title=@title, summary=@summary, content=@content, scope=@scope,
+        projectIds=@projectIds, goalIds=@goalIds, taskIds=@taskIds, tags=@tags, sourceType=@sourceType,
+        provenance=@provenance, confidence=@confidence, sensitivity=@sensitivity, status=@status,
+        validFrom=@validFrom, validUntil=@validUntil, lastConfirmedAt=@lastConfirmedAt, updatedAt=@updatedAt,
+        supersedesId=@supersedesId, evidenceReferences=@evidenceReferences, contentHash=@contentHash
+      WHERE id=@id
+    `).run(serializeKnowledge(updated));
+    return updated;
+  }
+
+  deleteKnowledge(id: string): KnowledgeRecord {
+    return this.updateKnowledge(id, { status: 'DELETED' });
+  }
+
+  confirmKnowledge(id: string): KnowledgeRecord {
+    return this.updateKnowledge(id, { status: 'ACTIVE', confidence: 1 });
+  }
+
+  supersedeKnowledge(id: string, replacement: Partial<KnowledgeRecord> & { title?: string; summary?: string; content?: string; provenance?: string }): KnowledgeRecord {
+    const current = this.getKnowledge(id);
+    if (!current) throw new Error('knowledge not found');
+    return this.runInTransaction(() => {
+      this.updateKnowledge(id, { status: 'SUPERSEDED' });
+      return this.createKnowledge({
+        kind: replacement.kind ?? current.kind,
+        title: replacement.title ?? current.title,
+        summary: replacement.summary ?? current.summary,
+        content: replacement.content ?? current.content,
+        scope: replacement.scope ?? current.scope,
+        projectIds: replacement.projectIds ?? current.projectIds,
+        goalIds: replacement.goalIds ?? current.goalIds,
+        taskIds: replacement.taskIds ?? current.taskIds,
+        tags: replacement.tags ?? current.tags,
+        sourceType: replacement.sourceType ?? 'USER_STATEMENT',
+        provenance: replacement.provenance ?? `supersedes ${id}`,
+        confidence: replacement.confidence ?? 1,
+        status: replacement.status ?? 'ACTIVE',
+        supersedesId: id,
+        evidenceReferences: replacement.evidenceReferences ?? current.evidenceReferences,
+      });
+    });
+  }
+
+  searchKnowledge(input: KnowledgeSearchInput): KnowledgeSearchResult[] {
+    assertPlainPayload(input);
+    const query = assertText(input.query || 'knowledge', 'query', 1000);
+    const projectIds = new Set(assertArray(input.projectIds, 'projectIds', 10, 120));
+    const goalId = input.goalId || null;
+    const taskId = input.taskId || null;
+    const maxRecords = Math.max(1, Math.min(20, input.maxRecords ?? 8));
+    const maxBytes = Math.max(500, Math.min(20000, input.maxBytes ?? 6000));
+    const allowedStatuses = input.includeUnconfirmed ? ['ACTIVE', 'NEEDS_CONFIRMATION'] : ['ACTIVE'];
+    const tokens = tokenise(query);
+    let usedBytes = 0;
+    const candidates = this.listKnowledge(false).filter(record => {
+      if (!allowedStatuses.includes(record.status)) return false;
+      if (input.kinds?.length && !input.kinds.includes(record.kind)) return false;
+      if (record.status === 'EXPIRED' || record.status === 'DELETED' || record.status === 'SUPERSEDED') return false;
+      if (record.scope === 'NO_MEMORY') return false;
+      if (input.policy === 'PROJECT_ONLY' && record.scope === 'PERSONAL_ONLY') return false;
+      if (input.policy === 'PERSONAL_ONLY' && record.scope === 'PROJECT_ONLY') return false;
+      if (input.policy === 'PROJECT_ONLY' && !record.projectIds.length) return false;
+      if (input.policy === 'PERSONAL_ONLY' && record.projectIds.length) return false;
+      if (projectIds.size && record.projectIds.length && !record.projectIds.some(id => projectIds.has(id))) return false;
+      if (goalId && record.goalIds.length && !record.goalIds.includes(goalId)) return false;
+      if (taskId && record.taskIds.length && !record.taskIds.includes(taskId)) return false;
+      return true;
+    }).map(record => scoreKnowledge(record, tokens, projectIds, goalId, taskId))
+      .filter(result => result.score > 0)
+      .sort((a, b) => b.score - a.score || b.record.updatedAt.localeCompare(a.record.updatedAt));
+    const out: KnowledgeSearchResult[] = [];
+    for (const result of candidates) {
+      const bytes = JSON.stringify(result.record).length;
+      if (usedBytes + bytes > maxBytes) continue;
+      usedBytes += bytes;
+      out.push(result);
+      if (out.length >= maxRecords) break;
+    }
+    return out;
+  }
+
+  listKnowledgeConflicts(): Array<{ key: string; records: KnowledgeRecord[] }> {
+    const active = this.listKnowledge(false).filter(record => record.status === 'ACTIVE');
+    const groups = new Map<string, KnowledgeRecord[]>();
+    for (const record of active) {
+      const key = `${record.kind}:${record.scope}:${record.projectIds.join(',')}:${record.tags.sort().join(',')}:${record.title.toLowerCase()}`;
+      groups.set(key, [...(groups.get(key) ?? []), record]);
+    }
+    return [...groups.entries()].filter(([, records]) => records.length > 1).map(([key, records]) => ({ key, records }));
+  }
+
+  buildMemoryPack(input: KnowledgeSearchInput & { policy?: MemoryPolicy }): MemoryPack {
+    const policy = assertEnum(input.policy ?? 'PERSONAL_AND_PROJECT', MEMORY_POLICIES, 'memory policy');
+    if (policy === 'NO_MEMORY') {
+      return emptyMemoryPack(input.query || '', policy);
+    }
+    const results = this.searchKnowledge({ ...input, policy, includeUnconfirmed: true, maxRecords: input.maxRecords ?? 12, maxBytes: input.maxBytes ?? 8000 });
+    const active = results.map(result => result.record).filter(record => record.status === 'ACTIVE');
+    const uncertainRecords = results.map(result => result.record).filter(record => record.status === 'NEEDS_CONFIRMATION');
+    const conflicts = this.listKnowledgeConflicts().filter(conflict => conflict.records.some(record => active.some(item => item.id === record.id)));
+    return {
+      id: `memorypack-${randomUUID()}`,
+      policy: uncertainRecords.length && policy !== 'PROJECT_ONLY' ? 'CONFIRMATION_REQUIRED' : policy,
+      requestIntent: input.query,
+      confirmedPreferences: active.filter(record => record.kind === 'USER_PREFERENCE'),
+      relevantUserFacts: active.filter(record => record.kind === 'USER_FACT' || record.kind === 'CONTACT_CONTEXT'),
+      relevantProjectConventions: active.filter(record => record.kind === 'PROJECT_CONVENTION' || record.kind === 'WORKFLOW'),
+      relevantArchitectureDecisions: active.filter(record => record.kind === 'ARCHITECTURE_DECISION' || record.kind === 'DECISION'),
+      previousLessons: active.filter(record => record.kind === 'LESSON_LEARNED'),
+      recurringIssues: active.filter(record => record.kind === 'RECURRING_ISSUE'),
+      conflicts,
+      staleWarnings: results.filter(result => result.stale).map(result => `${result.record.id} may be stale`),
+      evidenceReferences: [...new Set(active.flatMap(record => record.evidenceReferences))].slice(0, 20),
+      retrievalExplanation: results.map(result => `${result.record.id}: ${result.reasons.join(', ')}`),
+      uncertainRecords,
+      createdAt: now(),
+    };
   }
 
   updatePreference(id: string, patch: Partial<Pick<UserPreference, 'value' | 'confidence' | 'status' | 'provenance'>>): UserPreference {
@@ -420,6 +704,65 @@ export class PersonalOsStore {
   }
 }
 
+const KNOWLEDGE_KINDS = [
+  'USER_FACT', 'USER_PREFERENCE', 'PROJECT_CONVENTION', 'ARCHITECTURE_DECISION', 'WORKFLOW',
+  'LESSON_LEARNED', 'RECURRING_ISSUE', 'DECISION', 'CONTACT_CONTEXT', 'REFERENCE', 'SUMMARY',
+] as const satisfies readonly KnowledgeKind[];
+const KNOWLEDGE_STATUSES = ['ACTIVE', 'NEEDS_CONFIRMATION', 'SUPERSEDED', 'EXPIRED', 'DELETED'] as const satisfies readonly KnowledgeStatus[];
+const KNOWLEDGE_SENSITIVITIES = ['PUBLIC', 'INTERNAL', 'PRIVATE', 'SECRET_REJECTED'] as const satisfies readonly KnowledgeSensitivity[];
+const KNOWLEDGE_SOURCE_TYPES = ['USER_STATEMENT', 'PREFERENCE', 'TASK_SUMMARY', 'GOAL_OUTCOME', 'PROJECT_DECISION', 'VALIDATION_REVIEW', 'MANUAL_IMPORT', 'INFERRED'] as const satisfies readonly KnowledgeSourceType[];
+const MEMORY_POLICIES = ['PERSONAL_ONLY', 'PROJECT_ONLY', 'PERSONAL_AND_PROJECT', 'NO_MEMORY', 'CONFIRMATION_REQUIRED'] as const satisfies readonly MemoryPolicy[];
+
+function classifySensitivity(value: string): KnowledgeSensitivity {
+  if (/(BEGIN (RSA|OPENSSH|PRIVATE) KEY|bearer\s+[A-Za-z0-9._-]{20,}|sk-[A-Za-z0-9]{20,}|password\s*=|token\s*=|api[_-]?key\s*=|postgres:\/\/|mysql:\/\/|mongodb(\+srv)?:\/\/|\.env\s*(contents|file)?)/i.test(value)) return 'SECRET_REJECTED';
+  if (/\b(private|personal|owner|preference)\b/i.test(value)) return 'PRIVATE';
+  if (/\b(project|architecture|workflow|deployment|internal)\b/i.test(value)) return 'INTERNAL';
+  return 'PUBLIC';
+}
+
+function tokenise(value: string): string[] {
+  return [...new Set(value.toLowerCase().split(/[^a-z0-9]+/).filter(part => part.length > 2))];
+}
+
+function scoreKnowledge(record: KnowledgeRecord, tokens: string[], projectIds: Set<string>, goalId: string | null, taskId: string | null): KnowledgeSearchResult {
+  const haystack = `${record.kind} ${record.title} ${record.summary} ${record.content} ${record.tags.join(' ')}`.toLowerCase();
+  const reasons: string[] = [];
+  let score = 0;
+  for (const token of tokens) {
+    if (haystack.includes(token)) { score += 2; reasons.push(`token:${token}`); }
+  }
+  if (record.tags.some(tag => tokens.includes(tag))) { score += 5; reasons.push('tag'); }
+  if (record.projectIds.some(id => projectIds.has(id))) { score += 8; reasons.push('project'); }
+  if (goalId && record.goalIds.includes(goalId)) { score += 8; reasons.push('goal'); }
+  if (taskId && record.taskIds.includes(taskId)) { score += 8; reasons.push('task'); }
+  if (record.status === 'ACTIVE') { score += 3; reasons.push('confirmed'); }
+  if (record.status === 'NEEDS_CONFIRMATION') { score += 1; reasons.push('needs-confirmation'); }
+  score += Math.round(record.confidence * 3);
+  const stale = Boolean(record.validUntil && record.validUntil < new Date().toISOString().slice(0, 10));
+  if (stale) { score -= 3; reasons.push('stale'); }
+  return { record, score, reasons, stale };
+}
+
+function emptyMemoryPack(requestIntent: string, policy: MemoryPolicy): MemoryPack {
+  return {
+    id: `memorypack-${randomUUID()}`,
+    policy,
+    requestIntent,
+    confirmedPreferences: [],
+    relevantUserFacts: [],
+    relevantProjectConventions: [],
+    relevantArchitectureDecisions: [],
+    previousLessons: [],
+    recurringIssues: [],
+    conflicts: [],
+    staleWarnings: [],
+    evidenceReferences: [],
+    retrievalExplanation: ['memory disabled by policy'],
+    uncertainRecords: [],
+    createdAt: now(),
+  };
+}
+
 function serializeGoal(goal: Goal): Record<string, unknown> {
   return { ...goal, projectIds: JSON.stringify(goal.projectIds), successCriteria: JSON.stringify(goal.successCriteria), constraints: JSON.stringify(goal.constraints) };
 }
@@ -431,4 +774,26 @@ function parseGoal(row: any): Goal {
     successCriteria: readJson<string[]>(row.successCriteria, []),
     constraints: readJson<string[]>(row.constraints, []),
   } as Goal;
+}
+
+function serializeKnowledge(record: KnowledgeRecord): Record<string, unknown> {
+  return {
+    ...record,
+    projectIds: JSON.stringify(record.projectIds),
+    goalIds: JSON.stringify(record.goalIds),
+    taskIds: JSON.stringify(record.taskIds),
+    tags: JSON.stringify(record.tags),
+    evidenceReferences: JSON.stringify(record.evidenceReferences),
+  };
+}
+
+function parseKnowledge(row: any): KnowledgeRecord {
+  return {
+    ...row,
+    projectIds: readJson<string[]>(row.projectIds, []),
+    goalIds: readJson<string[]>(row.goalIds, []),
+    taskIds: readJson<string[]>(row.taskIds, []),
+    tags: readJson<string[]>(row.tags, []),
+    evidenceReferences: readJson<string[]>(row.evidenceReferences, []),
+  } as KnowledgeRecord;
 }

@@ -29,11 +29,35 @@ async function main() {
       if (args[0] === 'generate') return print(service.generateDailyBrief());
       if (args[0] === 'show') return print(service.store.latestDailyBrief());
     }
+    if (cmd === 'knowledge') {
+      const sub = args[0];
+      if (sub === 'list') return print({ knowledge: service.store.listKnowledge(args.includes('--include-inactive')) });
+      if (sub === 'add') {
+        const [kind, title, ...contentParts] = args.slice(1);
+        const content = contentParts.join(' ');
+        return print(service.createKnowledge({
+          kind: kind as any,
+          title,
+          summary: content.slice(0, 500),
+          content,
+          provenance: 'personal-os cli',
+          sourceType: 'USER_STATEMENT',
+        }));
+      }
+      if (sub === 'search') return print({ results: service.searchKnowledge({ query: args.slice(1).join(' '), includeUnconfirmed: true }) });
+      if (sub === 'confirm') return print(service.store.confirmKnowledge(args[1]));
+      if (sub === 'remove') return print(service.store.deleteKnowledge(args[1]));
+    }
+    if (cmd === 'memory-pack') {
+      return print(service.buildMemoryPack({ query: args.join(' '), policy: 'PERSONAL_AND_PROJECT', includeUnconfirmed: true }));
+    }
     if (cmd === 'today') return print(service.generateDailyBrief());
     console.log(`Usage:
   personal-os preference list|add <category> <key> <value>|remove <id>
   personal-os goal create <title>|list|show <id>|plan <id>|activate <id>|pause <id>
   personal-os brief generate|show
+  personal-os knowledge list|add <kind> <title> <content>|search <query>|confirm <id>|remove <id>
+  personal-os memory-pack <query>
   personal-os today`);
   } finally {
     service.close();
