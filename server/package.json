@@ -16,7 +16,7 @@
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
     "coding:acceptance": "tsx src/coding/acceptance.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -42,7 +42,8 @@
     "agentic-coding:fixtures": "tsx src/coding/__fixtures__/baseline-check.ts",
     "agentic-coding:pilot": "tsx src/coding/pilot.ts",
     "agentic-coding:real-certification": "tsx src/coding/real-world-certification.ts",
-    "agentic-coding:retrieval-eval": "tsx src/coding/retrieval/evaluate.ts"
+    "agentic-coding:retrieval-eval": "tsx src/coding/retrieval/evaluate.ts",
+    "test:selfheal-probe": "tsx src/company-os/__tests__/self-healing-probe.test.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

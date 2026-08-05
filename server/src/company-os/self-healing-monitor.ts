@@ -19,21 +19,33 @@ export interface ServiceCheck {
   health_url?: string;       // for http health checks
   port?: number;             // for port checks
   critical: boolean;         // if true, CEO alert immediately
+  /**
+   * Set for Mi Core's own routes, which sit behind the API-key guard. The probe then
+   * sends MI_CORE_API_KEY so an authenticated endpoint is not misread as an outage.
+   * Third-party endpoints (Ollama, accounting) stay unauthenticated.
+   */
+  authenticated?: boolean;
 }
+
+const miCoreUrl = (route: string): string => `http://localhost:${process.env.MI_PORT || 4001}${route}`;
 
 const SERVICES_TO_MONITOR: ServiceCheck[] = [
   { id: 'mi-core',              name: 'Mi Core Server',        type: 'pm2',  pm2_name: 'mi-core',             critical: true  },
-  { id: 'whatsapp-gateway',     name: 'WhatsApp Gateway',      type: 'pm2',  pm2_name: 'whatsapp-ai-gateway', critical: true  },
+  { id: 'whatsapp-gateway',     name: 'WhatsApp Gateway',      type: 'pm2',  pm2_name: 'mi-whatsapp-gateway', critical: true  },
   { id: 'mi-accounting',        name: 'Accounting Engine',     type: 'pm2',  pm2_name: 'mi-accounting',       critical: true  },
   { id: 'mi-ceo-observer',      name: 'CEO Observer',          type: 'pm2',  pm2_name: 'mi-ceo-observer',     critical: false },
-  { id: 'mi-core-http',         name: 'Mi Core HTTP',          type: 'http', health_url: `http://localhost:${process.env.MI_PORT || 4001}/health`, critical: true },
+  { id: 'mi-core-http',         name: 'Mi Core HTTP',          type: 'http', health_url: miCoreUrl('/api/health'), authenticated: true, critical: true },
   { id: 'accounting-http',      name: 'Accounting HTTP',       type: 'http', health_url: 'http://localhost:8844/health', critical: false },
   { id: 'ollama',               name: 'Ollama AI',             type: 'http', health_url: 'http://localhost:11434/api/tags', critical: true },
   { id: 'food-safety-gw',       name: 'Food Safety Gateway',   type: 'pm2',  pm2_name: 'food-safety-gateway', critical: false },
   { id: 'qb-ops-agent',         name: 'QB Ops Agent',          type: 'pm2',  pm2_name: 'qb-ops-agent',        critical: false },
-  { id: 'evidence-db',          name: 'Evidence DB',           type: 'http', health_url: `http://localhost:${process.env.MI_PORT || 4001}/api/company-os/health`, critical: true },
-  { id: 'knowledge-db',         name: 'Knowledge DB',          type: 'http', health_url: `http://localhost:${process.env.MI_PORT || 4001}/api/knowledge/health`, critical: false },
+  { id: 'evidence-db',          name: 'Evidence DB',           type: 'http', health_url: miCoreUrl('/api/company-os/health'), authenticated: true, critical: true },
+  // Personal OS integrity is a genuine readiness signal and, unlike /api/knowledge/health,
+  // cannot be shadowed by the generic /api/knowledge/:id route.
+  { id: 'knowledge-db',         name: 'Knowledge DB',          type: 'http', health_url: miCoreUrl('/api/personal/integrity'), authenticated: true, critical: false },
 ];
+
+export const MONITORED_SERVICES: readonly ServiceCheck[] = SERVICES_TO_MONITOR;
 
 export interface ServiceStatus {
   id: string;
@@ -58,10 +70,18 @@ async function checkPm2Service(svc: ServiceCheck): Promise<boolean> {
   } catch { return false; }
 }
 
-async function checkHttpService(svc: ServiceCheck): Promise<boolean> {
+export async function checkHttpService(svc: ServiceCheck): Promise<boolean> {
   if (!svc.health_url) return false;
+  const headers: Record<string, string> = {};
+  if (svc.authenticated) {
+    const apiKey = process.env.MI_CORE_API_KEY || '';
+    // No key configured means the probe cannot authenticate. Report unhealthy rather
+    // than dropping the guard, and never log the key itself.
+    if (!apiKey) return false;
+    headers['x-api-key'] = apiKey;
+  }
   try {
-    const res = await fetch(svc.health_url, { signal: AbortSignal.timeout(5000) });
+    const res = await fetch(svc.health_url, { headers, signal: AbortSignal.timeout(5000) });
     return res.ok;
   } catch { return false; }
 }
