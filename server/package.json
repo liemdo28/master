@@ -30,6 +30,7 @@
     "test:personal-context": "tsx src/personal-os/__tests__/personal-context.test.ts",
     "test:goals": "tsx src/personal-os/__tests__/goals.test.ts",
     "test:daily-brief": "tsx src/personal-os/__tests__/daily-brief.test.ts",
+    "test:phase5a-closure": "tsx src/personal-os/__tests__/closure.test.ts",
     "phase5a:acceptance": "tsx src/personal-os/acceptance.ts",
     "personal-os": "tsx src/personal-os/cli.ts",
     "agentic-coding:acceptance": "tsx src/coding/agentic-acceptance.ts",

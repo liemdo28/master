@@ -25,6 +25,7 @@ export interface Goal {
   priority: number;
   status: GoalStatus;
   targetDate: string | null;
+  completedAt: string | null;
   projectIds: string[];
   parentGoalId: string | null;
   successCriteria: string[];
@@ -66,6 +67,8 @@ export interface DailyBrief {
 }
 
 export interface GoalPlan {
+  planId: string;
+  version: number;
   goalId: string;
   objective: string;
   assumptions: string[];

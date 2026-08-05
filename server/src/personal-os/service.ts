@@ -10,7 +10,15 @@ function today(): string {
 }
 
 function sanitizeUntrustedText(value: string): string {
-  return value.replace(/ignore previous instructions|system prompt|developer message/gi, '[untrusted-instruction]');
+  return redactSecrets(value).replace(/ignore previous instructions|system prompt|developer message/gi, '[untrusted-instruction]');
+}
+
+function redactSecrets(value: string): string {
+  return value
+    .replace(/BEGIN (RSA|OPENSSH|PRIVATE) KEY[\s\S]*?END \1 KEY/gi, '[REDACTED_SECRET]')
+    .replace(/bearer\s+[A-Za-z0-9._-]{20,}/gi, 'bearer [REDACTED_SECRET]')
+    .replace(/(password|token|api[_-]?key)\s*=\s*\S+/gi, '$1=[REDACTED_SECRET]')
+    .replace(/(postgres|mysql|mongodb(\+srv)?):\/\/\S+/gi, '[REDACTED_CONNECTION_STRING]');
 }
 
 export class PersonalOsService {
@@ -30,9 +38,27 @@ export class PersonalOsService {
     return this.store.createPreference(input);
   }
 
+  activateGoal(goalId: string): Goal {
+    const goal = this.store.getGoal(goalId);
+    if (!goal) throw new Error('goal not found');
+    for (const projectId of goal.projectIds) {
+      if (!this.registry.getProject(projectId)) throw new Error(`registered project required before activation: ${projectId}`);
+    }
+    return this.store.updateGoalStatus(goalId, 'ACTIVE');
+  }
+
   planGoal(goalId: string): { goal: Goal; plan: GoalPlan; childTaskIds: string[] } {
     const goal = this.store.getGoal(goalId);
     if (!goal) throw new Error('goal not found');
+    for (const projectId of goal.projectIds) {
+      if (!this.registry.getProject(projectId)) throw new Error(`registered project required before planning: ${projectId}`);
+    }
+    const existing = this.store.existingPlan(goalId);
+    if (existing.plan) {
+      return { goal, plan: existing.plan, childTaskIds: existing.childTaskIds };
+    }
+    const operationId = this.store.startPlanOperation(goalId);
+    const childTaskIds: string[] = [];
     const projects = goal.projectIds.slice(0, 3);
     const milestones = [
       'Confirm the tagged v1.0 baseline and current production health.',
@@ -48,6 +74,8 @@ export class PersonalOsService {
       approvalRequired: true,
     }));
     const plan: GoalPlan = {
+      planId: operationId,
+      version: 1,
       goalId,
       objective: sanitizeUntrustedText(goal.title),
       assumptions: [
@@ -69,33 +97,54 @@ export class PersonalOsService {
       createdAt: new Date().toISOString(),
     };
 
-    const engine = new TaskEngine(this.taskStore);
-    const childTaskIds = proposed.map(task => {
-      const created = engine.createTask({
-        userRequest: task.title,
-        parentTaskId: goal.id,
-        taskKind: 'general',
-        projectId: projects[0] ?? null,
-        riskLevel: 'read-only',
+    try {
+      const engine = new TaskEngine(this.taskStore);
+      if (process.env.MI_PHASE5A_FAIL_PLAN_AT === 'before-first-child') throw new Error('injected failure before first child');
+      for (let index = 0; index < proposed.length; index++) {
+        const task = proposed[index];
+        const reusable = this.taskStore.listTasks()
+          .find(existingTask => existingTask.parentTaskId === goal.id && existingTask.userRequest === task.title);
+        if (reusable) {
+          childTaskIds.push(reusable.id);
+        } else {
+          const created = engine.createTask({
+            userRequest: task.title,
+            parentTaskId: goal.id,
+            taskKind: 'general',
+            projectId: projects[0] ?? null,
+            riskLevel: 'read-only',
+          });
+          const waiting = engine.transition(created.id, 'CONTEXT_BUILDING');
+          engine.transition(waiting.id, 'PLANNING');
+          const approval = engine.transition(waiting.id, 'WAITING_APPROVAL', 'Phase 5A creates draft child tasks only.');
+          childTaskIds.push(approval.id);
+        }
+        this.store.updatePlanOperation(operationId, 'STAGING', childTaskIds);
+        if (process.env.MI_PHASE5A_FAIL_PLAN_AT === 'after-some-children' && index === 1) {
+          throw new Error('injected failure after some children');
+        }
+      }
+      if (process.env.MI_PHASE5A_FAIL_PLAN_AT === 'before-plan-activation') throw new Error('injected failure before plan activation');
+      this.store.saveGoalPlan(goalId, plan, childTaskIds);
+      childTaskIds.forEach((taskId, index) => {
+        if (!this.store.listPriorities(goalId).some(item => item.taskId === taskId)) {
+          this.store.createPriority({
+            goalId,
+            taskId,
+            reason: proposed[index].title,
+            urgency: 3,
+            importance: 4,
+            dueAt: null,
+            status: 'OPEN',
+          });
+        }
       });
-      const waiting = engine.transition(created.id, 'CONTEXT_BUILDING');
-      engine.transition(waiting.id, 'PLANNING');
-      const approval = engine.transition(waiting.id, 'WAITING_APPROVAL', 'Phase 5A creates draft child tasks only.');
-      return approval.id;
-    });
-    this.store.saveGoalPlan(goalId, plan, childTaskIds);
-    childTaskIds.forEach((taskId, index) => {
-      this.store.createPriority({
-        goalId,
-        taskId,
-        reason: proposed[index].title,
-        urgency: 3,
-        importance: 4,
-        dueAt: null,
-        status: 'OPEN',
-      });
-    });
-    return { goal, plan, childTaskIds };
+      this.store.updatePlanOperation(operationId, 'COMPLETED', childTaskIds);
+      return { goal, plan, childTaskIds };
+    } catch (err) {
+      this.store.updatePlanOperation(operationId, 'FAILED', childTaskIds, err instanceof Error ? err.message : String(err));
+      throw err;
+    }
   }
 
   goalProgress(goalId: string): Record<string, unknown> {
@@ -107,6 +156,8 @@ export class PersonalOsService {
   }
 
   generateDailyBrief(): DailyBrief {
+    const existing = this.store.latestDailyBrief(today());
+    if (existing) return existing;
     const activeGoals = this.store.listGoals().filter(goal => ['DRAFT', 'ACTIVE', 'PAUSED', 'BLOCKED'].includes(goal.status));
     const tasks = this.taskStore.listTasks().slice(0, 20);
     let projects: unknown[] = [];
@@ -121,9 +172,19 @@ export class PersonalOsService {
     } catch {
       projects = [];
     }
-    const pendingTasks = tasks.filter(task => ['WAITING_APPROVAL', 'READY', 'BLOCKED'].includes(task.status));
-    const recentFailures = tasks.filter(task => task.status === 'FAILED').slice(0, 5);
-    const recentSuccesses = tasks.filter(task => task.status === 'COMPLETED').slice(0, 5);
+    const sanitizeTask = (task: any) => ({
+      id: task.id,
+      parentTaskId: task.parentTaskId,
+      status: task.status,
+      projectId: task.projectId,
+      userRequest: sanitizeUntrustedText(task.userRequest || ''),
+      resultSummary: sanitizeUntrustedText(task.resultSummary || ''),
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+    });
+    const pendingTasks = tasks.filter(task => ['WAITING_APPROVAL', 'READY', 'BLOCKED'].includes(task.status)).map(sanitizeTask);
+    const recentFailures = tasks.filter(task => task.status === 'FAILED').slice(0, 5).map(sanitizeTask);
+    const recentSuccesses = tasks.filter(task => task.status === 'COMPLETED').slice(0, 5).map(sanitizeTask);
     const unknowns = [];
     if (!process.env.GOOGLE_CLIENT_ID) unknowns.push('Calendar and email facts are unknown because Google connectors are not configured in this environment.');
     if (!projects.length) unknowns.push('Project registry has no registered projects in this environment.');
@@ -131,10 +192,10 @@ export class PersonalOsService {
       id: `brief-${randomUUID()}`,
       date: today(),
       generatedAt: new Date().toISOString(),
-      activeGoals,
+      activeGoals: activeGoals.map(goal => ({ ...goal, title: sanitizeUntrustedText(goal.title), description: sanitizeUntrustedText(goal.description) })),
       activeProjects: projects,
       pendingTasks,
-      pendingApprovals: pendingTasks.map(task => ({ taskId: task.id, reason: task.resultSummary ?? 'approval required' })),
+      pendingApprovals: pendingTasks.map(task => ({ taskId: task.id, reason: task.resultSummary || 'approval required' })),
       recentFailures,
       recentSuccesses,
       systemAlerts: [],
