@@ -5,7 +5,7 @@ import { assertPlainPayload } from './store';
 export const personalOsJsonParser = express.json({ limit: '1mb' });
 
 const router = Router();
-const typedIdPattern = /^(pref|goal|brief)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const typedIdPattern = /^(pref|goal|brief|knowledge)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function withService<T>(fn: (service: PersonalOsService) => T): T {
   const service = new PersonalOsService();
@@ -118,5 +118,73 @@ router.post('/daily-brief/generate', (_req, res) => withService(service => {
 }));
 
 router.get('/personal/integrity', (_req, res) => withService(service => res.json(service.store.integrity())));
+
+router.get('/knowledge', (req, res) => withService(service => {
+  res.json({ knowledge: service.store.listKnowledge(req.query.includeInactive === 'true') });
+}));
+
+router.post('/knowledge', (req, res) => withService(service => {
+  try {
+    sanitizeBody(req.body);
+    res.status(201).json(service.createKnowledge(req.body ?? {}));
+  } catch (err) { handleError(res, err); }
+}));
+
+router.get('/knowledge/conflicts', (_req, res) => withService(service => res.json({ conflicts: service.store.listKnowledgeConflicts() })));
+
+router.get('/knowledge/:id', (req, res) => withService(service => {
+  if (!validId(req.params.id) || !req.params.id.startsWith('knowledge-')) return res.status(400).json({ error: 'invalid knowledge id' });
+  const record = service.store.getKnowledge(req.params.id);
+  return record ? res.json(record) : res.status(404).json({ error: 'knowledge not found' });
+}));
+
+router.patch('/knowledge/:id', (req, res) => withService(service => {
+  if (!validId(req.params.id) || !req.params.id.startsWith('knowledge-')) return res.status(400).json({ error: 'invalid knowledge id' });
+  try {
+    sanitizeBody(req.body);
+    res.json(service.store.updateKnowledge(req.params.id, req.body ?? {}));
+  } catch (err) { handleError(res, err); }
+}));
+
+router.delete('/knowledge/:id', (req, res) => withService(service => {
+  if (!validId(req.params.id) || !req.params.id.startsWith('knowledge-')) return res.status(400).json({ error: 'invalid knowledge id' });
+  try { res.json(service.store.deleteKnowledge(req.params.id)); }
+  catch (err) { handleError(res, err); }
+}));
+
+router.post('/knowledge/search', (req, res) => withService(service => {
+  try {
+    sanitizeBody(req.body);
+    res.json({ results: service.searchKnowledge(req.body ?? {}) });
+  } catch (err) { handleError(res, err); }
+}));
+
+router.post('/knowledge/:id/confirm', (req, res) => withService(service => {
+  if (!validId(req.params.id) || !req.params.id.startsWith('knowledge-')) return res.status(400).json({ error: 'invalid knowledge id' });
+  try { res.json(service.store.confirmKnowledge(req.params.id)); }
+  catch (err) { handleError(res, err); }
+}));
+
+router.post('/knowledge/:id/supersede', (req, res) => withService(service => {
+  if (!validId(req.params.id) || !req.params.id.startsWith('knowledge-')) return res.status(400).json({ error: 'invalid knowledge id' });
+  try {
+    sanitizeBody(req.body);
+    res.status(201).json(service.store.supersedeKnowledge(req.params.id, req.body ?? {}));
+  } catch (err) { handleError(res, err); }
+}));
+
+router.post('/knowledge/extract/task/:taskId', (req, res) => withService(service => {
+  try {
+    sanitizeBody(req.body ?? {});
+    res.status(201).json(service.extractKnowledgeFromTask(req.params.taskId));
+  } catch (err) { handleError(res, err); }
+}));
+
+router.post('/knowledge/memory-pack', (req, res) => withService(service => {
+  try {
+    sanitizeBody(req.body);
+    res.status(201).json(service.buildMemoryPack(req.body ?? {}));
+  } catch (err) { handleError(res, err); }
+}));
 
 export const personalOsRouter = router;
