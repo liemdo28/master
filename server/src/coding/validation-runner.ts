@@ -201,25 +201,40 @@ export function resolveNpmInvocation(): { command: string; args: string[]; confi
 }
 
 export function resolveFlutterInvocation(): { command: string; args: string[]; configured: boolean } {
-  const snapshotCandidates = [
-    process.env.FLUTTER_ROOT ? path.join(process.env.FLUTTER_ROOT, 'bin', 'cache', 'flutter_tools.snapshot') : null,
-    'C:\\flutter\\bin\\cache\\flutter_tools.snapshot',
-    'C:\\src\\flutter\\bin\\cache\\flutter_tools.snapshot',
-  ].filter(Boolean) as string[];
-  for (const snapshot of snapshotCandidates) {
+  const roots = new Set<string>();
+  if (process.env.FLUTTER_ROOT) roots.add(process.env.FLUTTER_ROOT);
+  if (process.env.FLUTTER_BIN) roots.add(path.resolve(process.env.FLUTTER_BIN, '..', '..'));
+  for (const entry of pathEntries()) {
+    const flutterScript = path.join(entry, process.platform === 'win32' ? 'flutter.bat' : 'flutter');
+    if (fs.existsSync(flutterScript)) roots.add(path.resolve(entry, '..'));
+  }
+
+  for (const rootValue of roots) {
+    const snapshot = path.join(rootValue, 'bin', 'cache', 'flutter_tools.snapshot');
     const root = path.resolve(snapshot, '..', '..');
     const dart = path.join(root, 'cache', 'dart-sdk', 'bin', process.platform === 'win32' ? 'dart.exe' : 'dart');
     if (fs.existsSync(snapshot) && fs.existsSync(dart)) return { command: dart, args: [snapshot], configured: true };
   }
-  const executableCandidates = [
-    process.env.FLUTTER_BIN,
-    'C:\\flutter\\bin\\flutter',
-    'C:\\src\\flutter\\bin\\flutter',
-  ].filter(Boolean) as string[];
+  const executableCandidates = [process.env.FLUTTER_BIN, findOnPath('flutter')].filter(Boolean) as string[];
   for (const candidate of executableCandidates) {
     if (fs.existsSync(candidate)) return { command: candidate, args: [], configured: true };
   }
   return { command: 'flutter', args: [], configured: true };
+}
+
+function pathEntries(): string[] {
+  return (process.env.PATH ?? process.env.Path ?? '').split(path.delimiter).filter(Boolean);
+}
+
+function findOnPath(name: string): string | null {
+  const names = process.platform === 'win32' ? [name, `${name}.exe`, `${name}.cmd`, `${name}.bat`] : [name];
+  for (const entry of pathEntries()) {
+    for (const candidateName of names) {
+      const candidate = path.join(entry, candidateName);
+      if (fs.existsSync(candidate)) return candidate;
+    }
+  }
+  return null;
 }
 
 function runCommand(spec: ValidationCommand, options: { isCancelled?: () => boolean }): Promise<ValidationResult> {

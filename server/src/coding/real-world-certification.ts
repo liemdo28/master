@@ -21,8 +21,8 @@ function git(root: string, args: string[]): string {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 }
 
-function requiredEnv(name: string, fallback?: string): string {
-  const value = process.env[name] || fallback;
+function requiredEnv(name: string): string {
+  const value = process.env[name];
   if (!value) throw new Error(`${name} is required`);
   return path.resolve(value);
 }
@@ -115,8 +115,8 @@ async function runCase(item: RealProjectCase, service: ProjectRegistryService): 
 async function main(): Promise<void> {
   const repoRoot = path.resolve(process.cwd(), '..');
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-real-certification-'));
-  const miAcademyRoot = requiredEnv('MI_ACADEMY_ROOT', 'D:/phase4-10-mi-academy-source');
-  const healthyLdRoot = requiredEnv('HEALTHY_LD_ROOT', 'D:/phase4-11-healthy-ld-source');
+  const miAcademyRoot = requiredEnv('MI_ACADEMY_ROOT');
+  const healthyLdRoot = requiredEnv('HEALTHY_LD_ROOT');
   process.env.MI_PROJECT_REGISTRY_DIR = path.join(tmpDir, 'registry');
   process.env.MI_TASK_RUNTIME_DIR = path.join(tmpDir, 'tasks');
   process.env.MI_CODING_WORKTREE_ROOT = path.join(tmpDir, 'worktrees');
