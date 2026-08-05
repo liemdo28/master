@@ -289,7 +289,7 @@ export class CodingWorkflow {
 
     const latestBeforeValidation = this.mustGetCodingTask(task.id);
     if (latestBeforeValidation.status !== 'VALIDATING') this.taskEngine.transition(task.id, 'VALIDATING');
-    const artifactBaseline = captureValidationArtifactBaseline(worktreePath);
+    let artifactBaseline = captureValidationArtifactBaseline(worktreePath);
     const validationPlan = buildValidationPlan(context.project, worktreePath, validationCommands);
     this.taskStore.updateCodingFields(task.id, { validationPlan: JSON.stringify(validationPlan) });
     let validation = await runValidationPlan(validationPlan, { isCancelled: () => this.taskStore.getTask(task.id)?.status === 'CANCELLED' });
@@ -331,6 +331,7 @@ export class CodingWorkflow {
         if (symbolsExpanded.length) {
           this.event(task.id, 'coding.context.symbols.expanded', { attempt: attempts, symbols: symbolsExpanded });
         }
+        artifactBaseline = includeTaskChangedFilesInArtifactBaseline(artifactBaseline, captureValidationArtifactBaseline(worktreePath), repaired.changedFiles);
       } catch (err) {
         this.recordFailure(task.id, err);
         this.event(task.id, 'coding.repair.failed', { attempt: attempts, message: err instanceof Error ? err.message : String(err) });
@@ -449,6 +450,20 @@ function parseJsonOrNull(value: string | null): unknown {
 
 function validationPassed(results: ValidationResult[]): boolean {
   return results.every(result => !result.configured || result.exitCode === 0);
+}
+
+function includeTaskChangedFilesInArtifactBaseline(
+  baseline: { status: string[]; diff: string },
+  current: { status: string[]; diff: string },
+  changedFiles: string[]
+): { status: string[]; diff: string } {
+  const changed = new Set(changedFiles.map(file => file.replace(/\\/g, '/')));
+  const merged = new Set(baseline.status);
+  for (const entry of current.status) {
+    const file = entry.slice(3).replace(/\\/g, '/');
+    if (changed.has(file)) merged.add(entry);
+  }
+  return { status: [...merged], diff: baseline.diff };
 }
 
 function failedValidationNames(results: ValidationResult[]): string[] {
