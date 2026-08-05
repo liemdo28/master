@@ -40,6 +40,12 @@ The Personal OS database is outside source control. It stores visible preference
 
 Do not store raw credentials, `.env` contents, private keys, connection strings, or hidden chain-of-thought. Daily brief summaries sanitize untrusted instructions and redact credential-shaped values.
 
+Default production database locations:
+
+- `.local-agent-global/personal-os/personal-os.db`
+- `.local-agent-global/task-runtime/tasks.db`
+- `.local-agent-global/project-registry/projects.db`
+
 ## Planning Policy
 
 Planning validates registered project IDs. Repeated planning returns the existing plan and child task IDs. If child task staging is interrupted, retry reuses already staged child tasks and completes the same bounded plan.
@@ -53,3 +59,12 @@ Daily briefs separate facts, suggestions, and unknowns. Calendar and email facts
 ## Production Deploy
 
 Build from a clean worktree at the final master SHA. Back up the current live `server/dist` under `D:\mi-core-pm2-backups` before copying the clean build. Restart only the `mi-core` PM2 process and verify health, tools, task runtime, project registry, coding, and Phase 5A API acceptance.
+
+Known limitations:
+
+- no semantic personal knowledge memory yet
+- no calendar/email intelligence
+- no voice
+- no unrestricted desktop control
+- no autonomous push/merge/deploy
+- no autonomous external actions

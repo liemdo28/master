@@ -20,6 +20,7 @@ If a migration issue is suspected, first run SQLite `integrity_check` and `forei
 - Child tasks created by Phase 5A remain approval-gated at `WAITING_APPROVAL`.
 - Goal activation does not execute child tasks.
 - Daily brief records are read-side summaries and can remain in place after dist rollback.
+- Preference and goal data remain outside source control and should be preserved unless explicitly removed by the owner.
 
 ## Escalation
 
