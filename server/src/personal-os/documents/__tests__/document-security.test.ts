@@ -127,7 +127,10 @@ async function run() {
   }
 
   // --- secret scanner: true positives ----------------------------------------
-  const filler = 'abcdefghijklmnopqrstuvwxyz012345';
+  // Built at runtime, not written as a literal: a 32-character alphanumeric run sitting
+  // next to words like "bearer" is exactly what repository secret scanners flag, and a
+  // scanner trained to ignore this file would be worse than one that fails on it.
+  const filler = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)).join('') + '012345';
   const decoyPassword = ['hun', 'ter', '2', 'X9'].join('');
   const secrets: Array<[string, string]> = [
     ['PRIVATE_KEY', `${'-----BEGIN RSA PRIV' + 'ATE KEY-----'}\nMIIEow${filler}\n${'-----END RSA PRIV' + 'ATE KEY-----'}`],
