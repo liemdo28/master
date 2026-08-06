@@ -73,14 +73,18 @@ async function run() {
 
   // --- an explicitly approved single file must not be rejected merely because an
   // ancestor directory elsewhere on the machine happens to share a name with an
-  // excluded segment. The fixture root here already lives under the OS temp directory
-  // (…\AppData\Local\Temp\… on Windows), which is exactly this scenario: "Temp" matches
-  // the excluded "temp" segment, so this is a real regression test, not a contrived one.
-  assert.ok(/temp/i.test(projectRoot), 'fixture root sits under a directory literally named Temp, as intended');
-  const approvedFileResolved = resolveApprovedFile(good, { projectRoots: {}, documentRoots: [], approvedFiles: [good] });
+  // excluded segment. Built explicitly rather than relying on the OS's own temp-
+  // directory naming — Windows uses "...\AppData\Local\Temp\...", Linux CI runners use
+  // "/tmp", and only the former collides with the excluded "temp" segment, so a
+  // platform-specific assumption here would make the test itself non-portable.
+  const collisionRoot = path.join(root, 'cache', 'workspace');
+  fs.mkdirSync(collisionRoot, { recursive: true });
+  const collisionFile = path.join(collisionRoot, 'approved.md');
+  fs.writeFileSync(collisionFile, '# Approved\n\nContent under a path with a colliding ancestor name.\n');
+  const approvedFileResolved = resolveApprovedFile(collisionFile, { projectRoots: {}, documentRoots: [], approvedFiles: [collisionFile] });
   assert.strictEqual(approvedFileResolved.rootKind, 'APPROVED_FILE');
-  assert.strictEqual(approvedFileResolved.sourceUri, 'architecture.md',
-    'an approved file under a machine path containing "Temp" is still resolved, not spuriously excluded');
+  assert.strictEqual(approvedFileResolved.sourceUri, 'approved.md',
+    'an approved file under a path whose ancestor is named "cache" is still resolved, not spuriously excluded');
 
   // The basename-based exclusion patterns must still catch a dangerous file even when
   // explicitly named in approvedFiles — scoping the segment check must not weaken this.
