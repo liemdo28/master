@@ -5,7 +5,7 @@ import * as path from 'path';
 import Database from 'better-sqlite3';
 import { PersonalOsStore } from '../../store';
 import { IntelligenceStore } from '../../../intelligence/store';
-import { DocumentStore, applyPhase5dMigration, currentSchemaVersion, PHASE5D_SCHEMA_VERSION } from '../store';
+import { DocumentStore, applyPhase5dMigration, currentSchemaVersion, PHASE5D2_SCHEMA_VERSION } from '../store';
 
 function tmp(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'mi-5d-migration-'));
@@ -63,7 +63,7 @@ function run() {
   const freshIntegrity = fresh.integrity();
   assert.strictEqual(freshIntegrity.integrityCheck, 'ok');
   assert.deepStrictEqual(freshIntegrity.foreignKeyViolations, []);
-  assert.strictEqual(freshIntegrity.schemaVersion, PHASE5D_SCHEMA_VERSION, 'a new database is created at v4');
+  assert.strictEqual(freshIntegrity.schemaVersion, PHASE5D2_SCHEMA_VERSION, 'a new database is created at v5');
   assert.strictEqual(fresh.handle.pragma('journal_mode', { simple: true }), 'wal');
   assert.strictEqual(fresh.handle.pragma('foreign_keys', { simple: true }), 1);
   fresh.close();
@@ -80,20 +80,23 @@ function run() {
   assert.ok(before.daily_briefs >= 1 && before.daily_agendas >= 1 && before.connector_sync_state >= 1);
 
   const store = new DocumentStore(root);
-  assert.strictEqual(store.integrity().schemaVersion, 4, 'migration moves v3 to v4');
+  assert.strictEqual(store.integrity().schemaVersion, 5, 'opening a DocumentStore moves v3 straight to v5');
   store.close();
 
   const after = tableCounts(dbFile);
   for (const [table, count] of Object.entries(before)) {
     // schema_migrations is the one table the migration is *supposed* to grow: it gains
-    // exactly the v4 row and nothing else.
+    // exactly the v4 and v5 rows and nothing else.
     if (table === 'schema_migrations') {
-      assert.strictEqual(after[table], count + 1, 'schema_migrations gains exactly the v4 row');
+      assert.strictEqual(after[table], count + 2, 'schema_migrations gains exactly the v4 and v5 rows');
       continue;
     }
     assert.strictEqual(after[table], count, `row count preserved for ${table}`);
   }
-  for (const added of ['knowledge_documents', 'knowledge_chunks', 'knowledge_ingestion_jobs', 'knowledge_document_projects']) {
+  for (const added of [
+    'knowledge_documents', 'knowledge_chunks', 'knowledge_ingestion_jobs', 'knowledge_document_projects',
+    'knowledge_chunks_fts', 'knowledge_conflicts', 'knowledge_relations',
+  ]) {
     assert.ok(added in after, `${added} created by the migration`);
     assert.strictEqual(after[added], 0, `${added} starts empty`);
   }
@@ -106,7 +109,7 @@ function run() {
   assert.ok(personal.getDailyBrief(seeded.briefId), 'daily brief survives');
   const personalIntegrity = personal.integrity();
   assert.strictEqual(personalIntegrity.integrityCheck, 'ok');
-  assert.strictEqual(personalIntegrity.schemaVersion, 4, 'Phase 5B store reports the new version');
+  assert.strictEqual(personalIntegrity.schemaVersion, 5, 'Phase 5B store reports the new shared version');
   personal.close();
 
   const intelligence = new IntelligenceStore(root);
@@ -114,13 +117,14 @@ function run() {
   assert.strictEqual(intelligence.listSyncState().length, 1, 'connector sync state survives');
   intelligence.close();
 
-  // --- rerunning the migration is a no-op ------------------------------------
+  // --- rerunning the v4 migration is a no-op, even against an already-v5 database ---
   const rerunDb = new Database(dbFile);
   const first = applyPhase5dMigration(rerunDb);
   const second = applyPhase5dMigration(rerunDb);
-  assert.strictEqual(first.to, 4);
+  assert.strictEqual(first.to, 5, 'the shared database is already at v5 by this point');
+  assert.strictEqual(first.applied, false, 'v4 migration has nothing left to apply on a v5 database');
   assert.strictEqual(second.applied, false, 'a second run applies nothing');
-  assert.strictEqual(currentSchemaVersion(rerunDb), 4);
+  assert.strictEqual(currentSchemaVersion(rerunDb), 5);
   rerunDb.close();
   assert.deepStrictEqual(tableCounts(dbFile), after, 'rerun changes no row counts');
 
@@ -155,7 +159,7 @@ function run() {
   // --- close/reopen is clean --------------------------------------------------
   const reopenedAgain = new DocumentStore(root);
   assert.strictEqual(reopenedAgain.integrity().integrityCheck, 'ok');
-  assert.strictEqual(reopenedAgain.integrity().schemaVersion, 4);
+  assert.strictEqual(reopenedAgain.integrity().schemaVersion, 5);
   reopenedAgain.close();
 
   fs.rmSync(root, { recursive: true, force: true });
