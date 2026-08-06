@@ -149,8 +149,16 @@ export function resolveApprovedFile(requested: string, roots: ApprovedRoots): Re
   const linkResolvedDiffers = normalise(resolvedRequest) !== canonicalPath;
 
   for (const approved of roots.approvedFiles) {
-    if (canonicalPath === realPath(approved)) {
-      if (isExcludedPath(canonicalPath)) {
+    const approvedReal = realPath(approved);
+    if (canonicalPath === approvedReal) {
+      // Scope the exclusion check to the file's own directory, not the full machine
+      // path. An unscoped check against every ancestor segment down to the drive root
+      // would spuriously reject a file the owner explicitly approved just because some
+      // ancestor directory happens to be named "temp", "cache", "build" and so on —
+      // exactly the invariant the project/document-root branches below already respect.
+      // Dangerous basenames (.env, *.pem, session.json, tokens, …) are still caught:
+      // that half of isExcludedPath matches on the filename alone, independent of root.
+      if (isExcludedPath(canonicalPath, path.dirname(approvedReal))) {
         throw new PathPolicyError('EXCLUDED_PATH_CLASS', 'this file class is never ingestible');
       }
       return {

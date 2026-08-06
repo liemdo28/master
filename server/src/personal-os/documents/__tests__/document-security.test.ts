@@ -71,6 +71,28 @@ async function run() {
   assert.strictEqual(resolved.projectId, 'p');
   assert.ok(!path.isAbsolute(resolved.sourceUri), 'the returned uri is never absolute');
 
+  // --- an explicitly approved single file must not be rejected merely because an
+  // ancestor directory elsewhere on the machine happens to share a name with an
+  // excluded segment. The fixture root here already lives under the OS temp directory
+  // (…\AppData\Local\Temp\… on Windows), which is exactly this scenario: "Temp" matches
+  // the excluded "temp" segment, so this is a real regression test, not a contrived one.
+  assert.ok(/temp/i.test(projectRoot), 'fixture root sits under a directory literally named Temp, as intended');
+  const approvedFileResolved = resolveApprovedFile(good, { projectRoots: {}, documentRoots: [], approvedFiles: [good] });
+  assert.strictEqual(approvedFileResolved.rootKind, 'APPROVED_FILE');
+  assert.strictEqual(approvedFileResolved.sourceUri, 'architecture.md',
+    'an approved file under a machine path containing "Temp" is still resolved, not spuriously excluded');
+
+  // The basename-based exclusion patterns must still catch a dangerous file even when
+  // explicitly named in approvedFiles — scoping the segment check must not weaken this.
+  const approvedEnvPath = write(projectRoot, '.env', 'SECRET=x');
+  try {
+    resolveApprovedFile(approvedEnvPath, { projectRoots: {}, documentRoots: [], approvedFiles: [approvedEnvPath] });
+    assert.fail('an approved .env file must still be rejected');
+  } catch (err) {
+    assert.ok(err instanceof PathPolicyError && err.code === 'EXCLUDED_PATH_CLASS',
+      'an approved .env file is rejected by filename pattern regardless of scoping');
+  }
+
   // --- traversal and containment --------------------------------------------
   const expectReject = (fn: () => unknown, code: string, label: string) => {
     try { fn(); assert.fail(`${label} must be rejected`); }
