@@ -16,7 +16,7 @@
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
     "coding:acceptance": "tsx src/coding/acceptance.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -49,7 +49,10 @@
     "test:daily-agenda": "tsx src/intelligence/__tests__/daily-agenda.test.ts",
     "test:weekly-review": "tsx src/intelligence/__tests__/weekly-review.test.ts",
     "test:follow-ups": "tsx src/intelligence/__tests__/follow-ups.test.ts",
-    "phase5c:acceptance": "tsx src/intelligence/phase5c-acceptance.ts"
+    "phase5c:acceptance": "tsx src/intelligence/phase5c-acceptance.ts",
+    "test:knowledge-migration": "tsx src/personal-os/documents/__tests__/knowledge-migration.test.ts",
+    "test:document-security": "tsx src/personal-os/documents/__tests__/document-security.test.ts",
+    "test:document-ingestion": "tsx src/personal-os/documents/__tests__/document-ingestion.test.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

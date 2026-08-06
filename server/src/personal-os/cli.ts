@@ -53,6 +53,12 @@ async function main() {
     }
     if (cmd === 'today') return print(service.generateDailyBrief());
     // Phase 5C read-only intelligence. No mutation subcommand exists.
+    // Phase 5D-1 document foundation. Read/ingest only — there is deliberately no
+    // ingest-all, full-rebuild or watch-all subcommand.
+    if (cmd === 'docs') {
+      const { runDocumentsCli } = await import('../personal-os/documents/cli');
+      return print(await runDocumentsCli(args));
+    }
     if (cmd === 'calendar' || cmd === 'email' || cmd === 'agenda' || cmd === 'weekly-review' || cmd === 'follow-ups') {
       const { runIntelligenceCli } = await import('../intelligence/cli');
       return print(await runIntelligenceCli(cmd, args));
@@ -68,7 +74,8 @@ async function main() {
   personal-os email search "<query>"|thread "<id>"
   personal-os agenda
   personal-os weekly-review
-  personal-os follow-ups`);
+  personal-os follow-ups
+  personal-os docs discover <projectId>|ingest <approved-path>|list|show <id>|reindex <id>|stale`);
   } finally {
     service.close();
   }
