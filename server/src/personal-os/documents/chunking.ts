@@ -137,6 +137,8 @@ export function buildChunks(input: ChunkInput): ChunkResult {
         contentHash,
         sourceStart: section.sourceStart,
         sourceEnd: section.sourceEnd,
+        lineStart: section.lineStart,
+        lineEnd: section.lineEnd,
         pageNumber: section.pageNumber,
         sectionTitle: section.sectionTitle,
         tags: input.tags ?? [],
