@@ -52,13 +52,23 @@ async function main() {
       return print(service.buildMemoryPack({ query: args.join(' '), policy: 'PERSONAL_AND_PROJECT', includeUnconfirmed: true }));
     }
     if (cmd === 'today') return print(service.generateDailyBrief());
+    // Phase 5C read-only intelligence. No mutation subcommand exists.
+    if (cmd === 'calendar' || cmd === 'email' || cmd === 'agenda' || cmd === 'weekly-review' || cmd === 'follow-ups') {
+      const { runIntelligenceCli } = await import('../intelligence/cli');
+      return print(await runIntelligenceCli(cmd, args));
+    }
     console.log(`Usage:
   personal-os preference list|add <category> <key> <value>|remove <id>
   personal-os goal create <title>|list|show <id>|plan <id>|activate <id>|pause <id>
   personal-os brief generate|show
   personal-os knowledge list|add <kind> <title> <content>|search <query>|confirm <id>|remove <id>
   personal-os memory-pack <query>
-  personal-os today`);
+  personal-os today
+  personal-os calendar today|week
+  personal-os email search "<query>"|thread "<id>"
+  personal-os agenda
+  personal-os weekly-review
+  personal-os follow-ups`);
   } finally {
     service.close();
   }
