@@ -131,6 +131,7 @@ import ceoObjectiveRouter from './ceo-command-center';
 import { personalOsJsonParser, personalOsRouter } from './personal-os/router';
 import { intelligenceJsonParser, intelligenceRouter } from './intelligence/router';
 import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './personal-os/documents/router';
+import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -194,6 +195,7 @@ app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimite
 app.use('/api', personalOsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, personalOsRouter);
 app.use('/api', intelligenceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, intelligenceRouter);
 app.use('/api', knowledgeDocumentsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, knowledgeDocumentsRouter);
+app.use('/api', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatingRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);

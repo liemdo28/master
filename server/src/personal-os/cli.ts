@@ -51,7 +51,46 @@ async function main() {
     if (cmd === 'memory-pack') {
       return print(service.buildMemoryPack({ query: args.join(' '), policy: 'PERSONAL_AND_PROJECT', includeUnconfirmed: true }));
     }
-    if (cmd === 'today') return print(service.generateDailyBrief());
+    // Phase 5D-3 daily operating loop. Approving a plan only changes its status —
+    // it never executes a task.
+    if (cmd === 'today') {
+      const { DailyOperatingLoop } = await import('./operating/loop');
+      const sub = args[0];
+      const loop = new DailyOperatingLoop();
+      try {
+        if (!sub || sub === 'generate') return print(await loop.morning());
+        if (sub === 'refresh') return print(await loop.midday());
+        if (sub === 'plan') return print(loop.plan());
+        if (sub === 'approve-plan') return print(loop.setPlanStatus(args[1], 'APPROVED'));
+        if (sub === 'review') return print(await loop.evening());
+      } finally { loop.close(); }
+    }
+    if (cmd === 'week') {
+      const { DailyOperatingLoop } = await import('./operating/loop');
+      const loop = new DailyOperatingLoop();
+      try { return print(await loop.weekly()); } finally { loop.close(); }
+    }
+    if (cmd === 'approvals') {
+      const { DailyOperatingLoop } = await import('./operating/loop');
+      const { listPendingApprovals } = await import('./operating/approvals');
+      const loop = new DailyOperatingLoop();
+      try { return print({ approvals: listPendingApprovals(loop) }); } finally { loop.close(); }
+    }
+    if (cmd === 'project-health') {
+      const { DailyOperatingLoop } = await import('./operating/loop');
+      const { computeProjectHealth } = await import('./operating/health');
+      const loop = new DailyOperatingLoop();
+      try {
+        if (args[0]) return print(computeProjectHealth(args[0], loop));
+        const goals = loop.personalStore.listGoals().filter(g => ['DRAFT', 'ACTIVE', 'PAUSED', 'BLOCKED'].includes(g.status));
+        const projectIds = [...new Set(goals.flatMap(g => g.projectIds))];
+        return print({ projectHealth: projectIds.map(pid => computeProjectHealth(pid, loop)) });
+      } finally { loop.close(); }
+    }
+    if (cmd === 'service-health') {
+      const { computeServiceHealth } = await import('./operating/health');
+      return print({ serviceHealth: await computeServiceHealth() });
+    }
     // Phase 5C read-only intelligence. No mutation subcommand exists.
     // Phase 5D-1 document foundation. Read/ingest only — there is deliberately no
     // ingest-all, full-rebuild or watch-all subcommand.
@@ -69,7 +108,11 @@ async function main() {
   personal-os brief generate|show
   personal-os knowledge list|add <kind> <title> <content>|search <query>|confirm <id>|remove <id>
   personal-os memory-pack <query>
-  personal-os today
+  personal-os today [generate|refresh|plan|approve-plan <planId>|review]
+  personal-os week
+  personal-os approvals
+  personal-os project-health [projectId]
+  personal-os service-health
   personal-os calendar today|week
   personal-os email search "<query>"|thread "<id>"
   personal-os agenda
