@@ -16,7 +16,7 @@
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
     "coding:acceptance": "tsx src/coding/acceptance.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion && npm run test:knowledge-retrieval-security && npm run test:knowledge-index && npm run test:knowledge-citations && npm run test:knowledge-conflicts && npm run test:knowledge-retrieval-evaluation && npm run test:knowledge-index-backup && npm run test:daily-operating-security && npm run test:daily-operating-loop && npm run test:operating-migration",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion && npm run test:knowledge-retrieval-security && npm run test:knowledge-index && npm run test:knowledge-citations && npm run test:knowledge-conflicts && npm run test:knowledge-retrieval-evaluation && npm run test:knowledge-index-backup && npm run test:daily-operating-security && npm run test:daily-operating-loop && npm run test:operating-migration && npm run test:daily-operating-evaluation",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -62,7 +62,10 @@
     "phase5d2:acceptance": "tsx src/personal-os/documents/phase5d2-acceptance.ts",
     "test:daily-operating-security": "tsx src/personal-os/operating/__tests__/daily-operating-security.test.ts",
     "test:daily-operating-loop": "tsx src/personal-os/operating/__tests__/operating-loop.test.ts",
-    "test:operating-migration": "tsx src/personal-os/operating/__tests__/operating-migration.test.ts"
+    "test:operating-migration": "tsx src/personal-os/operating/__tests__/operating-migration.test.ts",
+    "test:daily-operating-evaluation": "tsx src/personal-os/operating/__tests__/operating-evaluation.test.ts",
+    "phase5d3:acceptance": "tsx src/personal-os/operating/phase5d3-acceptance.ts",
+    "phase5d3:realday-acceptance": "tsx src/personal-os/operating/real-day-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
