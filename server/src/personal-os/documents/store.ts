@@ -610,10 +610,31 @@ export interface ChunkSearchResult {
   rank: number;
 }
 
+/**
+ * Common English function words. A query matching *only* because it happens to share a
+ * stopword with an indexed chunk ("and", "the", "for") is not a real match — it is noise
+ * that would otherwise survive ranking as the sole candidate and be shown as a fact
+ * instead of correctly falling through to UNKNOWN. Filtered out of the FTS expression
+ * itself, not just scored lower, so a query with no substantive term overlap returns no
+ * candidates at all.
+ */
+export const STOPWORDS = new Set([
+  'a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'being', 'by', 'can', 'could',
+  'did', 'do', 'does', 'for', 'from', 'had', 'has', 'have', 'he', 'her', 'him', 'his',
+  'how', 'i', 'if', 'in', 'is', 'it', 'its', 'me', 'my', 'no', 'not', 'of', 'on', 'or',
+  'our', 'she', 'should', 'so', 'that', 'the', 'their', 'them', 'these', 'they', 'this',
+  'those', 'to', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'who', 'why',
+  'will', 'with', 'would', 'you', 'your',
+]);
+
 function ftsMatchExpression(text: string): string {
-  const terms = text.trim().split(/\s+/).filter(Boolean).slice(0, 50)
-    .map(t => `"${t.replace(/"/g, '""')}"`);
-  return terms.length ? terms.join(' OR ') : '""';
+  const allTerms = text.trim().split(/\s+/).filter(Boolean).slice(0, 50);
+  const substantiveTerms = allTerms.filter(t => !STOPWORDS.has(t.toLowerCase()));
+  const quoted = substantiveTerms.map(t => `"${t.replace(/"/g, '""')}"`);
+  // A query that is entirely stopwords ("what is it") carries no substantive term to
+  // search for — the impossible-match sentinel below correctly falls through to UNKNOWN
+  // rather than matching on coincidental function-word overlap.
+  return quoted.length ? quoted.join(' OR ') : '""';
 }
 
 function serializeConflict(record: ConflictRecord): Record<string, unknown> {

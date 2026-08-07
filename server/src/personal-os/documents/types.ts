@@ -154,6 +154,17 @@ export const PARSER_VERSION = 'phase5d-1.0.0';
  * explicit, bounded project scope is invalid before it reaches the retrieval layer.
  * ──────────────────────────────────────────────────────────────────────────────────── */
 
+/**
+ * Bounds enforced on every KnowledgePack before it leaves buildKnowledgePack. Under the
+ * KnowledgeQuery bounds above (limit <= 20, excerpts <= 800 chars) a pack cannot
+ * naturally approach maxPackBytes — this is a defensive, tested ceiling, not a limit
+ * ordinary queries are expected to hit.
+ */
+export const KNOWLEDGE_PACK_LIMITS = {
+  maxStatementChars: 800,
+  maxPackBytes: 65_536,
+} as const;
+
 /** Bounds enforced on every KnowledgeQuery before retrieval runs. */
 export const KNOWLEDGE_QUERY_LIMITS = {
   minTextChars: 2,
