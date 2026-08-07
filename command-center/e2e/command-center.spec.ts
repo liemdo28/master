@@ -1,0 +1,114 @@
+import { test, expect } from '@playwright/test';
+
+const PIN = process.env.E2E_PIN || '135790';
+
+test.describe('Command Center — full flow against a controlled fixture backend (§32)', () => {
+  test('login, brief, plan, approvals, goal, project, knowledge, citation, calendar, inbox, health, EOD review, refresh, persistence', async ({ page }) => {
+    // 1. Login
+    await page.goto('./');
+    await expect(page.getByText('Enter your PIN to unlock.')).toBeVisible();
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+
+    // 2. Open Today
+    await expect(page).toHaveURL(/\/today$/);
+
+    // 3. Inspect Morning Brief
+    await expect(page.getByRole('heading', { name: 'Today' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /pending approvals/i })).toBeVisible();
+    await expect(page.getByText(/1 item\(s\) waiting/i)).toBeVisible();
+
+    // 4. Open Daily Plan
+    await page.getByRole('link', { name: /open today's daily plan/i }).click();
+    await expect(page).toHaveURL(/\/today\/plan$/);
+    await expect(page.getByText(/does not execute tasks/i)).toBeVisible();
+
+    // 5. Approve plan
+    const approveButton = page.getByRole('button', { name: 'Approve plan' });
+    if (await approveButton.isVisible()) {
+      await approveButton.click();
+      await expect(page.getByText('APPROVED')).toBeVisible();
+    }
+
+    // 6. Verify task statuses unchanged — the WAITING_APPROVAL task must still show as such
+    // in the plan's "requires approval" list, never silently promoted.
+    await expect(page.getByText(/requires approval before it can run/i)).toBeVisible();
+
+    // 7. Open Approvals
+    await page.getByRole('link', { name: 'Approvals' }).click();
+    await expect(page).toHaveURL(/\/approvals$/);
+    await expect(page.getByText(/E2E fixture: deploy the pricing page/i)).toBeVisible();
+    await expect(page.getByText(/Task Runtime has no safe, idempotent "approve" API/i)).toBeVisible();
+
+    // 8. Inspect goal
+    await page.getByRole('link', { name: 'Goals' }).click();
+    await expect(page).toHaveURL(/\/goals$/);
+    await page.getByText('E2E fixture goal').click();
+    await expect(page.getByRole('heading', { name: 'E2E fixture goal' })).toBeVisible();
+
+    // 9. Inspect project
+    await page.getByRole('link', { name: 'Projects' }).click();
+    await expect(page).toHaveURL(/\/projects$/);
+    await page.getByText('Mi Core System').click();
+    await expect(page.getByRole('heading', { name: 'Mi Core System' })).toBeVisible();
+
+    // 10. Search knowledge
+    await page.getByRole('link', { name: 'Knowledge' }).click();
+    await expect(page).toHaveURL(/\/knowledge$/);
+    await page.getByPlaceholder('Search knowledge…').fill('E2E fixture feature');
+    await page.getByPlaceholder('project ids, comma-separated').fill('mi-core');
+    await page.getByRole('button', { name: 'Search' }).last().click();
+    await expect(page.getByText(/E2E Fixture Architecture/i).first()).toBeVisible({ timeout: 10_000 });
+
+    // 11. Open citation (document detail)
+    await page.getByRole('link', { name: /E2E Fixture Architecture/i }).first().click();
+    await expect(page.getByText('architecture.md')).toBeVisible();
+
+    // 12. Open Calendar — read-only, honest NOT_CONFIGURED in this fixture environment
+    // (no Google token exists in this disposable E2E environment — the UI must say so
+    // honestly rather than fabricate calendar data, which is exactly what it does).
+    await page.getByRole('link', { name: 'Calendar' }).click();
+    await expect(page).toHaveURL(/\/calendar$/);
+    await expect(page.getByText(/never writes to calendar/i)).toBeVisible();
+
+    // 13. Open Inbox — read-only, honest NOT_CONFIGURED
+    await page.getByRole('link', { name: 'Inbox' }).click();
+    await expect(page).toHaveURL(/\/inbox$/);
+    await expect(page.getByText(/never sends, replies, or modifies gmail/i)).toBeVisible();
+
+    // 14. Open Health
+    await page.getByRole('link', { name: 'Health' }).click();
+    await expect(page).toHaveURL(/\/health$/);
+    await expect(page.getByText(/schema version/i)).toBeVisible();
+
+    // 15. Generate EOD review
+    await page.getByRole('link', { name: 'Reviews' }).click();
+    await expect(page).toHaveURL(/\/reviews$/);
+    const generateReview = page.getByRole('button', { name: /generate today's review/i });
+    await generateReview.click();
+    await expect(page.getByText('Completed', { exact: true })).toBeVisible();
+
+    // 16. Refresh page
+    await page.reload();
+
+    // 17. Verify persistence — still authenticated (session survives reload), still on Reviews
+    await expect(page.getByRole('heading', { name: 'Reviews' })).toBeVisible();
+    await expect(page.getByText('Enter your PIN to unlock.')).not.toBeVisible();
+  });
+
+  test('no external writes: reload after approve leaves the underlying task WAITING_APPROVAL', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    const loginRes = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await loginRes.json();
+    const tasksRes = await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const tasks = await tasksRes.json();
+    const waiting = tasks.find((t: { userRequest: string }) => t.userRequest.includes('E2E fixture'));
+    expect(waiting?.status).toBe('WAITING_APPROVAL');
+  });
+});

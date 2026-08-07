@@ -1,0 +1,382 @@
+/** Mirrors of backend read-model contracts (Phase 5A-5D3). Kept intentionally loose
+ *  (optional/unknown-tolerant) since the UI must never crash on a field the backend
+ *  didn't send — see ErrorState/EmptyState handling instead of type coercion. */
+
+export type ProjectHealthStatus = 'HEALTHY' | 'ATTENTION' | 'BLOCKED' | 'UNKNOWN';
+export type ServiceHealthStatus = 'HEALTHY' | 'UNHEALTHY' | 'UNKNOWN';
+
+export interface ProjectHealth {
+  projectId: string;
+  mapStatus: string;
+  lastTaskStatus: string | null;
+  failedTaskCount: number;
+  blockedTaskCount: number;
+  staleKnowledgeCount: number;
+  openConflictCount: number;
+  pendingApprovalCount: number;
+  status: ProjectHealthStatus;
+  reasons: string[];
+  evidenceReferences: string[];
+}
+
+export interface ServiceHealth {
+  service: string;
+  status: ServiceHealthStatus;
+  lastCheck: string;
+  reason: string | null;
+  evidenceReference: string;
+}
+
+export type ApprovalSourceType = 'TASK_RUNTIME' | 'GOAL_PLANNER' | 'KNOWLEDGE_CONFIRMATION' | 'CONFLICT_RESOLUTION';
+
+export interface PendingApprovalItem {
+  id: string;
+  sourceType: ApprovalSourceType;
+  sourceId: string;
+  title: string;
+  reason: string;
+  riskLevel: 'low' | 'medium' | 'high';
+  projectId: string | null;
+  goalId: string | null;
+  requestedAt: string;
+  expiresAt: string | null;
+  evidenceReferences: string[];
+}
+
+export interface FocusBlockSuggestion {
+  start: string;
+  end: string;
+  durationMinutes: number;
+  taskIds: string[];
+  goalIds: string[];
+  reason: string;
+  confidence: number;
+  constraints: string[];
+  evidenceReferences: string[];
+}
+
+export interface DailyOperatingBrief {
+  id: string;
+  date: string;
+  timezone: string;
+  version: number;
+  facts: string[];
+  meetings: CalendarEventContext[];
+  deadlines: Array<{ summary: string; dueAt: string; sourceId: string }>;
+  activeGoals: Array<{ id: string; title: string; status: string; priority: number }>;
+  priorityTasks: Array<{ id: string; status: string; projectId: string | null }>;
+  pendingApprovals: PendingApprovalItem[];
+  followUps: FollowUpCandidate[];
+  projectHealth: ProjectHealth[];
+  serviceHealth: ServiceHealth[];
+  relevantMemory: Array<{ id: string; kind: string; title: string; summary: string }>;
+  relevantKnowledge: Array<{ statement: string; citations: Citation[]; isStale?: boolean }>;
+  knowledgeCitations: Citation[];
+  focusWindows: FocusBlockSuggestion[];
+  blockers: string[];
+  risks: string[];
+  suggestions: string[];
+  unknowns: string[];
+  confirmationRequests: Array<{ id: string; title: string; kind: string; type: string }>;
+  conflicts: unknown[];
+  evidenceReferences: string[];
+  generatedAt: string;
+  refreshedAt: string | null;
+}
+
+export type DailyPlanStatus = 'DRAFT' | 'APPROVED' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
+
+export interface PlanTaskRef {
+  id: string;
+  kind: 'FIXED' | 'FLEXIBLE' | 'OPTIONAL';
+  title: string;
+  reason: string;
+  tier: 'high' | 'medium' | 'low';
+  sourceId: string | null;
+  sourceType: 'TASK' | 'GOAL' | 'MEETING' | 'DEADLINE' | 'FOLLOW_UP' | 'SUGGESTION';
+}
+
+export interface DailyPlan {
+  id: string;
+  date: string;
+  timezone: string;
+  briefId: string;
+  objective: string;
+  selectedGoals: string[];
+  selectedTasks: PlanTaskRef[];
+  proposedOrder: string[];
+  dependencies: Array<{ taskId: string; dependsOnTaskId: string }>;
+  focusBlocks: FocusBlockSuggestion[];
+  meetings: unknown[];
+  requiredApprovals: string[];
+  risks: string[];
+  successCriteria: string[];
+  evidenceReferences: string[];
+  status: DailyPlanStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DailyRefresh {
+  id: string;
+  date: string;
+  previousBriefId: string;
+  changedFacts: string[];
+  newRisks: string[];
+  resolvedBlockers: string[];
+  newFollowUps: unknown[];
+  planAdjustments: string[];
+  suggestions: string[];
+  generatedAt: string;
+}
+
+export interface EndOfDayReview {
+  id: string;
+  date: string;
+  planId: string | null;
+  plannedItems: PlanTaskRef[];
+  completedItems: Array<{ id: string; title: string; evidenceReference: string }>;
+  incompleteItems: PlanTaskRef[];
+  blockedItems: PlanTaskRef[];
+  failedItems: Array<{ id: string; title: string; reason: string; evidenceReference: string }>;
+  decisions: string[];
+  lessons: string[];
+  recurringIssues: string[];
+  knowledgeCandidates: Array<{ kind: string; title: string; summary: string; evidenceReferences: string[]; needsConfirmation: boolean }>;
+  unresolvedFollowUps: unknown[];
+  tomorrowSuggestions: string[];
+  facts: string[];
+  suggestions: string[];
+  unknowns: string[];
+  evidenceReferences: string[];
+  generatedAt: string;
+  version: number;
+}
+
+export interface WeeklyOperatingReview {
+  id: string;
+  weekStart: string;
+  weekEnd: string;
+  goalsProgressed: string[];
+  goalsStalled: string[];
+  completedTasks: number;
+  failedTasks: number;
+  blockedTasks: number;
+  unresolvedApprovals: number;
+  unresolvedFollowUps: unknown[];
+  projectHealth: ProjectHealth[];
+  serviceHealth: ServiceHealth[];
+  recurringIssues: string[];
+  knowledgeAdded: number;
+  staleKnowledge: number;
+  conflicts: unknown[];
+  meetingLoad: { meetingCount: number; totalMinutes: number };
+  focusTime: { minutes: number };
+  lessons: string[];
+  suggestedNextWeekPriorities: string[];
+  suggestedDeScope: string[];
+  facts: string[];
+  suggestions: string[];
+  unknowns: string[];
+  evidenceReferences: string[];
+  version: number;
+  generatedAt: string;
+}
+
+// ── Goals (Phase 5A) ──────────────────────────────────────────────────────
+export type GoalStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'BLOCKED' | 'COMPLETED' | 'CANCELLED';
+
+export interface Goal {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  priority: number;
+  status: GoalStatus;
+  targetDate: string | null;
+  completedAt: string | null;
+  projectIds: string[];
+  parentGoalId: string | null;
+  successCriteria: string[];
+  constraints: string[];
+  approvalPolicy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Task Runtime ──────────────────────────────────────────────────────────
+export type TaskStatus =
+  | 'CREATED' | 'CONTEXT_BUILDING' | 'PLANNING' | 'WAITING_APPROVAL' | 'READY'
+  | 'RUNNING' | 'VALIDATING' | 'RECOVERING' | 'BLOCKED' | 'FAILED' | 'COMPLETED'
+  | 'CANCELLED' | 'ROLLED_BACK';
+
+export interface TaskRecord {
+  id: string;
+  parentTaskId: string | null;
+  userRequest: string;
+  taskKind?: string;
+  projectId: string | null;
+  status: TaskStatus;
+  approvalState: 'not-required' | 'requested' | 'granted' | 'rejected';
+  createdAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+  resultSummary: string | null;
+  currentStep?: number;
+}
+
+export interface TaskEvent {
+  id?: number;
+  taskId: string;
+  type: string;
+  payload?: unknown;
+  createdAt: string;
+}
+
+// ── Knowledge / Memory (Phase 5A + 5D-1/2) ───────────────────────────────
+export type KnowledgeStatus = 'ACTIVE' | 'NEEDS_CONFIRMATION' | 'SUPERSEDED' | 'EXPIRED' | 'DELETED';
+
+export interface KnowledgeRecord {
+  id: string;
+  kind: string;
+  title: string;
+  summary: string;
+  scope?: string;
+  provenance?: 'user-stated' | 'confirmed' | 'inferred' | string;
+  confidence?: number;
+  source?: string;
+  status: KnowledgeStatus;
+  projectIds?: string[];
+  goalIds?: string[];
+  taskIds?: string[];
+  lastConfirmedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Citation {
+  documentId: string;
+  chunkId: string;
+  sourceUri: string;
+  headingPath?: string[];
+  lineStart?: number | null;
+  lineEnd?: number | null;
+  excerpt: string;
+  documentChecksum?: string;
+  chunkContentHash?: string;
+}
+
+export interface KnowledgeDocument {
+  id: string;
+  title: string;
+  sourceUri: string;
+  type?: string;
+  projectIds: string[];
+  version: number;
+  status: 'ACTIVE' | 'STALE' | 'SUPERSEDED' | 'REJECTED' | 'DELETED';
+  checksum: string;
+  indexedAt: string;
+  sizeBytes?: number;
+}
+
+export interface KnowledgePackItem {
+  factType: 'FACT' | 'SYNTHESIS' | 'SUGGESTION' | 'UNKNOWN';
+  statement: string;
+  citations: Citation[];
+  score?: number;
+  isStale?: boolean;
+}
+
+export interface KnowledgePack {
+  queryId: string;
+  query: { text: string; projectIds: string[]; includeStale?: boolean };
+  generatedAt: string;
+  items: KnowledgePackItem[];
+  conflicts: unknown[];
+  warnings: string[];
+  unknown: boolean;
+}
+
+// ── Calendar / Email (Phase 5C) ──────────────────────────────────────────
+export interface CalendarEventContext {
+  eventId: string;
+  calendarId: string;
+  title: string;
+  start: string;
+  end: string;
+  timezone: string;
+  allDay: boolean;
+  attendees: Array<{ email: string; displayName: string | null; responseStatus: string; organizer: boolean }>;
+  organizer: string | null;
+  location: string | null;
+  descriptionSummary: string;
+  status: 'CONFIRMED' | 'TENTATIVE' | 'CANCELLED';
+  recurrence: string[];
+  recurringEventId: string | null;
+  visibility: 'default' | 'public' | 'private';
+  projectIds: string[];
+  goalIds: string[];
+  evidenceReference: string;
+}
+
+export interface EmailContext {
+  messageId: string;
+  threadId: string;
+  from: string;
+  to: string[];
+  cc: string[];
+  subject: string;
+  receivedAt: string;
+  labels: string[];
+  bodySummary: string;
+  attachmentMetadata: Array<{ filename: string; mimeType: string; sizeBytes: number }>;
+  projectIds: string[];
+  goalIds: string[];
+  evidenceReference: string;
+}
+
+export interface FollowUpCandidate {
+  id: string;
+  kind: string;
+  summary: string;
+  sourceId: string;
+  sourceType: 'EMAIL' | 'CALENDAR';
+  reason: string;
+  confidence: number;
+  dueAt: string | null;
+  projectIds: string[];
+  goalIds: string[];
+  linkConfidence: string;
+  evidenceReference: string;
+  status: 'SUGGESTION' | 'WAITING_APPROVAL';
+  createdAt: string;
+}
+
+// ── Project Registry ──────────────────────────────────────────────────────
+export interface ProjectRecord {
+  id: string;
+  displayName: string;
+  gitRoot?: string | null;
+  repositoryUrl?: string | null;
+  defaultBranch?: string | null;
+  owner?: string | null;
+  businessPurpose?: string | null;
+  mapStatus: 'FRESH' | 'STALE' | 'PARTIAL' | 'FAILED' | 'NOT_GENERATED';
+  updatedAt?: string;
+}
+
+// ── Coding ─────────────────────────────────────────────────────────────────
+export interface CodingTaskSummary {
+  id: string;
+  status: string;
+  projectId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ConnectorStatusInfo {
+  status: 'READY' | 'NOT_CONFIGURED' | 'TOKEN_EXPIRED' | 'INSUFFICIENT_SCOPE';
+  grantedScopes?: string[];
+  detail?: string;
+}

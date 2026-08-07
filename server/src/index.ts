@@ -190,6 +190,36 @@ function requireTaskRuntimeAuth(req: express.Request, res: express.Response, nex
   return res.status(401).json({ error: 'Unauthorized' });
 }
 
+// ── Public / self-authenticating routes — mounted first (bug fix) ────────────
+// These MUST be registered before the bare '/api' catch-all mounts below: Express
+// runs app.use('/api', ...) middleware for every '/api/*' path, including
+// '/api/remote/login', '/api/auth/login' and '/api/health', and requireTaskRuntimeAuth
+// short-circuits with a 401 without calling next() — so if those bare mounts were
+// registered first, none of these "intentionally public" routes could ever be
+// reached without already having the raw API key, making PIN login itself
+// impossible. (Found while wiring Phase 5E's Command Center login flow; these three
+// routes were previously mounted much later in this file, after every bare '/api'
+// mount, so this was already broken for mobile.html/liveboard.html before Phase 5E.)
+app.use('/api/remote', express.json({ limit: '1mb' }), remoteRouter); // Remote access (has own auth)
+app.use('/api/auth', express.json({ limit: '1mb' }), authRouter);     // Auth endpoints (must be public)
+app.use('/api/health', healthRouter);                                 // Health check (public)
+
+// ── Command Center bridge (Phase 5E) ──────────────────────────────────────────
+// The exact same routers used below, mounted a second time under a session-token-gated
+// path so the browser never needs the raw MI_CORE_API_KEY. No handler or business
+// logic is duplicated — only the auth middleware differs (requireRemoteAuth's
+// persisted PIN session instead of requireTaskRuntimeAuth's raw API key). This block
+// MUST also come before the bare '/api' catch-all mounts just below, for the exact
+// same route-shadowing reason as the public-routes block above — '/api/command-center/*'
+// starts with '/api' too, so requireTaskRuntimeAuth would otherwise reject it first.
+app.use('/api/command-center/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, taskRuntimeRouter);
+app.use('/api/command-center/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, codingRouter);
+app.use('/api/command-center/projects', express.json({ limit: '2mb' }), rateLimiter, applyIpGuard, requireRemoteAuth, projectsRouter);
+app.use('/api/command-center', personalOsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, personalOsRouter);
+app.use('/api/command-center', intelligenceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, intelligenceRouter);
+app.use('/api/command-center', knowledgeDocumentsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, knowledgeDocumentsRouter);
+app.use('/api/command-center', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, operatingRouter);
+
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
 app.use('/api', personalOsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, personalOsRouter);
@@ -206,6 +236,12 @@ app.use(applyIpGuard);
 
 // ── Static UI ───────────────────────────────────────────────────────────────
 app.use(express.static(path.resolve(__dirname, '../../ui')));
+// Command Center (Phase 5E) — served additively at its own path; does not touch the
+// existing root static mount above. SPA fallback so client-side routes (e.g.
+// /command-center/goals) reload correctly.
+const commandCenterDist = path.resolve(__dirname, '../../command-center/dist');
+app.use('/command-center', express.static(commandCenterDist));
+app.get('/command-center/*', (_req, res) => res.sendFile(path.join(commandCenterDist, 'index.html')));
 app.get('/liveboard', (_req, res) => res.redirect('/liveboard.html'));
 app.get('/mobile',    (_req, res) => res.redirect('/mobile.html'));
 app.get('/voice',     (_req, res) => res.redirect('/voice.html'));
@@ -241,9 +277,6 @@ app.use('/api/knowledge',   requireAuth, knowledgeRouter);
 app.use('/api/ceo-observer', requireAuth, ceoObserverRouter); // Session A proxy
 
 // Internal / already protected / public
-app.use('/api/remote',      remoteRouter);       // Remote access (has own auth)
-app.use('/api/auth',        authRouter);         // Auth endpoints (must be public)
-app.use('/api/health',      healthRouter);       // Health check (public)
 app.use('/api/nodes',       requireAuth, nodesRouter);        // Node registration (internal)
 app.use('/api/whatsapp',    whatsappRouter);     // Has API key auth middleware
 app.use('/api/models',      modelsRouter);
