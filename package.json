@@ -1,4 +1,14 @@
 {
+  "scripts": {
+    "build": "npm --prefix server run build && npm --prefix command-center run build",
+    "test:ci": "npm --prefix server run test:ci",
+    "test:controlled-actions": "npm --prefix server run test:controlled-actions",
+    "test:controlled-actions-security": "npm --prefix server run test:controlled-actions-security",
+    "test:controlled-actions-restart": "npm --prefix server run test:controlled-actions-restart",
+    "test:controlled-actions-evaluation": "npm --prefix server run test:controlled-actions-evaluation",
+    "phase5f:acceptance": "npm --prefix server run phase5f:acceptance",
+    "personal-os": "npm --prefix server run personal-os --"
+  },
   "devDependencies": {
     "typescript": "^6.0.3"
   }
