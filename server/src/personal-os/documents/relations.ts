@@ -64,6 +64,11 @@ export function deriveDuplicateRelations(chunks: Array<{ chunk: DocumentChunk; d
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
         if (group[i].document.id === group[j].document.id) continue;
+        // Explicit linkage required even for an exact text match: a scan spanning
+        // multiple projects at once must not connect two documents that don't actually
+        // share a project just because a scan happened to cover both.
+        const sharesProject = group[i].chunk.projectIds.some(p => group[j].chunk.projectIds.includes(p));
+        if (!sharesProject) continue;
         out.push({ fromChunkId: group[i].chunk.id, toChunkId: group[j].chunk.id, relationType: 'DUPLICATES', confidence: 1 });
       }
     }
@@ -84,8 +89,13 @@ export function deriveReferenceRelations(chunks: Array<{ chunk: DocumentChunk; d
       if (otherDocId === document.id) continue;
       const otherDoc = chunks.find(c => c.document.id === otherDocId)?.document;
       if (!otherDoc) continue;
+      if (!document.projectIds.some(p => otherDoc.projectIds.includes(p))) continue; // explicit linkage required
       const needle = otherDoc.title.toLowerCase();
-      if (needle.length >= 6 && lowerText.includes(needle)) {
+      // A multi-word title is unlikely to appear as an accidental substring the way a
+      // single short generic word could — "Deploy Guide" is specific; "Runbook" alone is
+      // not high-confidence evidence that a chunk is actually referencing that document.
+      const isSpecificTitle = needle.length >= 10 && needle.trim().split(/\s+/).length >= 2;
+      if (isSpecificTitle && lowerText.includes(needle)) {
         out.push({ fromChunkId: chunk.id, toChunkId: anchor.id, relationType: 'REFERENCES', confidence: 0.7 });
         out.push({ fromChunkId: anchor.id, toChunkId: chunk.id, relationType: 'REFERENCED_BY', confidence: 0.7 });
       }
@@ -94,7 +104,15 @@ export function deriveReferenceRelations(chunks: Array<{ chunk: DocumentChunk; d
   return out;
 }
 
-/** RELATED_TO: same project, shared tags or section title, different documents. Heuristic. */
+/**
+ * RELATED_TO: same project, different documents, and either an explicit shared tag
+ * (deliberate metadata, high confidence) or a shared section title specific enough not
+ * to be coincidental (at least three words — "Architecture", "Config", "Limits",
+ * "Deployment" recur naturally across unrelated documents in any real codebase and are
+ * not, on their own, evidence of a relationship; "Choose Zustand Over Redux" is).
+ */
+const GENERIC_HEADING_MIN_WORDS = 3;
+
 export function deriveRelatedToRelations(chunks: Array<{ chunk: DocumentChunk; document: DocumentRecord }>): DerivedRelation[] {
   const out: DerivedRelation[] = [];
   for (let i = 0; i < chunks.length; i++) {
@@ -105,8 +123,10 @@ export function deriveRelatedToRelations(chunks: Array<{ chunk: DocumentChunk; d
       const sharesProject = a.chunk.projectIds.some(p => b.chunk.projectIds.includes(p));
       if (!sharesProject) continue;
       const sharesTag = a.chunk.tags.some(t => b.chunk.tags.includes(t));
-      const sharesSection = Boolean(a.chunk.sectionTitle) && a.chunk.sectionTitle === b.chunk.sectionTitle;
-      if (sharesTag || sharesSection) {
+      const sharedSectionIsSpecific = Boolean(a.chunk.sectionTitle)
+        && a.chunk.sectionTitle === b.chunk.sectionTitle
+        && a.chunk.sectionTitle!.trim().split(/\s+/).length >= GENERIC_HEADING_MIN_WORDS;
+      if (sharesTag || sharedSectionIsSpecific) {
         out.push({ fromChunkId: a.chunk.id, toChunkId: b.chunk.id, relationType: 'RELATED_TO', confidence: 0.5 });
       }
     }
