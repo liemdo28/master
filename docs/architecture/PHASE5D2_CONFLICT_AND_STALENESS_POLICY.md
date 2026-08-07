@@ -62,9 +62,9 @@ idempotent. Ten types, each derived deterministically:
 |---|---|---|
 | `SUPERSEDES` / `SUPERSEDED_BY` | Version history (`document.supersedesId`), anchored on each document's first chunk | 1 (exact) |
 | `PART_OF` / `CONTAINS` | Heading-path nesting within one document | 1 (exact) |
-| `DUPLICATES` | Identical normalised text across two different documents | 1 (exact) |
-| `REFERENCES` / `REFERENCED_BY` | A chunk's text literally names another active document's title | 0.7 (heuristic) |
-| `RELATED_TO` | Same project, shared tag or section title, different documents | 0.5 (heuristic) |
+| `DUPLICATES` | Identical normalised text across two different documents that explicitly share a project | 1 (exact) |
+| `REFERENCES` / `REFERENCED_BY` | A chunk's text literally names another active document's title — the title must be specific (≥10 chars, ≥2 words) so a short generic title can't false-positive | 0.7 (heuristic) |
+| `RELATED_TO` | Same project (explicit, per-pair), different documents, and an explicit shared tag or a shared section title specific enough not to be coincidental (≥3 words — "Config"/"Architecture" alone never qualify) | 0.5 (heuristic) |
 | `CONTRADICTS` / `CONTRADICTED_BY` | Minted alongside a detected conflict, one pair per conflicting chunk pair | 1 (exact, by construction) |
 
 Relation scans (`scanForRelations`) respect the same project scope as everything else in

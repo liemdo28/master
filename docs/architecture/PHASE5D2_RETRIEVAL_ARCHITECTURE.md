@@ -13,7 +13,7 @@ KnowledgeQuery (validated)
 KnowledgeRetrievalService.search()
     ↓ DocumentStore.searchChunks() — FTS5 MATCH joined live to knowledge_documents.status
     ↓ scoreCandidate() — layered structural ranking (see below)
-    ↓ RELEVANCE_FLOOR — drop padding, never drop the single best match
+    ↓ RELEVANCE_MARGIN — drop padding, never drop the single best match
 KnowledgeRetrievalService.buildKnowledgePack()
     ↓ citations.ts::buildCitation() — one Citation per surfaced chunk
     ↓ citations.ts::validateKnowledgePackItem() — enforces the fact-typing policy
@@ -61,9 +61,17 @@ chunk that is genuinely the best match for a query must still be returned, with 
 conflict attached in `KnowledgePack.conflicts`, rather than hidden. Hiding it would be
 its own way of silently picking a winner.
 
-Scores are min-max normalised to `[0, 1]` across each query's own candidate pool before
-`RELEVANCE_FLOOR` (0.55) drops anything that would otherwise pad the result list with
-noise — except the single best match, which always survives, even alone.
+Relevance filtering compares each candidate's *raw* score against the top raw score in
+the same pool: `RELEVANCE_MARGIN` (1.0 score-units) drops anything more than that gap
+below the top candidate — the single best match always survives, even alone. Scores are
+min-max normalised to `[0, 1]` only afterward, for the `score` field a caller sees; the
+filtering decision itself deliberately does not use the normalised value. An earlier
+version filtered on the normalised score, which stretches a negligible real gap between
+two near-tied raw scores into a full 0..1 spread — with only two or three candidates in
+the pool (a small document set, or two documents in direct conflict) that incorrectly
+dropped a candidate that was in fact just as relevant as the one that survived, most
+visibly when a conflict penalty pushed the whole pool's raw scores negative. The fix and
+its regression are in `server/src/personal-os/documents/__tests__/conflicts-relations.test.ts`.
 
 ## KnowledgePack and the fact-typing policy
 
@@ -96,17 +104,33 @@ See `docs/architecture/PHASE5D2_RETRIEVAL_AUDIT.md` for the component selection 
 dataset (15 synthetic across three fixture projects, 15 against real approved
 documentation from Mi Core, Mi Academy and Healthy-LD).
 
-Measured results, structural ranking only, no embeddings:
+Measured results, structural ranking only, no embeddings (closure re-run, after the
+relevance-margin and relation-linkage fixes below):
 
 | Target | Required | Synthetic | Real projects |
 |---|---|---|---|
+| Top-1 accuracy | — (recorded) | 100% | 100% |
 | Top-3 recall | ≥ 90% | 100% | 100% |
+| MRR | — (recorded) | 1.000 | 1.000 |
 | Citation correctness | = 100% | 100% | 100% |
+| Citation range accuracy | = 100% | 100% | 100% |
 | Project leakage | = 0 | 0 | 0 |
 | Deleted/superseded leakage | = 0 | 0 | 0 |
-| Unrelated result rate | < 10% | 0% | 8.0% |
+| Stale leakage (default query) | = 0 | 0 | 0 |
+| Unrelated result rate | < 10% | 7.7% | 0.0% |
 | Deterministic ordering | = 100% | 100% | 100% |
-| p95 retrieval latency | < 500ms | ~2ms | ~8ms |
+| p50 / p95 retrieval latency | < 500ms | ~0ms / ~1-3ms | ~1ms / ~7-8ms |
+| Mean KnowledgePack size | ≤ 64KB budget | ~1.0KB | ~1.5KB |
+| UNKNOWN accuracy (no real answer exists) | — (recorded) | 100% | 100% |
+
+A stopword filter (`STOPWORDS` in `store.ts`, shared with the ranking's heading/tag
+matching in `retrieval.ts`) was added during closure review: without it, a query sharing
+*only* a common function word ("and", "the", "for") with the corpus could still produce a
+single FTS candidate that — being the sole result — always survived the relevance filter
+and was returned as a FACT instead of falling through to UNKNOWN. Confirmed fixed with a
+dedicated probe per project (genuinely unrelated vocabulary — bread hydration ratios,
+bike tire pressure, lunar eclipse calendars — queried against project corpora that share
+no substantive term with them).
 
 Every target passed on the first structurally-correct ranking, without ever needing the
 bounded local embedding experiment the directive describes as the fallback path. Per the
