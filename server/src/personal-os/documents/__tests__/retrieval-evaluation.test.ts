@@ -118,11 +118,15 @@ const SYNTHETIC_QUERIES: EvalQuery[] = [
 
 interface RealProject { id: string; root: string; files: Array<{ rel: string; dest: string }>; }
 
+/** Repo root, derived from this file's own location so the "mi-core" self-reference
+ *  below works from any worktree or clone, not just one specific checkout path. */
+const REPO_ROOT = path.resolve(__dirname, '..', '..', '..', '..', '..');
+
 function realProjects(): RealProject[] {
   return [
     {
       id: 'mi-core',
-      root: 'D:/mi-core-phase5d2-index-retrieval',
+      root: REPO_ROOT,
       files: [
         { rel: 'docs/architecture/PHASE5D_FOUNDATION.md', dest: 'PHASE5D_FOUNDATION.md' },
         { rel: 'docs/operations/PHASE5D_MIGRATION.md', dest: 'PHASE5D_MIGRATION.md' },
