@@ -60,6 +60,24 @@ function detectLanguage(text: string): string {
   return /[ăâđêôơưàáảãạèéẻẽẹìíỉĩịòóỏõọùúủũụỳýỷỹỵ]/i.test(text) ? 'vi' : 'en';
 }
 
+/** Offsets of every newline, built once per document so line lookups are O(log n). */
+function buildNewlineOffsets(raw: string): number[] {
+  const offsets: number[] = [];
+  for (let i = 0; i < raw.length; i++) if (raw.charCodeAt(i) === 10) offsets.push(i);
+  return offsets;
+}
+
+/** 1-based line number containing `offset`, via binary search over newline positions. */
+function lineAtOffset(newlineOffsets: number[], offset: number): number {
+  let lo = 0;
+  let hi = newlineOffsets.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (newlineOffsets[mid] < offset) lo = mid + 1; else hi = mid;
+  }
+  return lo + 1;
+}
+
 // ── Markdown ────────────────────────────────────────────────────────────────────
 
 export function parseMarkdown(raw: string): ParsedDocument {
@@ -83,12 +101,14 @@ export function parseMarkdown(raw: string): ParsedDocument {
   const headingStack: Array<{ level: number; title: string }> = [];
   let buffer: string[] = [];
   let bufferStart = 0;
+  let bufferStartLine = 1;
   let offset = 0;
+  let lineNo = 0;
   let inFence = false;
   let fenceMarker = '';
   let title = '';
 
-  const flush = (end: number) => {
+  const flush = (end: number, endLine: number) => {
     const body = buffer.join('\n').trim();
     buffer = [];
     if (!body) return;
@@ -97,12 +117,15 @@ export function parseMarkdown(raw: string): ParsedDocument {
       text: body,
       sourceStart: bufferStart,
       sourceEnd: end,
+      lineStart: bufferStartLine,
+      lineEnd: Math.max(bufferStartLine, endLine),
       pageNumber: null,
       sectionTitle: headingStack.length ? headingStack[headingStack.length - 1].title : null,
     });
   };
 
   for (const line of lines) {
+    lineNo += 1;
     const lineStart = offset;
     offset += line.length + 1;
 
@@ -118,20 +141,21 @@ export function parseMarkdown(raw: string): ParsedDocument {
 
     const heading = /^(#{1,6})\s+(.*)$/.exec(line);
     if (heading) {
-      flush(lineStart);
+      flush(lineStart, lineNo - 1);
       const level = heading[1].length;
       const headingTitle = heading[2].replace(/#+\s*$/, '').trim();
       while (headingStack.length && headingStack[headingStack.length - 1].level >= level) headingStack.pop();
       headingStack.push({ level, title: headingTitle });
       if (!title && level <= 2) title = headingTitle;
       bufferStart = lineStart;
+      bufferStartLine = lineNo;
       continue;
     }
 
-    if (!buffer.length) bufferStart = lineStart;
+    if (!buffer.length) { bufferStart = lineStart; bufferStartLine = lineNo; }
     buffer.push(line);
   }
-  flush(offset);
+  flush(offset, lineNo);
 
   if (sections.length > DOCUMENT_LIMITS.maxSections) {
     warnings.push('document exceeded the section limit and was truncated');
@@ -153,6 +177,7 @@ export function parseMarkdown(raw: string): ParsedDocument {
 
 export function parsePlainText(raw: string): ParsedDocument {
   const sections: ParsedSection[] = [];
+  const newlineOffsets = buildNewlineOffsets(raw);
   let offset = 0;
   for (const block of raw.split(/\r?\n\s*\r?\n/)) {
     const start = offset;
@@ -161,6 +186,7 @@ export function parsePlainText(raw: string): ParsedDocument {
     if (!body) continue;
     sections.push({
       headingPath: [], text: body, sourceStart: start, sourceEnd: start + block.length,
+      lineStart: lineAtOffset(newlineOffsets, start), lineEnd: lineAtOffset(newlineOffsets, start + block.length),
       pageNumber: null, sectionTitle: null,
     });
     if (sections.length >= DOCUMENT_LIMITS.maxSections) break;
@@ -200,6 +226,8 @@ function groupStructuredSections(leaves: ParsedSection[]): ParsedSection[] {
       text: items.map(i => i.text).join('\n'),
       sourceStart: 0,
       sourceEnd: 0,
+      lineStart: null,
+      lineEnd: null,
       pageNumber: null,
       sectionTitle: key || items[0].sectionTitle,
     });
@@ -214,7 +242,7 @@ function flattenStructured(
   if (depth > maxDepth) {
     out.push({
       headingPath: keyPath.slice(0, -1), text: `${keyPath.join('.')}: [depth limit reached]`,
-      sourceStart: 0, sourceEnd: 0, pageNumber: null,
+      sourceStart: 0, sourceEnd: 0, lineStart: null, lineEnd: null, pageNumber: null,
       sectionTitle: keyPath[keyPath.length - 1] ?? null,
     });
     return;
@@ -226,7 +254,7 @@ function flattenStructured(
     out.push({
       headingPath: keyPath.slice(0, -1),
       text: `${keyPath.join('.')}: ${rendered}`.slice(0, 2000),
-      sourceStart: 0, sourceEnd: 0, pageNumber: null, sectionTitle: key || null,
+      sourceStart: 0, sourceEnd: 0, lineStart: null, lineEnd: null, pageNumber: null, sectionTitle: key || null,
     });
     return;
   }
@@ -412,7 +440,7 @@ export function parseHtml(raw: string): ParsedDocument {
     if (!body) continue;
     sections.push({
       headingPath: headingStack.map(h => h.title),
-      text: body, sourceStart: start, sourceEnd: start + part.length, pageNumber: null,
+      text: body, sourceStart: start, sourceEnd: start + part.length, lineStart: null, lineEnd: null, pageNumber: null,
       sectionTitle: headingStack.length ? headingStack[headingStack.length - 1].title : null,
     });
     if (sections.length >= DOCUMENT_LIMITS.maxSections) break;
@@ -470,7 +498,7 @@ export async function parsePdf(filePath: string): Promise<ParsedDocument> {
       if (!body) continue;
       sections.push({
         headingPath: [], text: body, sourceStart: start, sourceEnd: start + pageText.length,
-        pageNumber: index + 1, sectionTitle: null,
+        lineStart: null, lineEnd: null, pageNumber: index + 1, sectionTitle: null,
       });
       if (sections.length >= DOCUMENT_LIMITS.maxSections) return;
     }

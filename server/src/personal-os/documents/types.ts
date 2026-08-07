@@ -65,6 +65,10 @@ export interface DocumentChunk {
   /** Character offsets into the parsed source, for citation. */
   sourceStart: number;
   sourceEnd: number;
+  /** 1-based line numbers in the original source file. Null for structured (JSON/YAML)
+   *  and PDF sources, where heading-path / page number is the citation locator instead. */
+  lineStart: number | null;
+  lineEnd: number | null;
   pageNumber: number | null;
   sectionTitle: string | null;
   tags: string[];
@@ -96,6 +100,8 @@ export interface ParsedSection {
   text: string;
   sourceStart: number;
   sourceEnd: number;
+  lineStart: number | null;
+  lineEnd: number | null;
   pageNumber: number | null;
   sectionTitle: string | null;
 }
@@ -138,3 +144,135 @@ export const CHUNK_DEFAULTS = {
 } as const;
 
 export const PARSER_VERSION = 'phase5d-1.0.0';
+
+/* ────────────────────────────────────────────────────────────────────────────────────
+ * Phase 5D-2 — index, retrieval, citations, conflicts, staleness.
+ *
+ * These contracts describe what a caller may ask for (KnowledgeQuery) and what Mi may
+ * hand back (KnowledgePack). Every fact in a pack traces to a Citation with an exact
+ * source-range pointer; nothing here expresses "search everything" — a query without an
+ * explicit, bounded project scope is invalid before it reaches the retrieval layer.
+ * ──────────────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Bounds enforced on every KnowledgePack before it leaves buildKnowledgePack. Under the
+ * KnowledgeQuery bounds above (limit <= 20, excerpts <= 800 chars) a pack cannot
+ * naturally approach maxPackBytes — this is a defensive, tested ceiling, not a limit
+ * ordinary queries are expected to hit.
+ */
+export const KNOWLEDGE_PACK_LIMITS = {
+  maxStatementChars: 800,
+  maxPackBytes: 65_536,
+} as const;
+
+/** Bounds enforced on every KnowledgeQuery before retrieval runs. */
+export const KNOWLEDGE_QUERY_LIMITS = {
+  minTextChars: 2,
+  maxTextChars: 500,
+  minProjectIds: 1,
+  maxProjectIds: 5,
+  maxGoalIds: 10,
+  maxTaskIds: 10,
+  minLimit: 1,
+  maxLimit: 20,
+  defaultLimit: 8,
+} as const;
+
+/**
+ * A caller-supplied retrieval request. `projectIds` is required and bounded — there is
+ * deliberately no "search all private knowledge" mode and no way to expand a result set
+ * beyond the projects named here.
+ */
+export interface KnowledgeQuery {
+  text: string;
+  projectIds: string[];
+  goalIds: string[];
+  taskIds: string[];
+  limit: number;
+  /** STALE documents are excluded from retrieval unless the caller opts in. */
+  includeStale: boolean;
+}
+
+/** A pointer to the exact place a fact came from. Never carries canonicalPath. */
+export interface Citation {
+  documentId: string;
+  chunkId: string;
+  title: string;
+  /** Project-relative or opaque reference — the same value the document API exposes. */
+  sourceUri: string;
+  headingPath: string[];
+  sectionTitle: string | null;
+  lineStart: number | null;
+  lineEnd: number | null;
+  pageNumber: number | null;
+  documentChecksum: string;
+  chunkContentHash: string;
+  projectIds: string[];
+  documentStatus: DocumentStatus;
+}
+
+/**
+ * How a KnowledgePack item relates to its citations. FACT and SYNTHESIS must carry at
+ * least one Citation; SUGGESTION must carry none (a suggestion is Mi's own inference,
+ * never dressed up as sourced); UNKNOWN means retrieval found nothing and says so rather
+ * than inventing an answer.
+ */
+export type FactType = 'FACT' | 'SYNTHESIS' | 'SUGGESTION' | 'UNKNOWN';
+
+export interface KnowledgePackItem {
+  factType: FactType;
+  statement: string;
+  citations: Citation[];
+  score: number;
+  isStale: boolean;
+}
+
+export interface KnowledgePack {
+  queryId: string;
+  query: { text: string; projectIds: string[]; includeStale: boolean };
+  generatedAt: string;
+  items: KnowledgePackItem[];
+  /** Unresolved conflicts touching any returned chunk — surfaced, never silently picked. */
+  conflicts: ConflictRecord[];
+  warnings: string[];
+  /** True when nothing matched: an explicit "I don't know", not an empty list to guess from. */
+  unknown: boolean;
+}
+
+export type ConflictStatus = 'OPEN' | 'NEEDS_CONFIRMATION' | 'RESOLVED' | 'DISMISSED';
+
+/**
+ * Two or more ACTIVE chunks whose content disagrees. Detection only ever raises a
+ * conflict for a human to look at — it never silently prefers one chunk over another.
+ */
+export interface ConflictRecord {
+  id: string;
+  chunkIds: string[];
+  documentIds: string[];
+  projectIds: string[];
+  description: string;
+  detectionReason: string;
+  status: ConflictStatus;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt: string | null;
+  resolutionNote: string | null;
+}
+
+export type KnowledgeRelationType =
+  | 'SUPERSEDES' | 'SUPERSEDED_BY'
+  | 'REFERENCES' | 'REFERENCED_BY'
+  | 'DUPLICATES'
+  | 'RELATED_TO'
+  | 'CONTRADICTS' | 'CONTRADICTED_BY'
+  | 'PART_OF' | 'CONTAINS';
+
+/** A lightweight, deterministic edge between two chunks. Not a graph database. */
+export interface KnowledgeRelation {
+  id: string;
+  fromChunkId: string;
+  toChunkId: string;
+  relationType: KnowledgeRelationType;
+  confidence: number;
+  createdAt: string;
+}

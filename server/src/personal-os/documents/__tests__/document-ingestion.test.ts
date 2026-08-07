@@ -238,7 +238,7 @@ async function run() {
   const integrity = service.store.integrity();
   assert.strictEqual(integrity.integrityCheck, 'ok');
   assert.deepStrictEqual(integrity.foreignKeyViolations, []);
-  assert.strictEqual(integrity.schemaVersion, 4);
+  assert.strictEqual(integrity.schemaVersion, 5);
   service.close();
 
   // --- close and reopen --------------------------------------------------------

@@ -16,7 +16,7 @@
     "project-registry:acceptance": "tsx src/project-registry/acceptance.ts",
     "coding": "tsx src/coding/cli.ts",
     "coding:acceptance": "tsx src/coding/acceptance.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion && npm run test:knowledge-retrieval-security && npm run test:knowledge-index && npm run test:knowledge-citations && npm run test:knowledge-conflicts && npm run test:knowledge-retrieval-evaluation && npm run test:knowledge-index-backup",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -52,7 +52,14 @@
     "phase5c:acceptance": "tsx src/intelligence/phase5c-acceptance.ts",
     "test:knowledge-migration": "tsx src/personal-os/documents/__tests__/knowledge-migration.test.ts",
     "test:document-security": "tsx src/personal-os/documents/__tests__/document-security.test.ts",
-    "test:document-ingestion": "tsx src/personal-os/documents/__tests__/document-ingestion.test.ts"
+    "test:document-ingestion": "tsx src/personal-os/documents/__tests__/document-ingestion.test.ts",
+    "test:knowledge-retrieval-security": "tsx src/personal-os/documents/__tests__/retrieval-security.test.ts",
+    "test:knowledge-index": "tsx src/personal-os/documents/__tests__/knowledge-index.test.ts",
+    "test:knowledge-citations": "tsx src/personal-os/documents/__tests__/citations.test.ts",
+    "test:knowledge-conflicts": "tsx src/personal-os/documents/__tests__/conflicts-relations.test.ts",
+    "test:knowledge-retrieval-evaluation": "tsx src/personal-os/documents/__tests__/retrieval-evaluation.test.ts",
+    "test:knowledge-index-backup": "tsx src/personal-os/documents/__tests__/index-backup.test.ts",
+    "phase5d2:acceptance": "tsx src/personal-os/documents/phase5d2-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
