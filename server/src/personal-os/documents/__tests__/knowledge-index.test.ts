@@ -74,7 +74,46 @@ async function run() {
   assert.strictEqual(hits.length, 0, 'a deleted document\'s content is gone from the index even with includeStale');
   assert.strictEqual(ftsRowCount(store), 0, 'index is empty after the only document is deleted');
 
+  // --- deliberate mismatch/recovery: an FTS row goes missing behind the store's back ---
+  const mismatchPath = write(root, 'mismatch.md', '# Mismatch\n\nThe recovery canary phrase is glimmerwood-forty-two for this deliberate test.\n');
+  const mismatchOutcome = await service.ingestApprovedDocument({ filePath: mismatchPath, projectIds: ['proj-mismatch'] });
+  assert.strictEqual(mismatchOutcome.status, 'ACTIVE');
+  const beforeCorruption = store.searchChunks('glimmerwood-forty-two', { projectIds: ['proj-mismatch'] });
+  assert.strictEqual(beforeCorruption.length, 1);
+
+  // Simulate a crash mid-index-write: the FTS row disappears but the chunk row survives.
+  const mismatchedChunkId = beforeCorruption[0].chunk.id;
+  store.handle.prepare('DELETE FROM knowledge_chunks_fts WHERE chunkId = ?').run(mismatchedChunkId);
+  assert.strictEqual(
+    store.searchChunks('glimmerwood-forty-two', { projectIds: ['proj-mismatch'] }).length, 0,
+    'the desynced chunk is unsearchable immediately after the simulated crash',
+  );
+  assert.strictEqual(
+    (store.handle.prepare('SELECT COUNT(*) c FROM knowledge_chunks WHERE id = ?').get(mismatchedChunkId) as { c: number }).c, 1,
+    'the chunk row itself was never lost — only the index entry',
+  );
   service.close();
+
+  // Reopening runs applyPhase5d2Migration again, which backfills any chunk missing from
+  // the FTS index — this is the self-healing recovery path, not a manual repair step.
+  const recoveredStore = new DocumentStore(dbDir);
+  const recoveredHits = recoveredStore.searchChunks('glimmerwood-forty-two', { projectIds: ['proj-mismatch'] });
+  assert.strictEqual(recoveredHits.length, 1, 'reopening the store recovers the desynced chunk automatically');
+  assert.strictEqual(recoveredStore.integrity().integrityCheck, 'ok');
+
+  // An orphan FTS row (index entry with no backing chunk) can never surface as a result:
+  // searchChunks joins to knowledge_chunks and knowledge_documents, so a row with no
+  // matching chunk is structurally excluded regardless of how it got there.
+  recoveredStore.handle.prepare(`
+    INSERT INTO knowledge_chunks_fts (chunkId, documentId, headingPath, sectionTitle, text, tags)
+    VALUES ('chunk-orphan-test', 'doc-does-not-exist', '', '', 'orphan row with no backing chunk glimmerwood-orphan', '')
+  `).run();
+  assert.strictEqual(
+    recoveredStore.searchChunks('glimmerwood-orphan', { projectIds: ['proj-mismatch'] }).length, 0,
+    'an orphan FTS row with no backing knowledge_chunks row never surfaces via searchChunks',
+  );
+  recoveredStore.close();
+
   fs.rmSync(root, { recursive: true, force: true });
   fs.rmSync(dbDir, { recursive: true, force: true });
 

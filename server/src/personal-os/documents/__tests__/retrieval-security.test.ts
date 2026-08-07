@@ -13,6 +13,7 @@ import { DocumentStore } from '../store';
 import { KnowledgeDocumentService } from '../service';
 import { KnowledgeRetrievalService } from '../retrieval';
 import { KnowledgeQueryValidationError, validateKnowledgeQuery } from '../query-validation';
+import { KNOWLEDGE_PACK_LIMITS } from '../types';
 
 function tmp(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'mi-5d2-retrieval-sec-'));
@@ -99,6 +100,21 @@ async function run() {
   for (const text of weirdQueries) {
     const pack = retrieval.buildKnowledgePack({ text: text.trim() || 'placeholder query text', projectIds: ['proj-public'] });
     assert.ok(pack, `query "${text.slice(0, 30)}..." must not throw or crash the retrieval layer`);
+  }
+
+  // --- KnowledgePack payload is bounded ------------------------------------------
+  for (let i = 0; i < 25; i++) {
+    write(root, `bulk/doc-${i}.md`, `# Bulk Document ${i}\n\nThis is bulk fixture content about widgets, gateways, and configuration for entry number ${i}, padded with enough distinct prose that each chunk clears the minimum chunk size on its own.\n`);
+  }
+  for (let i = 0; i < 25; i++) {
+    await service.ingestApprovedDocument({ filePath: path.join(root, 'bulk', `doc-${i}.md`), projectIds: ['proj-public'] });
+  }
+  const bulkPack = retrieval.buildKnowledgePack({ text: 'widgets gateways configuration entry', projectIds: ['proj-public'], limit: 20 });
+  const bulkBytes = Buffer.byteLength(JSON.stringify(bulkPack));
+  assert.ok(bulkBytes <= KNOWLEDGE_PACK_LIMITS.maxPackBytes, `KnowledgePack (${bulkBytes} bytes) must stay within the ${KNOWLEDGE_PACK_LIMITS.maxPackBytes}-byte budget even at max limit with many candidates`);
+  assert.ok(bulkPack.items.length <= 20, 'item count never exceeds the requested limit');
+  for (const item of bulkPack.items) {
+    assert.ok(item.statement.length <= KNOWLEDGE_PACK_LIMITS.maxStatementChars + 1, 'every excerpt stays within maxStatementChars');
   }
 
   service.close();

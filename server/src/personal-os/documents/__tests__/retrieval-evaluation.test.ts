@@ -174,18 +174,31 @@ interface Metrics {
   total: number;
   recallHits: number;
   recallEligible: number;
+  unknownEligible: number;
+  unknownHits: number;
+  top1Hits: number;
+  reciprocalRankSum: number;
   citationChecks: number;
   citationFailures: number;
+  rangeChecks: number;
+  rangeFailures: number;
   projectLeaks: number;
   deletedSupersededLeaks: number;
+  staleLeaks: number;
   unrelatedProbes: number;
   unrelatedLeaks: number;
   nonDeterministic: number;
   latenciesMs: number[];
+  packBytes: number[];
 }
 
 function newMetrics(): Metrics {
-  return { total: 0, recallHits: 0, recallEligible: 0, citationChecks: 0, citationFailures: 0, projectLeaks: 0, deletedSupersededLeaks: 0, unrelatedProbes: 0, unrelatedLeaks: 0, nonDeterministic: 0, latenciesMs: [] };
+  return {
+    total: 0, recallHits: 0, recallEligible: 0, unknownEligible: 0, unknownHits: 0, top1Hits: 0, reciprocalRankSum: 0,
+    citationChecks: 0, citationFailures: 0, rangeChecks: 0, rangeFailures: 0,
+    projectLeaks: 0, deletedSupersededLeaks: 0, staleLeaks: 0,
+    unrelatedProbes: 0, unrelatedLeaks: 0, nonDeterministic: 0, latenciesMs: [], packBytes: [],
+  };
 }
 
 function runQueries(retrieval: KnowledgeRetrievalService, store: DocumentStore, queries: EvalQuery[], metrics: Metrics, forbiddenGlobal: string[]): void {
@@ -194,6 +207,10 @@ function runQueries(retrieval: KnowledgeRetrievalService, store: DocumentStore, 
     const start = Date.now();
     const pack: KnowledgePack = retrieval.buildKnowledgePack({ text: q.text, projectIds: [q.project], limit: 3 });
     metrics.latenciesMs.push(Date.now() - start);
+    metrics.packBytes.push(Buffer.byteLength(JSON.stringify(pack)));
+
+    // Every item's isStale flag must be false when the query never opted into includeStale.
+    if (pack.items.some(i => i.isStale)) metrics.staleLeaks++;
 
     // Determinism: an identical query, run again, must produce the same citation order.
     const pack2 = retrieval.buildKnowledgePack({ text: q.text, projectIds: [q.project], limit: 3 });
@@ -214,6 +231,18 @@ function runQueries(retrieval: KnowledgeRetrievalService, store: DocumentStore, 
           && !('canonicalPath' in (citation as unknown as Record<string, unknown>));
         if (!ok) metrics.citationFailures++;
         if (!citation.projectIds.includes(q.project)) metrics.projectLeaks++;
+
+        // Range accuracy: a line-cited chunk's range must actually be within the source
+        // file's line count, non-inverted, and consistent with the chunk it points at;
+        // a heading/page-cited chunk must carry the citation locator it claims to.
+        metrics.rangeChecks++;
+        const hasLineRange = citation.lineStart !== null && citation.lineEnd !== null;
+        const hasHeadingOrPage = citation.headingPath.length > 0 || citation.pageNumber !== null;
+        const rangeOk = chunk && (
+          (hasLineRange && citation.lineStart! >= 1 && citation.lineEnd! >= citation.lineStart! && citation.lineStart === chunk.lineStart && citation.lineEnd === chunk.lineEnd)
+          || (!hasLineRange && hasHeadingOrPage)
+        );
+        if (!rangeOk) metrics.rangeFailures++;
       }
     }
 
@@ -224,12 +253,21 @@ function runQueries(retrieval: KnowledgeRetrievalService, store: DocumentStore, 
       if (serialized.includes(banned)) metrics.deletedSupersededLeaks++;
     }
 
+    if (q.expectEmpty) {
+      metrics.unknownEligible++;
+      if (pack.unknown && pack.items.length === 1 && pack.items[0].factType === 'UNKNOWN') metrics.unknownHits++;
+    }
+
     if (q.expectSourceUri) {
       metrics.recallEligible++;
       const top3 = pack.items.slice(0, 3);
-      const hit = top3.some(i => i.citations.some(c => c.sourceUri.includes(q.expectSourceUri!))
-        && (!q.expectExcerptContains || i.statement.includes(q.expectExcerptContains)));
+      const matchesExpected = (i: typeof pack.items[number]) => i.citations.some(c => c.sourceUri.includes(q.expectSourceUri!))
+        && (!q.expectExcerptContains || i.statement.includes(q.expectExcerptContains));
+      const hit = top3.some(matchesExpected);
       if (hit) metrics.recallHits++;
+      if (matchesExpected(pack.items[0])) metrics.top1Hits++;
+      const rank = pack.items.findIndex(matchesExpected);
+      if (rank >= 0) metrics.reciprocalRankSum += 1 / (rank + 1);
       if (process.env.EVAL_DEBUG) {
         console.log(`Q${q.id} [${hit ? 'HIT' : 'MISS'}] "${q.text}" expect=${q.expectSourceUri}/${q.expectExcerptContains}`);
         for (const i of top3) console.log(`   -> ${i.citations[0]?.chunkId} ${i.citations[0]?.sourceUri} :: ${i.statement.slice(0, 60)}`);
@@ -254,21 +292,37 @@ function percentile(values: number[], p: number): number {
   return sorted[Math.max(0, idx)];
 }
 
+function mean(values: number[]): number {
+  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+}
+
 function report(label: string, m: Metrics): void {
+  const unknownAccuracy = m.unknownEligible ? m.unknownHits / m.unknownEligible : 1;
+  const top1 = m.recallEligible ? m.top1Hits / m.recallEligible : 1;
   const recall = m.recallEligible ? m.recallHits / m.recallEligible : 1;
+  const mrr = m.recallEligible ? m.reciprocalRankSum / m.recallEligible : 1;
   const citationCorrectness = m.citationChecks ? 1 - m.citationFailures / m.citationChecks : 1;
+  const rangeAccuracy = m.rangeChecks ? 1 - m.rangeFailures / m.rangeChecks : 1;
   const unrelatedRate = m.unrelatedProbes ? m.unrelatedLeaks / m.unrelatedProbes : 0;
   const deterministic = m.total ? 1 - m.nonDeterministic / m.total : 1;
+  const p50 = percentile(m.latenciesMs, 50);
   const p95 = percentile(m.latenciesMs, 95);
-  console.log(`[retrieval-evaluation:${label}] queries=${m.total} top3Recall=${(recall * 100).toFixed(1)}% ` +
-    `citationCorrectness=${(citationCorrectness * 100).toFixed(1)}% projectLeaks=${m.projectLeaks} ` +
-    `deletedSupersededLeaks=${m.deletedSupersededLeaks} unrelatedRate=${(unrelatedRate * 100).toFixed(1)}% ` +
-    `deterministic=${(deterministic * 100).toFixed(1)}% p95Ms=${p95}`);
+  const meanPackBytes = mean(m.packBytes);
 
+  console.log(`[retrieval-evaluation:${label}] queries=${m.total} top1=${(top1 * 100).toFixed(1)}% ` +
+    `top3Recall=${(recall * 100).toFixed(1)}% mrr=${mrr.toFixed(3)} ` +
+    `citationCorrectness=${(citationCorrectness * 100).toFixed(1)}% rangeAccuracy=${(rangeAccuracy * 100).toFixed(1)}% ` +
+    `projectLeaks=${m.projectLeaks} deletedSupersededLeaks=${m.deletedSupersededLeaks} staleLeaks=${m.staleLeaks} ` +
+    `unrelatedRate=${(unrelatedRate * 100).toFixed(1)}% deterministic=${(deterministic * 100).toFixed(1)}% ` +
+    `p50Ms=${p50} p95Ms=${p95} meanPackBytes=${Math.round(meanPackBytes)} unknownAccuracy=${(unknownAccuracy * 100).toFixed(1)}%`);
+
+  if (m.unknownEligible) assert.strictEqual(unknownAccuracy, 1, `${label}: a query with no real answer must report UNKNOWN, not a fabricated result`);
   assert.ok(recall >= TARGETS.top3Recall, `${label}: top-3 recall ${recall} below target ${TARGETS.top3Recall}`);
   assert.ok(citationCorrectness >= TARGETS.citationCorrectness, `${label}: citation correctness ${citationCorrectness} below target`);
+  assert.strictEqual(rangeAccuracy, 1, `${label}: citation range accuracy below 100%`);
   assert.strictEqual(m.projectLeaks, TARGETS.projectLeakage, `${label}: project leakage detected`);
   assert.strictEqual(m.deletedSupersededLeaks, TARGETS.deletedSupersededLeakage, `${label}: deleted/superseded content leaked`);
+  assert.strictEqual(m.staleLeaks, 0, `${label}: a STALE item leaked into a query that never set includeStale`);
   assert.ok(unrelatedRate <= TARGETS.unrelatedResultRate, `${label}: unrelated result rate ${unrelatedRate} above target`);
   assert.ok(deterministic >= TARGETS.deterministicOrdering, `${label}: non-deterministic ordering detected`);
   assert.ok(p95 <= TARGETS.p95Ms, `${label}: p95 latency ${p95}ms above target ${TARGETS.p95Ms}ms`);
@@ -283,6 +337,9 @@ async function run() {
 
   const syntheticMetrics = newMetrics();
   runQueries(retrieval, service.store, SYNTHETIC_QUERIES, syntheticMetrics, [deletedDocId]);
+  runQueries(retrieval, service.store, [
+    { id: 33, project: 'proj-alpha', text: 'recommended sourdough bread hydration ratio and proofing temperature', expectEmpty: true },
+  ], syntheticMetrics, [deletedDocId]);
   report('synthetic', syntheticMetrics);
   service.close();
   fs.rmSync(root, { recursive: true, force: true });
@@ -309,6 +366,16 @@ async function run() {
     const realRetrieval = new KnowledgeRetrievalService(realService.store);
     const realMetrics = newMetrics();
     runQueries(realRetrieval, realService.store, REAL_QUERIES, realMetrics, []);
+
+    // Supplementary to the frozen 30-query set (§9 acceptance, not §8's reproduction):
+    // a question genuinely outside the ingested approved docs must come back UNKNOWN,
+    // never a fabricated answer stitched from unrelated text.
+    const unknownProbes: EvalQuery[] = [
+      { id: 31, project: 'mi-academy', text: 'recommended tire pressure for a mountain bike on gravel trails', expectEmpty: true },
+      { id: 32, project: 'healthy-ld', text: 'quarterly astronomy calendar for observing the next lunar eclipse', expectEmpty: true },
+    ];
+    runQueries(realRetrieval, realService.store, unknownProbes, realMetrics, []);
+
     report('real-projects', realMetrics);
     realService.close();
     fs.rmSync(realRoot, { recursive: true, force: true });

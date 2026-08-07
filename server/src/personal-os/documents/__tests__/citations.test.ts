@@ -3,7 +3,12 @@
  */
 
 import assert from 'assert';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 import { buildCitation, CitationValidationError, validateCitation, validateKnowledgePackItem } from '../citations';
+import { DocumentStore } from '../store';
+import { KnowledgeDocumentService } from '../service';
 import type { DocumentChunk, DocumentRecord, KnowledgePackItem } from '../types';
 
 function fixtureDocument(overrides: Partial<DocumentRecord> = {}): DocumentRecord {
@@ -29,7 +34,7 @@ function fixtureChunk(overrides: Partial<DocumentChunk> = {}): DocumentChunk {
   };
 }
 
-function run(): void {
+async function run(): Promise<void> {
   const document = fixtureDocument();
   const chunk = fixtureChunk();
 
@@ -105,7 +110,55 @@ function run(): void {
     (err: unknown) => err instanceof CitationValidationError && err.code === 'EMPTY_STATEMENT',
   );
 
+  // --- citation stability across an unchanged reindex, and unavailability after -----
+  // supersession/deletion, against a real store rather than hand-built fixtures.
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-5d2-citation-stability-'));
+  const dbDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-5d2-citation-stability-db-'));
+  const store = new DocumentStore(dbDir);
+  const service = new KnowledgeDocumentService({ store, roots: { documentRoots: [root] } });
+
+  const filePath = path.join(root, 'stability.md');
+  fs.writeFileSync(filePath, '# Stability\n\nThis fixture text is used to check that citation identity survives an unchanged reindex.\n', 'utf8');
+  const first = await service.ingestApprovedDocument({ filePath, projectIds: ['proj-stability'] });
+  assert.strictEqual(first.status, 'ACTIVE');
+  const firstChunk = store.listChunks(first.documentId!)[0];
+  const firstCitation = buildCitation(firstChunk, store.getDocument(first.documentId!)!);
+
+  // Re-ingesting the *same* content is a no-op (service.ts reports UNCHANGED) — the
+  // chunk id is content-hash-derived, so the citation must resolve to the exact same
+  // chunk, not a newly-minted one.
+  const second = await service.ingestApprovedDocument({ filePath, operationId: `reindex-unchanged-${Date.now()}`, projectIds: ['proj-stability'] });
+  assert.strictEqual(second.status, 'UNCHANGED');
+  const secondChunk = store.listChunks(second.documentId!)[0];
+  assert.strictEqual(secondChunk.id, firstChunk.id, 'an unchanged reindex preserves the exact chunk id, so old citations stay valid');
+  validateCitation(firstCitation, secondChunk, store.getDocument(second.documentId!)!); // must not throw
+
+  // Now genuinely change the content: the old citation's chunk must become unresolvable
+  // (SUPERSEDED documents have their chunks deleted), so a caller holding the stale
+  // citation can detect it rather than silently trusting stale content.
+  fs.writeFileSync(filePath, '# Stability\n\nThis fixture text has changed, so the previous citation must no longer resolve.\n', 'utf8');
+  const third = await service.ingestApprovedDocument({ filePath, operationId: `reindex-changed-${Date.now()}`, projectIds: ['proj-stability'] });
+  assert.strictEqual(third.status, 'SUPERSEDED');
+  const oldDocument = store.getDocument(first.documentId!)!;
+  assert.strictEqual(oldDocument.status, 'SUPERSEDED', 'the old document record survives, marked SUPERSEDED, for audit purposes');
+  const staleChunkStillExists = store.listChunks(first.documentId!).find(c => c.id === firstChunk.id);
+  assert.strictEqual(staleChunkStillExists, undefined, 'the old citation\'s chunk is gone — a superseded citation is unavailable, not silently served');
+
+  // Deletion: the citation becomes unavailable the same way, and the document itself is
+  // no longer returned by normal lookups that filter DELETED out.
+  fs.writeFileSync(path.join(root, 'to-delete.md'), '# To Delete\n\nThis document about deletion-canary-fact will be removed outright.\n', 'utf8');
+  const deletable = await service.ingestApprovedDocument({ filePath: path.join(root, 'to-delete.md'), projectIds: ['proj-stability'] });
+  assert.strictEqual(deletable.status, 'ACTIVE');
+  const deletableChunkId = store.listChunks(deletable.documentId!)[0].id;
+  store.deleteDocument(deletable.documentId!);
+  assert.strictEqual(store.listChunks(deletable.documentId!).find(c => c.id === deletableChunkId), undefined, 'a deleted document\'s citation is unavailable');
+  assert.strictEqual(store.getDocument(deletable.documentId!)?.status, 'DELETED');
+
+  service.close();
+  fs.rmSync(root, { recursive: true, force: true });
+  fs.rmSync(dbDir, { recursive: true, force: true });
+
   console.log('[citations] PASS');
 }
 
-run();
+run().catch(err => { console.error('[citations] FAIL:', err); process.exit(1); });

@@ -55,6 +55,39 @@ async function run(): Promise<void> {
   const pack = retrieval.buildKnowledgePack({ text: 'what is the api timeout', projectIds: ['proj-x'] });
   assert.ok(pack.conflicts.length >= 1, 'a query that returns a conflicted chunk surfaces the conflict, never silently picks a winner');
 
+  // --- regression: the conflict penalty must nudge ranking, never suppress content ---
+  // (a prior version used a -1.5 penalty, large enough to drop conflicting chunks below
+  // the relevance floor entirely — content the caller explicitly asked about would vanish
+  // instead of being shown with the conflict attached, its own kind of silently picking a
+  // winner. The penalty is now -0.4.) Isolated two-document corpus, deliberately without
+  // the A/B/C fixture's exact-duplicate C, which would otherwise dominate ranking and
+  // confound this specific check.
+  {
+    const penaltyRoot = tmp();
+    const penaltyDbDir = tmp();
+    const penaltyStore = new DocumentStore(penaltyDbDir);
+    const penaltyService = new KnowledgeDocumentService({ store: penaltyStore, roots: { documentRoots: [penaltyRoot] } });
+    const limitsA = write(penaltyRoot, 'limits-a.md', '# Limits\n\nThe max upload size is 25MB per request, enforced at the gateway.\n');
+    const limitsB = write(penaltyRoot, 'limits-b.md', '# Limits\n\nThe max upload size is 50MB per request, enforced at the gateway.\n');
+    await penaltyService.ingestApprovedDocument({ filePath: limitsA, projectIds: ['proj-penalty'] });
+    await penaltyService.ingestApprovedDocument({ filePath: limitsB, projectIds: ['proj-penalty'] });
+    scanForConflicts(penaltyStore, ['proj-penalty']);
+    assert.strictEqual(penaltyStore.listConflicts('OPEN').length, 1, 'the isolated fixture raises exactly the upload-size conflict');
+
+    const penaltyRetrieval = new KnowledgeRetrievalService(penaltyStore);
+    const rankedForLimits = penaltyRetrieval.search({ text: 'what is the max upload size', projectIds: ['proj-penalty'], limit: 10 });
+    const rankedDocIds = new Set(rankedForLimits.map(r => r.document.sourceUri));
+    assert.ok(rankedDocIds.has('limits-a.md') && rankedDocIds.has('limits-b.md'),
+      'both conflicting documents are returned for a query on-topic for both — neither is silently dropped by the conflict penalty');
+
+    const penaltyPack = penaltyRetrieval.buildKnowledgePack({ text: 'what is the max upload size', projectIds: ['proj-penalty'] });
+    assert.ok(penaltyPack.conflicts.length >= 1, 'the surfaced conflict is still attached to the pack alongside the still-present content');
+
+    penaltyService.close();
+    fs.rmSync(penaltyRoot, { recursive: true, force: true });
+    fs.rmSync(penaltyDbDir, { recursive: true, force: true });
+  }
+
   // --- resolution: status transitions, resolvedAt set, never auto-resolved ----------
   const conflictId = conflicts[0].id;
   const resolved = store.updateConflictStatus(conflictId, 'RESOLVED', 'confirmed with owner: 30s is correct, B is outdated');
@@ -81,6 +114,32 @@ async function run(): Promise<void> {
   assert.ok(duplicateRelation, 'A and C are byte-identical content, so a DUPLICATES relation must exist between them');
   assert.strictEqual(duplicateRelation!.confidence, 1, 'exact text duplication is confidence 1, not a fuzzy guess');
   void chunksA; void docC;
+
+  // --- weak lexical overlap alone must not create a RELATED_TO relation -------------
+  // A and B share nothing but the one-word heading "Config" (and disagree on content) —
+  // that is exactly the coincidental-generic-heading case that must not count as
+  // evidence of a relationship. Neither carries a tag, so RELATED_TO must not appear.
+  const docB = store.findActiveByPath(path.resolve(pathB))!;
+  const relationsBetweenAAndB = store.listRelationsForDocument(docA.id)
+    .filter(r => r.relationType === 'RELATED_TO')
+    .filter(r => {
+      const bChunkIds = new Set(store.listChunks(docB.id).map(c => c.id));
+      return bChunkIds.has(r.fromChunkId) || bChunkIds.has(r.toChunkId);
+    });
+  assert.strictEqual(relationsBetweenAAndB.length, 0,
+    'sharing only a generic one-word section title ("Config") is not high-confidence evidence and must not create RELATED_TO');
+
+  // --- deleted/superseded chunks take their relations with them (FK cascade) --------
+  const relationsForCBefore = store.listRelationsForDocument(docC.id);
+  assert.ok(relationsForCBefore.length > 0, 'sanity: C has at least the DUPLICATES relation with A before deletion');
+  store.deleteDocument(docC.id);
+  const relationsForCAfter = store.listRelationsForDocument(docC.id);
+  assert.strictEqual(relationsForCAfter.length, 0, 'a deleted document\'s relations are gone, not just excluded from display');
+  const orphanRelations = store.handle.prepare(`
+    SELECT COUNT(*) c FROM knowledge_relations
+    WHERE fromChunkId NOT IN (SELECT id FROM knowledge_chunks) OR toChunkId NOT IN (SELECT id FROM knowledge_chunks)
+  `).get() as { c: number };
+  assert.strictEqual(orphanRelations.c, 0, 'no relation ever points at a chunk that no longer exists');
 
   // --- version relations: SUPERSEDES / SUPERSEDED_BY from reindexing ----------------
   write(root, 'a.md', '# Config\n\nThe api timeout is 30 seconds and the retry count is 5.\n');
