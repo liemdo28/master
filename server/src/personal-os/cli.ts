@@ -51,6 +51,25 @@ async function main() {
     if (cmd === 'memory-pack') {
       return print(service.buildMemoryPack({ query: args.join(' '), policy: 'PERSONAL_AND_PROJECT', includeUnconfirmed: true }));
     }
+    if (cmd === 'actions') {
+      const { ControlledActionService } = await import('./actions/service');
+      const actionService = new ControlledActionService();
+      try {
+        const sub = args[0] ?? 'list';
+        if (sub === 'list') return print({ actions: actionService.list(args[1] as any) });
+        if (sub === 'show') return print(actionService.detail(args[1]));
+        if (sub === 'approve') {
+          const detail = actionService.detail(args[1]);
+          console.log(`Preview:\n${detail.proposal.preview.text}\n`);
+          console.log(`Risk: ${detail.proposal.riskClass}`);
+          console.log(`Target: ${detail.proposal.targetSystem}`);
+          console.log(`Payload hash: ${detail.proposal.payloadHash}`);
+          return print(actionService.approve(args[1], { source: 'cli', approver: 'cli-user' }));
+        }
+        if (sub === 'reject') return print(actionService.reject(args[1], { source: 'cli', approver: 'cli-user', reason: args.slice(2).join(' ') || 'Rejected from CLI' }));
+        if (sub === 'execute') return print(actionService.execute(args[1]));
+      } finally { actionService.close(); }
+    }
     // Phase 5D-3 daily operating loop. Approving a plan only changes its status —
     // it never executes a task.
     if (cmd === 'today') {
@@ -108,6 +127,7 @@ async function main() {
   personal-os brief generate|show
   personal-os knowledge list|add <kind> <title> <content>|search <query>|confirm <id>|remove <id>
   personal-os memory-pack <query>
+  personal-os actions list [status]|show <id>|approve <id>|reject <id> [reason]|execute <id>
   personal-os today [generate|refresh|plan|approve-plan <planId>|review]
   personal-os week
   personal-os approvals

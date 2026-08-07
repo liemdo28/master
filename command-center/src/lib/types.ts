@@ -380,3 +380,86 @@ export interface ConnectorStatusInfo {
   grantedScopes?: string[];
   detail?: string;
 }
+
+// ── Controlled Actions (Phase 5F) ─────────────────────────────────────────
+export type ActionRiskClass = 'R0' | 'R1' | 'R2' | 'R3' | 'R4';
+export type ActionProposalStatus = 'DRAFT' | 'WAITING_APPROVAL' | 'APPROVED' | 'EXECUTING' | 'COMPLETED' | 'FAILED' | 'REJECTED' | 'EXPIRED' | 'CANCELLED' | 'RECOVERY_REQUIRED';
+
+export interface ActionPreview {
+  kind: 'EMAIL' | 'CALENDAR' | 'LOCAL_TASK' | 'CODING' | 'GENERIC';
+  text: string;
+  fields: Record<string, string | string[] | number | boolean | null>;
+}
+
+export interface ActionProposal {
+  id: string;
+  actionType: string;
+  riskClass: ActionRiskClass;
+  title: string;
+  description: string;
+  reason: string;
+  projectId: string | null;
+  targetSystem: string;
+  requestedOperation: string;
+  normalizedPayload: Record<string, unknown>;
+  payloadHash: string;
+  preview: ActionPreview;
+  sideEffects: string[];
+  rollbackPlan: string;
+  requiredApprovals: number;
+  status: ActionProposalStatus;
+  evidenceReferences: string[];
+  safeFailure: boolean;
+  createdAt: string;
+  expiresAt: string;
+  approvedAt: string | null;
+  executedAt: string | null;
+  rejectedAt: string | null;
+  failureCode: string | null;
+}
+
+export interface ActionApproval {
+  id: string;
+  proposalId: string;
+  approver: string;
+  decision: 'APPROVE' | 'REJECT';
+  payloadHash: string;
+  actionType: string;
+  targetSystem: string;
+  targetSummary: string;
+  riskAcknowledgement: string;
+  approvedAt: string;
+  expiresAt: string;
+  source: string;
+}
+
+export interface ActionExecution {
+  id: string;
+  proposalId: string;
+  approvalId: string;
+  status: 'EXECUTING' | 'COMPLETED' | 'FAILED' | 'RECOVERY_REQUIRED';
+  providerMode: 'fixture' | 'sandbox' | 'live';
+  providerResponseSummary: Record<string, unknown>;
+  externalObjectId: string | null;
+  failureCode: string | null;
+  startedAt: string;
+  completedAt: string | null;
+}
+
+export interface ActionEvidence {
+  id: string;
+  proposalId: string;
+  eventType: string;
+  summary: string;
+  payloadHash: string | null;
+  actor: string;
+  createdAt: string;
+}
+
+export interface ActionDetail {
+  proposal: ActionProposal;
+  approval: ActionApproval | null;
+  executions: ActionExecution[];
+  evidence: ActionEvidence[];
+  compensations: Array<{ id: string; description: string; available: boolean; requiresNewApproval: boolean; status: string }>;
+}

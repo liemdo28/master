@@ -71,7 +71,7 @@ import { doordashMetricsRouter } from './routes/doordash-metrics';
 import { bigdataRouter, initBigData } from './routes/bigdata';
 import { enterpriseRouter } from './routes/enterprise';
 import { voiceRouter } from './routes/voice';
-import { actionsRouter } from './routes/actions';
+import { controlledActionsJsonParser, controlledActionsRouter } from './personal-os/actions/router';
 import { jarvisRouter } from './routes/jarvis';
 import { workflowMetricsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
@@ -219,6 +219,7 @@ app.use('/api/command-center', personalOsJsonParser, taskRuntimeJsonErrorHandler
 app.use('/api/command-center', intelligenceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, intelligenceRouter);
 app.use('/api/command-center', knowledgeDocumentsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, knowledgeDocumentsRouter);
 app.use('/api/command-center', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, operatingRouter);
+app.use('/api/command-center', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, controlledActionsRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -226,6 +227,7 @@ app.use('/api', personalOsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, 
 app.use('/api', intelligenceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, intelligenceRouter);
 app.use('/api', knowledgeDocumentsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, knowledgeDocumentsRouter);
 app.use('/api', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatingRouter);
+app.use('/api', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, controlledActionsRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
@@ -255,7 +257,8 @@ app.get('/agenview',  (_req, res) => res.redirect('/agenview.html'));
 
 // P0 — Write access (approve actions, send emails, modify data)
 app.use('/api/approval',    requireAuth, approvalRouter);
-app.use('/api/actions',     requireAuth, actionsRouter);
+// Phase 5F controlled actions are mounted above under `/api` and `/api/command-center`
+// so route order cannot expose the older raw action adapter surface.
 
 // P1 — Sensitive read (executive data, memory, briefing)
 app.use('/api/executive',   requireAuth, executiveRouter);

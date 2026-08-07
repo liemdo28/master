@@ -65,6 +65,11 @@
     "test:daily-operating-loop": "tsx src/personal-os/operating/__tests__/operating-loop.test.ts",
     "test:operating-migration": "tsx src/personal-os/operating/__tests__/operating-migration.test.ts",
     "test:daily-operating-evaluation": "tsx src/personal-os/operating/__tests__/operating-evaluation.test.ts",
+    "test:controlled-actions": "tsx src/personal-os/actions/__tests__/controlled-actions.test.ts",
+    "test:controlled-actions-security": "tsx src/personal-os/actions/__tests__/controlled-actions-security.test.ts",
+    "test:controlled-actions-restart": "tsx src/personal-os/actions/__tests__/controlled-actions-restart.test.ts",
+    "test:controlled-actions-evaluation": "tsx src/personal-os/actions/controlled-actions-evaluation.ts",
+    "phase5f:acceptance": "npm run test:controlled-actions && npm run test:controlled-actions-security && npm run test:controlled-actions-restart && npm run test:controlled-actions-evaluation",
     "phase5d3:acceptance": "tsx src/personal-os/operating/phase5d3-acceptance.ts",
     "phase5d3:realday-acceptance": "tsx src/personal-os/operating/real-day-acceptance.ts"
   },
