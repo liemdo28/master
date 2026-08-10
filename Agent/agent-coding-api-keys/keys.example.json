@@ -1,0 +1,49 @@
+{
+  "mode": "REPLACE_ME",
+  "activeProviders": ["opusmax", "antigravity", "anthropic", "zai", "openai", "gemini", "ollama"],
+  "providers": {
+    "opusmax": {
+      "baseURL": "REPLACE_WITH_PROVIDER_BASE_URL",
+      "model": "REPLACE_WITH_MODEL_ID",
+      "models": ["REPLACE_WITH_MODEL_ID"],
+      "aliases": {},
+      "keys": [
+        { "id": "key-1", "value": "REPLACE_WITH_REAL_KEY", "active": true, "label": "REPLACE_WITH_LABEL" }
+      ]
+    },
+    "antigravity": {
+      "baseURL": "REPLACE_WITH_PROVIDER_BASE_URL",
+      "model": "REPLACE_WITH_MODEL_ID",
+      "models": ["REPLACE_WITH_MODEL_ID"],
+      "aliases": {},
+      "keys": [
+        { "id": "key-1", "value": "REPLACE_WITH_REAL_KEY", "active": true, "label": "REPLACE_WITH_LABEL" }
+      ]
+    },
+    "anthropic": {
+      "baseURL": "https://api.anthropic.com",
+      "model": "REPLACE_WITH_MODEL_ID"
+    },
+    "zai": {
+      "baseURL": "REPLACE_WITH_PROVIDER_BASE_URL",
+      "model": "REPLACE_WITH_MODEL_ID",
+      "models": ["REPLACE_WITH_MODEL_ID"],
+      "aliases": {},
+      "keys": [
+        { "id": "key-1", "value": "REPLACE_WITH_REAL_KEY", "active": true, "label": "REPLACE_WITH_LABEL" }
+      ]
+    },
+    "openai": {
+      "baseURL": "https://api.openai.com/v1",
+      "model": "REPLACE_WITH_MODEL_ID"
+    },
+    "gemini": {
+      "baseURL": "REPLACE_WITH_PROVIDER_BASE_URL",
+      "model": "REPLACE_WITH_MODEL_ID"
+    },
+    "ollama": {
+      "baseURL": "http://127.0.0.1:11434",
+      "model": "REPLACE_WITH_MODEL_ID"
+    }
+  }
+}

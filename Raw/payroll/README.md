@@ -3,6 +3,18 @@
 ## Overview
 Tính lương và tip cho nhân viên từ 2 file CSV (Timesheet + Order Details), sau đó tính thuế theo QuickBooks.
 
+## Google OAuth setup (`token.json`)
+
+`token.json` (real OAuth token/refresh token/client secret) is **not tracked in git** —
+see `.gitignore`. It previously was tracked (removed 2026-08-10, see
+`docs/security/PHASE5G_CREDENTIAL_REMEDIATION.md`); that historical exposure requires
+manual rotation at the Google Cloud Console (revoke the OAuth grant / rotate the OAuth
+client secret) — this has not been done automatically. A placeholder-shaped template is
+at `token.example.json`. To regenerate a working `token.json` locally after rotation,
+run `python scripts/oauth_auth.py` (or `python scripts/get_token_from_code.py`) and
+complete the Google OAuth consent flow; the script writes `token.json` to this
+directory.
+
 ## Quick Start
 
 ```bash
