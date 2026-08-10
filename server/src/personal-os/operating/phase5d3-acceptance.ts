@@ -166,6 +166,8 @@ async function run(): Promise<void> {
   // === MIDDAY (one task completed, one meeting cancelled) ============================
   engine.transition(ready.id, 'RUNNING'); engine.transition(ready.id, 'VALIDATING');
   engine.completeTask(ready.id, 'release notes drafted');
+  (taskStore as unknown as { db: { prepare: (sql: string) => { run: (...args: unknown[]) => unknown } } }).db
+    .prepare(`UPDATE tasks SET completedAt = ? WHERE id = ?`).run(`${DATE}T17:00:00.000Z`, ready.id);
 
   const middayFixture = { ...morningFixture, events: { primary: [standup] } }; // the review meeting is gone = cancelled/rescheduled off today
   const intelligenceMidday = new IntelligenceService({
