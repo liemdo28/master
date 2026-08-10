@@ -15,6 +15,11 @@ id_rsa
 id_rsa.*
 service-account*.json
 
+# removed 2026-08-10 (Phase 5G security blocker closure) — tracked real credentials,
+# see docs/security/PHASE5G_CREDENTIAL_REMEDIATION.md
+Agent/agent-coding-api-keys/keys.json
+Raw/payroll/token.json
+
 # build/dependency artifacts — never belong in git, regenerable via install
 node_modules/
 .venv/

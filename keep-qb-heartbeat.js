@@ -9,7 +9,7 @@
 const http = require('http');
 const Database = require('better-sqlite3');
 
-const MI_CORE_API_KEY = '2c6b56891f788f3836e3c6529624610f1bcce878dd556617b03b4ce690edebec';
+const MI_CORE_API_KEY = process.env.MI_CORE_API_KEY || '';
 const MI_CORE_HOST = '127.0.0.1';
 const MI_CORE_PORT = 4001;
 const INTERVAL_MS = 60_000;
