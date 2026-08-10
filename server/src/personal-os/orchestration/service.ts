@@ -72,9 +72,13 @@ export class GovernedOrchestrationService {
   private createPlanVersion(input: CreateActionPlanInput, planVersion: number, previousVersionId: string | null): ActionPlan {
     if (!input.steps.length) throw new Error('plan must contain at least one step');
     const keys = new Set<string>();
+    const VALID_STEP_TYPES = new Set(['READ_ONLY', 'LOCAL_COMPUTE', 'CONTROLLED_ACTION']);
     for (const step of input.steps) {
       if (keys.has(step.key)) throw new Error(`duplicate step key: ${step.key}`);
       keys.add(step.key);
+      if (!VALID_STEP_TYPES.has(step.type)) {
+        throw new Error(`step "${step.key}": type "${step.type}" is not a valid step type (only READ_ONLY, LOCAL_COMPUTE, CONTROLLED_ACTION are permitted — there is no arbitrary "external action" or shell category)`);
+      }
       if (step.type === 'CONTROLLED_ACTION') {
         if (!isAllowedActionType(step.actionType)) {
           throw new Error(`step "${step.key}": actionType "${step.actionType}" is not an allowed Controlled Action type`);
