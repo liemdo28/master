@@ -1,5 +1,8 @@
 import { randomUUID } from 'crypto';
 import { ControlledActionStore } from './store';
+import { ActionPolicyEngine } from './governance/engine';
+import { GovernanceAnomalyDetector } from './governance/anomaly';
+import type { ActionBudget, GovernanceAnomaly, KillSwitch, PolicyDecision } from './governance/types';
 import {
   ALLOWED_EXECUTION_RISKS,
   assertDateTime,
@@ -51,9 +54,13 @@ type ProviderResult = {
 
 export class ControlledActionService {
   readonly store: ControlledActionStore;
+  readonly policyEngine: ActionPolicyEngine;
+  readonly anomalyDetector: GovernanceAnomalyDetector;
 
   constructor(root?: string) {
     this.store = new ControlledActionStore(root);
+    this.policyEngine = new ActionPolicyEngine(this.store.handle);
+    this.anomalyDetector = new GovernanceAnomalyDetector(this.policyEngine.store);
   }
 
   close(): void { this.store.close(); }
@@ -74,6 +81,12 @@ export class ControlledActionService {
     executions: ActionExecution[];
     evidence: ActionEvidence[];
     compensations: ActionCompensation[];
+    governance: {
+      latestDecision: PolicyDecision | null;
+      anomalies: GovernanceAnomaly[];
+      budgets: ActionBudget[];
+      killSwitches: KillSwitch[];
+    };
   } {
     const proposal = this.get(id);
     return {
@@ -82,6 +95,12 @@ export class ControlledActionService {
       executions: this.store.listExecutions(id),
       evidence: this.store.listEvidence(id),
       compensations: this.store.listCompensations(id),
+      governance: {
+        latestDecision: this.policyEngine.store.latestDecision(id),
+        anomalies: this.policyEngine.store.listAnomalies(50).filter(a => a.proposalId === id),
+        budgets: this.policyEngine.store.listBudgets(),
+        killSwitches: this.policyEngine.store.listKillSwitches(),
+      },
     };
   }
 
@@ -129,10 +148,15 @@ export class ControlledActionService {
     };
     return this.store.runInTransaction(() => {
       const saved = this.store.saveProposal(proposal);
+      const decision = this.policyEngine.evaluate({ proposal: saved, stage: 'proposal', actor: 'system' });
+      this.policyEngine.budgetManager.incrementProposal(saved);
       this.recordEvidence(saved, 'action.proposed', 'Action proposal created and waiting for explicit approval.', null, {
         payloadHash: saved.payloadHash,
         payloadHashShort: shortHash(saved.payloadHash),
+        policyDecision: decision.decision,
+        policyDecisionHash: shortHash(decision.decisionHash),
       }, 'system');
+      this.anomalyDetector.detectForProposal(saved);
       this.store.saveCompensation(compensationFor(saved));
       return saved;
     });
@@ -175,6 +199,32 @@ export class ControlledActionService {
     assertPlainPayload(input);
     const result = this.store.runInTransaction(() => {
       const proposal = this.requireWaitingProposal(id);
+      const decision = this.policyEngine.evaluate({ proposal, stage: 'approval', actor: input.approver || 'user' });
+      if (!['ALLOW', 'REQUIRE_APPROVAL', 'REQUIRE_STRONG_APPROVAL'].includes(decision.decision)) {
+        throw new Error(`policy blocked approval: ${decision.decision}`);
+      }
+      const acknowledgement = input.strongConfirmation
+        ? `${input.riskAcknowledgement || riskAcknowledgement(proposal)} ${input.strongConfirmation}`
+        : input.riskAcknowledgement || riskAcknowledgement(proposal);
+      if (decision.requiredApprovalLevel === 'STRONG' && !acknowledgement.includes(`CONFIRM:${proposal.id}`)) {
+        throw new Error(`strong approval requires CONFIRM:${proposal.id} and decision hash ${shortHash(decision.decisionHash)}`);
+      }
+      this.policyEngine.assertExecutionAllowed(decision, {
+        id: 'precheck',
+        proposalId: proposal.id,
+        approver: input.approver || 'user',
+        decision: 'APPROVE',
+        payloadHash: proposal.payloadHash,
+        actionType: proposal.actionType,
+        targetSystem: proposal.targetSystem,
+        targetSummary: targetSummary(proposal),
+        riskAcknowledgement: acknowledgement,
+        approvedAt: now(),
+        expiresAt: proposal.expiresAt,
+        source: input.source || 'api',
+        evidenceReferences: proposal.evidenceReferences,
+        approvedPayloadSnapshot: proposal.normalizedPayload,
+      });
       const recomputed = payloadHash(proposal.normalizedPayload);
       if (recomputed !== proposal.payloadHash) {
         this.failProposal(proposal, 'PAYLOAD_HASH_MISMATCH', 'action.execution.failed', 'Payload hash changed before approval.');
@@ -190,7 +240,7 @@ export class ControlledActionService {
         actionType: proposal.actionType,
         targetSystem: proposal.targetSystem,
         targetSummary: targetSummary(proposal),
-        riskAcknowledgement: sanitizeText(input.riskAcknowledgement || riskAcknowledgement(proposal), 1000),
+        riskAcknowledgement: sanitizeText(acknowledgement, 1000),
         approvedAt,
         expiresAt: proposal.expiresAt,
         source: sanitizeText(input.source || 'api', 80),
@@ -198,10 +248,13 @@ export class ControlledActionService {
         approvedPayloadSnapshot: proposal.normalizedPayload,
       };
       this.store.saveApproval(approval);
+      this.policyEngine.budgetManager.incrementApproval(proposal);
       const approved = this.store.updateProposalStatus(proposal.id, 'APPROVED', { approvedAt });
       this.recordEvidence(approved, 'action.approved', 'Approval bound to exact proposal, payload hash, action type, target, and expiry.', approval.id, {
         payloadHash: approval.payloadHash,
         targetSystem: approval.targetSystem,
+        policyDecisionHash: shortHash(decision.decisionHash),
+        approvalLevel: decision.requiredApprovalLevel,
       }, approval.approver);
       return { proposal: approved, approval };
     });
@@ -268,6 +321,13 @@ export class ControlledActionService {
     if (!ALLOWED_EXECUTION_RISKS.has(proposal.riskClass)) {
       this.failProposal(proposal, 'FORBIDDEN_RISK', 'action.execution.failed', 'Risk class is not allowed in Phase 5F.');
       throw new Error('risk class forbidden');
+    }
+    const decision = this.policyEngine.evaluate({ proposal, approval, stage: 'execution', actor: 'system' });
+    this.policyEngine.assertExecutionAllowed(decision, approval);
+    const reserved = this.policyEngine.budgetManager.reserveExecution(proposal);
+    if (reserved.blocked) {
+      this.recordEvidence(proposal, 'policy.budget.blocked', reserved.reason || 'Budget blocked execution.', approval.id, { budgetState: reserved }, 'system');
+      throw new Error('policy blocked execution: BLOCK_BUDGET');
     }
     const recomputed = payloadHash(proposal.normalizedPayload);
     if (recomputed !== proposal.payloadHash || approval.payloadHash !== proposal.payloadHash) {

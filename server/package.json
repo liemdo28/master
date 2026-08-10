@@ -69,8 +69,13 @@
     "test:controlled-actions-security": "tsx src/personal-os/actions/__tests__/controlled-actions-security.test.ts",
     "test:controlled-actions-restart": "tsx src/personal-os/actions/__tests__/controlled-actions-restart.test.ts",
     "test:controlled-actions-evaluation": "tsx src/personal-os/actions/controlled-actions-evaluation.ts",
+    "test:action-governance": "tsx src/personal-os/actions/__tests__/action-governance.test.ts",
+    "test:action-governance-security": "tsx src/personal-os/actions/__tests__/action-governance-security.test.ts",
+    "test:action-governance-restart": "tsx src/personal-os/actions/__tests__/action-governance-restart.test.ts",
+    "test:action-governance-evaluation": "tsx src/personal-os/actions/action-governance-evaluation.ts",
     "phase5f:acceptance": "npm run test:controlled-actions && npm run test:controlled-actions-security && npm run test:controlled-actions-restart && npm run test:controlled-actions-evaluation",
     "phase5f:sandbox-acceptance": "tsx src/personal-os/actions/sandbox-acceptance.ts",
+    "phase5g:acceptance": "npm run test:action-governance && npm run test:action-governance-security && npm run test:action-governance-restart && npm run test:action-governance-evaluation && tsx src/personal-os/actions/phase5g-acceptance.ts",
     "phase5d3:acceptance": "tsx src/personal-os/operating/phase5d3-acceptance.ts",
     "phase5d3:realday-acceptance": "tsx src/personal-os/operating/real-day-acceptance.ts"
   },

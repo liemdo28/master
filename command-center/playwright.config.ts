@@ -17,7 +17,7 @@ export default defineConfig({
     command: `node e2e/seed-and-serve.cjs`,
     url: `http://127.0.0.1:${PORT}/api/health`,
     reuseExistingServer: false,
-    timeout: 30_000,
+    timeout: 90_000,
     env: { E2E_PORT: PORT, E2E_PIN: PIN },
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],

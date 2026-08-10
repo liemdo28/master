@@ -11,6 +11,7 @@ export const NAV_ITEMS = [
   { to: '/goals', label: 'Goals', key: 'g g' },
   { to: '/approvals', label: 'Approvals', key: 'g a' },
   { to: '/actions', label: 'Actions', key: 'g x' },
+  { to: '/governance', label: 'Governance', key: 'g v' },
   { to: '/projects', label: 'Projects', key: 'g p' },
   { to: '/tasks', label: 'Tasks', key: 'g k' },
   { to: '/knowledge', label: 'Knowledge', key: 'g n' },

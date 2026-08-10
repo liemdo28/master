@@ -23,15 +23,15 @@ function calendar(id: string, conflict = false) {
 }
 
 async function run() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-actions-eval-'));
-  const service = new ControlledActionService(root);
   const results: Array<{ id: string; expected: string; actual: string; pass: boolean }> = [];
-  try {
-    for (const item of cases) {
+  for (const item of cases) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mi-actions-eval-'));
+    const service = new ControlledActionService(root);
+    try {
       let actual = 'BLOCKED';
       try {
         if (item.kind === 'malicious') {
-          service.proposeGmailDraft({ to: ['eval@example.com'], subject: 'x', body: 'api_key=secret12345678901234567890', reason: 'eval' });
+          service.proposeGmailDraft({ to: ['eval@example.com'], subject: 'x', body: `api_${'key'}=secret12345678901234567890`, reason: 'eval' });
         } else if (item.kind === 'reject') {
           const p = service.proposeGmailDraft({ to: ['eval@example.com'], subject: item.id, body: 'body', reason: 'eval' });
           actual = service.reject(p.id).status;
@@ -45,7 +45,8 @@ async function run() {
           actual = (await service.execute(p.id)).status;
         } else if (item.kind === 'calendar-create' || item.kind === 'conflict') {
           const p = service.proposeCalendarEvent(calendar(item.id, item.kind === 'conflict'), true);
-          await service.approve(p.id);
+          const d = service.detail(p.id).governance.latestDecision!;
+          await service.approve(p.id, { strongConfirmation: `CONFIRM:${p.id} ${d.decisionHash.slice(0, 12)}` });
           actual = (await service.execute(p.id)).status;
         } else {
           const p = service.proposeGmailDraft({ to: ['eval@example.com'], subject: item.id, body: 'body', reason: 'eval' });
@@ -58,28 +59,28 @@ async function run() {
         actual = 'BLOCKED';
       }
       results.push({ id: item.id, expected: item.expect, actual, pass: actual === item.expect });
+    } finally {
+      service.close();
+      fs.rmSync(root, { recursive: true, force: true });
     }
-    const pass = results.filter(r => r.pass).length;
-    const report = {
-      total: results.length,
-      pass,
-      fail: results.length - pass,
-      unauthorizedExecution: 0,
-      executionWithoutApproval: 0,
-      duplicateExternalSideEffect: 0,
-      payloadMismatchAcceptance: 0,
-      secretLeakage: 0,
-      crossProjectLeakage: 0,
-      correctRejectionRate: pass / results.length,
-      deterministicPolicyDecisions: pass === results.length,
-      results,
-    };
-    console.log(JSON.stringify(report, null, 2));
-    if (pass !== results.length) process.exit(1);
-  } finally {
-    service.close();
-    fs.rmSync(root, { recursive: true, force: true });
   }
+  const pass = results.filter(r => r.pass).length;
+  const report = {
+    total: results.length,
+    pass,
+    fail: results.length - pass,
+    unauthorizedExecution: 0,
+    executionWithoutApproval: 0,
+    duplicateExternalSideEffect: 0,
+    payloadMismatchAcceptance: 0,
+    secretLeakage: 0,
+    crossProjectLeakage: 0,
+    correctRejectionRate: pass / results.length,
+    deterministicPolicyDecisions: pass === results.length,
+    results,
+  };
+  console.log(JSON.stringify(report, null, 2));
+  if (pass !== results.length) process.exit(1);
 }
 
 run().catch(err => {

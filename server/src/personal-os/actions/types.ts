@@ -155,6 +155,7 @@ export interface ProposeActionInput {
 export interface ApproveActionInput {
   approver?: string;
   riskAcknowledgement?: string;
+  strongConfirmation?: string;
   source?: string;
   execute?: boolean;
 }

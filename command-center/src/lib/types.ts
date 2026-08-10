@@ -462,4 +462,78 @@ export interface ActionDetail {
   executions: ActionExecution[];
   evidence: ActionEvidence[];
   compensations: Array<{ id: string; description: string; available: boolean; requiresNewApproval: boolean; status: string }>;
+  governance: {
+    latestDecision: PolicyDecision | null;
+    anomalies: GovernanceAnomaly[];
+    budgets: ActionBudget[];
+    killSwitches: KillSwitch[];
+  };
+}
+
+export type ApprovalLevel = 'NONE' | 'STANDARD' | 'STRONG' | 'DUAL_CONFIRMATION';
+export type PolicyDecisionResult = 'ALLOW' | 'REQUIRE_APPROVAL' | 'REQUIRE_STRONG_APPROVAL' | 'DENY' | 'BLOCK_BUDGET' | 'BLOCK_CONTEXT' | 'BLOCK_KILL_SWITCH';
+
+export interface PolicyDecision {
+  id: string;
+  proposalId: string;
+  actionType: string;
+  projectId: string | null;
+  riskClass: ActionRiskClass;
+  decision: PolicyDecisionResult;
+  requiredApprovalLevel: ApprovalLevel;
+  reasons: string[];
+  matchedPolicies: string[];
+  deniedPolicies: string[];
+  budgetState: { blocked: boolean; budgetId: string | null; remainingExecutions: number | null; reason: string | null };
+  killSwitchState: { blocked: boolean; switches: KillSwitch[] };
+  contextualConstraints: { staleReasons: string[] };
+  evaluatedAt: string;
+  policyVersion: string;
+  inputHash: string;
+  decisionHash: string;
+}
+
+export interface ActionBudget {
+  id: string;
+  scope: string;
+  projectId: string | null;
+  actionType: string | null;
+  period: string;
+  maxExecutions: number;
+  currentUsage: { executions: number; proposals: number; approvals: number; externalTargets: number };
+  resetsAt: string;
+  enabled: boolean;
+}
+
+export interface KillSwitch {
+  id: string;
+  scope: string;
+  projectId: string | null;
+  actionType: string | null;
+  enabled: boolean;
+  reason: string;
+  activatedAt: string;
+  expiresAt: string | null;
+}
+
+export interface GovernanceAnomaly {
+  id: string;
+  type: string;
+  severity: 'INFO' | 'WARNING' | 'CRITICAL';
+  proposalId: string | null;
+  projectId: string | null;
+  description: string;
+  detectedAt: string;
+  status: string;
+}
+
+export interface GovernanceStatus {
+  pendingActions: number;
+  actionsExecutedToday: number;
+  blockedByPolicy: number;
+  blockedByBudget: number;
+  anomalies: number;
+  currentGlobalPolicy: { id: string; version: string; contentHash: string; status: string } | null;
+  killSwitchState: { active: boolean; switches: KillSwitch[] };
+  budgets: ActionBudget[];
 }

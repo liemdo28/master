@@ -72,20 +72,22 @@ async function main() {
     assert.match(localExecution.externalObjectId || '', /^calendar-proposal-/);
 
     const create = service.proposeCalendarEvent(calendarPayload(), true);
-    await service.approve(create.id);
+    const createDecision = service.detail(create.id).governance.latestDecision!;
+    await service.approve(create.id, { strongConfirmation: `CONFIRM:${create.id} ${createDecision.decisionHash.slice(0, 12)}` });
     const calendarExecution = await service.execute(create.id);
     assert.equal(calendarExecution.status, 'COMPLETED');
     assert.match(calendarExecution.externalObjectId || '', /^calendar-event-fixture-/);
 
     const conflicted = service.proposeCalendarEvent(calendarPayload([{ eventId: 'fixture-conflict', title: 'Busy', start: '2026-08-08T09:00:00+07:00', end: '2026-08-08T09:30:00+07:00' }]), true);
-    await service.approve(conflicted.id);
+    const conflictedDecision = service.detail(conflicted.id).governance.latestDecision!;
+    await service.approve(conflicted.id, { strongConfirmation: `CONFIRM:${conflicted.id} ${conflictedDecision.decisionHash.slice(0, 12)}` });
     const failed = await service.execute(conflicted.id);
     assert.equal(failed.status, 'FAILED');
     assert.equal(failed.failureCode, 'CONFLICT_CHANGED');
 
     const integrity = service.store.integrity();
     assert.equal(integrity.integrityCheck, 'ok');
-    assert.equal(integrity.schemaVersion, 7);
+    assert.equal(integrity.schemaVersion, 8);
   } finally {
     service.close();
     fs.rmSync(root, { recursive: true, force: true });
