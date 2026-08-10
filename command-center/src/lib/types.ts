@@ -537,3 +537,71 @@ export interface GovernanceStatus {
   killSwitchState: { active: boolean; switches: KillSwitch[] };
   budgets: ActionBudget[];
 }
+
+// Phase 5H — Governed Multi-Step Action Planning. ActionPlan/ActionPlanStep are a
+// distinct concept from Phase 5D-3's DailyPlan (see PlanPage.tsx / /today/plan) —
+// that is a read-only daily-agenda summary; this is an executable, governed,
+// multi-step action DAG. Sharing the English word "plan" only.
+export type ActionPlanStatus = 'DRAFT' | 'VALIDATED' | 'WAITING_APPROVAL' | 'READY' | 'RUNNING' | 'PAUSED' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+export type ActionPlanStepType = 'READ_ONLY' | 'LOCAL_COMPUTE' | 'CONTROLLED_ACTION';
+export type ActionPlanStepStatus = 'PENDING' | 'BLOCKED' | 'READY' | 'RUNNING' | 'WAITING_APPROVAL' | 'COMPLETED' | 'FAILED' | 'CANCELLED' | 'RECONCILIATION_REQUIRED';
+
+export interface ActionPlan {
+  id: string;
+  goalId: string | null;
+  title: string;
+  objective: string;
+  projectId: string | null;
+  status: ActionPlanStatus;
+  planVersion: number;
+  previousVersionId: string | null;
+  planHash: string;
+  policyVersion: string | null;
+  policyHash: string | null;
+  createdAt: string;
+  updatedAt: string;
+  validatedAt: string | null;
+  completedAt: string | null;
+  cancelledAt: string | null;
+  failureReason: string | null;
+  blockedReason: string | null;
+}
+
+export interface ActionPlanStep {
+  id: string;
+  planId: string;
+  stepIndex: number;
+  key: string;
+  type: ActionPlanStepType;
+  description: string;
+  projectId: string | null;
+  dependsOnStepIds: string[];
+  sideEffectClass: 'NONE' | 'LOCAL' | 'EXTERNAL';
+  actionType: string | null;
+  riskClass: string | null;
+  requiredApprovalLevel: string | null;
+  proposalId: string | null;
+  status: ActionPlanStepStatus;
+  failureReason: string | null;
+  createdAt: string;
+  updatedAt: string;
+  startedAt: string | null;
+  completedAt: string | null;
+}
+
+export interface ActionPlanEvidence {
+  id: string;
+  planId: string;
+  stepId: string | null;
+  eventType: string;
+  summary: string;
+  metadata: Record<string, unknown>;
+  actor: string;
+  createdAt: string;
+}
+
+export interface PlanValidationResult {
+  valid: boolean;
+  issues: Array<{ code: string; message: string; stepKey?: string }>;
+  topologicalOrder: string[];
+}

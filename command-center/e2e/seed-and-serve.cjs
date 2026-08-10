@@ -33,6 +33,7 @@ async function seed() {
   const { KnowledgeDocumentService } = require(path.join(DIST, 'personal-os', 'documents', 'service.js'));
   const { OperatingStore } = require(path.join(DIST, 'personal-os', 'operating', 'store.js'));
   const { DailyOperatingLoop } = require(path.join(DIST, 'personal-os', 'operating', 'loop.js'));
+  const { GovernedOrchestrationService } = require(path.join(DIST, 'personal-os', 'orchestration', 'service.js'));
 
   const registry = new ProjectRegistryService();
   registry.registerProject(seedMiCoreProject(root));
@@ -61,10 +62,27 @@ async function seed() {
   await loop.morning('2026-08-07');
   loop.plan('2026-08-07');
 
+  const orchestration = new GovernedOrchestrationService(process.env.MI_PERSONAL_OS_DIR);
+  const plan = orchestration.createPlan({
+    title: 'E2E fixture: prepare customer follow-up', objective: 'Prepare a customer follow-up.', projectId: 'mi-core',
+    steps: [
+      { key: 'retrieve', type: 'READ_ONLY', description: 'Retrieve context.' },
+      {
+        key: 'draft', type: 'CONTROLLED_ACTION', description: 'Prepare Gmail draft.', dependsOnKeys: ['retrieve'],
+        actionType: 'GMAIL_CREATE_DRAFT',
+        actionPayload: { to: ['owner@example.com'], subject: 'E2E fixture follow-up', body: 'Fixture body.', projectId: 'mi-core', reason: 'E2E fixture' },
+      },
+    ],
+  });
+  orchestration.validate(plan.id);
+  orchestration.start(plan.id);
+  orchestration.close();
+
   personal.close(); taskStore.close(); registry.close(); documentStore.close(); operatingStore.close();
 
   fs.writeFileSync(path.join(root, 'waiting-task-id.txt'), waiting.id, 'utf8');
-  return { waitingTaskId: waiting.id };
+  fs.writeFileSync(path.join(root, 'plan-id.txt'), plan.id, 'utf8');
+  return { waitingTaskId: waiting.id, planId: plan.id };
 }
 
 seed().then(({ waitingTaskId }) => {

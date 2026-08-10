@@ -155,4 +155,28 @@ describe('calendar/Gmail mutation controls are structurally absent (§32)', () =
     }
     vi.doUnmock('@/lib/api-client');
   });
+
+  it('PlansPage never renders an approve/execute control — plan structure and Controlled Action approval are strictly separate surfaces (Phase 5H)', async () => {
+    vi.doMock('@/lib/api-client', () => ({
+      api: {
+        get: vi.fn(() => Promise.resolve({
+          plans: [{
+            id: 'plan-1', goalId: null, title: 'Prepare tomorrow follow-up', objective: 'x', projectId: 'mi-core',
+            status: 'WAITING_APPROVAL', planVersion: 1, previousVersionId: null, planHash: 'h', policyVersion: 'v1', policyHash: 'p',
+            createdAt: '2026-08-07T00:00:00Z', updatedAt: '2026-08-07T00:00:00Z', validatedAt: '2026-08-07T00:00:00Z',
+            completedAt: null, cancelledAt: null, failureReason: null, blockedReason: null,
+          }],
+        })),
+        post: vi.fn(), patch: vi.fn(), del: vi.fn(),
+      },
+      ApiError: class extends Error {}, UnauthorizedError: class extends Error {}, setUnauthorizedHandler: vi.fn(),
+    }));
+    const { PlansPage } = await import('@/routes/PlansPage');
+    renderWithProviders(<PlansPage />);
+    await waitFor(() => expect(screen.getByText(/tomorrow follow-up/i)).toBeInTheDocument());
+    for (const forbidden of [/^approve$/i, /^execute$/i, /^send$/i, /^run$/i]) {
+      expect(screen.queryByRole('button', { name: forbidden })).not.toBeInTheDocument();
+    }
+    vi.doUnmock('@/lib/api-client');
+  });
 });
