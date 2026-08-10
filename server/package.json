@@ -78,7 +78,14 @@
     "phase5f:sandbox-acceptance": "tsx src/personal-os/actions/sandbox-acceptance.ts",
     "phase5g:acceptance": "npm run test:action-governance && npm run test:action-governance-security && npm run test:action-governance-restart && npm run test:action-governance-evaluation && tsx src/personal-os/actions/phase5g-acceptance.ts",
     "phase5d3:acceptance": "tsx src/personal-os/operating/phase5d3-acceptance.ts",
-    "phase5d3:realday-acceptance": "tsx src/personal-os/operating/real-day-acceptance.ts"
+    "phase5d3:realday-acceptance": "tsx src/personal-os/operating/real-day-acceptance.ts",
+    "test:orchestration": "tsx src/personal-os/orchestration/__tests__/orchestration.test.ts",
+    "test:orchestration-security": "tsx src/personal-os/orchestration/__tests__/orchestration-security.test.ts",
+    "test:orchestration-migration": "tsx src/personal-os/orchestration/__tests__/orchestration-migration.test.ts",
+    "test:orchestration-restart": "tsx src/personal-os/orchestration/__tests__/orchestration-restart.test.ts",
+    "test:orchestration-concurrency": "tsx src/personal-os/orchestration/__tests__/orchestration-concurrency.test.ts",
+    "test:orchestration-evaluation": "tsx src/personal-os/orchestration/orchestration-evaluation.ts",
+    "phase5h:acceptance": "npm run test:orchestration && npm run test:orchestration-security && npm run test:orchestration-migration && npm run test:orchestration-restart && npm run test:orchestration-concurrency && npm run test:orchestration-evaluation && tsx src/personal-os/orchestration/phase5h-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

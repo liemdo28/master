@@ -82,6 +82,15 @@ export class OrchestrationStore {
   get handle(): Database.Database { return this.db; }
   runInTransaction<T>(fn: () => T): T { return this.db.transaction(fn)(); }
 
+  integrity(): { integrityCheck: string; foreignKeyViolations: unknown[]; schemaVersion: number } {
+    const integrity = this.db.prepare(`PRAGMA integrity_check`).get() as Record<string, string>;
+    return {
+      integrityCheck: Object.values(integrity)[0],
+      foreignKeyViolations: this.db.prepare(`PRAGMA foreign_key_check`).all(),
+      schemaVersion: (this.db.prepare(`SELECT MAX(version) AS v FROM schema_migrations`).get() as { v: number | null }).v ?? 0,
+    };
+  }
+
   // ── Plans ──────────────────────────────────────────────────────────────
 
   savePlan(plan: ActionPlan): ActionPlan {
