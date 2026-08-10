@@ -73,7 +73,7 @@ module.exports = {
       watch: false,
       max_memory_restart: '768M',
       kill_timeout: 15000,
-      wait_ready: true,
+      wait_ready: false,
       listen_timeout: 35000,
       max_restarts: 15,
       restart_delay: 5000,
