@@ -137,7 +137,12 @@ async function main() {
       conflicts: [],
       freeBusyEvidence: 'sandbox-freebusy-rechecked-at-execution',
     }, true);
-    await service.approve(event.id, { approver: 'sandbox-acceptance', source: 'acceptance-script' });
+    const eventDecision = service.detail(event.id).governance.latestDecision!;
+    await service.approve(event.id, {
+      approver: 'sandbox-acceptance',
+      source: 'acceptance-script',
+      strongConfirmation: `CONFIRM:${event.id} ${eventDecision.decisionHash.slice(0, 12)}`,
+    });
     const eventBeforeDuplicateCount = await calendarEventCount(title, start, end);
     const eventExecution = await service.execute(event.id);
     const eventDuplicate = await service.execute(event.id);

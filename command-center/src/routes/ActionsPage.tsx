@@ -70,13 +70,19 @@ export function ActionsPage() {
 }
 
 function ActionDetailPanel({ id }: { id: string }) {
+  const [strongText, setStrongText] = useState('');
   const { data, isLoading, error } = useQuery({
     queryKey: ['action', id],
     queryFn: () => api.get<ActionDetail>(`/actions/${id}`),
   });
   const mutation = useMutation({
     mutationFn: (op: 'approve' | 'reject' | 'cancel' | 'execute') => {
-      if (op === 'approve') return api.post(`/actions/${id}/approve`, { approver: 'command-center', source: 'command-center', riskAcknowledgement: 'Confirmed from Command Center risk preview.' });
+      if (op === 'approve') return api.post(`/actions/${id}/approve`, {
+        approver: 'command-center',
+        source: 'command-center',
+        riskAcknowledgement: 'Confirmed from Command Center risk preview.',
+        strongConfirmation: strongText,
+      });
       return api.post(`/actions/${id}/${op}`, {});
     },
     onSuccess: () => {
@@ -90,6 +96,7 @@ function ActionDetailPanel({ id }: { id: string }) {
   if (!data) return null;
 
   const { proposal, approval, executions, evidence, compensations } = data;
+  const decision = data.governance.latestDecision;
   const hashShort = proposal.payloadHash.slice(0, 12);
   const canApprove = proposal.status === 'WAITING_APPROVAL';
   const canExecute = proposal.status === 'APPROVED';
@@ -115,7 +122,23 @@ function ActionDetailPanel({ id }: { id: string }) {
         <Info label="Expires" value={new Date(proposal.expiresAt).toLocaleString()} />
         <Info label="Project" value={proposal.projectId ?? 'none'} />
         <Info label="Rollback" value={proposal.rollbackPlan} />
+        <Info label="Policy decision" value={decision ? `${decision.decision} · ${decision.requiredApprovalLevel}` : 'not evaluated'} />
+        <Info label="Policy version" value={decision?.policyVersion ?? 'none'} />
+        <Info label="Budget remaining" value={decision?.budgetState.remainingExecutions?.toString() ?? 'unknown'} />
       </section>
+
+      {decision && (
+        <section className="rounded-md border border-(--color-border) bg-(--color-surface) p-4">
+          <h3 className="mb-2 text-sm font-semibold text-(--color-text)">Governance</h3>
+          <div className="grid gap-3 md:grid-cols-2">
+            <Timeline title="Reasons" items={decision.reasons} />
+            <Timeline title="Policies" items={[...decision.matchedPolicies.map(x => `matched: ${x}`), ...decision.deniedPolicies.map(x => `denied: ${x}`)]} />
+          </div>
+          {decision.contextualConstraints.staleReasons.length ? (
+            <p className="mt-3 text-sm text-red-100">{decision.contextualConstraints.staleReasons.join(' ')}</p>
+          ) : null}
+        </section>
+      )}
 
       <section className="rounded-md border border-(--color-border) bg-(--color-surface) p-4">
         <h3 className="mb-2 text-sm font-semibold text-(--color-text)">Preview</h3>
@@ -126,8 +149,14 @@ function ActionDetailPanel({ id }: { id: string }) {
       </section>
 
       {isR3 && proposal.status === 'WAITING_APPROVAL' && (
-        <div className="rounded-md border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-100">
-          This approval authorizes one external side effect against the exact target and payload hash shown above.
+        <div className="space-y-2 rounded-md border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-100">
+          <p>This approval authorizes one external side effect against the exact target and payload hash shown above.</p>
+          <input
+            value={strongText}
+            onChange={event => setStrongText(event.target.value)}
+            placeholder={`CONFIRM:${proposal.id} ${decision?.decisionHash.slice(0, 12) ?? 'decision-hash'}`}
+            className="w-full rounded border border-red-400/40 bg-black/20 px-2 py-2 font-mono text-xs text-white outline-none"
+          />
         </div>
       )}
 

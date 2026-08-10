@@ -64,10 +64,46 @@ async function main() {
           console.log(`Risk: ${detail.proposal.riskClass}`);
           console.log(`Target: ${detail.proposal.targetSystem}`);
           console.log(`Payload hash: ${detail.proposal.payloadHash}`);
-          return print(await actionService.approve(args[1], { source: 'cli', approver: 'cli-user' }));
+          const decision = detail.governance.latestDecision ?? actionService.policyEngine.evaluate({ proposal: detail.proposal, stage: 'approval', actor: 'cli-user' });
+          console.log(`Policy decision: ${decision.decision}`);
+          console.log(`Approval level: ${decision.requiredApprovalLevel}`);
+          console.log(`Decision hash: ${decision.decisionHash}`);
+          const confirmation = args.includes('--strong-confirm')
+            ? `CONFIRM:${detail.proposal.id} ${decision.decisionHash.slice(0, 12)}`
+            : undefined;
+          return print(await actionService.approve(args[1], { source: 'cli', approver: 'cli-user', strongConfirmation: confirmation }));
         }
         if (sub === 'reject') return print(actionService.reject(args[1], { source: 'cli', approver: 'cli-user', reason: args.slice(2).join(' ') || 'Rejected from CLI' }));
         if (sub === 'execute') return print(await actionService.execute(args[1]));
+        if (sub === 'lockdown') {
+          const item = actionService.policyEngine.killSwitch.lockdown('cli-user');
+          actionService.policyEngine.audit.record({ eventType: 'kill_switch.enabled', policyVersion: null, inputHash: null, decisionHash: null, actor: 'cli-user', proposalId: null, reasons: [item.reason], metadata: { id: item.id, scope: item.scope } });
+          return print(item);
+        }
+        if (sub === 'unlock') {
+          const item = actionService.policyEngine.killSwitch.unlock(args[1] || 'missing');
+          actionService.policyEngine.audit.record({ eventType: 'kill_switch.disabled', policyVersion: null, inputHash: null, decisionHash: null, actor: 'cli-user', proposalId: null, reasons: ['Kill switch disabled from local CLI.'], metadata: { id: item.id } });
+          return print(item);
+        }
+      } finally { actionService.close(); }
+    }
+    if (cmd === 'governance') {
+      const { ControlledActionService } = await import('./actions/service');
+      const actionService = new ControlledActionService();
+      try {
+        const sub = args[0] ?? 'status';
+        const store = actionService.policyEngine.store;
+        if (sub === 'status') return print({
+          activePolicy: store.activePolicySet(),
+          killSwitches: store.listKillSwitches(),
+          budgets: store.listBudgets(),
+          anomalies: store.listAnomalies(),
+        });
+        if (sub === 'policies') return print({ policies: store.listPolicySets() });
+        if (sub === 'simulate') return print({ policyId: args[1], changed: [], note: 'Run phase5g:acceptance for the full deterministic fixture simulation.' });
+        if (sub === 'activate') throw new Error('policy activation requires explicit approved draft flow; no --force exists');
+        if (sub === 'budgets') return print({ budgets: store.listBudgets() });
+        if (sub === 'anomalies') return print({ anomalies: store.listAnomalies() });
       } finally { actionService.close(); }
     }
     // Phase 5D-3 daily operating loop. Approving a plan only changes its status —
@@ -127,7 +163,8 @@ async function main() {
   personal-os brief generate|show
   personal-os knowledge list|add <kind> <title> <content>|search <query>|confirm <id>|remove <id>
   personal-os memory-pack <query>
-  personal-os actions list [status]|show <id>|approve <id>|reject <id> [reason]|execute <id>
+  personal-os actions list [status]|show <id>|approve <id> [--strong-confirm]|reject <id> [reason]|execute <id>|lockdown|unlock <killSwitchId>
+  personal-os governance status|policies|simulate <policyId>|activate <policyId>|budgets|anomalies
   personal-os today [generate|refresh|plan|approve-plan <planId>|review]
   personal-os week
   personal-os approvals

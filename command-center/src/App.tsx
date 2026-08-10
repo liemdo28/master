@@ -12,6 +12,7 @@ import { TodayPage } from '@/routes/TodayPage';
 import { PlanPage } from '@/routes/PlanPage';
 import { ApprovalsPage } from '@/routes/ApprovalsPage';
 import { ActionsPage } from '@/routes/ActionsPage';
+import { GovernancePage } from '@/routes/GovernancePage';
 import { GoalsPage } from '@/routes/GoalsPage';
 import { GoalDetailPage } from '@/routes/GoalDetailPage';
 import { ProjectsPage } from '@/routes/ProjectsPage';
@@ -46,6 +47,7 @@ function Gate() {
         <Route path="/today/plan" element={<PlanPage />} />
         <Route path="/approvals" element={<ApprovalsPage />} />
         <Route path="/actions" element={<ActionsPage />} />
+        <Route path="/governance" element={<GovernancePage />} />
         <Route path="/goals" element={<GoalsPage />} />
         <Route path="/goals/:id" element={<GoalDetailPage />} />
         <Route path="/projects" element={<ProjectsPage />} />

@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import Database from 'better-sqlite3';
 import { applyPhase5d3Migration, currentSchemaVersion } from '../operating/store';
+import { applyPhase5gMigration } from './governance/schema';
 import { PHASE5F_SCHEMA_VERSION } from './policy';
 import type { ActionApproval, ActionCompensation, ActionEvidence, ActionExecution, ActionProposal, ActionProposalStatus } from './types';
 
@@ -139,6 +140,7 @@ export class ControlledActionStore {
     fs.mkdirSync(root, { recursive: true });
     this.db = new Database(path.join(root, 'personal-os.db'));
     applyPhase5fMigration(this.db);
+    applyPhase5gMigration(this.db);
   }
 
   close(): void { this.db.close(); }
