@@ -101,24 +101,27 @@ export class GovernedOrchestrationService {
       };
       this.store.savePlan(plan);
 
+      // Two passes: every step row must exist before any dependency row can reference
+      // it via FOREIGN KEY, and step order in the input array is not guaranteed to
+      // match dependency order (a step may legitimately depend on a later-indexed one).
       const keyToId = new Map<string, string>();
       input.steps.forEach(s => keyToId.set(s.key, `step-${randomUUID()}`));
-      input.steps.forEach((s, index) => {
-        const step: ActionPlanStep = {
-          id: keyToId.get(s.key)!, planId, stepIndex: index, key: s.key, type: s.type,
-          description: s.description, projectId: s.projectId ?? input.projectId ?? null,
-          dependsOnStepIds: (s.dependsOnKeys ?? []).map(k => keyToId.get(k)).filter((v): v is string => !!v),
-          inputs: s.inputs ?? {}, expectedOutputs: s.expectedOutputs ?? {},
-          sideEffectClass: s.type === 'CONTROLLED_ACTION' ? 'EXTERNAL' : 'NONE',
-          actionType: s.type === 'CONTROLLED_ACTION' ? (s.actionType as any) : null,
-          actionPayload: s.actionPayload ?? null,
-          riskClass: null, requiredApprovalLevel: null, policyDecisionId: null, policyDecisionResult: null,
-          proposalId: null, status: 'PENDING', outputSummary: null, failureReason: null,
-          createdAt, updatedAt: createdAt, startedAt: null, completedAt: null,
-        };
-        this.store.saveStep(step);
+      const steps: ActionPlanStep[] = input.steps.map((s, index) => ({
+        id: keyToId.get(s.key)!, planId, stepIndex: index, key: s.key, type: s.type,
+        description: s.description, projectId: s.projectId ?? input.projectId ?? null,
+        dependsOnStepIds: (s.dependsOnKeys ?? []).map(k => keyToId.get(k)).filter((v): v is string => !!v),
+        inputs: s.inputs ?? {}, expectedOutputs: s.expectedOutputs ?? {},
+        sideEffectClass: s.type === 'CONTROLLED_ACTION' ? 'EXTERNAL' : 'NONE',
+        actionType: s.type === 'CONTROLLED_ACTION' ? (s.actionType as any) : null,
+        actionPayload: s.actionPayload ?? null,
+        riskClass: null, requiredApprovalLevel: null, policyDecisionId: null, policyDecisionResult: null,
+        proposalId: null, status: 'PENDING', outputSummary: null, failureReason: null,
+        createdAt, updatedAt: createdAt, startedAt: null, completedAt: null,
+      }));
+      for (const step of steps) this.store.saveStep(step);
+      for (const step of steps) {
         for (const depId of step.dependsOnStepIds) this.store.saveDependency(planId, step.id, depId);
-      });
+      }
 
       this.store.recordEvidence(planId, null, 'PLAN_CREATED', `Plan created with ${input.steps.length} step(s), version ${planVersion}.`, { planHash, planVersion, previousVersionId }, 'user');
       if (previousVersionId) {
@@ -236,15 +239,21 @@ export class GovernedOrchestrationService {
   cancel(id: string, reason: string): ActionPlan {
     const plan = this.get(id);
     assertPlanTransition(plan.status, 'CANCELLED');
+    const steps = this.store.listStepsForPlan(id);
+    // Reject still-open proposals FIRST, outside any transaction on this store — it
+    // writes through a separate ControlledActionStore connection to the same file, and
+    // nesting a second connection's write transaction inside this store's own
+    // transaction deadlocks SQLite (SQLITE_BUSY). A dangling proposal after its plan is
+    // cancelled would be a hidden side effect waiting to happen, so this still happens
+    // before the plan/step rows below are updated, just not in the same transaction.
+    for (const step of steps) {
+      if (step.status === 'WAITING_APPROVAL' && step.proposalId) {
+        try { this.controlledActions.reject(step.proposalId, { reason: `plan ${id} cancelled` }); } catch { /* already terminal */ }
+      }
+    }
     return this.store.runInTransaction(() => {
-      const steps = this.store.listStepsForPlan(id);
       for (const step of steps) {
-        if (['PENDING', 'BLOCKED', 'READY'].includes(step.status)) {
-          this.store.updateStepStatus(step.id, 'CANCELLED');
-        } else if (step.status === 'WAITING_APPROVAL' && step.proposalId) {
-          // Reject the still-open proposal too — a dangling proposal after its plan is
-          // cancelled would be a hidden side effect waiting to happen.
-          try { this.controlledActions.reject(step.proposalId, { reason: `plan ${id} cancelled` }); } catch { /* already terminal */ }
+        if (['PENDING', 'BLOCKED', 'READY', 'WAITING_APPROVAL'].includes(step.status)) {
           this.store.updateStepStatus(step.id, 'CANCELLED');
         }
       }
@@ -273,6 +282,13 @@ export class GovernedOrchestrationService {
     }
 
     const plan = this.get(id);
+    if (['COMPLETED', 'FAILED', 'CANCELLED'].includes(plan.status)) {
+      // Terminal — advancing is a safe no-op, not an error, so a client that doesn't
+      // track plan status locally (or polls after completion) never gets a surprise
+      // exception, and no duplicate work is ever attempted.
+      const run = this.store.saveRun({ id: `run-${randomUUID()}`, planId: id, triggeredBy: opts.triggeredBy || 'user', idempotencyKey, stepsAdvanced: 0, startedAt: now(), completedAt: now(), resultSummary: `plan already ${plan.status}` });
+      return { plan, run, stepsAdvanced: 0, deduplicated: false };
+    }
     if (!['READY', 'RUNNING', 'WAITING_APPROVAL'].includes(plan.status)) {
       throw new Error(`plan cannot be advanced from status ${plan.status}`);
     }
@@ -309,7 +325,10 @@ export class GovernedOrchestrationService {
       }
 
       const current = this.store.getStep(step.id)!;
-      if (current.status !== 'READY') { if (current.status === 'WAITING_APPROVAL') anyWaitingApproval = true; continue; }
+      // WAITING_APPROVAL steps must still be re-checked every advance() call — that is
+      // how a since-granted approval (made through the existing Controlled Actions
+      // surface, entirely outside this call) gets observed and the step completed.
+      if (!['READY', 'WAITING_APPROVAL'].includes(current.status)) continue;
 
       if (current.type !== 'CONTROLLED_ACTION') {
         const advanced = await this.advanceSafeLocalStep(current);

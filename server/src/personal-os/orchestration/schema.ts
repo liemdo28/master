@@ -1,17 +1,21 @@
 import Database from 'better-sqlite3';
 import { currentSchemaVersion } from '../operating/store';
+import { applyPhase5fMigration } from '../actions/store';
 import { applyPhase5gMigration } from '../actions/governance/schema';
 import { PHASE5H_SCHEMA_VERSION } from './types';
 
 const now = (): string => new Date().toISOString();
 
 /**
- * Applies schema v9 — additive orchestration tables only. Chains through v8 (Phase 5G
- * governance) first, same pattern every prior phase in this database uses. Idempotent:
- * a second run against an already-migrated database applies nothing (`applied: false`).
+ * Applies schema v9 — additive orchestration tables only. Chains through v7 (Phase 5F,
+ * which itself chains all the way back) and v8 (Phase 5G governance) first — the same
+ * two-call sequence ControlledActionStore's own constructor uses, since
+ * applyPhase5gMigration does not chain backwards on its own. Idempotent: a second run
+ * against an already-migrated database applies nothing (`applied: false`).
  */
 export function applyPhase5hMigration(db: Database.Database): { from: number; to: number; applied: boolean } {
   const before = currentSchemaVersion(db);
+  if (before < 7) applyPhase5fMigration(db);
   if (before < 8) applyPhase5gMigration(db);
 
   db.pragma('journal_mode = WAL');
