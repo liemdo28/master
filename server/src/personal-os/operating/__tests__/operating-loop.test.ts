@@ -75,6 +75,8 @@ async function run(): Promise<void> {
   engine.transition(ready.id, 'RUNNING');
   taskStore.updateCodingFields(ready.id, { resultSummary: 'fixed and deployed' });
   engine.transition(ready.id, 'VALIDATING'); engine.transition(ready.id, 'COMPLETED');
+  (taskStore as unknown as { db: { prepare: (sql: string) => { run: (...args: unknown[]) => unknown } } }).db
+    .prepare(`UPDATE tasks SET completedAt = ? WHERE id = ?`).run(`${brief.date}T17:00:00.000Z`, ready.id);
 
   const refresh1 = await loop.midday();
   assert.strictEqual(refresh1.created, true);

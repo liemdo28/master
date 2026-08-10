@@ -1,12 +1,16 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/lib/auth';
+import { api } from '@/lib/api-client';
+import type { ActionProposal } from '@/lib/types';
 import { CommandPalette } from './CommandPalette';
 
 export const NAV_ITEMS = [
   { to: '/today', label: 'Today', key: 'g t' },
   { to: '/goals', label: 'Goals', key: 'g g' },
   { to: '/approvals', label: 'Approvals', key: 'g a' },
+  { to: '/actions', label: 'Actions', key: 'g x' },
   { to: '/projects', label: 'Projects', key: 'g p' },
   { to: '/tasks', label: 'Tasks', key: 'g k' },
   { to: '/knowledge', label: 'Knowledge', key: 'g n' },
@@ -22,6 +26,12 @@ export const NAV_ITEMS = [
 export function Layout() {
   const { logout } = useAuth();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const { data } = useQuery({
+    queryKey: ['actions-nav-count'],
+    queryFn: () => api.get<{ actions: ActionProposal[] }>('/actions'),
+    refetchInterval: 30_000,
+  });
+  const pendingActions = (data?.actions ?? []).filter(action => ['WAITING_APPROVAL', 'APPROVED', 'EXECUTING'].includes(action.status)).length;
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
@@ -56,7 +66,10 @@ export function Layout() {
                   }`
                 }
               >
-                {item.label}
+                <span>{item.label}</span>
+                {item.to === '/actions' && pendingActions > 0 ? (
+                  <span className="float-right rounded bg-(--color-accent) px-1.5 text-xs text-white">{pendingActions}</span>
+                ) : null}
               </NavLink>
             </li>
           ))}
