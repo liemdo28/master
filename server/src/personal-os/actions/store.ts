@@ -217,6 +217,29 @@ export class ControlledActionStore {
     return execution;
   }
 
+  updateExecutionResult(
+    id: string,
+    patch: Pick<ActionExecution, 'status' | 'providerRequestMetadata' | 'providerResponseSummary' | 'externalObjectId' | 'failureCode' | 'completedAt'>,
+  ): ActionExecution {
+    this.db.prepare(`
+      UPDATE action_executions SET status = @status, providerRequestMetadataJson = @providerRequestMetadataJson,
+        providerResponseSummaryJson = @providerResponseSummaryJson, externalObjectId = @externalObjectId,
+        failureCode = @failureCode, completedAt = @completedAt
+      WHERE id = @id
+    `).run({
+      id,
+      status: patch.status,
+      providerRequestMetadataJson: JSON.stringify(patch.providerRequestMetadata),
+      providerResponseSummaryJson: JSON.stringify(patch.providerResponseSummary),
+      externalObjectId: patch.externalObjectId,
+      failureCode: patch.failureCode,
+      completedAt: patch.completedAt,
+    });
+    const updated = this.db.prepare(`SELECT * FROM action_executions WHERE id = ?`).get(id) as any;
+    if (!updated) throw new Error('execution not found');
+    return parseExecution(updated);
+  }
+
   getExecutionByIdempotencyKey(key: string): ActionExecution | null {
     const row = this.db.prepare(`SELECT * FROM action_executions WHERE idempotencyKey = ?`).get(key) as any;
     return row ? parseExecution(row) : null;

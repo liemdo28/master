@@ -32,10 +32,10 @@ async function main() {
   try {
     const proposal = s.proposeGmailDraft(validDraft());
     id = proposal.id;
-    s.approve(id);
+    await s.approve(id);
     const db = s.store.handle;
     db.prepare(`UPDATE action_proposals SET normalizedPayloadJson = ? WHERE id = ?`).run(JSON.stringify({ ...proposal.normalizedPayload, subject: 'Tampered' }), id);
-    assert.throws(() => s.execute(id), /payload hash mismatch/i);
+    await assert.rejects(() => s.execute(id), /payload hash mismatch/i);
   } finally { s.close(); }
 
   s = service();
@@ -48,8 +48,28 @@ async function main() {
     });
     s.store.handle.prepare(`UPDATE action_proposals SET expiresAt = ? WHERE id = ?`).run('2000-01-01T00:00:00.000Z', proposal.id);
     assert.equal(s.get(proposal.id).status, 'EXPIRED');
-    assert.throws(() => s.approve(proposal.id), /not waiting|EXPIRED/i);
+    await assert.rejects(() => s.approve(proposal.id), /not waiting|EXPIRED/i);
   } finally { s.close(); }
+
+  s = service();
+  const previousMode = process.env.MI_CONTROLLED_ACTION_PROVIDER_MODE;
+  const previousSafe = process.env.SAFE_GOOGLE_SANDBOX;
+  try {
+    process.env.MI_CONTROLLED_ACTION_PROVIDER_MODE = 'sandbox';
+    delete process.env.SAFE_GOOGLE_SANDBOX;
+    const proposal = s.proposeGmailDraft({ ...validDraft(), subject: 'Sandbox guard fixture' });
+    await s.approve(proposal.id);
+    const execution = await s.execute(proposal.id);
+    assert.equal(execution.status, 'FAILED');
+    assert.equal(execution.failureCode, 'PERMISSION_DENIED');
+    assert.equal(s.detail(proposal.id).executions.length, 1);
+  } finally {
+    if (previousMode === undefined) delete process.env.MI_CONTROLLED_ACTION_PROVIDER_MODE;
+    else process.env.MI_CONTROLLED_ACTION_PROVIDER_MODE = previousMode;
+    if (previousSafe === undefined) delete process.env.SAFE_GOOGLE_SANDBOX;
+    else process.env.SAFE_GOOGLE_SANDBOX = previousSafe;
+    s.close();
+  }
 
   s = service();
   try {

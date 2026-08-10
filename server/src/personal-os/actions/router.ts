@@ -8,7 +8,7 @@ export const controlledActionsJsonParser = express.json({ limit: '1mb' });
 const router = Router();
 const actionIdPattern = /^action-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-function withService<T>(fn: (service: ControlledActionService) => T): T {
+async function withService<T>(fn: (service: ControlledActionService) => Promise<T> | T): Promise<T> {
   const service = new ControlledActionService();
   try { return fn(service); } finally { service.close(); }
 }
@@ -56,11 +56,11 @@ router.get('/actions/:id', (req, res) => withService(service => {
   try { res.json(service.detail(req.params.id)); } catch (err) { handleError(res, err); }
 }));
 
-router.post('/actions/:id/approve', (req, res) => withService(service => {
+router.post('/actions/:id/approve', (req, res) => withService(async service => {
   if (!validActionId(req.params.id)) return res.status(400).json({ error: 'invalid action id' });
   try {
     assertPlainPayload(req.body ?? {});
-    res.json(service.approve(req.params.id, req.body ?? {}));
+    res.json(await service.approve(req.params.id, req.body ?? {}));
   } catch (err) { handleError(res, err); }
 }));
 
@@ -77,9 +77,9 @@ router.post('/actions/:id/cancel', (req, res) => withService(service => {
   try { res.json(service.cancel(req.params.id)); } catch (err) { handleError(res, err); }
 }));
 
-router.post('/actions/:id/execute', (req, res) => withService(service => {
+router.post('/actions/:id/execute', (req, res) => withService(async service => {
   if (!validActionId(req.params.id)) return res.status(400).json({ error: 'invalid action id' });
-  try { res.json(service.execute(req.params.id)); } catch (err) { handleError(res, err); }
+  try { res.json(await service.execute(req.params.id)); } catch (err) { handleError(res, err); }
 }));
 
 router.get('/actions/:id/evidence', (req, res) => withService(service => {

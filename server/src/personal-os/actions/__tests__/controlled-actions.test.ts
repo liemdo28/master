@@ -45,19 +45,19 @@ async function main() {
     assert.match(draft.preview.text, /Sends: false/);
     assert.ok(draft.payloadHash.length >= 64);
 
-    assert.throws(() => service.execute(draft.id), /missing approval/i);
+    await assert.rejects(() => service.execute(draft.id), /missing approval/i);
 
-    const approved = service.approve(draft.id, { approver: 'tester' });
+    const approved = await service.approve(draft.id, { approver: 'tester' });
     assert.equal(approved.proposal.status, 'APPROVED');
     assert.equal(approved.approval.payloadHash, draft.payloadHash);
     assert.deepEqual(approved.approval.approvedPayloadSnapshot, draft.normalizedPayload);
 
-    const execution = service.execute(draft.id);
+    const execution = await service.execute(draft.id);
     assert.equal(execution.status, 'COMPLETED');
     assert.match(execution.externalObjectId || '', /^gmail-draft-fixture-/);
     assert.equal(execution.providerResponseSummary.sent, false);
 
-    const duplicate = service.execute(draft.id);
+    const duplicate = await service.execute(draft.id);
     assert.equal(duplicate.id, execution.id);
     assert.equal(service.detail(draft.id).executions.length, 1);
 
@@ -66,20 +66,20 @@ async function main() {
     assert.equal(service.get(rejected.id).status, 'REJECTED');
 
     const localProposal = service.proposeCalendarEvent(calendarPayload(), false);
-    service.approve(localProposal.id);
-    const localExecution = service.execute(localProposal.id);
+    await service.approve(localProposal.id);
+    const localExecution = await service.execute(localProposal.id);
     assert.equal(localExecution.status, 'COMPLETED');
     assert.match(localExecution.externalObjectId || '', /^calendar-proposal-/);
 
     const create = service.proposeCalendarEvent(calendarPayload(), true);
-    service.approve(create.id);
-    const calendarExecution = service.execute(create.id);
+    await service.approve(create.id);
+    const calendarExecution = await service.execute(create.id);
     assert.equal(calendarExecution.status, 'COMPLETED');
     assert.match(calendarExecution.externalObjectId || '', /^calendar-event-fixture-/);
 
     const conflicted = service.proposeCalendarEvent(calendarPayload([{ eventId: 'fixture-conflict', title: 'Busy', start: '2026-08-08T09:00:00+07:00', end: '2026-08-08T09:30:00+07:00' }]), true);
-    service.approve(conflicted.id);
-    const failed = service.execute(conflicted.id);
+    await service.approve(conflicted.id);
+    const failed = await service.execute(conflicted.id);
     assert.equal(failed.status, 'FAILED');
     assert.equal(failed.failureCode, 'CONFLICT_CHANGED');
 

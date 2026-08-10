@@ -38,20 +38,20 @@ async function run() {
         } else if (item.kind === 'expired') {
           const p = service.proposeGmailDraft({ to: ['eval@example.com'], subject: item.id, body: 'body', reason: 'eval' });
           service.store.handle.prepare(`UPDATE action_proposals SET expiresAt = ? WHERE id = ?`).run('2000-01-01T00:00:00.000Z', p.id);
-          service.approve(p.id);
+          await service.approve(p.id);
         } else if (item.kind === 'calendar-local') {
           const p = service.proposeCalendarEvent(calendar(item.id), false);
-          service.approve(p.id);
-          actual = service.execute(p.id).status;
+          await service.approve(p.id);
+          actual = (await service.execute(p.id)).status;
         } else if (item.kind === 'calendar-create' || item.kind === 'conflict') {
           const p = service.proposeCalendarEvent(calendar(item.id, item.kind === 'conflict'), true);
-          service.approve(p.id);
-          actual = service.execute(p.id).status;
+          await service.approve(p.id);
+          actual = (await service.execute(p.id)).status;
         } else {
           const p = service.proposeGmailDraft({ to: ['eval@example.com'], subject: item.id, body: 'body', reason: 'eval' });
-          service.approve(p.id);
-          const first = service.execute(p.id);
-          const second = item.kind === 'duplicate' ? service.execute(p.id) : first;
+          await service.approve(p.id);
+          const first = await service.execute(p.id);
+          const second = item.kind === 'duplicate' ? await service.execute(p.id) : first;
           actual = first.id === second.id ? first.status : 'FAILED';
         }
       } catch {

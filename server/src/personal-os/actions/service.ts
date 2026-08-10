@@ -40,6 +40,15 @@ const ACTION_TYPES = new Set<ActionType>([
   'CODING_TASK_APPROVAL',
 ]);
 
+type ProviderResult = {
+  providerMode: 'fixture' | 'sandbox' | 'live';
+  requestMetadata: Record<string, unknown>;
+  responseSummary: Record<string, unknown>;
+  externalObjectId: string | null;
+  failureCode: ProviderFailureCode | null;
+  summary: string;
+};
+
 export class ControlledActionService {
   readonly store: ControlledActionStore;
 
@@ -162,9 +171,9 @@ export class ControlledActionService {
     });
   }
 
-  approve(id: string, input: ApproveActionInput = {}): { proposal: ActionProposal; approval: ActionApproval; execution?: ActionExecution } {
+  async approve(id: string, input: ApproveActionInput = {}): Promise<{ proposal: ActionProposal; approval: ActionApproval; execution?: ActionExecution }> {
     assertPlainPayload(input);
-    return this.store.runInTransaction(() => {
+    const result = this.store.runInTransaction(() => {
       const proposal = this.requireWaitingProposal(id);
       const recomputed = payloadHash(proposal.normalizedPayload);
       if (recomputed !== proposal.payloadHash) {
@@ -194,12 +203,13 @@ export class ControlledActionService {
         payloadHash: approval.payloadHash,
         targetSystem: approval.targetSystem,
       }, approval.approver);
-      if (input.execute === true) {
-        const execution = this.executeApproved(approved, approval);
-        return { proposal: this.get(id), approval, execution };
-      }
       return { proposal: approved, approval };
     });
+    if (input.execute === true) {
+      const execution = await this.execute(id);
+      return { proposal: this.get(id), approval: result.approval, execution };
+    }
+    return result;
   }
 
   reject(id: string, input: RejectActionInput = {}): ActionProposal {
@@ -223,21 +233,32 @@ export class ControlledActionService {
     });
   }
 
-  execute(id: string): ActionExecution {
-    return this.store.runInTransaction(() => {
+  async execute(id: string): Promise<ActionExecution> {
+    const prepared = this.store.runInTransaction(() => {
       const proposal = this.get(id);
       const approval = this.store.latestApproval(id);
       if (!approval || approval.decision !== 'APPROVE') throw new Error('missing approval');
-      return this.executeApproved(proposal, approval);
+      return this.prepareExecution(proposal, approval);
     });
+    if (!prepared.shouldRunProvider) return prepared.execution;
+
+    const result = await this.runProvider(prepared.proposal);
+    return this.completeExecution(prepared.proposal, prepared.approval, prepared.execution, result);
   }
 
-  private executeApproved(proposal: ActionProposal, approval: ActionApproval): ActionExecution {
+  private prepareExecution(proposal: ActionProposal, approval: ActionApproval): {
+    shouldRunProvider: boolean;
+    proposal: ActionProposal;
+    approval: ActionApproval;
+    execution: ActionExecution;
+  } {
     if (proposal.status === 'COMPLETED') {
       const existing = this.store.getExecutionByIdempotencyKey(proposal.idempotencyKey);
-      if (existing) return existing;
+      if (existing) return { shouldRunProvider: false, proposal, approval, execution: existing };
       throw new Error('proposal completed without execution record');
     }
+    const existing = this.store.getExecutionByIdempotencyKey(proposal.idempotencyKey);
+    if (existing) return { shouldRunProvider: false, proposal, approval, execution: existing };
     if (!['APPROVED'].includes(proposal.status)) throw new Error(`proposal is not executable from ${proposal.status}`);
     if (new Date(approval.expiresAt).getTime() <= Date.now() || new Date(proposal.expiresAt).getTime() <= Date.now()) {
       this.store.updateProposalStatus(proposal.id, 'EXPIRED');
@@ -253,31 +274,39 @@ export class ControlledActionService {
       this.failProposal(proposal, 'PAYLOAD_HASH_MISMATCH', 'action.execution.failed', 'Payload hash does not match approval.');
       throw new Error('payload hash mismatch');
     }
-    const existing = this.store.getExecutionByIdempotencyKey(proposal.idempotencyKey);
-    if (existing) return existing;
-
     const startedAt = now();
-    this.store.updateProposalStatus(proposal.id, 'EXECUTING');
-    this.recordEvidence(proposal, 'action.execution.started', 'Single approved execution started.', approval.id, { idempotencyKey: proposal.idempotencyKey }, 'system');
-    const result = this.runProvider(proposal);
-    const completedAt = now();
     const execution: ActionExecution = {
       id: `execution-${randomUUID()}`,
       proposalId: proposal.id,
       approvalId: approval.id,
       actionType: proposal.actionType,
       idempotencyKey: proposal.idempotencyKey,
-      status: result.failureCode ? 'FAILED' : 'COMPLETED',
+      status: 'EXECUTING',
       attempt: 1,
-      providerMode: result.providerMode,
+      providerMode: providerMode(),
+      providerRequestMetadata: { status: 'pending', targetSystem: proposal.targetSystem, operation: proposal.requestedOperation },
+      providerResponseSummary: { status: 'pending' },
+      externalObjectId: null,
+      failureCode: null,
+      startedAt,
+      completedAt: null,
+    };
+    this.store.saveExecution(execution);
+    this.store.updateProposalStatus(proposal.id, 'EXECUTING');
+    this.recordEvidence(proposal, 'action.execution.started', 'Single approved execution started.', approval.id, { idempotencyKey: proposal.idempotencyKey }, 'system');
+    return { shouldRunProvider: true, proposal, approval, execution };
+  }
+
+  private completeExecution(proposal: ActionProposal, approval: ActionApproval, pending: ActionExecution, result: ProviderResult): ActionExecution {
+    const completedAt = now();
+    const execution = this.store.updateExecutionResult(pending.id, {
+      status: result.failureCode ? 'FAILED' : 'COMPLETED',
       providerRequestMetadata: result.requestMetadata,
       providerResponseSummary: result.responseSummary,
       externalObjectId: result.externalObjectId,
       failureCode: result.failureCode,
-      startedAt,
       completedAt,
-    };
-    this.store.saveExecution(execution);
+    });
     const finalStatus = execution.status === 'COMPLETED' ? 'COMPLETED' : 'FAILED';
     this.store.updateProposalStatus(proposal.id, finalStatus, { executedAt: completedAt, failureCode: execution.failureCode });
     this.recordEvidence(proposal, execution.status === 'COMPLETED' ? 'action.execution.completed' : 'action.execution.failed', result.summary, approval.id, {
@@ -289,14 +318,7 @@ export class ControlledActionService {
     return execution;
   }
 
-  private runProvider(proposal: ActionProposal): {
-    providerMode: 'fixture' | 'sandbox' | 'live';
-    requestMetadata: Record<string, unknown>;
-    responseSummary: Record<string, unknown>;
-    externalObjectId: string | null;
-    failureCode: ProviderFailureCode | null;
-    summary: string;
-  } {
+  private async runProvider(proposal: ActionProposal): Promise<ProviderResult> {
     const mode = providerMode();
     if (mode === 'live') {
       return {
@@ -309,6 +331,7 @@ export class ControlledActionService {
       };
     }
     if (proposal.actionType === 'GMAIL_CREATE_DRAFT') {
+      if (mode === 'sandbox') return this.runSandboxGmailDraft(proposal);
       const id = `gmail-draft-fixture-${shortHash(proposal.payloadHash)}`;
       return {
         providerMode: mode,
@@ -340,6 +363,7 @@ export class ControlledActionService {
           summary: 'Calendar create blocked because conflict state is not clean at execution time.',
         };
       }
+      if (mode === 'sandbox') return this.runSandboxCalendarCreate(proposal);
       const id = `calendar-event-fixture-${shortHash(proposal.payloadHash)}`;
       return {
         providerMode: mode,
@@ -358,6 +382,128 @@ export class ControlledActionService {
       failureCode: null,
       summary: 'Local controlled action completed.',
     };
+  }
+
+  private async runSandboxGmailDraft(proposal: ActionProposal): Promise<ProviderResult> {
+    try {
+      const guard = await assertSandboxGoogleIdentity('gmail.compose');
+      const { google } = await import('googleapis');
+      const { getAuthedClient } = await import('../../visibility/connectors/google/google-auth');
+      const auth = await getAuthedClient();
+      const gmail = google.gmail({ version: 'v1', auth });
+      const payload = proposal.normalizedPayload;
+      const to = payload.to as string[];
+      const cc = payload.cc as string[];
+      const raw = rfc2822Message({
+        to,
+        cc,
+        subject: String(payload.subject),
+        body: String(payload.body),
+      });
+      const res = await gmail.users.drafts.create({
+        userId: 'me',
+        requestBody: { message: { raw } },
+      });
+      const draftId = res.data.id || null;
+      if (!draftId) throw new SandboxProviderError('PROVIDER_UNAVAILABLE', 'Gmail did not return a draft id.');
+      await gmail.users.drafts.get({ userId: 'me', id: draftId, format: 'metadata' });
+      return {
+        providerMode: 'sandbox',
+        requestMetadata: {
+          provider: 'gmail',
+          operation: 'drafts.create',
+          toCount: to.length,
+          ccCount: cc.length,
+          bccCount: 0,
+          sandboxIdentity: guard.maskedEmail,
+        },
+        responseSummary: {
+          status: 'draft_created',
+          draftId: redactObjectId(draftId),
+          sent: false,
+          sandboxIdentity: guard.maskedEmail,
+        },
+        externalObjectId: draftId,
+        failureCode: null,
+        summary: 'Gmail draft created in sandbox provider. No email was sent.',
+      };
+    } catch (err) {
+      return providerFailure(err, 'gmail', 'drafts.create');
+    }
+  }
+
+  private async runSandboxCalendarCreate(proposal: ActionProposal): Promise<ProviderResult> {
+    try {
+      const guard = await assertSandboxGoogleIdentity('calendar.events');
+      const { google } = await import('googleapis');
+      const { getAuthedClient } = await import('../../visibility/connectors/google/google-auth');
+      const auth = await getAuthedClient();
+      const calendar = google.calendar({ version: 'v3', auth });
+      const payload = proposal.normalizedPayload;
+      const start = String(payload.start);
+      const end = String(payload.end);
+      const timezone = String(payload.timezone);
+      const freeBusy = await calendar.freebusy.query({
+        requestBody: {
+          timeMin: start,
+          timeMax: end,
+          timeZone: timezone,
+          items: [{ id: 'primary' }],
+        },
+      });
+      const busy = freeBusy.data.calendars?.primary?.busy ?? [];
+      if (busy.length > 0) {
+        return {
+          providerMode: 'sandbox',
+          requestMetadata: {
+            provider: 'google-calendar',
+            operation: 'events.insert',
+            dryRunRechecked: true,
+            sandboxIdentity: guard.maskedEmail,
+          },
+          responseSummary: { status: 'blocked', conflictChanged: true, busyCount: busy.length, sandboxIdentity: guard.maskedEmail },
+          externalObjectId: null,
+          failureCode: 'CONFLICT_CHANGED',
+          summary: 'Calendar create blocked because sandbox free/busy changed before execution.',
+        };
+      }
+      const attendees = (payload.attendees as string[]).map(email => ({ email }));
+      const res = await calendar.events.insert({
+        calendarId: 'primary',
+        sendUpdates: 'none',
+        requestBody: {
+          summary: String(payload.title),
+          description: String(payload.description || ''),
+          location: payload.location ? String(payload.location) : undefined,
+          start: { dateTime: start, timeZone: timezone },
+          end: { dateTime: end, timeZone: timezone },
+          attendees,
+        },
+      });
+      const eventId = res.data.id || null;
+      if (!eventId) throw new SandboxProviderError('PROVIDER_UNAVAILABLE', 'Calendar did not return an event id.');
+      return {
+        providerMode: 'sandbox',
+        requestMetadata: {
+          provider: 'google-calendar',
+          operation: 'events.insert',
+          sendUpdates: 'none',
+          attendeeCount: attendees.length,
+          dryRunRechecked: true,
+          sandboxIdentity: guard.maskedEmail,
+        },
+        responseSummary: {
+          status: 'event_created',
+          eventId: redactObjectId(eventId),
+          sandboxIdentity: guard.maskedEmail,
+        },
+        externalObjectId: eventId,
+        failureCode: null,
+        summary: 'Calendar event created in sandbox provider with sendUpdates=none.',
+      };
+    } catch (err) {
+      return providerFailure(err, 'google-calendar', 'events.insert');
+    }
   }
 
   private requireWaitingProposal(id: string): ActionProposal {
@@ -503,7 +649,7 @@ function sideEffectsFor(actionType: ActionType): string[] {
   if (actionType === 'GMAIL_CREATE_DRAFT') return ['Creates one Gmail draft. Does not send email.'];
   if (actionType === 'GMAIL_SEND_DRAFT') return ['Sends one external email. Irreversible.'];
   if (actionType === 'CALENDAR_EVENT_PROPOSAL') return ['Stores a local calendar proposal only.'];
-  if (actionType === 'CALENDAR_CREATE_EVENT') return ['Creates one Google Calendar event. May notify attendees according to provider settings.'];
+  if (actionType === 'CALENDAR_CREATE_EVENT') return ['Creates one Google Calendar event with provider notifications disabled in sandbox acceptance.'];
   return ['Updates local Personal OS state only.'];
 }
 
@@ -545,6 +691,93 @@ function targetSummary(proposal: ActionProposal): string {
 
 function getProjectId(payload: Record<string, unknown>): string | null {
   return typeof payload.projectId === 'string' ? payload.projectId : null;
+}
+
+class SandboxProviderError extends Error {
+  constructor(readonly code: ProviderFailureCode, message: string) {
+    super(message);
+  }
+}
+
+async function assertSandboxGoogleIdentity(requiredScope: 'gmail.compose' | 'calendar.events'): Promise<{ maskedEmail: string; scopes: string[] }> {
+  if (providerMode() !== 'sandbox') throw new SandboxProviderError('PROVIDER_UNAVAILABLE', 'Sandbox provider mode is not enabled.');
+  if (process.env.SAFE_GOOGLE_SANDBOX !== '1') throw new SandboxProviderError('PERMISSION_DENIED', 'SAFE_GOOGLE_SANDBOX=1 is required for sandbox writes.');
+  const expected = String(process.env.GOOGLE_SANDBOX_ACCOUNT || '').trim().toLowerCase();
+  if (!expected) throw new SandboxProviderError('AUTH_REQUIRED', 'GOOGLE_SANDBOX_ACCOUNT is required for sandbox writes.');
+
+  const { google } = await import('googleapis');
+  const { getAuthedClient, loadTokens } = await import('../../visibility/connectors/google/google-auth');
+  const tokens = loadTokens();
+  if (!tokens) throw new SandboxProviderError('AUTH_REQUIRED', 'Google tokens are missing.');
+  const scopes = String(tokens.scope || '').split(/\s+/).filter(Boolean);
+  const requiredUrl = requiredScope === 'gmail.compose'
+    ? 'https://www.googleapis.com/auth/gmail.compose'
+    : 'https://www.googleapis.com/auth/calendar.events';
+  if (!scopes.includes(requiredUrl)) throw new SandboxProviderError('PERMISSION_DENIED', `Missing required Google scope: ${requiredScope}.`);
+
+  const auth = await getAuthedClient();
+  const gmail = google.gmail({ version: 'v1', auth });
+  const profile = await gmail.users.getProfile({ userId: 'me' });
+  const actual = String(profile.data.emailAddress || '').trim().toLowerCase();
+  if (!actual) throw new SandboxProviderError('AUTH_REQUIRED', 'Google profile did not return an email address.');
+  if (actual !== expected) throw new SandboxProviderError('PERMISSION_DENIED', 'Authenticated Google account does not match GOOGLE_SANDBOX_ACCOUNT.');
+  return { maskedEmail: maskEmail(actual), scopes: scopes.map(scope => scope.replace('https://www.googleapis.com/auth/', '')) };
+}
+
+function rfc2822Message(input: { to: string[]; cc: string[]; subject: string; body: string }): string {
+  const headers = [
+    `To: ${input.to.join(', ')}`,
+    input.cc.length ? `Cc: ${input.cc.join(', ')}` : '',
+    `Subject: ${encodeHeader(input.subject)}`,
+    'MIME-Version: 1.0',
+    'Content-Type: text/plain; charset=utf-8',
+  ].filter(Boolean);
+  return Buffer.from(`${headers.join('\r\n')}\r\n\r\n${input.body}`, 'utf8').toString('base64url');
+}
+
+function encodeHeader(value: string): string {
+  return /[^\x20-\x7e]/.test(value)
+    ? `=?UTF-8?B?${Buffer.from(value, 'utf8').toString('base64')}?=`
+    : value.replace(/\r|\n/g, ' ');
+}
+
+function providerFailure(err: unknown, provider: string, operation: string): ProviderResult {
+  const code = err instanceof SandboxProviderError ? err.code : googleFailureCode(err);
+  return {
+    providerMode: 'sandbox',
+    requestMetadata: { provider, operation, sandbox: true },
+    responseSummary: { status: 'failed', failureCode: code, error: safeProviderError(err) },
+    externalObjectId: null,
+    failureCode: code,
+    summary: `Sandbox provider failed safely for ${operation}: ${code}.`,
+  };
+}
+
+function googleFailureCode(err: unknown): ProviderFailureCode {
+  const status = typeof err === 'object' && err !== null && 'code' in err ? Number((err as { code?: unknown }).code) : 0;
+  if (status === 401) return 'AUTH_REQUIRED';
+  if (status === 403) return 'PERMISSION_DENIED';
+  if (status === 404) return 'INVALID_TARGET';
+  if (status === 409) return 'CONFLICT_CHANGED';
+  if (status === 429) return 'RATE_LIMITED';
+  return 'PROVIDER_UNAVAILABLE';
+}
+
+function safeProviderError(err: unknown): string {
+  const message = err instanceof Error ? err.message : String(err);
+  return sanitizeText(message.replace(/[A-Za-z0-9_\-.]+@[A-Za-z0-9_\-.]+/g, '[email-redacted]'), 240);
+}
+
+function maskEmail(email: string): string {
+  const [local, domain = ''] = email.split('@');
+  const [name, ...domainParts] = domain.split('.');
+  const suffix = domainParts.length ? `.${domainParts[domainParts.length - 1]}` : '';
+  return `${local.slice(0, 2)}***@${name.slice(0, 2)}***${suffix}`;
+}
+
+function redactObjectId(id: string): string {
+  if (id.length <= 12) return `${id.slice(0, 3)}***`;
+  return `${id.slice(0, 8)}...${id.slice(-4)}`;
 }
 
 function providerMode(): 'fixture' | 'sandbox' | 'live' {

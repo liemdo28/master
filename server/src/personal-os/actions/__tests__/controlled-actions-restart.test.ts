@@ -22,17 +22,17 @@ async function main() {
 
   s = new ControlledActionService(root);
   assert.equal(s.get(proposal.id).status, 'WAITING_APPROVAL');
-  const approved = s.approve(proposal.id);
+  const approved = await s.approve(proposal.id);
   s.close();
 
   s = new ControlledActionService(root);
   assert.equal(s.get(proposal.id).status, 'APPROVED');
-  const execution = s.execute(proposal.id);
+  const execution = await s.execute(proposal.id);
   assert.equal(execution.status, 'COMPLETED');
   s.close();
 
   s = new ControlledActionService(root);
-  assert.equal(s.execute(proposal.id).id, execution.id);
+  assert.equal((await s.execute(proposal.id)).id, execution.id);
   assert.equal(s.detail(proposal.id).approval?.id, approved.approval.id);
   assert.equal(s.detail(proposal.id).evidence.some(e => e.eventType === 'action.execution.completed'), true);
   s.close();

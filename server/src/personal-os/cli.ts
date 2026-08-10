@@ -64,10 +64,10 @@ async function main() {
           console.log(`Risk: ${detail.proposal.riskClass}`);
           console.log(`Target: ${detail.proposal.targetSystem}`);
           console.log(`Payload hash: ${detail.proposal.payloadHash}`);
-          return print(actionService.approve(args[1], { source: 'cli', approver: 'cli-user' }));
+          return print(await actionService.approve(args[1], { source: 'cli', approver: 'cli-user' }));
         }
         if (sub === 'reject') return print(actionService.reject(args[1], { source: 'cli', approver: 'cli-user', reason: args.slice(2).join(' ') || 'Rejected from CLI' }));
-        if (sub === 'execute') return print(actionService.execute(args[1]));
+        if (sub === 'execute') return print(await actionService.execute(args[1]));
       } finally { actionService.close(); }
     }
     // Phase 5D-3 daily operating loop. Approving a plan only changes its status —
