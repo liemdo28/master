@@ -107,7 +107,15 @@
     "test:operator-control-center": "tsx src/operator-control/__tests__/operator-control.test.ts",
     "test:operator-control-center-security": "tsx src/operator-control/__tests__/operator-control-security.test.ts",
     "operator-control:evaluation": "tsx src/operator-control/operator-control-evaluation.ts",
-    "phase6c:acceptance": "tsx src/operator-control/phase6c-acceptance.ts"
+    "phase6c:acceptance": "tsx src/operator-control/phase6c-acceptance.ts",
+    "evidence": "tsx src/evidence/cli.ts",
+    "test:evidence-contract": "tsx src/evidence/__tests__/evidence.test.ts",
+    "test:evidence-security": "tsx src/evidence/__tests__/security.test.ts",
+    "test:evidence-conflicts": "tsx src/evidence/__tests__/conflicts.test.ts",
+    "test:evidence-redaction": "tsx src/evidence/__tests__/redaction.test.ts",
+    "test:evidence-freshness": "tsx src/evidence/__tests__/freshness.test.ts",
+    "evidence:evaluation": "tsx src/evidence/evidence-evaluation.ts",
+    "phase6d:acceptance": "npm run test:evidence-contract && npm run test:evidence-security && npm run test:evidence-conflicts && npm run test:evidence-redaction && npm run test:evidence-freshness && npm run evidence:evaluation && tsx src/evidence/phase6d-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
