@@ -302,10 +302,12 @@ export class GovernedOrchestrationService {
     }
 
     const plan = this.get(id);
-    if (['COMPLETED', 'FAILED', 'CANCELLED'].includes(plan.status)) {
-      // Terminal — advancing is a safe no-op, not an error, so a client that doesn't
-      // track plan status locally (or polls after completion) never gets a surprise
-      // exception, and no duplicate work is ever attempted.
+    if (['COMPLETED', 'FAILED', 'CANCELLED', 'PAUSED'].includes(plan.status)) {
+      // Terminal, or PAUSED (whether by an explicit pause() call or automatically by a
+      // governance block such as the kill switch) — advancing is a safe no-op, not an
+      // error, so a client that doesn't track plan status locally (or polls repeatedly
+      // while blocked) never gets a surprise exception, and no duplicate work is ever
+      // attempted. resume() is the only way to make a PAUSED plan advance-eligible again.
       const run = this.store.saveRun({ id: `run-${randomUUID()}`, planId: id, triggeredBy: opts.triggeredBy || 'user', idempotencyKey, stepsAdvanced: 0, startedAt: now(), completedAt: now(), resultSummary: `plan already ${plan.status}` });
       return { plan, run, stepsAdvanced: 0, deduplicated: false };
     }
@@ -322,6 +324,7 @@ export class GovernedOrchestrationService {
     let anyWaitingApproval = false;
     let anyBlocked = false;
     let anyFailed = false;
+    let governanceBlockReason: string | null = null;
 
     const steps = this.store.listStepsForPlan(id);
     const statusByStepId = new Map(steps.map(s => [s.id, s.status]));
@@ -360,8 +363,10 @@ export class GovernedOrchestrationService {
 
       const killed = this.controlledActions.policyEngine.killSwitch.state({ projectId: current.projectId, actionType: current.actionType as any });
       if (killed.blocked) {
-        this.store.recordEvidence(id, step.id, 'KILL_SWITCH_BLOCKED', killed.switches[0]?.reason || 'Kill switch active.', { killSwitchState: killed }, 'system');
+        const reason = killed.switches[0]?.reason || 'Kill switch active.';
+        this.store.recordEvidence(id, step.id, 'KILL_SWITCH_BLOCKED', reason, { killSwitchState: killed }, 'system');
         anyBlocked = true;
+        governanceBlockReason = `Kill switch active: ${reason}`;
         continue; // step stays READY — no state regression, no execution attempted
       }
 
@@ -379,6 +384,12 @@ export class GovernedOrchestrationService {
     let nextStatus: ActionPlanStatus = plan.status;
     if (allTerminal) nextStatus = 'COMPLETED';
     else if (anyStepFailed && !anyWaitingApproval && !anyBlocked) nextStatus = 'FAILED';
+    // A governance block (currently: kill switch) is a systemic, operator-actionable
+    // condition distinct from ordinary "waiting on an earlier step's dependency" or
+    // "waiting on human approval" — surface it explicitly as PAUSED with a reason,
+    // rather than silently leaving the plan reading RUNNING forever. resume() is the
+    // existing, explicit way to make the plan eligible again; it never auto-executes.
+    else if (governanceBlockReason) nextStatus = 'PAUSED';
     else if (anyWaitingApproval) nextStatus = 'WAITING_APPROVAL';
     else nextStatus = 'RUNNING';
 
@@ -387,6 +398,7 @@ export class GovernedOrchestrationService {
       this.store.updatePlanStatus(id, nextStatus, {
         completedAt: nextStatus === 'COMPLETED' ? now() : undefined,
         failureReason: nextStatus === 'FAILED' ? 'one or more steps failed' : undefined,
+        blockedReason: nextStatus === 'PAUSED' ? governanceBlockReason : undefined,
       });
       if (nextStatus === 'COMPLETED' || nextStatus === 'FAILED') {
         this.store.recordEvidence(id, null, nextStatus === 'COMPLETED' ? 'PLAN_COMPLETED' : 'PLAN_FAILED', `Plan transitioned to ${nextStatus}.`, {}, 'system');

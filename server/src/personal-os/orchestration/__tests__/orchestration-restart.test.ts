@@ -89,7 +89,7 @@ async function main() {
     });
     service.validate(killPlan.id);
     service.start(killPlan.id);
-    service.controlledActions.policyEngine.killSwitch.enable({ scope: 'GLOBAL', projectId: null, actionType: null, reason: 'restart test', activatedBy: 'test' });
+    const killSwitch1 = service.controlledActions.policyEngine.killSwitch.enable({ scope: 'GLOBAL', projectId: null, actionType: null, reason: 'restart test', activatedBy: 'test' });
     const killAdvance = await service.advance(killPlan.id);
     assert.strictEqual(service.detail(killPlan.id).steps[0].proposalId, null, 'kill switch must block proposal creation entirely');
     service.close();
@@ -100,6 +100,34 @@ async function main() {
     assert.strictEqual(stillKilled.blocked, true, 'kill switch must remain effective after restart');
     const killAdvance2 = await service.advance(killPlan.id);
     assert.strictEqual(service.detail(killPlan.id).steps[0].proposalId, null, 'kill switch must still block after restart');
+    assert.strictEqual(service.get(killPlan.id).status, 'PAUSED', 'a kill-switch block must surface as PAUSED, not silently stay RUNNING forever');
+    assert.ok(/kill switch/i.test(service.get(killPlan.id).blockedReason || ''), 'blockedReason must explain why');
+    service.controlledActions.policyEngine.killSwitch.unlock(killSwitch1.id);
+
+    // ── kill-switch race: approval already valid, THEN kill switch enabled — must
+    // block dispatch both via direct execute() and via advance(), and persist PAUSED
+    // across restart ──
+    const racePlan = service.createPlan({
+      title: 'x', objective: 'x', projectId: 'mi-core',
+      steps: [{ key: 'draft', type: 'CONTROLLED_ACTION', description: 'draft', actionType: 'GMAIL_CREATE_DRAFT', actionPayload: gmailPayload('killswitch-race') }],
+    });
+    service.validate(racePlan.id);
+    service.start(racePlan.id);
+    await service.advance(racePlan.id);
+    const raceProposalId = service.detail(racePlan.id).steps[0].proposalId!;
+    await service.controlledActions.approve(raceProposalId, { approver: 'test', source: 'test' });
+    assert.strictEqual(service.controlledActions.get(raceProposalId).status, 'APPROVED');
+    service.controlledActions.policyEngine.killSwitch.enable({ scope: 'GLOBAL', projectId: null, actionType: null, reason: 'race window', activatedBy: 'test' });
+    await assert.rejects(() => service.controlledActions.execute(raceProposalId), /kill.?switch/i, 'a valid approval must not bypass a kill switch enabled during the race window');
+    await service.advance(racePlan.id);
+    assert.strictEqual(service.get(racePlan.id).status, 'PAUSED');
+    const raceExecutionCount = service.controlledActions.store.handle.prepare('SELECT COUNT(*) c FROM action_executions WHERE proposalId = ?').get(raceProposalId).c;
+    assert.strictEqual(raceExecutionCount, 0, 'zero provider dispatch across the whole race window');
+    service.close();
+    service = restart(root);
+    await assert.rejects(() => service.controlledActions.execute(raceProposalId), /kill.?switch/i, 'still blocked immediately after restart');
+    const raceExecutionCountAfterRestart = service.controlledActions.store.handle.prepare('SELECT COUNT(*) c FROM action_executions WHERE proposalId = ?').get(raceProposalId).c;
+    assert.strictEqual(raceExecutionCountAfterRestart, 0);
 
     console.log('[orchestration-restart] PASS');
   } finally {
