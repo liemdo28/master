@@ -103,7 +103,11 @@
     "test:legacy-authority-adapters": "tsx src/authority-control-plane/__tests__/legacy-authority-adapters.test.ts",
     "test:legacy-authority-security": "tsx src/authority-control-plane/__tests__/legacy-authority-security.test.ts",
     "legacy-authority:evaluation": "tsx src/authority-control-plane/legacy-authority-evaluation.ts",
-    "phase6b:acceptance": "tsx src/authority-control-plane/phase6b-acceptance.ts"
+    "phase6b:acceptance": "tsx src/authority-control-plane/phase6b-acceptance.ts",
+    "test:operator-control-center": "tsx src/operator-control/__tests__/operator-control.test.ts",
+    "test:operator-control-center-security": "tsx src/operator-control/__tests__/operator-control-security.test.ts",
+    "operator-control:evaluation": "tsx src/operator-control/operator-control-evaluation.ts",
+    "phase6c:acceptance": "tsx src/operator-control/phase6c-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
