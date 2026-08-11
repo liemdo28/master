@@ -74,6 +74,7 @@ import { voiceRouter } from './routes/voice';
 import { controlledActionsJsonParser, controlledActionsRouter } from './personal-os/actions/router';
 import { governanceJsonParser, governanceRouter } from './personal-os/actions/governance/router';
 import { orchestrationJsonParser, orchestrationRouter } from './personal-os/orchestration/router';
+import { delegationJsonParser, delegationRouter } from './personal-os/delegation/router';
 import { jarvisRouter } from './routes/jarvis';
 import { workflowMetricsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
@@ -224,6 +225,7 @@ app.use('/api/command-center', operatingJsonParser, taskRuntimeJsonErrorHandler,
 app.use('/api/command-center', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, controlledActionsRouter);
 app.use('/api/command-center', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, governanceRouter);
 app.use('/api/command-center', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, orchestrationRouter);
+app.use('/api/command-center', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, delegationRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -234,6 +236,7 @@ app.use('/api', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, a
 app.use('/api', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, controlledActionsRouter);
 app.use('/api', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, governanceRouter);
 app.use('/api', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, orchestrationRouter);
+app.use('/api', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, delegationRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
