@@ -137,6 +137,7 @@ import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './person
 import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
 import { authorityRouter } from './authority-control-plane/router';
 import { operatorControlRouter } from './operator-control/router';
+import { evidenceRouter } from './evidence/router';
 import { assertAuthorityManifest, generateAuthorityManifest } from './authority-control-plane/scanner';
 import { validateLegacyAuthorityRuntime } from './authority-control-plane/legacy-adapter';
 import { legacyAuthorityBoundary } from './authority-control-plane/guard';
@@ -242,6 +243,7 @@ app.use('/api/command-center', orchestrationJsonParser, taskRuntimeJsonErrorHand
 app.use('/api/command-center', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, delegationRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, authorityRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, operatorControlRouter);
+app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, evidenceRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -255,6 +257,7 @@ app.use('/api', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimite
 app.use('/api', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, delegationRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, authorityRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatorControlRouter);
+app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, evidenceRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);

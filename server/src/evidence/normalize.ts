@@ -145,7 +145,7 @@ export function normalizeGovernanceAnomaly(row: RawGovernanceAnomalyRow, now: Da
     confidence: row.severity === 'CRITICAL' || row.severity === 'HIGH' ? 'CERTAIN' : 'LIKELY',
     projectId: row.projectId, subjectType: row.proposalId ? 'ActionProposal' : 'Anomaly',
     subjectId: row.proposalId ?? row.id,
-    claim: sanitizeClaim(row.description),
+    claim: row.description,
     observedAt: row.detectedAt,
     conflictGroup: row.status === 'OPEN' ? row.id : null,
   });
@@ -264,7 +264,7 @@ export function normalizeConflict(row: RawConflictRow, now: Date): EvidenceRecor
     sourceSystem: 'KNOWLEDGE', sourceId: row.id, category: 'CONFLICT',
     confidence: 'CERTAIN',
     projectId: row.projectIds[0] ?? null, subjectType: 'KnowledgeConflict', subjectId: row.id,
-    claim: sanitizeClaim(row.description),
+    claim: row.description,
     observedAt: row.createdAt,
     conflictGroup: row.status === 'OPEN' ? row.id : null,
     relatedEvidence: row.documentIds.map(id => `KNOWLEDGE:${id}`),
