@@ -4,8 +4,6 @@
  */
 
 import { Router, type Request, type Response } from 'express';
-import { runPipeline } from './execution-pipeline';
-import { getDeptExecutors } from './dept-executors';
 import { recentPipelineRuns, getPipelineRun, getStepsForPipeline } from './evidence-store';
 import { DEPARTMENTS, getActiveDepts, getDeptsByPhase } from './departments';
 import { SOURCE_INVENTORY, getRemoveCandidates, sourceInventorySummary } from './source-inventory';
@@ -15,33 +13,15 @@ import { checkBrainHealth } from './department-runtime';
 import { PROJECTS, getActiveProjects, getProjectsByDept, getCriticalProjects, getProjectSummary } from './project-registry';
 import { SERVICES, getServicesByDept, getPm2Services, getServicesSummary, checkAllServicesHealth, checkServiceHealth } from './service-registry';
 import { DATA_SOURCES, getSourcesByDept, dataSourceSummary, getMissingSources } from './data-source-registry';
-import { runMoneyWorkflow, runAllMoneyWorkflows, formatMoneyResultForCeo, type MoneyWorkflowId } from './money-operations';
+import { runAllMoneyWorkflows, formatMoneyResultForCeo } from './money-operations';
 import { runHealthScan, getMonitoredServices } from './self-healing-monitor';
+import { denyAuthorityMutation } from '../authority-control-plane/guard';
 
 const router = Router();
 
 // POST /api/company-os/command — CEO sends a command
 router.post('/command', async (req: Request, res: Response) => {
-  const { command, sender = 'CEO', channel = 'api' } = req.body as {
-    command?: string;
-    sender?: string;
-    channel?: string;
-  };
-
-  if (!command || typeof command !== 'string' || !command.trim()) {
-    return res.status(400).json({ error: 'command is required' });
-  }
-
-  try {
-    const result = await runPipeline(
-      { raw_command: command.trim(), sender, channel: channel as 'whatsapp' | 'api' | 'dashboard' },
-      getDeptExecutors()
-    );
-    return res.json(result);
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return res.status(500).json({ error: `Pipeline error: ${msg}` });
-  }
+  return denyAuthorityMutation(res, 'http:POST:/api/company-os/command', 'Legacy Company OS command execution is quarantined in Phase 6A; use governed orchestration in a future adapter.');
 });
 
 // GET /api/company-os/pipelines — recent pipeline runs
@@ -203,16 +183,7 @@ router.get('/data-sources', (_req: Request, res: Response) => {
 
 // POST /api/company-os/money/:workflow_id — run a specific money workflow
 router.post('/money/:workflow_id', async (req: Request, res: Response) => {
-  const workflowId = req.params.workflow_id as MoneyWorkflowId;
-  try {
-    const result = await runMoneyWorkflow(workflowId);
-    return res.status(result.status === 'FAIL' ? 500 : 200).json({
-      result,
-      ceo_message: formatMoneyResultForCeo(result),
-    });
-  } catch (err: unknown) {
-    return res.status(500).json({ error: `Money workflow error: ${err instanceof Error ? err.message : String(err)}` });
-  }
+  return denyAuthorityMutation(res, `http:POST:/api/company-os/money/${req.params.workflow_id}`, 'Financial/money workflow execution is forbidden in Phase 6A.');
 });
 
 // GET /api/company-os/money — run all 6 money workflows

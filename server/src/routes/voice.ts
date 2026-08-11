@@ -12,11 +12,10 @@ import path from 'path';
 import fs from 'fs';
 import { handleMiHumanAssistant } from '../communication/mi-human-assistant';
 import { runPipeline } from '../pipeline/response-pipeline';
-import { orchestrateVoiceOutput } from '../voice/voice-output-orchestrator';
-import { generateDailySummary } from '../whatsapp/daily-summary';
 import { isTTSAvailable, synthesizeSpeech, listVietnameseVoices } from '../voice/tts-service';
 import { getVoiceEvidence, listVoiceEvidence } from '../voice/voice-evidence-store';
-import { summarizeToExecutive, executiveToVoiceText, approvalToVoiceText, workflowToVoiceText } from '../voice/voice-personality';
+import { approvalToVoiceText, workflowToVoiceText } from '../voice/voice-personality';
+import { denyAuthorityMutation } from '../authority-control-plane/guard';
 
 export const voiceRouter = Router();
 
@@ -207,100 +206,12 @@ voiceRouter.post('/output/speak', async (req: Request, res: Response) => {
 // POST /api/voice/output/daily-brief — generate voice memo from daily summary
 // CEO command: "Mi đọc báo cáo hôm nay cho anh."
 voiceRouter.post('/output/daily-brief', async (req: Request, res: Response) => {
-  const { recipient, recipient_name, is_ceo, voice, rate } = req.body as {
-    recipient?: string;
-    recipient_name?: string;
-    is_ceo?: boolean;
-    voice?: string;
-    rate?: string;
-  };
-
-  const t0 = Date.now();
-
-  // Generate the daily text summary
-  const summary = await generateDailySummary();
-
-  // Executive summarization — convert raw metrics to Top 3 priorities/risks/actions
-  const executiveSummary = summarizeToExecutive(summary.text);
-  const speechText = executiveToVoiceText(executiveSummary);
-
-  const workflow_id = `daily-brief-${Date.now()}`;
-
-  const result = await orchestrateVoiceOutput({
-    text: speechText,
-    text_report: summary.text,
-    recipient,
-    recipient_name,
-    is_ceo,
-    workflow_id,
-    voice,
-    rate,
-  });
-
-  res.json({
-    ok: result.ok,
-    workflow_id: result.workflow_id,
-    duration_ms: Date.now() - t0,
-    text_report: result.text_report,
-    tts: result.tts,
-    whatsapp_sent: result.whatsapp_sent,
-    approval_status: result.approval_status,
-    approval_id: result.approval_id,
-    evidence: result.evidence ? {
-      workflow_id: result.evidence.workflow_id,
-      audio_path: result.evidence.audio_path,
-      voice: result.evidence.voice,
-      file_size_bytes: result.evidence.file_size_bytes,
-      created_at: result.evidence.created_at,
-    } : null,
-    error: result.error,
-  });
+  return denyAuthorityMutation(res, 'http:POST:/api/voice/output/daily-brief', 'Legacy outbound voice daily brief is quarantined in Phase 6A; no WhatsApp/audio send authority is expanded.');
 });
 
 // POST /api/voice/output/send — orchestrate voice output to a recipient
 voiceRouter.post('/output/send', async (req: Request, res: Response) => {
-  const { text, text_report, recipient, recipient_name, is_ceo, workflow_id, voice, rate } = req.body as {
-    text?: string;
-    text_report?: string;
-    recipient?: string;
-    recipient_name?: string;
-    is_ceo?: boolean;
-    workflow_id?: string;
-    voice?: string;
-    rate?: string;
-  };
-
-  if (!text) {
-    return res.status(400).json({ ok: false, error: 'Provide "text" in body' });
-  }
-
-  const result = await orchestrateVoiceOutput({
-    text,
-    text_report,
-    recipient,
-    recipient_name,
-    is_ceo,
-    workflow_id,
-    voice,
-    rate,
-  });
-
-  res.json({
-    ok: result.ok,
-    workflow_id: result.workflow_id,
-    tts: result.tts,
-    whatsapp_sent: result.whatsapp_sent,
-    approval_status: result.approval_status,
-    approval_id: result.approval_id,
-    evidence: result.evidence ? {
-      workflow_id: result.evidence.workflow_id,
-      audio_path: result.evidence.audio_path,
-      voice: result.evidence.voice,
-      file_size_bytes: result.evidence.file_size_bytes,
-      created_at: result.evidence.created_at,
-    } : null,
-    error: result.error,
-  });
+  return denyAuthorityMutation(res, 'http:POST:/api/voice/output/send', 'Legacy outbound voice send is quarantined in Phase 6A; no WhatsApp/audio send authority is expanded.');
 });
 
 // GET /api/voice/output/evidence — list recent voice evidence records

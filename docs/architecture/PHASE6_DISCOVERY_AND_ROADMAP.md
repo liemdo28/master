@@ -29,7 +29,7 @@ Recommended Phase 6 theme:
 | Expected docs/freeze SHA | `11c0a3dff11e51e6ec612d9780e0d914a701e237` |
 | `origin/master` | `11c0a3dff11e51e6ec612d9780e0d914a701e237` |
 | Expected functional deployed SHA | `ff51bcab13cf6dfca7d1a6259046b35b282d08dc` |
-| `.env` deployed marker | `DEPLOYED_SOURCE_SHA=ff51bcab13cf6dfca7d1a6259046b35b282d08dc` |
+| `.env` deployed marker | `MI_DEPLOYED_SOURCE_SHA=ff51bcab13cf6dfca7d1a6259046b35b282d08dc` |
 | Production source root marker | `D:\Project\Mi-core-system\Master\mi-core` |
 | Production health | `http://127.0.0.1:4001/api/health` returned 200 |
 | `/api/tools` unauthenticated | 401 |
@@ -318,7 +318,7 @@ The following Phase 6 implementation work has not been started and should remain
 | Inspect production checkout status | `D:\Project\Mi-core-system\Master\mi-core` | 0 | Production checkout on `codex/phase10-2-reality-closure`, HEAD `1db12eb31b6525870afc2b8ab827b0de3748b4bf`, dirty with unrelated changes. Not used as audit source. |
 | Health check | local HTTP | 0 | `/api/health` returned 200 with server, Python AI service, and Ollama ok. |
 | PM2 process list | local PM2 | 0 | `mi-core` and `mi-ai-service` online; `mi-core` runs from production checkout `server\dist\index.js`. |
-| Read deployment markers | production `.env` | 0 | `DEPLOYED_SOURCE_SHA=ff51bcab13cf6dfca7d1a6259046b35b282d08dc`; secrets not printed. |
+| Read deployment markers | production `.env` | 0 | `MI_DEPLOYED_SOURCE_SHA=ff51bcab13cf6dfca7d1a6259046b35b282d08dc`; secrets not printed. |
 | Personal/Task/Project DB integrity | production DB files | 0 | Personal v10 ok; Tasks ok; Projects ok; 0 FK violations. |
 | `/api/tools` unauthenticated | local HTTP | 0 | 401. |
 | `/api/tools` authenticated | local HTTP with local key | 0 | 200; key not printed. |

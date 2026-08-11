@@ -30,6 +30,7 @@ import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
 import { PlansPage } from '@/routes/PlansPage';
 import { DelegationsPage } from '@/routes/DelegationsPage';
+import { AuthorityPage } from '@/routes/AuthorityPage';
 
 const FIXTURES: Record<string, unknown> = {
   '/operating/today': {
@@ -67,6 +68,16 @@ const FIXTURES: Record<string, unknown> = {
   '/delegations': {
     delegations: [
       { id: 'delegation-1', delegationVersion: 1, previousVersionId: null, title: 'Morning follow-up drafts', description: 'x', owner: 'liem', projectId: 'mi-core', status: 'ACTIVE', allowedActionTypes: ['GMAIL_CREATE_DRAFT'], deniedActionTypes: [], targetRestriction: { allowedDomains: ['example.com'], maxRecipients: 3 }, riskCeiling: 'R2', approvalLevelCeiling: 'STANDARD', startsAt: '2026-08-11T09:00:00Z', expiresAt: '2026-08-11T12:00:00Z', timezone: 'UTC', maxExecutions: 3, usedExecutions: 1, maxTargets: null, usedTargets: 1, policyVersion: 'phase5g-default-v1', policyHash: 'p', createdAt: '2026-08-11T08:00:00Z', approvedAt: '2026-08-11T08:30:00Z', activatedAt: '2026-08-11T08:30:00Z', revokedAt: null, exhaustedAt: null, expiredAt: null, pausedReason: null },
+    ],
+  },
+  '/authority/manifest': {
+    generatedAt: '2026-08-11T00:00:00Z',
+    version: 'phase6a-v1',
+    counts: { total: 3, readOnly: 1, mutations: 2, canonical: 1, adapters: 1, quarantined: 1, forbidden: 0, internalTest: 0, unknownMutations: 0 },
+    surfaces: [
+      { id: 'route:GET:/api/health', kind: 'HTTP_ROUTE', sourcePath: 'src/index.ts', runtimeMount: '/api/health', method: 'GET', capability: 'health', effectClass: 'READ_ONLY', authorityClass: 'CANONICAL_READ', canonicalOwner: 'Public health/auth bootstrap', projectScoped: false, externalSystem: null, approvalRequired: false, governanceRequired: false, delegationEligible: false, authenticationRequired: 'PUBLIC_READ', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
+      { id: 'route:POST:/api/actions/:id/execute', kind: 'HTTP_ROUTE', sourcePath: 'src/personal-os/actions/router.ts', runtimeMount: '/api/actions/:id/execute', method: 'POST', capability: 'controlled action execution', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'CANONICAL_CONTROLLED_ACTION', canonicalOwner: 'ControlledActionService', projectScoped: true, externalSystem: 'gmail/calendar/sandboxed providers', approvalRequired: true, governanceRequired: true, delegationEligible: true, authenticationRequired: 'STRICT_API_KEY', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
+      { id: 'route:POST:/api/browser/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', evidence: ['fixture'] },
     ],
   },
 };
@@ -179,5 +190,12 @@ describe('Command Center screens', () => {
     // No bulk "approve all" / "activate all" control anywhere on the list screen.
     expect(screen.queryByRole('button', { name: /approve.?all/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /activate.?all/i })).not.toBeInTheDocument();
+  });
+
+  it('Authority renders the control-plane manifest and quarantine status', async () => {
+    renderWithProviders(<AuthorityPage />);
+    await waitFor(() => expect(screen.getByText('/api/browser/write')).toBeInTheDocument());
+    expect(screen.getAllByText(/quarantined/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('0').length).toBeGreaterThan(0);
   });
 });

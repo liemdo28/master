@@ -538,6 +538,67 @@ export interface GovernanceStatus {
   budgets: ActionBudget[];
 }
 
+// Phase 6A — Authority Control Plane
+export type AuthorityClass =
+  | 'CANONICAL_READ'
+  | 'CANONICAL_LOCAL_MUTATION'
+  | 'CANONICAL_CONTROLLED_ACTION'
+  | 'CANONICAL_GOVERNED_ORCHESTRATION'
+  | 'CANONICAL_DELEGATED_AUTHORITY'
+  | 'ADAPTER_TO_CANONICAL'
+  | 'LEGACY_QUARANTINED'
+  | 'FORBIDDEN'
+  | 'INTERNAL_TEST_ONLY';
+
+export type EffectClass =
+  | 'READ_ONLY'
+  | 'LOCAL_REVERSIBLE'
+  | 'LOCAL_IRREVERSIBLE'
+  | 'EXTERNAL_REVERSIBLE'
+  | 'EXTERNAL_IRREVERSIBLE'
+  | 'PROCESS_CONTROL'
+  | 'CODE_EXECUTION'
+  | 'SERVICE_CONTROL';
+
+export interface AuthoritySurface {
+  id: string;
+  kind: string;
+  sourcePath: string;
+  runtimeMount: string;
+  method: string;
+  capability: string;
+  effectClass: EffectClass;
+  authorityClass: AuthorityClass;
+  canonicalOwner: string;
+  projectScoped: boolean;
+  externalSystem: string | null;
+  approvalRequired: boolean;
+  governanceRequired: boolean;
+  delegationEligible: boolean;
+  authenticationRequired: string;
+  status: string;
+  legacyReason: string | null;
+  migrationTarget: string | null;
+  evidence: string[];
+}
+
+export interface AuthorityManifest {
+  generatedAt: string;
+  version: string;
+  surfaces: AuthoritySurface[];
+  counts: {
+    total: number;
+    readOnly: number;
+    mutations: number;
+    canonical: number;
+    adapters: number;
+    quarantined: number;
+    forbidden: number;
+    internalTest: number;
+    unknownMutations: number;
+  };
+}
+
 // Phase 5H — Governed Multi-Step Action Planning. ActionPlan/ActionPlanStep are a
 // distinct concept from Phase 5D-3's DailyPlan (see PlanPage.tsx / /today/plan) —
 // that is a read-only daily-agenda summary; this is an executable, governed,
