@@ -85,7 +85,15 @@
     "test:orchestration-restart": "tsx src/personal-os/orchestration/__tests__/orchestration-restart.test.ts",
     "test:orchestration-concurrency": "tsx src/personal-os/orchestration/__tests__/orchestration-concurrency.test.ts",
     "test:orchestration-evaluation": "tsx src/personal-os/orchestration/orchestration-evaluation.ts",
-    "phase5h:acceptance": "npm run test:orchestration && npm run test:orchestration-security && npm run test:orchestration-migration && npm run test:orchestration-restart && npm run test:orchestration-concurrency && npm run test:orchestration-evaluation && tsx src/personal-os/orchestration/phase5h-acceptance.ts"
+    "phase5h:acceptance": "npm run test:orchestration && npm run test:orchestration-security && npm run test:orchestration-migration && npm run test:orchestration-restart && npm run test:orchestration-concurrency && npm run test:orchestration-evaluation && tsx src/personal-os/orchestration/phase5h-acceptance.ts",
+    "delegation": "tsx src/personal-os/delegation/cli.ts",
+    "test:delegated-authority": "tsx src/personal-os/delegation/__tests__/delegation.test.ts",
+    "test:delegated-authority-security": "tsx src/personal-os/delegation/__tests__/delegation-security.test.ts",
+    "test:delegated-authority-migration": "tsx src/personal-os/delegation/__tests__/delegation-migration.test.ts",
+    "test:delegated-authority-concurrency": "tsx src/personal-os/delegation/__tests__/delegation-concurrency.test.ts",
+    "test:delegated-authority-restart": "tsx src/personal-os/delegation/__tests__/delegation-restart.test.ts",
+    "test:delegated-authority-evaluation": "tsx src/personal-os/delegation/delegation-evaluation.ts",
+    "phase5i:acceptance": "npm run test:delegated-authority && npm run test:delegated-authority-security && npm run test:delegated-authority-migration && npm run test:delegated-authority-restart && npm run test:delegated-authority-concurrency && npm run test:delegated-authority-evaluation && tsx src/personal-os/delegation/phase5i-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

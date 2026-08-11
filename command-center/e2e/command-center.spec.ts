@@ -131,4 +131,66 @@ test.describe('Command Center — full flow against a controlled fixture backend
     // never advance a step, create a Controlled Action proposal, or execute anything.
     expect(fixturePlan?.status).toBe('READY');
   });
+
+  test('Phase 5I: Delegations page renders bounded authority and revocation without hidden execution', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    const loginRes = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await loginRes.json();
+    const auth = { Authorization: `Bearer ${token}` };
+
+    await page.getByRole('link', { name: 'Delegations' }).click();
+    await expect(page).toHaveURL(/\/delegations$/);
+    await expect(page.getByRole('heading', { name: 'Delegations' })).toBeVisible();
+    await expect(page.getByText('E2E delegation active')).toBeVisible();
+    await expect(page.getByText('E2E delegation draft')).toBeVisible();
+    await expect(page.getByText('DRAFT').first()).toBeVisible();
+    for (const state of ['ACTIVE', 'PAUSED', 'EXPIRED', 'REVOKED']) {
+      await expect(page.getByText(state).first()).toBeVisible();
+    }
+    await expect(page.getByText(/GMAIL_CREATE_DRAFT/).first()).toBeVisible();
+    await expect(page.getByText('Active', { exact: true }).first()).toBeVisible();
+
+    for (const forbidden of [/^send$/i, /gmail send/i, /approve all/i, /activate all/i, /^execute$/i, /^run$/i]) {
+      await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
+    }
+
+    await page.getByRole('link', { name: 'E2E delegation waiting-approval' }).click();
+    await expect(page).toHaveURL(/\/delegations\/delegation-/);
+    await expect(page.getByText(/Strongly approve and activate/i)).toBeVisible();
+    await expect(page.getByPlaceholder(/AUTHORIZE:/i)).toBeVisible();
+    await expect(page.getByText(/Mi cannot approve its own delegation/i)).toBeVisible();
+    await expect(page.getByText(/no one-click approval exists/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /strongly approve and activate/i })).toBeDisabled();
+
+    await page.getByRole('link', { name: 'Delegations' }).click();
+    await page.getByRole('link', { name: 'E2E delegation active' }).click();
+    await expect(page).toHaveURL(/\/delegations\/delegation-/);
+    await expect(page.getByText(/Target scope/i)).toBeVisible();
+    await expect(page.getByText(/Risk ceiling/i)).toBeVisible();
+    await expect(page.getByText(/R2/).first()).toBeVisible();
+    await expect(page.getByText(/Window/i)).toBeVisible();
+    await expect(page.getByText(/Executions/i)).toBeVisible();
+    await expect(page.getByText(/example\.com/).first()).toBeVisible();
+    await expect(page.getByText(/not plan approval and not a single action approval/i)).toBeVisible();
+
+    page.once('dialog', dialog => dialog.accept());
+    await page.getByLabel(/Revoke reason/i).fill('E2E revoke');
+    await page.getByRole('button', { name: /revoke delegation/i }).click();
+    await expect(page.getByText('REVOKED').first()).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByText('Enter your PIN to unlock.')).not.toBeVisible();
+    await expect(page.getByText('REVOKED').first()).toBeVisible();
+
+    const actionsRes = await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth });
+    expect(actionsRes.status()).toBe(200);
+    const actionsPayload = await actionsRes.json();
+    const serializedActions = JSON.stringify(actionsPayload);
+    expect(serializedActions).not.toContain('GMAIL_SEND');
+    expect(serializedActions).not.toContain('FORBIDDEN_EXTERNAL_ACTION');
+  });
 });

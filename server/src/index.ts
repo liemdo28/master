@@ -74,6 +74,7 @@ import { voiceRouter } from './routes/voice';
 import { controlledActionsJsonParser, controlledActionsRouter } from './personal-os/actions/router';
 import { governanceJsonParser, governanceRouter } from './personal-os/actions/governance/router';
 import { orchestrationJsonParser, orchestrationRouter } from './personal-os/orchestration/router';
+import { delegationJsonParser, delegationRouter } from './personal-os/delegation/router';
 import { jarvisRouter } from './routes/jarvis';
 import { workflowMetricsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
@@ -224,6 +225,7 @@ app.use('/api/command-center', operatingJsonParser, taskRuntimeJsonErrorHandler,
 app.use('/api/command-center', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, controlledActionsRouter);
 app.use('/api/command-center', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, governanceRouter);
 app.use('/api/command-center', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, orchestrationRouter);
+app.use('/api/command-center', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, delegationRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -234,6 +236,7 @@ app.use('/api', operatingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, a
 app.use('/api', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, controlledActionsRouter);
 app.use('/api', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, governanceRouter);
 app.use('/api', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, orchestrationRouter);
+app.use('/api', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, delegationRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
@@ -552,6 +555,7 @@ startHttpServer().catch(e => {
 // ── Graceful shutdown — prevents EADDRINUSE on PM2 restart ───────────────────
 function gracefulShutdown(signal: string) {
   console.log(`[Mi] ${signal} received — shutting down gracefully`);
+  scheduleE2eFixtureCleanup();
   server.closeAllConnections?.();
   server.close(() => {
     console.log('[Mi] HTTP server closed');
@@ -566,3 +570,35 @@ function gracefulShutdown(signal: string) {
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
+
+function scheduleE2eFixtureCleanup() {
+  const root = process.env.MI_E2E_FIXTURE_ROOT;
+  if (process.env.MI_E2E_FIXTURE !== '1' || !root) return;
+  try {
+    const fs = require('fs') as typeof import('fs');
+    const os = require('os') as typeof import('os');
+    const { spawn } = require('child_process') as typeof import('child_process');
+    const tempRoot = fs.realpathSync(os.tmpdir());
+    const fixtureRoot = fs.realpathSync(root);
+    if (!fixtureRoot.startsWith(tempRoot) || !fixtureRoot.includes('mi-5e-e2e-')) return;
+    const cleanupScript = `
+const fs = require('fs');
+const pid = Number(process.argv[1]);
+const root = process.argv[2];
+function alive() { try { process.kill(pid, 0); return true; } catch { return false; } }
+function rm() { try { fs.rmSync(root, { recursive: true, force: true, maxRetries: 20, retryDelay: 250 }); } catch {} }
+(async () => {
+  for (let i = 0; i < 80 && alive(); i++) await new Promise(r => setTimeout(r, 250));
+  rm();
+})();
+`;
+    const child = spawn(process.execPath, ['-e', cleanupScript, String(process.pid), fixtureRoot], {
+      detached: true,
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+    child.unref();
+  } catch {
+    // Fixture cleanup is best-effort and only active for E2E.
+  }
+}

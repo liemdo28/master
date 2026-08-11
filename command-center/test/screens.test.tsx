@@ -29,6 +29,7 @@ import { CodingPage } from '@/routes/CodingPage';
 import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
 import { PlansPage } from '@/routes/PlansPage';
+import { DelegationsPage } from '@/routes/DelegationsPage';
 
 const FIXTURES: Record<string, unknown> = {
   '/operating/today': {
@@ -61,6 +62,11 @@ const FIXTURES: Record<string, unknown> = {
   '/orchestration/plans': {
     plans: [
       { id: 'plan-1', goalId: null, title: "Prepare tomorrow's customer follow-up", objective: 'x', projectId: 'mi-core', status: 'WAITING_APPROVAL', planVersion: 1, previousVersionId: null, planHash: 'h', policyVersion: 'phase5g-default-v1', policyHash: 'p', createdAt: '2026-08-07T00:00:00Z', updatedAt: '2026-08-07T00:00:00Z', validatedAt: '2026-08-07T00:00:00Z', completedAt: null, cancelledAt: null, failureReason: null, blockedReason: null },
+    ],
+  },
+  '/delegations': {
+    delegations: [
+      { id: 'delegation-1', delegationVersion: 1, previousVersionId: null, title: 'Morning follow-up drafts', description: 'x', owner: 'liem', projectId: 'mi-core', status: 'ACTIVE', allowedActionTypes: ['GMAIL_CREATE_DRAFT'], deniedActionTypes: [], targetRestriction: { allowedDomains: ['example.com'], maxRecipients: 3 }, riskCeiling: 'R2', approvalLevelCeiling: 'STANDARD', startsAt: '2026-08-11T09:00:00Z', expiresAt: '2026-08-11T12:00:00Z', timezone: 'UTC', maxExecutions: 3, usedExecutions: 1, maxTargets: null, usedTargets: 1, policyVersion: 'phase5g-default-v1', policyHash: 'p', createdAt: '2026-08-11T08:00:00Z', approvedAt: '2026-08-11T08:30:00Z', activatedAt: '2026-08-11T08:30:00Z', revokedAt: null, exhaustedAt: null, expiredAt: null, pausedReason: null },
     ],
   },
 };
@@ -163,5 +169,15 @@ describe('Command Center screens', () => {
     // but the list itself must never expose anything that reads as "Approve" — that
     // word is reserved for the Actions page's per-proposal approval flow.
     expect(screen.queryByRole('button', { name: /^approve$/i })).not.toBeInTheDocument();
+  });
+
+  it('Delegations lists an active delegated authority with its quota and scope, and never shows a bulk approve control', async () => {
+    renderWithProviders(<DelegationsPage />);
+    await waitFor(() => expect(screen.getByText(/morning follow-up drafts/i)).toBeInTheDocument());
+    expect(screen.getByText(/GMAIL_CREATE_DRAFT/)).toBeInTheDocument();
+    expect(screen.getByText('1/3')).toBeInTheDocument();
+    // No bulk "approve all" / "activate all" control anywhere on the list screen.
+    expect(screen.queryByRole('button', { name: /approve.?all/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /activate.?all/i })).not.toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test:command-center": "vitest run test/screens.test.tsx",
     "test:command-center-security": "vitest run test/security.test.tsx",
-    "test:command-center-e2e": "playwright test"
+    "test:command-center-e2e": "node e2e/run-playwright.cjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
