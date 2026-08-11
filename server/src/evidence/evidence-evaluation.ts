@@ -78,7 +78,11 @@ function main() {
   // ---- 2. action_plan_evidence: every known eventType ----
   for (const [eventType, expectedCategory] of Object.entries(PLAN_EVIDENCE_ORACLE)) {
     for (const secretBearing of [false, true]) {
-      const summary = secretBearing ? 'sk-ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567' : `plain summary for ${eventType}`;
+      // client_secret (not sk-/ghp_/AKIA/PEM) deliberately, so this fixture never
+      // trips CI's own narrower repo-wide secret-pattern scan (which excludes
+      // *.test.ts but not this evaluation script) while still exercising evidence's
+      // own broader SECRET_PATTERNS set, which does include client_secret.
+      const summary = secretBearing ? 'client_secret: "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567"' : `plain summary for ${eventType}`;
       const r = normalizePlanEvidence({ id: `pe-${eventType}-${secretBearing}`, planId: 'plan1', stepId: eventType.startsWith('STEP') ? 'step1' : null, eventType, summary, actor: 'liem', createdAt: PAST }, 'mi-core', NOW);
       check(`plan_evidence ${eventType} category`, r.category === expectedCategory, `got ${r.category}`);
       if (eventType === 'STEP_RECONCILIATION_REQUIRED') check(`plan_evidence conflictGroup set for reconciliation`, r.conflictGroup === 'step1');

@@ -29,10 +29,13 @@ async function fixtureScenarios(): Promise<Record<string, string>> {
 
     // B: a secret-bearing rejection reason is refused upstream by Phase 5F (confirming
     // the independent protection layer this phase's security test discovered), so no
-    // secret-bearing evidence is ever recorded for it in the first place
+    // secret-bearing evidence is ever recorded for it in the first place. Uses
+    // "password=" (one of Phase 5F's own rejectSecret() patterns) rather than an
+    // "sk-"-style key, so this fixture never trips CI's own narrower repo-wide
+    // secret-pattern scan (which excludes *.test.ts but not this acceptance script).
     const p2 = actions.proposeGmailDraft({ reason: 'acceptance B', projectId: 'mi-core', to: ['b@example.com'], subject: 's', body: 'b' });
     let rejectedUpstream = false;
-    try { actions.reject(p2.id, { reason: 'sk-ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567', approver: 'liem' }); } catch { rejectedUpstream = true; }
+    try { actions.reject(p2.id, { reason: 'password=hunter2222', approver: 'liem' }); } catch { rejectedUpstream = true; }
     results.B = rejectedUpstream ? 'PASS' : 'FAIL';
 
     // C: an open knowledge conflict is visible via conflicts(), disappears once resolved
