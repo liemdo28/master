@@ -150,6 +150,46 @@ export class DelegationService {
     return updated;
   }
 
+  pause(id: string, actor: string, reason: string): DelegatedAuthority {
+    const d = this.get(id);
+    assertTransition(d.status, 'PAUSED');
+    const updated = this.store.updateDelegationStatus(id, d.delegationVersion, 'PAUSED', { pausedReason: reason });
+    this.store.recordEvent(id, null, 'delegation.paused', reason, {}, actor);
+    return updated;
+  }
+
+  /** Never re-approves anything — resuming only restores the ability to be
+   *  re-evaluated; every subsequent action still passes the full eligibility check. */
+  resume(id: string, actor: string): DelegatedAuthority {
+    const d = this.get(id);
+    assertTransition(d.status, 'ACTIVE');
+    const updated = this.store.updateDelegationStatus(id, d.delegationVersion, 'ACTIVE', { pausedReason: null });
+    this.store.recordEvent(id, null, 'delegation.resumed', 'Delegation resumed.', {}, actor);
+    return updated;
+  }
+
+  /**
+   * §15: if the currently active Phase 5G policy set no longer matches the exact
+   * policy the delegation was strongly approved against, the delegation must not
+   * silently keep operating under a policy nobody reviewed it against. This is
+   * deliberately conservative — ANY policy change pauses the delegation (not just a
+   * detected stricter one), since safely proving "the new policy is strictly looser"
+   * in general is not decidable from a content hash alone. A human reviews and calls
+   * resume() (no re-approval needed — the delegation's own declared scope is
+   * unchanged) once satisfied the new policy still permits its exact scope.
+   */
+  private checkPolicyDrift(d: DelegatedAuthority): DelegatedAuthority {
+    if (d.status !== 'ACTIVE') return d;
+    const activePolicySet = this.controlledActions.policyEngine.store.activePolicySet();
+    const currentHash = activePolicySet?.contentHash ?? null;
+    if (d.policyHash && currentHash && d.policyHash !== currentHash) {
+      const updated = this.store.updateDelegationStatus(d.id, d.delegationVersion, 'PAUSED_POLICY_CHANGED', { pausedReason: `active policy changed from ${d.policyHash.slice(0, 12)} to ${currentHash.slice(0, 12)} since this delegation was approved` });
+      this.store.recordEvent(d.id, null, 'delegation.policy_changed', 'Active policy changed since approval — delegation paused pending review.', { previousPolicyHash: d.policyHash, currentPolicyHash: currentHash }, 'system');
+      return updated;
+    }
+    return d;
+  }
+
   revoke(id: string, actor: string, reason: string): DelegatedAuthority {
     const d = this.get(id);
     assertTransition(d.status, 'REVOKED');
@@ -168,13 +208,15 @@ export class DelegationService {
 
   get(id: string): DelegatedAuthority {
     this.sweepExpired();
-    const d = this.store.getDelegation(id);
+    let d = this.store.getDelegation(id);
     if (!d) throw new Error('delegation not found');
+    d = this.checkPolicyDrift(d);
     return d;
   }
 
   list(status?: DelegatedAuthorityStatus): DelegatedAuthority[] {
     this.sweepExpired();
+    for (const d of this.store.listDelegations('ACTIVE')) this.checkPolicyDrift(d);
     return this.store.listDelegations(status);
   }
 
@@ -201,6 +243,7 @@ export class DelegationService {
 
   evaluate(proposal: ActionProposal): DelegationDecision {
     this.sweepExpired();
+    for (const d of this.store.listDelegations('ACTIVE')) this.checkPolicyDrift(d);
     const candidates = this.store.listDelegations('ACTIVE').filter(d => d.projectId === proposal.projectId);
     if (candidates.length === 0) {
       return this.persistDenied(proposal, null, ['no ACTIVE delegation exists for this project']);
@@ -233,6 +276,7 @@ export class DelegationService {
   async tryAuthorize(proposal: ActionProposal): Promise<boolean> {
     if (proposal.status !== 'WAITING_APPROVAL') return false;
     this.sweepExpired();
+    for (const d of this.store.listDelegations('ACTIVE')) this.checkPolicyDrift(d);
     const candidates = this.store.listDelegations('ACTIVE').filter(d => d.projectId === proposal.projectId);
     for (const d of candidates) {
       const ctx = this.buildContext(d, proposal);
