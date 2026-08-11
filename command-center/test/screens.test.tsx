@@ -28,6 +28,7 @@ import { InboxPage } from '@/routes/InboxPage';
 import { CodingPage } from '@/routes/CodingPage';
 import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
+import { PlansPage } from '@/routes/PlansPage';
 
 const FIXTURES: Record<string, unknown> = {
   '/operating/today': {
@@ -57,6 +58,11 @@ const FIXTURES: Record<string, unknown> = {
   '/coding/model-health': { endpoint: 'http://x', installedModels: ['qwen3:8b'], residentModels: [], modelRoles: {}, healthy: true },
   '/operating/service-health': { serviceHealth: [{ service: 'Mi Core', status: 'HEALTHY', lastCheck: '', reason: null, evidenceReference: 'service:mi-core' }] },
   '/personal/integrity': { integrityCheck: 'ok', foreignKeyViolations: [], schemaVersion: 6 },
+  '/orchestration/plans': {
+    plans: [
+      { id: 'plan-1', goalId: null, title: "Prepare tomorrow's customer follow-up", objective: 'x', projectId: 'mi-core', status: 'WAITING_APPROVAL', planVersion: 1, previousVersionId: null, planHash: 'h', policyVersion: 'phase5g-default-v1', policyHash: 'p', createdAt: '2026-08-07T00:00:00Z', updatedAt: '2026-08-07T00:00:00Z', validatedAt: '2026-08-07T00:00:00Z', completedAt: null, cancelledAt: null, failureReason: null, blockedReason: null },
+    ],
+  },
 };
 
 vi.mock('@/lib/api-client', () => ({
@@ -148,5 +154,14 @@ describe('Command Center screens', () => {
   it('Reviews handles a missing daily review honestly, offers to generate it', async () => {
     renderWithProviders(<ReviewsPage />);
     await waitFor(() => expect(screen.getByText(/no end-of-day review/i)).toBeInTheDocument());
+  });
+
+  it('Plans lists a governed action plan and never shows an "Approve" control', async () => {
+    renderWithProviders(<PlansPage />);
+    await waitFor(() => expect(screen.getByText(/customer follow-up/i)).toBeInTheDocument());
+    // Plan structure operations (Validate/Start/Advance) may exist on the detail page,
+    // but the list itself must never expose anything that reads as "Approve" — that
+    // word is reserved for the Actions page's per-proposal approval flow.
+    expect(screen.queryByRole('button', { name: /^approve$/i })).not.toBeInTheDocument();
   });
 });

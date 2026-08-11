@@ -111,4 +111,24 @@ test.describe('Command Center — full flow against a controlled fixture backend
     const waiting = tasks.find((t: { userRequest: string }) => t.userRequest.includes('E2E fixture'));
     expect(waiting?.status).toBe('WAITING_APPROVAL');
   });
+
+  test('Phase 5H: visiting the Plans screen never advances or auto-executes the fixture plan', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+    await page.getByRole('link', { name: 'Plans' }).click();
+    await expect(page.getByText(/prepare customer follow-up/i)).toBeVisible();
+
+    const loginRes = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await loginRes.json();
+    const plansRes = await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const { plans } = await plansRes.json();
+    const fixturePlan = plans.find((p: { title: string }) => p.title.includes('E2E fixture'));
+    // Seeded as validated + started only — merely rendering the Plans screen must
+    // never advance a step, create a Controlled Action proposal, or execute anything.
+    expect(fixturePlan?.status).toBe('READY');
+  });
 });
