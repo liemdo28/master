@@ -9,10 +9,11 @@ const MOUNT_RE = /app\.use\(\s*['"`]([^'"`]+)['"`]([\s\S]*?)\);/g;
 const APP_GET_RE = /app\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g;
 
 export function generateAuthorityManifest(repoRoot = process.cwd()): AuthorityManifest {
-  const routes = discoverMountedRoutes(repoRoot);
+  const serverRoot = resolveServerRoot(repoRoot);
+  const routes = discoverMountedRoutes(serverRoot);
   const surfaces = [
     ...routes.map(classifyDiscoveredRoute),
-    ...discoverNonHttpSurfaces(repoRoot),
+    ...discoverNonHttpSurfaces(serverRoot),
   ].sort((a, b) => a.id.localeCompare(b.id));
   const mutations = surfaces.filter(item => isMutation(item.method, item.effectClass));
   const legacyMutations = mutations.filter(item => item.legacyReason || item.authorityClass === 'LEGACY_QUARANTINED');
@@ -37,6 +38,13 @@ export function generateAuthorityManifest(repoRoot = process.cwd()): AuthorityMa
       unresolvedLegacyMutations: legacyMutations.filter(s => !s.phase6bDisposition).length,
     },
   };
+}
+
+function resolveServerRoot(repoRoot: string): string {
+  if (fs.existsSync(path.join(repoRoot, 'src', 'index.ts'))) return repoRoot;
+  const nestedServerRoot = path.join(repoRoot, 'server');
+  if (fs.existsSync(path.join(nestedServerRoot, 'src', 'index.ts'))) return nestedServerRoot;
+  return repoRoot;
 }
 
 export function discoverNonHttpSurfaces(repoRoot = process.cwd()): AuthoritySurface[] {

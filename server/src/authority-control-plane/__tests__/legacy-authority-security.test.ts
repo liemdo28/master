@@ -41,6 +41,9 @@ function importsOf(file: string): string[] {
 function run(): void {
   process.env.MI_AUTHORITY_EVIDENCE_DISABLED = '1';
   const manifest = generateAuthorityManifest(process.cwd());
+  const repoRootManifest = generateAuthorityManifest(path.resolve(process.cwd(), '..'));
+  assert.strictEqual(repoRootManifest.counts.total, manifest.counts.total, 'repo-root manifest generation matches server-root total');
+  assert.strictEqual(repoRootManifest.counts.legacyMutations, manifest.counts.legacyMutations, 'repo-root manifest generation matches server-root legacy count');
   validateLegacyAuthorityRuntime(manifest);
   const adapter = new LegacyAuthorityAdapter(process.cwd());
   const legacy = legacyMutationSurfaces(manifest);
