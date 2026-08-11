@@ -108,9 +108,12 @@ export class EvidenceService {
 
   /** §6D.4 — open conflicts across every source, never silently resolved by picking a
    *  side. A conflict disappears from this list only when its own source system marks
-   *  it resolved (conflictGroup becomes null at normalization time). */
+   *  it resolved (conflictGroup becomes null at normalization time). Capped at
+   *  OPERATOR_SAFE unconditionally — this is always an operator-facing summary view,
+   *  never an internal-trusted-caller path, so there is no legitimate reason for it to
+   *  ever return a SENSITIVE/SECRET_NEVER_RENDER record (§6D.6). */
   conflicts(): EvidenceRecord[] {
-    return this.list({ category: 'CONFLICT' }).filter(r => r.conflictGroup !== null);
+    return this.list({ category: 'CONFLICT', redactionClassAtMost: 'OPERATOR_SAFE' }).filter(r => r.conflictGroup !== null);
   }
 
   /** §6D.8 — structured health metrics. Every dimension the directive lists is either
@@ -215,12 +218,13 @@ export class EvidenceService {
     return metrics;
   }
 
-  /** §6D.9 — read-only, no remediation. */
+  /** §6D.9 — read-only, no remediation. Capped at OPERATOR_SAFE unconditionally, same
+   *  reasoning as conflicts() above — the digest is always an operator-facing summary. */
   digest(date: string): DailyAuditDigest {
     const now = this.now();
     const dayStart = new Date(`${date}T00:00:00.000Z`).getTime();
     const dayEnd = dayStart + 24 * 60 * 60 * 1000;
-    const all = this.list();
+    const all = this.list({ redactionClassAtMost: 'OPERATOR_SAFE' });
     const inDay = all.filter(r => {
       const t = new Date(r.observedAt).getTime();
       return !Number.isNaN(t) && t >= dayStart && t < dayEnd;
@@ -235,7 +239,9 @@ export class EvidenceService {
       decisions: inDay.filter(r => r.category === 'DECISION').length,
       approvals: inDay.filter(r => r.category === 'APPROVAL').length,
       executions: inDay.filter(r => r.category === 'EXECUTION').length,
-      denials: inDay.filter(r => r.claim.toLowerCase().includes('denied') || r.claim.toLowerCase().includes('rejected')).length,
+      // Deterministic — driven by `outcome`, which every normalize function sets from
+      // its own source enum value, never by pattern-matching the claim text (§6D.3).
+      denials: inDay.filter(r => r.outcome === 'DENIED').length,
       delegationExecutions: inDay.filter(r => r.sourceSystem === 'DELEGATION' && r.category === 'EXECUTION').length,
       anomalies: inDay.filter(r => r.sourceSystem === 'GOVERNANCE' && r.category === 'HEALTH').length,
       blockedItems: inDay.filter(r => r.category === 'POLICY').length,

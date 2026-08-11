@@ -19,10 +19,14 @@ export type EvidenceFreshness = 'FRESH' | 'AGING' | 'STALE' | 'UNKNOWN';
 
 export type EvidenceRedactionClass = 'PUBLIC_SAFE' | 'OPERATOR_SAFE' | 'SENSITIVE' | 'SECRET_NEVER_RENDER';
 
-/** Every existing evidence-like table this contract reads through — never a new one. */
+/** Every existing evidence-like table this contract actually reads through. Phase 6A's
+ *  authority manifest is deliberately NOT included: it is a regenerated-on-demand,
+ *  never-persisted classification (see PHASE6D_EVIDENCE_AUDIT.md), already served by
+ *  its own `/authority/manifest` endpoint — duplicating it into the event-stream list()
+ *  would misrepresent a static classification as a timestamped event. */
 export type EvidenceSourceSystem =
   | 'CONTROLLED_ACTIONS' | 'GOVERNANCE' | 'ORCHESTRATION' | 'DELEGATION'
-  | 'KNOWLEDGE' | 'TASK_RUNTIME' | 'AUTHORITY_CONTROL_PLANE' | 'HEALTH';
+  | 'KNOWLEDGE' | 'TASK_RUNTIME';
 
 /** A structured pointer replacing the loose `evidenceReferences: string[]` convention
  *  found everywhere in the pre-6D codebase (Controlled Actions, Governance,
@@ -53,6 +57,11 @@ export interface EvidenceRecord {
   freshness: EvidenceFreshness;
   /** What this record was itself derived from — chains back through the system. */
   provenance: EvidenceRef[];
+  /** Deterministic, set from the same explicit source enum value that drove `category`
+   *  — never inferred from `claim` text. Lets a consumer (e.g. the daily digest's
+   *  denial count) ask "was this a denial?" without parsing free text, which would
+   *  violate §6D.3's hard rule the same way upgrading a claim's confidence would. */
+  outcome: 'ALLOWED' | 'DENIED' | 'NEUTRAL';
   redactionClass: EvidenceRedactionClass;
   /** A safe, non-secret reference (path/URI/short hash prefix) — never a credential. */
   canonicalReference: string | null;

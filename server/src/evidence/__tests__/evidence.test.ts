@@ -182,6 +182,47 @@ async function main() {
     assert.ok(Array.isArray(digest.significantEvents));
     console.log('[evidence] PASS: daily digest is read-only and reports non-negative counts');
 
+    // ---- 6D.9 regression: denials are counted from the deterministic `outcome` field,
+    // never by pattern-matching the claim text. A kill-switch-enabled governance event's
+    // claim is literally "Governance event: kill_switch.enabled" — it never contains the
+    // word "denied", yet it must still count as a denial because its outcome is DENIED. ----
+    // Enabling a kill switch only writes the kill_switches table row (see
+    // KillSwitchService.enable()); the 'kill_switch.enabled' governance_events audit
+    // entry is written separately, by the router/CLI layer that calls it — replicate
+    // that exact call here rather than assuming lockdown() alone produces one.
+    const killSwitch = actions.policyEngine.killSwitch.lockdown('liem', 'evidence digest denial-counting test');
+    actions.policyEngine.audit.record({
+      eventType: 'kill_switch.enabled', policyVersion: null, inputHash: null, decisionHash: null,
+      actor: 'liem', proposalId: null, reasons: ['evidence digest denial-counting test'],
+      metadata: { id: killSwitch.id, scope: killSwitch.scope },
+    });
+    const digestAfterKillSwitch = evidence.digest(today);
+    const killSwitchRecord = evidence.list({ sourceSystem: 'GOVERNANCE' }).find(r => r.claim.includes('kill_switch.enabled'));
+    assert.ok(killSwitchRecord, 'expected a kill_switch.enabled governance event');
+    assert.strictEqual(killSwitchRecord!.outcome, 'DENIED', 'kill_switch.enabled must be classified DENIED via the deterministic outcome table, not text-matched');
+    assert.ok(!killSwitchRecord!.claim.toLowerCase().includes('denied'), 'sanity check: this claim text never literally contains "denied"');
+    assert.ok(digestAfterKillSwitch.denials > digest.denials, 'digest() denials must increase from a DENIED-outcome record whose claim text never says "denied"');
+    actions.policyEngine.killSwitch.unlock(killSwitch.id);
+    console.log('[evidence] PASS: digest() denial counting is driven by the deterministic outcome field, not free-text matching');
+
+    // ---- 6D.6 regression: conflicts() and digest() enforce redactionClassAtMost
+    // internally, not only when a caller explicitly asks for it via list(). A SENSITIVE
+    // governance anomaly must never appear in either, even though its category (HEALTH)
+    // would otherwise qualify it for digest()'s significantEvents. ----
+    const anomalyStore = actions.policyEngine.store;
+    anomalyStore.saveAnomaly({
+      id: 'anomaly-sensitive-regression', type: 'suspicious_pattern', severity: 'MEDIUM',
+      proposalId: null, projectId: 'mi-core', description: 'sensitive anomaly for redaction-enforcement regression test',
+      evidence: {}, detectedAt: new Date().toISOString(), status: 'OPEN',
+    });
+    const sensitiveAnomaly = evidence.list({ sourceSystem: 'GOVERNANCE', category: 'HEALTH' }).find(r => r.sourceId === 'anomaly-sensitive-regression');
+    assert.ok(sensitiveAnomaly && sensitiveAnomaly.redactionClass === 'SENSITIVE', 'seeded anomaly must actually be SENSITIVE for this regression check to be meaningful');
+    const conflictsAfterAnomaly = evidence.conflicts();
+    assert.ok(!conflictsAfterAnomaly.some(r => r.sourceId === 'anomaly-sensitive-regression'), 'conflicts() must never surface a SENSITIVE record');
+    const digestAfterAnomaly = evidence.digest(today);
+    assert.ok(!digestAfterAnomaly.significantEvents.some(r => r.sourceId === 'anomaly-sensitive-regression'), 'digest().significantEvents must never surface a SENSITIVE record, even though HEALTH qualifies for inclusion');
+    console.log('[evidence] PASS: conflicts() and digest() enforce redactionClassAtMost internally, independent of caller-supplied filters');
+
     // ---- filter correctness ----
     const knowledgeOnly = evidence.list({ sourceSystem: 'KNOWLEDGE' });
     assert.ok(knowledgeOnly.every(r => r.sourceSystem === 'KNOWLEDGE'));

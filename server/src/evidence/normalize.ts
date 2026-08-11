@@ -28,6 +28,9 @@ function baseRecord(now: Date, params: {
   conflictGroup?: string | null;
   authorityDecisionId?: string | null;
   actor?: string | null;
+  /** Deterministic, derived by the caller from the same source enum value that chose
+   *  `category` — never from `claim`. Defaults to NEUTRAL for non-decision evidence. */
+  outcome?: 'ALLOWED' | 'DENIED' | 'NEUTRAL';
 }): EvidenceRecord {
   // Content-driven upgrade: if the RAW claim (before sanitization replaces it) or the
   // raw canonicalReference ever matched a secret pattern, this record is
@@ -50,6 +53,7 @@ function baseRecord(now: Date, params: {
     expiresAt: params.expiresAt ?? null,
     freshness: classifyFreshness(params.observedAt, params.category, now),
     provenance: params.provenance ?? [],
+    outcome: params.outcome ?? 'NEUTRAL',
     redactionClass: rawHadSecret ? 'SECRET_NEVER_RENDER' : classifyRedaction(params.sourceSystem, params.category),
     canonicalReference: sanitizeCanonicalReference(params.canonicalReference ?? null),
     relatedEvidence: params.relatedEvidence ?? [],
@@ -73,6 +77,12 @@ const ACTION_EVIDENCE_CATEGORY: Record<string, EvidenceCategory> = {
   'action.execution.failed': 'EXECUTION',
 };
 
+const ACTION_EVIDENCE_OUTCOME: Record<string, 'ALLOWED' | 'DENIED' | 'NEUTRAL'> = {
+  'action.approved': 'ALLOWED', 'action.execution.completed': 'ALLOWED',
+  'action.rejected': 'DENIED', 'action.expired': 'DENIED', 'policy.budget.blocked': 'DENIED',
+  'action.execution.failed': 'DENIED',
+};
+
 export interface RawActionEvidenceRow {
   id: string; proposalId: string; approvalId: string | null; executionId: string | null;
   eventType: string; summary: string; payloadHash: string | null; actor: string; createdAt: string;
@@ -87,6 +97,7 @@ export function normalizeActionEvidence(row: RawActionEvidenceRow, projectId: st
     claim: row.summary, observedAt: row.createdAt,
     canonicalReference: row.payloadHash ? `sha256:${row.payloadHash.slice(0, 16)}` : null,
     actor: row.actor,
+    outcome: ACTION_EVIDENCE_OUTCOME[row.eventType] ?? 'NEUTRAL',
   });
 }
 
@@ -97,6 +108,12 @@ export interface RawPolicyDecisionRow {
   evaluatedAt: string; policyVersion: string; decisionHash: string;
 }
 
+const POLICY_DECISION_OUTCOME: Record<string, 'ALLOWED' | 'DENIED' | 'NEUTRAL'> = {
+  ALLOW: 'ALLOWED',
+  DENY: 'DENIED', BLOCK_BUDGET: 'DENIED', BLOCK_CONTEXT: 'DENIED', BLOCK_KILL_SWITCH: 'DENIED',
+  REQUIRE_APPROVAL: 'NEUTRAL', REQUIRE_STRONG_APPROVAL: 'NEUTRAL',
+};
+
 export function normalizePolicyDecision(row: RawPolicyDecisionRow, now: Date): EvidenceRecord {
   return baseRecord(now, {
     sourceSystem: 'GOVERNANCE', sourceId: row.id, category: 'DECISION',
@@ -106,6 +123,7 @@ export function normalizePolicyDecision(row: RawPolicyDecisionRow, now: Date): E
     observedAt: row.evaluatedAt,
     canonicalReference: `policy-decision:${row.decisionHash.slice(0, 16)}`,
     authorityDecisionId: row.id,
+    outcome: POLICY_DECISION_OUTCOME[row.decision] ?? 'NEUTRAL',
   });
 }
 
@@ -121,9 +139,15 @@ export interface RawGovernanceEventRow {
   id: string; eventType: string; actor: string; proposalId: string | null; createdAt: string;
 }
 
+const GOVERNANCE_EVENT_OUTCOME: Array<[string, 'ALLOWED' | 'DENIED' | 'NEUTRAL']> = [
+  ['kill_switch.enabled', 'DENIED'], ['kill_switch.disabled', 'ALLOWED'],
+  ['legacy.quarantine.blocked', 'DENIED'], ['legacy.semantic.unsupported', 'DENIED'],
+];
+
 export function normalizeGovernanceEvent(row: RawGovernanceEventRow, projectId: string | null, now: Date): EvidenceRecord {
   const match = GOVERNANCE_EVENT_PREFIX_CATEGORY.find(([prefix]) => row.eventType.startsWith(prefix));
   const category: EvidenceCategory = match ? match[1] : 'DECISION';
+  const outcomeMatch = GOVERNANCE_EVENT_OUTCOME.find(([prefix]) => row.eventType.startsWith(prefix));
   return baseRecord(now, {
     sourceSystem: 'GOVERNANCE', sourceId: row.id, category,
     confidence: 'CERTAIN',
@@ -131,6 +155,7 @@ export function normalizeGovernanceEvent(row: RawGovernanceEventRow, projectId: 
     subjectId: row.proposalId ?? row.id,
     claim: `Governance event: ${row.eventType}`,
     observedAt: row.createdAt, actor: row.actor,
+    outcome: outcomeMatch ? outcomeMatch[1] : 'NEUTRAL',
   });
 }
 
@@ -148,6 +173,7 @@ export function normalizeGovernanceAnomaly(row: RawGovernanceAnomalyRow, now: Da
     claim: row.description,
     observedAt: row.detectedAt,
     conflictGroup: row.status === 'OPEN' ? row.id : null,
+    outcome: 'NEUTRAL', // an anomaly finding is neither an allow nor a deny by itself
   });
 }
 
@@ -165,6 +191,12 @@ const PLAN_EVIDENCE_CATEGORY: Record<string, EvidenceCategory> = {
   PLAN_FAILED: 'DECISION', PLAN_CANCELLED: 'DECISION',
 };
 
+const PLAN_EVIDENCE_OUTCOME: Record<string, 'ALLOWED' | 'DENIED' | 'NEUTRAL'> = {
+  PLAN_VALIDATED: 'ALLOWED', STEP_EXECUTED: 'ALLOWED', APPROVAL_BOUND: 'ALLOWED', PLAN_COMPLETED: 'ALLOWED',
+  PLAN_VALIDATION_FAILED: 'DENIED', POLICY_DENIED: 'DENIED', KILL_SWITCH_BLOCKED: 'DENIED',
+  BUDGET_BLOCKED: 'DENIED', STEP_FAILED: 'DENIED', PLAN_FAILED: 'DENIED', PLAN_CANCELLED: 'DENIED',
+};
+
 export interface RawPlanEvidenceRow {
   id: string; planId: string; stepId: string | null; eventType: string; summary: string; actor: string; createdAt: string;
 }
@@ -179,6 +211,7 @@ export function normalizePlanEvidence(row: RawPlanEvidenceRow, projectId: string
     claim: row.summary, observedAt: row.createdAt, actor: row.actor,
     conflictGroup: row.eventType === 'STEP_RECONCILIATION_REQUIRED' ? row.stepId : null,
     provenance: [{ sourceSystem: 'ORCHESTRATION', sourceId: row.planId }],
+    outcome: PLAN_EVIDENCE_OUTCOME[row.eventType] ?? 'NEUTRAL',
   });
 }
 
@@ -202,6 +235,11 @@ const DELEGATION_EVENT_CATEGORY: Record<string, EvidenceCategory> = {
   'delegation.anomaly_detected': 'CONFLICT',
 };
 
+const DELEGATION_EVENT_OUTCOME: Record<string, 'ALLOWED' | 'DENIED' | 'NEUTRAL'> = {
+  'delegation.approved': 'ALLOWED', 'delegation.activated': 'ALLOWED', 'delegation.execution.authorized': 'ALLOWED',
+  'delegation.execution.denied': 'DENIED', 'delegation.revoked': 'DENIED', 'delegation.expired': 'DENIED', 'delegation.cancelled': 'DENIED',
+};
+
 export interface RawDelegationEventRow {
   id: string; delegationId: string; proposalId: string | null; eventType: string; summary: string; actor: string; createdAt: string;
 }
@@ -215,6 +253,7 @@ export function normalizeDelegationEvent(row: RawDelegationEventRow, projectId: 
     claim: row.summary, observedAt: row.createdAt, actor: row.actor,
     conflictGroup: row.eventType === 'delegation.anomaly_detected' ? row.delegationId : null,
     relatedEvidence: row.proposalId ? [`CONTROLLED_ACTIONS:${row.proposalId}`] : [],
+    outcome: DELEGATION_EVENT_OUTCOME[row.eventType] ?? 'NEUTRAL',
   });
 }
 
@@ -234,6 +273,7 @@ export function normalizeDelegationDecision(row: RawDelegationDecisionRow, now: 
     canonicalReference: `delegation-decision:${row.decisionHash.slice(0, 16)}`,
     authorityDecisionId: row.id,
     relatedEvidence: [`DELEGATION:${row.delegationId}`],
+    outcome: eligible ? 'ALLOWED' : 'DENIED',
   });
 }
 
