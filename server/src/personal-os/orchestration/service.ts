@@ -33,13 +33,17 @@ function assertStepTransition(from: ActionPlanStepStatus, to: ActionPlanStepStat
 export class GovernedOrchestrationService {
   readonly store: OrchestrationStore;
   readonly controlledActions: ControlledActionService;
+  /** Optional (Phase 5I). Undefined for every pre-existing caller — zero behavior
+   *  change unless a caller explicitly wires a DelegationService in. */
+  readonly delegation?: import('../delegation/service').DelegationService;
 
-  constructor(root?: string) {
+  constructor(root?: string, delegation?: import('../delegation/service').DelegationService) {
     this.store = new OrchestrationStore(root);
     // Same personal-os.db, same governance/store singletons the Controlled Actions
     // service already uses — never a second policy engine, never a second DB handle
     // for the same file, never a duplicated connector-execution path.
     this.controlledActions = new ControlledActionService(root);
+    this.delegation = delegation;
   }
 
   close(): void { this.store.close(); this.controlledActions.close(); }
@@ -458,14 +462,34 @@ export class GovernedOrchestrationService {
         requiredApprovalLevel: decision?.requiredApprovalLevel ?? null,
       });
       this.store.recordEvidence(planId, step.id, 'STEP_WAITING_APPROVAL', `Controlled Action proposal ${proposal.id} created; waiting for explicit approval through the existing Controlled Actions surface. This step's approval can never authorize any other step.`, { proposalId: proposal.id, actionType: proposal.actionType }, 'system');
+      // Phase 5I (optional): give a matching ACTIVE delegation a chance to authorize
+      // this brand-new proposal immediately, in the same advance() cycle, exactly as
+      // the directive's flow describes (propose -> policy -> delegation check, as one
+      // continuous step). Falls through unchanged to a normal WAITING_APPROVAL step
+      // when no delegation is wired in or none is eligible.
+      if (this.delegation) {
+        await this.delegation.tryAuthorize(this.controlledActions.get(proposal.id));
+        const reobserved = this.controlledActions.get(proposal.id);
+        if (reobserved.status === 'APPROVED') return this.advanceControlledActionStep(planId, this.store.getStep(step.id)!);
+      }
       return waiting;
     }
 
-    // Step 2: a proposal already exists — reflect its current governed status. Never
-    // call approve() here (that would be the orchestration layer approving its own
-    // action); only call execute(), which itself requires a prior human APPROVE and is
-    // idempotent no-op if already executed.
-    const proposal = this.controlledActions.get(step.proposalId);
+    // Step 2: a proposal already exists — reflect its current governed status. This
+    // method itself never calls approve() (that would be the orchestration layer
+    // approving its own action); it only calls execute(), which itself requires a
+    // prior APPROVE and is an idempotent no-op if already executed. The one exception
+    // is delegated authorization (Phase 5I, optional — `this.delegation` is undefined
+    // unless explicitly wired in by the caller): that approve() call happens inside
+    // the separate, independently-audited DelegationService, never here, and only
+    // ever for a proposal already sitting at WAITING_APPROVAL under its own governed
+    // policy decision — delegation narrows an existing approval requirement, it does
+    // not remove one.
+    let proposal = this.controlledActions.get(step.proposalId);
+    if (proposal.status === 'WAITING_APPROVAL' && this.delegation) {
+      await this.delegation.tryAuthorize(proposal);
+      proposal = this.controlledActions.get(step.proposalId);
+    }
     if (proposal.status === 'WAITING_APPROVAL') return step; // still waiting on a human
     if (proposal.status === 'APPROVED') {
       const approval = this.controlledActions.store.latestApproval(step.proposalId);
