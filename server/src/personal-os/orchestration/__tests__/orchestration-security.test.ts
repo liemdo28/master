@@ -85,12 +85,36 @@ async function main() {
       steps: [{ key: 'draft', type: 'CONTROLLED_ACTION', description: 'draft', actionType: 'GMAIL_CREATE_DRAFT', actionPayload: gmailPayload('version-boundary-v2') }],
     });
     assert.strictEqual(service.detail(v2.id).steps[0].proposalId, null); // v2's step has its own, unapproved proposal slot
+    // The orphaned v1 proposal was already APPROVED (not just WAITING_APPROVAL) when v1
+    // was superseded — versioning must not leave an approved-but-unexecuted proposal
+    // from a cancelled plan version still executable. Regression test for a real defect
+    // found during closure review: cancel() originally only rejected WAITING_APPROVAL
+    // proposals, silently leaving already-APPROVED ones dangling and executable.
+    assert.strictEqual(service.controlledActions.get(v1ProposalId).status, 'CANCELLED');
+    await assert.rejects(() => service.controlledActions.execute(v1ProposalId), 'an approved proposal orphaned by plan versioning must never execute');
     service.validate(v2.id);
     service.start(v2.id);
     await service.advance(v2.id);
     const v2ProposalId = service.detail(v2.id).steps[0].proposalId!;
     assert.notStrictEqual(v2ProposalId, v1ProposalId);
     assert.strictEqual(service.controlledActions.get(v2ProposalId).status, 'WAITING_APPROVAL'); // v1's approval did not carry over
+
+    // ── directly cancelling a plan whose Controlled Action step is already APPROVED
+    // (not merely WAITING_APPROVAL) must terminate that proposal too, not just steps
+    // still awaiting approval ──
+    const cancelApprovedPlan = service.createPlan({
+      title: 'x', objective: 'x', projectId: 'mi-core',
+      steps: [{ key: 'draft', type: 'CONTROLLED_ACTION', description: 'draft', actionType: 'GMAIL_CREATE_DRAFT', actionPayload: gmailPayload('cancel-approved-test') }],
+    });
+    service.validate(cancelApprovedPlan.id);
+    service.start(cancelApprovedPlan.id);
+    await service.advance(cancelApprovedPlan.id);
+    const cancelApprovedProposalId = service.detail(cancelApprovedPlan.id).steps[0].proposalId!;
+    await service.controlledActions.approve(cancelApprovedProposalId, { approver: 'test', source: 'test' });
+    assert.strictEqual(service.controlledActions.get(cancelApprovedProposalId).status, 'APPROVED');
+    service.cancel(cancelApprovedPlan.id, 'cancel while approved');
+    assert.strictEqual(service.controlledActions.get(cancelApprovedProposalId).status, 'CANCELLED');
+    await assert.rejects(() => service.controlledActions.execute(cancelApprovedProposalId), 'cancelling a plan must terminate an already-approved, not-yet-executed proposal');
 
     // ── payload mutation invalidates approval (enforced by the existing Controlled
     // Actions payload-hash check — verified reachable from the orchestration path) ──

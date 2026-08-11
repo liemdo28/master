@@ -244,15 +244,31 @@ export class GovernedOrchestrationService {
     const plan = this.get(id);
     assertPlanTransition(plan.status, 'CANCELLED');
     const steps = this.store.listStepsForPlan(id);
-    // Reject still-open proposals FIRST, outside any transaction on this store — it
-    // writes through a separate ControlledActionStore connection to the same file, and
-    // nesting a second connection's write transaction inside this store's own
+    // Reject/cancel still-open proposals FIRST, outside any transaction on this store —
+    // it writes through a separate ControlledActionStore connection to the same file,
+    // and nesting a second connection's write transaction inside this store's own
     // transaction deadlocks SQLite (SQLITE_BUSY). A dangling proposal after its plan is
     // cancelled would be a hidden side effect waiting to happen, so this still happens
     // before the plan/step rows below are updated, just not in the same transaction.
+    //
+    // The step's own local status can be stale relative to the proposal's real status —
+    // e.g. approve() was called directly and no subsequent advance() has reconciled the
+    // step yet, so the step still reads WAITING_APPROVAL while the proposal itself is
+    // already APPROVED. Checking the live proposal status (not the step's cached one) is
+    // what makes this correct: WAITING_APPROVAL proposals are rejected (the only status
+    // ControlledActionService.reject() accepts); APPROVED-but-unexecuted proposals must
+    // use the separate, pre-existing ControlledActionService.cancel() path instead — an
+    // approved proposal left dangling after its plan is cancelled/superseded would still
+    // be directly executable, which is exactly the "approval crossing plan versions"
+    // failure mode this whole design exists to prevent.
     for (const step of steps) {
-      if (step.status === 'WAITING_APPROVAL' && step.proposalId) {
+      if (!step.proposalId) continue;
+      let proposalStatus: string;
+      try { proposalStatus = this.controlledActions.get(step.proposalId).status; } catch { continue; }
+      if (proposalStatus === 'WAITING_APPROVAL') {
         try { this.controlledActions.reject(step.proposalId, { reason: `plan ${id} cancelled` }); } catch { /* already terminal */ }
+      } else if (proposalStatus === 'APPROVED') {
+        try { this.controlledActions.cancel(step.proposalId, `plan ${id} cancelled`); } catch { /* already terminal */ }
       }
     }
     return this.store.runInTransaction(() => {
