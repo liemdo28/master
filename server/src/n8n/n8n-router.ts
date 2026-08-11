@@ -10,6 +10,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import { denyAuthorityMutation } from '../authority-control-plane/guard';
 
 export const n8nRouter = Router();
 
@@ -58,19 +59,7 @@ n8nRouter.get('/workflows', async (_req: Request, res: Response) => {
 });
 
 n8nRouter.post('/trigger/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const payload = req.body || {};
-  try {
-    const webhookRes = await fetch(`${N8N_BASE}/webhook/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ source: 'mi-core', triggered_at: new Date().toISOString(), ...payload }),
-    });
-    const result = await webhookRes.json().catch(() => ({}));
-    res.json({ ok: true, workflow_id: id, result });
-  } catch (e) {
-    res.status(500).json({ ok: false, workflow_id: id, error: (e as Error).message });
-  }
+  return denyAuthorityMutation(res, `http:POST:/api/n8n/trigger/${req.params.id}`, 'Legacy n8n workflow trigger is quarantined in Phase 6A.');
 });
 
 n8nRouter.get('/execution/:id', async (req: Request, res: Response) => {
@@ -100,34 +89,12 @@ n8nRouter.get('/execution/:id/logs', async (req: Request, res: Response) => {
 });
 
 n8nRouter.delete('/execution/:id', async (req: Request, res: Response) => {
-  try {
-    const data = await fetch(`${N8N_BASE}/api/v1/executions/${req.params.id}`, {
-      method: 'DELETE', headers: authHeaders(),
-    });
-    res.json({ ok: data.ok, status: data.status });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: (e as Error).message });
-  }
+  return denyAuthorityMutation(res, `http:DELETE:/api/n8n/execution/${req.params.id}`, 'Legacy n8n execution deletion is quarantined in Phase 6A.');
 });
 
 // Evidence callback — n8n workflows POST evidence here after completion
 n8nRouter.post('/evidence', (req: Request, res: Response) => {
-  const { workflow_id, status, evidence = [], duration_ms } = req.body as {
-    workflow_id: string; status: string; evidence: unknown[]; duration_ms: number;
-  };
-  if (!workflow_id) return res.status(400).json({ error: 'workflow_id required' });
-
-  const record = {
-    received_at: new Date().toISOString(),
-    workflow_id,
-    status,
-    evidence,
-    duration_ms,
-  };
-  evidenceLog.unshift(record);
-  if (evidenceLog.length > 500) evidenceLog.splice(500);
-
-  return res.json({ ok: true, logged: true, record });
+  return denyAuthorityMutation(res, 'http:POST:/api/n8n/evidence', 'Legacy n8n evidence mutation is quarantined in Phase 6A.');
 });
 
 n8nRouter.get('/evidence', (_req: Request, res: Response) => {

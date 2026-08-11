@@ -32,6 +32,7 @@ import { CodingPage } from '@/routes/CodingPage';
 import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
 import { SettingsPage } from '@/routes/SettingsPage';
+import { AuthorityPage } from '@/routes/AuthorityPage';
 
 function Gate() {
   const { state, lock } = useAuth();
@@ -70,6 +71,7 @@ function Gate() {
         <Route path="/coding" element={<CodingPage />} />
         <Route path="/health" element={<HealthPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
+        <Route path="/authority" element={<AuthorityPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/today" replace />} />
       </Route>

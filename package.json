@@ -7,6 +7,9 @@
     "test:controlled-actions-restart": "npm --prefix server run test:controlled-actions-restart",
     "test:controlled-actions-evaluation": "npm --prefix server run test:controlled-actions-evaluation",
     "phase5f:acceptance": "npm --prefix server run phase5f:acceptance",
+    "test:authority-control-plane": "npm --prefix server run test:authority-control-plane",
+    "test:authority-control-plane-security": "npm --prefix server run test:authority-control-plane-security",
+    "phase6a:acceptance": "npm --prefix server run phase6a:acceptance",
     "personal-os": "npm --prefix server run personal-os --"
   },
   "devDependencies": {

@@ -9,7 +9,7 @@
 import { Router, Request, Response } from 'express';
 import { spawn } from 'child_process';
 import { runBrowserTask } from '../browser/browser-router';
-import { assertPermission } from '../security/permission-layer';
+import { denyAuthorityMutation } from '../authority-control-plane/guard';
 
 export const browserAgentRouter = Router();
 
@@ -56,14 +56,6 @@ browserAgentRouter.post('/extract', async (req: Request, res: Response) => {
   res.json(result);
 });
 
-browserAgentRouter.post('/write', async (req: Request, res: Response) => {
-  const { url, task, approval_id, provider } = req.body as { url: string; task: string; approval_id: string; provider?: 'browser-use' | 'skyvern' };
-  if (!url || !task) return res.status(400).json({ error: 'url and task required' });
-  try {
-    await assertPermission({ actor: 'api', action: 'browser_write', resource: url, approval_id });
-    const result = await runBrowserTask({ url, task, approval_id, provider, headless: true }, { write: true, production: true });
-    res.json(result);
-  } catch (e) {
-    res.status(403).json({ error: String(e) });
-  }
+browserAgentRouter.post('/write', async (_req: Request, res: Response) => {
+  return denyAuthorityMutation(res, 'http:POST:/api/browser-agent/write', 'Legacy browser write is quarantined in Phase 6A; route through a future governed Controlled Action adapter.');
 });

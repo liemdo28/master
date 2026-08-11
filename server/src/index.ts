@@ -135,6 +135,8 @@ import { personalOsJsonParser, personalOsRouter } from './personal-os/router';
 import { intelligenceJsonParser, intelligenceRouter } from './intelligence/router';
 import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './personal-os/documents/router';
 import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
+import { authorityRouter } from './authority-control-plane/router';
+import { assertAuthorityManifest, generateAuthorityManifest } from './authority-control-plane/scanner';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -193,6 +195,14 @@ function requireTaskRuntimeAuth(req: express.Request, res: express.Response, nex
   return res.status(401).json({ error: 'Unauthorized' });
 }
 
+function validateAuthorityStartup(): void {
+  if (process.env.MI_AUTHORITY_STARTUP_ASSERT === 'false') return;
+  const started = Date.now();
+  const manifest = generateAuthorityManifest(path.resolve(__dirname, '..'));
+  assertAuthorityManifest(manifest);
+  console.log(`[Mi] ✓ Authority Control Plane validated (${manifest.counts.total} surfaces, ${manifest.counts.mutations} mutations, ${Date.now() - started}ms)`);
+}
+
 // ── Public / self-authenticating routes — mounted first (bug fix) ────────────
 // These MUST be registered before the bare '/api' catch-all mounts below: Express
 // runs app.use('/api', ...) middleware for every '/api/*' path, including
@@ -226,6 +236,7 @@ app.use('/api/command-center', controlledActionsJsonParser, taskRuntimeJsonError
 app.use('/api/command-center', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, governanceRouter);
 app.use('/api/command-center', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, orchestrationRouter);
 app.use('/api/command-center', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, delegationRouter);
+app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, authorityRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -237,6 +248,7 @@ app.use('/api', controlledActionsJsonParser, taskRuntimeJsonErrorHandler, rateLi
 app.use('/api', governanceJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, governanceRouter);
 app.use('/api', orchestrationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, orchestrationRouter);
 app.use('/api', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, delegationRouter);
+app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, authorityRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
@@ -361,6 +373,8 @@ app.get('/api/jobs', async (req, res) => {
     });
   }
 });
+
+validateAuthorityStartup();
 
 // ── Chat runtime metrics ─────────────────────────────────────────────────────
 app.get('/api/metrics/chat', (_req, res) => {
