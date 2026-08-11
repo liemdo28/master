@@ -255,6 +255,15 @@ function applyFilter(records: EvidenceRecord[], filter: EvidenceFilter): Evidenc
     if (filter.subjectId && r.subjectId !== filter.subjectId) return false;
     if (filter.since && new Date(r.observedAt).getTime() < new Date(filter.since).getTime()) return false;
     if (filter.until && new Date(r.observedAt).getTime() > new Date(filter.until).getTime()) return false;
+    if (filter.redactionClassAtMost && REDACTION_RANK[r.redactionClass] > REDACTION_RANK[filter.redactionClassAtMost]) return false;
     return true;
   });
 }
+
+/** Ascending sensitivity — a caller asking for `redactionClassAtMost: 'OPERATOR_SAFE'`
+ *  never sees a SENSITIVE or SECRET_NEVER_RENDER record. §6D.6: no evidence API/UI may
+ *  leak secret-bearing content; this is the enforcement point every route (6D.10) must
+ *  call through rather than filtering ad hoc. */
+const REDACTION_RANK: Record<import('./types').EvidenceRedactionClass, number> = {
+  PUBLIC_SAFE: 0, OPERATOR_SAFE: 1, SENSITIVE: 2, SECRET_NEVER_RENDER: 3,
+};

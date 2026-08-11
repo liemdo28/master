@@ -20,13 +20,19 @@ export function containsSecret(text: string): boolean {
 }
 
 /** Deterministic default redaction class per (sourceSystem, category) — never inferred
- *  from content. HEALTH/DECISION/POLICY/APPROVAL/EXECUTION default to OPERATOR_SAFE
- *  (safe for an authenticated Command Center operator, never for a public route).
- *  Raw provider payloads are never modeled as EvidenceRecord claims at all — see
- *  normalize.ts, which only ever extracts pre-approved safe summary fields. */
+ *  from claim content (content-driven upgrade to SECRET_NEVER_RENDER happens
+ *  separately in normalize.ts's baseRecord(), based on containsSecret() on the RAW
+ *  pre-sanitized text, not on this lookup). Aggregate, already-public-safe health
+ *  counters (service health, approvals-waiting counts) are PUBLIC_SAFE; everything
+ *  else defaults to OPERATOR_SAFE (safe for an authenticated Command Center operator,
+ *  never for an unauthenticated route). Governance anomalies are SENSITIVE — their
+ *  free-text `description` can reference specifics of a proposal/payload that
+ *  shouldn't be broadly visible even to every operator view, unlike a plain health
+ *  counter. Raw provider payloads are never modeled as EvidenceRecord claims at all —
+ *  see normalize.ts, which only ever extracts pre-approved safe summary fields. */
 export function classifyRedaction(sourceSystem: EvidenceSourceSystem, category: EvidenceCategory): EvidenceRedactionClass {
-  if (category === 'HEALTH') return 'PUBLIC_SAFE';
-  if (sourceSystem === 'KNOWLEDGE' && (category === 'FACT' || category === 'SOURCE_REFERENCE')) return 'OPERATOR_SAFE';
+  if (category === 'HEALTH' && sourceSystem !== 'GOVERNANCE') return 'PUBLIC_SAFE';
+  if (category === 'HEALTH' && sourceSystem === 'GOVERNANCE') return 'SENSITIVE'; // anomaly findings
   return 'OPERATOR_SAFE';
 }
 

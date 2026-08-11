@@ -8,7 +8,7 @@
  */
 import type { EvidenceCategory, EvidenceConfidence, EvidenceRecord, EvidenceRef } from './types';
 import { classifyFreshness } from './freshness';
-import { classifyRedaction, sanitizeCanonicalReference, sanitizeClaim } from './redaction';
+import { classifyRedaction, containsSecret, sanitizeCanonicalReference, sanitizeClaim } from './redaction';
 
 function baseRecord(now: Date, params: {
   sourceSystem: EvidenceRecord['sourceSystem'];
@@ -29,6 +29,12 @@ function baseRecord(now: Date, params: {
   authorityDecisionId?: string | null;
   actor?: string | null;
 }): EvidenceRecord {
+  // Content-driven upgrade: if the RAW claim (before sanitization replaces it) or the
+  // raw canonicalReference ever matched a secret pattern, this record is
+  // SECRET_NEVER_RENDER regardless of its category/source default — a stronger signal
+  // than the sanitized placeholder text alone, so any consumer knows to also withhold
+  // the record's other fields, not just the claim.
+  const rawHadSecret = containsSecret(params.claim) || (params.canonicalReference ? containsSecret(params.canonicalReference) : false);
   return {
     id: `${params.sourceSystem}:${params.sourceId}`,
     category: params.category,
@@ -44,7 +50,7 @@ function baseRecord(now: Date, params: {
     expiresAt: params.expiresAt ?? null,
     freshness: classifyFreshness(params.observedAt, params.category, now),
     provenance: params.provenance ?? [],
-    redactionClass: classifyRedaction(params.sourceSystem, params.category),
+    redactionClass: rawHadSecret ? 'SECRET_NEVER_RENDER' : classifyRedaction(params.sourceSystem, params.category),
     canonicalReference: sanitizeCanonicalReference(params.canonicalReference ?? null),
     relatedEvidence: params.relatedEvidence ?? [],
     conflictGroup: params.conflictGroup ?? null,

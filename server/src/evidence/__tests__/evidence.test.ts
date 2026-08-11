@@ -140,6 +140,20 @@ async function main() {
     }
     console.log('[evidence] PASS: no secret pattern survives into any evidence claim or canonical reference');
 
+    // ---- 6D.6: a claim that matched a secret pattern is upgraded to SECRET_NEVER_RENDER,
+    // and redactionClassAtMost actually excludes it ----
+    const proposalWithSecret = actions.proposeGmailDraft({
+      reason: 'secret-bearing rejection test', projectId: 'mi-core',
+      to: ['ops4@example.com'], subject: 'secret-bearing reason', body: 'body',
+    });
+    actions.reject(proposalWithSecret.id, { reason: 'client_secret: "leaked1234567890abcdef"', approver: 'liem' });
+    const secretRecords = evidence.list().filter(r => r.subjectId === proposalWithSecret.id);
+    assert.ok(secretRecords.some(r => r.redactionClass === 'SECRET_NEVER_RENDER'), 'a claim built from secret-bearing source text must be classified SECRET_NEVER_RENDER');
+    const operatorSafeOnly = evidence.list({ redactionClassAtMost: 'OPERATOR_SAFE' });
+    assert.ok(!operatorSafeOnly.some(r => r.redactionClass === 'SECRET_NEVER_RENDER' || r.redactionClass === 'SENSITIVE'), 'redactionClassAtMost must actually exclude higher-sensitivity records');
+    assert.ok(['PUBLIC_SAFE', 'OPERATOR_SAFE', 'SENSITIVE', 'SECRET_NEVER_RENDER'].every(c => typeof c === 'string'));
+    console.log('[evidence] PASS: secret-bearing content upgrades to SECRET_NEVER_RENDER and redactionClassAtMost enforces it');
+
     // ---- 6D.7: side-effect evidence links back to its authority decision / delegation ----
     // normalizeDelegationDecision (eligibility decisions, id-prefixed by the
     // delegation_decisions table) always sets authorityDecisionId; the sibling
