@@ -21,6 +21,7 @@ function syntheticSurface(i: number): AuthoritySurface {
       : authorityClass === 'CANONICAL_DELEGATED_AUTHORITY'
         ? 'DelegationService'
         : owners[i % owners.length];
+  const legacyDisposition = authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINE_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPT_SAFE' : null;
   return {
     id: `synthetic:${i}`,
     kind: i % 5 === 0 ? 'CLI_COMMAND' : i % 7 === 0 ? 'BACKGROUND_WORKER' : 'HTTP_ROUTE',
@@ -40,6 +41,11 @@ function syntheticSurface(i: number): AuthoritySurface {
     status: authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINED' : authorityClass === 'INTERNAL_TEST_ONLY' ? 'TEST_ONLY' : 'ACTIVE',
     legacyReason: authorityClass === 'LEGACY_QUARANTINED' ? 'synthetic legacy quarantine' : null,
     migrationTarget: authorityClass === 'LEGACY_QUARANTINED' ? owner : null,
+    phase6bDisposition: legacyDisposition,
+    adapterTarget: legacyDisposition === 'ADAPT_SAFE' ? 'LegacyAuthorityAdapter' : null,
+    quarantineHandler: legacyDisposition === 'QUARANTINE_ONLY' ? 'legacyAuthorityAdapter.quarantine' : null,
+    canonicalReplacement: legacyDisposition ? owner : null,
+    lastAuthorityEvidence: null,
     evidence: ['synthetic 200-surface evaluation'],
   };
 }
@@ -60,6 +66,11 @@ function run(): void {
       forbidden: 0,
       internalTest: surfaces.filter(s => s.authorityClass === 'INTERNAL_TEST_ONLY').length,
       unknownMutations: 0,
+      legacyMutations: surfaces.filter(s => s.effectClass !== 'READ_ONLY' && (s.legacyReason || s.authorityClass === 'LEGACY_QUARANTINED')).length,
+      adaptedLegacy: surfaces.filter(s => s.effectClass !== 'READ_ONLY' && (s.phase6bDisposition === 'ADAPT_SAFE' || s.phase6bDisposition === 'ADAPT_WITH_BEHAVIOR_CHANGE')).length,
+      quarantinedLegacy: surfaces.filter(s => s.effectClass !== 'READ_ONLY' && (s.phase6bDisposition === 'QUARANTINE_ONLY' || s.phase6bDisposition === 'REQUIRES_FUTURE_AUTHORIZATION')).length,
+      disabledDeadLegacy: surfaces.filter(s => s.effectClass !== 'READ_ONLY' && s.phase6bDisposition === 'DEAD_UNWIRED').length,
+      unresolvedLegacyMutations: surfaces.filter(s => s.effectClass !== 'READ_ONLY' && (s.legacyReason || s.authorityClass === 'LEGACY_QUARANTINED') && !s.phase6bDisposition).length,
     },
   };
   assertAuthorityManifest(manifest);

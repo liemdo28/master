@@ -137,6 +137,8 @@ import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './person
 import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
 import { authorityRouter } from './authority-control-plane/router';
 import { assertAuthorityManifest, generateAuthorityManifest } from './authority-control-plane/scanner';
+import { validateLegacyAuthorityRuntime } from './authority-control-plane/legacy-adapter';
+import { legacyAuthorityBoundary } from './authority-control-plane/guard';
 
 // dotenv already loaded at top of file — do not call again here.
 
@@ -200,6 +202,7 @@ function validateAuthorityStartup(): void {
   const started = Date.now();
   const manifest = generateAuthorityManifest(path.resolve(__dirname, '..'));
   assertAuthorityManifest(manifest);
+  validateLegacyAuthorityRuntime(manifest);
   console.log(`[Mi] ✓ Authority Control Plane validated (${manifest.counts.total} surfaces, ${manifest.counts.mutations} mutations, ${Date.now() - started}ms)`);
 }
 
@@ -256,6 +259,7 @@ app.use(rateLimiter);
 // ── IP Guard — block non-LAN/Tailscale (skip for remote/health, applied globally) ─
 // /api/remote/health is intentionally public (returns server info, no sensitive data)
 app.use(applyIpGuard);
+app.use(legacyAuthorityBoundary);
 
 // ── Static UI ───────────────────────────────────────────────────────────────
 app.use(express.static(path.resolve(__dirname, '../../ui')));

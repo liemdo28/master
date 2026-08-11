@@ -579,6 +579,11 @@ export interface AuthoritySurface {
   status: string;
   legacyReason: string | null;
   migrationTarget: string | null;
+  phase6bDisposition?: string | null;
+  adapterTarget?: string | null;
+  quarantineHandler?: string | null;
+  canonicalReplacement?: string | null;
+  lastAuthorityEvidence?: string | null;
   evidence: string[];
 }
 
@@ -596,6 +601,11 @@ export interface AuthorityManifest {
     forbidden: number;
     internalTest: number;
     unknownMutations: number;
+    legacyMutations?: number;
+    adaptedLegacy?: number;
+    quarantinedLegacy?: number;
+    disabledDeadLegacy?: number;
+    unresolvedLegacyMutations?: number;
   };
 }
 

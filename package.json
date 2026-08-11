@@ -10,6 +10,10 @@
     "test:authority-control-plane": "npm --prefix server run test:authority-control-plane",
     "test:authority-control-plane-security": "npm --prefix server run test:authority-control-plane-security",
     "phase6a:acceptance": "npm --prefix server run phase6a:acceptance",
+    "test:legacy-authority-adapters": "npm --prefix server run test:legacy-authority-adapters",
+    "test:legacy-authority-security": "npm --prefix server run test:legacy-authority-security",
+    "legacy-authority:evaluation": "npm --prefix server run legacy-authority:evaluation",
+    "phase6b:acceptance": "npm --prefix server run phase6b:acceptance",
     "personal-os": "npm --prefix server run personal-os --"
   },
   "devDependencies": {

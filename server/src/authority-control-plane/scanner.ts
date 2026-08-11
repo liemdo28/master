@@ -15,6 +15,7 @@ export function generateAuthorityManifest(repoRoot = process.cwd()): AuthorityMa
     ...discoverNonHttpSurfaces(repoRoot),
   ].sort((a, b) => a.id.localeCompare(b.id));
   const mutations = surfaces.filter(item => isMutation(item.method, item.effectClass));
+  const legacyMutations = mutations.filter(item => item.legacyReason || item.authorityClass === 'LEGACY_QUARANTINED');
   return {
     generatedAt: 'GENERATED_AT_RUNTIME',
     version: 'phase6a-v1',
@@ -29,6 +30,11 @@ export function generateAuthorityManifest(repoRoot = process.cwd()): AuthorityMa
       forbidden: surfaces.filter(s => s.authorityClass === 'FORBIDDEN').length,
       internalTest: surfaces.filter(s => s.authorityClass === 'INTERNAL_TEST_ONLY').length,
       unknownMutations: mutations.filter(s => s.canonicalOwner === 'UNREGISTERED').length,
+      legacyMutations: legacyMutations.length,
+      adaptedLegacy: legacyMutations.filter(s => s.phase6bDisposition === 'ADAPT_SAFE' || s.phase6bDisposition === 'ADAPT_WITH_BEHAVIOR_CHANGE').length,
+      quarantinedLegacy: legacyMutations.filter(s => s.phase6bDisposition === 'QUARANTINE_ONLY' || s.phase6bDisposition === 'REQUIRES_FUTURE_AUTHORIZATION').length,
+      disabledDeadLegacy: legacyMutations.filter(s => s.phase6bDisposition === 'DEAD_UNWIRED').length,
+      unresolvedLegacyMutations: legacyMutations.filter(s => !s.phase6bDisposition).length,
     },
   };
 }
@@ -60,6 +66,11 @@ export function discoverNonHttpSurfaces(repoRoot = process.cwd()): AuthoritySurf
       status: mutating ? 'ADAPTED' as const : 'TEST_ONLY' as const,
       legacyReason: null,
       migrationTarget: null,
+      phase6bDisposition: mutating ? 'ADAPT_SAFE' as const : null,
+      adapterTarget: mutating ? 'LegacyAuthorityAdapter' : null,
+      quarantineHandler: null,
+      canonicalReplacement: mutating ? canonicalOwnerForCli(name) : null,
+      lastAuthorityEvidence: null,
       evidence: ['server/package.json scripts'],
     };
   });
@@ -98,6 +109,11 @@ function worker(id: string, sourcePath: string, runtimeMount: string, effectClas
     status: authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINED' : authorityClass === 'INTERNAL_TEST_ONLY' ? 'TEST_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPTED' : 'ACTIVE',
     legacyReason: authorityClass === 'LEGACY_QUARANTINED' ? 'Background mutation must be adapted to a canonical owner before expanding authority.' : null,
     migrationTarget: authorityClass === 'LEGACY_QUARANTINED' ? owner : null,
+    phase6bDisposition: authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINE_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPT_SAFE' : null,
+    adapterTarget: authorityClass === 'ADAPTER_TO_CANONICAL' ? 'LegacyAuthorityAdapter' : null,
+    quarantineHandler: authorityClass === 'LEGACY_QUARANTINED' ? 'legacyAuthorityAdapter.quarantine' : null,
+    canonicalReplacement: authorityClass === 'LEGACY_QUARANTINED' ? owner : authorityClass === 'ADAPTER_TO_CANONICAL' ? owner : null,
+    lastAuthorityEvidence: null,
     evidence: ['server/src/index.ts startup wiring'],
   };
 }
@@ -170,6 +186,24 @@ export function assertAuthorityManifest(manifest: AuthorityManifest): void {
     item.method !== 'GET'
   );
   if (externalBypass.length) throw new Error(`AUTHORITY_EXTERNAL_WRITE_BYPASS: ${externalBypass.map(item => item.id).join(', ')}`);
+  const unresolvedLegacy = manifest.surfaces.filter(item =>
+    isMutation(item.method, item.effectClass) &&
+    (item.legacyReason || item.authorityClass === 'LEGACY_QUARANTINED') &&
+    !item.phase6bDisposition
+  );
+  if (unresolvedLegacy.length) throw new Error(`LEGACY_AUTHORITY_UNRESOLVED: ${unresolvedLegacy.map(item => item.id).join(', ')}`);
+  const adaptedWithoutTarget = manifest.surfaces.filter(item =>
+    item.phase6bDisposition &&
+    ['ADAPT_SAFE', 'ADAPT_WITH_BEHAVIOR_CHANGE'].includes(item.phase6bDisposition) &&
+    !item.adapterTarget
+  );
+  if (adaptedWithoutTarget.length) throw new Error(`LEGACY_AUTHORITY_ADAPTER_MISSING: ${adaptedWithoutTarget.map(item => item.id).join(', ')}`);
+  const quarantinedWithoutHandler = manifest.surfaces.filter(item =>
+    item.phase6bDisposition &&
+    ['QUARANTINE_ONLY', 'REQUIRES_FUTURE_AUTHORIZATION'].includes(item.phase6bDisposition) &&
+    !item.quarantineHandler
+  );
+  if (quarantinedWithoutHandler.length) throw new Error(`LEGACY_AUTHORITY_QUARANTINE_HANDLER_MISSING: ${quarantinedWithoutHandler.map(item => item.id).join(', ')}`);
 }
 
 function importedRouters(index: string): Map<string, string> {

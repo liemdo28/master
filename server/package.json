@@ -99,7 +99,11 @@
     "test:authority-control-plane": "tsx src/authority-control-plane/__tests__/authority-control-plane.test.ts && npm run authority:manifest:check",
     "test:authority-control-plane-security": "tsx src/authority-control-plane/__tests__/authority-control-plane-security.test.ts",
     "authority-control-plane:evaluation": "tsx src/authority-control-plane/authority-evaluation.ts",
-    "phase6a:acceptance": "tsx src/authority-control-plane/phase6a-acceptance.ts"
+    "phase6a:acceptance": "tsx src/authority-control-plane/phase6a-acceptance.ts",
+    "test:legacy-authority-adapters": "tsx src/authority-control-plane/__tests__/legacy-authority-adapters.test.ts",
+    "test:legacy-authority-security": "tsx src/authority-control-plane/__tests__/legacy-authority-security.test.ts",
+    "legacy-authority:evaluation": "tsx src/authority-control-plane/legacy-authority-evaluation.ts",
+    "phase6b:acceptance": "tsx src/authority-control-plane/phase6b-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
