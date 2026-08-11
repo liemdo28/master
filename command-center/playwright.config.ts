@@ -19,6 +19,7 @@ export default defineConfig({
     reuseExistingServer: false,
     timeout: 90_000,
     env: { E2E_PORT: PORT, E2E_PIN: PIN },
+    gracefulShutdown: { signal: 'SIGTERM', timeout: 10_000 },
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });
