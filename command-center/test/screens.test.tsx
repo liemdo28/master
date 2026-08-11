@@ -32,6 +32,7 @@ import { PlansPage } from '@/routes/PlansPage';
 import { DelegationsPage } from '@/routes/DelegationsPage';
 import { AuthorityPage } from '@/routes/AuthorityPage';
 import { OperatorControlPage } from '@/routes/OperatorControlPage';
+import { EvidencePage } from '@/routes/EvidencePage';
 
 const FIXTURES: Record<string, unknown> = {
   '/operating/today': {
@@ -111,6 +112,23 @@ const FIXTURES: Record<string, unknown> = {
     ],
     manifestCounts: { total: 1027, readOnly: 633, mutations: 394, canonical: 651, adapters: 158, quarantined: 155, forbidden: 0, internalTest: 63, unknownMutations: 0, legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, disabledDeadLegacy: 0, unresolvedLegacyMutations: 0 },
     legacy: { legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, unresolvedLegacyMutations: 0, sampleQuarantinedSurfaces: [{ id: 'legacy-1', runtimeMount: '/api/browser/write', method: 'POST', canonicalOwner: 'Authority Control Plane', phase6bDisposition: 'QUARANTINE_ONLY' }] },
+  },
+  '/evidence': {
+    evidence: [
+      { id: 'CONTROLLED_ACTIONS:ev-1', category: 'APPROVAL', sourceSystem: 'CONTROLLED_ACTIONS', sourceId: 'ev-1', projectId: 'mi-core', subjectType: 'ActionProposal', subjectId: 'action-1', claim: 'Approval bound to exact proposal, payload hash, action type, target, and expiry.', confidence: 'CERTAIN', observedAt: '2026-08-11T09:00:00Z', freshness: 'FRESH', redactionClass: 'OPERATOR_SAFE', canonicalReference: null, relatedEvidence: [], conflictGroup: null, authorityDecisionId: null, actor: 'liem' },
+      { id: 'KNOWLEDGE:doc-1', category: 'FACT', sourceSystem: 'KNOWLEDGE', sourceId: 'doc-1', projectId: 'mi-core', subjectType: 'KnowledgeDocument', subjectId: 'doc-1', claim: 'Document "Architecture" (ACTIVE)', confidence: 'CERTAIN', observedAt: '2026-08-11T08:00:00Z', freshness: 'FRESH', redactionClass: 'OPERATOR_SAFE', canonicalReference: 'docs/architecture.md', relatedEvidence: [], conflictGroup: null, authorityDecisionId: null, actor: null },
+    ],
+  },
+  '/evidence/conflicts': {
+    conflicts: [
+      { id: 'KNOWLEDGE:conflict-1', category: 'CONFLICT', sourceSystem: 'KNOWLEDGE', sourceId: 'conflict-1', projectId: 'mi-core', subjectType: 'KnowledgeConflict', subjectId: 'conflict-1', claim: 'Two documents disagree about the deployment date.', confidence: 'CERTAIN', observedAt: '2026-08-11T07:00:00Z', freshness: 'FRESH', redactionClass: 'OPERATOR_SAFE', canonicalReference: null, relatedEvidence: ['KNOWLEDGE:doc-1', 'KNOWLEDGE:doc-2'], conflictGroup: 'conflict-1', authorityDecisionId: null, actor: null },
+    ],
+  },
+  '/evidence/health': {
+    health: [
+      { dimension: 'APPROVALS_WAITING', value: 2, status: 'ATTENTION', detail: '2 Controlled Action proposal(s) waiting on a human.', evidenceIds: [] },
+      { dimension: 'KILL_SWITCHES', value: 0, status: 'OK', detail: 'No active kill switches.', evidenceIds: [] },
+    ],
   },
 };
 
@@ -243,5 +261,16 @@ describe('Command Center screens', () => {
     expect(screen.getByText('Create draft')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^approve/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /execute|run|send/i })).not.toBeInTheDocument();
+  });
+
+  it('Evidence renders the open conflict, health dimensions, and evidence stream without any mutation control', async () => {
+    renderWithProviders(<EvidencePage />);
+    await waitFor(() => expect(screen.getByText('Evidence & Audit')).toBeInTheDocument());
+    expect(screen.getByText(/two documents disagree about the deployment date/i)).toBeInTheDocument();
+    expect(screen.getByText('APPROVALS WAITING')).toBeInTheDocument();
+    expect(screen.getByText(/Approval bound to exact proposal/i)).toBeInTheDocument();
+    // No resolve/dismiss/approve/execute control anywhere on this screen — it is
+    // purely a read-through view (§6D.10: "Do not add mutation controls").
+    expect(screen.queryByRole('button', { name: /resolve|dismiss|approve|execute|remediate/i })).not.toBeInTheDocument();
   });
 });

@@ -842,3 +842,56 @@ export interface OperatorOverview {
   legacyQuarantinedCount: number;
   authority: OperatorAuthorityView;
 }
+
+// ---- Phase 6D: canonical evidence contract (read-only) ----
+
+export type EvidenceCategory =
+  | 'FACT' | 'INFERENCE' | 'ASSUMPTION' | 'UNKNOWN' | 'CONFLICT'
+  | 'DECISION' | 'SIDE_EFFECT' | 'HEALTH' | 'POLICY' | 'APPROVAL'
+  | 'EXECUTION' | 'SOURCE_REFERENCE';
+
+export type EvidenceFreshness = 'FRESH' | 'AGING' | 'STALE' | 'UNKNOWN';
+
+export interface EvidenceRecord {
+  id: string;
+  category: EvidenceCategory;
+  sourceSystem: string;
+  sourceId: string;
+  projectId: string | null;
+  subjectType: string;
+  subjectId: string;
+  claim: string;
+  confidence: 'CERTAIN' | 'LIKELY' | 'UNCERTAIN' | 'UNKNOWN';
+  observedAt: string;
+  freshness: EvidenceFreshness;
+  redactionClass: 'PUBLIC_SAFE' | 'OPERATOR_SAFE' | 'SENSITIVE' | 'SECRET_NEVER_RENDER';
+  canonicalReference: string | null;
+  relatedEvidence: string[];
+  conflictGroup: string | null;
+  authorityDecisionId: string | null;
+  actor: string | null;
+}
+
+export interface HealthMetric {
+  dimension: string;
+  value: number;
+  status: 'OK' | 'ATTENTION' | 'CRITICAL' | 'UNKNOWN';
+  detail: string;
+  evidenceIds: string[];
+}
+
+export interface DailyAuditDigest {
+  date: string;
+  generatedAt: string;
+  decisions: number;
+  approvals: number;
+  executions: number;
+  denials: number;
+  delegationExecutions: number;
+  anomalies: number;
+  blockedItems: number;
+  openConflicts: number;
+  healthDegradations: number;
+  staleEvidenceCount: number;
+  significantEvents: EvidenceRecord[];
+}
