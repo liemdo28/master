@@ -1,4 +1,4 @@
-import type { AuthRequirement, AuthorityClass, AuthorityStatus, EffectClass, AuthoritySurface, DiscoveredRoute } from './types';
+import type { AuthRequirement, AuthorityClass, AuthorityStatus, EffectClass, AuthoritySurface, DiscoveredRoute, LegacyDisposition } from './types';
 
 type Rule = {
   id: string;
@@ -17,6 +17,10 @@ type Rule = {
   delegationEligible?: boolean;
   legacyReason?: string | null;
   migrationTarget?: string | null;
+  phase6bDisposition?: LegacyDisposition | null;
+  adapterTarget?: string | null;
+  quarantineHandler?: string | null;
+  canonicalReplacement?: string | null;
   evidence: string[];
 };
 
@@ -101,42 +105,50 @@ export const AUTHORITY_RULES: Rule[] = [
   }),
   rule('legacy-approval', /^\/api\/approval(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'ControlledActionService', auth: 'REMOTE_SESSION', capability: 'legacy approval queue without direct execution',
-    approvalRequired: true, governanceRequired: false, status: 'QUARANTINED', legacyReason: 'Old approval route overlapped with Phase 5 Controlled Actions and formerly dispatched external writes.', migrationTarget: 'ControlledActionService',
+    approvalRequired: true, governanceRequired: false, status: 'ADAPTED_TO_CANONICAL', legacyReason: 'Old approval route overlapped with Phase 5 Controlled Actions and formerly dispatched external writes.', migrationTarget: 'ControlledActionService',
+    phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE', adapterTarget: 'LegacyAuthorityAdapter', quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: '/api/actions/*',
     evidence: ['server/src/routes/approval.ts'],
   }),
   rule('legacy-voice-browser', /^\/api\/(voice|browser)(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'EXTERNAL_REVERSIBLE', canonicalOwner: 'ControlledActionService', auth: 'REMOTE_SESSION', capability: 'legacy voice/browser side-effect surfaces blocked or read-limited',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'Voice/browser mutation must not expand in Phase 6A.', migrationTarget: 'future governed adapter',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/routes/voice.ts', 'server/src/routes/browser-agent.ts'],
   }),
   rule('legacy-autonomy', /^\/api\/(company-os|autonomous|council|improvement|ceo)(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'GovernedOrchestrationService', auth: 'REMOTE_SESSION', capability: 'legacy autonomous/company/control surfaces',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'Legacy autonomous-style surfaces are outside Phase 5 canonical authority.', migrationTarget: 'GovernedOrchestrationService',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/company-os/company-os-router.ts', 'server/src/autonomous/autonomous-router.ts'],
   }),
   rule('legacy-coo-v4', /^\/api\/coo-v4(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'GovernedOrchestrationService', auth: 'REMOTE_SESSION', capability: 'legacy COO planning/execution surface',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'COO V4 execution authority is outside Phase 5 canonical control plane.', migrationTarget: 'GovernedOrchestrationService',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/routes/coo-v4-router.ts'],
   }),
   rule('legacy-node-process-control', /^\/api\/nodes(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'PROCESS_CONTROL', canonicalOwner: 'Authority Control Plane', auth: 'INTERNAL_ONLY', capability: 'node registration, heartbeat and process-control compatibility surface',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'Node process-control mutation must not be remotely executable without a future governed adapter.', migrationTarget: 'future governed operations adapter',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/routes/nodes.ts'],
   }),
   rule('legacy-process-workflow', /^\/api\/(operations|workflows|n8n|gstack|engineering|ai)(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'PROCESS_CONTROL', canonicalOwner: 'Authority Control Plane', auth: 'REMOTE_SESSION', capability: 'legacy workflow/process/service-control surfaces',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'Process and workflow mutation must be classified before execution authority is used.', migrationTarget: 'future governed operations adapter',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/routes/operations.ts', 'server/src/n8n/n8n-router.ts'],
   }),
   rule('legacy-sensitive-local', /^\/api\/(memory|briefing|graph|brain|visibility|chat|jarvis|qb-agent|qb|reminders|knowledge|whatsapp|models|agent-engine|integration-agent|data-analyst|skills|doordash-agent|doordash|bigdata|enterprise|mi|tasks|strategic|agenview|seo|telemetry|executive-intelligence|analytics|gbp|connectors|executive|workspace|ceo-observer)(\/.*)?$/, {
     authorityClass: 'ADAPTER_TO_CANONICAL', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Legacy compatibility adapter', auth: 'REMOTE_SESSION', capability: 'legacy read/local compatibility surface',
     approvalRequired: false, governanceRequired: false, status: 'ADAPTED', legacyReason: 'Mounted pre-Phase-5 compatibility surface; must not become a second canonical owner.', migrationTarget: 'Phase 5 canonical stores as applicable',
+    phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: 'Phase 5 canonical stores as applicable',
     evidence: ['server/src/index.ts legacy mounts'],
   }),
   rule('legacy-simulation', /^\/api\/digital-twin(\/.*)?$/, {
     authorityClass: 'ADAPTER_TO_CANONICAL', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Digital Twin simulation read model', auth: 'REMOTE_SESSION', capability: 'local simulation only',
     approvalRequired: false, governanceRequired: false, status: 'ADAPTED', legacyReason: 'Simulation surface mutates no external system.', migrationTarget: 'read-focused simulation adapter',
+    phase6bDisposition: 'ADAPT_SAFE', adapterTarget: 'LegacyAuthorityAdapter', canonicalReplacement: 'read-focused simulation adapter',
     evidence: ['server/src/digital-twin/digital-twin-router.ts'],
   }),
   rule('static-ui', /^\/(command-center|liveboard|mobile|voice|agenview)(\/.*)?$/, {
@@ -188,6 +200,9 @@ function rule(id: string, pattern: RegExp, input: Omit<Rule, 'id' | 'pattern' | 
 }
 
 function surfaceFrom(route: DiscoveredRoute, rule: Omit<Rule, 'id' | 'pattern' | 'methods'>): AuthoritySurface {
+  const disposition = rule.phase6bDisposition ?? defaultDisposition(route, rule);
+  const quarantineHandler = rule.quarantineHandler ?? (rule.authorityClass === 'LEGACY_QUARANTINED' ? 'legacyAuthorityAdapter.quarantine' : null);
+  const adapterTarget = rule.adapterTarget ?? (rule.authorityClass === 'ADAPTER_TO_CANONICAL' || rule.status === 'ADAPTED_TO_CANONICAL' ? 'LegacyAuthorityAdapter' : null);
   return {
     id: `http:${route.method}:${route.runtimeMount}`,
     kind: 'HTTP_ROUTE',
@@ -209,8 +224,21 @@ function surfaceFrom(route: DiscoveredRoute, rule: Omit<Rule, 'id' | 'pattern' |
     status: rule.status ?? statusFor(rule.authorityClass),
     legacyReason: rule.legacyReason ?? null,
     migrationTarget: rule.migrationTarget ?? null,
+    phase6bDisposition: disposition,
+    adapterTarget,
+    quarantineHandler,
+    canonicalReplacement: rule.canonicalReplacement ?? rule.migrationTarget ?? null,
+    lastAuthorityEvidence: null,
     evidence: rule.evidence,
   };
+}
+
+export function defaultDisposition(route: DiscoveredRoute, rule: Omit<Rule, 'id' | 'pattern' | 'methods'>): LegacyDisposition | null {
+  if (!rule.legacyReason && rule.authorityClass !== 'LEGACY_QUARANTINED' && rule.authorityClass !== 'ADAPTER_TO_CANONICAL') return null;
+  if (rule.authorityClass === 'LEGACY_QUARANTINED') return 'QUARANTINE_ONLY';
+  if (rule.authorityClass === 'ADAPTER_TO_CANONICAL') return 'ADAPT_SAFE';
+  if (route.method === 'GET' || rule.effectClass === 'READ_ONLY') return 'ADAPT_SAFE';
+  return null;
 }
 
 function statusFor(authorityClass: AuthorityClass): AuthorityStatus {

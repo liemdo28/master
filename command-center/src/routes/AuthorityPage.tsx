@@ -48,6 +48,16 @@ export function AuthorityPage() {
           <Metric label="Quarantined" value={data.counts.quarantined} />
         </section>
 
+        <section className="mb-4 rounded-md border border-(--color-border) bg-(--color-surface) p-3">
+          <h2 className="text-sm font-semibold text-(--color-text)">Legacy Authority Migration</h2>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <MiniMetric label="Legacy" value={data.counts.legacyMutations ?? 0} />
+            <MiniMetric label="Adapted" value={data.counts.adaptedLegacy ?? 0} />
+            <MiniMetric label="Quarantined" value={data.counts.quarantinedLegacy ?? 0} />
+            <MiniMetric label="Unresolved" value={data.counts.unresolvedLegacyMutations ?? 0} />
+          </div>
+        </section>
+
         <div className="mb-3 flex rounded-md border border-(--color-border) p-1">
           {FILTERS.map(item => (
             <button
@@ -107,6 +117,9 @@ function AuthorityDetail({ surface }: { surface: AuthoritySurface }) {
         <Info label="Approval" value={surface.approvalRequired ? 'required' : 'not required'} />
         <Info label="Governance" value={surface.governanceRequired ? 'required' : 'not required'} />
         <Info label="Delegation" value={surface.delegationEligible ? 'eligible' : 'not eligible'} />
+        <Info label="Disposition" value={surface.phase6bDisposition ?? 'none'} />
+        <Info label="Adapter" value={surface.adapterTarget ?? 'none'} />
+        <Info label="Quarantine" value={surface.quarantineHandler ?? 'none'} />
       </section>
 
       <section className="rounded-md border border-(--color-border) bg-(--color-surface) p-4">
@@ -114,6 +127,8 @@ function AuthorityDetail({ surface }: { surface: AuthoritySurface }) {
         <p className="break-all text-sm text-(--color-text-dim)">{surface.sourcePath}</p>
         {surface.legacyReason ? <p className="mt-3 text-sm text-(--color-approval)">{surface.legacyReason}</p> : null}
         {surface.migrationTarget ? <p className="mt-2 text-sm text-(--color-text-dim)">Migration target: {surface.migrationTarget}</p> : null}
+        {surface.canonicalReplacement ? <p className="mt-2 text-sm text-(--color-text-dim)">Canonical replacement: {surface.canonicalReplacement}</p> : null}
+        {surface.lastAuthorityEvidence ? <p className="mt-2 text-sm text-(--color-text-dim)">Last evidence: {surface.lastAuthorityEvidence}</p> : null}
       </section>
 
       <section className="rounded-md border border-(--color-border) bg-(--color-surface) p-4">
@@ -123,6 +138,15 @@ function AuthorityDetail({ surface }: { surface: AuthoritySurface }) {
         </ul>
       </section>
     </article>
+  );
+}
+
+function MiniMetric({ label, value }: { label: string; value: number }) {
+  return (
+    <div>
+      <div className="text-xs uppercase text-(--color-text-faint)">{label}</div>
+      <div className="mt-0.5 text-sm font-semibold text-(--color-text)">{value}</div>
+    </div>
   );
 }
 

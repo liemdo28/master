@@ -26,7 +26,23 @@ export type AuthRequirement =
   | 'INTERNAL_ONLY'
   | 'DISABLED';
 
-export type AuthorityStatus = 'ACTIVE' | 'ADAPTED' | 'QUARANTINED' | 'FORBIDDEN' | 'TEST_ONLY';
+export type AuthorityStatus =
+  | 'ACTIVE'
+  | 'ADAPTED'
+  | 'ADAPTED_TO_CANONICAL'
+  | 'QUARANTINED'
+  | 'READ_ONLY_COMPAT'
+  | 'DISABLED'
+  | 'DEAD_UNWIRED'
+  | 'FORBIDDEN'
+  | 'TEST_ONLY';
+
+export type LegacyDisposition =
+  | 'ADAPT_SAFE'
+  | 'ADAPT_WITH_BEHAVIOR_CHANGE'
+  | 'QUARANTINE_ONLY'
+  | 'DEAD_UNWIRED'
+  | 'REQUIRES_FUTURE_AUTHORIZATION';
 
 export interface AuthoritySurface {
   id: string;
@@ -47,6 +63,11 @@ export interface AuthoritySurface {
   status: AuthorityStatus;
   legacyReason: string | null;
   migrationTarget: string | null;
+  phase6bDisposition: LegacyDisposition | null;
+  adapterTarget: string | null;
+  quarantineHandler: string | null;
+  canonicalReplacement: string | null;
+  lastAuthorityEvidence: string | null;
   evidence: string[];
 }
 
@@ -70,8 +91,13 @@ export interface AuthorityManifest {
     canonical: number;
     adapters: number;
     quarantined: number;
-    forbidden: number;
-    internalTest: number;
-    unknownMutations: number;
+      forbidden: number;
+      internalTest: number;
+      unknownMutations: number;
+      legacyMutations: number;
+      adaptedLegacy: number;
+      quarantinedLegacy: number;
+      disabledDeadLegacy: number;
+      unresolvedLegacyMutations: number;
   };
 }

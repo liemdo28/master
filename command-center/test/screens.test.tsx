@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from './test-utils';
 
 // jsdom reports 0 for element dimensions, so @tanstack/react-virtual would compute
@@ -73,11 +73,11 @@ const FIXTURES: Record<string, unknown> = {
   '/authority/manifest': {
     generatedAt: '2026-08-11T00:00:00Z',
     version: 'phase6a-v1',
-    counts: { total: 3, readOnly: 1, mutations: 2, canonical: 1, adapters: 1, quarantined: 1, forbidden: 0, internalTest: 0, unknownMutations: 0 },
+    counts: { total: 3, readOnly: 1, mutations: 2, canonical: 1, adapters: 1, quarantined: 1, forbidden: 0, internalTest: 0, unknownMutations: 0, legacyMutations: 1, adaptedLegacy: 0, quarantinedLegacy: 1, disabledDeadLegacy: 0, unresolvedLegacyMutations: 0 },
     surfaces: [
-      { id: 'route:GET:/api/health', kind: 'HTTP_ROUTE', sourcePath: 'src/index.ts', runtimeMount: '/api/health', method: 'GET', capability: 'health', effectClass: 'READ_ONLY', authorityClass: 'CANONICAL_READ', canonicalOwner: 'Public health/auth bootstrap', projectScoped: false, externalSystem: null, approvalRequired: false, governanceRequired: false, delegationEligible: false, authenticationRequired: 'PUBLIC_READ', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
-      { id: 'route:POST:/api/actions/:id/execute', kind: 'HTTP_ROUTE', sourcePath: 'src/personal-os/actions/router.ts', runtimeMount: '/api/actions/:id/execute', method: 'POST', capability: 'controlled action execution', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'CANONICAL_CONTROLLED_ACTION', canonicalOwner: 'ControlledActionService', projectScoped: true, externalSystem: 'gmail/calendar/sandboxed providers', approvalRequired: true, governanceRequired: true, delegationEligible: true, authenticationRequired: 'STRICT_API_KEY', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
-      { id: 'route:POST:/api/browser/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', evidence: ['fixture'] },
+      { id: 'route:GET:/api/health', kind: 'HTTP_ROUTE', sourcePath: 'src/index.ts', runtimeMount: '/api/health', method: 'GET', capability: 'health', effectClass: 'READ_ONLY', authorityClass: 'CANONICAL_READ', canonicalOwner: 'Public health/auth bootstrap', projectScoped: false, externalSystem: null, approvalRequired: false, governanceRequired: false, delegationEligible: false, authenticationRequired: 'PUBLIC_READ', status: 'ACTIVE', legacyReason: null, migrationTarget: null, phase6bDisposition: null, adapterTarget: null, quarantineHandler: null, canonicalReplacement: null, lastAuthorityEvidence: null, evidence: ['fixture'] },
+      { id: 'route:POST:/api/actions/:id/execute', kind: 'HTTP_ROUTE', sourcePath: 'src/personal-os/actions/router.ts', runtimeMount: '/api/actions/:id/execute', method: 'POST', capability: 'controlled action execution', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'CANONICAL_CONTROLLED_ACTION', canonicalOwner: 'ControlledActionService', projectScoped: true, externalSystem: 'gmail/calendar/sandboxed providers', approvalRequired: true, governanceRequired: true, delegationEligible: true, authenticationRequired: 'STRICT_API_KEY', status: 'ACTIVE', legacyReason: null, migrationTarget: null, phase6bDisposition: null, adapterTarget: null, quarantineHandler: null, canonicalReplacement: null, lastAuthorityEvidence: null, evidence: ['fixture'] },
+      { id: 'route:POST:/api/browser/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', phase6bDisposition: 'QUARANTINE_ONLY', adapterTarget: null, quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: 'ControlledActionService', lastAuthorityEvidence: null, evidence: ['fixture'] },
     ],
   },
 };
@@ -195,6 +195,9 @@ describe('Command Center screens', () => {
   it('Authority renders the control-plane manifest and quarantine status', async () => {
     renderWithProviders(<AuthorityPage />);
     await waitFor(() => expect(screen.getByText('/api/browser/write')).toBeInTheDocument());
+    fireEvent.click(screen.getByText('/api/browser/write'));
+    expect(screen.getByText('Legacy Authority Migration')).toBeInTheDocument();
+    expect(screen.getByText('QUARANTINE_ONLY')).toBeInTheDocument();
     expect(screen.getAllByText(/quarantined/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText('0').length).toBeGreaterThan(0);
   });

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import path from 'path';
 import { generateAuthorityManifest, assertAuthorityManifest } from './scanner';
+import { LegacyAuthorityAdapter, legacyMutationSurfaces } from './legacy-adapter';
 
 export const authorityRouter = Router();
 
@@ -21,4 +22,26 @@ authorityRouter.get('/authority/status', (_req, res) => {
   } catch (err) {
     res.status(500).json({ ok: false, error: err instanceof Error ? err.message : String(err), counts: manifest.counts });
   }
+});
+
+authorityRouter.get('/authority/legacy-migration', (_req, res) => {
+  const adapter = new LegacyAuthorityAdapter(serverRoot());
+  const legacy = legacyMutationSurfaces(adapter.manifest);
+  res.json({
+    ...adapter.migrationSummary(),
+    surfaces: legacy.map(surface => ({
+      id: surface.id,
+      runtimeMount: surface.runtimeMount,
+      sourcePath: surface.sourcePath,
+      method: surface.method,
+      effectClass: surface.effectClass,
+      canonicalOwner: surface.canonicalOwner,
+      disposition: surface.phase6bDisposition,
+      adapterTarget: surface.adapterTarget,
+      quarantineHandler: surface.quarantineHandler,
+      canonicalReplacement: surface.canonicalReplacement,
+      reason: surface.legacyReason,
+      migrationTarget: surface.migrationTarget,
+    })),
+  });
 });

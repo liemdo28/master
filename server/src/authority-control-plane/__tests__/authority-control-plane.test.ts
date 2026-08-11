@@ -30,7 +30,7 @@ async function run(): Promise<void> {
     const res = await fetch(`${server.url}/mutation`, { method: 'POST' });
     assert.strictEqual(res.status, 403);
     const body = await res.json() as { error: string };
-    assert.strictEqual(body.error, 'AUTHORITY_SURFACE_QUARANTINED');
+    assert.strictEqual(body.error, 'LEGACY_AUTHORITY_QUARANTINED');
   } finally {
     await server.close();
   }

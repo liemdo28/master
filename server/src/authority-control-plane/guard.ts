@@ -1,6 +1,10 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { ControlledActionService } from '../personal-os/actions/service';
+import { LegacyAuthorityAdapter, respondWithLegacyResult } from './legacy-adapter';
+import { generateAuthorityManifest } from './scanner';
+import { isMutation } from './registry';
+import type { AuthoritySurface } from './types';
 
 export const LEGACY_EXTERNAL_ACTION_CATEGORIES = new Set([
   'gmail_send',
@@ -15,16 +19,19 @@ export const LEGACY_EXTERNAL_ACTION_CATEGORIES = new Set([
 ]);
 
 export function denyAuthorityMutation(res: Response, surfaceId: string, reason: string, status = 409): void {
-  recordAuthorityEvent('authority.legacy.blocked', surfaceId, reason);
-  res.status(status).json({
-    error: 'AUTHORITY_SURFACE_QUARANTINED',
-    surfaceId,
-    reason,
-  });
+  const adapter = new LegacyAuthorityAdapter();
+  respondWithLegacyResult(res, adapter.quarantine(surfaceId, reason, 'authority-control-plane', status));
 }
 
 export function isLegacyExternalAction(category: string): boolean {
   return LEGACY_EXTERNAL_ACTION_CATEGORIES.has(category);
+}
+
+export function legacyAuthorityBoundary(req: Request, res: Response, next: NextFunction): void {
+  const surface = legacyMutationMatcher().find(item => item.method === req.method && item.regex.test(req.path));
+  if (!surface) return next();
+  if (surface.id === 'http:POST:/api/approval/request') return next();
+  denyAuthorityMutation(res, surface.id, `Legacy mutation ${surface.runtimeMount} is quarantined by the Phase 6B authority boundary.`, 409);
 }
 
 export function denyUnregisteredMutation(_req: Request, res: Response): void {
@@ -51,4 +58,27 @@ export function recordAuthorityEvent(eventType: string, surfaceId: string, reaso
   } catch {
     // Authority denial must not become an availability dependency on the audit DB.
   }
+}
+
+let legacyMutationCache: Array<AuthoritySurface & { regex: RegExp }> | null = null;
+
+function legacyMutationMatcher(): Array<AuthoritySurface & { regex: RegExp }> {
+  if (legacyMutationCache) return legacyMutationCache;
+  const manifest = generateAuthorityManifest(process.cwd());
+  legacyMutationCache = manifest.surfaces
+    .filter(surface =>
+      isMutation(surface.method, surface.effectClass) &&
+      (surface.legacyReason !== null || surface.authorityClass === 'LEGACY_QUARANTINED') &&
+      surface.phase6bDisposition !== 'ADAPT_SAFE'
+    )
+    .map(surface => ({ ...surface, regex: routeRegex(surface.runtimeMount) }));
+  return legacyMutationCache;
+}
+
+function routeRegex(runtimeMount: string): RegExp {
+  const escaped = runtimeMount
+    .split('/')
+    .map(segment => segment.startsWith(':') ? '[^/]+' : segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('/');
+  return new RegExp(`^${escaped}/?$`);
 }
