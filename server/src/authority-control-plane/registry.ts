@@ -59,6 +59,10 @@ export const AUTHORITY_RULES: Rule[] = [
     authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'Authority Control Plane', auth: 'REMOTE_SESSION', capability: 'authority inventory read model',
     evidence: ['server/src/authority-control-plane/router.ts'],
   }),
+  rule('operator-control-read', /^\/api\/(command-center\/)?operator(\/.*)?$/, {
+    authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'OperatorControlService', auth: 'REMOTE_SESSION', capability: 'operator pending authority read model',
+    evidence: ['server/src/operator-control/router.ts', 'server/src/operator-control/service.ts'],
+  }),
   rule('task-runtime', /^\/api\/(command-center\/)?task-runtime(\/.*)?$/, {
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Task Runtime', auth: 'STRICT_API_KEY', capability: 'task state and read-only command evidence',
     projectScoped: true, evidence: ['server/src/routes/task-runtime.ts', 'server/src/task-runtime/engine.ts'],
