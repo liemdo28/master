@@ -25,6 +25,7 @@ export const NAV_ITEMS = [
   { to: '/reviews', label: 'Reviews', key: 'g r' },
   { to: '/operator', label: 'Operator', key: 'g o' },
   { to: '/authority', label: 'Authority', key: 'g y' },
+  { to: '/evidence', label: 'Evidence', key: 'g e' },
   { to: '/settings', label: 'Settings', key: 'g s' },
 ] as const;
 

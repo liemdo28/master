@@ -206,4 +206,38 @@ describe('calendar/Gmail mutation controls are structurally absent (§32)', () =
     }
     vi.doUnmock('@/lib/api-client');
   });
+
+  it('EvidencePage never renders any mutation control, even for a defense-in-depth SECRET_NEVER_RENDER record (Phase 6D)', async () => {
+    vi.doMock('@/lib/api-client', () => ({
+      api: {
+        get: vi.fn((path: string) => {
+          if (path.startsWith('/evidence/conflicts')) return Promise.resolve({ conflicts: [] });
+          if (path.startsWith('/evidence/health')) return Promise.resolve({ health: [] });
+          if (path.startsWith('/evidence/digest')) return Promise.resolve({});
+          // Even if a backend bug ever served a SECRET_NEVER_RENDER record over this
+          // API (it must not — see evidence/router.ts's redactionClassAtMost
+          // enforcement), the UI itself must never render a mutation control near it.
+          return Promise.resolve({
+            evidence: [{
+              id: 'CONTROLLED_ACTIONS:leaked', category: 'DECISION', sourceSystem: 'CONTROLLED_ACTIONS', sourceId: 'leaked',
+              projectId: 'mi-core', subjectType: 'ActionProposal', subjectId: 'action-1',
+              claim: '[redacted: claim text matched a secret pattern]', confidence: 'CERTAIN', observedAt: '2026-08-11T09:00:00Z',
+              freshness: 'FRESH', redactionClass: 'SECRET_NEVER_RENDER', canonicalReference: null, relatedEvidence: [],
+              conflictGroup: null, authorityDecisionId: null, actor: 'liem',
+            }],
+          });
+        }),
+        post: vi.fn(), patch: vi.fn(), del: vi.fn(),
+      },
+      ApiError: class extends Error {}, UnauthorizedError: class extends Error {}, setUnauthorizedHandler: vi.fn(),
+    }));
+    const { EvidencePage } = await import('@/routes/EvidencePage');
+    renderWithProviders(<EvidencePage />);
+    await waitFor(() => expect(screen.getByText('Evidence & Audit')).toBeInTheDocument());
+    expect(screen.getByText('[redacted: claim text matched a secret pattern]')).toBeInTheDocument();
+    for (const forbidden of [/resolve/i, /dismiss/i, /^approve/i, /^execute/i, /remediate/i, /^yes$/i, /^force$/i]) {
+      expect(screen.queryByRole('button', { name: forbidden })).not.toBeInTheDocument();
+    }
+    vi.doUnmock('@/lib/api-client');
+  });
 });
