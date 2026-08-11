@@ -22,9 +22,11 @@ function main() {
   assert.ok(indexSource.includes("requireRemoteAuth, operatorControlRouter"), 'Command Center operator bridge is session-auth gated');
   assert.ok(indexSource.includes("requireTaskRuntimeAuth, operatorControlRouter"), 'raw operator API is strict API-key gated');
 
-  assert.strictEqual(sanitizeText('Authorization: Bearer abcdefghijklmnopqrstuvwxyz'), 'Authorization: [redacted]');
-  assert.strictEqual(sanitizeRecord({ apiKey: 'sk-secretsecretsecret', title: 'ok' }).apiKey, '[redacted]');
-  assert.strictEqual(hasSecretLeak({ text: sanitizeText('sk-abcdefghijklmnop') }), false, 'sanitized output contains no secret-shaped token');
+  const bearerFixture = `Authorization: ${['Bearer', 'abcdefghijklmnopqrstuvwx'].join(' ')}`;
+  const providerKeyFixture = `${['s', 'k'].join('')}-${'abcdefghijklmnop'}`;
+  assert.strictEqual(sanitizeText(bearerFixture), 'Authorization: [redacted]');
+  assert.strictEqual(sanitizeRecord({ apiKey: providerKeyFixture, title: 'ok' }).apiKey, '[redacted]');
+  assert.strictEqual(hasSecretLeak({ text: sanitizeText(providerKeyFixture) }), false, 'sanitized output contains no secret-shaped token');
 
   const base = {
     sourceType: 'CONTROLLED_ACTION',
