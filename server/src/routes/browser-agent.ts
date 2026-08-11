@@ -57,5 +57,5 @@ browserAgentRouter.post('/extract', async (req: Request, res: Response) => {
 });
 
 browserAgentRouter.post('/write', async (_req: Request, res: Response) => {
-  return denyAuthorityMutation(res, 'http:POST:/api/browser-agent/write', 'Legacy browser write is quarantined in Phase 6A; route through a future governed Controlled Action adapter.');
+  return denyAuthorityMutation(res, 'http:POST:/api/browser/write', 'Legacy browser write is quarantined in Phase 6A; route through a future governed Controlled Action adapter.');
 });

@@ -77,7 +77,7 @@ const FIXTURES: Record<string, unknown> = {
     surfaces: [
       { id: 'route:GET:/api/health', kind: 'HTTP_ROUTE', sourcePath: 'src/index.ts', runtimeMount: '/api/health', method: 'GET', capability: 'health', effectClass: 'READ_ONLY', authorityClass: 'CANONICAL_READ', canonicalOwner: 'Public health/auth bootstrap', projectScoped: false, externalSystem: null, approvalRequired: false, governanceRequired: false, delegationEligible: false, authenticationRequired: 'PUBLIC_READ', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
       { id: 'route:POST:/api/actions/:id/execute', kind: 'HTTP_ROUTE', sourcePath: 'src/personal-os/actions/router.ts', runtimeMount: '/api/actions/:id/execute', method: 'POST', capability: 'controlled action execution', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'CANONICAL_CONTROLLED_ACTION', canonicalOwner: 'ControlledActionService', projectScoped: true, externalSystem: 'gmail/calendar/sandboxed providers', approvalRequired: true, governanceRequired: true, delegationEligible: true, authenticationRequired: 'STRICT_API_KEY', status: 'ACTIVE', legacyReason: null, migrationTarget: null, evidence: ['fixture'] },
-      { id: 'route:POST:/api/browser-agent/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser-agent/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', evidence: ['fixture'] },
+      { id: 'route:POST:/api/browser/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', evidence: ['fixture'] },
     ],
   },
 };
@@ -194,7 +194,7 @@ describe('Command Center screens', () => {
 
   it('Authority renders the control-plane manifest and quarantine status', async () => {
     renderWithProviders(<AuthorityPage />);
-    await waitFor(() => expect(screen.getByText('/api/browser-agent/write')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('/api/browser/write')).toBeInTheDocument());
     expect(screen.getAllByText(/quarantined/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText('0').length).toBeGreaterThan(0);
   });

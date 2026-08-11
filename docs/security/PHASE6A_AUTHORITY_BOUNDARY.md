@@ -16,7 +16,7 @@ Phase 6A keeps the Phase 5 freeze intact while creating an explicit control-plan
 Legacy external/process-control endpoints now return `AUTHORITY_SURFACE_QUARANTINED` before execution:
 
 - `/api/approval/:id/approve` for legacy external queued actions.
-- `/api/browser-agent/write`.
+- `/api/browser/write`.
 - `/api/voice/output/daily-brief`.
 - `/api/voice/output/send`.
 - `/api/company-os/command`.
