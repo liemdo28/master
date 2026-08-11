@@ -82,6 +82,29 @@ async function main() {
     const executionsAfter = service.controlledActions.detail(proposalId).executions.length;
     assert.strictEqual(executionsAfter, executionsBefore, 'restart must not repeat a completed external execution');
 
+    // ── restart at FAILED — must remain FAILED, never silently retried or resurrected ──
+    const failPlan = service.createPlan({
+      title: 'x', objective: 'x', projectId: 'mi-core',
+      steps: [
+        { key: 'a', type: 'CONTROLLED_ACTION', description: 'a', actionType: 'GMAIL_CREATE_DRAFT', actionPayload: gmailPayload('restart-fail-a') },
+        { key: 'b', type: 'LOCAL_COMPUTE', description: 'b', dependsOnKeys: ['a'] },
+      ],
+    });
+    service.validate(failPlan.id);
+    service.start(failPlan.id);
+    await service.advance(failPlan.id);
+    const failStepId = service.detail(failPlan.id).steps.find(s => s.key === 'a').id;
+    service.store.handle.prepare(`UPDATE action_plan_steps SET status = 'FAILED' WHERE id = ?`).run(failStepId);
+    await service.advance(failPlan.id);
+    assert.strictEqual(service.get(failPlan.id).status, 'FAILED');
+    assert.strictEqual(service.detail(failPlan.id).steps.find(s => s.key === 'b').status, 'FAILED', 'dependent step must be blocked-failed before restart');
+    service.close();
+    service = restart(root);
+    assert.strictEqual(service.get(failPlan.id).status, 'FAILED', 'restart must preserve FAILED, never resurrect the plan');
+    const failAdvance = await service.advance(failPlan.id); // safe no-op on a terminal plan
+    assert.strictEqual(failAdvance.stepsAdvanced, 0);
+    assert.strictEqual(service.get(failPlan.id).status, 'FAILED');
+
     // ── restart while PAUSED (e.g. by kill switch) — must remain enforced ──
     const killPlan = service.createPlan({
       title: 'x', objective: 'x', projectId: 'mi-core',
