@@ -179,4 +179,31 @@ describe('calendar/Gmail mutation controls are structurally absent (§32)', () =
     }
     vi.doUnmock('@/lib/api-client');
   });
+
+  it('DelegationsPage never renders a bulk approve/activate control — strong approval always requires a typed confirmation phrase (Phase 5I)', async () => {
+    vi.doMock('@/lib/api-client', () => ({
+      api: {
+        get: vi.fn(() => Promise.resolve({
+          delegations: [{
+            id: 'delegation-1', delegationVersion: 1, previousVersionId: null, title: 'Follow-up drafts', description: 'x',
+            owner: 'liem', projectId: 'mi-core', status: 'WAITING_APPROVAL', allowedActionTypes: ['GMAIL_CREATE_DRAFT'],
+            deniedActionTypes: [], targetRestriction: { allowedDomains: ['example.com'], maxRecipients: 3 },
+            riskCeiling: 'R2', approvalLevelCeiling: 'STANDARD', startsAt: '2026-08-11T09:00:00Z', expiresAt: '2026-08-11T12:00:00Z',
+            timezone: 'UTC', maxExecutions: 3, usedExecutions: 0, maxTargets: null, usedTargets: 0,
+            policyVersion: 'v1', policyHash: 'p', createdAt: '2026-08-11T08:00:00Z', approvedAt: null, activatedAt: null,
+            revokedAt: null, exhaustedAt: null, expiredAt: null, pausedReason: null,
+          }],
+        })),
+        post: vi.fn(), patch: vi.fn(), del: vi.fn(),
+      },
+      ApiError: class extends Error {}, UnauthorizedError: class extends Error {}, setUnauthorizedHandler: vi.fn(),
+    }));
+    const { DelegationsPage } = await import('@/routes/DelegationsPage');
+    renderWithProviders(<DelegationsPage />);
+    await waitFor(() => expect(screen.getByText(/follow-up drafts/i)).toBeInTheDocument());
+    for (const forbidden of [/^approve.?all$/i, /^activate.?all$/i, /^yes$/i, /^force$/i, /^bulk/i]) {
+      expect(screen.queryByRole('button', { name: forbidden })).not.toBeInTheDocument();
+    }
+    vi.doUnmock('@/lib/api-client');
+  });
 });

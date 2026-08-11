@@ -15,6 +15,8 @@ import { ActionsPage } from '@/routes/ActionsPage';
 import { GovernancePage } from '@/routes/GovernancePage';
 import { PlansPage } from '@/routes/PlansPage';
 import { PlanDetailPage } from '@/routes/PlanDetailPage';
+import { DelegationsPage } from '@/routes/DelegationsPage';
+import { DelegationDetailPage } from '@/routes/DelegationDetailPage';
 import { GoalsPage } from '@/routes/GoalsPage';
 import { GoalDetailPage } from '@/routes/GoalDetailPage';
 import { ProjectsPage } from '@/routes/ProjectsPage';
@@ -52,6 +54,8 @@ function Gate() {
         <Route path="/governance" element={<GovernancePage />} />
         <Route path="/plans" element={<PlansPage />} />
         <Route path="/plans/:id" element={<PlanDetailPage />} />
+        <Route path="/delegations" element={<DelegationsPage />} />
+        <Route path="/delegations/:id" element={<DelegationDetailPage />} />
         <Route path="/goals" element={<GoalsPage />} />
         <Route path="/goals/:id" element={<GoalDetailPage />} />
         <Route path="/projects" element={<ProjectsPage />} />

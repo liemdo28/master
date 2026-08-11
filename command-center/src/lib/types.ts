@@ -605,3 +605,76 @@ export interface PlanValidationResult {
   issues: Array<{ code: string; message: string; stepKey?: string }>;
   topologicalOrder: string[];
 }
+
+// Phase 5I — DelegatedAuthority. Distinct from ActionPlan (workflow structure) and
+// from a single Controlled Action approval (one action). A delegation pre-authorizes
+// a tightly bounded CLASS of actions in advance; it is never itself an approval of
+// any specific action, and plan/action approval semantics are unchanged by its
+// existence — see docs/architecture/PHASE5I_DELEGATED_AUTHORITY.md.
+export type DelegatedAuthorityStatus =
+  | 'DRAFT' | 'WAITING_APPROVAL' | 'ACTIVE' | 'PAUSED' | 'PAUSED_POLICY_CHANGED'
+  | 'EXPIRED' | 'EXHAUSTED' | 'REVOKED' | 'CANCELLED';
+
+export interface DelegationTargetRestriction {
+  allowedDomains?: string[];
+  allowedContactIds?: string[];
+  projectLinkedContactsOnly?: boolean;
+  maxRecipients?: number;
+  calendarId?: string;
+  maxAttendees?: number;
+  maxDurationMinutes?: number;
+  allowedHours?: { startHour: number; endHour: number };
+}
+
+export interface DelegatedAuthority {
+  id: string;
+  delegationVersion: number;
+  previousVersionId: string | null;
+  title: string;
+  description: string;
+  owner: string;
+  projectId: string;
+  status: DelegatedAuthorityStatus;
+  allowedActionTypes: string[];
+  deniedActionTypes: string[];
+  targetRestriction: DelegationTargetRestriction;
+  riskCeiling: string;
+  approvalLevelCeiling: string;
+  startsAt: string;
+  expiresAt: string;
+  timezone: string;
+  maxExecutions: number;
+  usedExecutions: number;
+  maxTargets: number | null;
+  usedTargets: number;
+  policyVersion: string | null;
+  policyHash: string | null;
+  createdAt: string;
+  approvedAt: string | null;
+  activatedAt: string | null;
+  revokedAt: string | null;
+  exhaustedAt: string | null;
+  expiredAt: string | null;
+  pausedReason: string | null;
+}
+
+export interface DelegationEvidenceEvent {
+  id: string;
+  delegationId: string;
+  proposalId: string | null;
+  eventType: string;
+  summary: string;
+  metadata: Record<string, unknown>;
+  actor: string;
+  createdAt: string;
+}
+
+export interface DelegationDecisionRecord {
+  id: string;
+  delegationId: string;
+  proposalId: string;
+  actionType: string;
+  eligible: boolean;
+  reasons: string[];
+  evaluatedAt: string;
+}

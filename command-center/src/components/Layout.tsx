@@ -13,6 +13,7 @@ export const NAV_ITEMS = [
   { to: '/actions', label: 'Actions', key: 'g x' },
   { to: '/governance', label: 'Governance', key: 'g v' },
   { to: '/plans', label: 'Plans', key: 'g l' },
+  { to: '/delegations', label: 'Delegations', key: 'g d' },
   { to: '/projects', label: 'Projects', key: 'g p' },
   { to: '/tasks', label: 'Tasks', key: 'g k' },
   { to: '/knowledge', label: 'Knowledge', key: 'g n' },
