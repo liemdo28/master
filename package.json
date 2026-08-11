@@ -14,6 +14,10 @@
     "test:legacy-authority-security": "npm --prefix server run test:legacy-authority-security",
     "legacy-authority:evaluation": "npm --prefix server run legacy-authority:evaluation",
     "phase6b:acceptance": "npm --prefix server run phase6b:acceptance",
+    "test:operator-control-center": "npm --prefix server run test:operator-control-center",
+    "test:operator-control-center-security": "npm --prefix server run test:operator-control-center-security",
+    "operator-control:evaluation": "npm --prefix server run operator-control:evaluation",
+    "phase6c:acceptance": "npm --prefix server run phase6c:acceptance",
     "personal-os": "npm --prefix server run personal-os --"
   },
   "devDependencies": {

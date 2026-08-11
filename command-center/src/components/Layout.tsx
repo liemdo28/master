@@ -23,6 +23,7 @@ export const NAV_ITEMS = [
   { to: '/coding', label: 'Coding', key: 'g d' },
   { to: '/health', label: 'Health', key: 'g h' },
   { to: '/reviews', label: 'Reviews', key: 'g r' },
+  { to: '/operator', label: 'Operator', key: 'g o' },
   { to: '/authority', label: 'Authority', key: 'g y' },
   { to: '/settings', label: 'Settings', key: 'g s' },
 ] as const;

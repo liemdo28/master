@@ -749,3 +749,96 @@ export interface DelegationDecisionRecord {
   reasons: string[];
   evaluatedAt: string;
 }
+
+// Phase 6C — Operator Control Center
+export type OperatorSourceType =
+  | 'TASK_APPROVAL' | 'KNOWLEDGE_CONFIRMATION' | 'CONTROLLED_ACTION' | 'GOVERNANCE_CHANGE'
+  | 'ACTION_PLAN' | 'ACTION_PLAN_STEP' | 'DELEGATION' | 'LEGACY_MIGRATION_WARNING' | 'AUTHORITY_VIOLATION';
+
+export type OperatorItemState =
+  | 'WAITING_ON_OPERATOR' | 'ACTIVE' | 'BLOCKED' | 'NEEDS_ATTENTION' | 'EXPIRING' | 'QUARANTINED' | 'INFORMATIONAL';
+
+export type OperatorUrgency = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+export interface OperatorItem {
+  id: string;
+  sourceType: OperatorSourceType;
+  sourceId: string;
+  projectId: string | null;
+  title: string;
+  summary: string;
+  state: OperatorItemState;
+  urgency: OperatorUrgency;
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string | null;
+  actor: string | null;
+  requestedBy: string | null;
+  actionType: string | null;
+  targetSummary: string | null;
+  risk: {
+    effectClass: string;
+    riskClass: string | null;
+    approvalRequired: boolean;
+    requiredApprovalLevel: string | null;
+    governanceRequired: boolean;
+    externalSystem: string | null;
+    canExecuteWithoutHuman: boolean;
+    canonicalRecheckRequired: boolean;
+  };
+  authority: {
+    actionType: string | null;
+    authorityClass: string | null;
+    authoritySurfaceId: string | null;
+    canonicalOwner: string | null;
+    state: string;
+    reason: string;
+    details: string[];
+  };
+  policyState: string | null;
+  budgetState: string | null;
+  killSwitchState: string | null;
+  delegationState: string | null;
+  planId: string | null;
+  stepId: string | null;
+  blockedReason: string;
+  evidenceRefs: string[];
+  allowedOperatorActions: string[];
+}
+
+export interface EffectiveAuthorityAction {
+  actionType: string;
+  state: string;
+  canExecuteWithoutHuman: boolean;
+  canonicalRecheckRequired: boolean;
+  reason: string;
+  activeDelegations: number;
+  remainingDelegatedExecutions: number;
+  activeKillSwitches: number;
+  enabledBudgets: number;
+  details: string[];
+}
+
+export interface OperatorAuthorityView {
+  generatedAt: string;
+  frozenExternalWritableActions: string[];
+  effectiveActions: EffectiveAuthorityAction[];
+  manifestCounts: AuthorityManifest['counts'];
+  legacy: {
+    legacyMutations: number;
+    adaptedLegacy: number;
+    quarantinedLegacy: number;
+    unresolvedLegacyMutations: number;
+    sampleQuarantinedSurfaces: Array<Pick<AuthoritySurface, 'id' | 'runtimeMount' | 'method' | 'canonicalOwner' | 'phase6bDisposition'>>;
+  };
+}
+
+export interface OperatorOverview {
+  generatedAt: string;
+  counts: Record<OperatorItemState | 'total', number>;
+  pendingBySource: Record<OperatorSourceType, number>;
+  criticalCount: number;
+  expiringCount: number;
+  legacyQuarantinedCount: number;
+  authority: OperatorAuthorityView;
+}

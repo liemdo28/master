@@ -31,6 +31,7 @@ import { ReviewsPage } from '@/routes/ReviewsPage';
 import { PlansPage } from '@/routes/PlansPage';
 import { DelegationsPage } from '@/routes/DelegationsPage';
 import { AuthorityPage } from '@/routes/AuthorityPage';
+import { OperatorControlPage } from '@/routes/OperatorControlPage';
 
 const FIXTURES: Record<string, unknown> = {
   '/operating/today': {
@@ -79,6 +80,37 @@ const FIXTURES: Record<string, unknown> = {
       { id: 'route:POST:/api/actions/:id/execute', kind: 'HTTP_ROUTE', sourcePath: 'src/personal-os/actions/router.ts', runtimeMount: '/api/actions/:id/execute', method: 'POST', capability: 'controlled action execution', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'CANONICAL_CONTROLLED_ACTION', canonicalOwner: 'ControlledActionService', projectScoped: true, externalSystem: 'gmail/calendar/sandboxed providers', approvalRequired: true, governanceRequired: true, delegationEligible: true, authenticationRequired: 'STRICT_API_KEY', status: 'ACTIVE', legacyReason: null, migrationTarget: null, phase6bDisposition: null, adapterTarget: null, quarantineHandler: null, canonicalReplacement: null, lastAuthorityEvidence: null, evidence: ['fixture'] },
       { id: 'route:POST:/api/browser/write', kind: 'HTTP_ROUTE', sourcePath: 'src/routes/browser-agent.ts', runtimeMount: '/api/browser/write', method: 'POST', capability: 'legacy browser write', effectClass: 'EXTERNAL_REVERSIBLE', authorityClass: 'LEGACY_QUARANTINED', canonicalOwner: 'Authority Control Plane', projectScoped: false, externalSystem: 'browser', approvalRequired: true, governanceRequired: true, delegationEligible: false, authenticationRequired: 'STRICT_API_KEY', status: 'QUARANTINED', legacyReason: 'legacy write surface', migrationTarget: 'ControlledActionService', phase6bDisposition: 'QUARANTINE_ONLY', adapterTarget: null, quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: 'ControlledActionService', lastAuthorityEvidence: null, evidence: ['fixture'] },
     ],
+  },
+  '/operator/overview': {
+    generatedAt: '2026-08-11T00:00:00Z',
+    counts: { total: 3, WAITING_ON_OPERATOR: 2, ACTIVE: 0, BLOCKED: 1, NEEDS_ATTENTION: 0, EXPIRING: 0, QUARANTINED: 0, INFORMATIONAL: 0 },
+    pendingBySource: { TASK_APPROVAL: 1, KNOWLEDGE_CONFIRMATION: 0, CONTROLLED_ACTION: 1, GOVERNANCE_CHANGE: 0, ACTION_PLAN: 0, ACTION_PLAN_STEP: 0, DELEGATION: 0, LEGACY_MIGRATION_WARNING: 0, AUTHORITY_VIOLATION: 0 },
+    criticalCount: 0,
+    expiringCount: 0,
+    legacyQuarantinedCount: 186,
+    authority: null,
+  },
+  '/operator/pending': {
+    items: [
+      { id: 'task:t1', sourceType: 'TASK_APPROVAL', sourceId: 't1', projectId: 'mi-core', title: 'Review task', summary: 'waiting', state: 'WAITING_ON_OPERATOR', urgency: 'MEDIUM', createdAt: '2026-08-11T00:00:00Z', updatedAt: '2026-08-11T00:00:00Z', expiresAt: null, actor: null, requestedBy: 'task-runtime', actionType: null, targetSummary: null, risk: { effectClass: 'LOCAL_REVERSIBLE', riskClass: null, approvalRequired: true, requiredApprovalLevel: null, governanceRequired: false, externalSystem: null, canExecuteWithoutHuman: false, canonicalRecheckRequired: false }, authority: { actionType: null, authorityClass: null, authoritySurfaceId: null, canonicalOwner: null, state: 'UNKNOWN', reason: 'WAITING_HUMAN_APPROVAL', details: [] }, policyState: null, budgetState: null, killSwitchState: null, delegationState: null, planId: null, stepId: null, blockedReason: 'WAITING_HUMAN_APPROVAL', evidenceRefs: ['task:t1'], allowedOperatorActions: ['open_task'] },
+      { id: 'action:a1', sourceType: 'CONTROLLED_ACTION', sourceId: 'a1', projectId: 'mi-core', title: 'Create draft', summary: 'draft', state: 'WAITING_ON_OPERATOR', urgency: 'HIGH', createdAt: '2026-08-11T00:00:00Z', updatedAt: '2026-08-11T00:00:00Z', expiresAt: null, actor: null, requestedBy: 'ControlledActionService', actionType: 'GMAIL_CREATE_DRAFT', targetSummary: 'Draft email', risk: { effectClass: 'EXTERNAL_REVERSIBLE', riskClass: 'R2', approvalRequired: true, requiredApprovalLevel: 'STANDARD', governanceRequired: true, externalSystem: 'external', canExecuteWithoutHuman: false, canonicalRecheckRequired: true }, authority: { actionType: 'GMAIL_CREATE_DRAFT', authorityClass: null, authoritySurfaceId: null, canonicalOwner: 'ControlledActionService', state: 'PER_ACTION_APPROVAL_REQUIRED', reason: 'WAITING_HUMAN_APPROVAL', details: [] }, policyState: 'REQUIRE_APPROVAL', budgetState: null, killSwitchState: null, delegationState: null, planId: null, stepId: null, blockedReason: 'WAITING_HUMAN_APPROVAL', evidenceRefs: ['action:a1'], allowedOperatorActions: ['open_controlled_action'] },
+    ],
+  },
+  '/operator/blocked': {
+    items: [
+      { id: 'legacy:phase6b-quarantine', sourceType: 'LEGACY_MIGRATION_WARNING', sourceId: 'phase6b-quarantine', projectId: null, title: 'Legacy authority quarantine', summary: '186 legacy mutation surfaces are quarantined.', state: 'QUARANTINED', urgency: 'LOW', createdAt: '2026-08-11T00:00:00Z', updatedAt: '2026-08-11T00:00:00Z', expiresAt: null, actor: null, requestedBy: null, actionType: null, targetSummary: null, risk: { effectClass: 'PROCESS_CONTROL', riskClass: null, approvalRequired: false, requiredApprovalLevel: null, governanceRequired: true, externalSystem: null, canExecuteWithoutHuman: false, canonicalRecheckRequired: true }, authority: { actionType: null, authorityClass: null, authoritySurfaceId: null, canonicalOwner: null, state: 'UNKNOWN', reason: 'LEGACY_QUARANTINED', details: [] }, policyState: null, budgetState: null, killSwitchState: null, delegationState: null, planId: null, stepId: null, blockedReason: 'LEGACY_QUARANTINED', evidenceRefs: ['authority:phase6b'], allowedOperatorActions: ['open_authority'] },
+    ],
+  },
+  '/operator/authority': {
+    generatedAt: '2026-08-11T00:00:00Z',
+    frozenExternalWritableActions: ['GMAIL_CREATE_DRAFT', 'CALENDAR_EVENT_PROPOSAL', 'CALENDAR_CREATE_EVENT'],
+    effectiveActions: [
+      { actionType: 'GMAIL_CREATE_DRAFT', state: 'PER_ACTION_APPROVAL_REQUIRED', canExecuteWithoutHuman: false, canonicalRecheckRequired: true, reason: 'WAITING_HUMAN_APPROVAL', activeDelegations: 0, remainingDelegatedExecutions: 0, activeKillSwitches: 0, enabledBudgets: 1, details: [] },
+      { actionType: 'CALENDAR_EVENT_PROPOSAL', state: 'PER_ACTION_APPROVAL_REQUIRED', canExecuteWithoutHuman: false, canonicalRecheckRequired: true, reason: 'WAITING_HUMAN_APPROVAL', activeDelegations: 0, remainingDelegatedExecutions: 0, activeKillSwitches: 0, enabledBudgets: 1, details: [] },
+      { actionType: 'CALENDAR_CREATE_EVENT', state: 'BLOCKED', canExecuteWithoutHuman: false, canonicalRecheckRequired: true, reason: 'KILL_SWITCH_ACTIVE', activeDelegations: 0, remainingDelegatedExecutions: 0, activeKillSwitches: 1, enabledBudgets: 1, details: [] },
+    ],
+    manifestCounts: { total: 1027, readOnly: 633, mutations: 394, canonical: 651, adapters: 158, quarantined: 155, forbidden: 0, internalTest: 63, unknownMutations: 0, legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, disabledDeadLegacy: 0, unresolvedLegacyMutations: 0 },
+    legacy: { legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, unresolvedLegacyMutations: 0, sampleQuarantinedSurfaces: [{ id: 'legacy-1', runtimeMount: '/api/browser/write', method: 'POST', canonicalOwner: 'Authority Control Plane', phase6bDisposition: 'QUARANTINE_ONLY' }] },
   },
 };
 
@@ -200,5 +232,16 @@ describe('Command Center screens', () => {
     expect(screen.getByText('QUARANTINE_ONLY')).toBeInTheDocument();
     expect(screen.getAllByText(/quarantined/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText('0').length).toBeGreaterThan(0);
+  });
+
+  it('Operator Control renders pending, active authority, blocked, and legacy sections without approval controls', async () => {
+    renderWithProviders(<OperatorControlPage />);
+    await waitFor(() => expect(screen.getByText('Operator Control')).toBeInTheDocument());
+    expect(screen.getByText('Waiting on Me')).toBeInTheDocument();
+    expect(screen.getByText('Active Authority')).toBeInTheDocument();
+    expect(screen.getByText('Legacy / Quarantined')).toBeInTheDocument();
+    expect(screen.getByText('Create draft')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^approve/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /execute|run|send/i })).not.toBeInTheDocument();
   });
 });
