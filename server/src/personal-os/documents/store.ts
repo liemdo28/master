@@ -415,6 +415,23 @@ export class DocumentStore {
     return row ? parseDocument(row) : null;
   }
 
+  /** Phase 6E §9 — explicit filename/path retrieval priority. A `LIKE` match against
+   *  `sourceUri` (never `canonicalPath`, which never leaves this module) so a query
+   *  that names a file gets that exact document even when the file's prose content
+   *  never uses the word "documented"/"file"/etc. that a pure FTS match would need.
+   *  Bounded to the caller's project scope — this is a lookup, not a bypass of
+   *  KnowledgeQuery's own project-scoping requirement. */
+  findBySourceUriFragment(fragment: string, projectIds: string[], includeStale: boolean): DocumentRecord[] {
+    if (!fragment || !projectIds.length) return [];
+    const statuses = includeStale ? ['ACTIVE', 'STALE'] : ['ACTIVE'];
+    const rows = this.db.prepare(`
+      SELECT * FROM knowledge_documents
+      WHERE status IN (${statuses.map(() => '?').join(',')}) AND sourceUri LIKE ? ESCAPE '\\'
+      LIMIT 20
+    `).all(...statuses, `%${escapeLike(fragment)}%`) as any[];
+    return rows.map(parseDocument).filter(d => d.projectIds.some(p => projectIds.includes(p)));
+  }
+
   listDocuments(status?: DocumentStatus, limit = 100): DocumentRecord[] {
     const rows = status
       ? this.db.prepare(`SELECT * FROM knowledge_documents WHERE status = ? ORDER BY updatedAt DESC LIMIT ?`)
@@ -626,6 +643,10 @@ export const STOPWORDS = new Set([
   'those', 'to', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'who', 'why',
   'will', 'with', 'would', 'you', 'your',
 ]);
+
+function escapeLike(fragment: string): string {
+  return fragment.replace(/[\\%_]/g, ch => `\\${ch}`);
+}
 
 function ftsMatchExpression(text: string): string {
   const allTerms = text.trim().split(/\s+/).filter(Boolean).slice(0, 50);

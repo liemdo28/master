@@ -227,6 +227,15 @@ export interface KnowledgePackItem {
   isStale: boolean;
 }
 
+/**
+ * Why a query came back empty. Distinguishes "this project has never been indexed"
+ * from "it has content but genuinely nothing matched" from "matches exist but are all
+ * STALE and includeStale was not set" — collapsing these into one empty result would
+ * read identically to a caller as "knowledge definitely does not exist here", which is
+ * only true for NO_SUPPORTED_ANSWER.
+ */
+export type UnknownReason = 'PROJECT_NOT_INDEXED' | 'STALE_ONLY' | 'NO_SUPPORTED_ANSWER';
+
 export interface KnowledgePack {
   queryId: string;
   query: { text: string; projectIds: string[]; includeStale: boolean };
@@ -237,6 +246,8 @@ export interface KnowledgePack {
   warnings: string[];
   /** True when nothing matched: an explicit "I don't know", not an empty list to guess from. */
   unknown: boolean;
+  /** Set only when `unknown` is true — see UnknownReason. */
+  unknownReason: UnknownReason | null;
 }
 
 export type ConflictStatus = 'OPEN' | 'NEEDS_CONFIRMATION' | 'RESOLVED' | 'DISMISSED';
