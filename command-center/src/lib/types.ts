@@ -296,6 +296,32 @@ export interface KnowledgePack {
   conflicts: unknown[];
   warnings: string[];
   unknown: boolean;
+  unknownReason?: 'PROJECT_NOT_INDEXED' | 'STALE_ONLY' | 'NO_SUPPORTED_ANSWER' | null;
+}
+
+// ── Knowledge quality (Phase 6E) ─────────────────────────────────────────
+export interface KnowledgeQualitySummary {
+  documents: number;
+  chunks: number;
+  activeDocuments: number;
+  staleDocuments: number;
+  projects: number;
+  openConflicts: number;
+  failedIngestion: number;
+  retryableIngestion: number;
+  blockedIngestion: number;
+  indexHealth: 'OK' | 'ATTENTION';
+}
+
+export interface IngestionJobSummary {
+  id: string;
+  documentId: string | null;
+  operationId: string;
+  status: 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'CANCELLED' | 'RECOVERY_REQUIRED';
+  errorCode: string | null;
+  safeError: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ── Calendar / Email (Phase 5C) ──────────────────────────────────────────
