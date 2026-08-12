@@ -311,6 +311,36 @@ export function normalizeConflict(row: RawConflictRow, now: Date): EvidenceRecor
   });
 }
 
+const INGESTION_JOB_OUTCOME: Record<string, 'ALLOWED' | 'DENIED' | 'NEUTRAL'> = {
+  COMPLETED: 'ALLOWED', FAILED: 'DENIED', CANCELLED: 'DENIED',
+};
+
+/** `errorCode`/`safeError` are already sanitized by `documents/service.ts`'s
+ *  `safeMessage()` before they ever reach the job row — never a raw parser stack trace
+ *  or an absolute path — so no further redaction of the claim text is needed here
+ *  beyond `baseRecord`'s own defense-in-depth secret scan. */
+export interface RawIngestionJobRow {
+  id: string; documentId: string | null; status: string;
+  errorCode: string | null; safeError: string | null;
+  sourceChecksum: string | null; createdAt: string; updatedAt: string; completedAt: string | null;
+}
+
+export function normalizeIngestionJob(row: RawIngestionJobRow, projectId: string | null, now: Date): EvidenceRecord {
+  const claim = row.status === 'FAILED'
+    ? `Ingestion job failed: ${row.errorCode ?? 'UNKNOWN_ERROR'} — ${row.safeError ?? 'no further detail'}`
+    : `Ingestion job ${row.status.toLowerCase()}`;
+  return baseRecord(now, {
+    sourceSystem: 'KNOWLEDGE', sourceId: row.id, category: 'SOURCE_REFERENCE',
+    confidence: 'CERTAIN',
+    projectId, subjectType: 'IngestionJob', subjectId: row.id,
+    claim,
+    observedAt: row.completedAt ?? row.updatedAt ?? row.createdAt,
+    canonicalReference: row.sourceChecksum ? `sha256:${row.sourceChecksum.slice(0, 16)}` : null,
+    relatedEvidence: row.documentId ? [`KNOWLEDGE:${row.documentId}`] : [],
+    outcome: INGESTION_JOB_OUTCOME[row.status] ?? 'NEUTRAL',
+  });
+}
+
 // ---- Task Runtime (task_events) --------------------------------------------------------
 
 function taskEventCategory(type: string): EvidenceCategory {

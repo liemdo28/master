@@ -8,7 +8,7 @@ import { DocumentStore } from '../personal-os/documents/store';
 import {
   normalizeActionEvidence, normalizeConflict, normalizeDelegationDecision,
   normalizeDelegationEvent, normalizeDocument, normalizeGovernanceAnomaly,
-  normalizeGovernanceEvent, normalizePlanEvidence, normalizePolicyDecision, normalizeTaskEvent,
+  normalizeGovernanceEvent, normalizeIngestionJob, normalizePlanEvidence, normalizePolicyDecision, normalizeTaskEvent,
 } from './normalize';
 import type { DailyAuditDigest, EvidenceFilter, EvidenceRecord, EvidenceServiceOptions, HealthMetric } from './types';
 
@@ -86,11 +86,20 @@ export class EvidenceService {
       }
     }
 
-    for (const document of this.documentStore.listDocuments()) {
+    const documents = this.documentStore.listDocuments();
+    const documentProjectId = new Map(documents.map(d => [d.id, d.projectIds[0] ?? null]));
+    for (const document of documents) {
       records.push(normalizeDocument(document as any, now));
     }
     for (const conflict of this.documentStore.listConflicts()) {
       records.push(normalizeConflict(conflict as any, now));
+    }
+    // Every FAILED_INGESTION evidenceId health() below reports must resolve through
+    // get() — normalizing every job (not only FAILED ones) keeps that promise for the
+    // job's full lifecycle, not just its failure state.
+    for (const job of this.documentStore.listJobs(200)) {
+      const projectId = job.documentId ? documentProjectId.get(job.documentId) ?? null : null;
+      records.push(normalizeIngestionJob(job as any, projectId, now));
     }
 
     for (const task of this.taskStore.listTasks()) {

@@ -82,6 +82,51 @@ router.get('/knowledge-documents/stale', async (_req, res) => {
   } catch (err) { fail(res, err); }
 });
 
+const JOB_STATUSES = new Set(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'RECOVERY_REQUIRED']);
+
+// Registered ahead of GET /knowledge-documents/:id (like /stale above) so the literal
+// segment "ingestion-jobs" is never swallowed by the :id wildcard.
+router.get('/knowledge-documents/ingestion-jobs', async (req, res) => {
+  try {
+    const status = typeof req.query.status === 'string' && JOB_STATUSES.has(req.query.status) ? req.query.status : undefined;
+    const jobs = await withStore(store => store.listJobs(Number(req.query.limit) || 100));
+    const filtered = status ? jobs.filter(j => j.status === status) : jobs;
+    // IngestionJob already carries no absolute path (documentId/operationId/errorCode/
+    // safeError only — safeError is produced by service.ts's safeMessage(), which
+    // strips paths before it is ever persisted).
+    return res.json({ jobs: filtered });
+  } catch (err) { return fail(res, err); }
+});
+
+// Same ordering reason as /ingestion-jobs above.
+router.get('/knowledge-documents/quality-summary', async (_req, res) => {
+  try {
+    const summary = await withStore(store => {
+      const active = store.listDocuments('ACTIVE', 500);
+      const stale = store.listDocuments('STALE', 500);
+      const jobs = store.listJobs(500);
+      const failedJobs = jobs.filter(j => j.status === 'FAILED');
+      const retryableJobs = jobs.filter(j => j.status === 'RECOVERY_REQUIRED');
+      const blockedJobs = jobs.filter(j => j.status === 'CANCELLED');
+      const stats = store.stats();
+      const openConflicts = store.listConflicts('OPEN', 500).length + store.listConflicts('NEEDS_CONFIRMATION', 500).length;
+      return {
+        documents: stats.documents,
+        chunks: stats.chunks,
+        activeDocuments: active.length,
+        staleDocuments: stale.length,
+        projects: [...new Set(active.concat(stale).flatMap(d => d.projectIds))].length,
+        openConflicts,
+        failedIngestion: failedJobs.length,
+        retryableIngestion: retryableJobs.length,
+        blockedIngestion: blockedJobs.length,
+        indexHealth: failedJobs.length === 0 && openConflicts === 0 ? 'OK' : 'ATTENTION',
+      };
+    });
+    return res.json(summary);
+  } catch (err) { return fail(res, err); }
+});
+
 // Registered ahead of GET /knowledge-documents/:id (like /stale above) so the literal
 // segment "conflicts" is never swallowed by the :id wildcard.
 router.get('/knowledge-documents/conflicts', async (req, res) => {
@@ -228,6 +273,16 @@ router.post('/knowledge-documents/relations/scan', async (req, res) => {
     if (!projectIds.length) return res.status(400).json({ error: 'projectIds is required and must be a non-empty array (max 5)' });
     const result = await withStore(store => scanForRelations(store, projectIds));
     return res.json(result);
+  } catch (err) { return fail(res, err); }
+});
+
+// ── Phase 6E: debug view ───────────────────────────────────────────────────────────────
+
+router.post('/knowledge-documents/debug-search', async (req, res) => {
+  try {
+    assertPlainPayload(req.body);
+    const explanation = await withStore(store => new KnowledgeRetrievalService(store).explainQuery(req.body));
+    return res.json(explanation);
   } catch (err) { return fail(res, err); }
 });
 
