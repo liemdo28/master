@@ -1,6 +1,36 @@
-# Phase 6E — Acceptance
+# Phase 6E — Acceptance — DONE / FROZEN
 
 Date: 2026-08-12
+
+## Release provenance
+
+- PR: [#90](https://github.com/liemdo28/master/pull/90), merged.
+- Independent review performed against the PR diff (not a re-read of the
+  implementation summary) before merge: found and fixed one real bug —
+  `findBySourceUriFragment()`'s SQL `LIMIT` was applied before the JS project-scope
+  filter, so 20+ other projects sharing a queried document's exact filename fragment
+  could silently crowd the caller's own in-scope document out of the exactPathMatch
+  priority signal (never a leak — the project filter was still correct once applied —
+  but a false miss on the signal). Fixed by over-fetching before filtering (same
+  pattern `searchChunks` already uses for the identical JSON-column constraint). A
+  permanent regression test (25 decoy-project documents) was added and verified to
+  fail against the unfixed code and pass against the fix before committing. See
+  commit `6de476de`.
+- Final reviewed PR head / merge SHA: `e766feb15dab24355ad84b63c8c4f3c7201a0f95`.
+- Final repository master SHA at functional deploy: `e766feb15dab24355ad84b63c8c4f3c7201a0f95`.
+- Functional deployed SHA: `e766feb15dab24355ad84b63c8c4f3c7201a0f95`.
+
+Production provenance:
+
+- Production root: `D:\Project\Mi-core-system\Master\mi-core`.
+- `MI_DEPLOYED_SOURCE_SHA=e766feb15dab24355ad84b63c8c4f3c7201a0f95`.
+- `MI_DEPLOYED_SOURCE_ROOT=D:\mi-core-deployed-source\e766feb15dab24355ad84b63c8c4f3c7201a0f95`
+  (fileCount 738, treeChecksum `644bd12a9ecd38d2ed2a4ad1632aa14d6e3870b76c3efb62c59365991fb52ed7`).
+- Predeploy backup: `D:\mi-core-production-backups\phase6e-predeploy-20260812-101529`.
+- Deployment provenance invariant confirmed live:
+  `MI_DEPLOYED_SOURCE_SHA = deploy-owned source snapshot SHA = runtime scanned source
+  SHA = authority manifest SHA = server/dist reviewed SHA` — all equal to
+  `e766feb15dab24355ad84b63c8c4f3c7201a0f95`.
 
 ## §40 — 20-point acceptance (`npm run phase6e:acceptance`)
 
@@ -79,16 +109,45 @@ change is additive and covered by the existing E2E fixture flow, which already
 navigates the Knowledge page); this is recorded honestly rather than claimed as a
 live-browser check.
 
-## Deployment provenance
+## Live production acceptance (post-deploy, real production data, read-only)
 
-Functional deployed SHA, hotfix-invariant compliance
-(`MI_DEPLOYED_SOURCE_SHA = snapshot SHA = scanned source SHA = manifest SHA =
-server/dist SHA`), and production acceptance results are recorded in the final Phase
-6E closure document after merge and deploy — this document is written at PR-open time
-and will be superseded by that closure record, matching the Phase 6D precedent.
+- `GET /api/health`: 200 — `server: ok`, `python_ai_service: ok` (`ollama: down` is a
+  pre-existing, unrelated condition, independently re-verified at the start of this
+  phase to confirm the canonical FTS-based Knowledge OS has no dependency on it — see
+  `docs/architecture/PHASE6E_KNOWLEDGE_QUALITY.md`).
+- `GET /api/authority/status` (authenticated): 200,
+  `{"total":1066,"readOnly":670,"mutations":396,"canonical":677,"adapters":158,"quarantined":155,"forbidden":0,"internalTest":76,"unknownMutations":0,"legacyMutations":190,"adaptedLegacy":4,"quarantinedLegacy":186,"disabledDeadLegacy":0,"unresolvedLegacyMutations":0}` —
+  matches the reviewed manifest at the merged SHA exactly; the two new Phase 6E routes
+  (`ingestion-jobs`, `quality-summary`) confirmed present in the live manifest.
+- `GET /api/knowledge-documents/quality-summary` (authenticated): 200, real production
+  counts — `documents: 1` (the pre-existing SUPERSEDED fixture-test row),
+  `chunks: 0`, `failedIngestion: 2` (the two pre-existing FAILED jobs from before this
+  phase — `UNSUPPORTED_MIME` and `SECRET_REJECTED`, unrelated to this deploy),
+  `indexHealth: ATTENTION` (correctly reflecting those two pre-existing failures, not
+  anything newly introduced).
+- `GET /api/knowledge-documents/ingestion-jobs?status=FAILED`: 200, both pre-existing
+  failed jobs individually visible with reason codes.
+- `personal-os.db` post-restart: `integrity: ok`, 0 FK violations, schema v10
+  (unchanged — this phase never touches any `.db` file or schema).
+- `mi-core` post-restart error log scan (300 lines): 0 matches for uncaught
+  exception, unhandled rejection, SQLite lock, migration failure, route collision,
+  authority startup refusal, unresolved/unknown mutation, duplicate/unauthorized/
+  automatic execution, Gmail SEND, calendar notification dispatch, or secret/token
+  leakage.
+- Restart discipline: only `mi-core` restarted (restart count 2, new PID); every
+  other PM2 process (`mi-accounting`, `mi-ai-service`, `mi-ceo-observer`, `mi-n8n`,
+  `mi-node-agent`, `mi-whatsapp-gateway`, `qb-ops-agent`) untouched — 0 restarts, same
+  PID/uptime throughout.
+- Production Git checkout untouched throughout (still on unrelated branch
+  `codex/phase10-2-reality-closure`, HEAD `1db12eb3`, 3499 modified/untracked files) —
+  never read, written, reset, or checked out at any point in this phase.
 
 ## Phase 6E frozen status
 
-**Not yet — PR open, pending review/CI/merge/deploy/production acceptance.** This
-document will be superseded by a final closure record once all of §46–§51 of the
-governing directive are complete.
+**FROZEN.** Merged, deployed, production-verified, documented. The Sequential Master
+Program's auto-continue condition ("If Phase 6E is fully merged, deployed,
+production-verified, documented, and frozen with no blocker: continue automatically
+to PHASE 6F — GOVERNED AUTOMATION SIMULATION") is satisfied — no blocker was
+encountered. Per the governing directive, Phase 6F requires its own specification
+section, which is not present in this context; the program stops here to request it
+rather than inventing a different roadmap.
