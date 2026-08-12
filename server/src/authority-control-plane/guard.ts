@@ -5,6 +5,7 @@ import { LegacyAuthorityAdapter, respondWithLegacyResult } from './legacy-adapte
 import { generateAuthorityManifest } from './scanner';
 import { isMutation } from './registry';
 import type { AuthoritySurface } from './types';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 export const LEGACY_EXTERNAL_ACTION_CATEGORIES = new Set([
   'gmail_send',
@@ -64,7 +65,7 @@ let legacyMutationCache: Array<AuthoritySurface & { regex: RegExp }> | null = nu
 
 function legacyMutationMatcher(): Array<AuthoritySurface & { regex: RegExp }> {
   if (legacyMutationCache) return legacyMutationCache;
-  const manifest = generateAuthorityManifest(process.cwd());
+  const manifest = generateAuthorityManifest(resolveAuthorityRepoRoot(process.cwd()));
   legacyMutationCache = manifest.surfaces
     .filter(surface =>
       isMutation(surface.method, surface.effectClass) &&

@@ -2,11 +2,12 @@ import { Router } from 'express';
 import path from 'path';
 import { generateAuthorityManifest, assertAuthorityManifest } from './scanner';
 import { LegacyAuthorityAdapter, legacyMutationSurfaces } from './legacy-adapter';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 export const authorityRouter = Router();
 
 function serverRoot(): string {
-  return path.resolve(__dirname, '../..');
+  return resolveAuthorityRepoRoot(path.resolve(__dirname, '../..'));
 }
 
 authorityRouter.get('/authority/manifest', (_req, res) => {

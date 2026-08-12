@@ -6,10 +6,12 @@ import { generateAuthorityManifest, assertAuthorityManifest } from './scanner';
 import { LegacyAuthorityAdapter, legacyMutationSurfaces, validateLegacyAuthorityRuntime } from './legacy-adapter';
 import { runLegacyAuthorityEvaluation } from './legacy-authority-evaluation';
 import { ControlledActionService } from '../personal-os/actions/service';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 function run(): void {
   process.env.MI_AUTHORITY_EVIDENCE_DISABLED = '1';
-  const manifest = generateAuthorityManifest(process.cwd());
+  const repoRoot = resolveAuthorityRepoRoot(process.cwd());
+  const manifest = generateAuthorityManifest(repoRoot);
   assertAuthorityManifest(manifest);
   validateLegacyAuthorityRuntime(manifest);
   assert.strictEqual(manifest.counts.unknownMutations, 0, 'Phase 6A registry has zero unknown mutations');

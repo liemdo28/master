@@ -1,8 +1,9 @@
 import assert from 'assert';
 import { generateAuthorityManifest, assertAuthorityManifest } from './scanner';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 function run(): void {
-  const manifest = generateAuthorityManifest(process.cwd());
+  const manifest = generateAuthorityManifest(resolveAuthorityRepoRoot(process.cwd()));
   assertAuthorityManifest(manifest);
 
   const byId = new Map(manifest.surfaces.map(surface => [surface.id, surface]));

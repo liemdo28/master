@@ -4,6 +4,7 @@ import os from 'os';
 import path from 'path';
 import { LegacyAuthorityAdapter, legacyMutationSurfaces, validateLegacyAuthorityRuntime } from './legacy-adapter';
 import { generateAuthorityManifest } from './scanner';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 type Case = {
   id: string;
@@ -59,9 +60,10 @@ export function runLegacyAuthorityEvaluation(): {
   unknownLegacyMutation: number;
   deterministicResults: boolean;
 } {
-  const manifest = generateAuthorityManifest(process.cwd());
+  const repoRoot = resolveAuthorityRepoRoot(process.cwd());
+  const manifest = generateAuthorityManifest(repoRoot);
   validateLegacyAuthorityRuntime(manifest);
-  const adapter = new LegacyAuthorityAdapter(process.cwd());
+  const adapter = new LegacyAuthorityAdapter(repoRoot);
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'phase6b-eval-'));
   const cases = makeCases();
   let correct = 0;

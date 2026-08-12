@@ -6,6 +6,7 @@ import { payloadHash } from '../personal-os/actions/policy';
 import { generateAuthorityManifest } from './scanner';
 import { isMutation } from './registry';
 import type { AuthorityManifest, AuthoritySurface, LegacyDisposition } from './types';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
 export type LegacyAdapterResultCode =
   | 'ADAPTED'
@@ -63,7 +64,7 @@ const adaptedProposalCache = new Map<string, { proposalId: string; actionType: A
 export class LegacyAuthorityAdapter {
   readonly manifest: AuthorityManifest;
 
-  constructor(repoRoot = process.cwd()) {
+  constructor(repoRoot = resolveAuthorityRepoRoot(process.cwd())) {
     this.manifest = generateAuthorityManifest(repoRoot);
   }
 
