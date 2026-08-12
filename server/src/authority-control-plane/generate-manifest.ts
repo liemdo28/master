@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import { assertAuthorityManifest, generateAuthorityManifest } from './scanner';
+import { resolveAuthorityRepoRoot } from './source-provenance';
 
-const repoRoot = process.cwd();
-const outPath = path.join(repoRoot, 'authority-manifest.json');
+const cwd = process.cwd();
+const outPath = path.join(cwd, 'authority-manifest.json');
 const check = process.argv.includes('--check');
-const manifest = generateAuthorityManifest(repoRoot);
+const manifest = generateAuthorityManifest(resolveAuthorityRepoRoot(cwd));
 assertAuthorityManifest(manifest);
 const body = `${JSON.stringify(manifest, null, 2)}\n`;
 
