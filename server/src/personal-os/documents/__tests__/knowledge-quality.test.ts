@@ -7,6 +7,7 @@
  */
 import assert from 'assert';
 import * as fs from 'fs';
+import * as path from 'path';
 import { DocumentStore } from '../store';
 import { KnowledgeDocumentService } from '../service';
 import { KnowledgeRetrievalService } from '../retrieval';
@@ -30,6 +31,35 @@ async function run() {
   {
     const pack = retrieval.buildKnowledgePack({ text: 'what is documented in proj-eta/architecture.md', projectIds: ['proj-eta'] });
     assert.ok(pack.items.some(i => i.citations.some(c => c.sourceUri.includes('architecture.md'))), 'exact path: filename reference resolves');
+  }
+
+  // --- exact path at scale: the caller's own document is still found when 20+ other
+  // projects share the exact same filename fragment and would otherwise crowd it out
+  // of an un-over-fetched SQL LIMIT before project filtering ever runs -------------
+  {
+    const manyRoot = tmpDir();
+    const manyDb = tmpDir();
+    const manyService = new KnowledgeDocumentService({ store: new DocumentStore(manyDb), roots: { documentRoots: [manyRoot] } });
+    for (let i = 0; i < 25; i++) {
+      const decoyPath = path.join(manyRoot, `decoy-project-${i}`, 'shared-name.md');
+      fs.mkdirSync(path.dirname(decoyPath), { recursive: true });
+      fs.writeFileSync(decoyPath, `# Decoy\n\nThis is unrelated filler content for decoy project ${i}, sharing only the filename with the real target document below.\n`);
+      await manyService.ingestApprovedDocument({ filePath: decoyPath, projectIds: [`decoy-project-${i}`] });
+    }
+    const targetPath = path.join(manyRoot, 'proj-target', 'shared-name.md');
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.writeFileSync(targetPath, '# Target\n\nThis document carries the marker phrase findable-only-by-exact-path-lookup for this regression test.\n');
+    await manyService.ingestApprovedDocument({ filePath: targetPath, projectIds: ['proj-target'] });
+
+    const manyRetrieval = new KnowledgeRetrievalService(manyService.store);
+    const targetPack = manyRetrieval.buildKnowledgePack({ text: 'what is in shared-name.md', projectIds: ['proj-target'] });
+    assert.ok(
+      targetPack.items.some(i => i.statement.includes('findable-only-by-exact-path-lookup')),
+      'exact path at scale: the in-scope document is found even when 20+ other projects share its exact filename',
+    );
+    manyService.close();
+    fs.rmSync(manyRoot, { recursive: true, force: true });
+    fs.rmSync(manyDb, { recursive: true, force: true });
   }
 
   // --- symbols: a literal code/file symbol from a runbook resolves -----------------

@@ -420,16 +420,25 @@ export class DocumentStore {
    *  that names a file gets that exact document even when the file's prose content
    *  never uses the word "documented"/"file"/etc. that a pure FTS match would need.
    *  Bounded to the caller's project scope — this is a lookup, not a bypass of
-   *  KnowledgeQuery's own project-scoping requirement. */
+   *  KnowledgeQuery's own project-scoping requirement.
+   *
+   *  `projectIds` can't be pushed into the SQL `WHERE` clause (it's a JSON array
+   *  column — see `searchChunks`'s own comment on the same constraint), so this
+   *  over-fetches before filtering in JS the same way `searchChunks` does: without an
+   *  over-fetch, a caller's own in-scope document could be silently excluded merely
+   *  because 20+ *other* projects' documents happen to share the same filename
+   *  fragment and sort first in SQLite's unspecified row order — not a leak (the
+   *  project filter below is still correctly applied), but a false miss on the
+   *  priority signal this function exists to provide. */
   findBySourceUriFragment(fragment: string, projectIds: string[], includeStale: boolean): DocumentRecord[] {
     if (!fragment || !projectIds.length) return [];
     const statuses = includeStale ? ['ACTIVE', 'STALE'] : ['ACTIVE'];
     const rows = this.db.prepare(`
       SELECT * FROM knowledge_documents
       WHERE status IN (${statuses.map(() => '?').join(',')}) AND sourceUri LIKE ? ESCAPE '\\'
-      LIMIT 20
+      LIMIT 200
     `).all(...statuses, `%${escapeLike(fragment)}%`) as any[];
-    return rows.map(parseDocument).filter(d => d.projectIds.some(p => projectIds.includes(p)));
+    return rows.map(parseDocument).filter(d => d.projectIds.some(p => projectIds.includes(p))).slice(0, 20);
   }
 
   listDocuments(status?: DocumentStatus, limit = 100): DocumentRecord[] {
