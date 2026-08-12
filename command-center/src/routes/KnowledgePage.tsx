@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { api } from '@/lib/api-client';
-import type { KnowledgeDocument } from '@/lib/types';
+import type { KnowledgeDocument, KnowledgeQualitySummary, IngestionJobSummary } from '@/lib/types';
 import { DataBoundary } from '@/components/States';
 import { StatusBadge } from '@/components/StatusBadge';
 import { shortChecksum, formatDate } from '@/lib/format';
@@ -15,7 +15,7 @@ interface ConflictRecord {
   id: string; status: string; chunkIds: string[]; description?: string; projectIds: string[];
 }
 
-const TABS = ['Search', 'Documents', 'Stale', 'Conflicts'] as const;
+const TABS = ['Search', 'Documents', 'Stale', 'Conflicts', 'Quality'] as const;
 
 export function KnowledgePage() {
   const [tab, setTab] = useState<typeof TABS[number]>('Search');
@@ -41,6 +41,16 @@ export function KnowledgePage() {
     queryKey: ['knowledge-documents', 'conflicts'],
     queryFn: () => api.get<{ conflicts: ConflictRecord[] }>('/knowledge-documents/conflicts'),
     enabled: tab === 'Conflicts',
+  });
+  const quality = useQuery({
+    queryKey: ['knowledge-documents', 'quality-summary'],
+    queryFn: () => api.get<KnowledgeQualitySummary>('/knowledge-documents/quality-summary'),
+    enabled: tab === 'Quality',
+  });
+  const failedJobs = useQuery({
+    queryKey: ['knowledge-documents', 'ingestion-jobs', 'FAILED'],
+    queryFn: () => api.get<{ jobs: IngestionJobSummary[] }>('/knowledge-documents/ingestion-jobs?status=FAILED'),
+    enabled: tab === 'Quality',
   });
 
   function onSearch() {
@@ -117,6 +127,50 @@ export function KnowledgePage() {
           </ul>
         </DataBoundary>
       )}
+
+      {tab === 'Quality' && (
+        <DataBoundary isLoading={quality.isLoading} error={quality.error} isEmpty={false}>
+          {quality.data && (
+            <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <QualityStat label="Documents" value={quality.data.documents} />
+              <QualityStat label="Chunks" value={quality.data.chunks} />
+              <QualityStat label="Projects" value={quality.data.projects} />
+              <QualityStat label="Stale" value={quality.data.staleDocuments} />
+              <QualityStat label="Open conflicts" value={quality.data.openConflicts} />
+              <QualityStat label="Failed ingestion" value={quality.data.failedIngestion} />
+              <QualityStat label="Retryable" value={quality.data.retryableIngestion} />
+              <QualityStat label="Blocked" value={quality.data.blockedIngestion} />
+              <div className="col-span-2 flex items-center gap-2 rounded-lg border border-(--color-border) p-3 sm:col-span-4">
+                <span className="text-sm text-(--color-text-dim)">Index health</span>
+                <StatusBadge status={quality.data.indexHealth} />
+              </div>
+            </div>
+          )}
+          <h2 className="mb-2 text-sm font-medium text-(--color-text)">Failed ingestion</h2>
+          <DataBoundary isLoading={failedJobs.isLoading} error={failedJobs.error} isEmpty={(failedJobs.data?.jobs.length ?? 0) === 0} emptyTitle="No failed ingestion jobs.">
+            <ul className="space-y-2">
+              {(failedJobs.data?.jobs ?? []).map(j => (
+                <li key={j.id} className="rounded-lg border border-(--color-border) p-3">
+                  <div className="mb-1 flex items-center justify-between">
+                    <span className="font-mono text-xs text-(--color-text-faint)">{j.id}</span>
+                    <StatusBadge status={j.status} />
+                  </div>
+                  <p className="text-sm text-(--color-text-dim)">{j.errorCode ?? 'UNKNOWN_ERROR'}{j.safeError ? ` — ${j.safeError}` : ''}</p>
+                </li>
+              ))}
+            </ul>
+          </DataBoundary>
+        </DataBoundary>
+      )}
+    </div>
+  );
+}
+
+function QualityStat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-lg border border-(--color-border) p-3">
+      <p className="text-lg font-semibold text-(--color-text)">{value}</p>
+      <p className="text-xs text-(--color-text-faint)">{label}</p>
     </div>
   );
 }

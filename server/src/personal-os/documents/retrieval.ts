@@ -30,6 +30,13 @@ const RANK_WEIGHTS = {
   tagMatch: 0.5,
   /** More recently indexed content ranks slightly higher, all else equal. */
   recency: 0.3,
+  /** Phase 6E §9 — the query explicitly names a file (a token shaped like a path or
+   *  filename) and this chunk's document sourceUri contains that exact fragment. Larger
+   *  than exactPhrase: an explicit filename reference is a stronger, less ambiguous
+   *  signal than a phrase happening to appear in prose, and must win over content-only
+   *  matches — matching the Phase 4 explicit-path retrieval lesson this phase is
+   *  required to preserve. */
+  exactPathMatch: 6,
 } as const;
 
 const PENALTIES = {
@@ -74,11 +81,31 @@ export class KnowledgeRetrievalService {
   /** Structural search: validated query in, ranked chunks out. No embeddings. */
   search(rawQuery: unknown): RankedChunk[] {
     const query = validateKnowledgeQuery(rawQuery);
-    const candidates = this.store.searchChunks(query.text, {
+    const ftsCandidates = this.store.searchChunks(query.text, {
       projectIds: query.projectIds,
       includeStale: query.includeStale,
       limit: Math.min(query.limit * 5, 100),
     });
+
+    // Explicit filename/path reference: fetched independently of the FTS match, so a
+    // query that names a file still finds it even when the file's own prose never uses
+    // the query's other words — an FTS-only match would silently miss this entirely.
+    const pathFragment = extractPathFragment(query.text);
+    const pathCandidates: ChunkSearchResult[] = [];
+    if (pathFragment) {
+      const matchedDocs = this.store.findBySourceUriFragment(pathFragment, query.projectIds, query.includeStale);
+      for (const document of matchedDocs) {
+        for (const chunk of this.store.listChunks(document.id)) pathCandidates.push({ chunk, document, rank: 0 });
+      }
+    }
+
+    const seen = new Set<string>();
+    const candidates: ChunkSearchResult[] = [];
+    for (const c of [...ftsCandidates, ...pathCandidates]) {
+      if (seen.has(c.chunk.id)) continue;
+      seen.add(c.chunk.id);
+      candidates.push(c);
+    }
     if (!candidates.length) return [];
 
     const chunkIds = candidates.map(c => c.chunk.id);
@@ -86,7 +113,7 @@ export class KnowledgeRetrievalService {
     const queryTerms = query.text.toLowerCase().split(/\s+/).filter(t => t.length > 1 && !STOPWORDS.has(t));
     const now = Date.now();
 
-    const ranked = candidates.map(candidate => scoreCandidate(candidate, query.text, queryTerms, conflicted, now));
+    const ranked = candidates.map(candidate => scoreCandidate(candidate, query.text, queryTerms, conflicted, now, pathFragment));
     ranked.sort((a, b) => b.score - a.score || a.chunk.id.localeCompare(b.chunk.id));
 
     // A relevance floor, not just a count limit: padding a pack with the least-bad
@@ -99,6 +126,68 @@ export class KnowledgeRetrievalService {
     const topRaw = ranked[0]?.score ?? 0;
     const relevant = ranked.filter((r, i) => i === 0 || (topRaw - r.score) <= RELEVANCE_MARGIN);
     return normaliseScores(relevant).slice(0, query.limit);
+  }
+
+  /**
+   * Phase 6E §31 — operator-only read/debug visibility into how a query was scored.
+   * Never a user-facing answer override: this returns the same candidates `search()`
+   * would rank, plus the individual score components, so an operator can see *why* a
+   * result ranked where it did. Excerpts are truncated the same way a normal
+   * KnowledgePack truncates them — no secret-bearing raw content by default, and never
+   * a document's canonicalPath.
+   */
+  explainQuery(rawQuery: unknown): {
+    normalizedText: string;
+    queryTerms: string[];
+    projectIds: string[];
+    pathFragment: string | null;
+    candidates: Array<{
+      chunkId: string; documentId: string; sourceUri: string; score: number; isStale: boolean; isConflicted: boolean;
+      components: { bm25: number; exactPhrase: number; headingMatch: number; tagMatch: number; recency: number; exactPathMatch: number; stalePenalty: number; conflictPenalty: number };
+      excerpt: string;
+    }>;
+  } {
+    const query = validateKnowledgeQuery(rawQuery);
+    const ftsCandidates = this.store.searchChunks(query.text, {
+      projectIds: query.projectIds, includeStale: query.includeStale, limit: Math.min(query.limit * 5, 100),
+    });
+    const pathFragment = extractPathFragment(query.text);
+    const pathCandidates: ChunkSearchResult[] = [];
+    if (pathFragment) {
+      for (const document of this.store.findBySourceUriFragment(pathFragment, query.projectIds, query.includeStale)) {
+        for (const chunk of this.store.listChunks(document.id)) pathCandidates.push({ chunk, document, rank: 0 });
+      }
+    }
+    const seen = new Set<string>();
+    const candidates: ChunkSearchResult[] = [];
+    for (const c of [...ftsCandidates, ...pathCandidates]) {
+      if (seen.has(c.chunk.id)) continue;
+      seen.add(c.chunk.id);
+      candidates.push(c);
+    }
+
+    const chunkIds = candidates.map(c => c.chunk.id);
+    const conflicted = new Set(this.store.openConflictsForChunks(chunkIds).flatMap(c => c.chunkIds));
+    const queryTerms = query.text.toLowerCase().split(/\s+/).filter(t => t.length > 1 && !STOPWORDS.has(t));
+    const now = Date.now();
+
+    const explained = candidates.map(candidate => {
+      const components = scoreComponents(candidate, query.text, queryTerms, now, pathFragment);
+      const isStale = candidate.document.status === 'STALE';
+      const isConflicted = conflicted.has(candidate.chunk.id);
+      const stalePenalty = isStale ? PENALTIES.stale : 0;
+      const conflictPenalty = isConflicted ? PENALTIES.conflict : 0;
+      const score = components.bm25 + components.exactPhrase + components.headingMatch + components.tagMatch + components.recency + components.exactPathMatch - stalePenalty - conflictPenalty;
+      return {
+        chunkId: candidate.chunk.id, documentId: candidate.document.id, sourceUri: candidate.document.sourceUri,
+        score, isStale, isConflicted,
+        components: { ...components, stalePenalty, conflictPenalty },
+        excerpt: candidate.chunk.text.slice(0, 200),
+      };
+    });
+    explained.sort((a, b) => b.score - a.score || a.chunkId.localeCompare(b.chunkId));
+
+    return { normalizedText: query.text, queryTerms, projectIds: query.projectIds, pathFragment, candidates: explained };
   }
 
   /**
@@ -118,6 +207,7 @@ export class KnowledgeRetrievalService {
       warnings.push('results include STALE documents because includeStale was set');
     }
 
+    const unknownReason = ranked.length === 0 ? this.classifyUnknown(query) : null;
     if (!items.length) {
       items.push({ factType: 'UNKNOWN', statement: `no matching knowledge found for "${query.text}" in the requested project scope`, citations: [], score: 0, isStale: false });
     }
@@ -134,8 +224,26 @@ export class KnowledgeRetrievalService {
       conflicts,
       warnings,
       unknown: ranked.length === 0,
+      unknownReason,
     };
     return enforcePackByteBudget(pack);
+  }
+
+  /**
+   * Only called on the already-empty path, so the extra store reads never cost a
+   * successful query anything. PROJECT_NOT_INDEXED takes priority over STALE_ONLY: a
+   * project with zero documents of any status is a different situation from one whose
+   * only matches are stale, even if both happen to also have no ACTIVE match.
+   */
+  private classifyUnknown(query: KnowledgeQuery): 'PROJECT_NOT_INDEXED' | 'STALE_ONLY' | 'NO_SUPPORTED_ANSWER' {
+    const hasAnyDocument = this.store.listDocuments('ACTIVE', 500).some(d => d.projectIds.some(p => query.projectIds.includes(p)))
+      || this.store.listDocuments('STALE', 500).some(d => d.projectIds.some(p => query.projectIds.includes(p)));
+    if (!hasAnyDocument) return 'PROJECT_NOT_INDEXED';
+    if (!query.includeStale) {
+      const staleCandidates = this.store.searchChunks(query.text, { projectIds: query.projectIds, includeStale: true, limit: 1 });
+      if (staleCandidates.some(c => c.document.status === 'STALE')) return 'STALE_ONLY';
+    }
+    return 'NO_SUPPORTED_ANSWER';
   }
 }
 
@@ -157,10 +265,41 @@ function enforcePackByteBudget(pack: KnowledgePack): KnowledgePack {
 }
 
 function scoreCandidate(
-  candidate: ChunkSearchResult, queryText: string, queryTerms: string[], conflicted: Set<string>, now: number,
+  candidate: ChunkSearchResult, queryText: string, queryTerms: string[], conflicted: Set<string>, now: number, pathFragment: string | null = null,
 ): RankedChunk {
   const { chunk, document } = candidate;
-  const bm25Signal = Math.max(0, -candidate.rank) * RANK_WEIGHTS.bm25;
+  const components = scoreComponents(candidate, queryText, queryTerms, now, pathFragment);
+  const isStale = document.status === 'STALE';
+  const stalePenalty = isStale ? PENALTIES.stale : 0;
+  const conflictPenalty = conflicted.has(chunk.id) ? PENALTIES.conflict : 0;
+
+  const score = components.bm25 + components.exactPhrase + components.headingMatch + components.tagMatch + components.recency + components.exactPathMatch - stalePenalty - conflictPenalty;
+  return { chunk, document, score, isStale };
+}
+
+/** A whitespace-separated token shaped like a filename or path (contains a `/`, or ends
+ *  in a short alphabetic extension) — extracted from the RAW query text, before
+ *  stopword filtering, since a path fragment like "architecture.md" is not itself a
+ *  stopword but also carries no FTS-searchable prose meaning of its own. */
+function extractPathFragment(queryText: string): string | null {
+  const tokens = queryText.split(/\s+/).filter(Boolean);
+  for (const token of tokens) {
+    const cleaned = token.replace(/[.,;:!?]+$/, '');
+    if (cleaned.includes('/') || /\.[a-zA-Z]{1,6}$/.test(cleaned)) {
+      if (cleaned.length >= 4) return cleaned;
+    }
+  }
+  return null;
+}
+
+/** The additive-only signals, shared by scoreCandidate and explainQuery — stale/conflict
+ *  penalties are applied by the caller since they depend on the caller's own conflicted
+ *  set, not on anything about the candidate in isolation. */
+function scoreComponents(candidate: ChunkSearchResult, queryText: string, queryTerms: string[], now: number, pathFragment: string | null = null): {
+  bm25: number; exactPhrase: number; headingMatch: number; tagMatch: number; recency: number; exactPathMatch: number;
+} {
+  const { chunk, document } = candidate;
+  const bm25 = Math.max(0, -candidate.rank) * RANK_WEIGHTS.bm25;
 
   const normalizedChunk = chunk.normalizedText;
   const exactPhrase = queryText.length > 3 && normalizedChunk.includes(queryText.toLowerCase())
@@ -172,15 +311,13 @@ function scoreCandidate(
   const tagText = chunk.tags.join(' ').toLowerCase();
   const tagMatch = queryTerms.some(t => tagText.includes(t)) ? RANK_WEIGHTS.tagMatch : 0;
 
+  const exactPathMatch = pathFragment && document.sourceUri.toLowerCase().includes(pathFragment.toLowerCase())
+    ? RANK_WEIGHTS.exactPathMatch : 0;
+
   const ageDays = Math.max(0, (now - Date.parse(document.updatedAt || document.createdAt)) / 86_400_000);
   const recency = RANK_WEIGHTS.recency / (1 + ageDays / 30);
 
-  const isStale = document.status === 'STALE';
-  const stalePenalty = isStale ? PENALTIES.stale : 0;
-  const conflictPenalty = conflicted.has(chunk.id) ? PENALTIES.conflict : 0;
-
-  const score = bm25Signal + exactPhrase + headingMatch + tagMatch + recency - stalePenalty - conflictPenalty;
-  return { chunk, document, score, isStale };
+  return { bm25, exactPhrase, headingMatch, tagMatch, recency, exactPathMatch };
 }
 
 /** Min-max scales scores into [0,1] so KnowledgePackItem.score is comparable across queries. */
