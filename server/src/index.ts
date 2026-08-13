@@ -134,6 +134,7 @@ import ceoObjectiveRouter from './ceo-command-center';
 import { personalOsJsonParser, personalOsRouter } from './personal-os/router';
 import { intelligenceJsonParser, intelligenceRouter } from './intelligence/router';
 import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './personal-os/documents/router';
+import { simulationJsonParser, automationSimulationRouter } from './personal-os/automation-simulation/router';
 import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
 import { authorityRouter } from './authority-control-plane/router';
 import { operatorControlRouter } from './operator-control/router';
@@ -244,6 +245,7 @@ app.use('/api/command-center', delegationJsonParser, taskRuntimeJsonErrorHandler
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, authorityRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, operatorControlRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, evidenceRouter);
+app.use('/api/command-center', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, automationSimulationRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -258,6 +260,7 @@ app.use('/api', delegationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, 
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, authorityRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatorControlRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, evidenceRouter);
+app.use('/api', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, automationSimulationRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);
