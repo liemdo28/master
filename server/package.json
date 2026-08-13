@@ -19,7 +19,7 @@
     "test:public-routes": "tsx src/__tests__/public-route-order.test.ts",
     "test:tracked-credential-scan": "tsx src/__tests__/tracked-credential-scan.test.ts",
     "test:pm2-ecosystem-paths": "tsx src/__tests__/pm2-ecosystem-paths.test.ts",
-    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion && npm run test:knowledge-retrieval-security && npm run test:knowledge-index && npm run test:knowledge-citations && npm run test:knowledge-conflicts && npm run test:knowledge-retrieval-evaluation && npm run test:knowledge-index-backup && npm run test:daily-operating-security && npm run test:daily-operating-loop && npm run test:operating-migration && npm run test:daily-operating-evaluation && npm run test:public-routes && npm run test:tracked-credential-scan",
+    "test:ci": "npm run test:unit && npm run test:task-runtime && npm run test:project-registry && npm run test:coding && npm run test:agentic-coding && npm run test:knowledge && npm run test:memory-retrieval && npm run test:knowledge-security && npm run test:selfheal-probe && npm run test:connector-readonly && npm run test:external-content-security && npm run test:daily-agenda && npm run test:weekly-review && npm run test:follow-ups && npm run test:knowledge-migration && npm run test:document-security && npm run test:document-ingestion && npm run test:knowledge-retrieval-security && npm run test:knowledge-index && npm run test:knowledge-citations && npm run test:knowledge-conflicts && npm run test:knowledge-retrieval-evaluation && npm run test:knowledge-index-backup && npm run test:daily-operating-security && npm run test:daily-operating-loop && npm run test:operating-migration && npm run test:daily-operating-evaluation && npm run test:public-routes && npm run test:tracked-credential-scan && npm run test:automation-simulation && npm run test:automation-simulation-security && npm run test:automation-simulation-parity",
     "bigdata:up": "cd ../infra/bigdata && docker-compose up -d",
     "bigdata:down": "cd ../infra/bigdata && docker-compose down",
     "bigdata:health": "node ../scripts/bigdata-health-check.js",
@@ -125,7 +125,12 @@
     "test:evidence-redaction": "tsx src/evidence/__tests__/redaction.test.ts",
     "test:evidence-freshness": "tsx src/evidence/__tests__/freshness.test.ts",
     "evidence:evaluation": "tsx src/evidence/evidence-evaluation.ts",
-    "phase6d:acceptance": "npm run test:evidence-contract && npm run test:evidence-security && npm run test:evidence-conflicts && npm run test:evidence-redaction && npm run test:evidence-freshness && npm run evidence:evaluation && tsx src/evidence/phase6d-acceptance.ts"
+    "phase6d:acceptance": "npm run test:evidence-contract && npm run test:evidence-security && npm run test:evidence-conflicts && npm run test:evidence-redaction && npm run test:evidence-freshness && npm run evidence:evaluation && tsx src/evidence/phase6d-acceptance.ts",
+    "test:automation-simulation": "tsx src/personal-os/automation-simulation/__tests__/automation-simulation.test.ts",
+    "test:automation-simulation-security": "tsx src/personal-os/automation-simulation/__tests__/automation-simulation-security.test.ts",
+    "test:automation-simulation-parity": "tsx src/personal-os/automation-simulation/__tests__/automation-simulation-parity.test.ts",
+    "automation-simulation:evaluation": "tsx src/personal-os/automation-simulation/simulation-evaluation.ts",
+    "phase6f:acceptance": "npm run test:automation-simulation && npm run test:automation-simulation-security && npm run test:automation-simulation-parity && npm run automation-simulation:evaluation && tsx src/personal-os/automation-simulation/phase6f-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",
