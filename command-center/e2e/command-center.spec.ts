@@ -193,4 +193,52 @@ test.describe('Command Center — full flow against a controlled fixture backend
     expect(serializedActions).not.toContain('GMAIL_SEND');
     expect(serializedActions).not.toContain('FORBIDDEN_EXTERNAL_ACTION');
   });
+
+  test('Phase 6F: Simulation runs against the real simulator with zero live mutation and no execution controls', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    const loginRes = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await loginRes.json();
+    const auth = { Authorization: `Bearer ${token}` };
+
+    // Snapshot the real governance state before running any simulation.
+    const actionsBefore = await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth });
+    const governanceBefore = await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: auth });
+
+    await page.getByRole('link', { name: 'Simulation' }).click();
+    await expect(page).toHaveURL(/\/simulation$/);
+    await expect(page.getByText('SIMULATION — NO LIVE SIDE EFFECTS')).toBeVisible();
+
+    // Default form step: a CALENDAR_EVENT_PROPOSAL, SUCCESS scenario — the real
+    // default policy requires STANDARD approval for it, so this exercises the
+    // policy/approval/side-effect-preview inspection flow without any manual
+    // configuration.
+    await page.getByRole('button', { name: 'Run Simulation' }).click();
+    await expect(page.getByText(/policy REQUIRE_APPROVAL/)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/approval STANDARD/)).toBeVisible();
+    await expect(page.getByText(/expected provider effect \(hypothetical\)/)).toBeVisible();
+    await expect(page.getByText('WOULD_REQUIRE_APPROVAL').first()).toBeVisible();
+
+    // Configure a kill-switch what-if and re-run — inspect the blocked state.
+    await page.getByLabel('Kill switch (GLOBAL)').check();
+    await page.getByRole('button', { name: 'Run Simulation' }).click();
+    await expect(page.getByText('WOULD_BLOCK').first()).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/Kill switch WOULD block this action/)).toBeVisible();
+
+    // No execution-shaped control anywhere on the Simulation page.
+    for (const forbidden of [/^execute/i, /^send$/i, /^approve/i, /^deploy$/i, /create event/i, /apply simulation/i, /use result/i, /^force$/i, /^bypass$/i]) {
+      await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
+    }
+
+    // Zero live mutation: the real governance state is unchanged after running
+    // simulations, including one that hit an approval-required, WOULD-execute-shaped
+    // path.
+    const actionsAfter = await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth });
+    const governanceAfter = await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: auth });
+    expect(await actionsAfter.json()).toEqual(await actionsBefore.json());
+    expect(await governanceAfter.json()).toEqual(await governanceBefore.json());
+  });
 });

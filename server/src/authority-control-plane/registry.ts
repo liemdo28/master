@@ -83,6 +83,12 @@ export const AUTHORITY_RULES: Rule[] = [
     authorityClass: 'CANONICAL_GOVERNED_ORCHESTRATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'GovernedOrchestrationService', auth: 'STRICT_API_KEY', capability: 'governed action plan DAG',
     approvalRequired: true, governanceRequired: true, delegationEligible: true, evidence: ['server/src/personal-os/orchestration/router.ts'],
   }),
+  rule('automation-simulation', /^\/api\/(command-center\/)?simulation(\/.*)?$/, {
+    authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'AutomationSimulationService', auth: 'STRICT_API_KEY',
+    capability: 'governed automation simulation — answers "what WOULD happen"; zero real external side effect, zero execution-ledger/budget/delegation mutation; results are ephemeral, in-process, never persisted',
+    governanceRequired: false, approvalRequired: false, delegationEligible: false,
+    evidence: ['server/src/personal-os/automation-simulation/router.ts', 'server/src/personal-os/automation-simulation/service.ts'],
+  }),
   rule('delegation', /^\/api\/(command-center\/)?delegations(\/.*)?$/, {
     authorityClass: 'CANONICAL_DELEGATED_AUTHORITY', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'DelegationService', auth: 'STRICT_API_KEY', capability: 'bounded delegated authority',
     approvalRequired: true, governanceRequired: true, delegationEligible: false, evidence: ['server/src/personal-os/delegation/router.ts'],

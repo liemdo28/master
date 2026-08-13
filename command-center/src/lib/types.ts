@@ -921,3 +921,94 @@ export interface DailyAuditDigest {
   staleEvidenceCount: number;
   significantEvents: EvidenceRecord[];
 }
+
+// Phase 6F — Governed Automation Simulation. Never a live status: SIMULATED runs
+// answer "what WOULD happen", they never appear in real execution/approval/budget
+// counts. See docs/security/PHASE6F_SIMULATION_BOUNDARY.md.
+export type SimulationOutcome =
+  | 'SIMULATED' | 'WOULD_EXECUTE' | 'WOULD_REQUIRE_APPROVAL' | 'WOULD_BLOCK'
+  | 'WOULD_FAIL' | 'UNCERTAIN' | 'INVALID';
+
+export type FakeProviderScenario =
+  | 'SUCCESS' | 'VALIDATION_ERROR' | 'TIMEOUT' | 'RATE_LIMIT' | 'UNAVAILABLE'
+  | 'AMBIGUOUS_RESULT' | 'PARTIAL_FAILURE';
+
+export type DelegationOverrideScenario =
+  | 'NONE' | 'VALID' | 'EXPIRED' | 'REVOKED' | 'QUOTA_EXHAUSTED' | 'WRONG_PROJECT'
+  | 'WRONG_ACTION' | 'WRONG_TARGET' | 'RISK_ABOVE_CEILING' | 'POLICY_CHANGED';
+
+export type SimulationStepType = 'READ_ONLY' | 'LOCAL_COMPUTE' | 'CONTROLLED_ACTION';
+export type SimulationKind = 'EXISTING_PLAN_SNAPSHOT' | 'PROPOSED_PLAN' | 'SINGLE_PROPOSAL' | 'DELEGATED_CANDIDATE' | 'POLICY_WHAT_IF';
+
+export interface SimulationStepInput {
+  key: string;
+  type: SimulationStepType;
+  description: string;
+  dependsOnKeys?: string[];
+  projectId?: string | null;
+  actionType?: string | null;
+  actionPayload?: Record<string, unknown> | null;
+  forbiddenCandidate?: boolean;
+  legacyQuarantinedSurfaceId?: string | null;
+  providerScenario?: FakeProviderScenario;
+  killSwitchOverrides?: Array<{ scope: 'GLOBAL' | 'PROJECT' | 'ACTION_TYPE'; projectId?: string | null; actionType?: string | null; reason: string }>;
+  budgetOverrides?: Array<{ actionType: string; projectId: string | null; maxExecutions: number; usedExecutions: number; maxExternalTargets: number; usedExternalTargets: number }>;
+  delegationOverride?: { scenario: DelegationOverrideScenario } | null;
+  concurrentCandidateCount?: number;
+}
+
+export interface SimulationInput {
+  kind: SimulationKind;
+  projectId: string | null;
+  steps: SimulationStepInput[];
+}
+
+export interface FakeProviderResult {
+  scenario: FakeProviderScenario;
+  simulatedObjectId: string | null;
+  responseSummary: Record<string, unknown>;
+  reconciliationRequired: boolean;
+}
+
+export interface SimulationStepResult {
+  stepId: string;
+  type: SimulationStepType;
+  dependencies: string[];
+  authoritySurface: string | null;
+  canonicalOwner: string | null;
+  actionType: string | null;
+  targetSummary: string;
+  riskClass: ActionRiskClass | null;
+  policyDecision: PolicyDecisionResult | null;
+  approvalRequirement: ApprovalLevel | null;
+  delegationDecision: { eligible: boolean; reasons: string[] } | null;
+  budgetDecision: { blocked: boolean; remainingExecutions: number | null; reason: string | null } | null;
+  killSwitchDecision: { blocked: boolean } | null;
+  expectedProviderEffect: FakeProviderResult | null;
+  result: SimulationOutcome;
+  reason: string;
+  evidenceRefs: string[];
+  reversibility: 'REVERSIBLE' | 'IRREVERSIBLE' | 'UNKNOWN';
+}
+
+export interface SimulationRun {
+  simulationId: string;
+  inputHash: string;
+  engineVersion: string;
+  createdAt: string;
+  simulatedAt: string;
+  projectId: string | null;
+  policyVersion: string | null;
+  policyHash: string | null;
+  overallOutcome: SimulationOutcome;
+  steps: SimulationStepResult[];
+  approvalCount: number;
+  sideEffectCount: number;
+  blockedCount: number;
+  uncertainCount: number;
+  evidenceRefs: string[];
+  assumptions: string[];
+  facts: string[];
+  unknowns: string[];
+  warnings: string[];
+}
