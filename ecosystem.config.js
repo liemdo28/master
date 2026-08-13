@@ -1,6 +1,10 @@
 /**
  * PM2 Ecosystem — Mi-Core Production
- * Manages: Mi-Core Server + Python AI Service + Node Agent
+ * Manages: Mi-Core Server + Python AI Service + Node Agent + Accounting Engine +
+ * CEO Observer + WhatsApp Gateway + n8n Execution Bus + QuickBooks Ops Agent
+ *
+ * All paths are __dirname-relative — this file must be runnable from any
+ * checkout location without edits (see codex/hotfix-production-f-drive-runtime).
  *
  * Usage:
  *   pm2 start ecosystem.config.js          — start all
@@ -16,7 +20,7 @@ module.exports = {
     {
       name: 'mi-accounting',
       script: 'api/server.js',
-      cwd: 'E:/Project/Master/mi-core/services/accounting-engine',
+      cwd: __dirname + '/services/accounting-engine',
       instances: 1,
       exec_mode: 'fork',
       autorestart: true,
@@ -27,8 +31,8 @@ module.exports = {
         NODE_ENV: 'development',
         ACCOUNTING_API_PORT: '8844',
       },
-      error_file: 'E:/Project/Master/.local-agent-global/logs/accounting-error.log',
-      out_file:   'E:/Project/Master/.local-agent-global/logs/accounting-out.log',
+      error_file: __dirname + '/.local-agent-global/logs/accounting-error.log',
+      out_file:   __dirname + '/.local-agent-global/logs/accounting-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       merge_logs: true,
     },
@@ -37,7 +41,7 @@ module.exports = {
     {
       name: 'mi-ceo-observer',
       script: 'src/index.js',
-      cwd: 'E:/Project/Master/mi-core/services/mi-ceo-observer',
+      cwd: __dirname + '/services/mi-ceo-observer',
       instances: 1,
       exec_mode: 'fork',
       autorestart: true,
@@ -46,18 +50,18 @@ module.exports = {
       restart_delay: 15000,
       env: {
         NODE_ENV: 'development',
-        CEO_SESSION_ROOT: 'E:/Project/Master/mi-core/services/mi-ceo-observer/data/ceo-session',
+        CEO_SESSION_ROOT: __dirname + '/services/mi-ceo-observer/data/ceo-session',
         CEO_CLIENT_ID: 'mi-ceo-observer',
         OBSERVER_PORT: '3212',
         MI_CORE_URL: 'http://127.0.0.1:4001',
         WHATSAPP_HEADLESS: 'true',
-        LOG_DIR: 'E:/Project/Master/mi-core/services/mi-ceo-observer/logs',
+        LOG_DIR: __dirname + '/services/mi-ceo-observer/logs',
         TASK_DETECTION_SENSITIVITY: '2',
         OBSERVE_PRIVATE_CHATS: 'true',
         OBSERVE_GROUPS: 'true',
       },
-      error_file: 'E:/Project/Master/.local-agent-global/logs/ceo-observer-error.log',
-      out_file:   'E:/Project/Master/.local-agent-global/logs/ceo-observer-out.log',
+      error_file: __dirname + '/.local-agent-global/logs/ceo-observer-error.log',
+      out_file:   __dirname + '/.local-agent-global/logs/ceo-observer-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       merge_logs: true,
     },
@@ -124,7 +128,7 @@ module.exports = {
     {
       name: 'mi-whatsapp-gateway',
       script: 'src/index.js',
-      cwd: 'E:/Project/Master/mi-core/services/whatsapp-ai-gateway',
+      cwd: __dirname + '/services/whatsapp-ai-gateway',
       instances: 1,
       exec_mode: 'fork',
       autorestart: true,
@@ -140,7 +144,7 @@ module.exports = {
         WHATSAPP_HEADLESS: 'true',
         AUTO_RECONNECT: 'true',
         MI_CORE_URL: 'http://127.0.0.1:4001',
-        WHATSAPP_SESSION_ROOT: 'E:/Project/Master/mi-core/services/whatsapp-ai-gateway/data/whatsapp',
+        WHATSAPP_SESSION_ROOT: __dirname + '/services/whatsapp-ai-gateway/data/whatsapp',
       },
       env_production: {
         NODE_ENV: 'production',
@@ -148,10 +152,46 @@ module.exports = {
         WHATSAPP_HEADLESS: 'true',
         AUTO_RECONNECT: 'true',
         MI_CORE_URL: 'http://127.0.0.1:4001',
-        WHATSAPP_SESSION_ROOT: 'E:/Project/Master/mi-core/services/whatsapp-ai-gateway/data/whatsapp',
+        WHATSAPP_SESSION_ROOT: __dirname + '/services/whatsapp-ai-gateway/data/whatsapp',
       },
-      error_file: 'E:/Project/Master/mi-core/services/whatsapp-ai-gateway/logs/pm2-err.log',
-      out_file:   'E:/Project/Master/mi-core/services/whatsapp-ai-gateway/logs/pm2-out.log',
+      error_file: __dirname + '/services/whatsapp-ai-gateway/logs/pm2-err.log',
+      out_file:   __dirname + '/services/whatsapp-ai-gateway/logs/pm2-out.log',
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
+      merge_logs: true,
+    },
+
+    // ── QuickBooks Ops Agent (heartbeat + workflow polling; SOAP sub-component
+    //    is a known pre-existing gap — see PHASE_FDRIVE_HOTFIX_RUNBOOK.md) ─────
+    {
+      name: 'qb-ops-agent',
+      script: 'dist/index.js',
+      cwd: __dirname + '/services/qb-ops-agent',
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '256M',
+      restart_delay: 10000,
+      max_restarts: 20,
+      min_uptime: 10000,
+      env: {
+        NODE_ENV: 'development',
+        AGENT_ENV: 'development',
+        AGENT_NAME: 'qb-laptop-01',
+        MI_CORE_URL: 'http://127.0.0.1:4001',
+        LOCAL_DB_PATH: __dirname + '/services/qb-ops-agent/data/qb-agent.db',
+        LOG_DIR: __dirname + '/services/qb-ops-agent/logs',
+      },
+      env_production: {
+        NODE_ENV: 'production',
+        AGENT_ENV: 'production',
+        AGENT_NAME: 'qb-laptop-01',
+        MI_CORE_URL: 'http://127.0.0.1:4001',
+        LOCAL_DB_PATH: __dirname + '/services/qb-ops-agent/data/qb-agent.db',
+        LOG_DIR: __dirname + '/services/qb-ops-agent/logs',
+      },
+      error_file: __dirname + '/.local-agent-global/logs/qb-ops-agent-error.log',
+      out_file:   __dirname + '/.local-agent-global/logs/qb-ops-agent-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       merge_logs: true,
     },

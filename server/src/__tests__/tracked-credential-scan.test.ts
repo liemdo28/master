@@ -15,7 +15,10 @@ const REPO_ROOT = path.join(__dirname, '..', '..', '..');
 
 function isTracked(relPath: string): boolean {
   try {
-    const out = execFileSync('git', ['ls-files', '--error-unmatch', relPath], {
+    // -c safe.directory=REPO_ROOT is a per-invocation override, never a persistent
+    // config change: some filesystems don't record ownership, which makes git
+    // refuse to run at all in that repo unless the caller passes this override.
+    const out = execFileSync('git', ['-c', `safe.directory=${REPO_ROOT}`, 'ls-files', '--error-unmatch', relPath], {
       cwd: REPO_ROOT,
       stdio: ['ignore', 'pipe', 'ignore'],
     });
