@@ -21,8 +21,11 @@ export type FakeProviderScenario =
   | 'SUCCESS' | 'VALIDATION_ERROR' | 'TIMEOUT' | 'RATE_LIMIT' | 'UNAVAILABLE'
   | 'AMBIGUOUS_RESULT' | 'PARTIAL_FAILURE';
 
-/** A branded marker only this module's own fake-providers.ts can construct — see
- *  fake-providers.ts's header comment for why this exists (§33 hard boundary). */
+/** An internal convention marker, minted only by fake-providers.ts's own
+ *  mintSimulationCapabilityToken(). Not a TypeScript-enforced impossibility —
+ *  structural typing means another file could construct a matching object literal —
+ *  see fake-providers.ts's comment on mintSimulationCapabilityToken() for where the
+ *  actual zero-real-dispatch guarantee comes from (§33). */
 export interface SimulationCapabilityToken {
   readonly __simulationOnly: true;
 }

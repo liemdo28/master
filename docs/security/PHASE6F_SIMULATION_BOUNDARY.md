@@ -20,12 +20,16 @@ codebase enforces the boundary structurally instead:
    private methods on `ControlledActionService` in `actions/service.ts`) are never
    called from anywhere in `automation-simulation/`.
 2. **A capability token, not a boolean.** `fake-providers.ts` mints a
-   `SimulationCapabilityToken` (`{ readonly __simulationOnly: true }`) that only its
-   own module can construct, and `runFakeProvider()` requires one as its first
-   argument. This is a type-level proof: nothing outside `fake-providers.ts` can
-   satisfy that parameter, so there is no code path — accidental or otherwise —
-   that reaches the fake provider without having gone through the one module that
-   is itself proven to import nothing real.
+   `SimulationCapabilityToken` (`{ readonly __simulationOnly: true }`), and
+   `runFakeProvider()` requires one as its first argument. This is an internal
+   convention/guard, not a TypeScript-enforced impossibility — structural typing
+   means another file could construct a matching object literal by hand. The
+   guarantee does not rest on the token being unforgeable: it comes from
+   `fake-providers.ts` itself being proven, by the import-graph scan below, to
+   import nothing real, and from the security/parity/evaluation tests proving zero
+   real side effects across many runs regardless of who calls it. The token's job
+   is to make accidental misuse loud and deliberate, not to be a hard compiler
+   boundary.
 3. **Read-only governance access.** `AutomationSimulationService` imports
    `ControlledActionService` for exactly one reason: to get a correctly-bootstrapped
    `.policyEngine` (real policy/risk/kill-switch/budget evaluators) against a

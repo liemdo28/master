@@ -101,8 +101,12 @@ identical input always produces an identical `sim-gmail-draft-…` /
 
 A `SimulationCapabilityToken` (`{ readonly __simulationOnly: true }`) is minted only
 inside `fake-providers.ts` and required as the first argument to
-`runFakeProvider()` — a type-level proof, not just a runtime flag, that the fake
-provider path cannot be satisfied by anything outside this module (§33).
+`runFakeProvider()`. This is an internal convention/guard, not a
+TypeScript-enforced impossibility (structural typing means another file could
+construct a matching literal) — the actual zero-real-dispatch guarantee comes
+from `fake-providers.ts` itself importing nothing real (verified by the
+import-graph scan) plus the tests proving zero real side effects across many
+runs, not from the token being unforgeable (§33).
 
 ## Persistence (§7/§43)
 

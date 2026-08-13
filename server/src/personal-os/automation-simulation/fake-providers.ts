@@ -14,9 +14,12 @@ import { createHash } from 'crypto';
 import type { ActionType } from '../actions/types';
 import type { FakeProviderResult, FakeProviderScenario, SimulationCapabilityToken } from './types';
 
-/** The only place this token is minted. Nothing outside this file can construct one,
- *  so `runFakeProvider` cannot be satisfied by accident from a real provider module —
- *  it is a type-level proof, not just a runtime flag (§33). */
+/** Minted only here, by convention. TypeScript's structural typing does not make this
+ *  the only place capable of constructing a matching object literal — it is an
+ *  internal guard, not a compiler-enforced impossibility. The actual zero-real-dispatch
+ *  guarantee comes from `fake-providers.ts` itself being proven (import-graph scan) to
+ *  import nothing real, plus the security/parity/evaluation tests proving zero real
+ *  side effects across many runs, regardless of how a caller obtained a token (§33). */
 export function mintSimulationCapabilityToken(): SimulationCapabilityToken {
   return { __simulationOnly: true };
 }
