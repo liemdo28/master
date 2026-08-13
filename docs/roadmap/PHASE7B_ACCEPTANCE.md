@@ -119,6 +119,35 @@ disabled and disconnected-connector misclassification proofs.
 based `probeIntentionallyDisabled()` behavior, `probeCore()` determinism, and
 the two evaluation-caught bug regressions.
 
+## Independent review finding (fixed)
+
+A fresh independent review of PR #101 (no prior context, verified every claim
+against the actual code and by re-running the commands itself rather than
+trusting the PR description) found one real, non-blocking issue: the
+regenerated authority manifest labeled `/api/health/detail` and
+`/api/health/dependencies` as `authenticationRequired: "PUBLIC_READ"`, even
+though both are actually gated by `requireRemoteAuth`/`requireTaskRuntimeAuth`
+(confirmed live — unauthenticated requests get `401`). Root cause:
+`authority-control-plane/registry.ts`'s pre-existing `public-read` rule used
+a wildcard pattern (`/^\/api\/(health|...)(\/.*)?$/`) written when
+`/api/health` had no subpaths; Phase 7B's new authenticated subpaths
+incidentally matched it. Not a live security hole (real auth was correctly
+enforced throughout), but the authority manifest is this program's canonical
+governance-validity artifact and was factually wrong about these two routes'
+classification. Fixed by adding a specific `health-detail` rule (ordered
+before `public-read`, `auth: 'STRICT_API_KEY'`, matching the same
+`STRICT_API_KEY`-for-dual-mounted-routes convention already used by the
+`automation-simulation` rule) and narrowing `public-read`'s health pattern to
+an exact match on bare `/api/health` only. Manifest re-verified after the fix:
+`/api/health/detail`/`/api/health/dependencies` → `STRICT_API_KEY`,
+`/api/command-center/health/detail`/`/api/command-center/health/dependencies`
+→ `REMOTE_SESSION`, bare `/api/health` → `PUBLIC_READ` (unchanged). Counts
+unchanged (`unknownMutations=0`, `unresolvedLegacyMutations=0`,
+`mutations=400`) — a classification-accuracy fix, not an authority change.
+`phase7a-authority-source-provenance`, `phase6a:acceptance`, and
+`phase6b:acceptance` (which also exercise `registry.ts`) all re-run clean
+after the change.
+
 ## Full regression
 
 - `npm run build` (server): clean.
