@@ -96,18 +96,64 @@ reversibility metadata. All passing.
 
 ## Build
 
-`npx tsc --noEmit` clean in `server/` after every commit on this branch.
+`npx tsc --noEmit` clean in `server/` and `command-center/` (`tsc -b && vite build`)
+after every commit on this branch.
+
+## Command Center
+
+`/simulation` page built and verified: `command-center` production build succeeds,
+both existing command-center suites pass unaffected (`test:command-center` 18/18,
+`test:command-center-security` 20/20), and the 4-test Playwright E2E suite
+(`test:command-center-e2e`) passes 4/4.
+
+## Full regression
+
+- `npm ci` (root, server, command-center) — clean.
+- Root `npm run build` (server `tsc` + command-center `tsc -b && vite build`) — clean.
+- `npx tsc --noEmit` (server) — clean.
+- Root `npm run test:ci` (server's full `test:ci`, including the new
+  `test:automation-simulation(-security|-parity)`) — clean, exit code 0.
+- Phase 5A, 5B, 5C, 5D2, 5D3, 5F, 5G, 5H, 5I, 6A, 6B, 6C, 6D, 6E acceptance scripts
+  — all PASS.
+- `agentic-coding:acceptance` — the fixture-based checks pass; the Ollama-dependent
+  real-world-certification pilot fixtures report `MODEL_UNAVAILABLE` (`ollama
+  unreachable at http://127.0.0.1:11434`) — a pre-existing environmental
+  dependency (no local Ollama service running on this machine), not a Phase 6F
+  regression and not something this phase's scope covers.
+- `npm run authority:manifest` / `authority:manifest:check` — clean:
+  `unknownMutations=0`, `unresolvedLegacyMutations=0`. New rule added for
+  `/api/(command-center/)?simulation/*` (`CANONICAL_LOCAL_MUTATION` /
+  `LOCAL_REVERSIBLE`, governance/approval/delegation all `false`).
+- §46 hygiene scans on the branch diff — clean: no conflict markers, no new
+  hardcoded `D:\`/`E:\` paths, no `.db`/`.sqlite` artifacts added, no `dist/`
+  output committed, no `child_process`/`exec`/`spawn` in
+  `automation-simulation/`.
+
+### Two pre-existing bugs found and fixed (not introduced by this phase)
+
+Both are the same root cause, surfaced only because this repository now runs from
+a filesystem that doesn't record ownership: code that shelled out to plain `git`
+with no `safe.directory` override silently failed closed (git refuses to run
+at all — "dubious ownership"), which the calling code's try/catch swallowed into
+a `null`/`false` result.
+
+1. `server/src/project-registry/service.ts`'s `gitOutput()` — caused
+   `registry-guard.test.ts`'s `sourceSha` assertion to fail.
+2. `server/src/__tests__/tracked-credential-scan.test.ts`'s `isTracked()` — caused
+   the "keys.example.json should remain tracked" assertion to fail.
+
+Fixed identically in both: pass `-c safe.directory=<repoRoot>` as a
+per-invocation git argument (never a persistent config change — matches the
+project's existing "never touch global git config" discipline).
+
+Also fixed, same drive-migration class of bug but unrelated to git ownership:
+`server/src/knowledge/reference-brain-path.ts`'s `getMiCoreRoot()` and
+`registry-guard.test.ts`'s own `repoRoot` computation both assumed a
+`<root>/server/package.json` nested-monorepo layout; both now detect nested vs.
+flattened-deploy-snapshot layouts.
 
 ## Still pending before merge
 
-- Command Center UI build/type-check verification (`command-center/` — in
-  progress).
-- `package.json` script wiring for the new test/eval/acceptance commands.
-- Authority manifest regeneration to reflect the two new simulation routes.
-- Full regression (`npm ci`, root `npm run build`, `npx tsc --noEmit`,
-  `npm run test:ci`, Phase 5A–5I, Phase 6A–6F, Agentic Coding, Command Center
-  unit/security/E2E).
-- Hygiene scans (§46).
 - PR open, independent review, merge, deploy, live production acceptance,
   closure docs — none of which proceed without explicit confirmation per this
   program's standing instruction.
