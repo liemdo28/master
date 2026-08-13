@@ -244,7 +244,10 @@ function createFixtureProject(root: string, name: string, slowTest = false): str
   fs.writeFileSync(path.join(root, 'server', 'package.json'), JSON.stringify({
     scripts: {
       build: 'node -e "process.exit(0)"',
-      'test:coding': slowTest ? 'node -e "setTimeout(()=>process.exit(0), 10000)"' : 'node -e "process.exit(0)"',
+      // Blocks forever instead of racing a fixed timer against the test's cancel
+      // call — it can only end via cancellation-triggered kill, so the test is
+      // deterministic regardless of how slow/loaded the runner is.
+      'test:coding': slowTest ? 'node -e "setInterval(()=>{}, 1000)"' : 'node -e "process.exit(0)"',
     },
   }, null, 2));
   fs.writeFileSync(path.join(root, 'server', 'src', 'routes', 'coding.ts'), [

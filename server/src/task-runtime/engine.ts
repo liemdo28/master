@@ -319,6 +319,15 @@ export class TaskEngine {
 
   completeTask(taskId: string, resultSummary: string): TaskRecord {
     const task = this.mustGetTask(taskId);
+    if (task.status === 'CANCELLED') {
+      // A concurrent cancelTask() can land while a worker is mid-flight (e.g.
+      // finishing validation/review/commit) and win the race. That cancellation
+      // is authoritative, so a completion callback arriving after it is stale —
+      // log and no-op instead of throwing, since this is expected under
+      // concurrent execution, not a state-machine bug.
+      this.store.appendEvent(taskId, 'task.completion.ignored_after_cancel', { resultSummary });
+      return task;
+    }
     const allowed = ALLOWED_TRANSITIONS[task.status] ?? [];
     if (!allowed.includes('COMPLETED')) {
       throw new Error(`Illegal transition for task ${taskId}: ${task.status} -> COMPLETED. Allowed: [${allowed.join(', ')}]`);
