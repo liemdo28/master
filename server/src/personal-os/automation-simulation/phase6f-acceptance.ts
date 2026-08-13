@@ -4,13 +4,51 @@
  * that same code rather than re-implementing it — one canonical proof per point.
  */
 import assert from 'assert';
+import * as path from 'path';
 import { AutomationSimulationService } from './service';
 import { riskForAction } from '../actions/policy';
+import { generateAuthorityManifest } from '../../authority-control-plane/scanner';
+import { resolveAuthorityRepoRoot } from '../../authority-control-plane/source-provenance';
 import { runSimulationEvaluation } from './simulation-evaluation';
+
+const EXECUTE_SURFACE_ID = 'http:POST:/api/actions/:id/execute';
 
 interface Point { n: number; label: string; ok: boolean; detail: string; }
 
 const PAYLOAD = { title: 'x', start: '2026-08-13T10:00:00Z', end: '2026-08-13T10:30:00Z', timezone: 'UTC' };
+
+function percentile(values: number[], p: number): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.floor((p / 100) * sorted.length))];
+}
+
+/** §43 — per-plan-size performance, not just the 500-scenario batch aggregate.
+ *  Each size is a single-chain plan (each step depends on the previous) with a
+ *  CONTROLLED_ACTION leaf so a real policy/risk/authority evaluation happens on
+ *  every run, not just DAG bookkeeping. Run REPS times per size for a stable p50/p95. */
+async function measurePlanSizePerformance(sim: AutomationSimulationService) {
+  const REPS = 10;
+  const sizes = [1, 10, 50, 100];
+  const results: Record<string, { p50Ms: number; p95Ms: number; reps: number }> = {};
+  for (const size of sizes) {
+    const steps = Array.from({ length: size }, (_, i) => ({
+      key: `s${i}`, type: 'READ_ONLY' as const, description: `perf step ${i}`,
+      dependsOnKeys: i > 0 ? [`s${i - 1}`] : [],
+    }));
+    steps[steps.length - 1] = {
+      ...steps[steps.length - 1], type: 'CONTROLLED_ACTION' as any, actionType: 'CALENDAR_EVENT_PROPOSAL',
+      actionPayload: PAYLOAD, delegationOverride: { scenario: 'VALID' },
+    } as any;
+    const latencies: number[] = [];
+    for (let i = 0; i < REPS; i++) {
+      const t0 = Date.now();
+      await sim.run({ kind: 'PROPOSED_PLAN', projectId: 'perf', steps: steps as any });
+      latencies.push(Date.now() - t0);
+    }
+    results[`${size}-step`] = { p50Ms: percentile(latencies, 50), p95Ms: percentile(latencies, 95), reps: REPS };
+  }
+  return results;
+}
 
 async function main(): Promise<void> {
   const points: Point[] = [];
@@ -65,6 +103,33 @@ async function main(): Promise<void> {
         budgetOverrides: [{ actionType: 'CALENDAR_EVENT_PROPOSAL', projectId: null, maxExecutions: 1, usedExecutions: 1, maxExternalTargets: 10, usedExternalTargets: 0 }] }],
     });
     check(7, 'budget what-if', r.steps[0].result === 'WOULD_BLOCK' && r.steps[0].policyDecision === 'BLOCK_BUDGET', `result=${r.steps[0].result}, policyDecision=${r.steps[0].policyDecision}`);
+  }
+
+  // authority parity (explicit point in the re-issued §41 list) — the simulated
+  // authoritySurface/canonicalOwner must match the real, current authority manifest
+  // exactly, never an invented value. Cross-checked at 30/30 (100%) in
+  // automation-simulation-parity.test.ts; re-verified directly here too.
+  {
+    const repoRoot = resolveAuthorityRepoRoot(path.resolve(__dirname, '../../..'));
+    const manifest = generateAuthorityManifest(repoRoot);
+    const liveSurface = manifest.surfaces.find(s => s.id === EXECUTE_SURFACE_ID);
+    const r = await sim.run({ kind: 'SINGLE_PROPOSAL', projectId: 'acc', steps: [{ key: 'a', type: 'CONTROLLED_ACTION', description: 'x', actionType: 'CALENDAR_EVENT_PROPOSAL', actionPayload: PAYLOAD }] });
+    const match = !!liveSurface && r.steps[0].authoritySurface === liveSurface.id && r.steps[0].canonicalOwner === liveSurface.canonicalOwner;
+    check(21, 'authority parity', match, `manifest=${liveSurface?.id}/${liveSurface?.canonicalOwner}, simulated=${r.steps[0].authoritySurface}/${r.steps[0].canonicalOwner}`);
+  }
+
+  // provider timeout (explicit point in the re-issued §41 list, distinct from
+  // ambiguous result at point 13) — TIMEOUT is flagged reconciliationRequired, like
+  // AMBIGUOUS_RESULT, but is a materially different real-world failure mode
+  // (no response at all vs. a response that may have been lost) and the directive
+  // calls it out as its own scenario to prove.
+  {
+    const r = await sim.run({
+      kind: 'DELEGATED_CANDIDATE', projectId: 'acc',
+      steps: [{ key: 'a', type: 'CONTROLLED_ACTION', description: 'x', actionType: 'CALENDAR_EVENT_PROPOSAL', actionPayload: PAYLOAD, providerScenario: 'TIMEOUT', delegationOverride: { scenario: 'VALID' } }],
+    });
+    check(22, 'provider timeout', r.steps[0].result === 'UNCERTAIN' && r.steps[0].expectedProviderEffect?.reconciliationRequired === true,
+      `result=${r.steps[0].result}, reconciliationRequired=${r.steps[0].expectedProviderEffect?.reconciliationRequired}`);
   }
 
   // 8: kill-switch what-if.
@@ -158,8 +223,15 @@ async function main(): Promise<void> {
   check(20, '500-case evaluation passes', evalSummary.total >= 500 && evalSummary.determinismRate === 1 && evalSummary.realSideEffects === 0,
     `total=${evalSummary.total}, determinismRate=${evalSummary.determinismRate}, realSideEffects=${evalSummary.realSideEffects}`);
 
+  // §43 — per-plan-size performance (single action, 10/50/100-step plans), plus the
+  // 500-scenario batch's own p50/p95 already measured above.
+  const performance = {
+    ...(await measurePlanSizePerformance(sim)),
+    '500-scenario-batch': { p50Ms: evalSummary.p50Ms, p95Ms: evalSummary.p95Ms, reps: evalSummary.total },
+  };
+
   const failed = points.filter(p => !p.ok).sort((a, b) => a.n - b.n);
-  console.log(JSON.stringify({ points: points.sort((a, b) => a.n - b.n), allPass: failed.length === 0 }, null, 2));
+  console.log(JSON.stringify({ points: points.sort((a, b) => a.n - b.n), allPass: failed.length === 0, performance }, null, 2));
   for (const p of failed) console.error(`[phase6f-acceptance] FAIL point ${p.n}: ${p.label} — ${p.detail}`);
   assert.strictEqual(failed.length, 0, `${failed.length} acceptance point(s) failed`);
   console.log('[phase6f-acceptance] PASS');
