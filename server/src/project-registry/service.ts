@@ -670,7 +670,11 @@ function inferPurpose(dir: string): string {
 
 function gitOutput(cwd: string, args: string[]): string | null {
   try {
-    return execFileSync('git', args, {
+    // -c safe.directory=<cwd> is a per-invocation override, never a persistent config
+    // change: some filesystems (e.g. removable/network drives on Windows) don't
+    // record ownership, which makes git refuse to run at all in that repo unless the
+    // caller either owns it globally-trusted-listed or passes this override.
+    return execFileSync('git', ['-c', `safe.directory=${cwd}`, ...args], {
       cwd,
       encoding: 'utf8',
       windowsHide: true,
