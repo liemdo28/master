@@ -5,6 +5,20 @@
  * Level 3: requires double approval (delete, deploy, push, financial)
  *
  * Persistence: SQLite via ops.db — survives PM2 restart and system reboot.
+ *
+ * Phase 7A.3 invariant: this queue is a status/audit record only. `approve()`
+ * flips a row's status and emits an event consumed only by the WebSocket
+ * broadcaster (index.ts) for UI notification — nothing here dispatches a
+ * real external side effect (no provider call, no child_process, no send).
+ * The only real external writes this codebase can perform
+ * (GMAIL_CREATE_DRAFT, CALENDAR_EVENT_PROPOSAL, CALENDAR_CREATE_EVENT) go
+ * exclusively through `personal-os/actions/service.ts`'s governed
+ * ControlledActionService — ActionPolicyEngine, RiskEvaluator, kill-switch,
+ * and budget checks included. This gate must never be wired to trigger a
+ * real mutation directly; a future feature that needs one should create a
+ * canonical Controlled Action proposal instead of calling `approve()` here
+ * and reacting to it. mi-whatsapp-gateway (the only caller that lets an
+ * external party reach `approve()`) remains intentionally stopped.
  */
 
 import { v4 as uuid } from 'uuid';
