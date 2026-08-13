@@ -33,7 +33,9 @@ const SERVER_URL    = getArg('--server') || process.env.MI_SERVER_URL || 'http:/
 const NODE_NAME     = getArg('--name')   || process.env.MI_NODE_NAME  || os.hostname();
 const NODE_PORT     = parseInt(getArg('--port') || process.env.MI_NODE_PORT || '4002');
 const NODE_ID       = process.env.MI_NODE_ID || `node-${os.hostname().toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-const CAPABILITIES  = (process.env.MI_CAPABILITIES || 'health-report,file-read,exec-safe').split(',').map(s => s.trim());
+// Phase 7A.1: default trimmed to what this file actually implements — it never
+// had a /file route, and /exec is retired (see the handler below).
+const CAPABILITIES  = (process.env.MI_CAPABILITIES || 'health-report').split(',').map(s => s.trim());
 const HB_INTERVAL   = 30_000; // 30s heartbeat
 
 let registered = false;
@@ -142,27 +144,17 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.url === '/exec' && req.method === 'POST') {
-    let body = '';
-    req.on('data', d => { body += d; });
-    req.on('end', () => {
-      try {
-        const { command, cwd } = JSON.parse(body);
-        // Safe-exec: only allow read-only commands
-        const BLOCKED = ['rm ', 'del ', 'format ', 'mkfs', 'dd if=', 'shutdown', 'reboot', '> '];
-        const blocked = BLOCKED.some(b => command.toLowerCase().includes(b));
-        if (blocked) {
-          res.statusCode = 403;
-          res.end(JSON.stringify({ error: 'EXEC_BLOCKED', reason: 'Destructive command not allowed from remote' }));
-          return;
-        }
-        const { execSync } = require('child_process');
-        const output = execSync(command, { cwd, timeout: 10_000 }).toString();
-        res.end(JSON.stringify({ success: true, output, command }));
-      } catch (e) {
-        res.statusCode = 500;
-        res.end(JSON.stringify({ error: e.message }));
-      }
-    });
+    // Phase 7A.1: retired. This endpoint ran arbitrary shell commands on a
+    // 0.0.0.0-bound listener with no authentication and only a trivially
+    // bypassable denylist (e.g. 'Remove-Item' was never blocked by 'rm ').
+    // Unrestricted shell execution is not an approved authority (Phase 6G),
+    // so this is retired rather than gated behind a shared secret — adding
+    // auth here would still leave a general remote-shell capability that
+    // was never reviewed or approved. mi-core's own dispatch path for this
+    // (POST /api/nodes/:id/exec) already quarantines the request before it
+    // would ever reach here (Phase 6B legacyAuthorityBoundary).
+    res.statusCode = 410;
+    res.end(JSON.stringify({ error: 'EXEC_RETIRED', reason: 'Remote shell execution was retired in Phase 7A.1 — unauthenticated and ungoverned, and unrestricted shell execution remains an unapproved authority.' }));
     return;
   }
 

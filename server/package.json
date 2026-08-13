@@ -130,7 +130,14 @@
     "test:automation-simulation-security": "tsx src/personal-os/automation-simulation/__tests__/automation-simulation-security.test.ts",
     "test:automation-simulation-parity": "tsx src/personal-os/automation-simulation/__tests__/automation-simulation-parity.test.ts",
     "automation-simulation:evaluation": "tsx src/personal-os/automation-simulation/simulation-evaluation.ts",
-    "phase6f:acceptance": "npm run test:automation-simulation && npm run test:automation-simulation-security && npm run test:automation-simulation-parity && npm run automation-simulation:evaluation && tsx src/personal-os/automation-simulation/phase6f-acceptance.ts"
+    "phase6f:acceptance": "npm run test:automation-simulation && npm run test:automation-simulation-security && npm run test:automation-simulation-parity && npm run automation-simulation:evaluation && tsx src/personal-os/automation-simulation/phase6f-acceptance.ts",
+    "runtime:preflight": "tsx src/runtime-preflight/cli.ts",
+    "runtime:recovery": "tsx src/runtime-preflight/recovery-cli.ts",
+    "test:phase7a-authority-containment": "tsx src/__tests__/phase7a-authority-containment.test.ts",
+    "test:phase7a-runtime-preflight": "tsx src/__tests__/phase7a-runtime-preflight.test.ts",
+    "test:phase7a-security": "tsx src/__tests__/phase7a-security.test.ts",
+    "phase7a:evaluation": "tsx src/runtime-preflight/phase7a-evaluation.ts",
+    "phase7a:acceptance": "npm run test:phase7a-authority-containment && npm run test:phase7a-runtime-preflight && npm run test:phase7a-security && npm run phase7a:evaluation && tsx src/runtime-preflight/phase7a-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

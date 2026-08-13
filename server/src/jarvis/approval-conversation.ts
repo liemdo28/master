@@ -2,6 +2,14 @@
  * Approval Conversation — manages WhatsApp approval dialogs.
  * Tracks pending approvals by ID. Each approval has a TTL.
  * Integrates with existing approval gate in whatsapp/ceo-command-router.ts.
+ *
+ * Phase 7A.2/7A.4: DEPRECATED as an execution-authorizing mechanism. This
+ * store's only consumer that ever reacted to `status === 'approved'` was
+ * `jarvis/autonomous-task-runner.ts`'s `runApprovedTask()`, which is now
+ * quarantined (always returns `blocked`, never calls a shell). This store
+ * may remain for conversational history/UX only — it must not be wired to
+ * trigger a real mutation. Real external writes go exclusively through
+ * `personal-os/actions/service.ts`'s governed ControlledActionService.
  */
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'expired';
