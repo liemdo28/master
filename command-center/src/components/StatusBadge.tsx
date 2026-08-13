@@ -9,6 +9,11 @@ const STYLE: Record<string, { dot: string; text: string; bg: string; icon: strin
   FAILED:           { dot: 'bg-(--color-down)',          text: 'text-(--color-down)',          bg: 'bg-(--color-down)/10',          icon: '✕' },
   NOT_CONFIGURED:   { dot: 'bg-(--color-not-configured)', text: 'text-(--color-not-configured)', bg: 'bg-(--color-not-configured)/10', icon: '○' },
   UNKNOWN:          { dot: 'bg-(--color-not-configured)', text: 'text-(--color-not-configured)', bg: 'bg-(--color-not-configured)/10', icon: '?' },
+  // Phase 7B — health/dependency truth model states.
+  DEGRADED:         { dot: 'bg-(--color-attention)',     text: 'text-(--color-attention)',     bg: 'bg-(--color-attention)/10',     icon: '▲' },
+  UNAVAILABLE:      { dot: 'bg-(--color-down)',          text: 'text-(--color-down)',          bg: 'bg-(--color-down)/10',          icon: '✕' },
+  DISCONNECTED:     { dot: 'bg-(--color-not-configured)', text: 'text-(--color-not-configured)', bg: 'bg-(--color-not-configured)/10', icon: '○' },
+  INTENTIONALLY_DISABLED: { dot: 'bg-(--color-text-faint)', text: 'text-(--color-text-faint)',  bg: 'bg-white/5',                    icon: '⊘' },
   DRAFT:            { dot: 'bg-(--color-unknown)',       text: 'text-(--color-text-dim)',      bg: 'bg-white/5',                    icon: '◇' },
   APPROVED:         { dot: 'bg-(--color-accent)',        text: 'text-(--color-accent)',        bg: 'bg-(--color-accent)/10',        icon: '✓' },
   ACTIVE:           { dot: 'bg-(--color-fact)',          text: 'text-(--color-fact)',          bg: 'bg-(--color-fact)/10',          icon: '▶' },

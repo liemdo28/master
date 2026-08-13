@@ -62,6 +62,27 @@ const FIXTURES: Record<string, unknown> = {
   '/coding/model-health': { endpoint: 'http://x', installedModels: ['qwen3:8b'], residentModels: [], modelRoles: {}, healthy: true },
   '/operating/service-health': { serviceHealth: [{ service: 'Mi Core', status: 'HEALTHY', lastCheck: '', reason: null, evidenceReference: 'service:mi-core' }] },
   '/personal/integrity': { integrityCheck: 'ok', foreignKeyViolations: [], schemaVersion: 6 },
+  '/health/detail': {
+    overall: 'DEGRADED',
+    overallReason: 'OAUTH_DISCONNECTED',
+    generatedAt: '2026-08-07T00:00:00Z',
+    dependencies: [
+      { id: 'CORE', state: 'HEALTHY', criticality: 'REQUIRED_FOR_CORE', reasonCode: 'OK', detail: 'mi-core process is serving this request.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'DATABASE', state: 'HEALTHY', criticality: 'REQUIRED_FOR_CORE', reasonCode: 'OK', detail: 'personal-os.db integrity_check=ok.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'AUTHORITY', state: 'HEALTHY', criticality: 'REQUIRED_FOR_CORE', reasonCode: 'OK', detail: 'unknownMutations=0.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'KNOWLEDGE', state: 'HEALTHY', criticality: 'OPTIONAL_DEGRADED', reasonCode: 'OK', detail: '3 document(s).', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'PYTHON_AI', state: 'HEALTHY', criticality: 'FEATURE_SCOPED', reasonCode: 'OK', detail: 'ai-service responds.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'LOCAL_MODEL', state: 'UNAVAILABLE', criticality: 'OPTIONAL_DEGRADED', reasonCode: 'MODEL_UNAVAILABLE', detail: 'Ollama unreachable.', capabilityImpact: ['Chat free-text generation is unavailable.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: '2026-08-07T00:00:00Z' },
+      { id: 'GOOGLE_CONNECTORS', state: 'DISCONNECTED', criticality: 'FEATURE_SCOPED', reasonCode: 'OAUTH_DISCONNECTED', detail: 'Google OAuth client is configured but no token file exists.', capabilityImpact: ['Gmail draft creation and Calendar event creation are unavailable.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: null },
+      { id: 'NODE_AGENT', state: 'BLOCKED', criticality: 'FEATURE_SCOPED', reasonCode: 'REGISTRATION_BLOCKED', detail: 'mi-node-agent process is running but has never successfully registered.', capabilityImpact: ['Secondary-device coordination unavailable.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: null },
+      { id: 'ACCOUNTING', state: 'HEALTHY', criticality: 'FEATURE_SCOPED', reasonCode: 'OK', detail: 'mi-accounting is online.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'QB_AGENT', state: 'HEALTHY', criticality: 'FEATURE_SCOPED', reasonCode: 'OK', detail: 'qb-ops-agent is online.', capabilityImpact: [], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: '2026-08-07T00:00:00Z', lastFailureAt: null },
+      { id: 'WHATSAPP', state: 'INTENTIONALLY_DISABLED', criticality: 'INTENTIONALLY_DISABLED', reasonCode: 'INTENTIONALLY_DISABLED', detail: 'mi-whatsapp-gateway is intentionally not started.', capabilityImpact: ['WhatsApp send/receive unavailable — intentionally disabled.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: null },
+      { id: 'N8N', state: 'INTENTIONALLY_DISABLED', criticality: 'INTENTIONALLY_DISABLED', reasonCode: 'INTENTIONALLY_DISABLED', detail: 'mi-n8n is intentionally not started.', capabilityImpact: ['n8n workflow execution unavailable — intentionally disabled.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: null },
+      { id: 'CEO_OBSERVER', state: 'INTENTIONALLY_DISABLED', criticality: 'INTENTIONALLY_DISABLED', reasonCode: 'INTENTIONALLY_DISABLED', detail: 'mi-ceo-observer is intentionally not started.', capabilityImpact: ['CEO WhatsApp signal ingestion unavailable — intentionally disabled.'], lastCheckedAt: '2026-08-07T00:00:00Z', lastHealthyAt: null, lastFailureAt: null },
+    ],
+    legacy: { server: 'ok', python_ai_service: 'ok', ollama: 'down', timestamp: '2026-08-07T00:00:00Z' },
+  },
   '/orchestration/plans': {
     plans: [
       { id: 'plan-1', goalId: null, title: "Prepare tomorrow's customer follow-up", objective: 'x', projectId: 'mi-core', status: 'WAITING_APPROVAL', planVersion: 1, previousVersionId: null, planHash: 'h', policyVersion: 'phase5g-default-v1', policyHash: 'p', createdAt: '2026-08-07T00:00:00Z', updatedAt: '2026-08-07T00:00:00Z', validatedAt: '2026-08-07T00:00:00Z', completedAt: null, cancelledAt: null, failureReason: null, blockedReason: null },
@@ -212,10 +233,14 @@ describe('Command Center screens', () => {
     expect(screen.queryByRole('button', { name: /run|push|merge|deploy/i })).not.toBeInTheDocument();
   });
 
-  it('Health renders service, integrity and connector status', async () => {
+  it('Health renders overall verdict and per-dependency states from the canonical health-truth model', async () => {
     renderWithProviders(<HealthPage />);
-    await waitFor(() => expect(screen.getByText('Mi Core')).toBeInTheDocument());
-    expect(screen.getByText(/schema version: v6/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('DEGRADED')).toBeInTheDocument());
+    expect(screen.getByText('CORE')).toBeInTheDocument();
+    expect(screen.getByText('DISCONNECTED')).toBeInTheDocument();
+    expect(screen.getByText('BLOCKED')).toBeInTheDocument();
+    expect(screen.getAllByText('INTENTIONALLY DISABLED').length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('Reviews handles a missing daily review honestly, offers to generate it', async () => {

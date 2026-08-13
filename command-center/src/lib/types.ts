@@ -991,6 +991,48 @@ export interface SimulationStepResult {
   reversibility: 'REVERSIBLE' | 'IRREVERSIBLE' | 'UNKNOWN';
 }
 
+// Phase 7B — Health/Dependency Truth Model (read-only). A dependency being
+// unavailable never collapses into a generic "down"; an intentionally-disabled
+// service is never reported unhealthy. See server/src/health-truth/types.ts.
+export type DependencyState =
+  | 'HEALTHY' | 'DEGRADED' | 'UNAVAILABLE' | 'DISCONNECTED' | 'BLOCKED'
+  | 'INTENTIONALLY_DISABLED' | 'UNKNOWN';
+
+export type DependencyCriticality =
+  | 'REQUIRED_FOR_CORE' | 'OPTIONAL_DEGRADED' | 'FEATURE_SCOPED' | 'INTENTIONALLY_DISABLED';
+
+export type DependencyId =
+  | 'CORE' | 'DATABASE' | 'AUTHORITY' | 'KNOWLEDGE' | 'PYTHON_AI' | 'LOCAL_MODEL'
+  | 'GOOGLE_CONNECTORS' | 'NODE_AGENT' | 'ACCOUNTING' | 'QB_AGENT' | 'WHATSAPP'
+  | 'N8N' | 'CEO_OBSERVER';
+
+export interface DependencyHealth {
+  id: DependencyId;
+  state: DependencyState;
+  criticality: DependencyCriticality;
+  reasonCode: string;
+  detail: string;
+  capabilityImpact: string[];
+  lastCheckedAt: string | null;
+  lastHealthyAt: string | null;
+  lastFailureAt: string | null;
+}
+
+export type SystemHealthOverall = 'HEALTHY' | 'DEGRADED' | 'UNAVAILABLE' | 'BLOCKED';
+
+export interface SystemHealth {
+  overall: SystemHealthOverall;
+  overallReason: string;
+  generatedAt: string;
+  dependencies: DependencyHealth[];
+  legacy: {
+    server: 'ok';
+    python_ai_service: 'ok' | 'down';
+    ollama: 'ok' | 'down';
+    timestamp: string;
+  };
+}
+
 export interface SimulationRun {
   simulationId: string;
   inputHash: string;
