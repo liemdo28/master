@@ -2803,6 +2803,34 @@
       ]
     },
     {
+      "id": "cli:test:pm2-ecosystem-paths",
+      "kind": "CLI_COMMAND",
+      "sourcePath": "server/package.json",
+      "runtimeMount": "test:pm2-ecosystem-paths",
+      "method": "CLI",
+      "capability": "tsx src/__tests__/pm2-ecosystem-paths.test.ts",
+      "effectClass": "READ_ONLY",
+      "authorityClass": "INTERNAL_TEST_ONLY",
+      "canonicalOwner": "Test Harness",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "INTERNAL_ONLY",
+      "status": "TEST_ONLY",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/package.json scripts"
+      ]
+    },
+    {
       "id": "cli:test:project-registry",
       "kind": "CLI_COMMAND",
       "sourcePath": "server/package.json",
@@ -30345,14 +30373,14 @@
     }
   ],
   "counts": {
-    "total": 1075,
-    "readOnly": 675,
+    "total": 1076,
+    "readOnly": 676,
     "mutations": 400,
     "canonical": 683,
     "adapters": 158,
     "quarantined": 155,
     "forbidden": 0,
-    "internalTest": 79,
+    "internalTest": 80,
     "unknownMutations": 0,
     "legacyMutations": 190,
     "adaptedLegacy": 4,
