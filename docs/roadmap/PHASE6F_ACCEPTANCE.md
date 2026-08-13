@@ -2,26 +2,49 @@
 
 Date: 2026-08-13
 
-Status: **implementation and gates complete, not yet merged/deployed.** This
-document records local acceptance results from the working branch. Release
-provenance (PR number, merge SHA, deployed SHA, predeploy backup path, live
-production acceptance) will be filled in below once the PR opens, passes
-independent review, merges, and deploys — per the same two-stage doc pattern
-Phase 6D/6E used (functional PR doc, then a closure update).
+Status: **implementation and gates complete, independent review done, PR open,
+not yet merged/deployed.** This document records local acceptance results from
+the working branch. Release provenance (merge SHA, deployed SHA, predeploy
+backup path, live production acceptance) will be filled in below once the PR
+merges and deploys — per the same two-stage doc pattern Phase 6D/6E used
+(functional PR doc, then a closure update).
 
-## Release provenance (pending)
+## Release provenance
 
 - Branch: `codex/phase6f-governed-automation-simulation`.
 - Based on: `30ca642b0a22e65256831b474f13337a58b6ac19` (Phase 6E docs-only closure,
   the current repository master).
-- PR: not yet opened.
+- PR: [#92](https://github.com/liemdo28/master/pull/92), open, independently
+  reviewed (1 non-blocking documentation-wording finding, fixed).
 - Merge SHA: pending.
 - Deployed SHA: pending (production remains on the Phase 6E functional SHA,
   `e766feb15dab24355ad84b63c8c4f3c7201a0f95`, until this phase deploys).
 
-## §41 — 20-point acceptance (`npm run phase6f:acceptance`)
+## §42 — Production-derived acceptance: DEFERRED_TO_§54
 
-All 20 points PASS. Live local output:
+Per explicit user decision (2026-08-13): §42 requires read-only copies/snapshots
+of *production* state (real Controlled Action proposals, policy, Action Plans,
+delegations). No verified production DB backup or snapshot is reachable from
+this working environment (the previously-referenced
+`D:\mi-core-production-backups\phase6e-predeploy-20260812-101529` no longer
+exists after the drive migration), and this environment's relationship to the
+actual production machine is not confirmed. Rather than guess at a production
+data path or access an unverified backup, §42 is explicitly deferred and
+folded into §54 (`LIVE PRODUCTION-SAFE SIMULATION`), which already requires the
+same before/after live-store comparison against genuine production state —
+done once, on real data, after deploy, instead of twice (once on guessed data
+pre-merge, once for real post-deploy). **This is not being counted as PASS**
+and is **not treated as a pre-merge blocker** given every other gate below is
+green. If production state cannot be verified with confidence at §54 time, that
+step must report BLOCKED — not a downgraded/assumed PASS.
+
+## §41 — 22-point acceptance (`npm run phase6f:acceptance`)
+
+All 22 points PASS (20 from the original directive + 2 explicitly named in the
+re-issued directive's point list: authority parity, provider timeout — points
+6 and 13 already covered these implicitly via risk parity and ambiguous-result
+respectively, so they're now also proven as their own standalone points). Live
+local output:
 
 | # | Point | Result |
 |---|---|---|
@@ -45,6 +68,21 @@ All 20 points PASS. Live local output:
 | 18 | zero delegation consumption | `realDelegationQuotaConsumption=0` (simulator never instantiates a real delegation store) |
 | 19 | evidence semantics correct | `evidenceRefs` only `GOVERNANCE:`/`SIMULATION:` prefixed; reason text uses "WOULD", never past tense |
 | 20 | 500-case evaluation passes | 513 scenarios, `determinismRate=1`, `realSideEffects=0` |
+| 21 | authority parity | simulated `authoritySurface`/`canonicalOwner` matches the real, current authority manifest exactly |
+| 22 | provider timeout | `UNCERTAIN` + `reconciliationRequired=true`, distinct from ambiguous result (point 13) |
+
+### §43 — performance by plan size
+
+| Plan | p50 | p95 | reps |
+|---|---|---|---|
+| 1-step | 50ms | 54ms | 10 |
+| 10-step | 52ms | 55ms | 10 |
+| 50-step | 53ms | 54ms | 10 |
+| 100-step | 53ms | 54ms | 10 |
+| 500-scenario batch | 51ms | 54ms | 513 |
+
+Latency is flat regardless of plan size — no external network dominates
+simulation cost, confirming the ephemeral-store-only design.
 
 ## §39 — Parity test (`npx tsx automation-simulation-parity.test.ts`)
 
@@ -103,8 +141,15 @@ after every commit on this branch.
 
 `/simulation` page built and verified: `command-center` production build succeeds,
 both existing command-center suites pass unaffected (`test:command-center` 18/18,
-`test:command-center-security` 20/20), and the 4-test Playwright E2E suite
-(`test:command-center-e2e`) passes 4/4.
+`test:command-center-security` 20/20), and the Playwright E2E suite
+(`test:command-center-e2e`) now includes a dedicated Phase 6F Simulation flow test
+(login → Simulation → run default scenario → inspect policy/approval/expected
+side-effect preview → configure kill-switch what-if → inspect `WOULD_BLOCK` →
+confirm banner → confirm zero execute/send/approve/deploy controls → confirm
+real `/actions` and `/governance/status` state byte-identical before/after,
+against the actual compiled server, not a mock). 5/5 tests pass, run twice per
+§47, no orphan `LISTENING` process on the E2E port after either run (only
+expected TCP `TIME_WAIT` teardown entries).
 
 ## Full regression
 
@@ -152,8 +197,24 @@ Also fixed, same drive-migration class of bug but unrelated to git ownership:
 `<root>/server/package.json` nested-monorepo layout; both now detect nested vs.
 flattened-deploy-snapshot layouts.
 
-## Still pending before merge
+## Independent review
 
-- PR open, independent review, merge, deploy, live production acceptance,
-  closure docs — none of which proceed without explicit confirmation per this
-  program's standing instruction.
+Performed against PR #92's actual pushed diff (not the implementation summary):
+re-verified all 22 acceptance points, the import-graph scan, the manifest diff
+(purely additive, arithmetically consistent — `+9` surfaces exactly accounts
+for the `+5`/`+4`/`+6`/`+3` count deltas), the `AUTHORITY_RULES.find()`
+first-match-wins + `CANONICAL_PREFIXES` GET-override logic, and reproduced
+`GMAIL_SEND_DRAFT` without `forbiddenCandidate` to confirm it's blocked by the
+real R4-risk `DENY` rule rather than relying on the caller remembering to flag
+it. One finding: the `SimulationCapabilityToken` comments/docs overstated
+TypeScript's structural typing as a hard construction-impossibility guarantee.
+Fixed (commit `6a15c233`) — reworded to describe it as an internal
+convention/guard, with the real guarantee correctly attributed to
+`fake-providers.ts`'s proven absence of any real-provider import plus the
+tests proving zero real dispatch. No other findings.
+
+## Still pending before merge/deploy
+
+- Merge, deploy, live production acceptance (§54, now also covering the
+  deferred §42), closure docs — none of which proceed without explicit
+  confirmation per this program's standing instruction.
