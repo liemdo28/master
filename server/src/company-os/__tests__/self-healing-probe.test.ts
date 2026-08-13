@@ -3,7 +3,7 @@ import express from 'express';
 import type { AddressInfo } from 'net';
 import type { NextFunction, Request, Response } from 'express';
 import {
-  MONITORED_SERVICES, checkHttpService, checkPm2Service, type ServiceCheck,
+  MONITORED_SERVICES, checkHttpService, checkPm2Service, personalOsIntegrityIsHealthy, type ServiceCheck,
 } from '../self-healing-monitor';
 
 const API_KEY = 'selfheal-probe-test-key';
@@ -58,16 +58,26 @@ async function run() {
   const stub = await listen(miCoreStub(healthyIntegrity));
   const at = (route: string) => `http://127.0.0.1:${stub.port}${route}`;
 
-  // --- the routes the monitor actually probes ------------------------------
+  // --- the routes the monitor actually probes -------------------------------
+  // evidence-db/knowledge-db moved to type:'internal' in Phase 7B (direct
+  // in-process calls — no HTTP round-trip, so they can never be starved by
+  // the global rate limiter; see self-healing-rate-limit-regression.test.ts).
+  // These two checkHttpService() calls below now exercise generic HTTP-probe
+  // behavior against arbitrary stub routes, not the evidence-db/knowledge-db
+  // checks themselves — checkHttpService remains the real, still-used probe
+  // for every genuinely HTTP-backed MONITORED_SERVICES entry (mi-core-http,
+  // accounting-http, ollama).
   assert.strictEqual(await checkHttpService(probe(at('/api/health'), true)), true,
     'authenticated /api/health probe reports healthy');
   assert.strictEqual(await checkHttpService(probe(at('/api/company-os/health'), true)), true,
-    'authenticated Evidence DB probe reports healthy');
+    'checkHttpService still reports healthy for a generic authenticated 200');
 
-  const knowledgeCheck = MONITORED_SERVICES.find(s => s.id === 'knowledge-db')!;
-  assert.strictEqual(
-    await checkHttpService(probe(at('/api/personal/integrity'), true, knowledgeCheck.validateBody)), true,
-    'authenticated Knowledge DB probe reports healthy on a clean integrity report');
+  // The Knowledge DB body-validation logic (integrity_check ok + zero FK
+  // violations) is now exercised directly, in-process — see the corrupt/
+  // fkBroken assertions below using personalOsIntegrityIsHealthy() rather
+  // than round-tripping through HTTP.
+  assert.strictEqual(personalOsIntegrityIsHealthy(healthyIntegrity), true,
+    'a clean integrity report is healthy');
 
   // --- the defects this change fixes ---------------------------------------
   assert.strictEqual(await checkHttpService(probe(at('/health'), true)), false,
@@ -92,18 +102,12 @@ async function run() {
     'authenticated probes are refused for non-loopback hosts');
 
   // --- body validation, not just HTTP 200 ----------------------------------
-  const corrupt = await listen(miCoreStub({ integrityCheck: 'malformed database', foreignKeyViolations: [] }));
-  assert.strictEqual(
-    await checkHttpService(probe(`http://127.0.0.1:${corrupt.port}/api/personal/integrity`, true, knowledgeCheck.validateBody)),
-    false,
-    'a 200 response reporting corruption is not healthy');
-  const fkBroken = await listen(miCoreStub({ integrityCheck: 'ok', foreignKeyViolations: [{ table: 'goals' }] }));
-  assert.strictEqual(
-    await checkHttpService(probe(`http://127.0.0.1:${fkBroken.port}/api/personal/integrity`, true, knowledgeCheck.validateBody)),
-    false,
+  // Tested directly against the same logic checkPersonalOsIntegrityInternal()
+  // now calls in-process, rather than round-tripping through HTTP.
+  assert.strictEqual(personalOsIntegrityIsHealthy({ integrityCheck: 'malformed database', foreignKeyViolations: [] }), false,
+    'a report claiming corruption is not healthy');
+  assert.strictEqual(personalOsIntegrityIsHealthy({ integrityCheck: 'ok', foreignKeyViolations: [{ table: 'goals' }] }), false,
     'foreign-key violations are not healthy');
-  await corrupt.close();
-  await fkBroken.close();
 
   // --- credentials are not forwarded across a redirect ---------------------
   // fetch does not strip custom headers on cross-origin redirects, so following
@@ -159,13 +163,18 @@ async function run() {
   assert.ok(miCoreHttp.health_url?.endsWith('/api/health'), 'Mi Core HTTP probes /api/health');
   assert.strictEqual(miCoreHttp.authenticated, true, 'Mi Core HTTP probe is authenticated');
 
-  assert.strictEqual(byId.get('evidence-db')!.authenticated, true, 'Evidence DB probe is authenticated');
+  // Phase 7B: evidence-db/knowledge-db are type:'internal' — no health_url,
+  // no authenticated flag, no HTTP validateBody. They can never be starved by
+  // the rate limiter because they never make an HTTP request at all.
+  const evidenceDb = byId.get('evidence-db')!;
+  assert.strictEqual(evidenceDb.type, 'internal', 'Evidence DB probe is internal, not HTTP');
+  assert.strictEqual(typeof evidenceDb.check, 'function', 'Evidence DB probe carries a direct check() function');
+  assert.strictEqual(evidenceDb.health_url, undefined, 'Evidence DB probe has no health_url — no HTTP path exists to regress back to');
 
-  assert.ok(!knowledgeCheck.health_url?.includes('/api/knowledge/'),
-    'Knowledge DB no longer probes a route that /api/knowledge/:id can shadow');
-  assert.strictEqual(knowledgeCheck.authenticated, true, 'Knowledge DB probe is authenticated');
-  assert.ok(typeof knowledgeCheck.validateBody === 'function',
-    'Knowledge DB validates the integrity body, not just the status code');
+  const knowledgeCheck = byId.get('knowledge-db')!;
+  assert.strictEqual(knowledgeCheck.type, 'internal', 'Knowledge DB probe is internal, not HTTP');
+  assert.strictEqual(typeof knowledgeCheck.check, 'function', 'Knowledge DB probe carries a direct check() function');
+  assert.strictEqual(knowledgeCheck.health_url, undefined, 'Knowledge DB probe has no health_url — no HTTP path exists to regress back to');
 
   // The standalone food-safety-gateway entry is retired — superseded, not missing.
   assert.ok(!byId.has('food-safety-gw'),

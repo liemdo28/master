@@ -43,7 +43,23 @@ const CANONICAL_PREFIXES = [
 const MUTATION_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 export const AUTHORITY_RULES: Rule[] = [
-  rule('public-read', /^\/api\/(health|remote\/health|remote\/qr-data|auth\/google\/status|auth\/google\/start|auth\/google\/callback)(\/.*)?$/, {
+  // Phase 7B: /api/health/detail and /api/health/dependencies are authenticated
+  // (requireRemoteAuth at /api/command-center, requireTaskRuntimeAuth at bare
+  // /api — see server/src/health-truth/detail-router.ts) and must be classified
+  // before the public-read rule below, whose (health|...)(\/.*)? pattern would
+  // otherwise wildcard-match these subpaths as PUBLIC_READ. Labeled
+  // STRICT_API_KEY to match the same dual-mount convention already used for
+  // 'automation-simulation' below.
+  rule('health-detail', /^\/api\/(command-center\/)?health\/(detail|dependencies)$/, {
+    authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'Health Truth Model', auth: 'STRICT_API_KEY',
+    capability: 'authenticated structured health/dependency read model — never mutates, never a source of recovery authority',
+    evidence: ['server/src/health-truth/detail-router.ts', 'server/src/index.ts requireRemoteAuth/requireTaskRuntimeAuth mounts'],
+  }),
+  // Only the bare, exact /api/health liveness route is genuinely public — the
+  // (\/.*)? suffix used to also (incorrectly) cover any future /api/health/*
+  // subpath; narrowed to an exact match so a new subpath must be explicitly
+  // classified rather than silently defaulting to PUBLIC_READ.
+  rule('public-read', /^\/api\/health$|^\/api\/(remote\/health|remote\/qr-data|auth\/google\/status|auth\/google\/start|auth\/google\/callback)(\/.*)?$/, {
     authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'Public health/auth bootstrap', auth: 'PUBLIC_READ', capability: 'public read/bootstrap',
     evidence: ['server/src/index.ts public routes mounted before bare /api'],
   }),

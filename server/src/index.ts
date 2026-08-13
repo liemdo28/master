@@ -45,7 +45,8 @@ import { WebSocketServer } from 'ws';
 import { chatRouter } from './routes/chat';
 import { executiveRouter } from './routes/executive';
 import { profileRouter } from './routes/profile';
-import { healthRouter } from './routes/health';
+import { healthPublicRouter } from './health-truth/public-router';
+import { healthDetailRouter } from './health-truth/detail-router';
 import { approvalRouter } from './routes/approval';
 import { workspaceRouter } from './routes/workspace';
 import { modelsRouter } from './routes/models';
@@ -221,7 +222,7 @@ function validateAuthorityStartup(): void {
 // mount, so this was already broken for mobile.html/liveboard.html before Phase 5E.)
 app.use('/api/remote', express.json({ limit: '1mb' }), remoteRouter); // Remote access (has own auth)
 app.use('/api/auth', express.json({ limit: '1mb' }), authRouter);     // Auth endpoints (must be public)
-app.use('/api/health', healthRouter);                                 // Health check (public)
+app.use('/api/health', healthPublicRouter);                            // Health check (public liveness only)
 
 // ── Command Center bridge (Phase 5E) ──────────────────────────────────────────
 // The exact same routers used below, mounted a second time under a session-token-gated
@@ -246,6 +247,7 @@ app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, aut
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, operatorControlRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, evidenceRouter);
 app.use('/api/command-center', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, automationSimulationRouter);
+app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, healthDetailRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -261,6 +263,7 @@ app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, authorityRout
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatorControlRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, evidenceRouter);
 app.use('/api', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, automationSimulationRouter);
+app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, healthDetailRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);

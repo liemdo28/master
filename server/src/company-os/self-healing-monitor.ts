@@ -14,7 +14,7 @@ const execAsync = promisify(exec);
 export interface ServiceCheck {
   id: string;
   name: string;
-  type: 'pm2' | 'http' | 'port';
+  type: 'pm2' | 'http' | 'port' | 'internal';
   pm2_name?: string;         // for pm2 services
   health_url?: string;       // for http health checks
   port?: number;             // for port checks
@@ -30,6 +30,16 @@ export interface ServiceCheck {
    * an endpoint can answer 200 while reporting internal corruption.
    */
   validateBody?: (body: unknown) => boolean;
+  /**
+   * Phase 7B — for type:'internal'. Calls the same logic the equivalent HTTP route
+   * would run, but in-process — no loopback fetch, so this probe can never be starved
+   * by the global rate limiter (the confirmed root cause of a prior false-positive
+   * "Evidence DB DOWN"/"Knowledge DB DOWN" alert: both used to be HTTP checks against
+   * mi-core's own /api/company-os/health and /api/personal/integrity, which sit behind
+   * the same IP-keyed limiter as any other traffic and are not in the internal-bypass
+   * allowlist). Must never throw — return false on any internal error.
+   */
+  check?: () => Promise<boolean>;
 }
 
 const miCoreUrl = (route: string): string => `http://localhost:${process.env.MI_PORT || 4001}${route}`;
@@ -48,12 +58,43 @@ function isLoopbackUrl(url: string): boolean {
   }
 }
 
-function personalOsIntegrityIsHealthy(body: unknown): boolean {
+export function personalOsIntegrityIsHealthy(body: unknown): boolean {
   if (!body || typeof body !== 'object') return false;
   const report = body as { integrityCheck?: unknown; foreignKeyViolations?: unknown };
   return report.integrityCheck === 'ok'
     && Array.isArray(report.foreignKeyViolations)
     && report.foreignKeyViolations.length === 0;
+}
+
+/** Same check GET /api/personal/integrity performs, called in-process. */
+async function checkPersonalOsIntegrityInternal(): Promise<boolean> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { PersonalOsService } = require('../personal-os/service');
+    const service = new PersonalOsService();
+    try {
+      return personalOsIntegrityIsHealthy(service.store.integrity());
+    } finally {
+      service.close();
+    }
+  } catch {
+    return false;
+  }
+}
+
+/** Same check GET /api/company-os/health performs, called in-process. */
+async function checkCompanyOsHealthInternal(): Promise<boolean> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { getActiveDepts } = require('./departments');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { listBrainAssignments } = require('./brain-registry');
+    getActiveDepts();
+    listBrainAssignments();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const SERVICES_TO_MONITOR: ServiceCheck[] = [
@@ -70,10 +111,13 @@ const SERVICES_TO_MONITOR: ServiceCheck[] = [
   // process that is never meant to exist is a permanent false alarm, not a safety net —
   // see docs/operations/FOOD_SAFETY_GATEWAY_RETIREMENT.md for the full evidence.
   { id: 'qb-ops-agent',         name: 'QB Ops Agent',          type: 'pm2',  pm2_name: 'qb-ops-agent',        critical: false },
-  { id: 'evidence-db',          name: 'Evidence DB',           type: 'http', health_url: miCoreUrl('/api/company-os/health'), authenticated: true, critical: true },
-  // Personal OS integrity is a genuine readiness signal and, unlike /api/knowledge/health,
-  // cannot be shadowed by the generic /api/knowledge/:id route.
-  { id: 'knowledge-db',         name: 'Knowledge DB',          type: 'http', health_url: miCoreUrl('/api/personal/integrity'), authenticated: true, validateBody: personalOsIntegrityIsHealthy, critical: false },
+  // Phase 7B: converted from HTTP loopback checks to direct in-process calls — the
+  // HTTP versions sat behind the same rate limiter as regular traffic and were not in
+  // the internal-bypass allowlist (only /api/jarvis*/api/mi* are exempt), so a request
+  // burst from anywhere could starve these self-checks into a false "DOWN" alert. Same
+  // underlying logic, called directly instead of round-tripping through HTTP to itself.
+  { id: 'evidence-db',          name: 'Evidence DB',           type: 'internal', check: checkCompanyOsHealthInternal, critical: true },
+  { id: 'knowledge-db',         name: 'Knowledge DB',          type: 'internal', check: checkPersonalOsIntegrityInternal, critical: false },
 ];
 
 export const MONITORED_SERVICES: readonly ServiceCheck[] = SERVICES_TO_MONITOR;
@@ -86,9 +130,24 @@ export interface ServiceStatus {
   restart_attempted?: boolean;
   restart_count: number;
   last_checked: string;
+  /** Phase 7B — undefined means "never observed healthy/failed since process start",
+   *  not a fabricated historical timestamp. */
+  last_healthy_at?: string;
+  last_failure_at?: string;
 }
 
 const restartCounts: Record<string, number> = {};
+const lastHealthyAt: Record<string, string> = {};
+const lastFailureAt: Record<string, string> = {};
+/** Phase 7B — the latest completed scan, cached so read-only health consumers (the
+ *  new canonical health model) never trigger a fresh probe synchronously per HTTP
+ *  request; they read whatever SelfHeal's own periodic scan last observed. */
+let _lastScanResults: ServiceStatus[] | null = null;
+let _lastScanAt: string | null = null;
+
+export function getLastScanResults(): { results: ServiceStatus[] | null; scannedAt: string | null } {
+  return { results: _lastScanResults, scannedAt: _lastScanAt };
+}
 const MAX_AUTO_RESTART = 2;
 
 export async function checkPm2Service(svc: ServiceCheck): Promise<boolean> {
@@ -156,14 +215,21 @@ async function sendCeoAlert(message: string): Promise<void> {
   }
 }
 
+async function dispatchCheck(svc: ServiceCheck): Promise<boolean> {
+  if (svc.type === 'pm2') return checkPm2Service(svc);
+  if (svc.type === 'internal') {
+    if (!svc.check) return false;
+    try { return await svc.check(); } catch { return false; }
+  }
+  return checkHttpService(svc);
+}
+
 export async function runHealthScan(): Promise<ServiceStatus[]> {
   const results: ServiceStatus[] = [];
   const now = new Date().toISOString();
 
   for (const svc of SERVICES_TO_MONITOR) {
-    const healthy = svc.type === 'pm2'
-      ? await checkPm2Service(svc)
-      : await checkHttpService(svc);
+    const healthy = await dispatchCheck(svc);
 
     const count = restartCounts[svc.id] || 0;
     let restartAttempted = false;
@@ -187,6 +253,9 @@ export async function runHealthScan(): Promise<ServiceStatus[]> {
       }
     }
 
+    if (healthy) lastHealthyAt[svc.id] = now;
+    else lastFailureAt[svc.id] = now;
+
     results.push({
       id: svc.id,
       name: svc.name,
@@ -194,9 +263,13 @@ export async function runHealthScan(): Promise<ServiceStatus[]> {
       restart_attempted: restartAttempted,
       restart_count: restartCounts[svc.id] || 0,
       last_checked: now,
+      last_healthy_at: lastHealthyAt[svc.id],
+      last_failure_at: lastFailureAt[svc.id],
     });
   }
 
+  _lastScanResults = results;
+  _lastScanAt = now;
   return results;
 }
 

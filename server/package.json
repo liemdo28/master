@@ -137,7 +137,13 @@
     "test:phase7a-runtime-preflight": "tsx src/__tests__/phase7a-runtime-preflight.test.ts",
     "test:phase7a-security": "tsx src/__tests__/phase7a-security.test.ts",
     "phase7a:evaluation": "tsx src/runtime-preflight/phase7a-evaluation.ts",
-    "phase7a:acceptance": "npm run test:phase7a-authority-containment && npm run test:phase7a-runtime-preflight && npm run test:phase7a-security && npm run phase7a:evaluation && tsx src/runtime-preflight/phase7a-acceptance.ts"
+    "phase7a:acceptance": "npm run test:phase7a-authority-containment && npm run test:phase7a-runtime-preflight && npm run test:phase7a-security && npm run phase7a:evaluation && tsx src/runtime-preflight/phase7a-acceptance.ts",
+    "test:health-truth-model": "tsx src/health-truth/__tests__/phase7b-health-truth-model.test.ts",
+    "test:health-truth-security": "tsx src/health-truth/__tests__/phase7b-health-truth-security.test.ts",
+    "test:selfheal-rate-limit-regression": "tsx src/company-os/__tests__/selfheal-rate-limit-regression.test.ts",
+    "health-truth:evaluation": "tsx src/health-truth/phase7b-evaluation.ts",
+    "health-truth:performance": "tsx src/health-truth/phase7b-performance.ts",
+    "phase7b:acceptance": "npm run test:health-truth-model && npm run test:health-truth-security && npm run test:selfheal-rate-limit-regression && npm run health-truth:evaluation && tsx src/health-truth/phase7b-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

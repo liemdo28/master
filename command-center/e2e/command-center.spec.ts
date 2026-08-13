@@ -79,7 +79,8 @@ test.describe('Command Center — full flow against a controlled fixture backend
     // 14. Open Health
     await page.getByRole('link', { name: 'Health' }).click();
     await expect(page).toHaveURL(/\/health$/);
-    await expect(page.getByText(/schema version/i)).toBeVisible();
+    await expect(page.getByText('Overall')).toBeVisible();
+    await expect(page.getByText('CORE', { exact: true })).toBeVisible();
 
     // 15. Generate EOD review
     await page.getByRole('link', { name: 'Reviews' }).click();
