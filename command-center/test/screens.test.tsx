@@ -26,6 +26,8 @@ import { MemoryPage } from '@/routes/MemoryPage';
 import { CalendarPage } from '@/routes/CalendarPage';
 import { InboxPage } from '@/routes/InboxPage';
 import { CodingPage } from '@/routes/CodingPage';
+import { JarvisPage } from '@/routes/JarvisPage';
+import { api } from '@/lib/api-client';
 import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
 import { PlansPage } from '@/routes/PlansPage';
@@ -241,6 +243,61 @@ describe('Command Center screens', () => {
     expect(screen.getByText('BLOCKED')).toBeInTheDocument();
     expect(screen.getAllByText('INTENTIONALLY DISABLED').length).toBeGreaterThan(0);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('Jarvis renders its initial state with no dangerous controls', async () => {
+    renderWithProviders(<JarvisPage />);
+    await waitFor(() => expect(screen.getByText(/no questions asked yet/i)).toBeInTheDocument());
+    expect(screen.getByPlaceholderText(/ask about health/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ask' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /send|execute|approve|force|bypass|run shell|deploy/i })).not.toBeInTheDocument();
+  });
+
+  it('Jarvis renders a structured gateway response with facts, citations, and next steps', async () => {
+    vi.mocked(api.post).mockResolvedValueOnce({
+      requestId: 'req-1',
+      intent: 'KNOWLEDGE_SEARCH',
+      projectId: 'mi-core',
+      status: 'ANSWERED',
+      answer: 'Deployment uses fs.cpSync with file-count verification.',
+      facts: [{ kind: 'FACT', statement: 'Deployment uses fs.cpSync with file-count verification.' }],
+      inferences: [],
+      unknowns: [],
+      conflicts: [],
+      citations: [{ documentId: 'doc-1', chunkId: 'chunk-1', sourceUri: 'docs/RUNBOOK.md', title: 'Deploy Runbook', lineStart: 12, lineEnd: 14 }],
+      suggestedNextSteps: [],
+      evidenceRefs: [],
+      degradedCapabilities: [],
+      generatedAt: '2026-08-14T00:00:00Z',
+    });
+    renderWithProviders(<JarvisPage />);
+    fireEvent.change(screen.getByPlaceholderText(/ask about health/i), { target: { value: 'how does deployment work' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
+    await waitFor(() => expect(screen.getAllByText(/fs\.cpSync/).length).toBeGreaterThan(0));
+    expect(screen.getByText('Deploy Runbook (line 12-14)')).toBeInTheDocument();
+    expect(screen.getByText('ANSWERED')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /send|execute|approve|force|bypass|run shell|deploy/i })).not.toBeInTheDocument();
+  });
+
+  it('Jarvis surfaces a WAITING_APPROVAL response with a link to Approvals, never an inline approve control', async () => {
+    vi.mocked(api.post).mockResolvedValueOnce({
+      requestId: 'req-2',
+      intent: 'ACTION_PROPOSAL',
+      projectId: null,
+      status: 'WAITING_APPROVAL',
+      answer: 'Proposal prepared and waiting for approval.',
+      facts: [], inferences: [], unknowns: [], conflicts: [], citations: [], suggestedNextSteps: [],
+      proposal: { proposalId: 'prop-1', actionType: 'CALENDAR_EVENT_PROPOSAL', riskClass: 'R1' },
+      evidenceRefs: [], degradedCapabilities: [],
+      generatedAt: '2026-08-14T00:00:00Z',
+    });
+    renderWithProviders(<JarvisPage />);
+    fireEvent.change(screen.getByPlaceholderText(/ask about health/i), { target: { value: 'propose a calendar event' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
+    await waitFor(() => expect(screen.getByText('WAITING APPROVAL')).toBeInTheDocument());
+    const approvalsLink = screen.getByRole('link', { name: /approvals/i });
+    expect(approvalsLink).toHaveAttribute('href', '/approvals');
+    expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
   });
 
   it('Reviews handles a missing daily review honestly, offers to generate it', async () => {

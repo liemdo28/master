@@ -82,17 +82,43 @@ test.describe('Command Center — full flow against a controlled fixture backend
     await expect(page.getByText('Overall')).toBeVisible();
     await expect(page.getByText('CORE', { exact: true })).toBeVisible();
 
-    // 15. Generate EOD review
+    // 15. Open Jarvis — ask a health question, a project-scoped question, and a
+    //     knowledge question against the real canonical gateway (Phase 7C).
+    //     Read/plan/simulate only; never executes.
+    await page.getByRole('link', { name: 'Jarvis' }).click();
+    await expect(page).toHaveURL(/\/jarvis$/);
+
+    const jarvisInput = page.getByPlaceholder(/ask about health/i);
+    await jarvisInput.fill('what is the system health right now');
+    await page.getByRole('button', { name: 'Ask' }).click();
+    await expect(page.getByText('system status', { exact: true })).toBeVisible();
+    await expect(page.getByText(/Overall:/)).toBeVisible();
+
+    await page.getByRole('combobox').selectOption({ label: 'Mi Core System' });
+    await jarvisInput.fill('what tasks are waiting on me');
+    await page.getByRole('button', { name: 'Ask' }).click();
+    await expect(page.getByText('task query', { exact: true })).toBeVisible();
+
+    await jarvisInput.fill('find documentation about deployment');
+    await page.getByRole('button', { name: 'Ask' }).click();
+    await expect(page.getByText('knowledge search', { exact: true })).toBeVisible();
+
+    // No execution/mutation control anywhere on the page, across all three answers.
+    for (const forbidden of [/^approve/i, /^execute/i, /^send$/i, /^force$/i, /run shell/i, /bypass/i, /deploy/i]) {
+      await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
+    }
+
+    // 16. Generate EOD review
     await page.getByRole('link', { name: 'Reviews' }).click();
     await expect(page).toHaveURL(/\/reviews$/);
     const generateReview = page.getByRole('button', { name: /generate today's review/i });
     await generateReview.click();
     await expect(page.getByText('Completed', { exact: true })).toBeVisible();
 
-    // 16. Refresh page
+    // 17. Refresh page
     await page.reload();
 
-    // 17. Verify persistence — still authenticated (session survives reload), still on Reviews
+    // 18. Verify persistence — still authenticated (session survives reload), still on Reviews
     await expect(page.getByRole('heading', { name: 'Reviews' })).toBeVisible();
     await expect(page.getByText('Enter your PIN to unlock.')).not.toBeVisible();
   });
