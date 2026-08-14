@@ -83,6 +83,26 @@ export const AUTHORITY_RULES: Rule[] = [
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Task Runtime', auth: 'STRICT_API_KEY', capability: 'task state and read-only command evidence',
     projectScoped: true, evidence: ['server/src/routes/task-runtime.ts', 'server/src/task-runtime/engine.ts'],
   }),
+  // Phase 7C — canonical Jarvis Gateway. Orchestrates read/plan/simulate/
+  // propose against the already-classified canonical subsystems above; it
+  // never dispatches to a real external system itself (no direct provider
+  // call, no ControlledActionService.execute()/.approve() — see
+  // docs/security/PHASE7C_JARVIS_BOUNDARY.md). Classified the same way
+  // 'automation-simulation' below is: a POST that only ever mutates a
+  // bounded, ephemeral, in-process request/response cache, never a real
+  // external system. Must be ordered before 'legacy-sensitive-local'
+  // (whose /api/jarvis(\/.*)? wildcard would otherwise misclassify this as
+  // a generic legacy compatibility adapter).
+  rule('jarvis-gateway-request', /^\/api\/(command-center\/)?jarvis\/request$/, {
+    authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'canonical Jarvis conversational gateway — read/plan/simulate/propose only, dispatches to already-classified canonical subsystems exclusively, never executes directly',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/gateway.ts'],
+  }),
+  rule('jarvis-gateway-request-get', /^\/api\/(command-center\/)?jarvis\/request\/.+$/, {
+    authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['GET'],
+    capability: 'retrieve a previously-generated Jarvis Gateway response from the bounded in-process cache',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/request-store.ts'],
+  }),
   rule('coding', /^\/api\/(command-center\/)?coding(\/.*)?$/, {
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'CODE_EXECUTION', canonicalOwner: 'Coding Engine control plane', auth: 'STRICT_API_KEY', capability: 'coding workflow under project registry constraints',
     projectScoped: true, evidence: ['server/src/routes/coding.ts', 'server/src/coding/workflow.ts'],

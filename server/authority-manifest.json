@@ -2075,6 +2075,62 @@
       ]
     },
     {
+      "id": "cli:test:jarvis-gateway",
+      "kind": "CLI_COMMAND",
+      "sourcePath": "server/package.json",
+      "runtimeMount": "test:jarvis-gateway",
+      "method": "CLI",
+      "capability": "tsx src/jarvis-gateway/__tests__/phase7c-jarvis-gateway.test.ts",
+      "effectClass": "READ_ONLY",
+      "authorityClass": "INTERNAL_TEST_ONLY",
+      "canonicalOwner": "Test Harness",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "INTERNAL_ONLY",
+      "status": "TEST_ONLY",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/package.json scripts"
+      ]
+    },
+    {
+      "id": "cli:test:jarvis-gateway-security",
+      "kind": "CLI_COMMAND",
+      "sourcePath": "server/package.json",
+      "runtimeMount": "test:jarvis-gateway-security",
+      "method": "CLI",
+      "capability": "tsx src/__tests__/phase7c-legacy-containment.test.ts && tsx src/jarvis-gateway/__tests__/phase7c-legacy-mutation-scan.test.ts && tsx src/jarvis-gateway/__tests__/phase7c-jarvis-gateway-api-security.test.ts",
+      "effectClass": "READ_ONLY",
+      "authorityClass": "INTERNAL_TEST_ONLY",
+      "canonicalOwner": "Test Harness",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "INTERNAL_ONLY",
+      "status": "TEST_ONLY",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/package.json scripts"
+      ]
+    },
+    {
       "id": "cli:test:knowledge",
       "kind": "CLI_COMMAND",
       "sourcePath": "server/package.json",
@@ -7010,6 +7066,35 @@
       "evidence": [
         "server/src/intelligence/router.ts",
         "server/src/intelligence/service.ts"
+      ]
+    },
+    {
+      "id": "http:GET:/api/command-center/jarvis/request/:id",
+      "kind": "HTTP_ROUTE",
+      "sourcePath": "src/jarvis-gateway/router.ts",
+      "runtimeMount": "/api/command-center/jarvis/request/:id",
+      "method": "GET",
+      "capability": "retrieve a previously-generated Jarvis Gateway response from the bounded in-process cache",
+      "effectClass": "READ_ONLY",
+      "authorityClass": "CANONICAL_READ",
+      "canonicalOwner": "JarvisGateway",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "REMOTE_SESSION",
+      "status": "ACTIVE",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/src/jarvis-gateway/router.ts",
+        "server/src/jarvis-gateway/request-store.ts"
       ]
     },
     {
@@ -13376,6 +13461,35 @@
       "lastAuthorityEvidence": null,
       "evidence": [
         "server/src/index.ts legacy mounts"
+      ]
+    },
+    {
+      "id": "http:GET:/api/jarvis/request/:id",
+      "kind": "HTTP_ROUTE",
+      "sourcePath": "src/jarvis-gateway/router.ts",
+      "runtimeMount": "/api/jarvis/request/:id",
+      "method": "GET",
+      "capability": "retrieve a previously-generated Jarvis Gateway response from the bounded in-process cache",
+      "effectClass": "READ_ONLY",
+      "authorityClass": "CANONICAL_READ",
+      "canonicalOwner": "JarvisGateway",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "STRICT_API_KEY",
+      "status": "ACTIVE",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/src/jarvis-gateway/router.ts",
+        "server/src/jarvis-gateway/request-store.ts"
       ]
     },
     {
@@ -23236,6 +23350,35 @@
       ]
     },
     {
+      "id": "http:POST:/api/command-center/jarvis/request",
+      "kind": "HTTP_ROUTE",
+      "sourcePath": "src/jarvis-gateway/router.ts",
+      "runtimeMount": "/api/command-center/jarvis/request",
+      "method": "POST",
+      "capability": "canonical Jarvis conversational gateway — read/plan/simulate/propose only, dispatches to already-classified canonical subsystems exclusively, never executes directly",
+      "effectClass": "LOCAL_REVERSIBLE",
+      "authorityClass": "CANONICAL_LOCAL_MUTATION",
+      "canonicalOwner": "JarvisGateway",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "REMOTE_SESSION",
+      "status": "ACTIVE",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/src/jarvis-gateway/router.ts",
+        "server/src/jarvis-gateway/gateway.ts"
+      ]
+    },
+    {
       "id": "http:POST:/api/command-center/knowledge",
       "kind": "HTTP_ROUTE",
       "sourcePath": "src/personal-os/router.ts",
@@ -26844,6 +26987,35 @@
       "lastAuthorityEvidence": null,
       "evidence": [
         "server/src/index.ts legacy mounts"
+      ]
+    },
+    {
+      "id": "http:POST:/api/jarvis/request",
+      "kind": "HTTP_ROUTE",
+      "sourcePath": "src/jarvis-gateway/router.ts",
+      "runtimeMount": "/api/jarvis/request",
+      "method": "POST",
+      "capability": "canonical Jarvis conversational gateway — read/plan/simulate/propose only, dispatches to already-classified canonical subsystems exclusively, never executes directly",
+      "effectClass": "LOCAL_REVERSIBLE",
+      "authorityClass": "CANONICAL_LOCAL_MUTATION",
+      "canonicalOwner": "JarvisGateway",
+      "projectScoped": false,
+      "externalSystem": null,
+      "approvalRequired": false,
+      "governanceRequired": false,
+      "delegationEligible": false,
+      "authenticationRequired": "STRICT_API_KEY",
+      "status": "ACTIVE",
+      "legacyReason": null,
+      "migrationTarget": null,
+      "phase6bDisposition": null,
+      "adapterTarget": null,
+      "quarantineHandler": null,
+      "canonicalReplacement": null,
+      "lastAuthorityEvidence": null,
+      "evidence": [
+        "server/src/jarvis-gateway/router.ts",
+        "server/src/jarvis-gateway/gateway.ts"
       ]
     },
     {
@@ -30657,14 +30829,14 @@
     }
   ],
   "counts": {
-    "total": 1086,
-    "readOnly": 686,
-    "mutations": 400,
-    "canonical": 687,
+    "total": 1092,
+    "readOnly": 690,
+    "mutations": 402,
+    "canonical": 691,
     "adapters": 158,
     "quarantined": 155,
     "forbidden": 0,
-    "internalTest": 86,
+    "internalTest": 88,
     "unknownMutations": 0,
     "legacyMutations": 190,
     "adaptedLegacy": 4,

@@ -8,6 +8,7 @@ import { CommandPalette } from './CommandPalette';
 
 export const NAV_ITEMS = [
   { to: '/today', label: 'Today', key: 'g t' },
+  { to: '/jarvis', label: 'Jarvis', key: 'g j' },
   { to: '/goals', label: 'Goals', key: 'g g' },
   { to: '/approvals', label: 'Approvals', key: 'g a' },
   { to: '/actions', label: 'Actions', key: 'g x' },
