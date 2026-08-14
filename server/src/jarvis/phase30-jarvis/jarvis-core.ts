@@ -241,17 +241,18 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
   const storeName = storeMatch ? storeMatch[1].replace(/\b\w/g, c => c.toUpperCase()) : 'cửa hàng';
 
   // Content / SEO / website post
+  // QUARANTINED_PHASE_7C1: cooExecute() is LEGACY_QUARANTINED at the HTTP layer
+  // (POST /api/coo-v4/execute is 409-blocked) but this in-process require()+call
+  // bypassed that quarantine entirely and could reach a real external website
+  // publish (gstack/connectors/raw-website-connector.ts-style mutation) with only
+  // coo-v4's own non-canonical governor/council as a gate. See
+  // docs/architecture/PHASE7C_COMPONENT_AUDIT.md §2 — closed the same way Phase
+  // 7A closed autonomous-task-runner.ts. coo-v4 itself is untouched/unredesigned.
   if (has(t, /(raw sushi|stone oak|bakudan|rim|bandera).*(tao bai|tao post|post bai|viet bai|bai seo|bai post|len website|post website|create.*post|seo post)|marketing.*(raw sushi|stone oak|bakudan)|content.*(raw sushi|stone oak|bakudan)|tao bai seo|viet bai seo/)) {
-    try {
-      const { cooExecute } = require('../../coo-v4/coo-orchestrator');
-      const result = await cooExecute(`Tạo bài SEO và post lên website cho ${storeName}: ${ctx.raw_text}`);
-      return { handled: true, phase: 40, reply: result.reply, metadata: { workflow_id: result.workflow_id } };
-    } catch {
-      return {
-        handled: true, phase: 30,
-        reply: `📝 *Content Workflow — ${storeName}*\n\nEm đã nhận yêu cầu. COO agent sẽ:\n1. Draft bài SEO cho ${storeName}\n2. Gửi anh xem trước khi post\n3. Publish lên website sau khi anh duyệt\n\n⏳ Em đang chuẩn bị draft — anh chờ em chút nhé.`,
-      };
-    }
+    return {
+      handled: true, phase: 30,
+      reply: `📝 *Content Workflow — ${storeName}*\n\nEm đã nhận yêu cầu. Tính năng auto-publish qua COO agent hiện đang tạm khoá (QUARANTINED_PHASE_7C1) — anh dùng Command Center Jarvis để tạo và duyệt content thay thế nhé.`,
+    };
   }
 
   // ── Restaurant Creative Engine V2 ────────────────────────────────────────
@@ -530,16 +531,23 @@ async function _processJarvisQuery(ctx: JarvisContext): Promise<JarvisResponse> 
 
   // COO V4: CEO issues ONE instruction → Mi plans + executes end-to-end
   // Triggers: "mi làm X", "create/audit/analyze/publish/prepare X", action verbs with targets
+  // QUARANTINED_PHASE_7C1: cooExecute()/handleCeoSignal() are LEGACY_QUARANTINED
+  // at the HTTP layer (POST /api/coo-v4/execute, /workflows/:id/signal are 409-
+  // blocked) but this in-process require()+call bypassed that quarantine
+  // entirely. handleCeoSignal() parses raw WhatsApp text for "APPROVE wf_…" —
+  // a real authority decision outside canonical governance; cooExecute()'s
+  // dispatchStep() can reach coo-v4/agents/ai-developer-agent.ts (code
+  // modification via execSync/exec) and coo-v4/agents/creative-agents.ts (shell
+  // exec with unescaped content interpolation) with only coo-v4's own governor/
+  // council as a gate. See docs/architecture/PHASE7C_COMPONENT_AUDIT.md §2 —
+  // closed the same way Phase 7A closed autonomous-task-runner.ts. coo-v4 itself
+  // is untouched/unredesigned; getRunningWorkflows() (read-only, below) is not
+  // affected by this quarantine.
   if (has(t, /^(tao|lam|audit|fix|create|publish|send|analyze|prepare|update|optimize|schedule|automate)\b|mi (lam|chay|thuc hien|xu ly|giai quyet)\b|coo v4|autonomous coo/)) {
-    try {
-      const { cooExecute, handleCeoSignal, getRunningWorkflows } = require('../../coo-v4/coo-orchestrator');
-      // CEO workflow approval/cancel signals
-      const signalResult = handleCeoSignal(ctx.raw_text);
-      if (signalResult.handled) return { handled: true, phase: 40, reply: signalResult.reply };
-
-      const result = await cooExecute(ctx.raw_text);
-      return { handled: true, phase: 40, reply: result.reply, metadata: { workflow_id: result.workflow_id, status: result.status } };
-    } catch { /* fall through */ }
+    return {
+      handled: true, phase: 40,
+      reply: 'Em đã nhận yêu cầu. Tính năng autonomous COO execute hiện đang tạm khoá (QUARANTINED_PHASE_7C1) — anh dùng Command Center Jarvis để lên kế hoạch và duyệt tác vụ thay thế nhé.',
+    };
   }
 
   // COO V4: workflow status query
