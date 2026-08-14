@@ -33,12 +33,19 @@ async function main(): Promise<void> {
     gatewaySrc.includes('export async function handleGatewayRequest') && gatewaySrc.includes('function dispatch'),
     'server/src/jarvis-gateway/gateway.ts exports handleGatewayRequest() and an internal dispatch() switch');
 
-  // 2. One request entrypoint.
+  // 2. One request-creation entrypoint. The real invariant is "exactly one
+  //    mutation-shaped (POST) route, ever" — additional READ routes (e.g.
+  //    Phase 7D's GET /jarvis/session/current) are expected to accumulate
+  //    over time and are not themselves a boundary violation; a second POST
+  //    route, or any /execute route, would be. Reviewed amendment to this
+  //    frozen 7C acceptance point, made explicitly for Phase 7D — see
+  //    docs/architecture/PHASE7D_UNIFIED_CONTEXT.md.
   const routerSrc = stripComments(read('router.ts', GATEWAY_DIR));
-  const postRouteCount = (routerSrc.match(/jarvisGatewayRouter\.(post|get)\(/g) || []).length;
-  add('exactly one canonical request-creation entrypoint (POST /jarvis/request) plus its GET retrieval companion, no generic /execute',
-    routerSrc.includes("post('/jarvis/request'") && routerSrc.includes("get('/jarvis/request/:id'") && postRouteCount === 2 && !routerSrc.includes("'/execute'"),
-    `router defines exactly ${postRouteCount} routes: POST /jarvis/request, GET /jarvis/request/:id`);
+  const postRouteCount = (routerSrc.match(/jarvisGatewayRouter\.post\(/g) || []).length;
+  const getRouteCount = (routerSrc.match(/jarvisGatewayRouter\.get\(/g) || []).length;
+  add('exactly one mutation-shaped entrypoint (POST /jarvis/request), any number of GET read routes, no generic /execute',
+    routerSrc.includes("post('/jarvis/request'") && routerSrc.includes("get('/jarvis/request/:id'") && postRouteCount === 1 && getRouteCount >= 2 && !routerSrc.includes("'/execute'"),
+    `router defines ${postRouteCount} POST route(s) and ${getRouteCount} GET route(s); POST /jarvis/request and GET /jarvis/request/:id confirmed present`);
 
   // 3. Auth.
   const indexSrc = read('src/index.ts', SERVER_ROOT).replace(/\s+/g, ' ');
