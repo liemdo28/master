@@ -28,7 +28,11 @@ interface Rule {
 // Ordered — first match wins. More specific/higher-authority-implying
 // patterns are checked before general ones.
 const RULES: Rule[] = [
-  { type: 'SYSTEM_STATUS', pattern: /\b(health|status|he thong|dang chay|is (up|down|broken)|what'?s broken|gi bi loi|healthy|degraded)\b/ },
+  // Scoped to genuinely system-shaped phrasing — a bare "status"/"health" is
+  // too broad and would otherwise hijack "what is the status of project X"
+  // or "task health" style questions that belong to other request types
+  // (caught live by the >=500-scenario evaluation, see phase7c-evaluation.ts).
+  { type: 'SYSTEM_STATUS', pattern: /\b(system (health|status)|health (status|check)|is (the system |everything )?(up|down|broken|healthy)|what'?s broken|gi bi loi|degraded|he thong|dang chay)\b/ },
   { type: 'OPERATOR_QUERY', pattern: /\b(pending|waiting.?approval|blocked|why (was|is) this blocked|operator|what did you do)\b/ },
   { type: 'CODING', pattern: /\b(code|coding|fix\b.*\bbug|implement|refactor|write (a )?function|pull request|git diff)\b/ },
   { type: 'ACTION_PROPOSAL', pattern: /\b(draft (an? )?email|schedule (a )?meeting|create (a )?calendar event|send (an? )?email|propose|book (a )?meeting)\b/ },
