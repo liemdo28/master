@@ -106,6 +106,34 @@ async function run(): Promise<void> {
       assertPass(postBody.sessionId !== 'device:device-A', 'must never resolve to the bare device:device-A key that a real authenticated device A request would get');
     }
 
+    // ── GET /jarvis/request/:id ownership: device B can never read device A's stored response ──
+    // (found by independent review of PR #105 — 7C's endpoint had no
+    // ownership check, and 7D raised its sensitivity by adding sessionId
+    // to every stored response).
+    {
+      const post = await fetch(`${base}/api/command-center/jarvis/request`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-session-token': 'device-A-token' },
+        body: JSON.stringify({ text: 'device A private request' }),
+      });
+      const postBody = await post.json() as { requestId: string };
+
+      const ownerGet = await fetch(`${base}/api/command-center/jarvis/request/${postBody.requestId}`, { headers: { 'x-session-token': 'device-A-token' } });
+      assertPass(ownerGet.status === 200, 'the creating caller (device A) must still be able to read its own stored request');
+
+      const otherDeviceGet = await fetch(`${base}/api/command-center/jarvis/request/${postBody.requestId}`, { headers: { 'x-session-token': 'device-B-token' } });
+      assertPass(otherDeviceGet.status === 404, 'a different device must get 404, never device A\'s stored response, even with a valid requestId');
+
+      const apiKeyGet = await fetch(`${base}/api/jarvis/request/${postBody.requestId}`, { headers: { 'x-api-key': API_KEY } });
+      assertPass(apiKeyGet.status === 404, 'an api_key caller must never read a remote_session caller\'s stored request either');
+    }
+
+    // ── GET /jarvis/session/current query sessionId length validation ───────
+    {
+      const res = await fetch(`${base}/api/jarvis/session/current?sessionId=${'x'.repeat(200)}`, { headers: { 'x-api-key': API_KEY } });
+      assertPass(res.status === 400, 'an oversized ?sessionId= query param must be rejected with 400, same as POST body validation');
+    }
+
     // ── An api_key caller can never read a device: session by guessing the id ──
     {
       const res = await fetch(`${base}/api/jarvis/session/current?sessionId=${encodeURIComponent('device:device-A')}`, { headers: { 'x-api-key': API_KEY } });

@@ -31,6 +31,19 @@ function callerIdentity(req: Request): CallerIdentity {
   return deviceId ? { source: 'remote_session', deviceId } : { source: 'api_key' };
 }
 
+// Phase 7D — independent review of PR #103 noted GET /jarvis/request/:id
+// (Phase 7C) had no caller-ownership check, and that Phase 7D increased
+// what it exposes by adding `sessionId` to every stored JarvisResponse. A
+// remote_session caller must only ever read back a request THEY created;
+// api_key callers share fate the same way explicit sessions already do
+// (there is no stronger per-api_key identity anywhere in this codebase —
+// see PHASE7D_UNIFIED_CONTEXT.md).
+function sameCaller(a: CallerIdentity, b: CallerIdentity): boolean {
+  if (a.source !== b.source) return false;
+  if (a.source === 'remote_session') return a.deviceId === b.deviceId;
+  return true;
+}
+
 export function jarvisGatewayJsonErrorHandler(err: unknown, _req: Request, res: Response, next: NextFunction): void {
   if (err instanceof SyntaxError && 'body' in (err as object)) {
     res.status(400).json({ error: 'Malformed JSON body' });
@@ -83,8 +96,10 @@ jarvisGatewayRouter.post('/jarvis/request', async (req: Request, res: Response) 
 
 jarvisGatewayRouter.get('/jarvis/request/:id', (req: Request, res: Response) => {
   const entry = getRequest(req.params.id);
-  if (!entry) {
-    res.status(404).json({ error: 'Request not found (expired or never existed)' });
+  // Same 404 for "not found" and "not yours" — never confirm existence of
+  // a request id to a caller who isn't its creator.
+  if (!entry || !sameCaller(callerIdentity(req), entry.request.caller)) {
+    res.status(404).json({ error: 'Request not found (expired, never existed, or not owned by this caller)' });
     return;
   }
   res.json(entry.response);
@@ -97,7 +112,12 @@ jarvisGatewayRouter.get('/jarvis/request/:id', (req: Request, res: Response) => 
 // This is the read counterpart to POST's session resolution — same function,
 // same rules, so there is no second, divergent access-control path to audit.
 jarvisGatewayRouter.get('/jarvis/session/current', (req: Request, res: Response) => {
-  const explicitSessionId = typeof req.query.sessionId === 'string' ? req.query.sessionId : undefined;
+  const rawSessionId = req.query.sessionId;
+  if (rawSessionId !== undefined && (typeof rawSessionId !== 'string' || rawSessionId.length > MAX_SESSION_ID_LENGTH)) {
+    res.status(400).json({ error: `sessionId, if provided, must be a string of at most ${MAX_SESSION_ID_LENGTH} characters` });
+    return;
+  }
+  const explicitSessionId = typeof rawSessionId === 'string' ? rawSessionId : undefined;
   const sessionId = resolveSessionId(callerIdentity(req), explicitSessionId);
   if (!sessionId) {
     res.status(404).json({ error: 'No session identity resolvable for this caller (remote_session callers always have one; api_key callers must pass ?sessionId=)' });
