@@ -118,8 +118,17 @@ const LIVE_CONVERSATIONAL_ADAPTERS = [
   'routes/chat.ts',
   'routes/whatsapp.ts',
   'pipeline/response-pipeline.ts',
-  'jarvis-gateway/gateway.ts',
-  'jarvis-gateway/router.ts',
+  // Auto-discovered rather than hand-listed, so a new top-level file (e.g.
+  // Phase 7D's session-store.ts/session-resolver.ts) is scanned automatically
+  // without anyone needing to remember to add it here. Excludes acceptance/
+  // evaluation scripts (phase*-acceptance.ts, phase*-evaluation.ts): those
+  // are dev-time tooling, never reachable from a live request, and their own
+  // source legitimately contains the forbidden-call strings as scanner data
+  // (e.g. phase7c-acceptance.ts's own `forbidden = ['cooExecute(', ...]`
+  // array) — a false positive if scanned the same way as a real adapter.
+  ...fs.readdirSync(path.join(SRC_ROOT, 'jarvis-gateway'))
+    .filter(f => f.endsWith('.ts') && !/-(acceptance|evaluation)\.ts$/.test(f))
+    .map(f => `jarvis-gateway/${f}`),
   ...fs.readdirSync(path.join(SRC_ROOT, 'jarvis-gateway', 'handlers')).map(f => `jarvis-gateway/handlers/${f}`),
 ];
 

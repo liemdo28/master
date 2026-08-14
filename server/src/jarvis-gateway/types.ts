@@ -72,6 +72,11 @@ export interface JarvisRequestInput {
    *  this plan" button), never inferred from free text for security-sensitive
    *  classes without going through the classifier's own rules. */
   requestType?: RequestType;
+  /** Phase 7D — opt-in session continuity (see session-resolver.ts). Only
+   *  meaningful for `api_key` callers, who have no stable identity of their
+   *  own; `remote_session` callers get session continuity automatically via
+   *  their persisted device_id and never need to pass this. */
+  sessionId?: string;
 }
 
 export interface JarvisRequest extends JarvisRequestInput {
@@ -85,6 +90,10 @@ export interface JarvisResponse {
   requestId: string;
   intent: RequestType;
   projectId: string | null;
+  /** Phase 7D — the session this request was recorded under, or null if no
+   *  resolvable session identity existed for this caller/request (sessions
+   *  are opt-in — see session-resolver.ts). */
+  sessionId: string | null;
   status: ResponseStatus;
   answer: string;
   facts: TruthStatement[];
