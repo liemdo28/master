@@ -9,6 +9,7 @@ export function baseResponse(requestId: string, intent: RequestType, projectId: 
     requestId,
     intent,
     projectId,
+    sessionId: null,
     status: 'ANSWERED',
     answer: '',
     facts: [],

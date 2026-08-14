@@ -1063,12 +1063,14 @@ export interface JarvisRequestInput {
   text: string;
   projectId?: string | null;
   requestType?: JarvisRequestType;
+  sessionId?: string;
 }
 
 export interface JarvisResponse {
   requestId: string;
   intent: JarvisRequestType;
   projectId: string | null;
+  sessionId: string | null;
   status: JarvisResponseStatus;
   answer: string;
   facts: JarvisTruthStatement[];

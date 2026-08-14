@@ -103,6 +103,15 @@ export const AUTHORITY_RULES: Rule[] = [
     capability: 'retrieve a previously-generated Jarvis Gateway response from the bounded in-process cache',
     evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/request-store.ts'],
   }),
+  // Phase 7D — read-only, and only ever the CALLER'S OWN session: the route
+  // takes no client-suppliable session id, it re-derives the session key
+  // server-side from the same resolveSessionId() function POST uses (see
+  // docs/architecture/PHASE7D_CANONICAL_JARVIS_SESSION.md).
+  rule('jarvis-gateway-session-get', /^\/api\/(command-center\/)?jarvis\/session\/current$/, {
+    authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['GET'],
+    capability: 'retrieve the caller\'s own bounded, in-process Jarvis conversation session',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/session-store.ts'],
+  }),
   rule('coding', /^\/api\/(command-center\/)?coding(\/.*)?$/, {
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'CODE_EXECUTION', canonicalOwner: 'Coding Engine control plane', auth: 'STRICT_API_KEY', capability: 'coding workflow under project registry constraints',
     projectScoped: true, evidence: ['server/src/routes/coding.ts', 'server/src/coding/workflow.ts'],

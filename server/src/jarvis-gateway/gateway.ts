@@ -23,6 +23,8 @@ import { handleCoding } from './handlers/coding';
 import { handleInformation } from './handlers/information';
 import { recordRequest } from './request-store';
 import { scrubReply } from '../middleware/response-scrubber';
+import { peekSession, recordTurn } from './session-store';
+import { resolveSessionId } from './session-resolver';
 
 // KNOWLEDGE_SEARCH is required too: KnowledgeRetrievalService's own query
 // validator refuses to run without at least one projectId — "there is no
@@ -70,9 +72,24 @@ export async function handleGatewayRequest(input: JarvisRequestInput, caller: Ca
     receivedAt: new Date().toISOString(),
   };
 
+  // Phase 7D — opt-in session continuity. peekSession() never creates a
+  // session as a side effect of merely checking for one (see session-store.ts).
+  const sessionId = resolveSessionId(caller, input.sessionId);
+  const session = sessionId ? peekSession(sessionId) : null;
+
   const classification = classifyRequest(request.text, request.requestType);
   const requiresProject = PROJECT_REQUIRED_TYPES.has(classification.type);
-  const resolution = resolveProject(projectRegistry, request.projectId, request.text, requiresProject);
+  let resolution = resolveProject(projectRegistry, request.projectId, request.text, requiresProject);
+
+  // Session context may only ever UNBLOCK a would-be clarification by
+  // reusing the session's last explicitly-resolved project — it never
+  // narrows an already-answerable request (e.g. TASK_QUERY's existing
+  // "no projectId = all projects" behavior is untouched) and never
+  // overrides an explicit projectId or a free-text project mention that
+  // already resolved on its own.
+  if (requiresProject && resolution.status === 'UNKNOWN' && !request.projectId && session?.activeProjectId) {
+    resolution = { status: 'RESOLVED', projectId: session.activeProjectId };
+  }
 
   let response: JarvisResponse;
   if (resolution.status === 'AMBIGUOUS' || (requiresProject && resolution.status === 'UNKNOWN')) {
@@ -83,7 +100,9 @@ export async function handleGatewayRequest(input: JarvisRequestInput, caller: Ca
   }
 
   scrubResponse(response);
+  response.sessionId = sessionId;
   recordRequest(request, response);
+  if (sessionId) recordTurn(sessionId, response, request.text);
   return response;
 }
 
