@@ -27,6 +27,13 @@ const STYLE: Record<string, { dot: string; text: string; bg: string; icon: strin
   STALE:            { dot: 'bg-(--color-attention)',     text: 'text-(--color-attention)',     bg: 'bg-(--color-attention)/10',     icon: '▲' },
   PARTIAL:          { dot: 'bg-(--color-attention)',     text: 'text-(--color-attention)',     bg: 'bg-(--color-attention)/10',     icon: '◐' },
   NOT_GENERATED:    { dot: 'bg-(--color-not-configured)', text: 'text-(--color-not-configured)', bg: 'bg-(--color-not-configured)/10', icon: '○' },
+  // Phase 7C — Jarvis Gateway response statuses.
+  ANSWERED:         { dot: 'bg-(--color-healthy)',       text: 'text-(--color-healthy)',       bg: 'bg-(--color-healthy)/10',       icon: '●' },
+  NEEDS_CLARIFICATION: { dot: 'bg-(--color-attention)',  text: 'text-(--color-attention)',     bg: 'bg-(--color-attention)/10',     icon: '?' },
+  NO_SUPPORTED_ANSWER: { dot: 'bg-(--color-not-configured)', text: 'text-(--color-not-configured)', bg: 'bg-(--color-not-configured)/10', icon: '○' },
+  CONFLICT:         { dot: 'bg-(--color-attention)',     text: 'text-(--color-attention)',     bg: 'bg-(--color-attention)/10',     icon: '⚡' },
+  SIMULATED:        { dot: 'bg-(--color-suggestion)',    text: 'text-(--color-suggestion)',    bg: 'bg-(--color-suggestion)/10',    icon: '◈' },
+  PROPOSAL_READY:   { dot: 'bg-(--color-accent)',        text: 'text-(--color-accent)',        bg: 'bg-(--color-accent)/10',        icon: '◆' },
 };
 
 export function StatusBadge({ status, label }: { status: string; label?: string }) {

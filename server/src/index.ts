@@ -136,6 +136,7 @@ import { personalOsJsonParser, personalOsRouter } from './personal-os/router';
 import { intelligenceJsonParser, intelligenceRouter } from './intelligence/router';
 import { knowledgeDocumentsJsonParser, knowledgeDocumentsRouter } from './personal-os/documents/router';
 import { simulationJsonParser, automationSimulationRouter } from './personal-os/automation-simulation/router';
+import { jarvisGatewayJsonParser, jarvisGatewayJsonErrorHandler, jarvisGatewayRouter } from './jarvis-gateway/router';
 import { operatingJsonParser, operatingRouter } from './personal-os/operating/router';
 import { authorityRouter } from './authority-control-plane/router';
 import { operatorControlRouter } from './operator-control/router';
@@ -248,6 +249,7 @@ app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, ope
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, evidenceRouter);
 app.use('/api/command-center', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, automationSimulationRouter);
 app.use('/api/command-center', rateLimiter, applyIpGuard, requireRemoteAuth, healthDetailRouter);
+app.use('/api/command-center', jarvisGatewayJsonParser, jarvisGatewayJsonErrorHandler, rateLimiter, applyIpGuard, requireRemoteAuth, jarvisGatewayRouter);
 
 app.use('/api/task-runtime', taskRuntimeJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, taskRuntimeRouter);
 app.use('/api/coding', codingJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, codingRouter);
@@ -264,6 +266,7 @@ app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, operatorContr
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, evidenceRouter);
 app.use('/api', simulationJsonParser, taskRuntimeJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, automationSimulationRouter);
 app.use('/api', rateLimiter, applyIpGuard, requireTaskRuntimeAuth, healthDetailRouter);
+app.use('/api', jarvisGatewayJsonParser, jarvisGatewayJsonErrorHandler, rateLimiter, applyIpGuard, requireTaskRuntimeAuth, jarvisGatewayRouter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(rateLimiter);

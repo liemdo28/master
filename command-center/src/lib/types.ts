@@ -1033,6 +1033,59 @@ export interface SystemHealth {
   };
 }
 
+// Phase 7C — Canonical Jarvis Gateway (read/plan/simulate/propose only; no
+// direct execution). See server/src/jarvis-gateway/types.ts.
+export type JarvisRequestType =
+  | 'INFORMATION' | 'KNOWLEDGE_SEARCH' | 'TASK_QUERY' | 'PROJECT_QUERY' | 'GOAL_QUERY'
+  | 'PLANNING' | 'SIMULATION' | 'ACTION_PROPOSAL' | 'CODING' | 'SYSTEM_STATUS' | 'OPERATOR_QUERY';
+
+export type JarvisResponseStatus =
+  | 'ANSWERED' | 'NEEDS_CLARIFICATION' | 'NO_SUPPORTED_ANSWER' | 'CONFLICT' | 'DEGRADED'
+  | 'SIMULATED' | 'PROPOSAL_READY' | 'WAITING_APPROVAL' | 'BLOCKED' | 'FAILED';
+
+export interface JarvisTruthStatement {
+  kind: 'FACT' | 'INFERENCE' | 'ASSUMPTION';
+  statement: string;
+  citationIds?: string[];
+}
+
+export interface JarvisCitationRef {
+  documentId: string;
+  chunkId: string;
+  sourceUri: string;
+  title: string;
+  headingPath?: string[];
+  lineStart?: number | null;
+  lineEnd?: number | null;
+}
+
+export interface JarvisRequestInput {
+  text: string;
+  projectId?: string | null;
+  requestType?: JarvisRequestType;
+}
+
+export interface JarvisResponse {
+  requestId: string;
+  intent: JarvisRequestType;
+  projectId: string | null;
+  status: JarvisResponseStatus;
+  answer: string;
+  facts: JarvisTruthStatement[];
+  inferences: JarvisTruthStatement[];
+  unknowns: string[];
+  conflicts: string[];
+  citations: JarvisCitationRef[];
+  suggestedNextSteps: string[];
+  simulation?: { simulationId: string; overallOutcome: string };
+  proposal?: { proposalId: string; actionType: string; riskClass: string };
+  approvalRequirement?: string | null;
+  healthImpact?: { overall: string; degradedDependencies: string[] };
+  evidenceRefs: string[];
+  degradedCapabilities: string[];
+  generatedAt: string;
+}
+
 export interface SimulationRun {
   simulationId: string;
   inputHash: string;

@@ -143,7 +143,11 @@
     "test:selfheal-rate-limit-regression": "tsx src/company-os/__tests__/selfheal-rate-limit-regression.test.ts",
     "health-truth:evaluation": "tsx src/health-truth/phase7b-evaluation.ts",
     "health-truth:performance": "tsx src/health-truth/phase7b-performance.ts",
-    "phase7b:acceptance": "npm run test:health-truth-model && npm run test:health-truth-security && npm run test:selfheal-rate-limit-regression && npm run health-truth:evaluation && tsx src/health-truth/phase7b-acceptance.ts"
+    "phase7b:acceptance": "npm run test:health-truth-model && npm run test:health-truth-security && npm run test:selfheal-rate-limit-regression && npm run health-truth:evaluation && tsx src/health-truth/phase7b-acceptance.ts",
+    "test:jarvis-gateway": "tsx src/jarvis-gateway/__tests__/phase7c-jarvis-gateway.test.ts",
+    "test:jarvis-gateway-security": "tsx src/__tests__/phase7c-legacy-containment.test.ts && tsx src/jarvis-gateway/__tests__/phase7c-legacy-mutation-scan.test.ts && tsx src/jarvis-gateway/__tests__/phase7c-jarvis-gateway-api-security.test.ts",
+    "jarvis-gateway:evaluation": "tsx src/jarvis-gateway/phase7c-evaluation.ts",
+    "phase7c:acceptance": "npm run test:jarvis-gateway && npm run test:jarvis-gateway-security && npm run jarvis-gateway:evaluation && tsx src/jarvis-gateway/phase7c-acceptance.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

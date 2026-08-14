@@ -29,6 +29,7 @@ import { MemoryPage } from '@/routes/MemoryPage';
 import { CalendarPage } from '@/routes/CalendarPage';
 import { InboxPage } from '@/routes/InboxPage';
 import { CodingPage } from '@/routes/CodingPage';
+import { JarvisPage } from '@/routes/JarvisPage';
 import { HealthPage } from '@/routes/HealthPage';
 import { ReviewsPage } from '@/routes/ReviewsPage';
 import { SettingsPage } from '@/routes/SettingsPage';
@@ -72,6 +73,7 @@ function Gate() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/coding" element={<CodingPage />} />
+        <Route path="/jarvis" element={<JarvisPage />} />
         <Route path="/health" element={<HealthPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/operator" element={<OperatorControlPage />} />

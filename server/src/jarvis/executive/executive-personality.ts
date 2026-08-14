@@ -411,26 +411,18 @@ function handleProjectQuery(text: string, sender: string): string | null {
   return reply;
 }
 
-// ── GStack Operating Backend — fires before personality for complex requests ──
-
-let _gstackModule: { shouldUseGStack: (t: string) => boolean; processGStackRequest: (r: unknown) => Promise<{ ceo_message: string; confidence_score: number }> } | null = null;
-function getGStack() {
-  if (!_gstackModule) _gstackModule = require('../../gstack/gstack-orchestrator');
-  return _gstackModule!;
-}
-
-async function tryGStack(text: string, sender: string): Promise<PersonalityResult | null> {
-  try {
-    const { shouldUseGStack, processGStackRequest } = getGStack();
-    if (!shouldUseGStack(text)) return null;
-
-    const result = await processGStackRequest({
-      raw_request: text,
-      requested_by: sender,
-      source: 'whatsapp',
-    });
-    return { handled: true, reply: result.ceo_message, intent: 'gstack_pipeline', confidence: result.confidence_score };
-  } catch { return null; }
+// ── GStack Operating Backend — QUARANTINED_PHASE_7C1 ──────────────────────────
+// gstack-orchestrator.processGStackRequest() is LEGACY_QUARANTINED at the HTTP
+// layer (POST /api/gstack/process is 409-blocked by legacyAuthorityBoundary),
+// but this in-process require()+call bypassed that quarantine entirely — Express
+// middleware cannot intercept a direct function call. Through this path gstack
+// could reach execSync('pm2 restart ...'), a real external website-publish call,
+// and other ungoverned mutation with only gstack's own (non-canonical) approval
+// engine as a gate. Phase 7C (docs/architecture/PHASE7C_COMPONENT_AUDIT.md §2)
+// closes this the same way Phase 7A closed autonomous-task-runner.ts: the call
+// site never invokes the orchestrator. gstack itself is untouched/unredesigned.
+async function tryGStack(_text: string, _sender: string): Promise<PersonalityResult | null> {
+  return null;
 }
 
 // ── Main entry point ──────────────────────────────────────────────────────────
