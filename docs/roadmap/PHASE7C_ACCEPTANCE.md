@@ -43,8 +43,10 @@ numbered points, each independently checked by `npm run phase7c:acceptance`
     `approval-engine`/`production-governor`.
 14. `WAITING_APPROVAL` responses point to the canonical Approvals UI
     (`Link to="/approvals"`), never an inline approve control.
-15. `CODING` calls the canonical `CodingWorkflow.planTask()` — never a
-    duplicate coding agent.
+15. `CODING` never calls `CodingWorkflow.planTask()`/`.run()` — both create
+    a real task record and a real git worktree, so the Gateway stays
+    advisory-only, same pattern as `ACTION_PROPOSAL`. (Fixed during
+    independent review — see below.)
 16. `SYSTEM_STATUS` uses the Phase 7B canonical health-truth model
     exclusively — never the legacy jarvis health-center duplicate.
 17. Legacy entrypoint containment proven by a permanent structural
@@ -194,7 +196,69 @@ fixture server as well as via Playwright.
 
 ## Independent review
 
-*To be completed before merge — see task #71.*
+A fresh independent review of PR #103 (no prior context, verified every
+claim against the actual code and by re-running every listed command itself
+rather than trusting the PR description or these docs) found two real,
+fixed-before-merge issues and several nitpicks:
+
+1. **`CODING` was non-functional and, if fixed naively, would have violated
+   the no-execution boundary.** `handlers/coding.ts` called
+   `codingWorkflow.planTask()` under the doc-comment's claim that it was
+   "read-plan-only." In fact `CodingWorkflow.planTask()` creates a real
+   `Task` record and calls `prepareWorktree()`, which runs a real `git
+   worktree add -b <branch>` — a genuine git/filesystem mutation, plus a
+   real coding-model invocation. It also structurally requires a pre-built
+   `contextPackId`/fresh project map the Gateway never supplies, so the
+   success path always threw `"...requires a fresh map before coding"` —
+   confirmed live against a real `ACTIVE` project. Neither
+   `test:jarvis-gateway` (only tested the missing-`projectId` path) nor the
+   evaluation's `coding_request` category (only checked classified intent,
+   never `status`) exercised the resolved-project path, so this shipped
+   undetected. **Fixed**: `CODING` now never calls `planTask()`/`.run()` at
+   all — it returns a fixed advisory reply pointing to Command Center →
+   Coding, the same "never call the mutating method, always redirect"
+   pattern `ACTION_PROPOSAL` already used. A new test
+   (`phase7c-jarvis-gateway.test.ts`) asserts a resolved-project `CODING`
+   request creates zero new task records. `phase7c-acceptance.ts` point 15
+   updated to check the absence of `.planTask(`/`.run(`/`CodingWorkflow`
+   rather than their presence.
+2. **The P0 secret-scrubbing middleware wasn't wired to the Gateway.**
+   `middleware/response-scrubber.ts`'s own doc comment names `/api/jarvis`
+   as an intended mount target and is wired to `routes/whatsapp.ts`/
+   `routes/chat.ts`, but not to `jarvisGatewayRouter`. Even mounting it as
+   Express middleware wouldn't have helped as-is, since it only scrubs
+   `body.reply`/`body.message`, and `JarvisResponse` uses `answer`/
+   `unknowns`/etc. Concretely exploitable path: `handlers/information.ts`
+   puts `askAi()` failure text into `response.unknowns`, and
+   `provider-router.ts` constructs some of those errors from raw upstream
+   HTTP response bodies, which could in principle echo a key-shaped string
+   on some provider error path — a path the existing secret-leakage test
+   never actually exercised (it only checked a `SYSTEM_STATUS` response).
+   **Fixed**: `gateway.ts` now calls the canonical `scrubReply()` (imported
+   directly, not a new redaction implementation) on every string-bearing
+   field of the response — `answer`, `unknowns`, `conflicts`,
+   `suggestedNextSteps`, `degradedCapabilities`, and each fact's/inference's
+   `statement` — once, at the single point every response passes through
+   before being cached and returned, so both `POST /jarvis/request` and the
+   cached `GET /jarvis/request/:id` get the scrubbed version automatically.
+3. **Nitpicks, also fixed**: the runbook's handler file count (9 → actual
+   11), an oxlint warning count off by one, `WAITING_APPROVAL` in the
+   runbook's status table was documented as a live path when no handler
+   currently emits it (now carries the same "(Reserved)" caveat
+   `PROPOSAL_READY` already had), and an unused `withStatus()` export in
+   `response.ts` was removed.
+4. **Noted, not fixed in this PR (correctly out of scope)**: a pre-existing,
+   untouched-by-this-PR mutation-capable call site in `jarvis-core.ts`
+   (`generateCreativePackage()`, real `fs.writeFileSync` for flyer/creative
+   content, no approval gate) that the mutation-scan's specific
+   `FORBIDDEN_CALLS` list doesn't catch because it isn't one of the named
+   quarantined functions. Recorded for Phase 7D, not a regression introduced
+   by this PR.
+
+All fixes re-verified: `npm run test:jarvis-gateway` (14/14, +1 new
+scenario), `npm run test:jarvis-gateway-security` (51/51 unchanged),
+`npm run jarvis-gateway:evaluation` and `npm run phase7c:acceptance` both
+re-run clean after the changes.
 
 ## Full regression
 

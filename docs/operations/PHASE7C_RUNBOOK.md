@@ -6,7 +6,7 @@ Date: 2026-08-14
 
 - New module `server/src/jarvis-gateway/`: `types.ts`, `intent-classifier.ts`,
   `project-resolver.ts`, `request-store.ts`, `services.ts`, `response.ts`,
-  `gateway.ts`, `router.ts`, `handlers/*.ts` (9 files),
+  `gateway.ts`, `router.ts`, `handlers/*.ts` (11 files),
   `phase7c-evaluation.ts` (530-fixture evaluation), `phase7c-acceptance.ts`
   (20-point acceptance).
 - `server/src/jarvis/executive/executive-personality.ts`: `tryGStack()`
@@ -56,7 +56,7 @@ handler calls an existing canonical service's existing public method.
 | `DEGRADED` | A dependency (usually a model provider) is unavailable. | Check `degradedCapabilities[]`; try a more specific request type that doesn't need the degraded dependency. |
 | `SIMULATED` | A `SIMULATION` request completed via `AutomationSimulationService`. | Read `simulation` preview; link to `/simulation` for full detail. Nothing was executed. |
 | `PROPOSAL_READY` | (Reserved — current handlers never emit this; `ACTION_PROPOSAL` always asks for clarification first.) | N/A |
-| `WAITING_APPROVAL` | A downstream canonical subsystem reports a real pending approval. | Go to `/approvals` in Command Center — never approve from the Jarvis page itself, it has no approve control. |
+| `WAITING_APPROVAL` | (Reserved — current handlers never emit this; no handler surfaces a real pending-approval read yet.) | N/A today. When wired, this must go to `/approvals` in Command Center — never approve from the Jarvis page itself, which has no approve control. |
 | `BLOCKED` | `SYSTEM_STATUS` reflecting a real `BLOCKED` overall health state (see Phase 7B). | Investigate the underlying health dependency, same as the Health page. |
 | `FAILED` | An unexpected internal error. | Check server logs; this should be rare — every handler catches its own known failure modes into a more specific status. |
 
@@ -81,12 +81,11 @@ Measured against the isolated-tmpdir evaluation harness in this dev
 checkout:
 
 - Direct-read paths (`TASK_QUERY`/`PROJECT_QUERY`/`GOAL_QUERY`/
-  `OPERATOR_QUERY`/`PLANNING`): low-millisecond, dominated by the underlying
-  store read.
-- `KNOWLEDGE_SEARCH`/`CODING`/`SIMULATION`: bounded by the canonical
-  subsystem they call (`KnowledgeRetrievalService`, `CodingWorkflow.planTask`
-  — confirmed to fail fast, ~31ms, when a project needs a fresh map;
-  `AutomationSimulationService.run`).
+  `OPERATOR_QUERY`/`PLANNING`/`CODING`): low-millisecond — `CODING` never
+  calls into the Coding Engine at all (see below), so it's a fixed-cost
+  advisory response, not a workflow call.
+- `KNOWLEDGE_SEARCH`/`SIMULATION`: bounded by the canonical subsystem they
+  call (`KnowledgeRetrievalService`, `AutomationSimulationService.run`).
 - `SYSTEM_STATUS`: inherits Phase 7B's `getSystemHealth()` cost — ~2.6-4.3s
   in this sandboxed dev environment where the Python AI service and Ollama
   are not reachable (each probe pays the connection-refused/timeout cost).

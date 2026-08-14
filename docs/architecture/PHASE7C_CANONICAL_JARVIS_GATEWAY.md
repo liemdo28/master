@@ -82,7 +82,7 @@ re-implements logic that already exists canonically:
 | `PLANNING` | `GovernedOrchestrationService.list()` (Phase 5H), read-only surfacing of existing plans | Fabricating a new structured plan from free text; no `JarvisPlannerV2` |
 | `SIMULATION` | `AutomationSimulationService.run()` (Phase 6F), always a `POLICY_WHAT_IF`/`READ_ONLY` step | `ControlledActionService`; never guesses a structured `CONTROLLED_ACTION` payload from free text |
 | `ACTION_PROPOSAL` | Nothing execution-capable — always returns `NEEDS_CLARIFICATION` asking for the exact structured fields the 3 governed action types require | `.propose()`/`.approve()`/`.execute()` |
-| `CODING` | `CodingWorkflow.planTask()` (plan-only) | `.run()` |
+| `CODING` | Nothing execution-capable — a fixed advisory reply pointing to Command Center → Coding | `CodingWorkflow.planTask()`/`.run()` (both create a real task and a real git worktree — see `PHASE7C_JARVIS_BOUNDARY.md`) |
 | `INFORMATION` | `services/ai-client.ts`'s `askAi()` (existing canonical multi-provider router) | A second model-routing layer |
 
 ## Conversation state — deliberately minimal

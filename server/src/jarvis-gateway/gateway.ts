@@ -22,6 +22,7 @@ import { handleActionProposal } from './handlers/action-proposal';
 import { handleCoding } from './handlers/coding';
 import { handleInformation } from './handlers/information';
 import { recordRequest } from './request-store';
+import { scrubReply } from '../middleware/response-scrubber';
 
 // KNOWLEDGE_SEARCH is required too: KnowledgeRetrievalService's own query
 // validator refuses to run without at least one projectId — "there is no
@@ -30,6 +31,22 @@ import { recordRequest } from './request-store';
 // calling it, never fall back to an unscoped search.
 const PROJECT_REQUIRED_TYPES = new Set<RequestType>(['CODING', 'KNOWLEDGE_SEARCH']);
 const MAX_TEXT_LENGTH = 4000;
+
+// Every string field the Gateway can populate from provider/model output or
+// an upstream error message (never structural fields like requestId/status/
+// citations' documentId/sourceUri) goes through the same P0 secret scrubber
+// every chat/WhatsApp reply already uses (middleware/response-scrubber.ts) —
+// this file wasn't wired to it originally (independent review of PR #103).
+function scrubResponse(response: JarvisResponse): JarvisResponse {
+  response.answer = scrubReply(response.answer, 'jarvis');
+  response.unknowns = response.unknowns.map(u => scrubReply(u, 'jarvis'));
+  response.conflicts = response.conflicts.map(c => scrubReply(c, 'jarvis'));
+  response.suggestedNextSteps = response.suggestedNextSteps.map(s => scrubReply(s, 'jarvis'));
+  response.degradedCapabilities = response.degradedCapabilities.map(d => scrubReply(d, 'jarvis'));
+  response.facts = response.facts.map(f => ({ ...f, statement: scrubReply(f.statement, 'jarvis') }));
+  response.inferences = response.inferences.map(i => ({ ...i, statement: scrubReply(i.statement, 'jarvis') }));
+  return response;
+}
 
 function clarificationResponse(requestId: string, intent: RequestType, resolution: ProjectResolution): JarvisResponse {
   const response = baseResponse(requestId, intent, null);
@@ -65,6 +82,7 @@ export async function handleGatewayRequest(input: JarvisRequestInput, caller: Ca
     response = await dispatch(classification.type, request, projectId);
   }
 
+  scrubResponse(response);
   recordRequest(request, response);
   return response;
 }

@@ -1,4 +1,4 @@
-import type { JarvisResponse, ResponseStatus, RequestType } from './types';
+import type { JarvisResponse, RequestType } from './types';
 
 /** Builds the base envelope every handler starts from — keeps every field
  *  present (per §25's "not every field is required" but callers should
@@ -21,8 +21,4 @@ export function baseResponse(requestId: string, intent: RequestType, projectId: 
     degradedCapabilities: [],
     generatedAt: new Date().toISOString(),
   };
-}
-
-export function withStatus(response: JarvisResponse, status: ResponseStatus, answer: string): JarvisResponse {
-  return { ...response, status, answer };
 }

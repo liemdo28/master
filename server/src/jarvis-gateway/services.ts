@@ -15,7 +15,6 @@ import { ControlledActionService } from '../personal-os/actions/service';
 import { OperatorControlService } from '../operator-control/service';
 import { DocumentStore } from '../personal-os/documents/store';
 import { KnowledgeRetrievalService } from '../personal-os/documents/retrieval';
-import { CodingWorkflow } from '../coding/workflow';
 
 export const projectRegistry = new ProjectRegistryService();
 export const taskStore = new TaskStore();
@@ -27,4 +26,3 @@ export const controlledActions = new ControlledActionService();
 export const operatorControl = new OperatorControlService();
 export const documentStore = new DocumentStore();
 export const knowledgeRetrieval = new KnowledgeRetrievalService(documentStore);
-export const codingWorkflow = new CodingWorkflow(taskStore, projectRegistry, taskEngine);

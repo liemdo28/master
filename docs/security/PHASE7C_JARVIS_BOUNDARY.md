@@ -28,6 +28,13 @@ and live:
 - No autonomous approval — `ACTION_PROPOSAL` never calls `.propose()`,
   `.approve()`, or `.execute()`; it always returns `NEEDS_CLARIFICATION`
   asking for the exact structured fields.
+- No autonomous coding execution — `CODING` never calls
+  `CodingWorkflow.planTask()`/`.run()`; both create a real task record and a
+  real git worktree (`git worktree add`, via `prepareWorktree()`), which is
+  a genuine mutation the Coding Engine has no read-only mode to avoid. An
+  earlier version of this handler called `planTask()` under the mistaken
+  assumption it was read-only — found and fixed during independent review
+  of PR #103, before merge (see `PHASE7C_ACCEPTANCE.md`).
 - No autonomous merge/deploy, no shell/process authority, no browser-write
   authority, no voice-triggered writes, no desktop control.
 - No Google OAuth reconnect, no Ollama start, no starting an
@@ -168,12 +175,21 @@ observed across the run.
 
 ## Secret handling
 
-No new redaction logic was written. The Gateway surfaces only what the
-canonical subsystems it calls already return, and those subsystems' existing
-secret-redaction (Phase 6D's evidence redaction, `askAi()`'s existing
-provider-error handling) is unchanged. `test:jarvis-gateway-api-security`
-includes a live scan of API responses for secret/path/token-shaped strings —
-zero matches.
+No new redaction logic was written. Every string-bearing field of a
+`JarvisResponse` (`answer`, `unknowns`, `conflicts`, `suggestedNextSteps`,
+`degradedCapabilities`, and each fact's/inference's `statement`) is passed
+through the existing P0 `scrubReply()` (`middleware/response-scrubber.ts`,
+already used by `routes/whatsapp.ts`/`routes/chat.ts`) at the single point
+every response passes through in `gateway.ts`, before it's cached or
+returned — reused, not reimplemented. (This wiring was missing in an earlier
+version of the PR — `response-scrubber.ts`'s own doc comment names
+`/api/jarvis` as an intended mount target, but it was never actually
+connected, and mounting it as HTTP middleware alone wouldn't have helped
+since it only recognizes `body.reply`/`body.message`, not `JarvisResponse`'s
+actual field names. Found during independent review of PR #103, fixed
+before merge by scrubbing the specific fields directly instead.)
+`test:jarvis-gateway-api-security` includes a live scan of API responses for
+secret/path/token-shaped strings — zero matches.
 
 ## Stop conditions this document exists to make checkable
 

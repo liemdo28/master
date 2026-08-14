@@ -115,11 +115,18 @@ async function main(): Promise<void> {
     read(path.join('..', '..', '..', 'command-center', 'src', 'routes', 'JarvisPage.tsx'), GATEWAY_DIR).includes("Link to=\"/approvals\""),
     'command-center/src/routes/JarvisPage.tsx links to /approvals for WAITING_APPROVAL, never an inline button');
 
-  // 15. Coding path reused.
+  // 15. Coding path never mutates. planTask()/run() both create a real
+  //     Task record and a real git worktree (git worktree add) — neither is
+  //     safe to trigger from unconfirmed free text, and the Coding Engine
+  //     has no read-only/dry-run mode to call instead, so the Gateway stays
+  //     purely advisory here (same "never call the mutating method" pattern
+  //     as point 11's ACTION_PROPOSAL). Found and fixed during independent
+  //     review of PR #103 — an earlier version called planTask() believing
+  //     it was read-only.
   const codingSrc = stripComments(read(path.join('handlers', 'coding.ts'), GATEWAY_DIR));
-  add('CODING calls the canonical CodingWorkflow.planTask(), never a duplicate coding agent',
-    codingSrc.includes('codingWorkflow.planTask(') && !codingSrc.includes('new CodingWorkflow'),
-    'handlers/coding.ts calls the shared canonical coding-workflow singleton');
+  add('CODING never calls CodingWorkflow.planTask()/.run() — advisory redirect only, no task/worktree creation',
+    !codingSrc.includes('.planTask(') && !codingSrc.includes('.run(') && !codingSrc.includes('CodingWorkflow'),
+    'handlers/coding.ts imports no coding-workflow service at all');
 
   // 16. Health-aware degradation.
   const systemStatusSrc = stripComments(read(path.join('handlers', 'system-status.ts'), GATEWAY_DIR));

@@ -21,7 +21,7 @@ async function run(): Promise<void> {
   process.env.MI_PROJECT_REGISTRY_WORKSPACE_ROOTS = root;
 
   const { handleGatewayRequest } = require('../gateway');
-  const { projectRegistry, taskEngine } = require('../services');
+  const { projectRegistry, taskEngine, taskStore } = require('../services');
 
   let scenarios = 0;
   let passed = 0;
@@ -124,6 +124,18 @@ async function run(): Promise<void> {
     assert.strictEqual(res.intent, 'CODING');
     assert.strictEqual(res.status, 'NEEDS_CLARIFICATION');
     assert.deepStrictEqual(res.unknowns, ['projectId']);
+    passed++;
+  }
+
+  // ── CODING — resolved project never mutates (creates no task/worktree) ──
+  {
+    scenarios++;
+    const before = taskStore.listTasks().length;
+    const res = await handleGatewayRequest({ text: 'fix the login bug', projectId: project.id }, CALLER);
+    assert.strictEqual(res.intent, 'CODING');
+    assert.strictEqual(res.status, 'ANSWERED');
+    const after = taskStore.listTasks().length;
+    assert.strictEqual(after, before, 'CODING must never create a task record');
     passed++;
   }
 
