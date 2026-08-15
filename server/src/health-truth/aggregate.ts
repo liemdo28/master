@@ -8,6 +8,7 @@ import {
   probeCore, probeDatabase, probeAuthority, probeProvenance, probeKnowledge,
   probePythonAi, probeLocalModel, probeGoogleConnectors, probeNodeAgent,
   probeAccounting, probeQbAgent, probeIntentionallyDisabled,
+  probeVoiceInput, probeVoiceOutput,
 } from './probes';
 
 /**
@@ -50,10 +51,11 @@ export interface SystemHealthOptions {
 export async function getSystemHealth(options: SystemHealthOptions = {}): Promise<SystemHealth> {
   const runtimeRoot = options.runtimeRoot ?? path.resolve(__dirname, '..', '..', '..');
 
-  const [pythonAi, localModel, nodeAgent] = await Promise.all([
+  const [pythonAi, localModel, nodeAgent, voiceInput] = await Promise.all([
     probePythonAi(),
     probeLocalModel(),
     probeNodeAgent(),
+    probeVoiceInput(),
   ]);
 
   const authority = probeAuthority();
@@ -86,6 +88,8 @@ export async function getSystemHealth(options: SystemHealthOptions = {}): Promis
     probeIntentionallyDisabled('WHATSAPP', runtimeRoot),
     probeIntentionallyDisabled('N8N', runtimeRoot),
     probeIntentionallyDisabled('CEO_OBSERVER', runtimeRoot),
+    voiceInput,
+    probeVoiceOutput(),
   ];
 
   const { overall, overallReason } = computeOverall(dependencies);
