@@ -33,19 +33,29 @@ async function main(): Promise<void> {
     gatewaySrc.includes('export async function handleGatewayRequest') && gatewaySrc.includes('function dispatch'),
     'server/src/jarvis-gateway/gateway.ts exports handleGatewayRequest() and an internal dispatch() switch');
 
-  // 2. One request-creation entrypoint. The real invariant is "exactly one
-  //    mutation-shaped (POST) route, ever" — additional READ routes (e.g.
-  //    Phase 7D's GET /jarvis/session/current) are expected to accumulate
-  //    over time and are not themselves a boundary violation; a second POST
-  //    route, or any /execute route, would be. Reviewed amendment to this
-  //    frozen 7C acceptance point, made explicitly for Phase 7D — see
-  //    docs/architecture/PHASE7D_UNIFIED_CONTEXT.md.
+  // 2. Request-creation entrypoints. The real invariant is not a literal
+  //    route count — it's "every POST route is one of the exact, named,
+  //    already-classified bounded/local-only entrypoints; nothing named
+  //    /execute or otherwise open-ended ever exists." Additional READ
+  //    routes (e.g. Phase 7D's GET /jarvis/session/current) and additional
+  //    named POST routes (e.g. Phase 7F's three voice routes — transcript/
+  //    audio-transcribe/synthesize, all CANONICAL_LOCAL_MUTATION/
+  //    LOCAL_REVERSIBLE in the authority registry, none reaching a real
+  //    external system) are expected to accumulate over time and are not
+  //    themselves a boundary violation; an UNNAMED/unexpected POST route,
+  //    or any /execute route, would be. Reviewed amendment history: 7D
+  //    loosened the GET-route count to "any number"; 7F now enumerates the
+  //    exact known-good POST set by name instead of loosening the count to
+  //    "any number" too, preserving the gate's value — see
+  //    docs/security/PHASE7F_VOICE_SECURITY.md.
   const routerSrc = stripComments(read('router.ts', GATEWAY_DIR));
   const postRouteCount = (routerSrc.match(/jarvisGatewayRouter\.post\(/g) || []).length;
   const getRouteCount = (routerSrc.match(/jarvisGatewayRouter\.get\(/g) || []).length;
-  add('exactly one mutation-shaped entrypoint (POST /jarvis/request), any number of GET read routes, no generic /execute',
-    routerSrc.includes("post('/jarvis/request'") && routerSrc.includes("get('/jarvis/request/:id'") && postRouteCount === 1 && getRouteCount >= 2 && !routerSrc.includes("'/execute'"),
-    `router defines ${postRouteCount} POST route(s) and ${getRouteCount} GET route(s); POST /jarvis/request and GET /jarvis/request/:id confirmed present`);
+  const KNOWN_POST_ROUTES = ["'/jarvis/request'", "'/jarvis/voice/transcript'", "'/jarvis/voice/audio-transcribe'", "'/jarvis/voice/synthesize'"];
+  const allPostRoutesKnown = KNOWN_POST_ROUTES.every(r => routerSrc.includes(`post(${r}`)) && postRouteCount === KNOWN_POST_ROUTES.length;
+  add('every mutation-shaped entrypoint is one of the exact, named, already-classified bounded/local-only POST routes; any number of GET read routes; no generic /execute',
+    allPostRoutesKnown && routerSrc.includes("get('/jarvis/request/:id'") && getRouteCount >= 2 && !routerSrc.includes("'/execute'"),
+    `router defines ${postRouteCount} POST route(s) (expected exactly: ${KNOWN_POST_ROUTES.join(', ')}) and ${getRouteCount} GET route(s); POST /jarvis/request and GET /jarvis/request/:id confirmed present`);
 
   // 3. Auth.
   const indexSrc = read('src/index.ts', SERVER_ROOT).replace(/\s+/g, ' ');

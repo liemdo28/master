@@ -254,6 +254,46 @@ export function probeQbAgent(): DependencyHealth {
   return probePm2Backed('QB_AGENT', 'qb-ops-agent', 'QuickBooks heartbeat/workflow polling unavailable.');
 }
 
+// ── Phase 7F — VOICE_INPUT / VOICE_OUTPUT ────────────────────────────────────
+// Both OPTIONAL_DEGRADED: voice unavailable never marks overall Jarvis DOWN
+// (§25) — Command Center's text path is always fully available regardless
+// of these two states.
+// isTranscriptionAvailable() spawns a real Python subprocess and — by
+// transcription-service.ts's own, unmodified design — waits up to 10s
+// before concluding it's unavailable. That is a reasonable worst case for
+// its own direct callers (e.g. a user explicitly checking voice status),
+// but getSystemHealth() is on the critical path of every health check
+// across the whole app (Command Center Health page, Jarvis SYSTEM_STATUS,
+// etc.) — a health probe must stay fast even when a dependency is down.
+// Racing against a short local timeout keeps this probe's own worst case
+// bounded to ~2s, independent of the shared library's own timeout.
+const VOICE_INPUT_PROBE_TIMEOUT_MS = 2000;
+
+export async function probeVoiceInput(): Promise<DependencyHealth> {
+  const now = new Date().toISOString();
+  const { isTranscriptionAvailable } = await import('../voice/transcription-service');
+  try {
+    const available = await Promise.race([
+      isTranscriptionAvailable(),
+      new Promise<boolean>(resolve => setTimeout(() => resolve(false), VOICE_INPUT_PROBE_TIMEOUT_MS)),
+    ]);
+    return available
+      ? dep('VOICE_INPUT', 'HEALTHY', 'OPTIONAL_DEGRADED', 'OK', 'Speech-to-text (local faster-whisper) is available.', [], { lastCheckedAt: now, lastHealthyAt: now })
+      : dep('VOICE_INPUT', 'UNAVAILABLE', 'OPTIONAL_DEGRADED', 'MODEL_UNAVAILABLE', 'Speech-to-text is not available in this runtime (or did not respond within 2s).', ['Voice input (audio upload transcription) unavailable — typed/client-side transcript input still works normally.'], { lastCheckedAt: now });
+  } catch (err) {
+    return dep('VOICE_INPUT', 'UNKNOWN', 'OPTIONAL_DEGRADED', 'UNKNOWN', `Could not check speech-to-text availability: ${err instanceof Error ? err.message : String(err)}`, ['Voice input status unconfirmed — typed/client-side transcript input still works normally.'], { lastCheckedAt: now });
+  }
+}
+
+export function probeVoiceOutput(): DependencyHealth {
+  const now = new Date().toISOString();
+  const { isTTSAvailable } = require('../voice/tts-service');
+  const available: boolean = isTTSAvailable();
+  return available
+    ? dep('VOICE_OUTPUT', 'HEALTHY', 'OPTIONAL_DEGRADED', 'OK', 'Text-to-speech (local edge-tts) is available.', [], { lastCheckedAt: now, lastHealthyAt: now })
+    : dep('VOICE_OUTPUT', 'UNAVAILABLE', 'OPTIONAL_DEGRADED', 'MODEL_UNAVAILABLE', 'Text-to-speech is not available in this runtime (set VOICE_TTS_ENABLED=1 to enable).', ['Spoken responses unavailable — the same answer is still fully shown as text.'], { lastCheckedAt: now });
+}
+
 // ── Intentionally-disabled services ──────────────────────────────────────────
 const INTENTIONALLY_DISABLED_SERVICES: Record<'WHATSAPP' | 'N8N' | 'CEO_OBSERVER', { pm2Name: string; runtimeDir: string; capability: string }> = {
   WHATSAPP: { pm2Name: 'mi-whatsapp-gateway', runtimeDir: 'services/whatsapp-ai-gateway', capability: 'WhatsApp send/receive unavailable — intentionally disabled.' },

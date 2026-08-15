@@ -12,6 +12,8 @@ import { ContextIndicator } from '@/components/jarvis/ContextIndicator';
 import { EvidenceInspector } from '@/components/jarvis/EvidenceInspector';
 import { PlanInspector } from '@/components/jarvis/PlanInspector';
 import { SimulationInspector } from '@/components/jarvis/SimulationInspector';
+import { VoiceControls } from '@/components/jarvis/VoiceControls';
+import type { VoiceResponse } from '@/lib/types';
 
 /**
  * Phase 7E — canonical Jarvis Operator Workspace. Talks only to the
@@ -221,6 +223,21 @@ export function JarvisPage() {
     ask.mutate({ text: text.trim(), projectId: projectId || null });
   }
 
+  // Phase 7F — a voice request that reached the Gateway (safetyLabel SAFE,
+  // gatewayResponse non-null) is cached and selected exactly like a typed
+  // ask — same ResponseDetail/Inspector rendering, no separate voice-only
+  // display path for the normal case. Blocked/clarification voice
+  // responses (gatewayResponse null) never reach here — VoiceControls
+  // shows those inline itself, since there is no JarvisResponse to select.
+  function handleVoiceResponse(voiceResponse: VoiceResponse, transcript: string) {
+    const response = voiceResponse.gatewayResponse;
+    if (!response) return;
+    setResponseCache(prev => new Map(prev).set(response.requestId, response));
+    setSelectedRequestId(response.requestId);
+    setSelectedRequestText(transcript);
+    queryClient.invalidateQueries({ queryKey: ['jarvis-session'] });
+  }
+
   function selectTurn(requestId: string) {
     setSelectedRequestId(requestId);
     const turn = session.data?.turns.find(t => t.requestId === requestId);
@@ -286,6 +303,12 @@ export function JarvisPage() {
             </button>
           </div>
         </form>
+
+        <VoiceControls
+          projectId={requestedProjectId}
+          sessionId={session.data?.sessionId}
+          onVoiceResponse={handleVoiceResponse}
+        />
 
         {ask.isError && <ErrorState error={ask.error} />}
 

@@ -130,6 +130,10 @@ const LIVE_CONVERSATIONAL_ADAPTERS = [
     .filter(f => f.endsWith('.ts') && !/-(acceptance|evaluation)\.ts$/.test(f))
     .map(f => `jarvis-gateway/${f}`),
   ...fs.readdirSync(path.join(SRC_ROOT, 'jarvis-gateway', 'handlers')).map(f => `jarvis-gateway/handlers/${f}`),
+  // Phase 7F — voice module, same auto-discovery reasoning as above.
+  ...fs.readdirSync(path.join(SRC_ROOT, 'jarvis-gateway', 'voice'))
+    .filter(f => f.endsWith('.ts') && !f.endsWith('.test.ts'))
+    .map(f => `jarvis-gateway/voice/${f}`),
 ];
 
 async function run(): Promise<void> {

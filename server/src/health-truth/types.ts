@@ -56,7 +56,9 @@ export type DependencyId =
   | 'QB_AGENT'
   | 'WHATSAPP'
   | 'N8N'
-  | 'CEO_OBSERVER';
+  | 'CEO_OBSERVER'
+  | 'VOICE_INPUT'
+  | 'VOICE_OUTPUT';
 
 export interface DependencyHealth {
   id: DependencyId;

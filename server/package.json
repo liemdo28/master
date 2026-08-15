@@ -149,7 +149,10 @@
     "jarvis-gateway:evaluation": "tsx src/jarvis-gateway/phase7c-evaluation.ts",
     "phase7c:acceptance": "npm run test:jarvis-gateway && npm run test:jarvis-gateway-security && npm run jarvis-gateway:evaluation && tsx src/jarvis-gateway/phase7c-acceptance.ts",
     "test:jarvis-session": "tsx src/jarvis-gateway/__tests__/phase7d-jarvis-session.test.ts",
-    "test:jarvis-session-security": "tsx src/jarvis-gateway/__tests__/phase7d-jarvis-session-security.test.ts && tsx src/jarvis-gateway/__tests__/phase7d-session-invariant.test.ts"
+    "test:jarvis-session-security": "tsx src/jarvis-gateway/__tests__/phase7d-jarvis-session-security.test.ts && tsx src/jarvis-gateway/__tests__/phase7d-session-invariant.test.ts",
+    "test:jarvis-voice": "tsx src/jarvis-gateway/__tests__/phase7f-jarvis-voice.test.ts",
+    "test:jarvis-voice-security": "tsx src/jarvis-gateway/__tests__/phase7f-jarvis-voice-security.test.ts && tsx src/jarvis-gateway/__tests__/phase7f-jarvis-voice-api-security.test.ts",
+    "jarvis-voice:evaluation": "tsx src/jarvis-gateway/phase7f-voice-evaluation.ts"
   },
   "dependencies": {
     "@googleapis/calendar": "^15.0.0",

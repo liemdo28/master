@@ -1113,6 +1113,51 @@ export interface JarvisSession {
   updatedAt: string;
 }
 
+// Phase 7F — voice is a second input/output modality over the same Gateway
+// (see docs/architecture/PHASE7F_VOICE_ARCHITECTURE.md). VOICE IS NOT
+// AUTHORITY — SPOKEN CONFIRMATION IS NOT APPROVAL.
+export type VoiceSource = 'web_speech' | 'server_stt' | 'typed';
+
+export type VoiceSafetyLabel =
+  | 'SAFE'
+  | 'FORBIDDEN_GMAIL_SEND'
+  | 'FORBIDDEN_FINANCIAL'
+  | 'FORBIDDEN_SHELL'
+  | 'FORBIDDEN_DEPLOY'
+  | 'FORBIDDEN_BROWSER_WRITE'
+  | 'FORBIDDEN_DESKTOP_CONTROL'
+  | 'FORBIDDEN_AUTONOMOUS_APPROVAL';
+
+export type VoiceOutputPrivacyClass = 'PUBLIC_SAFE' | 'OPERATOR_SAFE' | 'SCREEN_ONLY';
+
+export interface VoiceRequestInput {
+  transcript: string;
+  sessionId?: string;
+  projectId?: string | null;
+  language?: string;
+  confidence?: number;
+  source: VoiceSource;
+  capturedAt?: string;
+  isWakeWordTriggered?: boolean;
+}
+
+export interface VoiceResponse {
+  voiceRequestId: string;
+  safetyLabel: VoiceSafetyLabel;
+  gatewayResponse: JarvisResponse | null;
+  spokenText: string;
+  spokenTextPrivacyClass: VoiceOutputPrivacyClass;
+  lowConfidenceClarification: boolean;
+  generatedAt: string;
+}
+
+export interface VoiceSynthesizeResponse {
+  available: boolean;
+  audioBase64?: string;
+  mimeType?: string;
+  error?: string;
+}
+
 export interface SimulationRun {
   simulationId: string;
   inputHash: string;
