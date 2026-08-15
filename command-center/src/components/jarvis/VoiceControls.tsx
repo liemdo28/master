@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/api-client';
 import { useSpeechRecognition } from '@/lib/useSpeechRecognition';
 import type { VoiceResponse, VoiceSynthesizeResponse } from '@/lib/types';
@@ -21,46 +21,55 @@ export function VoiceControls({
   onVoiceResponse: (response: VoiceResponse, transcript: string) => void;
 }) {
   const speech = useSpeechRecognition();
-  const [editedTranscript, setEditedTranscript] = useState('');
+  const [transcript, setTranscript] = useState('');
+  const [usedSpeechThisTurn, setUsedSpeechThisTurn] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const [lastBlocked, setLastBlocked] = useState<VoiceResponse | null>(null);
   const [ttsUnavailableNotice, setTtsUnavailableNotice] = useState<string | null>(null);
 
-  const activeTranscript = editedTranscript || speech.transcript;
+  // Speech recognition results flow into the same transcript field the
+  // caller can type into directly — one field, one source of truth. This
+  // also means the transcript field is always keyboard-usable even when
+  // the browser has no Web Speech API (§24 no-microphone fallback) or when
+  // a real microphone/network round-trip isn't available.
+  useEffect(() => {
+    if (speech.transcript) {
+      setTranscript(speech.transcript);
+      setUsedSpeechThisTurn(true);
+    }
+  }, [speech.transcript]);
 
   function handleStart() {
     setSendError(null);
     setLastBlocked(null);
+    setUsedSpeechThisTurn(false);
     speech.start();
   }
 
-  function handleTranscriptChange(value: string) {
-    setEditedTranscript(value);
-  }
-
   async function handleSend() {
-    const transcript = activeTranscript.trim();
-    if (!transcript) return;
+    const text = transcript.trim();
+    if (!text) return;
     setSending(true);
     setSendError(null);
     setLastBlocked(null);
     try {
       const response = await api.post<VoiceResponse>('/jarvis/voice/transcript', {
-        transcript,
-        source: speech.transcript ? 'web_speech' : 'typed',
+        transcript: text,
+        source: usedSpeechThisTurn ? 'web_speech' : 'typed',
         projectId,
         sessionId,
-        confidence: speech.confidence,
+        confidence: usedSpeechThisTurn ? speech.confidence : undefined,
       });
       if (response.gatewayResponse) {
-        onVoiceResponse(response, transcript);
+        onVoiceResponse(response, text);
       } else {
         // Safety-blocked, confirmation-boundary, or low-confidence
         // clarification — always shown here, never silently discarded.
         setLastBlocked(response);
       }
-      setEditedTranscript('');
+      setTranscript('');
+      setUsedSpeechThisTurn(false);
       speech.reset();
     } catch (err) {
       setSendError(err instanceof Error ? err.message : 'Failed to send voice request.');
@@ -84,64 +93,61 @@ export function VoiceControls({
     }
   }
 
-  if (!speech.supported) {
-    return (
-      <section aria-label="Voice input" className="rounded-md border border-(--color-border) p-2 text-xs text-(--color-text-faint)">
-        Voice input isn't supported in this browser. Use the text box above — every Jarvis capability is available there too.
-      </section>
-    );
-  }
-
   return (
     <section aria-label="Voice input" className="space-y-2 rounded-md border border-(--color-border) p-2">
-      <div className="flex items-center gap-2">
-        {speech.state !== 'listening' ? (
-          <button
-            type="button"
-            onClick={handleStart}
-            disabled={sending}
-            className="rounded-md bg-(--color-accent) px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-          >
-            🎤 Push to talk
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={speech.stop}
-            className="rounded-md bg-(--color-blocked) px-3 py-1.5 text-sm font-medium text-white"
-          >
-            ⏹ Stop recording
-          </button>
-        )}
-        <span role="status" aria-live="polite" className="text-xs text-(--color-text-faint)">
-          {speech.state === 'listening' && 'Listening…'}
-          {speech.state === 'permission-denied' && 'Microphone permission denied — you can still type your question above.'}
-          {speech.state === 'error' && speech.errorMessage}
-        </span>
-      </div>
-
-      {activeTranscript && (
-        <div className="space-y-1.5">
-          <label htmlFor="voice-transcript-preview" className="text-xs font-medium text-(--color-text-faint)">
-            Transcript (edit if needed, nothing is sent until you click Send)
-          </label>
-          <textarea
-            id="voice-transcript-preview"
-            value={activeTranscript}
-            onChange={e => handleTranscriptChange(e.target.value)}
-            rows={2}
-            className="w-full rounded-md border border-(--color-border) bg-(--color-surface) p-2 text-sm text-(--color-text)"
-          />
-          <button
-            type="button"
-            onClick={handleSend}
-            disabled={sending || !activeTranscript.trim()}
-            className="rounded-md bg-(--color-accent) px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-          >
-            {sending ? 'Sending…' : 'Send'}
-          </button>
+      {speech.supported ? (
+        <div className="flex items-center gap-2">
+          {speech.state !== 'listening' ? (
+            <button
+              type="button"
+              onClick={handleStart}
+              disabled={sending}
+              className="rounded-md bg-(--color-accent) px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+            >
+              🎤 Push to talk
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={speech.stop}
+              className="rounded-md bg-(--color-blocked) px-3 py-1.5 text-sm font-medium text-white"
+            >
+              ⏹ Stop recording
+            </button>
+          )}
+          <span role="status" aria-live="polite" className="text-xs text-(--color-text-faint)">
+            {speech.state === 'listening' && 'Listening…'}
+            {speech.state === 'permission-denied' && 'Microphone permission denied — you can still type your question below.'}
+            {speech.state === 'error' && speech.errorMessage}
+          </span>
         </div>
+      ) : (
+        <p className="text-xs text-(--color-text-faint)">
+          Voice input isn't supported in this browser — type your question below, or use the text box above.
+        </p>
       )}
+
+      <div className="space-y-1.5">
+        <label htmlFor="voice-transcript-preview" className="text-xs font-medium text-(--color-text-faint)">
+          Transcript (type or speak; edit if needed — nothing is sent until you click Submit)
+        </label>
+        <textarea
+          id="voice-transcript-preview"
+          value={transcript}
+          onChange={e => { setTranscript(e.target.value); setUsedSpeechThisTurn(false); }}
+          placeholder="Type a question here, or use Push to talk above…"
+          rows={2}
+          className="w-full rounded-md border border-(--color-border) bg-(--color-surface) p-2 text-sm text-(--color-text)"
+        />
+        <button
+          type="button"
+          onClick={handleSend}
+          disabled={sending || !transcript.trim()}
+          className="rounded-md bg-(--color-accent) px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+        >
+          {sending ? 'Submitting…' : 'Submit'}
+        </button>
+      </div>
 
       {sending && <LoadingState label="Sending voice request…" />}
       {sendError && <p role="alert" className="text-xs text-(--color-blocked)">{sendError}</p>}

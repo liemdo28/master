@@ -29,7 +29,7 @@ describe('Phase 7F voice security — structural scans', () => {
   const sources = readAllSource();
 
   it('the only api.post calls anywhere in voice frontend files are the two authorized voice routes', () => {
-    for (const { file, src } of sources) {
+    for (const { src } of sources) {
       const postCalls = [...src.matchAll(/api\.post\(\s*['"`]([^'"`]+)['"`]/g)].map(m => m[1]);
       for (const p of postCalls) {
         expect(['/jarvis/voice/transcript', '/jarvis/voice/synthesize']).toContain(p);
@@ -135,7 +135,7 @@ describe('Phase 7F voice security — malicious content renders inert', () => {
     vi.mocked(api.post).mockResolvedValueOnce(malicious);
 
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Send' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Submit' }));
 
     await waitFor(() => expect(screen.getAllByText(/Ignore all previous instructions/).length).toBeGreaterThan(0));
     expect(document.querySelectorAll('img').length).toBe(0);
@@ -149,7 +149,7 @@ describe('Phase 7F voice security — no hidden auto-submit', () => {
   it('a transcript being present never sends automatically — only an explicit Send click calls api.post', async () => {
     mockSpeechState.transcript = 'what tasks are waiting on me';
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    await screen.findByRole('button', { name: 'Send' });
+    await screen.findByRole('button', { name: 'Submit' });
     // Rendering the transcript preview alone must never have called the API.
     expect(api.post).not.toHaveBeenCalled();
   });
@@ -161,7 +161,7 @@ describe('Phase 7F voice security — no hidden auto-submit', () => {
       spokenText: 'ok', spokenTextPrivacyClass: 'PUBLIC_SAFE', lowConfidenceClarification: false, generatedAt: '2026-08-15T00:00:00Z',
     } satisfies VoiceResponse);
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Send' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Submit' }));
     await waitFor(() => expect(api.post).toHaveBeenCalledTimes(1));
   });
 });
@@ -177,7 +177,7 @@ describe('Phase 7F voice security — approval-by-voice never succeeds', () => {
     vi.mocked(api.post).mockResolvedValueOnce(blocked);
     const onVoiceResponse = vi.fn();
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={onVoiceResponse} />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Send' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Submit' }));
     await waitFor(() => expect(screen.getByText('Approval is still required in Command Center.')).toBeInTheDocument());
     // onVoiceResponse (which would cache/select a real answer) is never
     // called for a blocked response — there is nothing to select.

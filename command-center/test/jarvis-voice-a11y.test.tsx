@@ -95,11 +95,28 @@ describe('Phase 7F voice accessibility', () => {
 
   it('the Send button is a real, keyboard-activatable <button>, disabled with no transcript', () => {
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    // No transcript yet — the Send button/preview area does not render at all,
-    // matching "no hidden action" rather than a disabled-but-present control
-    // that could confuse a screen reader user into thinking something is
-    // ready to send.
-    expect(screen.queryByRole('button', { name: 'Send' })).not.toBeInTheDocument();
+    // The transcript field and Send button are always present (typeable
+    // even with no working microphone — §24) but Send stays disabled until
+    // there is real transcript content, so nothing can be sent by accident.
+    const sendButton = screen.getByRole('button', { name: 'Submit' });
+    expect(sendButton.tagName).toBe('BUTTON');
+    expect(sendButton).toBeDisabled();
+  });
+
+  it('a keyboard-only user can type a transcript directly and send it, with zero microphone/speech-recognition involvement', async () => {
+    const response: VoiceResponse = {
+      voiceRequestId: 'vr-kb-1', safetyLabel: 'SAFE',
+      gatewayResponse: { requestId: 'req-kb-1', intent: 'INFORMATION', projectId: null, sessionId: null, status: 'ANSWERED', answer: 'typed-only answer', facts: [], inferences: [], unknowns: [], conflicts: [], citations: [], suggestedNextSteps: [], evidenceRefs: [], degradedCapabilities: [], generatedAt: '2026-08-15T00:00:00Z' },
+      spokenText: 'typed-only answer', spokenTextPrivacyClass: 'OPERATOR_SAFE', lowConfidenceClarification: false, generatedAt: '2026-08-15T00:00:00Z',
+    };
+    vi.mocked(api.post).mockResolvedValueOnce(response);
+    const onVoiceResponse = vi.fn();
+    renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={onVoiceResponse} />);
+    const textarea = screen.getByLabelText(/transcript.*edit if needed/i);
+    fireEvent.change(textarea, { target: { value: 'typed entirely by keyboard' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    await waitFor(() => expect(onVoiceResponse).toHaveBeenCalledWith(response, 'typed entirely by keyboard'));
+    expect(api.post).toHaveBeenCalledWith('/jarvis/voice/transcript', expect.objectContaining({ source: 'typed' }));
   });
 
   it('TTS-unavailable is announced as visible text, and the text answer remains the source of truth', async () => {
@@ -112,7 +129,7 @@ describe('Phase 7F voice accessibility', () => {
     vi.mocked(api.post).mockResolvedValueOnce(blocked);
     vi.mocked(api.post).mockResolvedValueOnce({ available: false, error: 'Text-to-speech is currently unavailable.' } satisfies VoiceSynthesizeResponse);
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Send' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Submit' }));
     await waitFor(() => expect(screen.getByText('Approval is still required in Command Center.')).toBeInTheDocument());
     fireEvent.click(screen.getByRole('button', { name: /play/i }));
     await waitFor(() => expect(screen.getByText(/text-to-speech is currently unavailable/i)).toBeInTheDocument());
@@ -121,9 +138,9 @@ describe('Phase 7F voice accessibility', () => {
     expect(screen.getByText('Approval is still required in Command Center.')).toBeInTheDocument();
   });
 
-  it('the transcript preview label explicitly says nothing is sent until Send is clicked — no ambiguity for a screen reader user', () => {
+  it('the transcript preview label explicitly says nothing is sent until Submit is clicked — no ambiguity for a screen reader user', () => {
     mockSpeechState.transcript = 'what tasks are waiting on me';
     renderWithProviders(<VoiceControls projectId={null} sessionId={undefined} onVoiceResponse={vi.fn()} />);
-    expect(screen.getByText(/nothing is sent until you click send/i)).toBeInTheDocument();
+    expect(screen.getByText(/nothing is sent until you click submit/i)).toBeInTheDocument();
   });
 });
