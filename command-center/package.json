@@ -13,7 +13,9 @@
     "test:jarvis-workspace-evaluation": "vitest run test/jarvis-workspace-evaluation.test.ts",
     "test:jarvis-workspace-security": "vitest run test/jarvis-workspace-security.test.tsx",
     "test:jarvis-workspace-a11y": "vitest run test/jarvis-workspace-a11y.test.tsx",
-    "test:command-center-e2e": "node e2e/run-playwright.cjs"
+    "test:command-center-e2e": "node e2e/run-playwright.cjs",
+    "test:jarvis-voice-security": "vitest run test/jarvis-voice-security.test.tsx",
+    "test:jarvis-voice-a11y": "vitest run test/jarvis-voice-a11y.test.tsx"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
