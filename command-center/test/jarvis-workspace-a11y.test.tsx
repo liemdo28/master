@@ -42,10 +42,14 @@ describe('Phase 7E accessibility', () => {
     expect(screen.getByLabelText(/project/i)).toBeInTheDocument();
   });
 
-  it('every landmark region has an aria-label (history, context, inspector)', () => {
+  it('every landmark region has an aria-label (history, current interaction, inspector) and there is no nested <main>', () => {
     renderWithProviders(<JarvisPage />);
     expect(screen.getByLabelText('Conversation history')).toBeInTheDocument();
+    expect(screen.getByLabelText('Current interaction')).toBeInTheDocument();
     expect(screen.getByLabelText('Inspector')).toBeInTheDocument();
+    // Layout.tsx already provides the page's single <main> — this page must
+    // never nest a second one (invalid HTML, confuses screen readers).
+    expect(document.querySelectorAll('main').length).toBe(0);
   });
 
   it('the inspector tabs use role="tab"/"tablist" with aria-selected, not bare divs', () => {

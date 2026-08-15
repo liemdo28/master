@@ -245,7 +245,11 @@ export function JarvisPage() {
 
       <ConversationHistory session={session.data} selectedRequestId={selectedRequestId} onSelect={selectTurn} />
 
-      <div className="space-y-4">
+      {/* Layout.tsx already wraps every route in its own <main> — nesting a
+          second <main> here would be invalid HTML and confuse screen
+          readers. A labelled <section> is the correct landmark for a
+          sub-region within the page's single main content area. */}
+      <section aria-label="Current interaction" className="space-y-4">
         <form onSubmit={submit} className="space-y-2">
           <label htmlFor="jarvis-text" className="sr-only">Ask Jarvis</label>
           <textarea
@@ -296,7 +300,7 @@ export function JarvisPage() {
           <EmptyState title="No questions asked yet" hint="Ask Jarvis something above, or pick a past turn from History." />
         )}
         {selected && <ResponseDetail requestText={selectedRequestText} response={selected} />}
-      </div>
+      </section>
 
       <InspectorPanel
         selected={selected}
