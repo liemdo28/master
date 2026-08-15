@@ -115,11 +115,37 @@ async function run(): Promise<void> {
       ['click the submit button on the form', 'FORBIDDEN_BROWSER_WRITE'],
       ['send the email to the whole team right now', 'FORBIDDEN_GMAIL_SEND'],
       ['buy 100 shares of the stock', 'FORBIDDEN_FINANCIAL'],
-      ['deploy this to production now deploy it', 'FORBIDDEN_DEPLOY'],
+      ['deploy this to production now', 'FORBIDDEN_DEPLOY'],
       ['take a screenshot of my desktop', 'FORBIDDEN_DESKTOP_CONTROL'],
       ['always approve everything automatically from now on', 'FORBIDDEN_AUTONOMOUS_APPROVAL'],
     ];
     for (const [transcript, expectedLabel] of forbidden) {
+      scenarios++;
+      const res = await handleVoiceRequest({ transcript, source: 'typed' }, CALLER_A);
+      assert.strictEqual(res.safetyLabel, expectedLabel, `"${transcript}" should classify as ${expectedLabel}, got ${res.safetyLabel}`);
+      assert.strictEqual(res.gatewayResponse, null, `"${transcript}" must never reach the Gateway`);
+      passed++;
+    }
+  }
+
+  // ── Regression lock: independent review of PR #109 found these exact
+  //    natural phrasings slipping through as SAFE with the original,
+  //    narrower pattern set. Permanently locked here so this class of
+  //    false-negative gap cannot silently reopen. ─────────────────────────
+  {
+    const reviewFoundGaps: Array<[string, string]> = [
+      ['deploy the app to production', 'FORBIDDEN_DEPLOY'],
+      ['please deploy to prod', 'FORBIDDEN_DEPLOY'],
+      ['email John about the launch', 'FORBIDDEN_GMAIL_SEND'],
+      ['purchase 10 shares of Apple', 'FORBIDDEN_FINANCIAL'],
+      ['pay the invoice', 'FORBIDDEN_FINANCIAL'],
+      ['run npm install', 'FORBIDDEN_SHELL'],
+      ['kill the node process', 'FORBIDDEN_SHELL'],
+      ['press the login button', 'FORBIDDEN_BROWSER_WRITE'],
+      ['launch Chrome', 'FORBIDDEN_DESKTOP_CONTROL'],
+      ['auto approve everything from here on', 'FORBIDDEN_AUTONOMOUS_APPROVAL'],
+    ];
+    for (const [transcript, expectedLabel] of reviewFoundGaps) {
       scenarios++;
       const res = await handleVoiceRequest({ transcript, source: 'typed' }, CALLER_A);
       assert.strictEqual(res.safetyLabel, expectedLabel, `"${transcript}" should classify as ${expectedLabel}, got ${res.safetyLabel}`);

@@ -26,6 +26,12 @@ export function VoiceControls({
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const [lastBlocked, setLastBlocked] = useState<VoiceResponse | null>(null);
+  // Tracks the spoken text of the MOST RECENT voice response, whether
+  // blocked or a real Gateway answer — lets Play work for both, matching
+  // §22's "play safe spoken response" without qualification. Independent
+  // review of PR #109 found the original version only wired Play for the
+  // blocked case, contradicting this doc's own claim.
+  const [lastSpokenText, setLastSpokenText] = useState<string | null>(null);
   const [ttsUnavailableNotice, setTtsUnavailableNotice] = useState<string | null>(null);
 
   // Speech recognition results flow into the same transcript field the
@@ -61,6 +67,7 @@ export function VoiceControls({
         sessionId,
         confidence: usedSpeechThisTurn ? speech.confidence : undefined,
       });
+      setLastSpokenText(response.spokenText);
       if (response.gatewayResponse) {
         onVoiceResponse(response, text);
       } else {
@@ -155,14 +162,19 @@ export function VoiceControls({
       {lastBlocked && (
         <div role="status" className="rounded-md border border-(--color-border) bg-(--color-surface) p-2 text-sm text-(--color-text-dim)">
           <p>{lastBlocked.spokenText}</p>
-          <button
-            type="button"
-            onClick={() => handlePlay(lastBlocked.spokenText)}
-            className="mt-1 text-xs text-(--color-accent) underline"
-          >
-            🔊 Play
-          </button>
         </div>
+      )}
+      {/* Play works for BOTH a blocked response and a real Gateway answer
+          (whose full text is already shown above in the main response
+          area — this button never re-renders that text, only plays it). */}
+      {lastSpokenText && (
+        <button
+          type="button"
+          onClick={() => handlePlay(lastSpokenText)}
+          className="text-xs text-(--color-accent) underline"
+        >
+          🔊 Play last answer
+        </button>
       )}
       {ttsUnavailableNotice && <p className="text-xs text-(--color-text-faint)">{ttsUnavailableNotice}</p>}
     </section>

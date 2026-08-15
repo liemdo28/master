@@ -1,10 +1,21 @@
 /**
- * Phase 7F §15/§21 — TTS output. Synthesizes exactly the text handed to
- * it (already-redacted spoken text from voice-gateway.ts, never a
- * separate/riskier channel) and returns audio bytes directly rather than
+ * Phase 7F §15/§21 — TTS output. Returns audio bytes directly rather than
  * a servable file path or URL — avoids retaining synthesized audio on
  * disk beyond the single request and avoids needing a second,
  * access-control-bearing GET route (§21 — minimal API surface).
+ *
+ * By convention, the Command Center frontend only ever calls this with
+ * text that came from a Gateway response (already-redacted via
+ * scrubReply()) or a fixed safe string (the confirmation-boundary
+ * message). This is NOT enforced server-side — the route accepts any
+ * authenticated caller's arbitrary text, same as any other authenticated
+ * utility endpoint. That is an intentional, reviewed scope decision, not
+ * an oversight: no secret is read to fulfill a synthesis request (the
+ * caller already knows whatever text they submit), so there is no
+ * leakage vector — see docs/security/PHASE7F_VOICE_SECURITY.md's TTS
+ * section for the full reasoning, corrected after independent review of
+ * PR #109 found the original wording here overstated this as a hard,
+ * server-enforced boundary.
  */
 import fs from 'fs';
 import { synthesizeSpeech, isTTSAvailable } from '../../voice/tts-service';
