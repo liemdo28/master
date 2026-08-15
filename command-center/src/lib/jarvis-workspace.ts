@@ -83,6 +83,40 @@ export function simulationTruthStatus(_run: Pick<SimulationRun, 'overallOutcome'
   return 'PROPOSED';
 }
 
+/**
+ * Directive §5 — pure derivation of "why does Jarvis believe it has this
+ * context", extracted from ContextIndicator.tsx so it can be exhaustively
+ * combinatorially tested. Never touches a secret-shaped field — only reads
+ * the already-safe sessionId/projectId/status fields a response/session
+ * already carries.
+ */
+export type SessionKind = 'device' | 'explicit' | 'none';
+
+export function sessionKind(sessionId: string | null): SessionKind {
+  if (!sessionId) return 'none';
+  return sessionId.startsWith('device:') ? 'device' : 'explicit';
+}
+
+export interface ContextState {
+  sessionKind: SessionKind;
+  explicitThisTurn: boolean;
+  contextReused: boolean;
+  clarificationRequired: boolean;
+}
+
+export function deriveContextState(
+  latest: Pick<JarvisResponse, 'sessionId' | 'projectId' | 'status'> | null,
+  requestedProjectId: string | null,
+): ContextState {
+  const explicitThisTurn = Boolean(requestedProjectId);
+  return {
+    sessionKind: sessionKind(latest?.sessionId ?? null),
+    explicitThisTurn,
+    contextReused: !explicitThisTurn && Boolean(latest?.projectId) && latest?.status !== 'NEEDS_CLARIFICATION',
+    clarificationRequired: latest?.status === 'NEEDS_CLARIFICATION',
+  };
+}
+
 export interface ParsedEvidenceRef {
   raw: string;
   /** Jarvis Gateway's own short prefixes (`task:`, `goal:`, `plan:`,

@@ -1,4 +1,5 @@
 import type { JarvisResponse, JarvisSession, ProjectRecord } from '@/lib/types';
+import { deriveContextState } from '@/lib/jarvis-workspace';
 
 /**
  * Directive §5 — shows WHY Jarvis believes it has context, never WHAT secret
@@ -6,12 +7,9 @@ import type { JarvisResponse, JarvisSession, ProjectRecord } from '@/lib/types';
  * context (rendered first, more prominent). No device IDs, no API keys, no
  * raw auth identifiers, no session tokens are ever rendered here — only the
  * derived, already-safe fields already returned by the Gateway/session API.
+ * The classification itself lives in lib/jarvis-workspace.ts's
+ * deriveContextState() so it can be exhaustively unit-tested.
  */
-
-function sessionKind(sessionId: string | null): 'device' | 'explicit' | 'none' {
-  if (!sessionId) return 'none';
-  return sessionId.startsWith('device:') ? 'device' : 'explicit';
-}
 
 function projectName(id: string | null, projects: ProjectRecord[]): string | null {
   if (!id) return null;
@@ -29,10 +27,7 @@ export function ContextIndicator({
   session: JarvisSession | null;
   projects: ProjectRecord[];
 }) {
-  const kind = sessionKind(latest?.sessionId ?? null);
-  const explicitThisTurn = Boolean(requestedProjectId);
-  const contextReused = !explicitThisTurn && Boolean(latest?.projectId) && latest?.status !== 'NEEDS_CLARIFICATION';
-  const clarificationRequired = latest?.status === 'NEEDS_CLARIFICATION';
+  const { sessionKind: kind, explicitThisTurn, contextReused, clarificationRequired } = deriveContextState(latest, requestedProjectId);
 
   return (
     <section aria-label="Context" className="space-y-3 rounded-md border border-(--color-border) p-3">
