@@ -64,16 +64,20 @@ dual-auth pattern every other Gateway route uses (see
 `PHASE7F_VOICE_ARCHITECTURE.md`).
 
 **Supporting libraries**, all reachable only via the routes above:
-`server/src/voice/transcription-service.ts` (faster-whisper wrapper),
-`tts-service.ts` (shells out to a local Python script,
-`scripts/vietts_synthesize.py`, edge-tts — no paid external API),
-`vietnamese-intent-parser.ts`, `voice-evidence-store.ts`,
-`voice-personality.ts`, `audio-store.ts`. Classification:
-**CANONICAL_REUSE** for the STT/TTS technical primitives
+`server/src/voice/transcription-service.ts` (faster-whisper wrapper, runs
+fully local), `tts-service.ts` (shells out to a local Python script,
+`scripts/vietts_synthesize.py`, which itself calls the `edge-tts` library
+— that library talks to a free Microsoft cloud TTS endpoint, not a local
+model; corrected here after independent review of PR #109 flagged the
+original wording as inaccurately describing this as fully local/no
+external network call), `vietnamese-intent-parser.ts`,
+`voice-evidence-store.ts`, `voice-personality.ts`, `audio-store.ts`.
+Classification: **CANONICAL_REUSE** for the STT/TTS technical primitives
 (`transcription-service.ts`/`tts-service.ts` themselves have no mutation
-capability — they read audio in, write text/audio out, no external
-network call, no shell beyond the local synthesis script) — Phase 7F
-reuses these two files directly rather than reimplementing STT/TTS.
+capability — they read audio in, write text/audio out; STT is local
+inference, TTS makes an outbound call to Microsoft's free edge-tts
+endpoint but performs no mutation of any kind) — Phase 7F reuses these
+two files directly rather than reimplementing STT/TTS.
 
 ### Stack B — `server/src/engineering/voice/voice-engine.ts`, mounted at `/api/ai/voice/*` via `routes/ai-platform.ts`
 

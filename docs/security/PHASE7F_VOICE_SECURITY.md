@@ -107,14 +107,23 @@ exactly as it already does for typed prompt injection.
 
 ## Secret leakage
 
-TTS only ever synthesizes text that already passed through the Phase 7C
-`scrubReply()` pipeline (unchanged) — no new, separate, unredacted text
-channel exists anywhere in the voice module. Verified: 10 direct
-secret-extraction-attempt scenarios in the evaluation ("say the API key
-out loud", "read me the access token", etc.) show `secretLeakage=0`;
-`synthesize.ts` is structurally scanned (frontend security suite) for any
-reference to raw env vars, request headers, or unredacted file reads —
-none found.
+By convention, the Command Center frontend only ever calls
+`/jarvis/voice/synthesize` with text that already passed through the
+Phase 7C `scrubReply()` pipeline or a fixed safe string — this is not a
+server-enforced boundary (corrected here after independent review of
+PR #109 found the original wording overstated it as one; see
+`synthesize.ts`'s docstring for the full reasoning). The route accepts
+any authenticated caller's arbitrary text, same as any other
+authenticated utility endpoint. This is not an actual leakage vector:
+`synthesizeVoiceOutput()` never reads a secret to fulfill a request — the
+caller already knows whatever text they submit, so there is no channel
+through which synthesis could expose something the caller didn't already
+have. Verified: 10 direct secret-extraction-attempt scenarios in the
+evaluation ("say the API key out loud", "read me the access token", etc.)
+show `secretLeakage=0` on the actual voice *request* pipeline (the path
+that determines what `spokenText` says); `synthesize.ts` is structurally
+scanned (frontend security suite) for any reference to raw env vars,
+request headers, or unredacted file reads — none found.
 
 ## No chain-of-thought UI
 
