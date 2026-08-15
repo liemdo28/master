@@ -112,6 +112,28 @@ export const AUTHORITY_RULES: Rule[] = [
     capability: 'retrieve the caller\'s own bounded, in-process Jarvis conversation session',
     evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/session-store.ts'],
   }),
+  // Phase 7F — voice is a second input/output modality over the exact same
+  // Gateway; these three routes carry request bodies (transcript text,
+  // uploaded audio, text-to-synthesize) so they are structurally POST, but
+  // none of them dispatch to a real external system or grant new authority
+  // — same LOCAL_REVERSIBLE/bounded-in-process classification Phase 7C's
+  // own 'jarvis-gateway-request' rule already established for the analogous
+  // POST /jarvis/request. See docs/security/PHASE7F_VOICE_SECURITY.md.
+  rule('jarvis-gateway-voice-transcript', /^\/api\/(command-center\/)?jarvis\/voice\/transcript$/, {
+    authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'canonical voice entrypoint — normalizes a transcript, safety-labels it, and dispatches to handleGatewayRequest() exactly like a typed request; never executes directly',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/voice/voice-gateway.ts'],
+  }),
+  rule('jarvis-gateway-voice-audio-transcribe', /^\/api\/(command-center\/)?jarvis\/voice\/audio-transcribe$/, {
+    authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'uploads an audio file and returns a transcript only — never calls the Gateway, never persists audio beyond the single request',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/voice/audio-transcribe.ts'],
+  }),
+  rule('jarvis-gateway-voice-synthesize', /^\/api\/(command-center\/)?jarvis\/voice\/synthesize$/, {
+    authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'JarvisGateway', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'synthesizes already-redacted text to speech and returns audio bytes directly — never persists synthesized audio beyond the single request',
+    evidence: ['server/src/jarvis-gateway/router.ts', 'server/src/jarvis-gateway/voice/synthesize.ts'],
+  }),
   rule('coding', /^\/api\/(command-center\/)?coding(\/.*)?$/, {
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'CODE_EXECUTION', canonicalOwner: 'Coding Engine control plane', auth: 'STRICT_API_KEY', capability: 'coding workflow under project registry constraints',
     projectScoped: true, evidence: ['server/src/routes/coding.ts', 'server/src/coding/workflow.ts'],

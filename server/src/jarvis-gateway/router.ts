@@ -15,6 +15,10 @@ import { getRequest } from './request-store';
 import { peekSession } from './session-store';
 import { resolveSessionId } from './session-resolver';
 import type { CallerIdentity, RequestType } from './types';
+import { handleVoiceRequest, MAX_VOICE_TRANSCRIPT_LENGTH } from './voice/voice-gateway';
+import type { VoiceSource } from './voice/types';
+import { audioUpload, transcribeUploadedAudio, cleanupUploadedAudio } from './voice/audio-transcribe';
+import { synthesizeVoiceOutput } from './voice/synthesize';
 
 export const jarvisGatewayJsonParser = express.json({ limit: '64kb' });
 
@@ -129,4 +133,103 @@ jarvisGatewayRouter.get('/jarvis/session/current', (req: Request, res: Response)
     return;
   }
   res.json(session);
+});
+
+// ── Phase 7F — Voice Experience, read/propose only ──────────────────────────
+// Voice is a second input/output modality over this exact same Gateway —
+// no separate router, no separate mount, no separate auth pattern. See
+// docs/architecture/PHASE7F_VOICE_ARCHITECTURE.md.
+
+const VALID_VOICE_SOURCES = new Set<VoiceSource>(['web_speech', 'server_stt', 'typed']);
+
+jarvisGatewayRouter.post('/jarvis/voice/transcript', async (req: Request, res: Response) => {
+  const body = req.body as {
+    transcript?: unknown; sessionId?: unknown; projectId?: unknown; language?: unknown;
+    confidence?: unknown; source?: unknown; capturedAt?: unknown; isWakeWordTriggered?: unknown;
+  };
+
+  if (typeof body?.transcript !== 'string' || body.transcript.trim().length === 0) {
+    res.status(400).json({ error: 'transcript is required and must be a non-empty string' });
+    return;
+  }
+  if (body.transcript.length > MAX_VOICE_TRANSCRIPT_LENGTH) {
+    res.status(400).json({ error: `transcript must be at most ${MAX_VOICE_TRANSCRIPT_LENGTH} characters` });
+    return;
+  }
+  if (typeof body.source !== 'string' || !VALID_VOICE_SOURCES.has(body.source as VoiceSource)) {
+    res.status(400).json({ error: 'source is required and must be one of: web_speech, server_stt, typed' });
+    return;
+  }
+  if (body.projectId !== undefined && body.projectId !== null && typeof body.projectId !== 'string') {
+    res.status(400).json({ error: 'projectId must be a string or null' });
+    return;
+  }
+  if (body.sessionId !== undefined && (typeof body.sessionId !== 'string' || body.sessionId.length > MAX_SESSION_ID_LENGTH)) {
+    res.status(400).json({ error: `sessionId, if provided, must be a string of at most ${MAX_SESSION_ID_LENGTH} characters` });
+    return;
+  }
+  if (body.confidence !== undefined && (typeof body.confidence !== 'number' || body.confidence < 0 || body.confidence > 1)) {
+    res.status(400).json({ error: 'confidence, if provided, must be a number between 0 and 1' });
+    return;
+  }
+
+  try {
+    const response = await handleVoiceRequest(
+      {
+        transcript: body.transcript,
+        sessionId: body.sessionId as string | undefined,
+        projectId: body.projectId as string | null | undefined,
+        language: typeof body.language === 'string' ? body.language : undefined,
+        confidence: body.confidence as number | undefined,
+        source: body.source as VoiceSource,
+        capturedAt: typeof body.capturedAt === 'string' ? body.capturedAt : undefined,
+        isWakeWordTriggered: body.isWakeWordTriggered === true,
+      },
+      callerIdentity(req),
+    );
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal error handling voice request', detail: err instanceof Error ? err.message : undefined });
+  }
+});
+
+// Secondary, optional path for browsers without a usable client-side
+// speech-recognition API — uploads audio, returns ONLY a transcript. Never
+// calls handleVoiceRequest()/handleGatewayRequest() itself; the caller
+// must show the transcript and let the user explicitly submit it via
+// POST /jarvis/voice/transcript as a separate step (§22/§23).
+jarvisGatewayRouter.post('/jarvis/voice/audio-transcribe', (req: Request, res: Response) => {
+  audioUpload.single('audio')(req, res, async (uploadErr: unknown) => {
+    if (uploadErr) {
+      res.status(400).json({ error: uploadErr instanceof Error ? uploadErr.message : 'Audio upload failed' });
+      return;
+    }
+    const file = req.file;
+    if (!file) {
+      res.status(400).json({ error: 'audio file is required (multipart field "audio")' });
+      return;
+    }
+    try {
+      const result = await transcribeUploadedAudio(file.path);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ error: 'Internal error transcribing audio', detail: err instanceof Error ? err.message : undefined });
+    } finally {
+      cleanupUploadedAudio(file.path);
+    }
+  });
+});
+
+jarvisGatewayRouter.post('/jarvis/voice/synthesize', async (req: Request, res: Response) => {
+  const body = req.body as { text?: unknown };
+  if (typeof body?.text !== 'string' || body.text.trim().length === 0) {
+    res.status(400).json({ error: 'text is required and must be a non-empty string' });
+    return;
+  }
+  try {
+    const result = await synthesizeVoiceOutput(body.text);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal error synthesizing speech', detail: err instanceof Error ? err.message : undefined });
+  }
 });
