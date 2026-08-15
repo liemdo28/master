@@ -407,4 +407,102 @@ test.describe('Command Center — full flow against a controlled fixture backend
     expect((await manifestBefore.json()).counts.unknownMutations).toBe(0);
     expect((await manifestBefore.json()).counts.unresolvedLegacyMutations).toBe(0);
   });
+
+  test('Phase 7F: voice read/plan/simulate/propose flow — spoken "yes, approve it" never approves, zero real mutation', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    const login = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await login.json();
+    const auth = { Authorization: `Bearer ${token}` };
+    const before = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: auth })).json(),
+      governance: await (await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: auth })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: auth })).json(),
+    };
+
+    await page.getByRole('link', { name: 'Jarvis' }).click();
+    await expect(page).toHaveURL(/\/jarvis$/);
+    const current = page.getByRole('region', { name: 'Current interaction' });
+    const voice = page.getByRole('region', { name: 'Voice input' });
+    const transcriptBox = voice.getByPlaceholder(/type a question here/i);
+    const submitButton = voice.getByRole('button', { name: 'Submit', exact: true });
+
+    // 1. Voice transcript mode is always visible — no separate "activate"
+    //    step is needed; the transcript field and Submit button are always
+    //    present and keyboard-usable (§24), which is exactly what makes
+    //    this real, deterministic browser automation possible without a
+    //    real microphone.
+    await expect(transcriptBox).toBeVisible();
+    await expect(submitButton).toBeVisible();
+
+    // 2. Submit a safe question via the voice transcript field, with an
+    //    explicit project — same rendering path a typed Ask uses.
+    await page.getByRole('combobox').selectOption({ label: 'Mi Core System' });
+    await transcriptBox.fill('what tasks are waiting on me');
+    await submitButton.click();
+    await expect(current.getByText('task query', { exact: true })).toBeVisible();
+    await expect(current.getByText(/E2E fixture: deploy the pricing page/i).first()).toBeVisible();
+
+    // 3. Project continuity via voice — a follow-up with NO explicit
+    //    project must still resolve through the same session Phase 7D
+    //    already governs, exactly like the typed path.
+    await page.getByRole('combobox').selectOption({ label: 'No specific project' });
+    await transcriptBox.fill('find documentation about the fixture architecture');
+    await submitButton.click();
+    await expect(current.getByText('knowledge search', { exact: true })).toBeVisible();
+    await expect(page.getByText(/reused the session's project context/i)).toBeVisible();
+
+    // 4. Simulation request via voice — result must always carry the
+    //    mandatory non-live-execution banner.
+    await transcriptBox.fill('simulate what would happen if I archived this project');
+    await submitButton.click();
+    await expect(current.getByText('simulation', { exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'simulation' }).click();
+    await expect(page.getByText('SIMULATION — NO LIVE EXECUTION')).toBeVisible();
+    await expect(page.getByText(/PROPOSED/).first()).toBeVisible();
+
+    // 5. Proposal-preparation request via voice — must always ask for
+    //    exact fields, never silently prepare or approve anything.
+    await transcriptBox.fill('draft an email to the team');
+    await submitButton.click();
+    await expect(current.getByText('action proposal', { exact: true })).toBeVisible();
+    await expect(current.getByText('NEEDS CLARIFICATION')).toBeVisible();
+
+    // 6. The hard confirmation-boundary rule — a spoken/typed "yes, approve
+    //    it" is intercepted before the Gateway even runs and produces the
+    //    fixed "still required" message inline in the Voice input region
+    //    itself (there is no Gateway response to select/cache for this
+    //    case), never an approval.
+    await transcriptBox.fill('yes, approve it');
+    await submitButton.click();
+    await expect(voice.getByText(/approval is still required in command center/i)).toBeVisible();
+
+    // No execution/mutation control, and no false EXECUTED claim, anywhere
+    // on the page across every voice exchange above.
+    for (const forbidden of [/^approve/i, /^execute/i, /^send$/i, /^force$/i, /run shell/i, /bypass/i, /deploy/i]) {
+      await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
+    }
+    await expect(page.getByText(/EXECUTED/)).toHaveCount(0);
+
+    // Zero real mutation anywhere, across the entire voice flow.
+    const after = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: auth })).json(),
+      governance: await (await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: auth })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: auth })).json(),
+    };
+    expect(after.actions).toEqual(before.actions);
+    expect(after.plans).toEqual(before.plans);
+    expect(after.governance).toEqual(before.governance);
+    expect(after.tasks).toEqual(before.tasks);
+
+    const manifest = await request.get(new URL('/api/command-center/authority/status', baseURL).toString(), { headers: auth });
+    const manifestBody = await manifest.json();
+    expect(manifestBody.counts.unknownMutations).toBe(0);
+    expect(manifestBody.counts.unresolvedLegacyMutations).toBe(0);
+  });
 });

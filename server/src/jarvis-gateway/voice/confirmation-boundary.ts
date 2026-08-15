@@ -24,6 +24,14 @@ const BARE_CONFIRMATION_PATTERNS: RegExp[] = [
   /^looks?\s+good[.!]?$/i,
   /^(ok|okay)[,.!]?\s*(send|do)\s+it[.!]?$/i,
   /^that('s| is)\s+correct[.!]?$/i,
+  // Compound "yes/yeah/ok(ay), <approval word> (it)" — a realistic full
+  // sentence, not just a bare single word. Deliberately requires the
+  // approval word to come IMMEDIATELY after the leading yes/ok (only a
+  // comma/whitespace between them), so a real question like "yes but what
+  // tasks are waiting on me" or "yes I want to know about the goals" never
+  // matches — those have unrelated content between "yes" and any approval
+  // word, which this pattern's tight anchoring rejects.
+  /^(yes|yeah|yep|yup|ok|okay)[,.\s]+(approve|approved|confirm|confirmed|do it|send it|go ahead)([.! ]+it)?[.!]?$/i,
 ];
 
 export const CONFIRMATION_BOUNDARY_MESSAGE =
