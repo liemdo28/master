@@ -82,31 +82,90 @@ test.describe('Command Center — full flow against a controlled fixture backend
     await expect(page.getByText('Overall')).toBeVisible();
     await expect(page.getByText('CORE', { exact: true })).toBeVisible();
 
-    // 15. Open Jarvis — ask a health question, a project-scoped question, and a
-    //     knowledge question against the real canonical gateway (Phase 7C).
-    //     Read/plan/simulate only; never executes.
+    // 15. Open Jarvis (Phase 7E Operator Workspace) — ask a health question, a
+    //     project-scoped question, and a knowledge question against the real
+    //     canonical gateway. Read/plan/simulate only; never executes. Intent-
+    //     label assertions are scoped to the "Current interaction" landmark
+    //     specifically, since the History panel can legitimately show the
+    //     same intent label for a past turn once a real session exists.
     await page.getByRole('link', { name: 'Jarvis' }).click();
     await expect(page).toHaveURL(/\/jarvis$/);
+    // A <section aria-label> maps to ARIA role "region" — Playwright's
+    // getByLabel targets form controls specifically, not arbitrary labelled
+    // landmarks (unlike testing-library's getByLabelText, used in the
+    // vitest a11y suite, which is more lenient here).
+    const current = page.getByRole('region', { name: 'Current interaction' });
 
     const jarvisInput = page.getByPlaceholder(/ask about health/i);
     await jarvisInput.fill('what is the system health right now');
-    await page.getByRole('button', { name: 'Ask' }).click();
-    await expect(page.getByText('system status', { exact: true })).toBeVisible();
-    await expect(page.getByText(/Overall:/)).toBeVisible();
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(current.getByText('system status', { exact: true })).toBeVisible();
+    await expect(current.getByText(/Overall:/)).toBeVisible();
 
     await page.getByRole('combobox').selectOption({ label: 'Mi Core System' });
     await jarvisInput.fill('what tasks are waiting on me');
-    await page.getByRole('button', { name: 'Ask' }).click();
-    await expect(page.getByText('task query', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(current.getByText('task query', { exact: true })).toBeVisible();
+    // The answer paragraph AND a per-task fact bullet both mention the task
+    // text — same pattern already found during Phase 7C's own review.
+    await expect(current.getByText(/E2E fixture: deploy the pricing page/i).first()).toBeVisible();
 
-    await jarvisInput.fill('find documentation about deployment');
-    await page.getByRole('button', { name: 'Ask' }).click();
-    await expect(page.getByText('knowledge search', { exact: true })).toBeVisible();
+    // 15a. Context Indicator (§5) — explicit project this turn must show,
+    //      distinct from session-derived context.
+    await expect(page.getByRole('tab', { name: 'context', selected: true })).toBeVisible();
+    await expect(page.getByText('Mi Core System', { exact: true }).last()).toBeVisible();
 
-    // No execution/mutation control anywhere on the page, across all three answers.
+    // 15b. Session continuity (§13/7D) — ask a follow-up with NO explicit
+    //      project this time; it must still resolve via session context,
+    //      never re-ask for clarification.
+    await page.getByRole('combobox').selectOption({ label: 'No specific project' });
+    // Deliberately avoids the word "deploy" — the History panel now renders
+    // each turn's own question text inside a <button>, and the forbidden-
+    // control check below scans the whole page for a /deploy/i-named
+    // button, so a question containing "deployment" would create a false
+    // positive against its own history entry.
+    await jarvisInput.fill('find documentation about the fixture architecture');
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(current.getByText('knowledge search', { exact: true })).toBeVisible();
+    await expect(current.getByText('NEEDS CLARIFICATION')).not.toBeVisible();
+    await expect(page.getByText(/reused the session's project context/i)).toBeVisible();
+
+    // 15c. Evidence Inspector (§7) — reuses the real Phase 6D Evidence API,
+    //      links out to the canonical Task detail page for the real
+    //      approval-required state (never an inline approve control here).
+    await jarvisInput.fill('what tasks are waiting on me');
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(current.getByText('task query', { exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'evidence' }).click();
+    const taskEvidenceLink = page.getByRole('link', { name: /open task/i }).first();
+    await expect(taskEvidenceLink).toBeVisible();
+    await taskEvidenceLink.click();
+    await expect(page).toHaveURL(/\/tasks\//);
+    await expect(page.getByText('WAITING_APPROVAL').first()).toBeVisible();
+    // The real approval-required state and its control live only on this
+    // canonical page — confirmed absent from the Jarvis workspace itself.
+    await page.goBack();
+    await expect(page).toHaveURL(/\/jarvis$/);
+
+    // 15d. Simulation Inspector (§10) — reuses the real Phase 6F simulator;
+    //      always the mandatory non-live-execution banner.
+    await jarvisInput.fill('simulate what would happen if I archived this project');
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(current.getByText('simulation', { exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'simulation' }).click();
+    await expect(page.getByText('SIMULATION — NO LIVE EXECUTION')).toBeVisible();
+    // TruthStatusBadge renders "<icon> PROPOSED" as one text node.
+    await expect(page.getByText(/PROPOSED/).first()).toBeVisible();
+
+    // No execution/mutation control, and no false EXECUTED claim, anywhere
+    // on the page, across every answer above.
     for (const forbidden of [/^approve/i, /^execute/i, /^send$/i, /^force$/i, /run shell/i, /bypass/i, /deploy/i]) {
       await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
     }
+    // Substring match (not exact) — TruthStatusBadge would render "✓ EXECUTED"
+    // as one text node if this claim were ever made; an exact match against
+    // the bare word would trivially pass even if that happened.
+    await expect(page.getByText(/EXECUTED/)).toHaveCount(0);
 
     // 16. Generate EOD review
     await page.getByRole('link', { name: 'Reviews' }).click();
@@ -267,5 +326,85 @@ test.describe('Command Center — full flow against a controlled fixture backend
     const governanceAfter = await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: auth });
     expect(await actionsAfter.json()).toEqual(await actionsBefore.json());
     expect(await governanceAfter.json()).toEqual(await governanceBefore.json());
+  });
+
+  test('Phase 7E: cross-session request/session access is denied, and the whole workspace flow leaves zero real mutation', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    // Snapshot real governance/action/task/plan/delegation state before
+    // touching the Jarvis workspace at all.
+    const loginA = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token: tokenA } = await loginA.json();
+    const authA = { Authorization: `Bearer ${tokenA}` };
+    const before = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: authA })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: authA })).json(),
+      governance: await (await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: authA })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: authA })).json(),
+    };
+
+    await page.getByRole('link', { name: 'Jarvis' }).click();
+    await expect(page).toHaveURL(/\/jarvis$/);
+    const jarvisInput = page.getByPlaceholder(/ask about health/i);
+    await jarvisInput.fill('what tasks are waiting on me');
+    await page.getByRole('button', { name: 'Ask', exact: true }).click();
+    await expect(page.getByRole('region', { name: 'Current interaction' }).getByText('task query', { exact: true })).toBeVisible();
+
+    // Recover the requestId this created via the API-key-style route mirror:
+    // the same login's own session must be able to read its own request back.
+    const ownSession = await request.get(new URL('/api/command-center/jarvis/session/current', baseURL).toString(), { headers: authA });
+    expect(ownSession.status()).toBe(200);
+    const sessionBody = await ownSession.json();
+    const requestId = sessionBody.turns.at(-1).requestId;
+    const ownRead = await request.get(new URL(`/api/command-center/jarvis/request/${requestId}`, baseURL).toString(), { headers: authA });
+    expect(ownRead.status()).toBe(200);
+
+    // A SECOND, independently-authenticated caller (Playwright's own request
+    // context uses a distinct User-Agent from the real browser page, so this
+    // PIN login mints a genuinely different device_id/session) must be
+    // denied both the specific request AND the first caller's session.
+    const loginB = await request.post(new URL('/api/remote/login', baseURL).toString(), {
+      data: { pin: PIN },
+      headers: { 'User-Agent': 'Phase7E-E2E-second-caller/1.0' },
+    });
+    const { token: tokenB } = await loginB.json();
+    const authB = { Authorization: `Bearer ${tokenB}` };
+
+    const crossRead = await request.get(new URL(`/api/command-center/jarvis/request/${requestId}`, baseURL).toString(), { headers: authB });
+    expect(crossRead.status()).toBe(404); // never 200, never leaks caller A's stored response
+
+    const crossSession = await request.get(new URL('/api/command-center/jarvis/session/current', baseURL).toString(), { headers: authB });
+    // Caller B has never asked anything itself yet, so its own session is
+    // legitimately empty — critically, it must never equal caller A's.
+    if (crossSession.status() === 200) {
+      const bodyB = await crossSession.json();
+      expect(bodyB.sessionId).not.toBe(sessionBody.sessionId);
+    } else {
+      expect(crossSession.status()).toBe(404);
+    }
+
+    // Unauthenticated access is rejected outright.
+    const unauth = await request.get(new URL(`/api/command-center/jarvis/request/${requestId}`, baseURL).toString());
+    expect(unauth.status()).toBe(401);
+
+    // Zero real mutation anywhere, across the entire workspace flow.
+    const after = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: authA })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: authA })).json(),
+      governance: await (await request.get(new URL('/api/command-center/governance/status', baseURL).toString(), { headers: authA })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: authA })).json(),
+    };
+    expect(after.actions).toEqual(before.actions);
+    expect(after.plans).toEqual(before.plans);
+    expect(after.governance).toEqual(before.governance);
+    expect(after.tasks).toEqual(before.tasks);
+
+    // Authority counts unchanged too.
+    const manifestBefore = await request.get(new URL('/api/command-center/authority/status', baseURL).toString(), { headers: authA });
+    expect((await manifestBefore.json()).counts.unknownMutations).toBe(0);
+    expect((await manifestBefore.json()).counts.unresolvedLegacyMutations).toBe(0);
   });
 });

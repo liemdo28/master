@@ -279,11 +279,12 @@ describe('Command Center screens', () => {
     expect(screen.queryByRole('button', { name: /send|execute|approve|force|bypass|run shell|deploy/i })).not.toBeInTheDocument();
   });
 
-  it('Jarvis surfaces a WAITING_APPROVAL response with a link to Approvals, never an inline approve control', async () => {
+  it('Jarvis surfaces a WAITING_APPROVAL response with a link to Actions (the real Controlled Action proposal surface), never an inline approve control', async () => {
     vi.mocked(api.post).mockResolvedValueOnce({
       requestId: 'req-2',
       intent: 'ACTION_PROPOSAL',
       projectId: null,
+      sessionId: null,
       status: 'WAITING_APPROVAL',
       answer: 'Proposal prepared and waiting for approval.',
       facts: [], inferences: [], unknowns: [], conflicts: [], citations: [], suggestedNextSteps: [],
@@ -295,8 +296,12 @@ describe('Command Center screens', () => {
     fireEvent.change(screen.getByPlaceholderText(/ask about health/i), { target: { value: 'propose a calendar event' } });
     fireEvent.click(screen.getByRole('button', { name: 'Ask' }));
     await waitFor(() => expect(screen.getByText('WAITING APPROVAL')).toBeInTheDocument());
-    const approvalsLink = screen.getByRole('link', { name: /approvals/i });
-    expect(approvalsLink).toHaveAttribute('href', '/approvals');
+    // ApprovalsPage's own feed (/operating/approvals) does not include
+    // Controlled Action proposals — see PHASE7E_COMPONENT_AUDIT.md — so the
+    // correct, real approval surface for this response is Actions, not
+    // Approvals. This is a deliberate improvement over the Phase 7C page.
+    const actionsLink = screen.getByRole('link', { name: /actions/i });
+    expect(actionsLink).toHaveAttribute('href', '/actions');
     expect(screen.queryByRole('button', { name: /approve/i })).not.toBeInTheDocument();
   });
 

@@ -107,6 +107,22 @@ async function run(): Promise<void> {
     passed++;
   }
 
+  // ── SIMULATION result is genuinely visible through the real public route's ──
+  // ── own cache lookup — regression lock for a real bug Phase 7E found: two ──
+  // ── separately-constructed AutomationSimulationService instances (one in ──
+  // ── jarvis-gateway/services.ts, one in the router) never saw each other's ──
+  // ── in-memory-only results, so a Jarvis-created simulationId 404'd when ──
+  // ── fetched back through GET /simulation/:id. ──────────────────────────────
+  {
+    scenarios++;
+    const { getCachedResult } = require('../../personal-os/automation-simulation/router');
+    const res = await handleGatewayRequest({ text: 'simulate what would happen if I archived this project', projectId: project.id }, CALLER);
+    const cached = getCachedResult(res.simulation!.simulationId);
+    assert.ok(cached, 'a Jarvis-created simulation must be retrievable via the exact same lookup GET /simulation/:id uses');
+    assert.strictEqual(cached.simulationId, res.simulation!.simulationId);
+    passed++;
+  }
+
   // ── ACTION_PROPOSAL — never guesses a target field ─────────────────────
   {
     scenarios++;

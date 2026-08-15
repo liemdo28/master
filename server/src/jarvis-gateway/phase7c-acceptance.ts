@@ -117,10 +117,21 @@ async function main(): Promise<void> {
     executionCallsFound === 0 && !gatewaySrc.includes('approval-engine') && !gatewaySrc.includes('production-governor'),
     'confirmed via the same structural scan as point 12 plus a direct gateway.ts check');
 
-  // 14. Approval reused.
+  // 14. Approval reused. The preserved security invariant is "links to a
+  //     canonical approval-surface page, never an inline approve control" —
+  //     which specific canonical page is incidental UI structure, not the
+  //     invariant itself. Originally checked for a literal `Link to="/approvals"`;
+  //     Phase 7E's component audit (docs/architecture/PHASE7E_COMPONENT_AUDIT.md)
+  //     found /approvals' feed does not even include Controlled Action
+  //     proposals, so JarvisPage.tsx was deliberately changed to link to
+  //     /actions instead — the correct canonical page for this state, not a
+  //     regression. Updated to accept either canonical target and to also
+  //     assert there is still no inline "Approve" button on the page.
+  const jarvisPageSrc = read(path.join('..', '..', '..', 'command-center', 'src', 'routes', 'JarvisPage.tsx'), GATEWAY_DIR);
   add('WAITING_APPROVAL responses point to canonical Approvals/Actions UI, never an inline approve control',
-    read(path.join('..', '..', '..', 'command-center', 'src', 'routes', 'JarvisPage.tsx'), GATEWAY_DIR).includes("Link to=\"/approvals\""),
-    'command-center/src/routes/JarvisPage.tsx links to /approvals for WAITING_APPROVAL, never an inline button');
+    (jarvisPageSrc.includes('Link to="/approvals"') || jarvisPageSrc.includes('Link to="/actions"'))
+      && !/<button[^>]*>\s*Approve/i.test(jarvisPageSrc),
+    'command-center/src/routes/JarvisPage.tsx links to a canonical approval-surface page (/approvals or /actions) for WAITING_APPROVAL, and defines no inline Approve button');
 
   // 15. Coding path never mutates. planTask()/run() both create a real
   //     Task record and a real git worktree (git worktree add) — neither is

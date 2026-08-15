@@ -1088,6 +1088,31 @@ export interface JarvisResponse {
   generatedAt: string;
 }
 
+// Phase 7D — Jarvis Gateway session/conversation continuity (ephemeral only:
+// not memory, not knowledge, not evidence, not authority, not durable source
+// of truth — see docs/architecture/PHASE7D_UNIFIED_CONTEXT.md). No frontend
+// mirror existed before Phase 7E.
+export interface JarvisConversationTurn {
+  turnId: string;
+  requestId: string;
+  text: string;
+  intent: JarvisRequestType;
+  projectId: string | null;
+  status: JarvisResponseStatus;
+  answerSummary: string;
+  citationRefs: JarvisCitationRef[];
+  truthCounts: { facts: number; inferences: number; unknowns: number; conflicts: number };
+  timestamp: string;
+}
+
+export interface JarvisSession {
+  sessionId: string;
+  activeProjectId: string | null;
+  turns: JarvisConversationTurn[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SimulationRun {
   simulationId: string;
   inputHash: string;

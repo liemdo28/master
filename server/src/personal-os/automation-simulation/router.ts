@@ -11,7 +11,14 @@ import type { SimulationInput, SimulationRun, SimulationStepInput } from './type
 export const simulationJsonParser = express.json({ limit: '256kb' });
 
 const router = Router();
-const service = new AutomationSimulationService();
+// Exported so any other in-process caller (e.g. jarvis-gateway/services.ts's
+// SIMULATION handler) reuses this exact instance rather than constructing a
+// second, disconnected one — this service's result cache is deliberately
+// in-memory-only (never a DB table, see the file header comment), so two
+// separate instances would silently never see each other's simulations.
+// Found via Phase 7E's Simulation Inspector, the first code to actually
+// fetch a Jarvis-created simulation back through this public route.
+export const service = new AutomationSimulationService();
 
 const SIM_ID = /^sim-[0-9a-f-]{36}$/i;
 const MAX_STEPS = 100;
@@ -19,12 +26,23 @@ const MAX_CACHE = 200;
 
 // Bounded, in-process, ephemeral only — cleared on process restart, never a DB table.
 const resultCache = new Map<string, SimulationRun>();
-function cacheResult(run: SimulationRun): void {
+// Exported for the same reason `service` is: any other in-process caller
+// (jarvis-gateway) that runs a simulation via the shared `service` above
+// must also cache its own result here, or GET /simulation/:id can never see
+// it — `service.run()` itself does not write to this cache, only this
+// route's own POST handler did, until Phase 7E's fix.
+export function cacheResult(run: SimulationRun): void {
   resultCache.set(run.simulationId, run);
   if (resultCache.size > MAX_CACHE) {
     const oldest = resultCache.keys().next().value;
     if (oldest) resultCache.delete(oldest);
   }
+}
+/** Test-only symmetry with cacheResult — lets a regression test prove a
+ *  simulation cached from elsewhere (e.g. jarvis-gateway) is genuinely
+ *  visible through this exact lookup, the same one GET /simulation/:id uses. */
+export function getCachedResult(id: string): SimulationRun | undefined {
+  return resultCache.get(id);
 }
 
 const ACTION_TYPES = new Set(['GMAIL_CREATE_DRAFT', 'CALENDAR_EVENT_PROPOSAL', 'CALENDAR_CREATE_EVENT', 'GMAIL_SEND_DRAFT']);

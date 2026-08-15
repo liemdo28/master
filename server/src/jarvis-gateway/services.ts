@@ -10,7 +10,7 @@ import { ProjectRegistryService } from '../project-registry/service';
 import { TaskStore } from '../task-runtime/store';
 import { TaskEngine } from '../task-runtime/engine';
 import { GovernedOrchestrationService } from '../personal-os/orchestration/service';
-import { AutomationSimulationService } from '../personal-os/automation-simulation/service';
+import { service as automationSimulationService, cacheResult as cacheSimulationResult } from '../personal-os/automation-simulation/router';
 import { ControlledActionService } from '../personal-os/actions/service';
 import { OperatorControlService } from '../operator-control/service';
 import { DocumentStore } from '../personal-os/documents/store';
@@ -21,7 +21,12 @@ export const taskStore = new TaskStore();
 export const taskEngine = new TaskEngine(taskStore);
 export const personalOs = new PersonalOsService(undefined, taskStore, projectRegistry);
 export const orchestration = new GovernedOrchestrationService();
-export const simulation = new AutomationSimulationService();
+// Reuses the exact same instance the real GET /simulation/:id route serves
+// from — its result cache is in-memory-only (never a DB table), so a
+// second, separately-constructed instance would never see this one's
+// simulations. Found and fixed during Phase 7E (see router.ts's comment).
+export const simulation = automationSimulationService;
+export const cacheSimulationResultForPublicRoute = cacheSimulationResult;
 export const controlledActions = new ControlledActionService();
 export const operatorControl = new OperatorControlService();
 export const documentStore = new DocumentStore();
