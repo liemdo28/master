@@ -4,7 +4,19 @@
  * pattern: where a point is already proven by a dedicated test/evaluation
  * script, this checks structural/source-level evidence and/or requires
  * that script to have passed as a precondition, rather than re-running an
- * expensive script (e.g. the 1500-scenario red team) a second time inline.
+ * expensive script (e.g. the 1500-scenario red team, ~1-2 minutes) a
+ * second time inline.
+ *
+ * Honesty note (added after independent review of PR #111 flagged this):
+ * roughly half the points below call `add(label, true, detail)` — a
+ * hardcoded boolean, not a locally computed condition. This is NOT this
+ * script re-verifying those points itself; it is this script ASSERTING
+ * that the cited upstream command was already run this session and
+ * passed. If you are reading a "PASS" from this script without having
+ * actually run the cited `npm run ...` commands first, that PASS is not
+ * evidence of anything — re-run the cited commands. This script's real,
+ * independent value is points 1-4, 7, 9-11, 16-17, 19 (and now 18), which
+ * DO compute a live condition from the current source tree.
  */
 import assert from 'assert';
 import fs from 'fs';
@@ -111,10 +123,39 @@ async function main(): Promise<void> {
     googleExecutor.includes('executeGmailSend') && !indexSrc.includes("routes/actions'"),
     'executeGmailSend()/sendEmail() exist in source but have zero live callers; routes/actions.ts (only importer of action-router.ts) not mounted in index.ts; action-router.ts has no case arm for gmail_send — all three regression-locked in test:phase7g-legacy-authority-scan');
 
-  // 18. Financial authority absent.
+  // 18. Financial authority absent — computed live, not asserted (fixed
+  //     after independent review of PR #111 flagged this point as one of
+  //     several hardcoded `true` values with no local check backing it).
+  function listTsFiles(dir: string): string[] {
+    const out: string[] = [];
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) out.push(...listTsFiles(full));
+      else if (entry.name.endsWith('.ts')) out.push(full);
+    }
+    return out;
+  }
+  const MONEY_MOVEMENT_NAMES = ['transferFunds', 'initiatePayment', 'placeTrade', 'executeTrade', 'withdrawFunds'];
+  // Excludes this file itself and other acceptance/evaluation/scanner
+  // scripts, whose own source legitimately contains these names as scan
+  // data (this exact file's own MONEY_MOVEMENT_NAMES array above, for
+  // instance) — matching the same exclusion phase7c-legacy-mutation-scan.
+  // test.ts already established for its own forbidden-call-string arrays.
+  const allServerFiles = listTsFiles(path.join(SERVER_ROOT, 'src'))
+    .filter(f => !/-(acceptance|evaluation)\.ts$|\.test\.ts$/.test(path.basename(f)));
+  const moneyMovementHits = allServerFiles.filter(f => {
+    const src = fs.readFileSync(f, 'utf8');
+    return MONEY_MOVEMENT_NAMES.some(n => src.includes(n));
+  });
+  // Same exclusion as above — this acceptance script's own file lives
+  // under jarvis-gateway/ and its own detail strings legitimately mention
+  // "accounting" while describing this exact check.
+  const gatewayFiles = listTsFiles(path.join(SERVER_ROOT, 'src', 'jarvis-gateway'))
+    .filter(f => !/-(acceptance|evaluation)\.ts$|\.test\.ts$/.test(path.basename(f)));
+  const accountingRefsInGateway = gatewayFiles.filter(f => fs.readFileSync(f, 'utf8').toLowerCase().includes('accounting'));
   add('financial authority absent',
-    true,
-    'zero matches anywhere in source for transferFunds/initiatePayment/placeTrade/executeTrade/withdrawFunds; zero references to "accounting" anywhere in jarvis-gateway/ (including voice/)');
+    moneyMovementHits.length === 0 && accountingRefsInGateway.length === 0,
+    `${moneyMovementHits.length} files reference a money-movement function name; ${accountingRefsInGateway.length} files under jarvis-gateway/ (incl. voice/) reference "accounting" — both computed live over ${allServerFiles.length} server/src/**/*.ts files`);
 
   // 19. Coding read-only boundary.
   const codingHandler = stripComments(read('handlers/coding.ts', SERVER_ROOT + '/src/jarvis-gateway'));
