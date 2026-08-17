@@ -186,6 +186,43 @@ export const AUTHORITY_RULES: Rule[] = [
     phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE', adapterTarget: 'LegacyAuthorityAdapter', quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: '/api/actions/*',
     evidence: ['server/src/routes/approval.ts'],
   }),
+  // Phase 8A — was previously covered by the general 'legacy-voice-browser'
+  // rule below, which claimed LEGACY_QUARANTINED/status QUARANTINED for this
+  // exact route even though the handler never called denyAuthorityMutation()
+  // (found in Phase 8 discovery — see
+  // docs/architecture/PHASE8_DISCOVERY_AND_ROADMAP.md). Now genuinely
+  // contained: requireTaskRuntimeAuth at the /api/browser mount (index.ts)
+  // plus validateTargetUrl() SSRF-safe target policy before any outbound
+  // request — reflects that real state instead of a false QUARANTINED claim.
+  // Must be ordered before 'legacy-voice-browser' so this exact route is
+  // matched first; /api/browser/write remains covered by that rule (it
+  // genuinely calls denyAuthorityMutation()).
+  rule('browser-extract-contained', /^\/api\/browser\/extract$/, {
+    authorityClass: 'LEGACY_QUARANTINED', effectClass: 'EXTERNAL_REVERSIBLE', canonicalOwner: 'ControlledActionService', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'read-only browser extraction task, gated by requireTaskRuntimeAuth and an SSRF-safe target policy (DNS-resolved IP blocklist covering loopback/RFC1918/link-local/CGNAT/metadata endpoints) — not routed through denyAuthorityMutation(), so authorityClass stays LEGACY_QUARANTINED (matches the external-effect-route invariant in assertAuthorityManifest) while status/disposition reflect that it now runs contained rather than being hard-blocked',
+    approvalRequired: false, governanceRequired: false, status: 'ADAPTED_TO_CANONICAL', legacyReason: 'Legacy browser automation surface; not yet a canonical Controlled Action.', migrationTarget: 'future governed browser adapter',
+    phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE', adapterTarget: 'LegacyAuthorityAdapter', quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: 'future governed browser adapter',
+    evidence: ['server/src/routes/browser-agent.ts', 'server/src/security/ssrf-policy.ts', 'server/src/index.ts requireTaskRuntimeAuth mount'],
+  }),
+  // Phase 8A — discovered mid-implementation while tracing every caller of
+  // runBrowserTask(): a SECOND, separately-defined browser-execution surface
+  // (engineering/browser/browser-agent.ts, real Playwright automation
+  // including in-page JS eval via 'evaluate') reachable at POST
+  // /api/ai/browser/run and /api/ai/browser/smoke, previously covered only
+  // by the generic 'legacy-process-workflow' rule below (which also falsely
+  // claimed QUARANTINED status for it — this router never called
+  // denyAuthorityMutation() either). Now contained: requireTaskRuntimeAuth
+  // at the /api/ai mount, validateTargetUrl() SSRF policy, and write-shaped
+  // actions (click/fill/evaluate) rejected with 403 before any browser
+  // action runs — see routes/ai-platform.ts. Must be ordered before
+  // 'legacy-process-workflow' so these two exact routes are matched first.
+  rule('ai-browser-contained', /^\/api\/ai\/browser\/(run|smoke)$/, {
+    authorityClass: 'LEGACY_QUARANTINED', effectClass: 'EXTERNAL_REVERSIBLE', canonicalOwner: 'ControlledActionService', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'read-only-by-policy real-browser (Playwright) navigate/wait/screenshot task — click/fill/evaluate rejected — gated by requireTaskRuntimeAuth and the same SSRF-safe target policy as /api/browser/extract; not routed through denyAuthorityMutation(), so authorityClass stays LEGACY_QUARANTINED while status/disposition reflect contained-not-blocked',
+    approvalRequired: false, governanceRequired: false, status: 'ADAPTED_TO_CANONICAL', legacyReason: 'Legacy browser automation surface; not yet a canonical Controlled Action.', migrationTarget: 'future governed browser adapter',
+    phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE', adapterTarget: 'LegacyAuthorityAdapter', quarantineHandler: 'legacyAuthorityAdapter.quarantine', canonicalReplacement: 'future governed browser adapter',
+    evidence: ['server/src/routes/ai-platform.ts', 'server/src/engineering/browser/browser-agent.ts', 'server/src/security/ssrf-policy.ts', 'server/src/index.ts requireTaskRuntimeAuth mount'],
+  }),
   rule('legacy-voice-browser', /^\/api\/(voice|browser)(\/.*)?$/, {
     authorityClass: 'LEGACY_QUARANTINED', effectClass: 'EXTERNAL_REVERSIBLE', canonicalOwner: 'ControlledActionService', auth: 'REMOTE_SESSION', capability: 'legacy voice/browser side-effect surfaces blocked or read-limited',
     approvalRequired: true, governanceRequired: true, status: 'QUARANTINED', legacyReason: 'Voice/browser mutation must not expand in Phase 6A.', migrationTarget: 'future governed adapter',

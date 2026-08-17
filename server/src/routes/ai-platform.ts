@@ -22,8 +22,16 @@ import { search, ingest }             from '../engineering/rag/rag-engine';
 import { analyzeImage, screenshotQA } from '../engineering/vision/vision-engine';
 import { transcribe, synthesize, classifyVoiceCommand } from '../engineering/voice/voice-engine';
 import { runBrowserTask, smokeTest }  from '../engineering/browser/browser-agent';
+import { validateTargetUrl } from '../security/ssrf-policy';
 
 export const aiPlatformRouter = Router();
+
+// Phase 8A: browser actions that mutate the target page (click/fill) or run
+// arbitrary in-page JS (evaluate) are write-shaped — this endpoint stays
+// read-only (navigate/wait/screenshot only) until a governed Controlled
+// Action adapter exists for browser writes, matching the same boundary
+// `routes/browser-agent.ts`'s `/write` route already enforces.
+const WRITE_SHAPED_ACTION_TYPES = new Set(['click', 'fill', 'evaluate']);
 
 // ── Workflow ──────────────────────────────────────────────────────────────────
 aiPlatformRouter.post('/workflow', async (req: Request, res: Response) => {
@@ -110,13 +118,29 @@ aiPlatformRouter.post('/voice/classify', (req: Request, res: Response) => {
 aiPlatformRouter.post('/browser/run', async (req: Request, res: Response) => {
   const { url, actions, screenshot, task_id } = req.body || {};
   if (!url) return res.status(400).json({ error: 'url required' });
-  const result = await runBrowserTask({ url, actions: actions || [], screenshot: !!screenshot, task_id });
+  const requestedActions = Array.isArray(actions) ? actions : [];
+  const writeShaped = requestedActions.find((a: { type?: string }) => a && WRITE_SHAPED_ACTION_TYPES.has(a.type || ''));
+  if (writeShaped) {
+    return res.status(403).json({
+      error: 'Browser write actions (click/fill/evaluate) are quarantined — this endpoint is read-only (navigate/wait/screenshot).',
+      rejected_action_type: writeShaped.type,
+    });
+  }
+  const policy = await validateTargetUrl(url);
+  if (!policy.safe) {
+    return res.status(400).json({ error: 'Target URL rejected by SSRF-safe target policy.', reason: policy.reason, detail: policy.detail });
+  }
+  const result = await runBrowserTask({ url, actions: requestedActions, screenshot: !!screenshot, task_id });
   res.json(result);
 });
 
 aiPlatformRouter.post('/browser/smoke', async (req: Request, res: Response) => {
   const { url, task_id } = req.body || {};
   if (!url) return res.status(400).json({ error: 'url required' });
+  const policy = await validateTargetUrl(url);
+  if (!policy.safe) {
+    return res.status(400).json({ error: 'Target URL rejected by SSRF-safe target policy.', reason: policy.reason, detail: policy.detail });
+  }
   const result = await smokeTest(url, task_id);
   res.json(result);
 });

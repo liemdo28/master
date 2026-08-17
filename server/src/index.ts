@@ -310,9 +310,9 @@ app.use('/api/visibility',  requireAuth, visibilityRouter);
 
 // P2 — Operational (protected but less sensitive)
 app.use('/api/chat',        requireAuth, chatRouter);
-app.use('/api/jarvis',      requireAuth, jarvisRouter);
+app.use('/api/jarvis',      requireTaskRuntimeAuth, jarvisRouter); // Phase 8A: legacy 49-route router upgraded from requireAuth (no-op while MI_PIN unset) to the always-enforced check; POST /approvals/:id/approve → runApprovedTask() remains hard-QUARANTINED_PHASE_7A1 regardless (see jarvis/autonomous-task-runner.ts)
 app.use('/api/qb-agent',    requireAuth, qbAgentRouter);
-app.use('/api/qb',          qbFinancialRouter);
+app.use('/api/qb',          requireTaskRuntimeAuth, qbFinancialRouter);
 app.use('/api/projects',    requireAuth, projectsRouter);
 app.use('/api/reminders',   requireAuth, remindersRouter);
 app.use('/api/workspace',   requireAuth, workspaceRouter);
@@ -321,47 +321,47 @@ app.use('/api/ceo-observer', requireAuth, ceoObserverRouter); // Session A proxy
 
 // Internal / already protected / public
 app.use('/api/nodes',       requireAuth, nodesRouter);        // Node registration (internal)
-app.use('/api/whatsapp',    whatsappRouter);     // Has API key auth middleware
-app.use('/api/models',      modelsRouter);
-app.use('/api/agent-engine',agentEngineRouter);
-app.use('/api/integration-agent', integrationAgentReleasesRouter);
-app.use('/api',             operationalKnowledgeRouter);
-app.use('/api/data-analyst',    dataAnalystRouter);
-app.use('/api/skills',          skillRouter);
-app.use('/api/browser',         browserAgentRouter);
-app.use('/api/doordash-agent',  doordashAgentRouter);
-app.use('/api/doordash',        doordashMetricsRouter);
-app.use('/api/bigdata',         bigdataRouter);
-app.use('/api/enterprise',      enterpriseRouter);
-app.use('/api/voice',           voiceRouter);
-app.use('/api/gstack',          gstackRouter);
-app.use('/api/models',          modelsRegistryRouter);
-app.use('/api/mi',              miReviewApprovalsRouter);
-app.use('/api/memory',          operationalMemoryRouter); // Phase 15: Operational Memory Runtime
-app.use('/api/tasks',           taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
-app.use('/api/strategic',       strategicMemoryRouter);    // Phase 18: Strategic Memory
-app.use('/api/agenview',        agenviewRouter);           // Phase 19: AgenView Dashboard
-app.use('/api/seo',             seoRouter);                // SEO Phase 2: 7 SEO Agent Integration
-app.use('/api/coo-v4',          cooV4Router);              // COO V4: Autonomous 24-Domain Engine
-app.use('/api/company-os',      companyOsRouter);          // Mi Company OS: 19-dept pipeline
-app.use('/api/autonomous',      autonomousRouter);         // Phase 20: Autonomous Execution
-app.use('/api/council',         councilRouter);            // Phase 21: Multi-Agent Council
-app.use('/api/improvement',     selfImprovementRouter);    // Phase 22: Self-Improvement
-app.use('/api/health-intel',    healthIntelligenceRouter); // Phase 23: Health Intelligence
-app.use('/api/digital-twin',    digitalTwinRouter);        // Phase 24: Digital Twin
+app.use('/api/whatsapp',    whatsappRouter);     // AUTHENTICATED (Phase 8A audit): own validateApiKey() check on x-api-key/body.api_key, independent of requireAuth's PIN no-op
+app.use('/api/models',      requireTaskRuntimeAuth, modelsRouter);
+app.use('/api/agent-engine', requireTaskRuntimeAuth, agentEngineRouter);
+app.use('/api/integration-agent', requireTaskRuntimeAuth, integrationAgentReleasesRouter);
+app.use('/api',             requireTaskRuntimeAuth, operationalKnowledgeRouter);
+app.use('/api/data-analyst',    requireTaskRuntimeAuth, dataAnalystRouter);
+app.use('/api/skills',          requireTaskRuntimeAuth, skillRouter);
+app.use('/api/browser',         requireTaskRuntimeAuth, browserAgentRouter);
+app.use('/api/doordash-agent',  requireTaskRuntimeAuth, doordashAgentRouter);
+app.use('/api/doordash',        requireTaskRuntimeAuth, doordashMetricsRouter);
+app.use('/api/bigdata',         requireTaskRuntimeAuth, bigdataRouter);
+app.use('/api/enterprise',      requireTaskRuntimeAuth, enterpriseRouter);
+app.use('/api/voice',           requireTaskRuntimeAuth, voiceRouter);
+app.use('/api/gstack',          requireTaskRuntimeAuth, gstackRouter);
+app.use('/api/models',          requireTaskRuntimeAuth, modelsRegistryRouter);
+app.use('/api/mi',              requireTaskRuntimeAuth, miReviewApprovalsRouter);
+app.use('/api/memory',          requireTaskRuntimeAuth, operationalMemoryRouter); // Phase 15: Operational Memory Runtime
+app.use('/api/tasks',           requireTaskRuntimeAuth, taskIntelligenceRouter);  // Phase 16: Personal Task Intelligence
+app.use('/api/strategic',       requireTaskRuntimeAuth, strategicMemoryRouter);    // Phase 18: Strategic Memory
+app.use('/api/agenview',        requireTaskRuntimeAuth, agenviewRouter);           // Phase 19: AgenView Dashboard
+app.use('/api/seo',             requireTaskRuntimeAuth, seoRouter);                // SEO Phase 2: 7 SEO Agent Integration
+app.use('/api/coo-v4',          requireTaskRuntimeAuth, cooV4Router);              // COO V4: Autonomous 24-Domain Engine
+app.use('/api/company-os',      requireTaskRuntimeAuth, companyOsRouter);          // Mi Company OS: 19-dept pipeline
+app.use('/api/autonomous',      requireTaskRuntimeAuth, autonomousRouter);         // Phase 20: Autonomous Execution
+app.use('/api/council',         requireTaskRuntimeAuth, councilRouter);            // Phase 21: Multi-Agent Council
+app.use('/api/improvement',     requireTaskRuntimeAuth, selfImprovementRouter);    // Phase 22: Self-Improvement
+app.use('/api/health-intel',    requireTaskRuntimeAuth, healthIntelligenceRouter); // Phase 23: Health Intelligence
+app.use('/api/digital-twin',    requireTaskRuntimeAuth, digitalTwinRouter);        // Phase 24: Digital Twin
 app.use('/api/operations',      requireAuth, operationsRouter);  // DEV3: Operations & Reliability Layer
 app.use('/api/workflows',       requireAuth, workflowMetricsRouter);  // DEV5: Workflow Execution Ledger & Metrics
 app.use('/api/telemetry',       requireAuth, ceoTelemetryRouter); // CEO Production Telemetry Foundation (P0-1..P0-6)
 app.use('/api/executive-intelligence', requireAuth, executiveIntelligenceRouter); // Phase 21: Executive Intelligence Layer
-app.use('/api/n8n',                 n8nRouter);              // n8n Execution Bus
-app.use('/api/seo/gsc',             gscRouter);              // Phase 4: Google Search Console
-app.use('/api/analytics',         ga4AnalyticsRouter);              // Phase 33: GA4 Revenue Intelligence
-app.use('/api/gbp',               gbpAnalyticsRouter);              // Phase 34B: Google Business Profile
-app.use('/api/engineering',       engineeringRouter);               // Phase 34: Engineering Division OS
-app.use('/api/ai',                aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
-app.use('/api/connectors',        connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
+app.use('/api/n8n',                 requireTaskRuntimeAuth, n8nRouter);              // n8n Execution Bus
+app.use('/api/seo/gsc',             requireTaskRuntimeAuth, gscRouter);              // Phase 4: Google Search Console
+app.use('/api/analytics',         requireTaskRuntimeAuth, ga4AnalyticsRouter);              // Phase 33: GA4 Revenue Intelligence
+app.use('/api/gbp',               requireTaskRuntimeAuth, gbpAnalyticsRouter);              // Phase 34B: Google Business Profile
+app.use('/api/engineering',       requireTaskRuntimeAuth, engineeringRouter);               // Phase 34: Engineering Division OS
+app.use('/api/ai',                requireTaskRuntimeAuth, aiPlatformRouter);                // Phase 34: AI Platform (workflow/rag/vision/voice/browser)
+app.use('/api/connectors',        requireTaskRuntimeAuth, connectorsRouter);                // Phase 35: Drive/Reviews/Social connectors
 app.use('/api/ceo',                 requireAuth, ceoObjectiveRouter); // Phase 25D: CEO Objective Command Center
-app.use('/api/ceo',                 ceoControlRouter);       // Phase 23D: CEO Control Center
+app.use('/api/ceo',                 requireTaskRuntimeAuth, ceoControlRouter);       // Phase 23D: CEO Control Center
 app.get('/api/tools', (_req, res) => {
   res.json({
     tools: [
