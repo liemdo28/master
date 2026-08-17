@@ -104,7 +104,10 @@ function run(): void {
   assert.strictEqual(writeSurface!.status, 'QUARANTINED', '/api/browser/write must remain genuinely QUARANTINED');
 
   console.log('[phase8a-security] PASS', {
-    unauthenticatedMountsFixed: previouslyUnauthenticatedMounts.length + 1,
+    // 35 distinct paths in this array + /api/jarvis = 36 distinct routes;
+    // /api/models is mounted on two separate app.use() lines (both fixed),
+    // so the actual line count in index.ts is 37 — see PHASE8A doc §3.
+    distinctRoutesFixed: previouslyUnauthenticatedMounts.length + 1,
     unsafeTargetAllowed: 0,
     browserWriteReachable: 0,
     financialExecutionReachable: 0,

@@ -26,7 +26,7 @@ This phase closes the #1 finding from Phase 8 discovery — `/api/browser/extrac
 | Target | Required | Actual |
 |---|---|---|
 | `unsafeTargetAllowed` | 0 | 0 |
-| `unauthenticatedAllowed` | 0 | 0 (36 mounts fixed — 35 bare mounts + `/api/jarvis` upgraded from the no-op `requireAuth`) |
+| `unauthenticatedAllowed` | 0 | 0 (37 `app.use()` lines fixed across 36 distinct route paths — `/api/models` is mounted on two separate lines, both fixed — 35 previously-bare paths + `/api/jarvis` upgraded from the no-op `requireAuth`) |
 | `browserWriteReachable` | 0 | 0 |
 | `financialExecutionReachable` | 0 | 0 |
 | `legacyMutationBypass` | 0 | 0 |
@@ -44,8 +44,8 @@ Every mount in `server/src/index.ts` was individually reviewed. Classification c
 ### AUTHENTICATED — own internal check (unchanged)
 `/api/whatsapp` (`validateApiKey()` on `x-api-key`/`body.api_key`, independent of `requireAuth`), `/api/remote` (documented own auth).
 
-### AUTHENTICATED — `requireTaskRuntimeAuth` (36 mounts fixed this phase)
-Found with **no auth middleware at all** in Phase 8 discovery, now behind the always-enforced `x-api-key` check (`requireTaskRuntimeAuth` — unlike `requireAuth`, this has no PIN-unset bypass):
+### AUTHENTICATED — `requireTaskRuntimeAuth` (36 distinct route paths, 37 `app.use()` lines fixed this phase)
+Found with **no auth middleware at all** in Phase 8 discovery, now behind the always-enforced `x-api-key` check (`requireTaskRuntimeAuth` — unlike `requireAuth`, this has no PIN-unset bypass). 35 distinct paths, listed once each below, plus `/api/jarvis` (§ below) = 36 distinct routes. `/api/models` is mounted on two separate `app.use()` lines (`modelsRouter` and `modelsRegistryRouter`) — both were bare and both are now fixed, which is why the line count (37) is one higher than the distinct-path count (36):
 `/api/qb`, `/api/models` (both mounts), `/api/agent-engine`, `/api/integration-agent`, bare `/api` (operationalKnowledgeRouter), `/api/data-analyst`, `/api/skills`, `/api/browser`, `/api/doordash-agent`, `/api/doordash`, `/api/bigdata`, `/api/enterprise`, `/api/voice`, `/api/gstack`, `/api/mi`, `/api/memory` (second, previously-shadow mount), `/api/tasks`, `/api/strategic`, `/api/agenview`, `/api/seo`, `/api/coo-v4`, `/api/company-os`, `/api/autonomous`, `/api/council`, `/api/improvement`, `/api/health-intel`, `/api/digital-twin`, `/api/n8n`, `/api/seo/gsc`, `/api/analytics`, `/api/gbp`, `/api/engineering`, `/api/ai`, `/api/connectors`, `/api/ceo` (second, previously-shadow mount).
 
 Plus, named explicitly in Priority #8: **`/api/jarvis`** — was mounted behind `requireAuth`, which is a no-op while `MI_PIN`/`MI_PIN_HASH` are unset (this deployment's current live configuration — see `routes/auth.ts:98`). Upgraded to `requireTaskRuntimeAuth` so the 49-route legacy router (including `POST /approvals/:id/approve`, which can reach `runApprovedTask()`) is genuinely, not just apparently, gated.
@@ -97,11 +97,15 @@ Given the dangerous surface is already hard-blocked and the remaining functional
 
 `test:ci` (incl. the two new suites above) · Phase 5A/5B/5C/5D2/5D3/5F/5G/5H/5I · Phase 6A/6B/6C/6D/6E/6F · Phase 7A/7B/7C acceptance scripts · Phase 7D session + 7F voice constituent tests (1255-scenario voice evaluation included) · Agentic Coding acceptance (5/5 fixtures) · Command Center unit/security/a11y (all vitest suites) · Command Center E2E (8/8 Playwright scenarios, real browser, full fixture-backed flow). Zero regressions attributable to this phase's changes.
 
-## 9. Non-goals confirmed (not added this phase)
+## 9. Known pre-existing issue, out of scope for 8A
+
+Independent review flagged that `routes/whatsapp.ts` (untouched by this phase — zero diff lines) gates `POST /mi` and `POST /webhook` with its own `validateApiKey()` check, but `POST /mi/setup`, `POST /mi/rotate`, `POST /mi/revoke`, and `POST /send-test` on the same router have no auth gate at all. This predates Phase 8A and was not part of its priority list; flagged here rather than silently left undocumented. **Recommended for Phase 8B**, given rotate/revoke touch the API key itself.
+
+## 10. Non-goals confirmed (not added this phase)
 
 No Gmail SEND, no financial execution authority, no autonomous approval, no autonomous merge/deploy, no desktop control, no new external action types, no schema v11.
 
-## 10. Decision record
+## 11. Decision record
 
 ```
 PHASE 8A STATUS: COMPLETE
