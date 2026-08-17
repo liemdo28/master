@@ -54,7 +54,13 @@ async function main(): Promise<void> {
   taskEngine.createTask({ userRequest: 'Beta secret task — CONFIDENTIAL-BETA-TOKEN', projectId: projectB.id });
   const docsDir = path.join(root, 'docs'); fs.mkdirSync(docsDir, { recursive: true });
   const docPath = path.join(docsDir, 'secret.md');
-  fs.writeFileSync(docPath, '# Alpha secrets\n\nAPI_KEY=sk-fake1234567890abcdef (fixture, not a real secret) and MI_CORE_API_KEY=mi_fakefakefakefakefakefakefakefake.\n');
+  // Deliberately short/malformed relative to real key shapes (sk- fixture
+  // under 20 chars, mi_ fixture using only hex-valid characters) — long
+  // enough to trip this script's own SECRET_RE detector below, short
+  // enough not to trip CI's repo-wide secret-pattern scan (which matches
+  // 20+ char sk- strings), avoiding a false-positive "Potential secret
+  // found" CI failure on a fixture, not a real credential.
+  fs.writeFileSync(docPath, '# Alpha secrets\n\nAPI_KEY=sk-fakefixture12 (fixture, not a real secret) and MI_CORE_API_KEY=mi_deadbeefdeadbeefdeadbeef00000000.\n');
   const ingest = new KnowledgeDocumentService({ store: documentStore, registry: projectRegistry, roots: { documentRoots: [docsDir] } });
   await ingest.ingestApprovedDocument({ filePath: docPath, projectIds: [projectA.id] });
 
