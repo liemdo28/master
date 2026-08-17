@@ -1,6 +1,6 @@
 # Phase 8A — Security & Operational Debt Closure
 
-**Status:** COMPLETE. **Branch:** `codex/phase8a-security-operational-debt` (from `origin/master` at `a43e2fb9`). **Scope:** security containment only — legacy retirement, autonomy expansion, and platform simplification remain out of scope and are deferred to Phase 8B per the Phase 8 discovery roadmap (`docs/architecture/PHASE8_DISCOVERY_AND_ROADMAP.md`).
+**Status:** COMPLETE — MERGED — DEPLOYED — VERIFIED — FROZEN. **PRs:** #114 (`codex/phase8a-security-operational-debt`, from `origin/master` at `a43e2fb9`), #115 (`codex/phase8a-manifest-drift-fix`, a small post-merge manifest regeneration), both independently reviewed and merged. **Deployed SHA:** `7cd1b0f56d5832bfd754af83aee63a4eec38bd79`. **Scope:** security containment only — legacy retirement, autonomy expansion, and platform simplification remain out of scope and are deferred to Phase 8B per the Phase 8 discovery roadmap (`docs/architecture/PHASE8_DISCOVERY_AND_ROADMAP.md`).
 
 This phase closes the #1 finding from Phase 8 discovery — `/api/browser/extract` was live, unauthenticated, and SSRF-shaped despite the authority manifest claiming it was `QUARANTINED` — plus every other item on the 12-point Phase 8A priority list.
 
@@ -77,6 +77,12 @@ unknownMutations: 0
 unresolvedLegacyMutations: 0
 ```
 
+**Runtime consequence discovered during production acceptance testing (see §9):** `authority-control-plane/guard.ts` exports `legacyAuthorityBoundary`, a middleware that independently re-derives the manifest from source *at request time* and auto-denies (409 `LEGACY_AUTHORITY_QUARANTINED`) any mutation whose `authorityClass === 'LEGACY_QUARANTINED'` (or non-null `legacyReason`) AND `phase6bDisposition !== 'ADAPT_SAFE'` — with a single hardcoded exemption for `http:POST:/api/approval/request`. This is a **pre-existing Phase 6B mechanism, not something Phase 8A added**, and it is wired ahead of the route handlers for these paths. Because `browser-extract-contained` and `ai-browser-contained` use `phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE'` (matching `legacy-approval`'s own established precedent — see above), all three routes — `/api/browser/extract`, `/api/ai/browser/run`, `/api/ai/browser/smoke` — are **currently fully blocked by this boundary in production, not merely SSRF-contained**: an authenticated request with a perfectly safe target still receives 409 `LEGACY_AUTHORITY_QUARANTINED` before `validateTargetUrl()` or the write-action check ever runs. Verified live against the deployed instance post-merge (§9).
+
+This means the actual current security posture is **stronger** than "contained": these three routes are unreachable end-to-end, exactly like `/api/browser/write`, just via a different mechanism (a boundary keyed off classification, rather than an explicit in-handler `denyAuthorityMutation()` call). The new `validateTargetUrl()` SSRF policy and write-action-shape check added this phase are real, tested, and load-bearing as **defense-in-depth for a future state** — if a later phase deliberately adds an ID exemption for one of these routes to `legacyAuthorityBoundary` (the same pattern already used for `/api/approval/request`) so it can actually execute, the SSRF/write containment is what makes that safe to do. Today, they are not the primary enforcement mechanism for these three routes; the pre-existing Phase 6B boundary is.
+
+The same mechanism was found to independently cover most `/api/jarvis` `POST` routes too (matched by the `legacy-sensitive-local` wildcard rule, which sets a non-null `legacyReason` and `phase6bDisposition: 'QUARANTINE_ONLY'`) — including `POST /api/jarvis/approvals/:id/approve`, the one route that can reach `autonomous-task-runner.ts`'s `runApprovedTask()`. Verified live: an authenticated `POST /api/jarvis/approvals/:id/approve` and `POST /api/jarvis/mute` both return 409 `LEGACY_AUTHORITY_QUARANTINED` before reaching the jarvis router's own handler code at all. This makes §5's `autonomous-task-runner.ts` re-confirmation (child_process-free, hard-`blocked` return) a **second, redundant safety layer** on top of this pre-existing boundary, not the sole one — worth knowing precisely rather than assuming either mechanism alone.
+
 ## 5. `mi-node-agent` formal disposition: **KEEP_BLOCKED**
 
 `node-agent.mjs`'s `/exec` endpoint (arbitrary remote shell execution, unauthenticated, 0.0.0.0-bound) was already retired to a hard `410 EXEC_RETIRED` in Phase 7A.1 — reconfirmed this phase: zero `child_process` import in the file, no other mutation surface exists (`/health` is read-only; registration/heartbeat only ever POST to the central server, never accept commands). Its registration has never once succeeded against this deployment (`BLOCKED_RUNTIME`, unrelated to security — an operational gap, not a live exposure).
@@ -97,18 +103,38 @@ Given the dangerous surface is already hard-blocked and the remaining functional
 
 `test:ci` (incl. the two new suites above) · Phase 5A/5B/5C/5D2/5D3/5F/5G/5H/5I · Phase 6A/6B/6C/6D/6E/6F · Phase 7A/7B/7C acceptance scripts · Phase 7D session + 7F voice constituent tests (1255-scenario voice evaluation included) · Agentic Coding acceptance (5/5 fixtures) · Command Center unit/security/a11y (all vitest suites) · Command Center E2E (8/8 Playwright scenarios, real browser, full fixture-backed flow). Zero regressions attributable to this phase's changes.
 
-## 9. Known pre-existing issue, out of scope for 8A
+## 9. Production acceptance evidence
+
+Verified live against the deployed instance (`MI_DEPLOYED_SOURCE_SHA=7cd1b0f56d5832bfd754af83aee63a4eec38bd79`, `mi-core` PM2 process restarted post-deploy) with real `curl` requests, not just test assertions:
+
+| Request | Result | Meaning |
+|---|---|---|
+| `POST /api/browser/extract` (no `x-api-key`) | `401` | unauthenticatedAllowed=0, confirmed live |
+| `POST /api/ai/browser/run` (no `x-api-key`) | `401` | same |
+| `GET /api/qb/status` (no `x-api-key`) | `401` | same |
+| `GET /api/jarvis/health` (no `x-api-key`) | `401` | `/api/jarvis` upgrade confirmed live |
+| `GET /api/health` (no `x-api-key`) | `200` | intentionally-public route still public |
+| `POST /api/browser/extract`, authenticated, target=metadata endpoint | `409 LEGACY_AUTHORITY_QUARANTINED` | blocked — see §4's runtime-boundary note |
+| `POST /api/ai/browser/run`, authenticated, write-shaped action | `409 LEGACY_AUTHORITY_QUARANTINED` | blocked by the same boundary, before the write-action check would have fired |
+| `POST /api/browser/write`, authenticated | `409 LEGACY_AUTHORITY_QUARANTINED` | genuinely quarantined, as designed |
+| `POST /api/jarvis/approvals/:id/approve`, authenticated | `409 LEGACY_AUTHORITY_QUARANTINED` | blocked before reaching `runApprovedTask()` at all |
+
+Predeploy: all 9 production SQLite databases backed up via `better-sqlite3`'s online `.backup()` API to `F:\Projects\D-root-mi-snapshots\mi-core-predeploy-backups\7cd1b0f5...\`, each verified with `PRAGMA integrity_check` → `ok`. Deploy: `server/dist` copied via `fs.cpSync` with file-count verification (687/687 match — the +1 over the prior deploy's 686 is exactly the one new non-test source file, `ssrf-policy.ts`; both new test files are excluded from compilation by `tsconfig.json`'s `src/**/__tests__` exclude pattern). `authority-manifest.json` and a `snapshot-manifest.json` (from `authority:build-snapshot`, 821 files, tree-checksummed) copied into the production `server/` directory. `.env`'s `MI_DEPLOYED_SOURCE_SHA`/`_ROOT` updated. Only `mi-core` was restarted (`pm2 restart mi-core --update-env`); `mi-accounting`, `mi-ai-service`, `mi-node-agent`, `qb-ops-agent` were untouched. Post-restart health: `{"server":"ok","python_ai_service":"ok","ollama":"ok","overall":"HEALTHY"}`. The only startup-log alerts (`WhatsApp Gateway DOWN`, `CEO Observer DOWN`) are the pre-existing, already-documented baseline (those services are intentionally not running) — not a regression.
+
+## 10. Known pre-existing issue, out of scope for 8A
 
 Independent review flagged that `routes/whatsapp.ts` (untouched by this phase — zero diff lines) gates `POST /mi` and `POST /webhook` with its own `validateApiKey()` check, but `POST /mi/setup`, `POST /mi/rotate`, `POST /mi/revoke`, and `POST /send-test` on the same router have no auth gate at all. This predates Phase 8A and was not part of its priority list; flagged here rather than silently left undocumented. **Recommended for Phase 8B**, given rotate/revoke touch the API key itself.
 
-## 10. Non-goals confirmed (not added this phase)
+## 11. Non-goals confirmed (not added this phase)
 
 No Gmail SEND, no financial execution authority, no autonomous approval, no autonomous merge/deploy, no desktop control, no new external action types, no schema v11.
 
-## 11. Decision record
+## 12. Decision record
 
 ```
-PHASE 8A STATUS: COMPLETE
+PHASE 8A STATUS: COMPLETE — MERGED — DEPLOYED — VERIFIED
+merged PRs: #114 (main containment), #115 (manifest drift fix)
+deployed SHA: 7cd1b0f56d5832bfd754af83aee63a4eec38bd79
 unsafeTargetAllowed: 0
 unauthenticatedAllowed: 0
 browserWriteReachable: 0
@@ -123,4 +149,4 @@ AUTONOMY EXPANSION ADDED: NO
 SCHEMA MIGRATION PERFORMED: NO
 ```
 
-Phase 8A is ready to freeze pending independent review, merge, and production deployment. Continue to **Phase 8B — Legacy Retirement / Platform Simplification** after this phase is deployed, verified, and frozen.
+Phase 8A is merged, deployed, and production-verified (§9). **Phase 8A is FROZEN.** Continue to **Phase 8B — Legacy Retirement / Platform Simplification**.
