@@ -4,12 +4,20 @@
  * GET  /api/browser/status     — check if browser-use is available
  * POST /api/browser/extract    — read-only browser task { url, task }
  * POST /api/browser/write      — write browser task (requires approval_id)
+ *
+ * Phase 8A: this whole router is mounted behind `requireTaskRuntimeAuth`
+ * in index.ts (found unauthenticated in Phase 8 discovery — see
+ * docs/architecture/PHASE8_DISCOVERY_AND_ROADMAP.md). `/extract` is
+ * additionally gated by `validateTargetUrl()` before any outbound
+ * request is attempted — the same SSRF-safe target policy is reused by
+ * every future caller-supplied-URL surface, not just this one.
  */
 
 import { Router, Request, Response } from 'express';
 import { spawn } from 'child_process';
 import { runBrowserTask } from '../browser/browser-router';
 import { denyAuthorityMutation } from '../authority-control-plane/guard';
+import { validateTargetUrl } from '../security/ssrf-policy';
 
 export const browserAgentRouter = Router();
 
@@ -52,6 +60,14 @@ browserAgentRouter.get('/status', async (_req: Request, res: Response) => {
 browserAgentRouter.post('/extract', async (req: Request, res: Response) => {
   const { url, task, provider } = req.body as { url: string; task: string; provider?: 'browser-use' | 'skyvern' };
   if (!url || !task) return res.status(400).json({ error: 'url and task required' });
+  const policy = await validateTargetUrl(url);
+  if (!policy.safe) {
+    return res.status(400).json({
+      error: 'Target URL rejected by SSRF-safe target policy.',
+      reason: policy.reason,
+      detail: policy.detail,
+    });
+  }
   const result = await runBrowserTask({ url, task, provider, headless: true });
   res.json(result);
 });
