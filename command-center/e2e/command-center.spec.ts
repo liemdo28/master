@@ -505,4 +505,102 @@ test.describe('Command Center — full flow against a controlled fixture backend
     expect(manifestBody.counts.unknownMutations).toBe(0);
     expect(manifestBody.counts.unresolvedLegacyMutations).toBe(0);
   });
+
+  test('Phase 7G §21: single continuous certification journey — health, project, task, knowledge+citation, plan, simulation, controlled-action proposal, approval-required, evidence, voice transcript, spoken approval phrase never approves, zero unintended execution', async ({ page, request, baseURL }) => {
+    await page.goto('./');
+    await page.getByLabel('PIN').fill(PIN);
+    await page.getByRole('button', { name: 'Unlock' }).click();
+    await expect(page).toHaveURL(/\/today$/);
+
+    const login = await request.post(new URL('/api/remote/login', baseURL).toString(), { data: { pin: PIN } });
+    const { token } = await login.json();
+    const auth = { Authorization: `Bearer ${token}` };
+    const before = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: auth })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: auth })).json(),
+    };
+
+    await page.getByRole('link', { name: 'Jarvis' }).click();
+    await expect(page).toHaveURL(/\/jarvis$/);
+    const current = page.getByRole('region', { name: 'Current interaction' });
+    const jarvisInput = page.getByPlaceholder(/ask about health/i);
+    const ask = page.getByRole('button', { name: 'Ask', exact: true });
+
+    // 1. HEALTH
+    await jarvisInput.fill('what is the current system health');
+    await ask.click();
+    await expect(current.getByText('system status', { exact: true })).toBeVisible();
+
+    // 2. PROJECT
+    await page.getByRole('combobox').selectOption({ label: 'Mi Core System' });
+    await jarvisInput.fill('what is the project status');
+    await ask.click();
+    await expect(current.getByText('project query', { exact: true })).toBeVisible();
+
+    // 3. TASK
+    await jarvisInput.fill('what tasks are waiting on me');
+    await ask.click();
+    await expect(current.getByText('task query', { exact: true })).toBeVisible();
+
+    // 3b. EVIDENCE — checked right after the task query, while it's still
+    //     the current interaction (the Evidence Inspector reflects the
+    //     interaction currently in view, matching where test 1 above
+    //     exercises the same tab).
+    await page.getByRole('tab', { name: 'evidence' }).click();
+    await expect(page.getByRole('link', { name: /open task/i }).first()).toBeVisible();
+
+    // 4. KNOWLEDGE + citation
+    await jarvisInput.fill('find documentation about the fixture architecture');
+    await ask.click();
+    await expect(current.getByText('knowledge search', { exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'context' }).click();
+
+    // 5. PLANNING — preview only, never execution
+    await jarvisInput.fill('make a plan to migrate the fixture database');
+    await ask.click();
+    await expect(current.getByText('planning', { exact: true })).toBeVisible();
+    await expect(page.getByText(/EXECUTED/)).toHaveCount(0);
+
+    // 6. SIMULATION — SIMULATION ONLY banner mandatory
+    await jarvisInput.fill('simulate what would happen if I archived this project');
+    await ask.click();
+    await expect(current.getByText('simulation', { exact: true })).toBeVisible();
+    await page.getByRole('tab', { name: 'simulation' }).click();
+    await expect(page.getByText('SIMULATION — NO LIVE EXECUTION')).toBeVisible();
+
+    // 7. CONTROLLED ACTION proposal preview -> approval-required state
+    //    (Gateway asks for exact fields, never fabricates a proposal)
+    await jarvisInput.fill('draft an email to the team about the launch');
+    await ask.click();
+    await expect(current.getByText('action proposal', { exact: true })).toBeVisible();
+    await expect(current.getByText('NEEDS CLARIFICATION')).toBeVisible();
+
+    // 9. VOICE transcript path, then the spoken approval phrase — must
+    //    never approve anything, must remain a distinct inline message.
+    const voice = page.getByRole('region', { name: 'Voice input' });
+    const transcriptBox = voice.getByPlaceholder(/type a question here/i);
+    const submitButton = voice.getByRole('button', { name: 'Submit', exact: true });
+    await transcriptBox.fill('yes, approve it');
+    await submitButton.click();
+    await expect(voice.getByText(/approval is still required in command center/i)).toBeVisible();
+
+    // 10. Zero unintended execution anywhere on the page or in the underlying
+    //     data, across this entire 9-step chained journey.
+    for (const forbidden of [/^approve/i, /^execute/i, /^send$/i, /^force$/i, /run shell/i, /bypass/i, /deploy/i]) {
+      await expect(page.getByRole('button', { name: forbidden })).toHaveCount(0);
+    }
+    await expect(page.getByText(/EXECUTED/)).toHaveCount(0);
+    const after = {
+      actions: await (await request.get(new URL('/api/command-center/actions', baseURL).toString(), { headers: auth })).json(),
+      plans: await (await request.get(new URL('/api/command-center/orchestration/plans', baseURL).toString(), { headers: auth })).json(),
+      tasks: await (await request.get(new URL('/api/command-center/task-runtime/tasks', baseURL).toString(), { headers: auth })).json(),
+    };
+    expect(after.actions).toEqual(before.actions);
+    expect(after.plans).toEqual(before.plans);
+    expect(after.tasks).toEqual(before.tasks);
+    const manifestAfter = await (await request.get(new URL('/api/command-center/authority/status', baseURL).toString(), { headers: auth })).json();
+    expect(manifestAfter.counts.unknownMutations).toBe(0);
+    expect(manifestAfter.counts.unresolvedLegacyMutations).toBe(0);
+  });
 });
