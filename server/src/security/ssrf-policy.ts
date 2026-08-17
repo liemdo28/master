@@ -93,9 +93,21 @@ function classifyIpv6(ip: string): UnsafeReason | null {
   if (/^fe[89ab][0-9a-f]:/.test(normalized)) return 'RESOLVED_LINK_LOCAL';
   // Unique local fc00::/7 (the IPv6 analogue of RFC1918)
   if (/^f[cd][0-9a-f]{2}:/.test(normalized)) return 'RESOLVED_RFC1918';
-  // IPv4-mapped IPv6 (::ffff:a.b.c.d) — unwrap and re-check as IPv4
-  const mapped = normalized.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-  if (mapped) return classifyIpv4(mapped[1]);
+  // IPv4-mapped IPv6, dotted-quad textual form (::ffff:a.b.c.d) — unwrap and
+  // re-check as IPv4.
+  const mappedDotted = normalized.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+  if (mappedDotted) return classifyIpv4(mappedDotted[1]);
+  // IPv4-mapped IPv6, pure-hex form (::ffff:7f00:1) — the WHATWG URL parser
+  // normalizes a dotted-quad mapped address into this form when it appears
+  // in a URL host, so both forms must be handled or this check silently
+  // never fires on the value this module actually receives.
+  const mappedHex = normalized.match(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+  if (mappedHex) {
+    const hi = parseInt(mappedHex[1], 16);
+    const lo = parseInt(mappedHex[2], 16);
+    const ipv4 = [hi >> 8, hi & 0xff, lo >> 8, lo & 0xff].join('.');
+    return classifyIpv4(ipv4);
+  }
   return null;
 }
 
@@ -129,12 +141,15 @@ export async function validateTargetUrl(rawUrl: string): Promise<TargetPolicyRes
   }
 
   const hostname = parsed.hostname;
+  // WHATWG URL always brackets an IPv6 host in .hostname (e.g. "[::1]");
+  // net.isIP() and the classifiers below expect the bare address.
+  const bareHostname = hostname.startsWith('[') && hostname.endsWith(']') ? hostname.slice(1, -1) : hostname;
 
   // A literal IP in the URL itself — validate directly, no DNS needed.
-  if (net.isIP(hostname)) {
-    const reason = classifyIp(hostname);
-    if (reason) return { safe: false, reason, detail: `Target IP ${hostname} is in a blocked range.`, resolvedAddresses: [hostname] };
-    return { safe: true, resolvedAddresses: [hostname] };
+  if (net.isIP(bareHostname)) {
+    const reason = classifyIp(bareHostname);
+    if (reason) return { safe: false, reason, detail: `Target IP ${bareHostname} is in a blocked range.`, resolvedAddresses: [bareHostname] };
+    return { safe: true, resolvedAddresses: [bareHostname] };
   }
 
   let addresses: string[];
