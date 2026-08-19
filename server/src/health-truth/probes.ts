@@ -162,6 +162,16 @@ export async function probePythonAi(): Promise<DependencyHealth> {
 }
 
 // ── LOCAL_MODEL (Ollama) ──────────────────────────────────────────────────────
+// Phase 8C note: this duplicates SelfHeal's own 60s-cached 'ollama' check
+// (company-os/self-healing-monitor.ts), which would otherwise match the
+// DATABASE/ACCOUNTING/QB_AGENT pattern of reading SelfHeal's cache instead of
+// live-fetching here. NOT merged: SelfHeal's check hardcodes
+// http://localhost:11434 and does not honor OLLAMA_URL, while this probe
+// (like 10+ other Ollama call sites across the codebase) does. Wiring this to
+// SelfHeal's cache would silently stop respecting OLLAMA_URL for anyone who
+// configures a non-default endpoint. Fixing that requires making SelfHeal's
+// own check OLLAMA_URL-aware first — flagged for a future phase, not guessed
+// at here. See docs/architecture/PHASE8C_SELFHEAL_AUDIT.md.
 export async function probeLocalModel(): Promise<DependencyHealth> {
   const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
   const now = new Date().toISOString();

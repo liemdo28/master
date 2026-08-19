@@ -238,7 +238,19 @@ export async function runHealthScan(): Promise<ServiceStatus[]> {
       if (svc.type === 'pm2' && count < MAX_AUTO_RESTART) {
         restartAttempted = await restartPm2Service(svc);
         restartCounts[svc.id] = count + 1;
-        console.log(`[SelfHeal] Restarted ${svc.name} (attempt ${count + 1}/${MAX_AUTO_RESTART})`);
+        // Phase 8C: this only proves the `pm2 restart` command was issued
+        // (or, if false, that it threw) — never that the service is back up.
+        // Recovery is only known truthfully on the *next* scan, via the
+        // "recovered after N restart(s)" message below. The previous
+        // "Restarted X" wording claimed success a full cycle before it could
+        // actually be known, which read as a fixed outage in the log even
+        // when the service was still down (confirmed live: immediately
+        // followed by continued DOWN alerts for the same service).
+        if (restartAttempted) {
+          console.log(`[SelfHeal] Restart command issued for ${svc.name} (attempt ${count + 1}/${MAX_AUTO_RESTART}) — will confirm recovery on next scan`);
+        } else {
+          console.error(`[SelfHeal] Restart command FAILED for ${svc.name} (attempt ${count + 1}/${MAX_AUTO_RESTART})`);
+        }
       } else if (count >= MAX_AUTO_RESTART || svc.critical) {
         const alertMsg = `🔴 *SERVICE DOWN*\n${svc.name} is DOWN.\n${count >= MAX_AUTO_RESTART ? 'Auto-restart exhausted.' : 'Critical service.'}\nManual action required.`;
         await sendCeoAlert(alertMsg);
