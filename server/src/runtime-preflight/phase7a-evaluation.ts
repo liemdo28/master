@@ -130,8 +130,20 @@ async function run(): Promise<void> {
     const a = await runPreflight(root);
     const b = await runPreflight(root);
     determinismChecks += 2;
-    // generatedAt legitimately differs; compare everything else.
-    const normalize = (r: typeof a) => JSON.stringify({ runtimeRoot: r.runtimeRoot, checks: r.checks, overall: r.overall });
+    // generatedAt legitimately differs, same as below. The two port-* checks
+    // (validator.ts "Ports" section) intentionally probe real, live machine
+    // TCP state (127.0.0.1:4001/4002) rather than anything in the fixture —
+    // their status is always 'PASS' either way, but the detail text ("is in
+    // use" vs "is free") reflects live external reachability at the instant
+    // of the probe, which can legitimately flip between two back-to-back
+    // calls under real system load. That's not boot-plan nondeterminism (the
+    // fixture input didn't change), so it's excluded from the comparison the
+    // same way generatedAt already is.
+    const normalize = (r: typeof a) => JSON.stringify({
+      runtimeRoot: r.runtimeRoot,
+      checks: r.checks.map(c => (c.id.startsWith('port-') ? { ...c, detail: '<live-probe>' } : c)),
+      overall: r.overall,
+    });
     if (normalize(a) !== normalize(b)) determinismFailures++;
     cleanup(root);
   }
