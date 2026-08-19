@@ -112,9 +112,18 @@ async function main(): Promise<void> {
     'personal-os.db/tasks.db/projects.db: integrity_check=ok, 0 FK violations (Section 1 live audit); disposable-copy corruption test proves fail-closed behavior (phase7g-failure-semantics.test.ts)');
 
   // 16. Legacy containment.
+  // The exact-190 baseline was captured at Phase 7G's own freeze. Phase 8B
+  // retired the legacy 49-route /api/jarvis HTTP router (zero live callers —
+  // see docs/architecture/PHASE8B_LEGACY_INVENTORY.md §1/§12), which
+  // correctly *removed* 15 legacy-classified mutation-capable surfaces from
+  // the manifest (190 -> 175, total 1111 -> 1064). Per the governing
+  // directive, a legacy-mutation-count *decrease* from retiring dead surface
+  // is the intended outcome, not a regression — only an *increase* is a STOP
+  // condition. Bounding by <= 190 (rather than re-pinning a new exact
+  // number) keeps this regression lock meaningful for future phases too.
   add('legacy containment holds, broadened',
-    manifest.counts.legacyMutations === 190 && manifest.counts.unresolvedLegacyMutations === 0,
-    `legacyMutations=${manifest.counts.legacyMutations}, unresolvedLegacyMutations=0; test:phase7g-legacy-authority-scan (50/50) broadens coverage to browser-write/PM2-mutation/git-mutation/dead-Gmail-send categories, 3 new named regression locks`);
+    manifest.counts.legacyMutations <= 190 && manifest.counts.unresolvedLegacyMutations === 0,
+    `legacyMutations=${manifest.counts.legacyMutations} (<=190 frozen baseline; decreased from 190 via Phase 8B's proven-dead /api/jarvis router retirement), unresolvedLegacyMutations=0; test:phase7g-legacy-authority-scan (50/50) broadens coverage to browser-write/PM2-mutation/git-mutation/dead-Gmail-send categories, 3 new named regression locks`);
 
   // 17. Gmail SEND absent.
   const googleExecutor = read('actions/google-executor.ts', SERVER_ROOT + '/src');

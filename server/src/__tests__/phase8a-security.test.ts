@@ -40,7 +40,13 @@ function run(): void {
   }
   // /api/jarvis was previously mounted behind the no-op requireAuth; Phase 8A
   // upgraded it to the always-enforced check (Priority #8, legacy 49-route router).
-  assert.ok(/app\.use\('\/api\/jarvis',\s*requireTaskRuntimeAuth,/.test(indexSrc), '/api/jarvis must be mounted behind requireTaskRuntimeAuth (upgraded from the no-op requireAuth)');
+  // Phase 8B subsequently retired that entire legacy router (zero external
+  // callers found — see docs/architecture/PHASE8B_LEGACY_INVENTORY.md §1/§12)
+  // — it is correctly absent from index.ts now, not merely re-mounted with
+  // different auth. The canonical Jarvis Gateway's own /api/jarvis/* routes
+  // (request/session/voice) are unaffected and still exist under their own,
+  // already-canonical auth (see phase8b-legacy-retirement.test.ts).
+  assert.ok(!/app\.use\('\/api\/jarvis',/.test(indexSrc), '/api/jarvis (the legacy 49-route router) must remain retired, not re-mounted');
 
   // Genuinely-intentional exceptions must remain exactly as documented —
   // this guards against someone "fixing" a public/self-authenticated route

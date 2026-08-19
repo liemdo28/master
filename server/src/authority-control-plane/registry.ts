@@ -79,6 +79,17 @@ export const AUTHORITY_RULES: Rule[] = [
     authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'OperatorControlService', auth: 'REMOTE_SESSION', capability: 'operator pending authority read model',
     evidence: ['server/src/operator-control/router.ts', 'server/src/operator-control/service.ts'],
   }),
+  // Phase 8B — found unregistered during the canonical-owner structural
+  // audit (docs/architecture/PHASE8B_LEGACY_INVENTORY.md §12): this is the
+  // canonical Phase 6D Evidence system (GET-only: /evidence, /evidence/:id,
+  // /evidence/conflicts, /evidence/health, /evidence/digest/:date), mounted
+  // the same way as authority-read/operator-control-read above, but had no
+  // registry rule at all — it fell through to the scanner's generic
+  // UNREGISTERED-owner default instead of resolving to its real owner.
+  rule('evidence-read', /^\/api\/(command-center\/)?evidence(\/.*)?$/, {
+    authorityClass: 'CANONICAL_READ', effectClass: 'READ_ONLY', canonicalOwner: 'EvidenceService', auth: 'REMOTE_SESSION', capability: 'evidence bundle read model (conflicts, health, digest)',
+    evidence: ['server/src/evidence/router.ts', 'server/src/evidence/service.ts'],
+  }),
   rule('task-runtime', /^\/api\/(command-center\/)?task-runtime(\/.*)?$/, {
     authorityClass: 'CANONICAL_LOCAL_MUTATION', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Task Runtime', auth: 'STRICT_API_KEY', capability: 'task state and read-only command evidence',
     projectScoped: true, evidence: ['server/src/routes/task-runtime.ts', 'server/src/task-runtime/engine.ts'],
