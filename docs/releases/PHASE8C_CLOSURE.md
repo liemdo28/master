@@ -11,6 +11,10 @@ Addressed both items in the existing Phase 8 roadmap's 8C scope, per `docs/archi
 
 `operations/self-healing.ts` (O9-SELFHEAL, anomaly detection) untouched — re-confirmed complementary, not duplicate.
 
+## Closure-doc PR CI flake (evidence)
+
+[PR #120](https://github.com/liemdo28/master/pull/120) (this closure doc, docs-only — a single new markdown file, verified via `gh pr diff 120 --name-only`) failed CI once on `Server build and tests`: `coding/__tests__/coding-workflow.test.ts`, `Error: Illegal transition for task ...: CANCELLED -> COMPLETED. Allowed: []` at `server/src/task-runtime/engine.ts:324` via `CodingWorkflow.resumeTask`. This is a task-state-machine timing test with no possible connection to a markdown-only diff. Re-ran the identical head (`gh run rerun --failed`): all checks (`Server build and tests`, `Repository scans`, `GitGuardian Security Checks`) passed clean on the second attempt. Classified as a transient, unrelated CI flake — not investigated further as a regression, since the change that triggered it contains zero executable code.
+
 ## Review and merge
 
 [PR #119](https://github.com/liemdo28/master/pull/119) — self-authored, self-reviewed, explicitly authorized for merge by the repo owner (scoped specifically to PR #119), after verifying exact head SHA match (`1cfd5b4a33105886b570a73682d9fbc2753fe629`), mergeability, green CI, no new commits, and diff scope limited to exactly 3 files (the logging fix, a documentation-only comment, and the audit doc) — no authority-manifest change, no route/schema file touched. Merged as `415a3f49e8833d929da6265573d9353ddea6d1c9`.
