@@ -11,9 +11,13 @@ Addressed both items in the existing Phase 8 roadmap's 8C scope, per `docs/archi
 
 `operations/self-healing.ts` (O9-SELFHEAL, anomaly detection) untouched — re-confirmed complementary, not duplicate.
 
-## Closure-doc PR CI flake (evidence)
+## Closure-doc PR CI flake — investigated, real bug found and fixed separately
 
-[PR #120](https://github.com/liemdo28/master/pull/120) (this closure doc, docs-only — a single new markdown file, verified via `gh pr diff 120 --name-only`) failed CI once on `Server build and tests`: `coding/__tests__/coding-workflow.test.ts`, `Error: Illegal transition for task ...: CANCELLED -> COMPLETED. Allowed: []` at `server/src/task-runtime/engine.ts:324` via `CodingWorkflow.resumeTask`. This is a task-state-machine timing test with no possible connection to a markdown-only diff. Re-ran the identical head (`gh run rerun --failed`): all checks (`Server build and tests`, `Repository scans`, `GitGuardian Security Checks`) passed clean on the second attempt. Classified as a transient, unrelated CI flake — not investigated further as a regression, since the change that triggered it contains zero executable code.
+[PR #120](https://github.com/liemdo28/master/pull/120) (this closure doc, docs-only — a single new markdown file, verified via `gh pr diff 120 --name-only`) failed CI twice, on two different docs-only heads of this same PR, both times with the identical `coding/__tests__/coding-workflow.test.ts` stack trace: `Error: Illegal transition for task ...: CANCELLED -> COMPLETED. Allowed: []` at `server/src/task-runtime/engine.ts:324` via `CodingWorkflow.resumeTask`. A markdown-only diff cannot cause this, and failing twice (not just once) ruled out a one-off flake — this was investigated as a real pre-existing TOCTOU race rather than dismissed.
+
+Root cause confirmed: `CodingWorkflow.resumeTask()` checks `task.status === 'CANCELLED'` after each validation attempt, but never again after that loop exits — through review and commit — before calling `taskEngine.completeTask()`. An out-of-band cancellation landing in that window makes `completeTask()`'s state-machine guard correctly refuse `CANCELLED -> COMPLETED`, but by throwing rather than being caught, which crashed the whole call.
+
+Fixed in a **separate, dedicated PR** — [PR #121](https://github.com/liemdo28/master/pull/121), merged as `76f5698b6861ace2e470a43c134d305b4298f24b` — not folded into this docs-only PR. That PR adds two additional `CANCELLED` checks (mirroring the two that already existed) and a permanent, runtime-calibrated regression test that deterministically reproduces the exact failure without the fix (3/3 runs) and resolves cleanly with it (5/5 runs). `TaskEngine.completeTask()`'s own state-machine strictness was verified untouched (zero diff on `engine.ts`). This PR (#120) itself remains docs-only throughout; the CI failures it exposed were a genuine finding about `master`, not something #120 caused or needed to fix directly.
 
 ## Review and merge
 
