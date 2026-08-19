@@ -1240,7 +1240,7 @@
       "sourcePath": "server/package.json",
       "runtimeMount": "test:coding",
       "method": "CLI",
-      "capability": "tsx src/coding/__tests__/coding-workflow.test.ts && tsx src/coding/__tests__/validation-profile.test.ts",
+      "capability": "tsx src/coding/__tests__/coding-workflow.test.ts && tsx src/coding/__tests__/validation-profile.test.ts && tsx src/coding/__tests__/cancel-race-regression.test.ts",
       "effectClass": "LOCAL_REVERSIBLE",
       "authorityClass": "ADAPTER_TO_CANONICAL",
       "canonicalOwner": "Coding Engine control plane",
