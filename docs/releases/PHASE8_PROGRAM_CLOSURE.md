@@ -39,6 +39,10 @@ Run against clean master (`23a044d8`, `rm -rf dist && npx tsc` — zero errors):
 
 Zero regressions found across the entire frozen Phase 5–8 surface.
 
+### CI observation on this closure PR — investigated, not a regression
+
+This docs-only PR's own CI run (`Server build and tests`) failed once on `server/src/coding/__tests__/cancel-race-regression.test.ts` (added by PR #121's TOCTOU fix): `AssertionError: the delay sweep must land at least one race past review/commit — otherwise this file is not actually exercising the fixed gap`. This is the test's own internal self-check on its runtime-calibrated timing window, not the safety property it exists to prove — **all 16 sequential and 12 concurrent cancel races still correctly ended `CANCELLED`, never `COMPLETED`, on that same run** (the actual invariant PR #121 fixed). A re-run on the exact same head (no code change) passed cleanly. Consistent with a CI-runner timing variance narrowly missing the calibrated window that run, not a functional regression — this PR contains zero changes to `coding/`, `task-runtime/`, or any related file, and the local `test:ci` run performed earlier in this same closure sweep (§ above) passed this exact test cleanly. Recorded here for transparency rather than silently re-run and ignored, per this program's established practice for any CI failure on a docs-only diff.
+
 ## Production audit
 
 - `GET /api/health` → `200 OK`, `{"overall":"HEALTHY"}`.
