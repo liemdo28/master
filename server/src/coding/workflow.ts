@@ -388,10 +388,29 @@ export class CodingWorkflow {
       return { task: failed, context, candidates, modelRoles, plan, apply, validation, review, commitSha: null };
     }
 
+    // An out-of-band cancellation (a separate TaskEngine instance calling
+    // cancelTask) can land at any point after the last check inside the
+    // validation/retry loop above — including during the review step just
+    // completed, which for the LLM engine can take real time. Re-check
+    // before creating a commit (a real side effect a cancelled task should
+    // not produce) and again immediately before completeTask() (whose own
+    // state-machine guard correctly refuses CANCELLED -> COMPLETED, but
+    // throws rather than returning cleanly — this workflow must not let
+    // that propagate as an unhandled crash for an outcome it can and should
+    // detect and return gracefully, the same way the two checks above do).
+    if (this.mustGetCodingTask(task.id).status === 'CANCELLED') {
+      codingResourceController.release(task.id);
+      return { task: this.mustGetCodingTask(task.id), context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['task cancelled'] }, commitSha: null };
+    }
+
     const commitSha = task.commitPolicy === 'no-commit' ? null : await this.commitLocal(worktreePath, task.userRequest);
     this.taskStore.updateCodingFields(task.id, { commitSha });
     this.event(task.id, 'coding.commit.created', { commitSha, policy: task.commitPolicy ?? 'local-only' });
     codingResourceController.release(task.id);
+
+    if (this.mustGetCodingTask(task.id).status === 'CANCELLED') {
+      return { task: this.mustGetCodingTask(task.id), context, candidates, modelRoles, plan, apply, validation, review: { status: 'FAIL', findings: ['task cancelled'] }, commitSha };
+    }
     const completed = this.taskEngine.completeTask(task.id, 'Coding workflow completed with local validation and review.');
     return { task: completed, context, candidates, modelRoles, plan, apply, validation, review, commitSha };
   }
