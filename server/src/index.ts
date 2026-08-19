@@ -76,7 +76,6 @@ import { controlledActionsJsonParser, controlledActionsRouter } from './personal
 import { governanceJsonParser, governanceRouter } from './personal-os/actions/governance/router';
 import { orchestrationJsonParser, orchestrationRouter } from './personal-os/orchestration/router';
 import { delegationJsonParser, delegationRouter } from './personal-os/delegation/router';
-import { jarvisRouter } from './routes/jarvis';
 import { workflowMetricsRouter } from './routes/workflow-metrics';
 import { gstackRouter } from './routes/gstack';
 import { nodesRouter } from './routes/nodes';
@@ -310,7 +309,14 @@ app.use('/api/visibility',  requireAuth, visibilityRouter);
 
 // P2 — Operational (protected but less sensitive)
 app.use('/api/chat',        requireAuth, chatRouter);
-app.use('/api/jarvis',      requireTaskRuntimeAuth, jarvisRouter); // Phase 8A: legacy 49-route router upgraded from requireAuth (no-op while MI_PIN unset) to the always-enforced check; POST /approvals/:id/approve → runApprovedTask() remains hard-QUARANTINED_PHASE_7A1 regardless (see jarvis/autonomous-task-runner.ts)
+// Phase 8B: legacy 49-route /api/jarvis HTTP router retired — REMOVE_CANDIDATE,
+// zero live callers found (no Command Center reference, no other backend caller,
+// no test, no PM2/CLI entrypoint — see docs/architecture/PHASE8B_LEGACY_INVENTORY.md
+// §1/§12). Its 20 backing modules (jarvis/proactive-monitor.ts through
+// jarvis/phase21-knowledge/ .. phase30-jarvis/) are UNCHANGED and remain fully
+// live via their real, non-HTTP callers (WhatsApp, voice, GStack skills/QA,
+// natural-conversation-engine, and bootJarvis() at startup) — only this HTTP
+// exposure layer, which had no caller, was removed.
 app.use('/api/qb-agent',    requireAuth, qbAgentRouter);
 app.use('/api/qb',          requireTaskRuntimeAuth, qbFinancialRouter);
 app.use('/api/projects',    requireAuth, projectsRouter);
