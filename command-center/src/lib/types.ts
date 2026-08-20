@@ -869,6 +869,55 @@ export interface OperatorOverview {
   authority: OperatorAuthorityView;
 }
 
+// ---- Phase 9B: background-worker observability (read-only) ----
+
+export interface OperatorBackgroundServiceView {
+  id: string;
+  name: string;
+  type: 'pm2' | 'http' | 'port' | 'internal';
+  pm2Name: string | null;
+  critical: boolean;
+  healthy: boolean | null;
+  lastChecked: string | null;
+  lastHealthyAt: string | null;
+  lastFailureAt: string | null;
+  intentionallyStopped: boolean;
+  restartEligibility: string | null;
+  restartCount: number;
+}
+
+export interface OperatorBackgroundRestartEvidence {
+  serviceId: string;
+  pm2Name: string;
+  decision: string;
+  outcome: string | null;
+  restartAttemptNumber: number;
+  detail: string;
+  createdAt: string;
+}
+
+export interface OperatorBackgroundWorkerClassification {
+  id: string;
+  sourcePath: string;
+  authorityClass: string;
+  status: string;
+  approvalRequired: boolean;
+  governanceRequired: boolean;
+  quarantineHandler: string | null;
+  phase6bDisposition: string | null;
+  behavioralHardeningDebt: boolean;
+}
+
+export interface OperatorBackgroundWorkerView {
+  generatedAt: string;
+  scanLastRunAt: string | null;
+  globalKillSwitchActive: boolean;
+  services: OperatorBackgroundServiceView[];
+  recentRestartEvidence: OperatorBackgroundRestartEvidence[];
+  workerClassifications: OperatorBackgroundWorkerClassification[];
+  behavioralHardeningDebtSurfaces: string[];
+}
+
 // ---- Phase 6D: canonical evidence contract (read-only) ----
 
 export type EvidenceCategory =
