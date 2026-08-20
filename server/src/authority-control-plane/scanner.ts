@@ -86,18 +86,65 @@ export function discoverNonHttpSurfaces(repoRoot = process.cwd()): AuthoritySurf
   const background: AuthoritySurface[] = [
     worker('background:scheduler', 'server/src/cron/sync-scheduler.ts', 'startScheduler', 'READ_ONLY', 'CANONICAL_READ', 'Connector Registry', 'scheduled connector sync/read model'),
     worker('background:burn-in', 'server/src/operations/burn-in.ts', 'startBurnInScheduler', 'LOCAL_REVERSIBLE', 'ADAPTER_TO_CANONICAL', 'Operations evidence', 'burn-in evidence snapshots'),
-    worker('background:self-healing-scheduler', 'server/src/operations/self-healing.ts', 'startSelfHealingScheduler', 'SERVICE_CONTROL', 'LEGACY_QUARANTINED', 'Authority Control Plane', 'self-healing process/service-control observation'),
-    worker('background:self-healing-monitor', 'server/src/company-os/self-healing-monitor.ts', 'startSelfHealingMonitor', 'SERVICE_CONTROL', 'LEGACY_QUARANTINED', 'Authority Control Plane', 'legacy service monitor'),
-    worker('background:jarvis-proactive-monitor', 'server/src/jarvis/proactive-monitor.ts', 'startProactiveMonitor', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Daily Operating Loop', 'legacy proactive notifications'),
-    worker('background:daily-briefing-scheduler', 'server/src/jarvis/daily-briefing-scheduler.ts', 'startDailyBriefingScheduler', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Daily Operating Loop', 'legacy daily WhatsApp briefing'),
-    worker('background:leader-heartbeat', 'server/src/nodes/leader-lock-persistent.ts', 'startLeaderHeartbeat', 'LOCAL_REVERSIBLE', 'ADAPTER_TO_CANONICAL', 'Node leader lock', 'leader heartbeat'),
-    worker('background:qb-online-watcher', 'server/src/jarvis/qb-online-watcher.ts', 'startQbOnlineWatcher', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Authority Control Plane', 'legacy QuickBooks online watcher notification'),
+    worker('background:self-healing-scheduler', 'server/src/operations/self-healing.ts', 'startSelfHealingScheduler', 'SERVICE_CONTROL', 'LEGACY_QUARANTINED', 'Authority Control Plane', 'self-healing process/service-control observation (read-only PM2 checks + local metrics-reset POST to itself)'),
+    // Phase 9A: this surface's runtime enforcement is now code-verified, not merely
+    // labeled — see evaluateRestartEligibility/RESTART_ALLOWLIST/isGlobalKillSwitchActive
+    // in self-healing-monitor.ts and their permanent regression coverage. It is no
+    // longer counted as an unresolved legacy mutation (legacyReason: null,
+    // phase6bDisposition: 'ADAPT_WITH_BEHAVIOR_CHANGE' — resolved, behavior changed).
+    worker('background:self-healing-monitor', 'server/src/company-os/self-healing-monitor.ts', 'startSelfHealingMonitor', 'SERVICE_CONTROL', 'CANONICAL_LOCAL_MUTATION', 'Company OS Self-Healing Monitor', 'deterministic, service-allowlisted PM2 restart with intentional-stop exclusion, global kill-switch gate, and durable evidence (Phase 9A)', {
+      approvalRequired: false,
+      governanceRequired: false,
+      status: 'ACTIVE',
+      legacyReason: null,
+      migrationTarget: null,
+      // Fully resolved out of the legacy-mutation tracking system, like any other
+      // CANONICAL_* surface — not adapted via LegacyAuthorityAdapter (adapterTarget
+      // stays null) and not quarantined, so no phase6bDisposition is needed.
+      phase6bDisposition: null,
+      adapterTarget: null,
+      quarantineHandler: 'selfHealingMonitor.evaluateRestartEligibility',
+      canonicalReplacement: null,
+      evidence: ['server/src/index.ts startup wiring', 'server/src/company-os/self-healing-monitor.ts evaluateRestartEligibility/RESTART_ALLOWLIST/isGlobalKillSwitchActive', 'server/src/company-os/__tests__/self-healing-restart-authority.test.ts'],
+    }),
+    worker('background:jarvis-proactive-monitor', 'server/src/jarvis/proactive-monitor.ts', 'startProactiveMonitor', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Daily Operating Loop', 'legacy proactive notifications (autonomous WhatsApp send)'),
+    worker('background:daily-briefing-scheduler', 'server/src/jarvis/daily-briefing-scheduler.ts', 'startDailyBriefingScheduler', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Daily Operating Loop', 'legacy daily WhatsApp briefing (autonomous WhatsApp send)'),
+    worker('background:leader-heartbeat', 'server/src/nodes/leader-lock-persistent.ts', 'startLeaderHeartbeat', 'LOCAL_REVERSIBLE', 'ADAPTER_TO_CANONICAL', 'Node leader lock', 'leader heartbeat (local lock file only; failover branch sends a proactive WhatsApp notification, not itself lock-mutating)'),
+    worker('background:qb-online-watcher', 'server/src/jarvis/qb-online-watcher.ts', 'startQbOnlineWatcher', 'EXTERNAL_REVERSIBLE', 'LEGACY_QUARANTINED', 'Authority Control Plane', 'legacy QuickBooks online watcher (DB command insert that drives a remote machine + autonomous WhatsApp send)'),
   ];
 
   return [...cliSurfaces, ...background];
 }
 
-function worker(id: string, sourcePath: string, runtimeMount: string, effectClass: AuthoritySurface['effectClass'], authorityClass: AuthoritySurface['authorityClass'], owner: string, capability: string): AuthoritySurface {
+interface WorkerOverrides {
+  approvalRequired?: boolean;
+  governanceRequired?: boolean;
+  status?: AuthoritySurface['status'];
+  legacyReason?: string | null;
+  migrationTarget?: string | null;
+  phase6bDisposition?: AuthoritySurface['phase6bDisposition'];
+  adapterTarget?: string | null;
+  quarantineHandler?: string | null;
+  canonicalReplacement?: string | null;
+  evidence?: string[];
+}
+
+/**
+ * Phase 9A: `approvalRequired` and `quarantineHandler` used to be derived purely
+ * from `authorityClass === 'LEGACY_QUARANTINED'`, for every BACKGROUND_WORKER
+ * surface uniformly. That was a false claim: `legacyAuthorityAdapter.quarantine()`
+ * is Express middleware — it can intercept an HTTP request/response cycle, but a
+ * `kind: 'BACKGROUND_WORKER'` surface (`method: 'BACKGROUND'`, started from a
+ * `setInterval` at process boot, see server/src/index.ts) has no such cycle for
+ * anything to intercept. No BACKGROUND_WORKER surface may claim `approvalRequired:
+ * true` or a `quarantineHandler` unless a `WorkerOverrides` argument explicitly
+ * supplies one that names a real, code-verified runtime guard (see
+ * background:self-healing-monitor above for the one surface currently fixed this
+ * way). `governanceRequired` is a distinct, honest, forward-looking flag — "this
+ * should eventually route through canonical governance" — and is not itself a
+ * claim that current enforcement exists, so it is left keyed to `authorityClass`.
+ */
+function worker(id: string, sourcePath: string, runtimeMount: string, effectClass: AuthoritySurface['effectClass'], authorityClass: AuthoritySurface['authorityClass'], owner: string, capability: string, overrides: WorkerOverrides = {}): AuthoritySurface {
   return {
     id,
     kind: 'BACKGROUND_WORKER',
@@ -110,19 +157,19 @@ function worker(id: string, sourcePath: string, runtimeMount: string, effectClas
     canonicalOwner: owner,
     projectScoped: false,
     externalSystem: effectClass.startsWith('EXTERNAL') ? 'notification/provider' : null,
-    approvalRequired: authorityClass === 'LEGACY_QUARANTINED',
-    governanceRequired: authorityClass === 'LEGACY_QUARANTINED',
+    approvalRequired: overrides.approvalRequired ?? false,
+    governanceRequired: overrides.governanceRequired ?? (authorityClass === 'LEGACY_QUARANTINED'),
     delegationEligible: false,
     authenticationRequired: 'INTERNAL_ONLY',
-    status: authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINED' : authorityClass === 'INTERNAL_TEST_ONLY' ? 'TEST_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPTED' : 'ACTIVE',
-    legacyReason: authorityClass === 'LEGACY_QUARANTINED' ? 'Background mutation must be adapted to a canonical owner before expanding authority.' : null,
-    migrationTarget: authorityClass === 'LEGACY_QUARANTINED' ? owner : null,
-    phase6bDisposition: authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINE_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPT_SAFE' : null,
-    adapterTarget: authorityClass === 'ADAPTER_TO_CANONICAL' ? 'LegacyAuthorityAdapter' : null,
-    quarantineHandler: authorityClass === 'LEGACY_QUARANTINED' ? 'legacyAuthorityAdapter.quarantine' : null,
-    canonicalReplacement: authorityClass === 'LEGACY_QUARANTINED' ? owner : authorityClass === 'ADAPTER_TO_CANONICAL' ? owner : null,
+    status: overrides.status ?? (authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINED' : authorityClass === 'INTERNAL_TEST_ONLY' ? 'TEST_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPTED' : 'ACTIVE'),
+    legacyReason: overrides.legacyReason !== undefined ? overrides.legacyReason : (authorityClass === 'LEGACY_QUARANTINED' ? 'Background mutation has no HTTP request/response cycle for the quarantine boundary to intercept; must be adapted to a canonical owner or given a code-verified runtime guard before its manifest entry may claim active enforcement.' : null),
+    migrationTarget: overrides.migrationTarget !== undefined ? overrides.migrationTarget : (authorityClass === 'LEGACY_QUARANTINED' ? owner : null),
+    phase6bDisposition: overrides.phase6bDisposition !== undefined ? overrides.phase6bDisposition : (authorityClass === 'LEGACY_QUARANTINED' ? 'QUARANTINE_ONLY' : authorityClass === 'ADAPTER_TO_CANONICAL' ? 'ADAPT_SAFE' : null),
+    adapterTarget: overrides.adapterTarget !== undefined ? overrides.adapterTarget : (authorityClass === 'ADAPTER_TO_CANONICAL' ? 'LegacyAuthorityAdapter' : null),
+    quarantineHandler: overrides.quarantineHandler !== undefined ? overrides.quarantineHandler : null,
+    canonicalReplacement: overrides.canonicalReplacement !== undefined ? overrides.canonicalReplacement : (authorityClass === 'LEGACY_QUARANTINED' ? owner : authorityClass === 'ADAPTER_TO_CANONICAL' ? owner : null),
     lastAuthorityEvidence: null,
-    evidence: ['server/src/index.ts startup wiring'],
+    evidence: overrides.evidence ?? ['server/src/index.ts startup wiring'],
   };
 }
 
@@ -206,12 +253,26 @@ export function assertAuthorityManifest(manifest: AuthorityManifest): void {
     !item.adapterTarget
   );
   if (adaptedWithoutTarget.length) throw new Error(`LEGACY_AUTHORITY_ADAPTER_MISSING: ${adaptedWithoutTarget.map(item => item.id).join(', ')}`);
+  // Phase 9A: a BACKGROUND_WORKER surface has no HTTP request/response cycle for
+  // legacyAuthorityAdapter.quarantine() to intercept — it cannot be required to
+  // name that handler the way an HTTP_ROUTE surface legitimately can.
   const quarantinedWithoutHandler = manifest.surfaces.filter(item =>
+    item.kind !== 'BACKGROUND_WORKER' &&
     item.phase6bDisposition &&
     ['QUARANTINE_ONLY', 'REQUIRES_FUTURE_AUTHORIZATION'].includes(item.phase6bDisposition) &&
     !item.quarantineHandler
   );
   if (quarantinedWithoutHandler.length) throw new Error(`LEGACY_AUTHORITY_QUARANTINE_HANDLER_MISSING: ${quarantinedWithoutHandler.map(item => item.id).join(', ')}`);
+  // Phase 9A: no BACKGROUND_WORKER surface may claim approvalRequired: true or name
+  // the HTTP-only quarantine handler — both are structurally false for a kind that
+  // has nothing resembling a request/response cycle to gate. This is the permanent
+  // guardrail against the exact manifest-vs-enforcement mismatch the Phase 9
+  // discovery audit found recurring for any future background surface.
+  const backgroundFalseEnforcementClaim = manifest.surfaces.filter(item =>
+    item.kind === 'BACKGROUND_WORKER' &&
+    (item.approvalRequired === true || item.quarantineHandler === 'legacyAuthorityAdapter.quarantine')
+  );
+  if (backgroundFalseEnforcementClaim.length) throw new Error(`LEGACY_AUTHORITY_BACKGROUND_FALSE_ENFORCEMENT_CLAIM: ${backgroundFalseEnforcementClaim.map(item => item.id).join(', ')}`);
 }
 
 function importedRouters(index: string): Map<string, string> {

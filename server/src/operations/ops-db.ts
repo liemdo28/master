@@ -112,6 +112,22 @@ export function getOpsDb(): InstanceType<typeof Database> {
       quality_score REAL,
       created_at TEXT NOT NULL
     );
+
+    -- Phase 9A: Self-Heal restart evidence — durable record of every restart
+    -- decision the background monitor makes (attempted, skipped, and why),
+    -- replacing the previous console-only/in-memory-only trail.
+    CREATE TABLE IF NOT EXISTS self_heal_restart_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      service_id TEXT NOT NULL,
+      pm2_name TEXT NOT NULL,
+      decision TEXT NOT NULL,
+      outcome TEXT,
+      restart_attempt_number INTEGER NOT NULL,
+      detail TEXT,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_self_heal_restart_log_service ON self_heal_restart_log(service_id);
+    CREATE INDEX IF NOT EXISTS idx_self_heal_restart_log_created ON self_heal_restart_log(created_at);
   `);
   return _db;
 }

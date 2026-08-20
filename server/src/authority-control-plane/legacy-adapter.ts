@@ -248,8 +248,24 @@ export function validateLegacyAuthorityRuntime(manifest: AuthorityManifest): voi
   if (unresolved.length) throw new Error(`LEGACY_AUTHORITY_UNRESOLVED: ${unresolved.map(surface => surface.id).join(', ')}`);
   const badAdapters = legacy.filter(surface => isAdaptedDisposition(surface) && !surface.adapterTarget);
   if (badAdapters.length) throw new Error(`LEGACY_AUTHORITY_ADAPTER_MISSING: ${badAdapters.map(surface => surface.id).join(', ')}`);
-  const badQuarantine = legacy.filter(surface => isQuarantineDisposition(surface) && !surface.quarantineHandler);
+  // Phase 9A: a BACKGROUND_WORKER surface has no HTTP request/response cycle for
+  // legacyAuthorityAdapter.quarantine() to intercept — it cannot be required to
+  // name that handler the way an HTTP_ROUTE surface legitimately can.
+  const badQuarantine = legacy.filter(surface => surface.kind !== 'BACKGROUND_WORKER' && isQuarantineDisposition(surface) && !surface.quarantineHandler);
   if (badQuarantine.length) throw new Error(`LEGACY_AUTHORITY_QUARANTINE_HANDLER_MISSING: ${badQuarantine.map(surface => surface.id).join(', ')}`);
+  // Phase 9A: no BACKGROUND_WORKER surface may claim approvalRequired: true or name
+  // the HTTP-only quarantine handler — both are structurally false for a kind that
+  // has nothing resembling a request/response cycle to gate. A background surface
+  // with real, verified enforcement must name its own runtime guard function
+  // instead (see background:self-healing-monitor in scanner.ts). This check exists
+  // specifically so the exact manifest-vs-enforcement mismatch found in the Phase 9
+  // discovery audit (a background worker labeled QUARANTINED/approvalRequired:true
+  // with zero actual enforcement) cannot silently recur for any future surface.
+  const badBackgroundClaim = manifest.surfaces.filter(surface =>
+    surface.kind === 'BACKGROUND_WORKER' &&
+    (surface.approvalRequired === true || surface.quarantineHandler === 'legacyAuthorityAdapter.quarantine')
+  );
+  if (badBackgroundClaim.length) throw new Error(`LEGACY_AUTHORITY_BACKGROUND_FALSE_ENFORCEMENT_CLAIM: ${badBackgroundClaim.map(surface => surface.id).join(', ')}`);
   const unsafeAdapted = legacy.filter(surface =>
     isAdaptedDisposition(surface) &&
     (surface.effectClass === 'PROCESS_CONTROL' || surface.effectClass === 'SERVICE_CONTROL' || surface.effectClass === 'EXTERNAL_IRREVERSIBLE')

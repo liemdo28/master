@@ -8,6 +8,11 @@
 
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { intentionallyStoppedServices } from '../runtime-preflight/validator';
+import { ControlledActionStore } from '../personal-os/actions/store';
+import { GovernanceStore } from '../personal-os/actions/governance/store';
+import { KillSwitchService } from '../personal-os/actions/governance/kill-switch';
+import { getOpsDb, nowIso as opsNowIso } from '../operations/ops-db';
 
 const execAsync = promisify(exec);
 
@@ -150,6 +155,94 @@ export function getLastScanResults(): { results: ServiceStatus[] | null; scanned
 }
 const MAX_AUTO_RESTART = 2;
 
+/**
+ * Phase 9A — the deterministic, code-verified boundary on what this monitor may
+ * ever restart. Derived from SERVICES_TO_MONITOR's own pm2-type entries, not a
+ * separate list, so it can never drift from what's actually configured above.
+ * `restartPm2Service` and `evaluateRestartEligibility` both re-check membership
+ * before issuing a `pm2 restart` — defense-in-depth against any future change
+ * that might otherwise let a dynamic/caller-influenced name reach exec().
+ */
+export const RESTART_ALLOWLIST: ReadonlySet<string> = new Set(
+  SERVICES_TO_MONITOR.filter(s => s.type === 'pm2' && s.pm2_name).map(s => s.pm2_name as string)
+);
+
+export type RestartDecision =
+  | 'eligible'
+  | 'not_pm2_type'
+  | 'not_allowlisted'
+  | 'intentionally_stopped'
+  | 'restart_limit_reached'
+  | 'kill_switch_blocked';
+
+let _actionStore: ControlledActionStore | null = null;
+let _killSwitch: KillSwitchService | null = null;
+
+/**
+ * Phase 9A — lazily-constructed, read-only access to the same governance
+ * kill-switch store ControlledActionService uses. This monitor never proposes,
+ * approves, or executes a Controlled Action — it only reads whether a GLOBAL
+ * kill switch is currently enabled, as one more gate before a `pm2 restart`.
+ * Only GLOBAL-scope switches can ever match here: this restart capability has
+ * no real ActionType (and Phase 9 explicitly must not add one), so a
+ * PROJECT/ACTION_TYPE-scope switch can never be created against it. This is a
+ * deliberate, honest constraint, not an oversight.
+ */
+function killSwitch(): KillSwitchService {
+  if (!_killSwitch) {
+    _actionStore = new ControlledActionStore();
+    _killSwitch = new KillSwitchService(new GovernanceStore(_actionStore.handle));
+  }
+  return _killSwitch;
+}
+
+function isGlobalKillSwitchActive(): boolean {
+  try {
+    return killSwitch().state({ projectId: null, actionType: 'internal:self-healing-monitor:restart' }).blocked;
+  } catch {
+    // A governance-store read failure must never itself block or silently allow a
+    // restart decision either way — treat it as "cannot confirm safe", i.e. blocked.
+    return true;
+  }
+}
+
+/** Phase 9A — closes the DB handle this monitor lazily opened, if any. Test/shutdown only. */
+export function closeSelfHealingGovernanceHandle(): void {
+  if (_actionStore) {
+    _actionStore.close();
+    _actionStore = null;
+    _killSwitch = null;
+  }
+}
+
+/**
+ * Phase 9A — the single decision point for whether a restart may be attempted.
+ * Every branch here is deterministic and independently testable; nothing here
+ * ever consults a caller-supplied value — `svc` always comes from the fixed
+ * SERVICES_TO_MONITOR array above.
+ */
+export function evaluateRestartEligibility(svc: ServiceCheck, restartCount: number): RestartDecision {
+  if (svc.type !== 'pm2' || !svc.pm2_name) return 'not_pm2_type';
+  if (!RESTART_ALLOWLIST.has(svc.pm2_name)) return 'not_allowlisted';
+  if (intentionallyStoppedServices().includes(svc.pm2_name)) return 'intentionally_stopped';
+  if (restartCount >= MAX_AUTO_RESTART) return 'restart_limit_reached';
+  if (isGlobalKillSwitchActive()) return 'kill_switch_blocked';
+  return 'eligible';
+}
+
+/** Phase 9A — durable evidence for every restart decision, replacing the previous
+ *  console-only/in-memory-only trail. Never throws — a logging failure must not
+ *  block or corrupt the actual health-scan/restart decision. */
+function recordRestartEvidence(svc: ServiceCheck, decision: RestartDecision, outcome: 'command_issued' | 'command_failed' | null, attemptNumber: number, detail: string): void {
+  try {
+    getOpsDb().prepare(
+      `INSERT INTO self_heal_restart_log (service_id, pm2_name, decision, outcome, restart_attempt_number, detail, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+    ).run(svc.id, svc.pm2_name ?? '', decision, outcome, attemptNumber, detail, opsNowIso());
+  } catch (err) {
+    console.error('[SelfHeal] evidence write failed (restart decision itself is unaffected):', err instanceof Error ? err.message : err);
+  }
+}
+
 export async function checkPm2Service(svc: ServiceCheck): Promise<boolean> {
   try {
     const { stdout } = await execAsync(`pm2 describe ${svc.pm2_name} --no-color`, {
@@ -191,7 +284,10 @@ export async function checkHttpService(svc: ServiceCheck): Promise<boolean> {
 }
 
 async function restartPm2Service(svc: ServiceCheck): Promise<boolean> {
-  if (svc.type !== 'pm2' || !svc.pm2_name) return false;
+  // Phase 9A defense-in-depth: re-checked here, not just by the caller, so this
+  // function can never be reached with an out-of-allowlist target even if a
+  // future refactor changes how callers invoke it.
+  if (svc.type !== 'pm2' || !svc.pm2_name || !RESTART_ALLOWLIST.has(svc.pm2_name)) return false;
   try {
     await execAsync(`pm2 restart ${svc.pm2_name}`, {
       timeout: 15_000,
@@ -235,9 +331,20 @@ export async function runHealthScan(): Promise<ServiceStatus[]> {
     let restartAttempted = false;
 
     if (!healthy) {
-      if (svc.type === 'pm2' && count < MAX_AUTO_RESTART) {
+      const decision = evaluateRestartEligibility(svc, count);
+
+      if (decision === 'intentionally_stopped') {
+        // Phase 9A: this service is in runtime-preflight's canonical
+        // intentionally-stopped set — it is SUPPOSED to be down. Never restart
+        // it, and never raise a DOWN alert for it either (both would be a false
+        // alarm about expected, deliberate state). This closes the gap where
+        // this monitor's own hardcoded service list could restart a service
+        // runtime-preflight explicitly says must not be auto-started.
+        recordRestartEvidence(svc, decision, null, count, `${svc.pm2_name} is intentionally stopped; not eligible for restart or alert`);
+      } else if (decision === 'eligible') {
         restartAttempted = await restartPm2Service(svc);
         restartCounts[svc.id] = count + 1;
+        recordRestartEvidence(svc, decision, restartAttempted ? 'command_issued' : 'command_failed', count + 1, `attempt ${count + 1}/${MAX_AUTO_RESTART}`);
         // Phase 8C: this only proves the `pm2 restart` command was issued
         // (or, if false, that it threw) — never that the service is back up.
         // Recovery is only known truthfully on the *next* scan, via the
@@ -251,7 +358,17 @@ export async function runHealthScan(): Promise<ServiceStatus[]> {
         } else {
           console.error(`[SelfHeal] Restart command FAILED for ${svc.name} (attempt ${count + 1}/${MAX_AUTO_RESTART})`);
         }
-      } else if (count >= MAX_AUTO_RESTART || svc.critical) {
+      } else if (decision === 'kill_switch_blocked') {
+        recordRestartEvidence(svc, decision, null, count, 'global governance kill switch is active — restart withheld');
+        console.error(`[SelfHeal] Restart WITHHELD for ${svc.name} — global kill switch active`);
+      } else {
+        // 'not_pm2_type' / 'not_allowlisted' — structurally unreachable given the
+        // fixed SERVICES_TO_MONITOR/RESTART_ALLOWLIST above; recorded, not silently
+        // dropped, in case that invariant is ever broken by a future change.
+        recordRestartEvidence(svc, decision, null, count, 'restart not attempted — outside the deterministic allowlist');
+      }
+
+      if (decision !== 'eligible' && decision !== 'intentionally_stopped' && (count >= MAX_AUTO_RESTART || svc.critical)) {
         const alertMsg = `🔴 *SERVICE DOWN*\n${svc.name} is DOWN.\n${count >= MAX_AUTO_RESTART ? 'Auto-restart exhausted.' : 'Critical service.'}\nManual action required.`;
         await sendCeoAlert(alertMsg);
         console.error(`[SelfHeal] CEO ALERT: ${svc.name} DOWN after ${count} restart(s)`);
@@ -310,6 +427,7 @@ export function stopSelfHealingMonitor(): void {
     clearInterval(_monitorInterval);
     _monitorInterval = null;
   }
+  closeSelfHealingGovernanceHandle();
 }
 
 export function getMonitoredServices(): ServiceCheck[] {
