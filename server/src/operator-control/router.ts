@@ -26,6 +26,10 @@ export function createOperatorControlRouter(options: OperatorServiceOptions = {}
     res.json({ items: withService(service => service.blocked()) });
   });
 
+  router.get('/operator/background-workers', (_req, res) => {
+    res.json(withService(service => service.backgroundWorkers()));
+  });
+
   router.get('/operator/item/:id', (req, res) => {
     const found = withService(service => service.item(req.params.id));
     if (!found) return res.status(404).json({ error: 'operator item not found' });
