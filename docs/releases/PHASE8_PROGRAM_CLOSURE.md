@@ -64,6 +64,22 @@ This docs-only PR's own CI run (`Server build and tests`) failed once on `server
 - No host-level startup configuration mutated opportunistically (Phase 8D's registry-wiring gap remains an explicitly documented, deliberately-deferred manual step, unchanged).
 - Every merge across all seven sub-phases required its own fresh, PR-number-scoped explicit human authorization — no phase was self-merged on a blanket or inherited authorization.
 
+## Post-merge incident: PM2 restart storm (unrelated to PR #126, resolved before freeze)
+
+After PR #126 merged (docs-only, no deploy), a final production re-verification found `mi-core` `DEGRADED` (`ollama: down`) and its PM2 restart counter climbing rapidly (5 → 781 over ~19 hours, accelerating). **This was unrelated to PR #126 or any Phase 8 code change** — the last deploy touching `mi-core` was Phase 8D, over 18 hours before the storm began at `2026-08-20 09:55:44`, and 8E/8F/8G/the #126 merge were all docs-only.
+
+**Root cause**: a PM2-on-Windows process-tracking desync. PID `19444`, a legitimately PM2-spawned `mi-core` instance (forked via PM2's own `ProcessContainerFork.js` from PM2's own daemon, running `F:\Projects\mi-core\server\dist\index.js`), successfully bound port 4001 and was genuinely serving traffic throughout (confirmed via `/api/health` returning valid responses and hundreds of real `TIME_WAIT` connections). PM2's own bookkeeping lost track of it and repeatedly spawned new `mi-core` instances that failed with `EADDRINUSE` and re-spawned in a loop, inflating the restart counter without ever affecting the live listener.
+
+**Identity verification before any action** (read-only): PID `19444`'s script path, exec cwd, and loaded native module (`better_sqlite3.node`) all independently confirmed via `pm2 describe`, `wmic`/PowerShell process inspection, and module inspection to resolve to the canonical `F:\Projects\mi-core\server\...` production tree — not a foreign or stale process. Pre-remediation snapshot captured at `F:\Projects\mi-core-predeploy-backups\incident-pm2-restart-storm-2026-08-20T05-32-45.000Z\` (`pm2-jlist`, `pm2 describe`, `netstat`, log tails, health).
+
+**Remediation performed** (explicitly authorized, narrow scope): `pm2 stop mi-core` (halted the crash-looping bookkeeping entry, restart counter frozen at 781) → `taskkill /F` on the verified orphan PID `19444` only → `pm2 start mi-core` (targeted single-app start, not a fleet-wide `pm2 resurrect`). `mi-ai-service`, `mi-accounting`, `qb-ops-agent`, `mi-node-agent` were never touched (confirmed 0 restarts, same PIDs, unchanged uptime throughout).
+
+**Post-remediation verification**: exactly one process (fresh PID, matching PM2's own tracking) owns port 4001; `/api/health` returns `200`; restart counter stable (no further increase); all 3 canonical DBs `integrity_check=ok`, 0 FK violations; schema v10 unchanged; authority manifest `unknownMutations=0`/`unresolvedLegacyMutations=0` unchanged; deployed provenance (`snapshot-manifest.json` / `.env`) still matches the Phase 8D SHA (`aab506bc818c1c4cf6ac5b0c2f2e45d4b4b8624a`), unchanged; no further `EADDRINUSE` since the fresh boot; no new error classes in the log.
+
+**Ollama** was deliberately left down and untouched — treated as a separate, optional, already-independently-tracked dependency per its own explicit scope boundary. `mi-core` itself is healthy; overall health truth correctly continues to report `DEGRADED` rather than being silently upgraded to `HEALTHY`, since Ollama really is unavailable.
+
+This incident and its remediation are entirely process-management, entirely outside git version control, and did not touch any Phase 8 source, config, schema, authority, or deployed-SHA state. It is recorded here for completeness and to keep the closure evidence honest, not because it constitutes a Phase 8 program change.
+
 ## Freeze declaration
 
 **PHASE 8 — COMPLETE AND FROZEN.** No further changes to any Phase 8A–8G scope without a new, separately-authorized phase. The program delivered: closed security/auth debt, retired confirmed-dead legacy surfaces, wired SelfHeal to canonical health-truth, formalized and certified boot/recovery, re-confirmed no proactive-operations candidate is ready for autonomy, evaluated the one candidate with real governance infrastructure behind it (Project planning, `READY_FOR_PROPOSAL_ONLY`, four gaps documented and left open), and closed with a full-regression, production-verified, zero-regression program closure.
