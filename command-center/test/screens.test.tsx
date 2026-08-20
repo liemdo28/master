@@ -136,6 +136,23 @@ const FIXTURES: Record<string, unknown> = {
     manifestCounts: { total: 1027, readOnly: 633, mutations: 394, canonical: 651, adapters: 158, quarantined: 155, forbidden: 0, internalTest: 63, unknownMutations: 0, legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, disabledDeadLegacy: 0, unresolvedLegacyMutations: 0 },
     legacy: { legacyMutations: 190, adaptedLegacy: 4, quarantinedLegacy: 186, unresolvedLegacyMutations: 0, sampleQuarantinedSurfaces: [{ id: 'legacy-1', runtimeMount: '/api/browser/write', method: 'POST', canonicalOwner: 'Authority Control Plane', phase6bDisposition: 'QUARANTINE_ONLY' }] },
   },
+  '/operator/background-workers': {
+    generatedAt: '2026-08-20T00:00:00Z',
+    scanLastRunAt: '2026-08-20T00:00:00Z',
+    globalKillSwitchActive: false,
+    services: [
+      { id: 'mi-core', name: 'Mi Core Server', type: 'pm2', pm2Name: 'mi-core', critical: true, healthy: true, lastChecked: '2026-08-20T00:00:00Z', lastHealthyAt: '2026-08-20T00:00:00Z', lastFailureAt: null, intentionallyStopped: false, restartEligibility: 'eligible', restartCount: 0 },
+      { id: 'whatsapp-gateway', name: 'WhatsApp Gateway', type: 'pm2', pm2Name: 'mi-whatsapp-gateway', critical: true, healthy: false, lastChecked: '2026-08-20T00:00:00Z', lastHealthyAt: null, lastFailureAt: '2026-08-20T00:00:00Z', intentionallyStopped: true, restartEligibility: 'intentionally_stopped', restartCount: 0 },
+    ],
+    recentRestartEvidence: [
+      { serviceId: 'whatsapp-gateway', pm2Name: 'mi-whatsapp-gateway', decision: 'intentionally_stopped', outcome: null, restartAttemptNumber: 0, detail: 'mi-whatsapp-gateway is intentionally stopped; not eligible for restart or alert', createdAt: '2026-08-20T00:00:00Z' },
+    ],
+    workerClassifications: [
+      { id: 'background:self-healing-monitor', sourcePath: 'server/src/company-os/self-healing-monitor.ts', authorityClass: 'CANONICAL_LOCAL_MUTATION', status: 'ACTIVE', approvalRequired: false, governanceRequired: false, quarantineHandler: 'selfHealingMonitor.evaluateRestartEligibility', phase6bDisposition: null, behavioralHardeningDebt: false },
+      { id: 'background:self-healing-scheduler', sourcePath: 'server/src/operations/self-healing.ts', authorityClass: 'LEGACY_QUARANTINED', status: 'QUARANTINED', approvalRequired: false, governanceRequired: true, quarantineHandler: null, phase6bDisposition: 'QUARANTINE_ONLY', behavioralHardeningDebt: true },
+    ],
+    behavioralHardeningDebtSurfaces: ['background:self-healing-scheduler', 'background:jarvis-proactive-monitor', 'background:daily-briefing-scheduler', 'background:qb-online-watcher'],
+  },
   '/evidence': {
     evidence: [
       { id: 'CONTROLLED_ACTIONS:ev-1', category: 'APPROVAL', sourceSystem: 'CONTROLLED_ACTIONS', sourceId: 'ev-1', projectId: 'mi-core', subjectType: 'ActionProposal', subjectId: 'action-1', claim: 'Approval bound to exact proposal, payload hash, action type, target, and expiry.', confidence: 'CERTAIN', observedAt: '2026-08-11T09:00:00Z', freshness: 'FRESH', redactionClass: 'OPERATOR_SAFE', canonicalReference: null, relatedEvidence: [], conflictGroup: null, authorityDecisionId: null, actor: 'liem' },
@@ -348,6 +365,22 @@ describe('Command Center screens', () => {
     expect(screen.getByText('Create draft')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^approve/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /execute|run|send/i })).not.toBeInTheDocument();
+  });
+
+  it('Operator Control renders Background Workers (Phase 9B) strictly read-only, with no restart/PM2 control', async () => {
+    renderWithProviders(<OperatorControlPage />);
+    await waitFor(() => expect(screen.getByText('Background Workers')).toBeInTheDocument());
+    expect(screen.getByText('Mi Core Server')).toBeInTheDocument();
+    expect(screen.getByText('WhatsApp Gateway')).toBeInTheDocument();
+    expect(screen.getByText('Intentionally stopped')).toBeInTheDocument();
+    expect(screen.getByText('background:self-healing-monitor')).toBeInTheDocument();
+    expect(screen.getByText('Kill switch inactive')).toBeInTheDocument();
+    // §26/9B: strictly read-only — no restart, no approve, no PM2 mutation control,
+    // no kill-switch toggle, anywhere on the whole page including this section.
+    expect(screen.queryByRole('button', { name: /restart/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^approve/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /kill.switch|enable|disable/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('Evidence renders the open conflict, health dimensions, and evidence stream without any mutation control', async () => {
