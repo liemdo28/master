@@ -145,3 +145,57 @@ export interface OperatorServiceOptions {
   repoRoot?: string;
   now?: () => Date;
 }
+
+/** Phase 9B — pure observability of a background worker's live state. Never a
+ *  mutation surface: nothing in this view or its consumer can restart, kill,
+ *  or otherwise act on anything it describes. */
+export interface OperatorBackgroundServiceView {
+  id: string;
+  name: string;
+  type: 'pm2' | 'http' | 'port' | 'internal';
+  pm2Name: string | null;
+  critical: boolean;
+  healthy: boolean | null;
+  lastChecked: string | null;
+  lastHealthyAt: string | null;
+  lastFailureAt: string | null;
+  intentionallyStopped: boolean;
+  restartEligibility: string | null;
+  restartCount: number;
+}
+
+export interface OperatorBackgroundRestartEvidence {
+  serviceId: string;
+  pm2Name: string;
+  decision: string;
+  outcome: string | null;
+  restartAttemptNumber: number;
+  detail: string;
+  createdAt: string;
+}
+
+export interface OperatorBackgroundWorkerClassification {
+  id: string;
+  sourcePath: string;
+  authorityClass: AuthoritySurface['authorityClass'];
+  status: AuthoritySurface['status'];
+  approvalRequired: boolean;
+  governanceRequired: boolean;
+  quarantineHandler: string | null;
+  phase6bDisposition: AuthoritySurface['phase6bDisposition'];
+  /** True for a BACKGROUND_WORKER surface still authorityClass LEGACY_QUARANTINED —
+   *  i.e. honestly reclassified in Phase 9A (no false enforcement claim) but not yet
+   *  behaviorally hardened. Distinct from self-healing-monitor, which received real
+   *  behavioral enforcement, not just reclassification. */
+  behavioralHardeningDebt: boolean;
+}
+
+export interface OperatorBackgroundWorkerView {
+  generatedAt: string;
+  scanLastRunAt: string | null;
+  globalKillSwitchActive: boolean;
+  services: OperatorBackgroundServiceView[];
+  recentRestartEvidence: OperatorBackgroundRestartEvidence[];
+  workerClassifications: OperatorBackgroundWorkerClassification[];
+  behavioralHardeningDebtSurfaces: string[];
+}

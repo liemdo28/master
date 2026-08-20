@@ -9,6 +9,9 @@ import { DELEGATION_ELIGIBLE_ACTION_TYPES } from '../personal-os/delegation/type
 import { generateAuthorityManifest } from '../authority-control-plane/scanner';
 import { legacyMutationSurfaces } from '../authority-control-plane/legacy-adapter';
 import { sanitizeRecord, sanitizeText } from './redaction';
+import { getMonitoredServices, evaluateRestartEligibility, getLastScanResults } from '../company-os/self-healing-monitor';
+import { intentionallyStoppedServices } from '../runtime-preflight/validator';
+import { listRecentSelfHealRestartLog } from '../operations/ops-db';
 import type { ActionProposal, ActionType } from '../personal-os/actions/types';
 import type { PolicyDecision } from '../personal-os/actions/governance/types';
 import type { DelegatedAuthority } from '../personal-os/delegation/types';
@@ -17,7 +20,7 @@ import type {
   EffectiveAuthorityAction, OperatorAuthoritySummary, OperatorAuthorityView,
   OperatorBlockedReason, OperatorControlSnapshot, OperatorItem, OperatorItemState,
   OperatorRiskSummary, OperatorServiceOptions, OperatorSourceType, OperatorUrgency,
-  OperatorOverview,
+  OperatorOverview, OperatorBackgroundWorkerView,
 } from './types';
 
 const FROZEN_EXTERNAL_WRITES: ActionType[] = ['GMAIL_CREATE_DRAFT', 'CALENDAR_EVENT_PROPOSAL', 'CALENDAR_CREATE_EVENT'];
@@ -91,6 +94,77 @@ export class OperatorControlService {
   blocked(): OperatorItem[] { return this.snapshot().blocked; }
   authority(): OperatorAuthorityView { return this.authorityView(); }
   item(id: string): OperatorItem | null { return this.snapshot().items.find(item => item.id === id) ?? null; }
+
+  /**
+   * Phase 9B — pure observability of every background worker's live state.
+   * Purely read-only: this method never restarts, kills, or otherwise acts on
+   * anything it describes. It composes existing read paths only:
+   * evaluateRestartEligibility (Phase 9A, unchanged), the durable restart-
+   * evidence log (Phase 9A), runtime-preflight's canonical intentional-stop
+   * set, and the authority manifest — nothing here duplicates or forks that
+   * logic, and nothing here grants any new capability.
+   */
+  backgroundWorkers(): OperatorBackgroundWorkerView {
+    const manifest = generateAuthorityManifest(this.repoRoot);
+    const workers = manifest.surfaces.filter(s => s.kind === 'BACKGROUND_WORKER');
+    const stopped = new Set(intentionallyStoppedServices());
+    const scan = getLastScanResults();
+    const now = Date.now();
+    const globalKillSwitchActive = this.governanceStore.listKillSwitches(false).some(sw =>
+      sw.scope === 'GLOBAL' && (!sw.expiresAt || new Date(sw.expiresAt).getTime() > now)
+    );
+
+    const services = getMonitoredServices().map(svc => {
+      const status = scan.results?.find(r => r.id === svc.id) ?? null;
+      const restartCount = status?.restart_count ?? 0;
+      return {
+        id: svc.id,
+        name: svc.name,
+        type: svc.type,
+        pm2Name: svc.pm2_name ?? null,
+        critical: svc.critical,
+        healthy: status?.healthy ?? null,
+        lastChecked: status?.last_checked ?? null,
+        lastHealthyAt: status?.last_healthy_at ?? null,
+        lastFailureAt: status?.last_failure_at ?? null,
+        intentionallyStopped: svc.pm2_name ? stopped.has(svc.pm2_name) : false,
+        restartEligibility: svc.type === 'pm2' ? evaluateRestartEligibility(svc, restartCount) : null,
+        restartCount,
+      };
+    });
+
+    const recentRestartEvidence = listRecentSelfHealRestartLog(20).map(row => ({
+      serviceId: row.service_id,
+      pm2Name: row.pm2_name,
+      decision: row.decision,
+      outcome: row.outcome,
+      restartAttemptNumber: row.restart_attempt_number,
+      detail: row.detail ?? '',
+      createdAt: row.created_at,
+    }));
+
+    const workerClassifications = workers.map(w => ({
+      id: w.id,
+      sourcePath: w.sourcePath,
+      authorityClass: w.authorityClass,
+      status: w.status,
+      approvalRequired: w.approvalRequired,
+      governanceRequired: w.governanceRequired,
+      quarantineHandler: w.quarantineHandler,
+      phase6bDisposition: w.phase6bDisposition,
+      behavioralHardeningDebt: w.authorityClass === 'LEGACY_QUARANTINED',
+    }));
+
+    return {
+      generatedAt: this.now().toISOString(),
+      scanLastRunAt: scan.scannedAt,
+      globalKillSwitchActive,
+      services,
+      recentRestartEvidence,
+      workerClassifications,
+      behavioralHardeningDebtSurfaces: workerClassifications.filter(w => w.behavioralHardeningDebt).map(w => w.id),
+    };
+  }
 
   private taskItems(): OperatorItem[] {
     return this.taskStore.listTasks().filter(task => ['WAITING_APPROVAL', 'BLOCKED'].includes(task.status)).map(task => {

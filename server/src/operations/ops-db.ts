@@ -132,6 +132,34 @@ export function getOpsDb(): InstanceType<typeof Database> {
   return _db;
 }
 
+export interface SelfHealRestartLogRow {
+  service_id: string;
+  pm2_name: string;
+  decision: string;
+  outcome: string | null;
+  restart_attempt_number: number;
+  detail: string | null;
+  created_at: string;
+}
+
+/** Phase 9B — read-only access to the durable Self-Heal restart evidence trail
+ *  added in Phase 9A. No mutation method exists for this table outside
+ *  self-healing-monitor.ts's own INSERT — this is deliberately read-only. */
+export function listRecentSelfHealRestartLog(limit = 20): SelfHealRestartLogRow[] {
+  return getOpsDb().prepare(
+    `SELECT service_id, pm2_name, decision, outcome, restart_attempt_number, detail, created_at
+     FROM self_heal_restart_log ORDER BY id DESC LIMIT ?`
+  ).all(Math.max(1, Math.min(200, limit))) as SelfHealRestartLogRow[];
+}
+
+/** Test/shutdown-only — closes the lazily-opened singleton connection, if any. */
+export function closeOpsDb(): void {
+  if (_db) {
+    _db.close();
+    _db = null;
+  }
+}
+
 export function nowIso(): string {
   return new Date().toISOString();
 }
