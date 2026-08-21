@@ -142,11 +142,29 @@ export function ingestFile(filePath: string, source = 'local'): boolean {
   } catch { return false; }
 }
 
-export function ingestDirectory(rootDir: string, source?: string, maxFiles = 2000): { ingested: number; skipped: number; errors: number } {
+// Phase 9F — yields back to the event loop periodically during a walk. `fullIngest()`
+// can visit tens of thousands of directory entries in one call (MASTER_ROOT defaults to
+// the workspace root, a sibling of mi-core itself); without this, the entire walk ran as
+// one uninterrupted synchronous burst, blocking every other timer and HTTP request on
+// Node's single JS thread for the walk's whole duration (observed: ~30-35 minutes).
+// setImmediate (not setTimeout(0)) is used deliberately — it yields exactly one turn of
+// the event loop, letting pending I/O/timers run, without adding idle delay.
+const YIELD_EVERY_ENTRIES = 25;
+function yieldToEventLoop(): Promise<void> {
+  return new Promise(resolve => setImmediate(resolve));
+}
+
+export async function ingestDirectory(
+  rootDir: string,
+  source?: string,
+  maxFiles = 2000,
+  onYield?: () => void,
+): Promise<{ ingested: number; skipped: number; errors: number }> {
   let ingested = 0; let skipped = 0; let errors = 0;
+  let entriesSinceYield = 0;
   const src = source || path.basename(rootDir);
 
-  const walk = (dir: string, depth: number) => {
+  const walk = async (dir: string, depth: number): Promise<void> => {
     if (depth > 5 || ingested >= maxFiles) return;
     try {
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -154,17 +172,25 @@ export function ingestDirectory(rootDir: string, source?: string, maxFiles = 200
         const full = path.join(dir, entry.name);
         if (entry.isFile()) {
           const ext = path.extname(entry.name).toLowerCase();
-          if (!INCLUDE_EXT.has(ext)) { skipped++; continue; }
-          const ok = ingestFile(full, src);
-          if (ok) ingested++; else skipped++;
+          if (!INCLUDE_EXT.has(ext)) { skipped++; }
+          else {
+            const ok = ingestFile(full, src);
+            if (ok) ingested++; else skipped++;
+          }
         } else if (entry.isDirectory()) {
-          walk(full, depth + 1);
+          await walk(full, depth + 1);
         }
+        if (++entriesSinceYield >= YIELD_EVERY_ENTRIES) {
+          entriesSinceYield = 0;
+          onYield?.();
+          await yieldToEventLoop();
+        }
+        if (ingested >= maxFiles) return;
       }
     } catch { errors++; }
   };
 
-  walk(rootDir, 0);
+  await walk(rootDir, 0);
   return { ingested, skipped, errors };
 }
 
@@ -237,43 +263,72 @@ export function getStats() {
   } catch { return { total_docs: 0, by_category: [], by_source: [] }; }
 }
 
-export function clearAndRebuild(): { ingested: number; skipped: number } {
+export async function clearAndRebuild(): Promise<{ ingested: number; skipped: number; errors: number }> {
+  // Phase 9F — if a scheduled/other-caller ingest is still walking, let it finish before
+  // wiping the tables out from under it rather than deleting mid-walk.
+  if (_ingestInFlight) await _ingestInFlight.catch(() => undefined);
   const d = db();
   d.exec('DELETE FROM docs; DELETE FROM docs_fts;');
   _db = null; // Reset so triggers re-create properly on next db() call
   return fullIngest();
 }
 
-export function fullIngest(): { ingested: number; skipped: number } {
+// Phase 9F — coalesces concurrent callers (the 4-hourly scheduler, a manual /ingest
+// HTTP call, boot-time ingest) onto the single real walk in flight, rather than letting
+// two walks run at once against the same DB/log file. Cleared in `finally` so the next
+// call — whether the previous run succeeded or failed — always starts a fresh walk.
+let _ingestInFlight: Promise<{ ingested: number; skipped: number; errors: number }> | null = null;
+
+export function fullIngest(): Promise<{ ingested: number; skipped: number; errors: number }> {
+  if (_ingestInFlight) return _ingestInFlight;
+  const run = runFullIngest().finally(() => { _ingestInFlight = null; });
+  _ingestInFlight = run;
+  return run;
+}
+
+async function runFullIngest(): Promise<{ ingested: number; skipped: number; errors: number }> {
   const log: Array<{ source: string; ingested: number; skipped: number; errors: number; at: string }> = [];
-  let totalIngested = 0; let totalSkipped = 0;
+  let totalIngested = 0; let totalSkipped = 0; let totalErrors = 0;
 
   // Ingest Master Workspace
-  const masterResult = ingestDirectory(MASTER_ROOT, 'master-workspace');
+  const masterResult = await ingestDirectory(MASTER_ROOT, 'master-workspace');
   log.push({ source: 'master-workspace', ...masterResult, at: new Date().toISOString() });
   totalIngested += masterResult.ingested;
   totalSkipped += masterResult.skipped;
+  totalErrors += masterResult.errors;
 
   // Ingest global visibility cache
   const cacheDir = path.join(GLOBAL_DIR, 'visibility');
   if (fs.existsSync(cacheDir)) {
-    const cacheResult = ingestDirectory(cacheDir, 'visibility-cache');
+    const cacheResult = await ingestDirectory(cacheDir, 'visibility-cache');
     log.push({ source: 'visibility-cache', ...cacheResult, at: new Date().toISOString() });
     totalIngested += cacheResult.ingested;
     totalSkipped += cacheResult.skipped;
+    totalErrors += cacheResult.errors;
   }
 
   // Ingest executive memory
   const memDir = path.join(GLOBAL_DIR, 'executive-memory-v2');
   if (fs.existsSync(memDir)) {
-    const memResult = ingestDirectory(memDir, 'executive-memory');
+    const memResult = await ingestDirectory(memDir, 'executive-memory');
     log.push({ source: 'executive-memory', ...memResult, at: new Date().toISOString() });
     totalIngested += memResult.ingested;
+    totalErrors += memResult.errors;
   }
 
-  fs.writeFileSync(LOG_PATH, JSON.stringify(log, null, 2));
-  getStats(); // Update stats file
-  return { ingested: totalIngested, skipped: totalSkipped };
+  // Phase 9F — neither of these is allowed to reject `fullIngest()`'s promise: a disk-full
+  // or permission failure writing the log/stats file is a real but bounded error, truthfully
+  // counted here, not a reason for the whole ingest run (whose actual DB writes already
+  // committed per-file above) to come back as a rejected promise the scheduler must guess
+  // how to handle.
+  try {
+    fs.writeFileSync(LOG_PATH, JSON.stringify(log, null, 2));
+    getStats(); // Update stats file
+  } catch (e) {
+    totalErrors += 1;
+    console.warn('[KnowledgeDB] fullIngest: log/stats write failed (ingested docs are unaffected):', e instanceof Error ? e.message : e);
+  }
+  return { ingested: totalIngested, skipped: totalSkipped, errors: totalErrors };
 }
 
 export function buildCatalog(): unknown[] {

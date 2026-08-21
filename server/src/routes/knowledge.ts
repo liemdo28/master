@@ -38,20 +38,26 @@ knowledgeRouter.get('/catalog', (_req: Request, res: Response) => {
   res.json(buildCatalog());
 });
 
-knowledgeRouter.post('/ingest', requireApiKey, (_req: Request, res: Response) => {
-  const result = fullIngest();
-  res.json({ ok: true, ...result });
+knowledgeRouter.post('/ingest', requireApiKey, async (_req: Request, res: Response) => {
+  try {
+    const result = await fullIngest();
+    res.json({ ok: true, ...result });
+  } catch (e) { res.status(500).json({ error: e instanceof Error ? e.message : String(e) }); }
 });
 
-knowledgeRouter.post('/rebuild', requireApiKey, (_req: Request, res: Response) => {
-  const result = clearAndRebuild();
-  res.json({ ok: true, ...result });
+knowledgeRouter.post('/rebuild', requireApiKey, async (_req: Request, res: Response) => {
+  try {
+    const result = await clearAndRebuild();
+    res.json({ ok: true, ...result });
+  } catch (e) { res.status(500).json({ error: e instanceof Error ? e.message : String(e) }); }
 });
 
-knowledgeRouter.post('/ingest-dir', requireApiKey, (req: Request, res: Response) => {
+knowledgeRouter.post('/ingest-dir', requireApiKey, async (req: Request, res: Response) => {
   const { dir, source } = req.body as { dir: string; source?: string };
   if (!dir) return res.status(400).json({ error: 'dir required' });
-  res.json({ ok: true, ...ingestDirectory(dir, source) });
+  try {
+    res.json({ ok: true, ...(await ingestDirectory(dir, source)) });
+  } catch (e) { res.status(500).json({ error: e instanceof Error ? e.message : String(e) }); }
 });
 
 // Packs
@@ -59,12 +65,16 @@ knowledgeRouter.get('/packs', (_req: Request, res: Response) => {
   res.json(listPacks());
 });
 
-knowledgeRouter.post('/packs/install-all', requireApiKey, (_req: Request, res: Response) => {
-  res.json(installAllPacks());
+knowledgeRouter.post('/packs/install-all', requireApiKey, async (_req: Request, res: Response) => {
+  try {
+    res.json(await installAllPacks());
+  } catch (e) { res.status(500).json({ error: e instanceof Error ? e.message : String(e) }); }
 });
 
-knowledgeRouter.post('/packs/:packId/install', requireApiKey, (req: Request, res: Response) => {
-  res.json(installPack(req.params.packId));
+knowledgeRouter.post('/packs/:packId/install', requireApiKey, async (req: Request, res: Response) => {
+  try {
+    res.json(await installPack(req.params.packId));
+  } catch (e) { res.status(500).json({ error: e instanceof Error ? e.message : String(e) }); }
 });
 
 knowledgeRouter.delete('/packs/:packId', requireApiKey, (req: Request, res: Response) => {
