@@ -34,16 +34,19 @@ export function startScheduler() {
     }
   }, SYNC_INTERVAL_MS);
 
-  // KB re-ingest
+  // KB re-ingest — Phase 9F: fullIngest() now yields to the event loop throughout the
+  // walk instead of running as one uninterrupted synchronous burst (previously ~30-35min
+  // of total HTTP/timer unresponsiveness per run), and never rejects (errors are counted
+  // and returned truthfully instead), so this callback cannot produce an unhandled
+  // rejection or leave the timer unusable after a failure.
   kbTimer = setInterval(() => {
-    try {
-      console.log('[Scheduler] Running KB incremental ingest...');
-      const result = fullIngest();
-      lastKbSync = new Date();
-      console.log(`[Scheduler] KB ingest: ${result.ingested} docs`);
-    } catch (e) {
-      console.warn('[Scheduler] KB ingest error:', e);
-    }
+    console.log('[Scheduler] Running KB incremental ingest...');
+    fullIngest()
+      .then(result => {
+        lastKbSync = new Date();
+        console.log(`[Scheduler] KB ingest: ${result.ingested} docs (${result.errors} errors)`);
+      })
+      .catch(e => console.warn('[Scheduler] KB ingest error:', e));
   }, KB_SYNC_INTERVAL_MS);
 
   dev2OpsTimer = setInterval(() => {

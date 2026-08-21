@@ -85,7 +85,7 @@ export function listPacks(): Pack[] {
   return PACK_DEFINITIONS.map(p => ({ ...p, installed: installedIds.has(p.pack_id) }));
 }
 
-export function installPack(packId: string): { ok: boolean; docs_added: number; message: string } {
+export async function installPack(packId: string): Promise<{ ok: boolean; docs_added: number; message: string }> {
   const pack = PACK_DEFINITIONS.find(p => p.pack_id === packId);
   if (!pack) return { ok: false, docs_added: 0, message: `Pack "${packId}" not found` };
 
@@ -101,7 +101,7 @@ export function installPack(packId: string): { ok: boolean; docs_added: number; 
   }
 
   // Ingest into knowledge DB
-  const result = ingestDirectory(packDir, `pack-${packId}`);
+  const result = await ingestDirectory(packDir, `pack-${packId}`);
 
   // Mark as installed
   const packs = getInstalledPacks();
@@ -114,11 +114,11 @@ export function installPack(packId: string): { ok: boolean; docs_added: number; 
   return { ok: true, docs_added: result.ingested, message: `Pack "${pack.name}" installed — ${result.ingested} docs added` };
 }
 
-export function installAllPacks(): { total_installed: number; results: Record<string, string> } {
+export async function installAllPacks(): Promise<{ total_installed: number; results: Record<string, string> }> {
   const results: Record<string, string> = {};
   let total = 0;
   for (const pack of PACK_DEFINITIONS) {
-    const r = installPack(pack.pack_id);
+    const r = await installPack(pack.pack_id);
     results[pack.pack_id] = r.message;
     if (r.ok) total += r.docs_added;
   }

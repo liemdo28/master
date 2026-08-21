@@ -527,15 +527,15 @@ function onListenSuccess() {
   console.log('[Mi] ✓ Connector Registry initialized');
   console.log('[Mi] ✓ Executive Memory initialized');
 
-  setTimeout(() => {
+  setTimeout(async () => {
     if (process.env.MI_BOOT_KNOWLEDGE_INGEST === '1') {
       try {
-        const result = fullIngest();
-        console.log(`[Mi] ✓ Knowledge DB: ${result.ingested} docs ingested`);
+        const result = await fullIngest();
+        console.log(`[Mi] ✓ Knowledge DB: ${result.ingested} docs ingested (${result.errors} errors)`);
       } catch (e) { console.warn('[Mi] Knowledge DB ingest error:', e); }
 
       try {
-        const packs = installAllPacks();
+        const packs = await installAllPacks();
         console.log(`[Mi] ✓ Knowledge Packs: ${packs.total_installed} docs from all packs`);
       } catch (e) { console.warn('[Mi] Pack install error:', e); }
     } else {
