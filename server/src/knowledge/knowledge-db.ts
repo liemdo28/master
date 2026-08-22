@@ -79,10 +79,24 @@ export interface SearchResult {
 // ---- INGEST ----
 
 const INCLUDE_EXT = new Set(['.md', '.txt', '.json', '.csv', '.html', '.ts', '.js', '.php', '.py']);
+// Phase 9G — 'mi-core-deployed-source' and 'mi-core-predeploy-backups' are deploy-tooling
+// output directories (exact-SHA source snapshots and predeploy DB/dist backups), not
+// knowledge sources. Confirmed via direct production DB query: zero of the 44,000+
+// currently-ingested docs originate from either name, at either of their real locations
+// (F:\Projects\mi-core-predeploy-backups and the two under F:\Projects\D-root-mi-snapshots).
+// Excluding by basename is safe here specifically because a filesystem search found these
+// exact names used nowhere else in the tree for any other purpose — this is not a general
+// pattern to reach for; each addition to this set needs its own such evidence.
 const EXCLUDE_DIRS = new Set([
   'node_modules', '.git', 'dist', 'build', 'vendor', 'cache', 'tmp',
   '.claude', 'worktrees', '.backups',
+  'mi-core-deployed-source', 'mi-core-predeploy-backups',
 ]);
+// Phase 9G — exported so the deterministic evaluation harness exercises the exact real
+// decision function, not a re-implementation of it.
+export function isExcludedDirName(name: string): boolean {
+  return EXCLUDE_DIRS.has(name);
+}
 const MAX_FILE_SIZE = 500 * 1024; // 500KB
 
 function simpleChecksum(s: string): string {
@@ -159,6 +173,14 @@ export async function ingestDirectory(
   source?: string,
   maxFiles = 2000,
   onYield?: () => void,
+  // Phase 9G — test-only observation hook, fired once per directory `walk()` actually
+  // calls readdirSync on. Never fires for a name in EXCLUDE_DIRS, because the exclusion
+  // check below runs in the *parent's* loop, before `walk()` is ever invoked for that
+  // child — the recursive call, and therefore this hook, simply never happens for it.
+  // This is what lets a test prove "never entered" rather than only "entered then
+  // rejected": assert this callback is never invoked with an excluded path. Read-only,
+  // no mutation authority, undefined in every production call site.
+  onDirectoryEnter?: (dir: string) => void,
 ): Promise<{ ingested: number; skipped: number; errors: number }> {
   let ingested = 0; let skipped = 0; let errors = 0;
   let entriesSinceYield = 0;
@@ -166,9 +188,10 @@ export async function ingestDirectory(
 
   const walk = async (dir: string, depth: number): Promise<void> => {
     if (depth > 5 || ingested >= maxFiles) return;
+    onDirectoryEnter?.(dir);
     try {
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-        if (EXCLUDE_DIRS.has(entry.name)) continue;
+        if (isExcludedDirName(entry.name)) continue;
         const full = path.join(dir, entry.name);
         if (entry.isFile()) {
           const ext = path.extname(entry.name).toLowerCase();
