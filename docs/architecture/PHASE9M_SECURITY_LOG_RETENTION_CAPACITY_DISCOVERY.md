@@ -139,7 +139,15 @@ Directly measured, not inferred: retention ranged from ~77 minutes to ~5.4 hours
 
 **`RETENTION_INCREASE_JUSTIFIED`**
 
-**`RECOMMENDED_TARGET_RANGE = 1 GB – 4 GB`**, sized to cover a **7–14 day** forensic window under the CENTRAL-to-HIGH empirical scenarios with the stated 1.5× headroom, while explicitly declining to recommend the 30-day/10+ GB tier given the diminishing forensic-value-per-privacy-day tradeoff identified in Section N. This range is a recommendation for a **separately-authorized future implementation phase** — no configuration was changed to produce or validate this range in Phase 9M.
+**`RECOMMENDED_TARGET_RANGE = 1 GB – 4 GB`**
+
+This range approximately supports:
+- **~7 days under the observed HIGH scenario with 1.5× headroom** (375 MB/day × 7 × 1.5 ≈ 3.9 GB), **or**
+- **~14 days under the observed CENTRAL scenario with 1.5× headroom** (139 MB/day × 14 × 1.5 ≈ 2.9 GB).
+
+**A 4 GB log does not guarantee 14-day retention during the observed HIGH workload.** A 14-day HIGH scenario with 1.5× headroom would require approximately 375 MB/day × 14 × 1.5 ≈ **7.9 GB** — outside the recommended range. The recommendation intentionally does **not** scale up to guarantee the worst observed workload for the full 14 days; it prioritizes the observed 7–14 day operational need, bounded privacy duration, and practical forensic value (Section N) over sizing for the worst case sustained for the longest evaluated window. If future measurement shows HIGH-level churn is sustained (rather than a short burst as currently observed at T3), this tradeoff should be revisited.
+
+This range is a recommendation for a **separately-authorized future implementation phase** — no configuration was changed to produce or validate this range in Phase 9M.
 
 ## R. Measurement limitations
 
