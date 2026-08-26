@@ -246,15 +246,43 @@ qbAgentRouter.post('/heartbeat', (req: Request, res: Response) => {
 });
 
 // ── Event ─────────────────────────────────────────────────────────────────────
-qbAgentRouter.post('/event', (req: Request, res: Response) => {
-  const b = req.body || {};
-  const machineId = b.machine_id || req.headers['x-machine-id'] as string;
+export function recordIngestEvent(input: {
+  machine_id: string; store_code?: string; event_type: string; event_key?: string;
+  message?: string; severity?: string; occurred_at?: string; payload?: Record<string, unknown>;
+}): void {
   db.prepare(`INSERT INTO events (machine_id, store_code, event_type, event_key, message,
     severity, occurred_at, received_at, payload_json)
     VALUES (?,?,?,?,?,?,?,?,?)`)
-    .run(machineId, b.store_code, b.event_type, b.event_key, b.message,
-         b.severity || 'info', b.occurred_at, now(), JSON.stringify(b.payload || {}));
+    .run(input.machine_id, input.store_code, input.event_type, input.event_key, input.message,
+         input.severity || 'info', input.occurred_at, now(), JSON.stringify(input.payload || {}));
+}
+
+qbAgentRouter.post('/event', (req: Request, res: Response) => {
+  const b = req.body || {};
+  const machineId = b.machine_id || req.headers['x-machine-id'] as string;
+  recordIngestEvent({
+    machine_id: machineId, store_code: b.store_code, event_type: b.event_type, event_key: b.event_key,
+    message: b.message, severity: b.severity, occurred_at: b.occurred_at, payload: b.payload,
+  });
   res.json({ ok: true });
+});
+
+// ── Ingest (generic push entry point) ─────────────────────────────────────────
+qbAgentRouter.post('/ingest', (req: Request, res: Response) => {
+  const b = req.body || {};
+  const machineId = b.machine_id || req.headers['x-machine-id'] as string;
+  if (!machineId) { res.status(400).json({ error: 'machine_id required' }); return; }
+  recordIngestEvent({
+    machine_id: machineId,
+    store_code: b.store_code,
+    event_type: b.event_type || 'ingest',
+    event_key: b.event_key,
+    message: b.message,
+    severity: b.severity,
+    occurred_at: b.occurred_at,
+    payload: b.payload || b,
+  });
+  res.json({ ok: true, received_at: now() });
 });
 
 // ── Activity Log Result ───────────────────────────────────────────────────────

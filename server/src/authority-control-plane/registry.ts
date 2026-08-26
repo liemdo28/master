@@ -264,6 +264,29 @@ export const AUTHORITY_RULES: Rule[] = [
     phase6bDisposition: 'QUARANTINE_ONLY', quarantineHandler: 'legacyAuthorityAdapter.quarantine',
     evidence: ['server/src/routes/operations.ts', 'server/src/n8n/n8n-router.ts'],
   }),
+  // Phase 9O — narrowly carved out of 'legacy-sensitive-local' below: these
+  // three POST routes only ever write local telemetry into qb-agent.db's
+  // machines/heartbeats/events tables (server/src/routes/qb-agent.ts) — no
+  // financial, external, or process-control effect. They were being blocked
+  // by the catch-all's QUARANTINE_ONLY default even though qb-agent.ts's own
+  // handler has no quarantine logic of its own; the block came entirely from
+  // this registry matching the broad catch-all below. `ingest` is a new
+  // generic push entry point added alongside register/heartbeat, deliberately
+  // NOT placed under /api/qb — that router is locked GET-only-financial-proxy
+  // by Phase 8A (financialExecutionReachable=0, enforced by
+  // src/__tests__/phase8a-security.test.ts: "/api/qb must expose no mutation
+  // route"). The other 10 POST routes under /api/qb-agent — including the
+  // free-form `commands` dispatch surface, which can direct the remote agent
+  // to act rather than merely report state — are deliberately NOT included
+  // here and remain quarantined by the catch-all pending separate review.
+  // See docs/architecture/PHASE9O_QB_AGENT_AUTHORITY_RECLASSIFICATION.md.
+  rule('qb-agent-machine-registry', /^\/api\/qb-agent\/(register|heartbeat|ingest)$/, {
+    authorityClass: 'ADAPTER_TO_CANONICAL', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'QB Agent Machine Registry', auth: 'STRICT_API_KEY', methods: ['POST'],
+    capability: 'local machine-identity registration, heartbeat, and generic ingest telemetry for QuickBooks desktop agents — writes only to qb-agent.db machines/heartbeats/events tables, no financial or external effect',
+    approvalRequired: false, governanceRequired: false, status: 'ADAPTED', legacyReason: 'Was matched by the broad legacy-sensitive-local catch-all below; reviewed individually and found to have no financial/external/process-control effect.', migrationTarget: 'Phase 5 canonical stores as applicable',
+    phase6bDisposition: 'ADAPT_SAFE', canonicalReplacement: 'Phase 5 canonical stores as applicable',
+    evidence: ['server/src/routes/qb-agent.ts', 'docs/architecture/PHASE9O_QB_AGENT_AUTHORITY_RECLASSIFICATION.md'],
+  }),
   rule('legacy-sensitive-local', /^\/api\/(memory|briefing|graph|brain|visibility|chat|jarvis|qb-agent|qb|reminders|knowledge|whatsapp|models|agent-engine|integration-agent|data-analyst|skills|doordash-agent|doordash|bigdata|enterprise|mi|tasks|strategic|agenview|seo|telemetry|executive-intelligence|analytics|gbp|connectors|executive|workspace|ceo-observer)(\/.*)?$/, {
     authorityClass: 'ADAPTER_TO_CANONICAL', effectClass: 'LOCAL_REVERSIBLE', canonicalOwner: 'Legacy compatibility adapter', auth: 'REMOTE_SESSION', capability: 'legacy read/local compatibility surface',
     approvalRequired: false, governanceRequired: false, status: 'ADAPTED', legacyReason: 'Mounted pre-Phase-5 compatibility surface; must not become a second canonical owner.', migrationTarget: 'Phase 5 canonical stores as applicable',
