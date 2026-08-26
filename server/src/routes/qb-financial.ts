@@ -4,6 +4,11 @@
  * GET /api/qb/status          — agent health + sync status
  * GET /api/qb/financial       — full financial data (accounts, receipts, invoices)
  * GET /api/qb/financial/summary — CEO summary (revenue, expenses, net income)
+ *
+ * Phase 8A locked this router GET-only (financialExecutionReachable=0,
+ * enforced by src/__tests__/phase8a-security.test.ts) — no mutation route may
+ * ever be added here. A generic push-based ingest entry point instead lives
+ * at POST /api/qb-agent/ingest (see routes/qb-agent.ts).
  */
 import { Router, Request, Response } from 'express';
 import http from 'http';
