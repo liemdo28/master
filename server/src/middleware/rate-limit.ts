@@ -14,15 +14,29 @@ function internalKey(): string {
   return key;
 }
 
-// Bypass rate limiting ONLY for authenticated Jarvis API calls.
+// Bypass rate limiting ONLY for authenticated Jarvis/QB-agent API calls.
 // Public routes (/api/remote/health, /api/remote/login, /api/health) are
 // never issued the internal key and therefore always rate-limited.
+//
+// /api/qb-agent was added after the runtime-429-audit log showed 565k+
+// throttled requests over 14 days (95% on /qb-agent/heartbeat) from the
+// laptop1 QB desktop agent — an authenticated caller (correct X-API-Key)
+// that was never in this bypass scope, sharing the same 120-req/60s bucket
+// as every unauthenticated caller on its IP. This does not widen authority:
+// the still-quarantined /api/qb-agent/* mutation routes (commands, event,
+// etc.) remain blocked by the separate legacyAuthorityBoundary check
+// regardless of whether the request is rate-limited first.
+//
+// `req.path` for this prefix has been observed both with and without the
+// leading /api segment (e.g. '/api/qb-agent/heartbeat' and
+// '/qb-agent/heartbeat') depending on the calling path — matched loosely
+// via includes() so both are covered.
 function isInternalJarvisCall(req: Request): boolean {
   if (process.env.MI_E2E_FIXTURE === '1') return true;
   const key = req.headers['x-api-key'];
   if (key !== internalKey()) return false;
-  // Scope to Jarvis + internal API paths only
-  return req.path.startsWith('/api/jarvis') || req.path.startsWith('/api/mi');
+  // Scope to Jarvis + internal API + QB-agent paths only
+  return req.path.startsWith('/api/jarvis') || req.path.startsWith('/api/mi') || req.path.includes('/qb-agent');
 }
 
 function headerValue(req: Request, name: string): string | undefined {
